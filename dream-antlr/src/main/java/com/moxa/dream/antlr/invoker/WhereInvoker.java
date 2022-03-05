@@ -1,0 +1,42 @@
+package com.moxa.dream.antlr.invoker;
+
+import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
+import com.moxa.dream.antlr.handler.Handler;
+import com.moxa.dream.antlr.handler.crud.WhereHandler;
+import com.moxa.dream.antlr.smt.InvokerStatement;
+import com.moxa.dream.antlr.smt.QueryStatement;
+import com.moxa.dream.antlr.smt.Statement;
+import com.moxa.dream.antlr.smt.WhereStatement;
+import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.sql.ToSQL;
+
+import java.util.List;
+
+public class WhereInvoker extends AbstractInvoker {
+    private WhereHandler whereHandler;
+
+    @Override
+    public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+        Statement[] columnList = invokerStatement.getListColumnStatement().getColumnList();
+        if (columnList.length == 2) {
+            whereHandler = new WhereHandler(this, columnList[1]);
+            String sql = toSQL.toStr(columnList[0], assist, invokerList);
+            invokerStatement.setStatement(columnList[0]);
+            return sql;
+        } else
+            throw new InvokerException("参数错误，不满足@" + AntlrInvokerFactory.WHERE + ":" + AntlrInvokerFactory.NAMESPACE + "(crud,condition)");
+    }
+
+    @Override
+    public Handler[] handler() {
+        return new Handler[]{whereHandler};
+    }
+
+    public void addWhere(QueryStatement queryStatement, Statement statement) {
+        WhereStatement whereStatement = new WhereStatement();
+        whereStatement.setCondition(statement);
+        queryStatement.setWhereStatement(whereStatement);
+        this.setAccessible(false);
+    }
+}

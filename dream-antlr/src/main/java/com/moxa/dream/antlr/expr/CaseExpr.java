@@ -1,0 +1,187 @@
+package com.moxa.dream.antlr.expr;
+
+import com.moxa.dream.antlr.bind.ExprInfo;
+import com.moxa.dream.antlr.bind.ExprType;
+import com.moxa.dream.antlr.read.ExprReader;
+import com.moxa.dream.antlr.smt.CaseStatement;
+import com.moxa.dream.antlr.smt.Statement;
+
+public class CaseExpr extends SqlExpr {
+    private CaseStatement caseStatement = new CaseStatement();
+
+    public CaseExpr(ExprReader exprReader) {
+        super(exprReader);
+        setExprTypes(ExprType.CASE);
+    }
+
+    @Override
+    protected Statement exprCase(ExprInfo exprInfo) {
+        push();
+        CaseCaseExpr caseCaseExpr = new CaseCaseExpr(exprReader);
+        caseStatement.setCaseColumn(caseCaseExpr.expr());
+        setExprTypes(ExprType.WHEN);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprWhen(ExprInfo exprInfo) {
+        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new WhenThenExpr(exprReader, caseStatement.getCaseColumn() == null), new ExprInfo(ExprType.BLANK, " "));
+        caseStatement.setWhenthenList(listColumnExpr.expr());
+        setExprTypes(ExprType.ELSE, ExprType.END);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprElse(ExprInfo exprInfo) {
+        push();
+        WhenThenExpr.CaseElseExpr caseElseExpr = new WhenThenExpr.CaseElseExpr(exprReader);
+        caseStatement.setElseColumn(caseElseExpr.expr());
+        setExprTypes(ExprType.END);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprEnd(ExprInfo exprInfo) {
+        push();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    public Statement nil() {
+        return caseStatement;
+    }
+
+    public static class CaseCaseExpr extends HelperExpr {
+        Statement statement;
+
+        public CaseCaseExpr(ExprReader exprReader) {
+            this(exprReader, () -> new CompareExpr(exprReader));
+            addExprTypes(ExprType.NIL);
+        }
+
+        public CaseCaseExpr(ExprReader exprReader, Helper helper) {
+            super(exprReader, helper);
+        }
+
+        @Override
+        public Statement exprHelp(Statement statement) {
+            this.statement = statement;
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        public Statement nil() {
+            return this.statement;
+        }
+    }
+
+    public static class WhenThenExpr extends SqlExpr {
+        private CaseStatement.WhenThenStatement whenThenStatement = new CaseStatement.WhenThenStatement();
+        private boolean compare;
+
+        public WhenThenExpr(ExprReader exprReader, boolean compare) {
+            super(exprReader);
+            setExprTypes(ExprType.WHEN);
+            this.compare = compare;
+        }
+
+
+        @Override
+        protected Statement exprWhen(ExprInfo exprInfo) {
+            push();
+            CaseWhenExpr caseWhenExpr = new CaseWhenExpr(exprReader);
+            Statement statement = caseWhenExpr.expr();
+            whenThenStatement.setWhen(statement);
+            setExprTypes(ExprType.THEN);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprThen(ExprInfo exprInfo) {
+            push();
+            CaseThenExpr caseThenExpr = new CaseThenExpr(exprReader);
+            whenThenStatement.setThen(caseThenExpr.expr());
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        public Statement nil() {
+            return whenThenStatement;
+        }
+
+        public static class CaseWhenExpr extends HelperExpr {
+            private Statement statement;
+
+            public CaseWhenExpr(ExprReader exprReader) {
+                this(exprReader, () -> new CompareExpr(exprReader));
+            }
+
+            public CaseWhenExpr(ExprReader exprReader, Helper helper) {
+                super(exprReader, helper);
+            }
+
+            @Override
+            public Statement exprHelp(Statement statement) {
+                this.statement = statement;
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            public Statement nil() {
+                return statement;
+            }
+        }
+
+        public static class CaseThenExpr extends HelperExpr {
+            private Statement statement;
+
+            public CaseThenExpr(ExprReader exprReader) {
+                this(exprReader, () -> new CompareExpr(exprReader));
+            }
+
+            public CaseThenExpr(ExprReader exprReader, Helper helper) {
+                super(exprReader, helper);
+            }
+
+            @Override
+            public Statement exprHelp(Statement statement) {
+                this.statement = statement;
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            public Statement nil() {
+                return statement;
+            }
+        }
+
+        public static class CaseElseExpr extends HelperExpr {
+            private Statement statement;
+
+            public CaseElseExpr(ExprReader exprReader) {
+                super(exprReader, () -> new CompareExpr(exprReader));
+            }
+
+            public CaseElseExpr(ExprReader exprReader, Helper helper) {
+                super(exprReader, helper);
+            }
+
+            @Override
+            public Statement exprHelp(Statement statement) {
+                this.statement = statement;
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            public Statement nil() {
+                return statement;
+            }
+        }
+    }
+}

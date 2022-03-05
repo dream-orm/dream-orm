@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns="http://moxa.org/schema/mapper"
+        targetNamespace="http://moxa.org/schema/mapper"
+        elementFormDefault="qualified">
+    <xs:element name="mapper">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="method"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="method">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="sql"/>
+                <xs:choice minOccurs="0" maxOccurs="1">
+                    <xs:element ref="eachList"/>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="name" use="required"/>
+            <xs:attribute name="timeOut"/>
+            <xs:attribute name="proxy">
+                <xs:simpleType>
+                    <xs:restriction>
+                        <xs:enumeration value="false"/>
+                        <xs:enumeration value="true"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="methodRef">
+        <xs:complexType>
+            <xs:attribute name="field"/>
+            <xs:attribute name="value" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="eachList">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="each"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="each">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="methodRef" minOccurs="0"/>
+                <xs:element ref="argList" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="lazy">
+                <xs:simpleType>
+                    <xs:restriction>
+                        <xs:enumeration value="true"/>
+                        <xs:enumeration value="false"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="argList">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="arg"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="arg">
+        <xs:complexType>
+            <xs:attribute name="name" use="required"/>
+            <xs:attribute name="value" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

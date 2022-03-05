@@ -1,0 +1,143 @@
+package com.moxa.dream.module.mapped;
+
+import com.moxa.dream.antlr.bind.Command;
+import com.moxa.dream.module.cache.CacheKey;
+import com.moxa.dream.module.config.Configuration;
+import com.moxa.dream.module.mapper.EachInfo;
+import com.moxa.dream.module.mapper.MethodInfo;
+import com.moxa.dream.util.common.ObjectUtil;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class MappedStatement {
+
+    private MappedSql mappedSql;
+    private List<MappedParam> mappedParamList;
+    private MethodInfo methodInfo;
+    private CacheKey uniqueKey;
+    private Object arg;
+    private Class<? extends Collection> rowType;
+    private Class<?> colType;
+
+    private MappedStatement() {
+
+    }
+
+    public Configuration getConfiguration() {
+        return methodInfo.getConfiguration();
+    }
+
+    public Command getCommand() {
+        return mappedSql.getCommand();
+    }
+
+    public MethodInfo getMethodInfo() {
+        return methodInfo;
+    }
+
+    public Object getArg() {
+        return arg;
+    }
+
+    public String getSql() {
+        return mappedSql.getSql();
+    }
+
+    public CacheKey getUniqueKey() {
+        return uniqueKey;
+    }
+
+    public Class<?> getColType() {
+        return colType;
+    }
+
+    public void setColType(Class<?> colType) {
+        this.colType = colType;
+    }
+
+    public Class<? extends Collection> getRowType() {
+        return rowType;
+    }
+
+    public void setRowType(Class<? extends Collection> rowType) {
+        this.rowType = rowType;
+    }
+
+    public Method getMethod() {
+        return methodInfo.getMethod();
+    }
+
+    public CacheKey getSqlKey() {
+        return methodInfo.getSqlKey();
+    }
+
+    public Set<String> getTableSet() {
+        return mappedSql.getTableSet();
+    }
+
+    public Integer getTimeOut() {
+        return methodInfo.getTimeOut();
+    }
+
+    public <T> T get(Class<T> type) {
+        return methodInfo.get(type);
+    }
+
+    public <T> void set(Class<T> type, T value) {
+        methodInfo.set(type, value);
+    }
+
+    public List<MappedParam> getMappedParamList() {
+        return mappedParamList;
+    }
+
+    public List<EachInfo> getEachInfoList() {
+        List<EachInfo> eachInfoList = methodInfo.getEachInfoList();
+        return eachInfoList;
+    }
+
+    public static class Builder {
+        private MappedStatement mappedStatement;
+
+        public Builder() {
+            mappedStatement = new MappedStatement();
+        }
+
+        public Builder methodInfo(MethodInfo methodInfo) {
+            mappedStatement.methodInfo = methodInfo;
+            mappedStatement.rowType = methodInfo.getRowType();
+            mappedStatement.colType = methodInfo.getColType();
+            return this;
+        }
+
+        public Builder mappedSql(MappedSql mappedSql) {
+            mappedStatement.mappedSql = mappedSql;
+            return this;
+        }
+
+        public Builder mappedParamList(List<MappedParam> mappedParamList) {
+            mappedStatement.mappedParamList = mappedParamList;
+            return this;
+        }
+
+        public Builder arg(Object arg) {
+            mappedStatement.arg = arg;
+            return this;
+        }
+
+        public MappedStatement build() {
+            mappedStatement.uniqueKey = mappedStatement.getSqlKey();
+            if (!ObjectUtil.isNull(mappedStatement.mappedParamList)) {
+                mappedStatement.uniqueKey.update(mappedStatement.mappedParamList.stream()
+                        .map(mappedParam -> mappedParam.getParamValue())
+                        .collect(Collectors.toList())
+                        .toArray());
+            }
+            return mappedStatement;
+        }
+    }
+}
