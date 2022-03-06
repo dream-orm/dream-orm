@@ -608,11 +608,11 @@ public class ToORACLE extends ToPubSQL {
                 ListColumnStatement listColumnStatement = (ListColumnStatement) statement;
                 Statement[] columnList = listColumnStatement.getColumnList();
                 InsertStatement insertStatement = insertInvoker.getInsertStatement();
-                String insertColumns = "INTO " + toStr(insertStatement.getTable(), assist, invokerList) + (insertStatement.getParams() != null ? toStr(insertStatement.getParams(), assist, invokerList) : "");
+                String insertColumns = "INTO " + toStr(insertStatement.getTable(), assist, invokerList) + (insertStatement.getParams() != null ? toStr(insertStatement.getParams(), assist, invokerList) : " ");
                 StringBuilder sqlBuilder = new StringBuilder("INSERT ALL ");
                 for (Statement column : columnList) {
                     String insertValues = toSQL.toStr(column, assist, invokerList);
-                    sqlBuilder.append(insertColumns + " VALUES " + insertValues);
+                    sqlBuilder.append(insertColumns + "VALUES" + insertValues);
                 }
                 sqlBuilder.append(" SELECT 1 FROM DUAL");
                 insertInvoker.setBatchSQL(sqlBuilder.toString());
