@@ -11,6 +11,8 @@ import java.util.Map;
 
 public abstract class ObjectWrapper {
 
+    protected ObjectWrapper tempWrapper;
+
     public static ObjectWrapper wrapper(Object object) {
         return wrapper(object, null);
     }
@@ -54,7 +56,14 @@ public abstract class ObjectWrapper {
     }
 
     public Object get(String property) throws WrapperException {
-        return get(new PropertyToken(property));
+        if (tempWrapper != null) {
+            Object result = tempWrapper.get(new PropertyToken(property));
+            if (result == null)
+                return get(new PropertyToken(property));
+            else
+                return result;
+        } else
+            return get(new PropertyToken(property));
     }
 
     public abstract Object getObject();
@@ -62,4 +71,12 @@ public abstract class ObjectWrapper {
     protected abstract Object set(PropertyToken propertyToken, Object value) throws WrapperException;
 
     protected abstract Object get(PropertyToken propertyToken);
+
+    public void setTemp(Object temp) {
+        if (temp == null) {
+            tempWrapper = null;
+        } else {
+            tempWrapper = ObjectWrapper.wrapper(temp);
+        }
+    }
 }

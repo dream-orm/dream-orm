@@ -64,7 +64,7 @@ public class ParamScanHandler extends AbstractHandler {
                                 Statement valueStatement = valuesList[i];
                                 if (InvokerUtil.is$(valueStatement)) {
                                     InvokerStatement invokerStatement = (InvokerStatement) valueStatement;
-                                    Statement vStatement = invokerStatement.getListColumnStatement().getColumnList()[0];
+                                    Statement vStatement = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList()[0];
                                     if (vStatement instanceof SymbolStatement.LetterStatement) {
                                         SymbolStatement.LetterStatement value = (SymbolStatement.LetterStatement) vStatement;
                                         Statement paramStatement = paramsList[i];
@@ -125,7 +125,7 @@ public class ParamScanHandler extends AbstractHandler {
             }
 
             public void scanStatement(InvokerStatement invokerStatement) {
-                Statement paramStatement = invokerStatement.getListColumnStatement().getColumnList()[0];
+                Statement paramStatement = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList()[0];
                 if (paramStatement instanceof SymbolStatement.LetterStatement) {
                     SymbolStatement.LetterStatement letterStatement = (SymbolStatement.LetterStatement) paramStatement;
                     String field = letterStatement.getSymbol();

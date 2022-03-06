@@ -14,7 +14,7 @@ public class Page<E> extends ArrayList<E> implements Serializable {
     private boolean count = true;
 
     public Page() {
-        this(1,Integer.MAX_VALUE);
+        this(1, Integer.MAX_VALUE);
     }
 
     public Page(int pageNum, int pageSize) {

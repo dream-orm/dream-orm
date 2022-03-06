@@ -16,7 +16,7 @@ public interface Invoker {
 
     String invoke(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException;
 
-    Handler[] handler();
+    Handler[] handle();
 
     boolean isAccessible();
 

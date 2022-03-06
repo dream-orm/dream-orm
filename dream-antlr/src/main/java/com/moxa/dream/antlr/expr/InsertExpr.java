@@ -49,7 +49,7 @@ public class InsertExpr extends SqlExpr {
     @Override
     protected Statement exprValues(ExprInfo exprInfo) {
         push();
-        Statement statement = new ListColumnExpr(exprReader,new ExprInfo(ExprType.COMMA,",")).expr();
+        Statement statement = new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")).expr();
         insertStatement.setValues(new InsertStatement.ValuesStatement(statement));
         setExprTypes(ExprType.NIL);
         return expr();
@@ -66,7 +66,7 @@ public class InsertExpr extends SqlExpr {
 
     @Override
     protected Statement exprInvoker(ExprInfo exprInfo) {
-        ColumnExpr columnExpr=new ColumnExpr(exprReader);
+        ColumnExpr columnExpr = new ColumnExpr(exprReader);
         Statement statement = columnExpr.expr();
         insertStatement.setValues(statement);
         setExprTypes(ExprType.NIL);

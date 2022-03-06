@@ -16,7 +16,7 @@ public class GroupInvoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = invokerStatement.getListColumnStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         if (columnList.length > 1) {
             groupHandler = new GroupHandler(this, columnList);
             String sql = toSQL.toStr(columnList[0], assist, invokerList);

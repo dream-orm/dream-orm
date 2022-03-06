@@ -3,6 +3,7 @@ package com.moxa.dream.antlr.invoker;
 import com.moxa.dream.antlr.callback.Callback;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.smt.InvokerStatement;
+import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.sql.ToAssist;
@@ -26,7 +27,7 @@ public class CallInvoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = invokerStatement.getListColumnStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         Statement statement = columnList[0];
         if (statement instanceof SymbolStatement.LetterStatement) {
             SymbolStatement.LetterStatement callFunctionStatement = (SymbolStatement.LetterStatement) statement;

@@ -10,10 +10,14 @@ import java.util.List;
 
 public abstract class AbstractInvoker implements Invoker {
     private boolean accessible = true;
+    private Handler[] handlers = null;
 
     @Override
-    public Handler[] handler() {
-        return new Handler[0];
+    public Handler[] handle() {
+        if (handlers == null) {
+            handlers = handler();
+        }
+        return handlers;
     }
 
     @Override
@@ -35,6 +39,10 @@ public abstract class AbstractInvoker implements Invoker {
         if (!this.isAccessible()) {
             this.setAccessible(true);
         }
+    }
+
+    protected Handler[] handler() {
+        return new Handler[0];
     }
 
     @Override

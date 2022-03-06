@@ -45,10 +45,9 @@ public abstract class SymbolStatement extends Statement {
         }
     }
 
-
     public static class MarkStatement extends SymbolStatement {
-        public MarkStatement(String symbol) {
-            super(symbol);
+        public MarkStatement() {
+            super("?");
         }
     }
 

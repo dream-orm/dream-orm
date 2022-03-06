@@ -3,6 +3,7 @@ package com.moxa.dream.antlr.sql;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.FunctionStatement;
+import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
 import java.util.List;
@@ -137,7 +138,7 @@ public class ToMYSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.ToCharStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         if (columnList.length == 2) {
             String pattern = statement.getPattern();
             if (pattern == null) {
@@ -152,7 +153,7 @@ public class ToMYSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.ToDateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String pattern = statement.getPattern();
         if (pattern == null) {
             pattern = getPattern(toStr(columnList[1], assist, invokerList));

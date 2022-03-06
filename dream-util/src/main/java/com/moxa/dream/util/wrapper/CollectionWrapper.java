@@ -29,7 +29,7 @@ public class CollectionWrapper extends ObjectWrapper {
             } else
                 return o;
         } else {
-            if(beanWrapper==null) {
+            if (beanWrapper == null) {
                 beanWrapper = new BeanWrapper(new ReflectClass(object));
             }
             return beanWrapper.get(propertyToken);

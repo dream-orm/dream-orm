@@ -1,6 +1,5 @@
 package com.moxa.dream.antlr.expr;
 
-import com.moxa.dream.antlr.bind.Constant;
 import com.moxa.dream.antlr.bind.ExprInfo;
 import com.moxa.dream.antlr.bind.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;

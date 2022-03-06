@@ -9,7 +9,7 @@ import java.util.List;
 public class InvokerStatement extends Statement {
     private String namespace;
     private String function;
-    private ListColumnStatement listColumnStatement;
+    private Statement paramStatement;
 
     public String getNamespace() {
         return namespace;
@@ -27,14 +27,14 @@ public class InvokerStatement extends Statement {
         this.function = function;
     }
 
-    public ListColumnStatement getListColumnStatement() {
-        return listColumnStatement;
+    public Statement getParamStatement() {
+        return paramStatement;
     }
 
-    public void setListColumnStatement(ListColumnStatement listColumnStatement) {
-        this.listColumnStatement = listColumnStatement;
-        if (listColumnStatement != null)
-            listColumnStatement.parentStatement = this;
+    public void setParamStatement(Statement paramStatement) {
+        this.paramStatement = paramStatement;
+        if (paramStatement != null)
+            paramStatement.parentStatement = this;
     }
 
     public void setStatement(Statement statement) {

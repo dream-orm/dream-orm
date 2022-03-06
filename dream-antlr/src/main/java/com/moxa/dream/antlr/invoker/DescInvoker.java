@@ -3,6 +3,7 @@ package com.moxa.dream.antlr.invoker;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
+import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.OrderStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToAssist;
@@ -13,7 +14,7 @@ import java.util.List;
 public class DescInvoker extends AbstractInvoker {
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = invokerStatement.getListColumnStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         if (columnList.length == 1) {
             OrderStatement.DescStatement descStatement = new OrderStatement.DescStatement(columnList[0]);
             invokerStatement.setStatement(descStatement);

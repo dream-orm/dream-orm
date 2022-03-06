@@ -61,7 +61,7 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.ToCharStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         if (columnList.length == 2) {
             return "TO_CHAR(" + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[1], assist, invokerList) + ")";
         } else
@@ -74,7 +74,7 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.RepeatStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String tar = toStr(columnList[0], assist, invokerList);
         String num = toStr(columnList[1], assist, invokerList);
         return "LPAD(" + tar + ",LENGTH(" + tar + ")*" + num + "," + tar + ")";
@@ -87,7 +87,7 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.LocateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         if (columnList.length == 2)
             return "STRPOS(" + toStr(columnList[1], assist, invokerList) + "," + toStr(columnList[0], assist, invokerList) + ")";
         else {
@@ -101,13 +101,13 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.ToDateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[1], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DateForMatStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String pattern = statement.getPattern();
         if (pattern == null) {
             pattern = getPattern(toStr(columnList[1], assist, invokerList));
@@ -119,7 +119,7 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.StrToDateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String pattern = statement.getPattern();
         if (pattern == null) {
             pattern = getPattern(toStr(columnList[1], assist, invokerList));
@@ -269,20 +269,20 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.LogStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        if (statement.getParamsStatement().getColumnList().length == 1)
-            return "LN(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1)
+            return "LN(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
         else
             return "LOG(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.Log2Statement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LOG(2," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "LOG(2," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.Log10Statement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LOG(10," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "LOG(10," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
@@ -312,7 +312,7 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.TruncateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String s1 = toStr(columnList[0], assist, invokerList);
         String s2 = toStr(columnList[1], assist, invokerList);
         return "FLOOR(" + s1 + "*POWER(10," + s2 + "))*POWER(10,-" + s2 + ")";
@@ -331,7 +331,7 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.DateDiffStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "DATE_PART('day'," + toStr(columnList[0], assist, invokerList) + "-" + toStr(columnList[1], assist, invokerList) + ")";
     }
 
@@ -347,7 +347,7 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.DayOfYearStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "CAST(TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'ddd') AS INTEGER)";
+        return "CAST(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ddd') AS INTEGER)";
     }
 
     @Override
@@ -357,17 +357,17 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.MinuteStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'mi')) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'mi')) AS INTEGER)";
     }
 
     @Override
     protected String toString(FunctionStatement.LastDayStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "(DATE_TRUNC('month', " + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ") + INTERVAL '1 month - 1 day')::date";
+        return "(DATE_TRUNC('month', " + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ") + INTERVAL '1 month - 1 day')::date";
     }
 
     @Override
     protected String toString(FunctionStatement.MonthStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'mm')) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'mm')) AS INTEGER)";
     }
 
     @Override
@@ -382,22 +382,22 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.QuarterStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'q')) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'q')) AS INTEGER)";
     }
 
     @Override
     protected String toString(FunctionStatement.SecondStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'ss')) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ss')) AS INTEGER)";
     }
 
     @Override
     protected String toString(FunctionStatement.WeekOfYearStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'ww'" + ")) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ww'" + ")) AS INTEGER)";
     }
 
     @Override
     protected String toString(FunctionStatement.YearStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'yyyy'" + ")) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'yyyy'" + ")) AS INTEGER)";
     }
 
     @Override
@@ -407,7 +407,7 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.IfStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "CASE WHEN " + toStr(columnList[0], assist, invokerList) + " THEN " + toStr(columnList[1], assist, invokerList) + " ELSE " + toStr(columnList[2], assist, invokerList) + " END";
     }
 

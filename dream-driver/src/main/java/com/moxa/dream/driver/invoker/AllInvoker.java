@@ -41,7 +41,7 @@ public class AllInvoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = invokerStatement.getListColumnStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         String[] tableList = null;
         if (!ObjectUtil.isNull(columnList)) {
             tableList = new String[columnList.length];

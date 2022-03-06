@@ -41,8 +41,7 @@ public class ToDREAM extends ToSQL {
 
     @Override
     protected String toString(FunctionStatement.ToDateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
-        return "TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[1], assist, invokerList) + ")";
+        return "TO_DATE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -147,7 +146,7 @@ public class ToDREAM extends ToSQL {
 
     @Override
     protected String toString(InsertStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "INSERT INTO " + toStr(statement.getTable(), assist, invokerList) + (statement.getParams() != null ? toStr(statement.getParams(), assist, invokerList) : "") + " " + toStr(statement.getValues(), assist, invokerList);
+        return "INSERT INTO " + toStr(statement.getTable(), assist, invokerList) + (statement.getParams() != null ? toStr(statement.getParams(), assist, invokerList) : " ") + toStr(statement.getValues(), assist, invokerList);
     }
 
     @Override
@@ -374,7 +373,7 @@ public class ToDREAM extends ToSQL {
 
     @Override
     protected String toString(FunctionStatement.LowerStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LOWER(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "LOWER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -524,12 +523,12 @@ public class ToDREAM extends ToSQL {
 
     @Override
     protected String toString(FunctionStatement.Log2Statement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LOG2(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "LOG2(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.Log10Statement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LOG10(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "LOG10(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -614,42 +613,42 @@ public class ToDREAM extends ToSQL {
 
     @Override
     protected String toString(FunctionStatement.DayStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DAY(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DAY(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DayOfWeekStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DAYOFWEEK(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DAYOFWEEK(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DayOfYearStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DAYOFYEAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DAYOFYEAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.HourStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "HOUR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "HOUR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.MinuteStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "MINUTE(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "MINUTE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.LastDayStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LAST_DAY(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "LAST_DAY(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.MonthStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "MONTH(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "MONTH(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATE(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -659,17 +658,17 @@ public class ToDREAM extends ToSQL {
 
     @Override
     protected String toString(FunctionStatement.QuarterStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "QUARTER(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "QUARTER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.SecondStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "SECOND(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "SECOND(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.WeekOfYearStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "WEEKOFYEAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "WEEKOFYEAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -901,7 +900,7 @@ public class ToDREAM extends ToSQL {
 
     @Override
     protected String toString(InvokerStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "@" + statement.getFunction() + (statement.getNamespace() == null ? "" : (":" + statement.getNamespace())) + "(" + toStr(statement.getListColumnStatement(), assist, invokerList) + ")";
+        return "@" + statement.getFunction() + (statement.getNamespace() == null ? "" : (":" + statement.getNamespace())) + "(" + toStr(statement.getParamStatement(), assist, invokerList) + ")";
     }
 
     @Override

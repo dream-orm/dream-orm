@@ -30,7 +30,7 @@ public abstract class ToSQL {
             handlerQueue = new ArrayDeque<>();
             for (Invoker invoker : new ArrayList<>(invokerList)) {
                 if (invoker.isAccessible()) {
-                    statement = assist.beforeChain(statement, this, handlerQueue, invoker.handler(), invokerList);
+                    statement = assist.beforeChain(statement, this, handlerQueue, invoker.handle(), invokerList);
                     if (statement == null)
                         return "";
                 }

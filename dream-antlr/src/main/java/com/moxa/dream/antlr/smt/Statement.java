@@ -30,6 +30,10 @@ public abstract class Statement {
         return parentStatement;
     }
 
+    public void setParentStatement(Statement parentStatement) {
+        this.parentStatement = parentStatement;
+    }
+
     protected boolean isNeedInnerCache(Statement... statements) {
         needCache = true;
         for (Statement statement : statements) {

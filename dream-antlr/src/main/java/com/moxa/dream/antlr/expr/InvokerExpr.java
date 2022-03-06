@@ -5,7 +5,6 @@ import com.moxa.dream.antlr.bind.ExprInfo;
 import com.moxa.dream.antlr.bind.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.InvokerStatement;
-import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
 public class InvokerExpr extends SqlExpr {
@@ -61,9 +60,8 @@ public class InvokerExpr extends SqlExpr {
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) {
         push();
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader,new ExprInfo(ExprType.COMMA, ","));
-        ListColumnStatement listColumnStatement = (ListColumnStatement) listColumnExpr.expr();
-        invokerStatement.setListColumnStatement(listColumnStatement);
+        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ","));
+        invokerStatement.setParamStatement(listColumnExpr.expr());
         setExprTypes(ExprType.RBRACE);
         return expr();
     }

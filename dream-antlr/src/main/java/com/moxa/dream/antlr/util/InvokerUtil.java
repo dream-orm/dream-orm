@@ -38,7 +38,7 @@ public class InvokerUtil {
                 listColumnStatement.add(statement);
             }
         }
-        invokerStatement.setListColumnStatement(listColumnStatement);
+        invokerStatement.setParamStatement(listColumnStatement);
         return invokerStatement;
     }
 }

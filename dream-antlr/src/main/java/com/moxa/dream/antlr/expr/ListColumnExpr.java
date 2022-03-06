@@ -11,8 +11,8 @@ public class ListColumnExpr extends HelperExpr {
     private final ExprType cut;
     private ListColumnStatement listColumnStatement = new ListColumnStatement();
 
-    public ListColumnExpr(ExprReader exprReader,ExprInfo exprInfo){
-        this(exprReader,()->new CompareExpr(exprReader),exprInfo);
+    public ListColumnExpr(ExprReader exprReader, ExprInfo exprInfo) {
+        this(exprReader, () -> new CompareExpr(exprReader), exprInfo);
     }
 
     public ListColumnExpr(ExprReader exprReader, Helper helper, ExprInfo exprInfo) {
@@ -42,7 +42,11 @@ public class ListColumnExpr extends HelperExpr {
 
     @Override
     public Statement nil() {
-        return listColumnStatement;
+        Statement[] columnList = listColumnStatement.getColumnList();
+        if (columnList.length == 1)
+            return columnList[0];
+        else
+            return listColumnStatement;
     }
 
 }

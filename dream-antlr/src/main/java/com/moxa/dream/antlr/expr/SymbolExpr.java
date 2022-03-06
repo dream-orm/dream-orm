@@ -87,7 +87,7 @@ public class SymbolExpr extends SqlExpr {
     @Override
     protected Statement exprMark(ExprInfo exprInfo) {
         push();
-        symbolStatement = new SymbolStatement.MarkStatement(exprInfo.getInfo());
+        symbolStatement = new SymbolStatement.MarkStatement();
         setExprTypes(ExprType.NIL);
         return expr();
     }

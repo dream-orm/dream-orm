@@ -6,6 +6,7 @@ import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.handler.scan.*;
 import com.moxa.dream.antlr.smt.InvokerStatement;
+import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToAssist;
@@ -41,7 +42,7 @@ public class ScanInvoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = invokerStatement.getListColumnStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         if (columnList.length != 1)
             throw new InvokerException("参数个数错误,不满足@" + AntlrInvokerFactory.SCAN + ":" + AntlrInvokerFactory.NAMESPACE + "(crud)");
         String sql = toSQL.toStr(columnList[0], assist, invokerList);

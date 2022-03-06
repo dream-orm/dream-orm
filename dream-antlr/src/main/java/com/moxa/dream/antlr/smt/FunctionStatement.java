@@ -2,7 +2,7 @@ package com.moxa.dream.antlr.smt;
 
 public abstract class FunctionStatement extends Statement {
 
-    protected ListColumnStatement paramsStatement;
+    protected Statement paramsStatement;
 
     protected String functionName;
 
@@ -14,11 +14,11 @@ public abstract class FunctionStatement extends Statement {
         this.functionName = functionName;
     }
 
-    public ListColumnStatement getParamsStatement() {
+    public Statement getParamsStatement() {
         return paramsStatement;
     }
 
-    public void setParamsStatement(ListColumnStatement paramsStatement) {
+    public void setParamsStatement(Statement paramsStatement) {
         this.paramsStatement = paramsStatement;
         if (paramsStatement != null) {
             paramsStatement.parentStatement = this;

@@ -3,6 +3,7 @@ package com.moxa.dream.test.antlr.myfucntion.simple;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.CustomFunctionStatement;
+import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
@@ -39,7 +40,7 @@ public class DecodeStatement extends CustomFunctionStatement {
      */
     protected String toOther(ToSQL toSQL, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         //获取decode参数列表
-        Statement[] columnList = paramsStatement.getColumnList();
+        Statement[] columnList = ((ListColumnStatement) paramsStatement).getColumnList();
         //翻译第一个参数，拿到第一个条件字符串
         String value = toSQL.toStr(columnList[0], assist, invokerList);
         //开始手动拼接case语句

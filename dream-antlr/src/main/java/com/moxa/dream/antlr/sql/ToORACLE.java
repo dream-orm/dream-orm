@@ -2,11 +2,16 @@ package com.moxa.dream.antlr.sql;
 
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.expr.QueryExpr;
+import com.moxa.dream.antlr.handler.AbstractHandler;
+import com.moxa.dream.antlr.handler.Handler;
+import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.util.ExprUtil;
+import com.moxa.dream.util.common.ObjectUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ToORACLE extends ToPubSQL {
@@ -71,7 +76,7 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.RepeatStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String tar = toStr(columnList[0], assist, invokerList);
         String num = toStr(columnList[1], assist, invokerList);
         return "LPAD(" + tar + ",LENGTH(" + tar + ")*" + num + "," + tar + ")";
@@ -84,7 +89,7 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.LocateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         Statement tempStatement = columnList[0];
         columnList[0] = columnList[1];
         columnList[1] = tempStatement;
@@ -93,13 +98,13 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.ToDateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[1], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DateForMatStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String pattern = statement.getPattern();
         if (pattern == null) {
             pattern = getPattern(toStr(columnList[1], assist, invokerList));
@@ -110,13 +115,12 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.StrToDateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String pattern = statement.getPattern();
         if (pattern == null) {
             pattern = getPattern(toStr(columnList[1], assist, invokerList));
             statement.setPattern(pattern);
         }
-
         return "TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")";
     }
 
@@ -235,6 +239,23 @@ public class ToORACLE extends ToPubSQL {
     }
 
     @Override
+    protected String toString(InsertStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
+        if (invokerList == null) {
+            invokerList = new ArrayList<>();
+        }
+        InsertInvoker insertInvoker = new InsertInvoker(statement);
+        invokerList.add(0, insertInvoker);
+        String result = toStr(statement.getValues(), assist, invokerList);
+        invokerList.remove(insertInvoker);
+        String batchSQL = insertInvoker.getBatchSQL();
+        if (!ObjectUtil.isNull(batchSQL)) {
+            return batchSQL;
+        } else {
+            return "INSERT INTO " + toStr(statement.getTable(), assist, invokerList) + (statement.getParams() != null ? toStr(statement.getParams(), assist, invokerList) : " ") + result;
+        }
+    }
+
+    @Override
     protected String toString(LimitStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         StringBuilder builder = new StringBuilder();
         builder.append(" OFFSET " + toStr(statement.getFirst(), assist, invokerList));
@@ -262,7 +283,7 @@ public class ToORACLE extends ToPubSQL {
             } else {
                 maxValue = toDREAM.toStr(second, null, null);
                 minValue = toDREAM.toStr(first, null, null);
-                sql = "select* from(select rownum rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn between " + minValue + " and " + minValue +"+"+ maxValue;
+                sql = "select* from(select rownum rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn between " + minValue + " and " + minValue + "+" + maxValue;
             }
             QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
             ExprUtil.copy(statement, queryStatement);
@@ -277,7 +298,7 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.ConcatStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         if (columnList.length == 2)
             return super.toString(statement, assist, invokerList);
         else {
@@ -292,7 +313,7 @@ public class ToORACLE extends ToPubSQL {
     }
 
     protected String toString(FunctionStatement.ConcatWsStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String link = toStr(columnList[0], assist, invokerList);
         int i;
         StringBuilder builder = new StringBuilder();
@@ -305,17 +326,17 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.LeftStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "SUBSTR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",1," + toStr(statement.getParamsStatement().getColumnList()[1], assist, invokerList) + ")";
+        return "SUBSTR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",1," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.RightStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "SUBSTR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",-" + toStr(statement.getParamsStatement().getColumnList()[1], assist, invokerList) + ")";
+        return "SUBSTR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",-" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.SpaceStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LPAD(' '," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",' ')";
+        return "LPAD(' '," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",' ')";
     }
 
     @Override
@@ -340,20 +361,20 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.LogStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        if (statement.getParamsStatement().getColumnList().length == 1)
-            return "LN(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1)
+            return "LN(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
         else
             return "LOG(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.Log2Statement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LOG(2," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "LOG(2," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.Log10Statement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LOG(10," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "LOG(10," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
@@ -383,7 +404,7 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.TruncateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String s1 = toStr(columnList[0], assist, invokerList);
         String s2 = toStr(columnList[1], assist, invokerList);
         return "FLOOR(" + s1 + "*POWER(10," + s2 + "))*POWER(10,-" + s2 + ")";
@@ -402,7 +423,7 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.DateDiffStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "CEIL(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + "-" + toStr(statement.getParamsStatement().getColumnList()[1], assist, invokerList) + ")";
+        return "CEIL(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + "-" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList) + ")";
     }
 
     @Override
@@ -417,7 +438,7 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.DayOfYearStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'ddd'))";
+        return "TO_NUMBER(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ddd'))";
     }
 
     @Override
@@ -427,17 +448,17 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.MinuteStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'mi'))";
+        return "TO_NUMBER(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'mi'))";
     }
 
     @Override
     protected String toString(FunctionStatement.LastDayStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LAST_DAY(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "LAST_DAY(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.MonthStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'mm'))";
+        return "TO_NUMBER(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'mm'))";
     }
 
     @Override
@@ -452,22 +473,22 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.QuarterStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'q'))";
+        return "TO_NUMBER(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'q'))";
     }
 
     @Override
     protected String toString(FunctionStatement.SecondStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'ss'))";
+        return "TO_NUMBER(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ss'))";
     }
 
     @Override
     protected String toString(FunctionStatement.WeekOfYearStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'ww'" + "))";
+        return "TO_NUMBER(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ww'" + "))";
     }
 
     @Override
     protected String toString(FunctionStatement.YearStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",'yyyy'" + "))";
+        return "TO_NUMBER(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'yyyy'" + "))";
     }
 
     @Override
@@ -477,7 +498,7 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.IfStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "CASE WHEN " + toStr(columnList[0], assist, invokerList) + " THEN " + toStr(columnList[1], assist, invokerList) + " ELSE " + toStr(columnList[2], assist, invokerList) + " END";
     }
 
@@ -517,5 +538,96 @@ public class ToORACLE extends ToPubSQL {
         String left = toStr(conditionStatement.getLeft(), assist, invokerList);
         String right = toStr(conditionStatement.getRight(), assist, invokerList);
         return left + right + "-2*BITAND(" + left + "," + right + ")";
+    }
+
+    protected class InsertInvoker extends AbstractInvoker {
+
+        private InsertStatement insertStatement;
+        private String batchSQL;
+
+        public InsertInvoker(InsertStatement statement) {
+            this.insertStatement = statement;
+        }
+
+        @Override
+        protected String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+            throw new InvokerException("not support InsertInvoker");
+        }
+
+        @Override
+        public Handler[] handler() {
+            return new Handler[]{new ValuesHandler(this)};
+        }
+
+        public InsertStatement getInsertStatement() {
+            return insertStatement;
+        }
+
+        public String getBatchSQL() {
+            return batchSQL;
+        }
+
+        public void setBatchSQL(String batchSQL) {
+            this.batchSQL = batchSQL;
+        }
+    }
+
+    protected class ValuesHandler extends AbstractHandler {
+
+        private InsertInvoker insertInvoker;
+
+        public ValuesHandler(InsertInvoker insertInvoker) {
+            this.insertInvoker = insertInvoker;
+        }
+
+        @Override
+        protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+            return statement;
+        }
+
+        @Override
+        protected boolean interest(Statement statement, ToAssist sqlAssist) {
+            return statement instanceof InsertStatement.ValuesStatement;
+        }
+
+        @Override
+        protected Handler[] handlerBound() {
+            return new Handler[]{new ListColumnHandler(insertInvoker)};
+        }
+
+        protected class ListColumnHandler extends AbstractHandler {
+            private InsertInvoker insertInvoker;
+
+            public ListColumnHandler(InsertInvoker insertInvoker) {
+                this.insertInvoker = insertInvoker;
+            }
+
+            @Override
+            protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+                insertInvoker.setAccessible(false);
+                ListColumnStatement listColumnStatement = (ListColumnStatement) statement;
+                Statement[] columnList = listColumnStatement.getColumnList();
+                if (columnList.length > 1) {
+                    InsertStatement insertStatement = insertInvoker.getInsertStatement();
+                    String insertColumns = "INTO " + toStr(insertStatement.getTable(), assist, invokerList) + (insertStatement.getParams() != null ? toStr(insertStatement.getParams(), assist, invokerList) : "");
+                    StringBuilder sqlBuilder = new StringBuilder("INSERT ALL ");
+                    for (Statement column : columnList) {
+                        String insertValues = toSQL.toStr(column, assist, invokerList);
+                        sqlBuilder.append(insertColumns + " VALUES " + insertValues);
+                    }
+                    sqlBuilder.append(" SELECT 1 FROM DUAL");
+                    insertInvoker.setBatchSQL(sqlBuilder.toString());
+                    return null;
+                } else
+                    return statement;
+            }
+
+            @Override
+            protected boolean interest(Statement statement, ToAssist sqlAssist) {
+                return statement instanceof ListColumnStatement
+                        && statement.getParentStatement() != null
+                        && statement.getParentStatement() instanceof InsertStatement.ValuesStatement;
+            }
+        }
     }
 }

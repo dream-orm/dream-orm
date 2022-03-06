@@ -1,10 +1,8 @@
 package com.moxa.dream.antlr.invoker;
 
 import com.moxa.dream.antlr.exception.InvokerException;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.smt.InvokerStatement;
-import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.util.wrapper.ObjectWrapper;
@@ -23,10 +21,7 @@ public class $Invoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = invokerStatement.getListColumnStatement().getColumnList();
-        if (columnList.length != 1)
-            throw new InvokerException("参数个数错误,不满足@" + AntlrInvokerFactory.$ + ":" + AntlrInvokerFactory.NAMESPACE + "(value)");
-        String paramName = toSQL.toStr(columnList[0], assist, invokerList);
+        String paramName = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
         Object value = paramWrapper.get(paramName);
         paramInfoList.add(new ParamInfo(paramName, value));
         return "?";
@@ -57,6 +52,11 @@ public class $Invoker extends AbstractInvoker {
 
         public Object getValue() {
             return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
         }
     }
 }

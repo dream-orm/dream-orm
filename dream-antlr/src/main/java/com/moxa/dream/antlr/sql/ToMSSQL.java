@@ -132,7 +132,7 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.ToCharStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         if (columnList.length == 2) {
             String pattern = statement.getPattern();
             if (pattern == null) {
@@ -155,7 +155,7 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.InStrStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "CHARINDEX(" + toStr(columnList[1], assist, invokerList) + "," + toStr(columnList[0], assist, invokerList) + ")";
     }
 
@@ -166,13 +166,13 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.ToDateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "CONVERT(datetime," + toStr(columnList[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DateForMatStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String pattern = statement.getPattern();
         if (pattern == null) {
             pattern = toStr(columnList[1], assist, invokerList);
@@ -183,7 +183,7 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.StrToDateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "CONVERT(datetime," + toStr(columnList[0], assist, invokerList) + ")";
     }
 
@@ -241,7 +241,6 @@ public class ToMSSQL extends ToPubSQL {
         if (!statement.isPositive())
             type = "-";
         return "DATEADD(mi," + type + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-
     }
 
     @Override
@@ -265,7 +264,6 @@ public class ToMSSQL extends ToPubSQL {
     @Override
     protected String toString(CastTypeStatement.TimeCastStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS TIME)";
-
     }
 
     @Override
@@ -296,7 +294,7 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.SubStrStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String str = toStr(columnList[0], assist, invokerList);
         String start = toStr(columnList[1], assist, invokerList);
         String num2;
@@ -332,7 +330,7 @@ public class ToMSSQL extends ToPubSQL {
                 querySql = toDREAM.toStr(statement, null, null);
                 maxValue = toDREAM.toStr(second, null, null);
                 minValue = toDREAM.toStr(first, null, null);
-                sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn between " + minValue + " and " + minValue +"+"+ maxValue;
+                sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn between " + minValue + " and " + minValue + "+" + maxValue;
             }
             QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
             ExprUtil.copy(statement, queryStatement);
@@ -362,17 +360,17 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.LpadStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        String num = toStr(statement.getParamsStatement().getColumnList()[1], assist, invokerList);
-        String str2 = toStr(statement.getParamsStatement().getColumnList()[2], assist, invokerList);
-        String str1 = toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList);
+        String num = toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList);
+        String str2 = toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[2], assist, invokerList);
+        String str1 = toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList);
         return "CASE WHEN LEN(" + str1 + ")<" + num + " THEN RIGHT(REPLICATE(" + str2 + "," + num + ")+" + str1 + "," + num + ") ELSE LEFT(" + str1 + "," + num + ") END";
     }
 
     @Override
     protected String toString(FunctionStatement.RpadStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        String num = toStr(statement.getParamsStatement().getColumnList()[1], assist, invokerList);
-        return "LEFT(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + "+REPLICATE("
-                + toStr(statement.getParamsStatement().getColumnList()[2], assist, invokerList) + ","
+        String num = toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList);
+        return "LEFT(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + "+REPLICATE("
+                + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[2], assist, invokerList) + ","
                 + num + ")," + num + ")";
     }
 
@@ -398,12 +396,12 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.Log2Statement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LOG(2," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "LOG(2," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.Log10Statement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LOG10(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "LOG10(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
@@ -428,14 +426,14 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.RoundStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        if (statement.getParamsStatement().getColumnList().length == 1)
-            return "ROUND(" + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ",0)";
+        if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1)
+            return "ROUND(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",0)";
         else return "ROUND(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.TruncateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String s1 = toStr(columnList[0], assist, invokerList);
         String s2 = toStr(columnList[1], assist, invokerList);
         return "FLOOR(" + s1 + "*POWER(CONVERT(FLOAT,10)," + s2 + "))*POWER(CONVERT(FLOAT,10),-" + s2 + ")";
@@ -455,43 +453,43 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.DateDiffStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATEDIFF(dd," + toStr(statement.getParamsStatement().getColumnList()[1], assist, invokerList) + "," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATEDIFF(dd," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList) + "," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DayStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATEPART(" + "dd," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "dd," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DayOfWeekStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATEPART(" + "w," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "w," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DayOfYearStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATEPART(" + "dy," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "dy," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.HourStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATEPART(" + "hh," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "hh," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.MinuteStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATEPART(" + "mi," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "mi," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.LastDayStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        String s = toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList);
+        String s = toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList);
         return "DATEADD(dd,-DAY(" + s + "),DATEADD(m,1," + s + "))";
     }
 
     @Override
     protected String toString(FunctionStatement.MonthStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATEPART(" + "m," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "m," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
@@ -506,22 +504,22 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.QuarterStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATEPART(" + "q," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "q," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.SecondStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATEPART(" + "s," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "s," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.WeekOfYearStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATEPART(" + "ww," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "ww," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.YearStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DATEPART(" + "yy," + toStr(statement.getParamsStatement().getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "yy," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
@@ -531,7 +529,7 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.IfStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = statement.getParamsStatement().getColumnList();
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "CASE WHEN " + toStr(columnList[0], assist, invokerList) + " THEN " + toStr(columnList[1], assist, invokerList) + " ELSE " + toStr(columnList[2], assist, invokerList) + " END";
     }
 

@@ -5,11 +5,7 @@ public class NullWrapper extends ObjectWrapper {
 
     @Override
     public Object set(PropertyToken propertyToken, Object value) throws WrapperException {
-        String ref = propertyToken.getRef();
-        if (ref == null)
-            throw new WrapperException("null对象不支持Set方法");
-        else
-            throw new WrapperException(ref + "引用类对象为null,不支持Set方法");
+        throw new WrapperException("null对象不支持Set方法");
     }
 
     @Override
