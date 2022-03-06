@@ -12,7 +12,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
+//@foreach(,@$(item))
+//@foreach(,@$(item.name))
+//@foreach(,`(@$(item.name),@$(item.name))`)
 public class ForEachInvoker extends AbstractInvoker {
     private String join = ",";
     private String mark = "?";

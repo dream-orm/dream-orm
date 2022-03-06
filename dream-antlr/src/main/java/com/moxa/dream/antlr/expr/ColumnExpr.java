@@ -42,7 +42,7 @@ public class ColumnExpr extends SqlExpr {
 
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) {
-        BraceExpr braceExpr = new BraceExpr(exprReader, () -> new ColumnExpr(exprReader));
+        BraceExpr braceExpr = new BraceExpr(exprReader);
         statement = braceExpr.expr();
         setExprTypes(ExprType.NIL);
         return expr();

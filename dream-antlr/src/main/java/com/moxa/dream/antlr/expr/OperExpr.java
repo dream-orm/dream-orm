@@ -188,7 +188,7 @@ public class OperExpr extends TreeExpr {
 
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) {
-        BraceExpr braceExpr = new BraceExpr(exprReader, () -> new OperExpr(exprReader));
+        BraceExpr braceExpr = new BraceExpr(exprReader);
         BraceStatement braceStatement = (BraceStatement) braceExpr.expr();
         exprTree(braceStatement);
         setExprTypes(OPER).addExprTypes(ExprType.NIL);

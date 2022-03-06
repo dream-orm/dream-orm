@@ -33,10 +33,7 @@ public class UpdateExpr extends SqlExpr {
     @Override
     protected Statement exprSet(ExprInfo exprInfo) {
         push();
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> {
-            CompareExpr compareExpr = new CompareExpr(exprReader);
-            return compareExpr;
-        }, new ExprInfo(ExprType.COMMA, ","));
+        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader,new ExprInfo(ExprType.COMMA, ","));
         updateStatement.setConditionList(listColumnExpr.expr());
         setExprTypes(ExprType.WHERE, ExprType.NIL);
         return expr();

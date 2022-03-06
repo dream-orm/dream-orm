@@ -112,4 +112,5 @@ public class ParamInvokerTest extends AbstractSqlTest {
             throw new RuntimeException(e);
         }
     }
+
 }

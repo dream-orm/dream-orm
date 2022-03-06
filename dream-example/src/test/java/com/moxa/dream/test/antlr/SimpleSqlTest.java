@@ -7,17 +7,19 @@ public class SimpleSqlTest extends AbstractSqlTest {
 
     public static void main(String[] args) {
         SimpleSqlTest simpleSqlTest = new SimpleSqlTest();
-        simpleSqlTest.testStr();
-        simpleSqlTest.testNumber();
-        simpleSqlTest.testDate();
-        simpleSqlTest.testOther();
-        simpleSqlTest.testCaseWhen();
+//        simpleSqlTest.testStr();
+//        simpleSqlTest.testNumber();
+//        simpleSqlTest.testDate();
+//        simpleSqlTest.testOther();
+//        simpleSqlTest.testCaseWhen();
         simpleSqlTest.testLimit();
         simpleSqlTest.testOffset();
         simpleSqlTest.testCompare();
         simpleSqlTest.testSelectDot();
         simpleSqlTest.testSelectFunction();
+        simpleSqlTest.testInsert();
     }
+
 
     public void testStr() {
         testSqlForMany("SELECT ascii(s),len(s),CHAR_LENGTH(s),CHARACTER_LENGTH(s),concat(s1,s2),concat(s1,s2,s3),concat_ws(s,s1,s2,s3),repeat(s,n),reverse(s),replace(s,from_s,to_s)" +
@@ -75,5 +77,9 @@ public class SimpleSqlTest extends AbstractSqlTest {
 
     public void testSelectFunction() {
         testSqlForMany("SELECT year,max,year.max", null, null);
+    }
+
+    public void testInsert() {
+        testSqlForMany("insert into dual(id,name)values(id,name),(?,?)", null, null);
     }
 }

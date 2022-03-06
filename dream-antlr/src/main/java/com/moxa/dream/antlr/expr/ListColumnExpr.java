@@ -11,6 +11,10 @@ public class ListColumnExpr extends HelperExpr {
     private final ExprType cut;
     private ListColumnStatement listColumnStatement = new ListColumnStatement();
 
+    public ListColumnExpr(ExprReader exprReader,ExprInfo exprInfo){
+        this(exprReader,()->new CompareExpr(exprReader),exprInfo);
+    }
+
     public ListColumnExpr(ExprReader exprReader, Helper helper, ExprInfo exprInfo) {
         super(exprReader, helper);
         if (exprInfo == null)

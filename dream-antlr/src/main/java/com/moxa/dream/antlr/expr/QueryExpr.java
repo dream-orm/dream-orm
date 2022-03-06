@@ -329,14 +329,7 @@ public class QueryExpr extends SqlExpr {
         @Override
         protected Statement exprBy(ExprInfo exprInfo) {
             push();
-            ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> {
-                CompareExpr operTreeExpr = new CompareExpr(exprReader, () -> {
-                    ColumnExpr columnExpr = new ColumnExpr(exprReader);
-                    columnExpr.setExprTypes(Constant.SYMBOL).addExprTypes(ExprType.CASE);
-                    return columnExpr;
-                });
-                return operTreeExpr;
-            }, new ExprInfo(ExprType.COMMA, ","));
+            ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ","));
 
             groupStatement.setGroup(listColumnExpr.expr());
             setExprTypes(ExprType.NIL);

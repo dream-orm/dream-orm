@@ -23,18 +23,6 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.moxa</groupId>
-            <artifactId>dream-frame</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava-bom</artifactId>
-            <version>31.0.1-jre</version>
-            <type>pom</type>
-        </dependency>
     </dependencies>
 
     <properties>

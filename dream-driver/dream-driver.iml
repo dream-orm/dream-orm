@@ -13,6 +13,5 @@
     <orderEntry type="module" module-name="dream-util" />
     <orderEntry type="module" module-name="dream-antlr" />
     <orderEntry type="module" module-name="dream-engine" />
-    <orderEntry type="library" name="Maven: com.moxa:dream-frame:1.0-SNAPSHOT" level="project" />
   </component>
 </module>

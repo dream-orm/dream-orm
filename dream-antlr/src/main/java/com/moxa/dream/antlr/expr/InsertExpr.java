@@ -39,13 +39,7 @@ public class InsertExpr extends SqlExpr {
 
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) {
-        BraceExpr braceExpr = new BraceExpr(exprReader,
-                () -> new ListColumnExpr(exprReader,
-                        () -> {
-                            ColumnExpr columnExpr = new ColumnExpr(exprReader);
-                            columnExpr.setExprTypes(ExprType.LETTER);
-                            return columnExpr;
-                        }, new ExprInfo(ExprType.COMMA, ",")));
+        BraceExpr braceExpr = new BraceExpr(exprReader);
         Statement statement = braceExpr.expr();
         insertStatement.setParams(statement);
         setExprTypes(ExprType.VALUES, ExprType.SELECT);
@@ -55,11 +49,8 @@ public class InsertExpr extends SqlExpr {
     @Override
     protected Statement exprValues(ExprInfo exprInfo) {
         push();
-        BraceExpr braceExpr = new BraceExpr(exprReader,
-                () -> new ListColumnExpr(exprReader,
-                        () -> new CompareExpr(exprReader),
-                        new ExprInfo(ExprType.COMMA, ",")));
-        insertStatement.setValues(new InsertStatement.ValuesStatement(braceExpr.expr()));
+        Statement statement = new ListColumnExpr(exprReader,new ExprInfo(ExprType.COMMA,",")).expr();
+        insertStatement.setValues(new InsertStatement.ValuesStatement(statement));
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -68,6 +59,15 @@ public class InsertExpr extends SqlExpr {
     protected Statement exprSelect(ExprInfo exprInfo) {
         QueryExpr queryExpr = new QueryExpr(exprReader);
         Statement statement = queryExpr.expr();
+        insertStatement.setValues(statement);
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprInvoker(ExprInfo exprInfo) {
+        ColumnExpr columnExpr=new ColumnExpr(exprReader);
+        Statement statement = columnExpr.expr();
         insertStatement.setValues(statement);
         setExprTypes(ExprType.NIL);
         return expr();

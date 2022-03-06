@@ -61,7 +61,7 @@ public class InvokerExpr extends SqlExpr {
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) {
         push();
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new CompareExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
+        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader,new ExprInfo(ExprType.COMMA, ","));
         ListColumnStatement listColumnStatement = (ListColumnStatement) listColumnExpr.expr();
         invokerStatement.setListColumnStatement(listColumnStatement);
         setExprTypes(ExprType.RBRACE);

@@ -1002,8 +1002,7 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             protected Statement exprLBrace(ExprInfo exprInfo) {
-                BraceExpr braceExpr = new BraceExpr(exprReader, () -> new ListColumnExpr(exprReader,
-                        () -> new CompareExpr(exprReader), new ExprInfo(ExprType.COMMA, ",")));
+                BraceExpr braceExpr = new BraceExpr(exprReader);
                 BraceStatement braceStatement = (BraceStatement) braceExpr.expr();
                 ((ConvertTypeStatement.DecimalConvertStatement) convertTypeStatement).setParamStatement(braceStatement);
                 setExprTypes(ExprType.NIL);
@@ -1112,8 +1111,7 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             protected Statement exprLBrace(ExprInfo exprInfo) {
-                BraceExpr braceExpr = new BraceExpr(exprReader, () -> new ListColumnExpr(exprReader,
-                        () -> new CompareExpr(exprReader), new ExprInfo(ExprType.COMMA, ",")));
+                BraceExpr braceExpr = new BraceExpr(exprReader);
                 BraceStatement braceStatement = (BraceStatement) braceExpr.expr();
                 ((CastTypeStatement.DecimalCastStatement) castTypeStatement).setParamStatement(braceStatement);
                 setExprTypes(ExprType.NIL);

@@ -146,7 +146,7 @@ public class CompareExpr extends TreeExpr {
 
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) {
-        BraceExpr braceExpr = new BraceExpr(exprReader, () -> new CompareExpr(exprReader));
+        BraceExpr braceExpr = new BraceExpr(exprReader);
         BraceStatement braceStatement = (BraceStatement) braceExpr.expr();
         exprTree(braceStatement);
         setExprTypes(compare).addExprTypes(condition).addExprTypes(OperExpr.OPER).addExprTypes(ExprType.NIL);
