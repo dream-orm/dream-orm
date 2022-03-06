@@ -250,6 +250,7 @@ public class ToORACLE extends ToPubSQL {
         if (limitStatement != null && !limitStatement.isOffset()) {
             Statement first = limitStatement.getFirst();
             Statement second = limitStatement.getSecond();
+            statement.setLimitStatement(null);
             ToSQL toDREAM = new ToDREAM();
             String minValue;
             String maxValue;
@@ -261,7 +262,7 @@ public class ToORACLE extends ToPubSQL {
             } else {
                 maxValue = toDREAM.toStr(second, null, null);
                 minValue = toDREAM.toStr(first, null, null);
-                sql = "select* from(select rownum rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn between " + minValue + " and " + minValue + maxValue;
+                sql = "select* from(select rownum rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn between " + minValue + " and " + minValue +"+"+ maxValue;
             }
             QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
             ExprUtil.copy(statement, queryStatement);

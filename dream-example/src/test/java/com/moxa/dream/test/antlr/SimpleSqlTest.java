@@ -7,11 +7,11 @@ public class SimpleSqlTest extends AbstractSqlTest {
 
     public static void main(String[] args) {
         SimpleSqlTest simpleSqlTest = new SimpleSqlTest();
-//        simpleSqlTest.testStr();
-//        simpleSqlTest.testNumber();
-//        simpleSqlTest.testDate();
-//        simpleSqlTest.testOther();
-//        simpleSqlTest.testCaseWhen();
+        simpleSqlTest.testStr();
+        simpleSqlTest.testNumber();
+        simpleSqlTest.testDate();
+        simpleSqlTest.testOther();
+        simpleSqlTest.testCaseWhen();
         simpleSqlTest.testLimit();
         simpleSqlTest.testOffset();
         simpleSqlTest.testCompare();
