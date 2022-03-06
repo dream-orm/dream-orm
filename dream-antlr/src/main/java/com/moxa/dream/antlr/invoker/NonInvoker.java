@@ -16,7 +16,7 @@ public class NonInvoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
-        String nonResult = toSQL.toStr(invokerStatement.getParentStatement(), assist, invokerList);
+        String nonResult = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
         if (ExprUtil.isEmpty(nonResult))
             nonResult = "1=1";
         return nonResult;

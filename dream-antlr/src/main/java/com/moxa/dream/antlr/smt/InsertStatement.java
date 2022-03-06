@@ -43,13 +43,13 @@ public class InsertStatement extends Statement {
     public static class ValuesStatement extends Statement {
         private Statement statement;
 
-        public ValuesStatement(Statement statement) {
-            this.statement = statement;
-            this.statement.parentStatement = this;
-        }
-
         public Statement getStatement() {
             return statement;
+        }
+
+        public void setStatement(Statement statement) {
+            this.statement = statement;
+            this.statement.parentStatement = this;
         }
 
         @Override

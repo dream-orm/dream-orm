@@ -607,24 +607,22 @@ public class ToORACLE extends ToPubSQL {
                 insertInvoker.setAccessible(false);
                 ListColumnStatement listColumnStatement = (ListColumnStatement) statement;
                 Statement[] columnList = listColumnStatement.getColumnList();
-                if (columnList.length > 1) {
-                    InsertStatement insertStatement = insertInvoker.getInsertStatement();
-                    String insertColumns = "INTO " + toStr(insertStatement.getTable(), assist, invokerList) + (insertStatement.getParams() != null ? toStr(insertStatement.getParams(), assist, invokerList) : "");
-                    StringBuilder sqlBuilder = new StringBuilder("INSERT ALL ");
-                    for (Statement column : columnList) {
-                        String insertValues = toSQL.toStr(column, assist, invokerList);
-                        sqlBuilder.append(insertColumns + " VALUES " + insertValues);
-                    }
-                    sqlBuilder.append(" SELECT 1 FROM DUAL");
-                    insertInvoker.setBatchSQL(sqlBuilder.toString());
-                    return null;
-                } else
-                    return statement;
+                InsertStatement insertStatement = insertInvoker.getInsertStatement();
+                String insertColumns = "INTO " + toStr(insertStatement.getTable(), assist, invokerList) + (insertStatement.getParams() != null ? toStr(insertStatement.getParams(), assist, invokerList) : "");
+                StringBuilder sqlBuilder = new StringBuilder("INSERT ALL ");
+                for (Statement column : columnList) {
+                    String insertValues = toSQL.toStr(column, assist, invokerList);
+                    sqlBuilder.append(insertColumns + " VALUES " + insertValues);
+                }
+                sqlBuilder.append(" SELECT 1 FROM DUAL");
+                insertInvoker.setBatchSQL(sqlBuilder.toString());
+                return null;
             }
 
             @Override
             protected boolean interest(Statement statement, ToAssist sqlAssist) {
                 return statement instanceof ListColumnStatement
+                        && ((ListColumnStatement) statement).getColumnList().length > 1
                         && statement.getParentStatement() != null
                         && statement.getParentStatement() instanceof InsertStatement.ValuesStatement;
             }

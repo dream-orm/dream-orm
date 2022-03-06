@@ -752,7 +752,7 @@ public class FunctionExpr extends SqlExpr {
 
         @Override
         public Statement exprHelp(Statement statement) {
-            func.setParamsStatement((ListColumnStatement) statement);
+            func.setParamsStatement(statement);
             setExprTypes(ExprType.RBRACE);
             return expr();
         }
@@ -1291,7 +1291,7 @@ public class FunctionExpr extends SqlExpr {
 
         @Override
         public Statement exprHelp(Statement statement) {
-            customFunctionStatement.setParamsStatement((ListColumnStatement) statement);
+            customFunctionStatement.setParamsStatement(statement);
             setExprTypes(ExprType.RBRACE);
             return expr();
         }

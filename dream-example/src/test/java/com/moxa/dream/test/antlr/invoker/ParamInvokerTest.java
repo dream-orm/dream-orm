@@ -17,18 +17,18 @@ public class ParamInvokerTest extends AbstractSqlTest {
     private List<InvokerFactory> invokerFactoryList = new ArrayList<>();
 
     public ParamInvokerTest() {
-        AntlrInvokerFactory injectInvokerFactory = new AntlrInvokerFactory();
-        invokerFactoryList.add(injectInvokerFactory);
+        AntlrInvokerFactory antlrInvokerFactory = new AntlrInvokerFactory();
+        invokerFactoryList.add(antlrInvokerFactory);
     }
 
 
     public static void main(String[] args) {
         ParamInvokerTest paramInvokerTest = new ParamInvokerTest();
-//        paramInvokerTest.testRepInvoker();
-//        paramInvokerTest.test$Invoker();
-//        paramInvokerTest.testNonInvoker();
-//        paramInvokerTest.testSimpleForEachInvoker();
-//        paramInvokerTest.testMapForEachInvoker();
+        paramInvokerTest.testRepInvoker();
+        paramInvokerTest.test$Invoker();
+        paramInvokerTest.testNonInvoker();
+        paramInvokerTest.testSimpleForEachInvoker();
+        paramInvokerTest.testMapForEachInvoker();
         paramInvokerTest.testforEachInsert();
     }
 
@@ -103,16 +103,14 @@ public class ParamInvokerTest extends AbstractSqlTest {
 
     public void testforEachInsert() {
         PackageStatement packageStatement = createStatement("insert into dual(id,name)values @foreach(list,(@$(item.id),@$(item.name)))", null);
+//        PackageStatement packageStatement = createStatement("insert into dual(id,name)values(1,2),(3,4)", null);
         try {
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("list", Arrays.asList(Map.of("name", "a"), Map.of("name", "a"), Map.of("name", "b"), Map.of("name", "c"), Map.of("name", "d"), Map.of("name", "e")));
-            ResultInfo resultInfo;
-//        System.out.println((resultInfo = new ToMYSQL().toResult(packageStatement, invokerFactoryList, Map.of(ObjectWrapper.class, ObjectWrapper.wrapper(paramMap)))).getSql() + "\t\t参数：" + (resultInfo.getSqlInvoker($Invoker.class)).getParamInfoList());
-            System.out.println((resultInfo = new ToORACLE().toResult(packageStatement, invokerFactoryList, Map.of(ObjectWrapper.class, ObjectWrapper.wrapper(paramMap)))).getSql() + "\t\t参数：" + (resultInfo.getSqlInvoker($Invoker.class)).getParamInfoList());
+            System.out.println((new ToORACLE().toResult(packageStatement, invokerFactoryList, Map.of(ObjectWrapper.class, ObjectWrapper.wrapper(paramMap)))).getSql());
 
         } catch (InvokerException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

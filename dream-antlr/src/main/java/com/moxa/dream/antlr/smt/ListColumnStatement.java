@@ -22,16 +22,6 @@ public class ListColumnStatement extends Statement {
         }
     }
 
-    public void addFirst(Statement column) {
-        if (column != null) {
-            Statement[] tempList = new Statement[columnList.length + 1];
-            System.arraycopy(columnList, 0, tempList, 1, columnList.length);
-            tempList[0] = column;
-            columnList = tempList;
-            column.parentStatement = this;
-        }
-    }
-
     public SymbolStatement.LetterStatement getCut() {
         return cut;
     }

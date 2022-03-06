@@ -42,11 +42,7 @@ public class ListColumnExpr extends HelperExpr {
 
     @Override
     public Statement nil() {
-        Statement[] columnList = listColumnStatement.getColumnList();
-        if (columnList.length == 1)
-            return columnList[0];
-        else
-            return listColumnStatement;
+        return listColumnStatement;
     }
 
 }

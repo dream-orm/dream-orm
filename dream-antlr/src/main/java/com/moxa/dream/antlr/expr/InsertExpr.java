@@ -48,9 +48,8 @@ public class InsertExpr extends SqlExpr {
 
     @Override
     protected Statement exprValues(ExprInfo exprInfo) {
-        push();
-        Statement statement = new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")).expr();
-        insertStatement.setValues(new InsertStatement.ValuesStatement(statement));
+        ValuesExpr valuesExpr = new ValuesExpr(exprReader);
+        insertStatement.setValues(valuesExpr.expr());
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -65,17 +64,45 @@ public class InsertExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprInvoker(ExprInfo exprInfo) {
-        ColumnExpr columnExpr = new ColumnExpr(exprReader);
-        Statement statement = columnExpr.expr();
-        insertStatement.setValues(statement);
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
-
-    @Override
     public Statement nil() {
         return insertStatement;
     }
 
+    public static class ValuesExpr extends SqlExpr {
+        private InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
+
+        public ValuesExpr(ExprReader exprReader) {
+            super(exprReader);
+            setExprTypes(ExprType.VALUES);
+        }
+
+        @Override
+        protected Statement exprValues(ExprInfo exprInfo) {
+            push();
+            setExprTypes(ExprType.INVOKER, ExprType.LBRACE);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprInvoker(ExprInfo exprInfo) {
+            ColumnExpr columnExpr = new ColumnExpr(exprReader);
+            Statement statement = columnExpr.expr();
+            valuesStatement.setStatement(statement);
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprLBrace(ExprInfo exprInfo) {
+            ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ","));
+            valuesStatement.setStatement(listColumnExpr.expr());
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        protected Statement nil() {
+            return valuesStatement;
+        }
+    }
 }
