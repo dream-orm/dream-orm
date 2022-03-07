@@ -44,18 +44,18 @@ public class DefaultCache implements Cache {
                 cacheKeySet.add(sqlKey);
             }
         }
-        Map<CacheKey, Object> objectMap = indexMap.get(sqlKey);
-        if (objectMap == null) {
+        Map<CacheKey, Object> keyMap = indexMap.get(sqlKey);
+        if (keyMap == null) {
             synchronized (this) {
-                objectMap = indexMap.get(sqlKey);
-                if (objectMap == null) {
-                    objectMap = new ConcurrentHashMap<>();
-                    indexMap.put(sqlKey, objectMap);
+                keyMap = indexMap.get(sqlKey);
+                if (keyMap == null) {
+                    keyMap = new ConcurrentHashMap<>();
+                    indexMap.put(sqlKey, keyMap);
                 }
             }
-        } else if (objectMap.size() > limit) {
+        } else if (keyMap.size() > limit) {
             if (canDelete.compareAndSet(true, false)) {
-                Map<CacheKey, Object> finalMap = objectMap;
+                Map<CacheKey, Object> finalMap = keyMap;
                 ThreadUtil.execute(() -> {
                     for (CacheKey cacheKey : finalMap.keySet()) {
                         double random = Math.random();
@@ -67,16 +67,16 @@ public class DefaultCache implements Cache {
                 });
             }
         }
-        objectMap.put(uniqueKey, value);
+        keyMap.put(uniqueKey, value);
     }
 
     @Override
     public Object get(MappedStatement mappedStatement) {
         CacheKey sqlKey = mappedStatement.getSqlKey();
-        Map<CacheKey, Object> objectMap = indexMap.get(sqlKey);
+        Map<CacheKey, Object> keyMap = indexMap.get(sqlKey);
         CacheKey uniqueKey = mappedStatement.getUniqueKey();
-        if (objectMap != null) {
-            return objectMap.get(uniqueKey);
+        if (keyMap != null) {
+            return keyMap.get(uniqueKey);
         } else
             return null;
     }
@@ -89,8 +89,8 @@ public class DefaultCache implements Cache {
                 Set<CacheKey> cacheKeySet = tableMap.get(table);
                 if (!ObjectUtil.isNull(cacheKeySet)) {
                     for (CacheKey cacheKey : cacheKeySet) {
-                        Map<CacheKey, Object> objectMap = indexMap.remove(cacheKey);
-                        objectMap.clear();
+                        Map<CacheKey, Object> keyMap = indexMap.remove(cacheKey);
+                        keyMap.clear();
                     }
                     cacheKeySet.clear();
                 }
