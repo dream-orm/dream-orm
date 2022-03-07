@@ -60,18 +60,23 @@ public abstract class AbstractDialectFactory implements DialectFactory {
 
     @Override
     public MappedStatement compile(MethodInfo methodInfo, Object arg) {
-        Configuration configuration = methodInfo.getConfiguration();
         PackageStatement statement = methodInfo.getStatement();
         ResultInfo resultInfo = getResultInfo(methodInfo, statement, arg);
         $Invoker invoker = resultInfo.getSqlInvoker($Invoker.class);
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
         ParamTypeMap paramTypeMap = methodInfo.get(ParamTypeMap.class);
         if (paramTypeMap == null) {
-            paramTypeMap = new ParamTypeMap();
-            methodInfo.set(ParamTypeMap.class, paramTypeMap);
+            synchronized (this) {
+                paramTypeMap = methodInfo.get(ParamTypeMap.class);
+                if (paramTypeMap == null) {
+                    paramTypeMap = new ParamTypeMap();
+                    methodInfo.set(ParamTypeMap.class, paramTypeMap);
+                }
+            }
         }
         List<MappedParam> mappedParamList = null;
         if (invoker != null) {
+            Configuration configuration = methodInfo.getConfiguration();
             TableFactory tableFactory = configuration.getTableFactory();
             mappedParamList = new ArrayList<>();
             Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap = scanInfo.getParamScanInfoMap();

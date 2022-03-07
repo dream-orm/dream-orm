@@ -28,21 +28,14 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public <T> T getMapper(Class<T> type) {
-        return mapperFactory.getMapper(type, (methodInfo, arg, args) ->
-                execute(methodInfo, arg)
+        return mapperFactory.getMapper(type, (methodInfo, arg, args)
+                ->execute(methodInfo, arg)
         );
     }
 
     @Override
     public Object execute(MethodInfo methodInfo, Object arg) {
-       long l=System.currentTimeMillis();
-        MappedStatement mappedStatement=null;
-        for(int i=0;i<100000;i++) {
-            mappedStatement = dialectFactory.compile(methodInfo, arg);
-        }
-        System.out.println(System.currentTimeMillis()-l);
-        if(mappedStatement==null)
-            return null;
+        MappedStatement mappedStatement = dialectFactory.compile(methodInfo, arg);
         Object value = null;
         try {
             Command command = mappedStatement.getCommand();
@@ -101,7 +94,7 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public Configuration getConfiguration() {
-        return getConfiguration();
+        return configuration;
     }
 
 }
