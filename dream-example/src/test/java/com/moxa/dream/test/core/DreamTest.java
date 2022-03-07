@@ -123,13 +123,18 @@ public class DreamTest {
         }
     }
     public void test(){
-//        long l=System.currentTimeMillis();
-//        for (int i = 0; i < 1000000; i++) {
+                long l=System.currentTimeMillis();
+
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+
+                    for (int i = 0; i < 1000000; i++) {
+
             CityMapper cityMapper = sqlSession.getMapper(CityMapper.class);
-                cityMapper.findByState("CA1");
+
+            cityMapper.findByState("CA"+i);
             }
-//        }
-//        System.out.println(System.currentTimeMillis()-l);
+
+        }
+        System.out.println(System.currentTimeMillis()-l);
     }
 }

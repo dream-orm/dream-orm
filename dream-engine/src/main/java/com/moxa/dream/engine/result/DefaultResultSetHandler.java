@@ -59,7 +59,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             }
             cacheMap.clear();
         }
-        return collection instanceof NonCollection ? ((NonCollection<?>) collection).toObject() : collection;
+        return collection instanceof NonCollection ? ((NonCollection<?>) collection).toObject() : collection.isEmpty()?null:collection;
     }
 
     protected Object doNestedResult(ResultSet resultSet, MappedStatement mappedStatement, MappedResult mappedResult, Map<CacheKey, Object> cacheMap) throws SQLException {

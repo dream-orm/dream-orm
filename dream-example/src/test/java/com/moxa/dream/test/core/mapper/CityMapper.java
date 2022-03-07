@@ -19,6 +19,8 @@ import com.moxa.dream.module.annotation.Mapper;
 import com.moxa.dream.module.annotation.Sql;
 import com.moxa.dream.test.core.table.City;
 
+import java.util.List;
+
 /**
  * @author Eddú Meléndez
  */
@@ -26,7 +28,7 @@ import com.moxa.dream.test.core.table.City;
 public interface CityMapper {
 
   @Sql("select id, name, state, country from city where state = @$(state)")
-  City findByState(String state);
+  List<City> findByState(String state);
   @Sql("update city set name=null where state = @$(state)")
   void updateCity(String state);
 

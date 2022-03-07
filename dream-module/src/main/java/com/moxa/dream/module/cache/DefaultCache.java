@@ -5,16 +5,17 @@ import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ThreadUtil;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DefaultCache implements Cache {
     protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>();
-    protected Map<CacheKey, Map<CacheKey, Object>> inLineMap = new ConcurrentHashMap<>();
+    protected Map<CacheKey, Map<CacheKey, Object>> indexMap = new ConcurrentHashMap<>();
     private int limit;
     private double rate;
+    private AtomicBoolean canDelete = new AtomicBoolean(true);
 
     public DefaultCache(int limit, double rate) {
         ObjectUtil.requireTrue(limit > 0, "Property 'limit' must gt 0");
@@ -43,34 +44,36 @@ public class DefaultCache implements Cache {
                 cacheKeySet.add(sqlKey);
             }
         }
-        Map<CacheKey, Object> objectMap = inLineMap.get(sqlKey);
+        Map<CacheKey, Object> objectMap = indexMap.get(sqlKey);
         if (objectMap == null) {
             synchronized (this) {
-                objectMap = inLineMap.get(sqlKey);
+                objectMap = indexMap.get(sqlKey);
                 if (objectMap == null) {
                     objectMap = new ConcurrentHashMap<>();
-                    inLineMap.put(sqlKey, objectMap);
+                    indexMap.put(sqlKey, objectMap);
                 }
             }
         } else if (objectMap.size() > limit) {
-            Iterator<Map.Entry<CacheKey, Object>> iterator = objectMap.entrySet().iterator();
-            ThreadUtil.execute(() -> {
-                while (iterator.hasNext()) {
-                    double random = Math.random();
-                    if (random <= rate) {
-                        iterator.remove();
+            if (canDelete.compareAndSet(true, false)) {
+                Map<CacheKey, Object> finalMap = objectMap;
+                ThreadUtil.execute(() -> {
+                    for (CacheKey cacheKey : finalMap.keySet()) {
+                        double random = Math.random();
+                        if (random <= rate) {
+                            finalMap.remove(cacheKey);
+                        }
                     }
-                }
-            });
+                    canDelete.set(true);
+                });
+            }
         }
         objectMap.put(uniqueKey, value);
-
     }
 
     @Override
     public Object get(MappedStatement mappedStatement) {
         CacheKey sqlKey = mappedStatement.getSqlKey();
-        Map<CacheKey, Object> objectMap = inLineMap.get(sqlKey);
+        Map<CacheKey, Object> objectMap = indexMap.get(sqlKey);
         CacheKey uniqueKey = mappedStatement.getUniqueKey();
         if (objectMap != null) {
             return objectMap.get(uniqueKey);
@@ -86,7 +89,7 @@ public class DefaultCache implements Cache {
                 Set<CacheKey> cacheKeySet = tableMap.get(table);
                 if (!ObjectUtil.isNull(cacheKeySet)) {
                     for (CacheKey cacheKey : cacheKeySet) {
-                        Map<CacheKey, Object> objectMap = inLineMap.remove(cacheKey);
+                        Map<CacheKey, Object> objectMap = indexMap.remove(cacheKey);
                         objectMap.clear();
                     }
                     cacheKeySet.clear();

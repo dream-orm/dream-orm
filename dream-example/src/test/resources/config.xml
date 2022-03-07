@@ -3,7 +3,7 @@
         <property name="ds" value="com.moxa.dream.test.core.MyDataSourceFactory"/>
     </aliasFactory>
     <cacheFactory type="com.moxa.dream.module.cache.DefaultCacheFactory">
-        <property name="enabled" value="false"/>
+<!--        <property name="enabled" value="false"/>-->
     </cacheFactory>
     <tableFactory>
         <mapping package="com.moxa.dream.test.core.table"/>

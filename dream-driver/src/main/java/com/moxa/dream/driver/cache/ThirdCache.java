@@ -6,10 +6,10 @@ import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ThreadUtil;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ThirdCache implements com.moxa.dream.module.cache.Cache {
     protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>();
@@ -17,20 +17,19 @@ public class ThirdCache implements com.moxa.dream.module.cache.Cache {
     protected Cache<CacheKey, Object> pointCache;
     private int limit;
     private double rate;
-    private boolean removeCache;
+    private AtomicBoolean canDelete = new AtomicBoolean(true);
 
     public ThirdCache(Cache<CacheKey, Object> pointCache) {
-        this(pointCache, 1000, 0.25, false);
+        this(pointCache, 1000, 0.25);
     }
 
-    public ThirdCache(com.moxa.dream.driver.cache.Cache<CacheKey, Object> pointCache, int limit, double rate, boolean removeCache) {
+    public ThirdCache(com.moxa.dream.driver.cache.Cache<CacheKey, Object> pointCache, int limit, double rate) {
         ObjectUtil.requireNonNull(pointCache, "Property 'pointCache' is required");
         ObjectUtil.requireTrue(limit > 0, "Property 'limit' must gt 0");
         ObjectUtil.requireTrue(rate > 0 && rate <= 1, "Property 'rate' must gt 0 and leq 1");
         this.pointCache = pointCache;
         this.limit = limit;
         this.rate = rate;
-        this.removeCache = removeCache;
     }
 
     @Override
@@ -64,15 +63,17 @@ public class ThirdCache implements com.moxa.dream.module.cache.Cache {
                 indexMap.put(sqlKey, cacheKeySet);
             }
         } else if (cacheKeySet.size() > limit) {
-            Iterator<CacheKey> iterator = cacheKeySet.iterator();
-            ThreadUtil.execute(() -> {
-                while (iterator.hasNext()) {
-                    double random = Math.random();
-                    if (random <= rate) {
-                        iterator.remove();
+            if (canDelete.compareAndSet(true, false)) {
+                Set<CacheKey> finalCacheKeySet = cacheKeySet;
+                ThreadUtil.execute(() -> {
+                    for (CacheKey cacheKey : finalCacheKeySet) {
+                        double random = Math.random();
+                        if (random <= rate) {
+                            finalCacheKeySet.remove(cacheKey);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
         cacheKeySet.add(uniqueKey);
         pointCache.put(uniqueKey, value);
@@ -99,13 +100,11 @@ public class ThirdCache implements com.moxa.dream.module.cache.Cache {
                     for (CacheKey cacheKey : cacheKeySet) {
                         Set<CacheKey> uniqueCacheKeySet = indexMap.remove(cacheKey);
                         if (!ObjectUtil.isNull(uniqueCacheKeySet)) {
-                            if (removeCache) {
-                                ThreadUtil.execute(() -> {
-                                    for (CacheKey uniqueCacheKey : uniqueCacheKeySet) {
-                                        pointCache.remove(uniqueCacheKey);
-                                    }
-                                });
-                            }
+                            ThreadUtil.execute(() -> {
+                                for (CacheKey uniqueCacheKey : uniqueCacheKeySet) {
+                                    pointCache.remove(uniqueCacheKey);
+                                }
+                            });
                             uniqueCacheKeySet.clear();
                         }
                     }
