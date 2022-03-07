@@ -5,6 +5,7 @@ import com.moxa.dream.driver.session.SqlSession;
 import com.moxa.dream.driver.session.SqlSessionFactory;
 import com.moxa.dream.driver.session.SqlSessionFactoryBuilder;
 import com.moxa.dream.module.mapper.MethodInfo;
+import com.moxa.dream.test.core.mapper.CityMapper;
 import com.moxa.dream.test.core.mapper.UserMapper;
 import com.moxa.dream.test.core.table.User;
 import com.moxa.dream.test.core.view.MyView;
@@ -24,8 +25,9 @@ public class DreamTest {
 //        dreamTest.selectField();
 //        dreamTest.selectTableList();
 //        dreamTest.selectAll();
-        dreamTest.selectMapper();
+//        dreamTest.selectMapper();
 //        dreamTest.selectMyView();
+   dreamTest.test();
     }
 
 
@@ -119,5 +121,15 @@ public class DreamTest {
             Object value = sqlSession.execute(methodInfo, user);
             System.out.println(value);
         }
+    }
+    public void test(){
+        long l=System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            CityMapper cityMapper = sqlSession.getMapper(CityMapper.class);
+                cityMapper.findByState("CA1"+i);
+            }
+        }
+        System.out.println(System.currentTimeMillis()-l);
     }
 }
