@@ -35,7 +35,14 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public Object execute(MethodInfo methodInfo, Object arg) {
-        MappedStatement mappedStatement = dialectFactory.compile(methodInfo, arg);
+       long l=System.currentTimeMillis();
+        MappedStatement mappedStatement=null;
+        for(int i=0;i<100000;i++) {
+            mappedStatement = dialectFactory.compile(methodInfo, arg);
+        }
+        System.out.println(System.currentTimeMillis()-l);
+        if(mappedStatement==null)
+            return null;
         Object value = null;
         try {
             Command command = mappedStatement.getCommand();
@@ -90,6 +97,11 @@ public class DefaultSqlSession implements SqlSession {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Configuration getConfiguration() {
+        return getConfiguration();
     }
 
 }
