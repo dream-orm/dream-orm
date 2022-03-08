@@ -5,19 +5,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MappedResult {
-    private Class rowType;
+    private Class colType;
     private String link;
     private MappedColumn[] primaryList = new MappedColumn[0];
     private MappedColumn[] mappedColumnList = new MappedColumn[0];
     private Map<String, MappedResult> childResultMappingMap = new HashMap<>();
 
-    public MappedResult(Class rowType, String link) {
-        this.rowType = rowType;
+    public MappedResult(Class colType, String link) {
+        this.colType = colType;
         this.link = link;
     }
 
-    public Class getRowType() {
-        return rowType;
+    public Class getColType() {
+        return colType;
     }
 
     public String getLink() {

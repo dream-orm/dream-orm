@@ -104,7 +104,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
     protected Object doSimpleResult(ResultSet resultSet, MappedStatement mappedStatement, MappedResult mappedResult) throws SQLException {
         MappedColumn[] mappedColumnList = mappedResult.getColumnMappingList();
-        ObjectWrapper objectWrapper = ObjectWrapper.wrapper(mappedResult.getRowType());
+        ObjectWrapper objectWrapper = ObjectWrapper.wrapper(mappedResult.getColType());
         for (MappedColumn mappedColumn : mappedColumnList) {
             mappedColumn.linkObject(resultSet, objectWrapper);
         }
@@ -176,10 +176,10 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
 
     protected boolean linkHandler(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
-        Class rowType = mappedResult.getRowType();
-        if (ReflectUtil.isBaseClass(rowType))
+        Class colType = mappedResult.getColType();
+        if (ReflectUtil.isBaseClass(colType))
             return linkHandlerForBase(mappedColumn, mappedStatement, mappedResult, tableSet);
-        else if (Map.class.isAssignableFrom(rowType)) {
+        else if (Map.class.isAssignableFrom(colType)) {
             return linkHandlerForMap(mappedColumn, mappedStatement, mappedResult, tableSet);
         } else {
             return linkHandlerForClass(mappedColumn, mappedStatement, mappedResult, tableSet);
@@ -187,7 +187,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
     protected boolean linkHandlerForBase(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
-        mappedColumn.setTypeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(mappedResult.getRowType(), mappedColumn.getJdbcType()));
+        mappedColumn.setTypeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(mappedResult.getColType(), mappedColumn.getJdbcType()));
         mappedResult.add(mappedColumn);
         return true;
     }
@@ -199,9 +199,9 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
     protected boolean linkHandlerForClass(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
-        Class rowType = mappedResult.getRowType();
-        String curTableName = getTableName(rowType);
-        List<Field> fieldList = ReflectUtil.findField(rowType);
+        Class colType = mappedResult.getColType();
+        String curTableName = getTableName(colType);
+        List<Field> fieldList = ReflectUtil.findField(colType);
         if (!ObjectUtil.isNull(fieldList)) {
             boolean lazyLoad = false;
             for (Field field : fieldList) {
@@ -227,8 +227,8 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     Map<String, MappedResult> childResultMappingMap = mappedResult.getChildResultMappingMap();
                     MappedResult childResultMapping = childResultMappingMap.get(fieldName);
                     if (childResultMapping == null) {
-                        Class<? extends Collection> collectionType = ReflectUtil.getRowType(rowType, field);
-                        childResultMapping = new MappedResult(ReflectUtil.getColType(rowType, field), collectionType == null ? fieldName : (fieldName + "[-1]"));
+                        Class<? extends Collection> collectionType = ReflectUtil.getRowType(colType, field);
+                        childResultMapping = new MappedResult(ReflectUtil.getColType(colType, field), collectionType == null ? fieldName : (fieldName + "[-1]"));
                         if (linkHandler(mappedColumn, mappedStatement, childResultMapping, tableSet)) {
                             childResultMappingMap.put(fieldName, childResultMapping);
                             return true;
