@@ -22,8 +22,7 @@ public class SpeedTest extends AbstractSqlTest {
     private List<InvokerFactory> invokerFactoryList = new ArrayList<>();
 
     public SpeedTest() {
-        AntlrInvokerFactory injectInvokerFactory = new AntlrInvokerFactory();
-        invokerFactoryList.add(injectInvokerFactory);
+        invokerFactoryList.add(new AntlrInvokerFactory());
     }
 
     public static void main(String[] args) {
@@ -70,9 +69,8 @@ public class SpeedTest extends AbstractSqlTest {
     public void testParamInvokerSpeed() {
         Map<String, Object> paramMap = new HashMap<>();
         //比较两种foreach速度，单参数做了优化，不进行反射，性能会提高很多
-        PackageStatement packageStatement = createStatement("select a1,a2,a3,a4,a5 from dual where a in(@foreach(a,name))", null);
+        PackageStatement packageStatement = createStatement("select a1,a2,a3,a4,a5 from dual where a in(@foreach(a,@$(name)))", null);
         paramMap.put("a", Arrays.asList(Map.of("name", "a"), Map.of("name", "a"), Map.of("name", "b"), Map.of("name", "c"), Map.of("name", "d"), Map.of("name", "e")));
-        List<InvokerFactory> invokerFactoryList = Arrays.asList(new DefaultInvokerFactory());
         int count = 1000000;
         System.out.println();
         System.out.println("双参数foreach：");
