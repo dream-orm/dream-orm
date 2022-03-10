@@ -20,6 +20,11 @@ public class BaseObjectFactory implements ObjectFactory {
     }
 
     @Override
+    public Object get(PropertyInfo propertyInfo) {
+        return null;
+    }
+
+    @Override
     public Object getObject() {
         return result;
     }

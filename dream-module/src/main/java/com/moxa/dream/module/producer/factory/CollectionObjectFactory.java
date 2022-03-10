@@ -8,7 +8,10 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class CollectionObjectFactory implements ObjectFactory{
-    private Collection result;
+     Collection result;
+     CollectionObjectFactory(){
+
+     }
     public CollectionObjectFactory(Class<?extends Collection>type){
         int modifiers = type.getModifiers();
         if(Modifier.isInterface(modifiers)||Modifier.isAbstract(modifiers)){
@@ -31,6 +34,11 @@ public class CollectionObjectFactory implements ObjectFactory{
     @Override
     public void set(PropertyInfo propertyInfo, Object value) {
         result.add(value);
+    }
+
+    @Override
+    public Object get(PropertyInfo propertyInfo) {
+        return null;
     }
 
     @Override

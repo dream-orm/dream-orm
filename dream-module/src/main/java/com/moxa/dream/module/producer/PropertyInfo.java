@@ -9,6 +9,7 @@ public class PropertyInfo {
     private String label;
     private Field field;
     private Method writeMethod;
+    private Method readMethod;
 
     public void setLabel(String label) {
         this.label = label;
@@ -19,6 +20,14 @@ public class PropertyInfo {
             field.trySetAccessible();
             this.field = field;
         }
+    }
+
+    public void setReadMethod(Method readMethod) {
+        this.readMethod = readMethod;
+    }
+
+    public Method getReadMethod() {
+        return readMethod;
     }
 
     public void setWriteMethod(Method writeMethod) {

@@ -10,7 +10,11 @@ import java.lang.reflect.Method;
 
 public class BeanObjectFactory implements ObjectFactory {
 
-    private Object result;
+    Object result;
+
+    BeanObjectFactory() {
+
+    }
 
     public BeanObjectFactory(Class type) {
         try {
@@ -34,6 +38,25 @@ public class BeanObjectFactory implements ObjectFactory {
         ObjectUtil.requireNonNull(field, "Property 'field' is required");
         try {
             field.set(result, value);
+        } catch (Exception e) {
+            throw new ProducerException(e);
+        }
+    }
+
+    @Override
+    public Object get(PropertyInfo propertyInfo) {
+        Method readMethod = propertyInfo.getReadMethod();
+        if (readMethod != null) {
+            try {
+                return readMethod.invoke(result);
+            } catch (Exception e) {
+                return new ProducerException(e);
+            }
+        }
+        Field field = propertyInfo.getField();
+        ObjectUtil.requireNonNull(field, "Property 'field' is required");
+        try {
+            return field.get(result);
         } catch (Exception e) {
             throw new ProducerException(e);
         }

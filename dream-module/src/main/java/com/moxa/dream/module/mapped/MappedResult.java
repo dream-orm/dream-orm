@@ -5,29 +5,35 @@ import com.moxa.dream.module.producer.factory.ObjectFactory;
 import com.moxa.dream.module.producer.wrapper.ObjectFactoryWrapper;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MappedResult {
+    private Class<?extends Collection>rowType;
     private Class colType;
     private ObjectFactoryWrapper objectFactoryWrapper;
-    private String link;
     private MappedColumn[] primaryList = new MappedColumn[0];
     private MappedColumn[] mappedColumnList = new MappedColumn[0];
     private Map<String, MappedResult> childResultMappingMap = new HashMap<>();
     private PropertyInfo propertyInfo;
-    public MappedResult(Class colType, String link) {
+    public MappedResult(Class<?extends Collection>rowType,Class colType,PropertyInfo propertyInfo) {
+        this.rowType=rowType;
         this.colType=colType;
+        this.propertyInfo=propertyInfo;
         this.objectFactoryWrapper=ObjectFactoryWrapper.wrapper(colType);
-        this.link = link;
+    }
+
+    public Class<? extends Collection> getRowType() {
+        return rowType;
     }
 
     public Class getColType() {
         return colType;
     }
 
-    public String getLink() {
-        return link;
+    public PropertyInfo getPropertyInfo() {
+        return propertyInfo;
     }
 
     public MappedColumn[] getColumnMappingList() {

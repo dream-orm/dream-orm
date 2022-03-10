@@ -7,14 +7,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapObjectFactory implements ObjectFactory{
-    private Map<String,Object> map=new HashMap<>();
+    Map<String,Object> result=new HashMap<>();
     @Override
     public void set(PropertyInfo propertyInfo, Object value) {
-        map.put(propertyInfo.getLabel(),value);
+        result.put(propertyInfo.getLabel(),value);
+    }
+
+    @Override
+    public Object get(PropertyInfo propertyInfo) {
+        return result.get(propertyInfo.getLabel());
     }
 
     @Override
     public Object getObject() {
-        return map;
+        return result;
     }
 }

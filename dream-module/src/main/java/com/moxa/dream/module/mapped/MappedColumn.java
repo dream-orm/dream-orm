@@ -28,10 +28,6 @@ public class MappedColumn {
         return typeHandler.getResult(resultSet, index, jdbcType);
     }
 
-    public void linkObject(ResultSet resultSet, ObjectFactory objectFactory) throws SQLException {
-        objectFactory.set(propertyInfo, getValue(resultSet));
-    }
-
     public String getTable() {
         return table;
     }
