@@ -1,5 +1,7 @@
 package com.moxa.dream.module.mapped;
 
+import com.moxa.dream.module.producer.PropertyInfo;
+import com.moxa.dream.module.producer.factory.ObjectFactory;
 import com.moxa.dream.module.type.handler.TypeHandler;
 import com.moxa.dream.util.wrapper.ObjectWrapper;
 
@@ -11,13 +13,14 @@ public class MappedColumn {
     private int jdbcType;
     private String table;
     private boolean primary;
-    private String link;
     private TypeHandler typeHandler;
+    private PropertyInfo propertyInfo;
 
-    public MappedColumn(int index, int jdbcType, String table, boolean primary) {
+    public MappedColumn(int index, int jdbcType, String table,PropertyInfo propertyInfo, boolean primary) {
         this.index = index;
         this.jdbcType = jdbcType;
         this.table = table;
+        this.propertyInfo=propertyInfo;
         this.primary = primary;
     }
 
@@ -25,20 +28,16 @@ public class MappedColumn {
         return typeHandler.getResult(resultSet, index, jdbcType);
     }
 
-    public Object linkObject(ResultSet resultSet, ObjectWrapper target) throws SQLException {
-        return target.set(link, getValue(resultSet));
+    public void linkObject(ResultSet resultSet, ObjectFactory objectFactory) throws SQLException {
+        objectFactory.set(propertyInfo, getValue(resultSet));
     }
 
     public String getTable() {
         return table;
     }
 
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
+    public PropertyInfo getPropertyInfo() {
+        return propertyInfo;
     }
 
     public int getJdbcType() {

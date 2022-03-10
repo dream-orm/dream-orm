@@ -10,6 +10,8 @@ import com.moxa.dream.module.mapped.MappedResult;
 import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.module.mapper.EachInfo;
 import com.moxa.dream.module.mapper.MapperFactory;
+import com.moxa.dream.module.producer.PropertyInfo;
+import com.moxa.dream.module.producer.factory.ObjectFactory;
 import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableInfo;
 import com.moxa.dream.module.type.handler.TypeHandler;
@@ -104,11 +106,11 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
     protected Object doSimpleResult(ResultSet resultSet, MappedStatement mappedStatement, MappedResult mappedResult) throws SQLException {
         MappedColumn[] mappedColumnList = mappedResult.getColumnMappingList();
-        ObjectWrapper objectWrapper = ObjectWrapper.wrapper(mappedResult.getColType());
+        ObjectFactory objectFactory = mappedResult.newObjectFactory();
         for (MappedColumn mappedColumn : mappedColumnList) {
-            mappedColumn.linkObject(resultSet, objectWrapper);
+            mappedColumn.linkObject(resultSet, objectFactory);
         }
-        return objectWrapper.getObject();
+        return objectFactory.getObject();
     }
 
     protected MappedResult getMappedResult(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException {
@@ -139,9 +141,10 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             String columnLabel = metaData.getColumnLabel(i);
             String tableName = metaData.getTableName(i);
             String link = getLink(mappedStatement, tableName, columnLabel);
+            PropertyInfo propertyInfo=new PropertyInfo();
+            propertyInfo.setLabel(link);
             boolean primary = isPrimary(tableName, columnLabel, mappedStatement);
-            MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName, primary);
-            mappedColumn.setLink(link);
+            MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName,propertyInfo,primary);
             boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, mappedStatement.getTableSet());
             ObjectUtil.requireTrue(success, "Property '" + link + "' mapping failure");
         }
@@ -203,17 +206,19 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         String curTableName = getTableName(colType);
         List<Field> fieldList = ReflectUtil.findField(colType);
         if (!ObjectUtil.isNull(fieldList)) {
+            PropertyInfo propertyInfo = mappedColumn.getPropertyInfo();
             boolean lazyLoad = false;
             for (Field field : fieldList) {
                 String fieldName = field.getName();
-                String link = mappedColumn.getLink();
+                String link = propertyInfo.getLabel();
                 if (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || curTableName.equalsIgnoreCase(mappedColumn.getTable())) {
                     if (fieldName.equalsIgnoreCase(link)) {
                         if (!fieldName.equals(link))
-                            mappedColumn.setLink(fieldName);
+                            propertyInfo.setLabel(fieldName);
                         TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), mappedColumn.getJdbcType());
                         mappedColumn.setTypeHandler(typeHandler);
                         if (!ObjectUtil.isNull(curTableName)) {
+                            propertyInfo.setField(field);
                             mappedResult.add(mappedColumn);
                             return true;
                         } else {

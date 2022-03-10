@@ -10,7 +10,7 @@ import java.util.Map;
 public interface ObjectFactoryWrapper {
     ObjectFactory newObjectFactory();
 
-    default ObjectFactoryWrapper wrapper(Class type) {
+   static  ObjectFactoryWrapper wrapper(Class type) {
         if (Collection.class.isAssignableFrom(type)) {
             return new CollectionObjectFactoryWrapper(type);
         } else if (Map.class.isAssignableFrom(type)) {
