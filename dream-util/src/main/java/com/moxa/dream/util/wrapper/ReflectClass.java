@@ -10,6 +10,7 @@ public class ReflectClass {
     private final Class<?> type;
     private Object target;
     private Map<String, Field> fieldMap = new HashMap<>();
+
     public ReflectClass(Object target) {
         this.target = target;
         this.type = target.getClass();

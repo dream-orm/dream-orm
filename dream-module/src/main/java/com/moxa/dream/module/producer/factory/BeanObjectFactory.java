@@ -12,14 +12,11 @@ import java.util.Collection;
 public class BeanObjectFactory implements ObjectFactory {
 
     Object result;
-
-    BeanObjectFactory() {
+    BeanObjectFactory(){
 
     }
-
     public BeanObjectFactory(Class type) {
         result = newInstance(type);
-
     }
 
     protected Collection newInstance(Class<? extends Collection> type) {
@@ -51,9 +48,10 @@ public class BeanObjectFactory implements ObjectFactory {
 
     @Override
     public Object get(PropertyInfo propertyInfo) {
-        return get(result,propertyInfo);
+        return get(result, propertyInfo);
     }
-    protected Object get(Object result,PropertyInfo propertyInfo){
+
+    protected Object get(Object result, PropertyInfo propertyInfo) {
         Method readMethod = propertyInfo.getReadMethod();
         if (readMethod != null) {
             try {

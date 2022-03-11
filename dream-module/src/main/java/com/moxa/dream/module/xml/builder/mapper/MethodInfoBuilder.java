@@ -4,7 +4,6 @@ import com.moxa.dream.module.xml.builder.XMLBuilder;
 import com.moxa.dream.module.xml.moudle.XmlConstant;
 import com.moxa.dream.module.xml.moudle.XmlHandler;
 import com.moxa.dream.module.xml.util.XmlUtil;
-import com.moxa.dream.util.wrapper.ObjectWrapper;
 import org.xml.sax.Attributes;
 
 public class MethodInfoBuilder extends XMLBuilder {

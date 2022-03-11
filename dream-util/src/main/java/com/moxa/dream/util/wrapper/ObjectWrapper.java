@@ -5,6 +5,7 @@ import java.util.Map;
 
 public abstract class ObjectWrapper {
     protected ObjectWrapper tempWrapper;
+
     public static ObjectWrapper wrapper(Object object) {
         ObjectWrapper wrapper;
         if (object == null)

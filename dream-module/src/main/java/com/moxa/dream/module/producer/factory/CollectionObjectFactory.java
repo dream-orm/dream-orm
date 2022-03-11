@@ -6,17 +6,20 @@ import java.util.Collection;
 
 public class CollectionObjectFactory extends BeanObjectFactory {
     Collection result;
-    public CollectionObjectFactory(){
+
+    CollectionObjectFactory() {
 
     }
+
     public CollectionObjectFactory(Class<? extends Collection> type) {
         super(type);
     }
+
     @Override
     public void set(PropertyInfo propertyInfo, Object value) {
-        if(propertyInfo==null)
+        if (propertyInfo == null)
             result.add(value);
-        else{
+        else {
             super.set(propertyInfo, value);
         }
     }
