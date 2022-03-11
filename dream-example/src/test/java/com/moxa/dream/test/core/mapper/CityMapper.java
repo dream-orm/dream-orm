@@ -27,9 +27,10 @@ import java.util.List;
 @Mapper
 public interface CityMapper {
 
-  @Sql("select id, name, state, country from city where state = @$(state)")
-  List<City> findByState(String state);
-  @Sql("update city set name=null where state = @$(state)")
-  void updateCity(String state);
+    @Sql("select id, name, state, country from city where state = @$(state)")
+    List<City> findByState(String state);
+
+    @Sql("update city set name=null where state = @$(state)")
+    void updateCity(String state);
 
 }

@@ -5,32 +5,38 @@ import com.moxa.dream.module.producer.ProducerException;
 import com.moxa.dream.module.producer.PropertyInfo;
 
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
 
-public class CollectionObjectFactory implements ObjectFactory{
-     Collection result;
-     CollectionObjectFactory(){
+public class CollectionObjectFactory implements ObjectFactory {
+    Collection result;
 
-     }
-    public CollectionObjectFactory(Class<?extends Collection>type){
+    CollectionObjectFactory() {
+
+    }
+
+    public CollectionObjectFactory(Class<? extends Collection> type) {
         int modifiers = type.getModifiers();
-        if(Modifier.isInterface(modifiers)||Modifier.isAbstract(modifiers)){
-                if (type.isAssignableFrom(ArrayList.class))
-                    result =new ArrayList();
-                else if (type.isAssignableFrom(HashSet.class)){
-                    result=new HashSet<>();
-                }else if(type.isAssignableFrom(LinkedList.class)){
-                    result=new LinkedList();
-                }else
-                    throw new ProducerException("The class name '"+type+"' not find implementation class");
-        }else{
+        if (Modifier.isInterface(modifiers) || Modifier.isAbstract(modifiers)) {
+            if (type.isAssignableFrom(ArrayList.class))
+                result = new ArrayList();
+            else if (type.isAssignableFrom(HashSet.class)) {
+                result = new HashSet<>();
+            } else if (type.isAssignableFrom(LinkedList.class)) {
+                result = new LinkedList();
+            } else
+                throw new ProducerException("The class name '" + type + "' not find implementation class");
+        } else {
             try {
                 result = type.getConstructor().newInstance();
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new ProducerException(e);
             }
         }
     }
+
     @Override
     public void set(PropertyInfo propertyInfo, Object value) {
         result.add(value);

@@ -7,6 +7,7 @@ import com.moxa.dream.util.common.ObjectUtil;
 public class BaseObjectFactory implements ObjectFactory {
     private Class type;
     private Object result;
+
     public BaseObjectFactory(Class type) {
         this.type = type;
     }
@@ -14,9 +15,9 @@ public class BaseObjectFactory implements ObjectFactory {
     @Override
     public void set(PropertyInfo propertyInfo, Object value) {
         if (value != null) {
-            ObjectUtil.requireTrue(type.isAssignableFrom(value.getClass()),"");
+            ObjectUtil.requireTrue(type.isAssignableFrom(value.getClass()), "");
         }
-        this.result=value;
+        this.result = value;
     }
 
     @Override

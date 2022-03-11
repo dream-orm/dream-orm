@@ -15,6 +15,7 @@ public class ReflectClass {
         this.target = target;
         this.type = target.getClass();
         for (Field field : ReflectUtil.findField(type)) {
+            field.trySetAccessible();
             fieldMap.put(field.getName(), field);
         }
     }
@@ -28,7 +29,6 @@ public class ReflectClass {
         if (field == null)
             throw new WrapperException("'" + type.getName() + "'字段属性'" + name + "'不存在");
         try {
-            field.setAccessible(true);
             Object result = field.get(target);
             field.set(target, value);
             return result;
@@ -55,7 +55,6 @@ public class ReflectClass {
         if (field == null)
             throw new WrapperException("'" + type.getName() + "'字段属性'" + name + "'不存在");
         try {
-            field.setAccessible(true);
             return field.get(target);
         } catch (IllegalAccessException e) {
             throw new WrapperException("'" + type.getName() + "'获取字段值'" + name + "'失败", e);

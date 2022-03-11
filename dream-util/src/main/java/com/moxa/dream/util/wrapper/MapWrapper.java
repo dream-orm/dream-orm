@@ -1,15 +1,13 @@
 package com.moxa.dream.util.wrapper;
 
-import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MapWrapper extends ObjectWrapper {
     private Map object;
-    private Type type;
 
-    public MapWrapper(Map map, Type type) {
+    public MapWrapper(Map map) {
         this.object = map;
-        this.type = type;
     }
 
     @Override
@@ -29,8 +27,8 @@ public class MapWrapper extends ObjectWrapper {
             ObjectWrapper resultWrapper;
             Object result = object.get(name);
             if (result == null) {
-                resultWrapper = wrapper(type);
-                result = resultWrapper.getObject();
+                result = new HashMap<>();
+                resultWrapper = wrapper(result);
                 object.put(name, result);
             } else
                 resultWrapper = wrapper(result);

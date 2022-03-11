@@ -1,7 +1,5 @@
 package com.moxa.dream.module.producer;
 
-import com.moxa.dream.util.common.ObjectUtil;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -11,8 +9,24 @@ public class PropertyInfo {
     private Method writeMethod;
     private Method readMethod;
 
+    public Method getReadMethod() {
+        return readMethod;
+    }
+
+    public void setReadMethod(Method readMethod) {
+        this.readMethod = readMethod;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public Field getField() {
+        return field;
     }
 
     public void setField(Field field) {
@@ -22,12 +36,8 @@ public class PropertyInfo {
         }
     }
 
-    public void setReadMethod(Method readMethod) {
-        this.readMethod = readMethod;
-    }
-
-    public Method getReadMethod() {
-        return readMethod;
+    public Method getWriteMethod() {
+        return writeMethod;
     }
 
     public void setWriteMethod(Method writeMethod) {
@@ -35,17 +45,5 @@ public class PropertyInfo {
             writeMethod.trySetAccessible();
             this.writeMethod = writeMethod;
         }
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public Field getField() {
-        return field;
-    }
-
-    public Method getWriteMethod() {
-        return writeMethod;
     }
 }

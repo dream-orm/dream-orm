@@ -8,9 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 
 public interface ObjectFactoryWrapper {
-    ObjectFactory newObjectFactory();
-
-   static  ObjectFactoryWrapper wrapper(Class type) {
+    static ObjectFactoryWrapper wrapper(Class type) {
         if (Collection.class.isAssignableFrom(type)) {
             return new CollectionObjectFactoryWrapper(type);
         } else if (Map.class.isAssignableFrom(type)) {
@@ -21,4 +19,6 @@ public interface ObjectFactoryWrapper {
             return new BeanObjectFactoryWrapper(type);
         }
     }
+
+    ObjectFactory newObjectFactory();
 }

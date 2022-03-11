@@ -1,9 +1,7 @@
 package com.moxa.dream.module.mapped;
 
 import com.moxa.dream.module.producer.PropertyInfo;
-import com.moxa.dream.module.producer.factory.ObjectFactory;
 import com.moxa.dream.module.type.handler.TypeHandler;
-import com.moxa.dream.util.wrapper.ObjectWrapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,11 +14,11 @@ public class MappedColumn {
     private TypeHandler typeHandler;
     private PropertyInfo propertyInfo;
 
-    public MappedColumn(int index, int jdbcType, String table,PropertyInfo propertyInfo, boolean primary) {
+    public MappedColumn(int index, int jdbcType, String table, PropertyInfo propertyInfo, boolean primary) {
         this.index = index;
         this.jdbcType = jdbcType;
         this.table = table;
-        this.propertyInfo=propertyInfo;
+        this.propertyInfo = propertyInfo;
         this.primary = primary;
     }
 

@@ -10,18 +10,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MappedResult {
-    private Class<?extends Collection>rowType;
+    private Class<? extends Collection> rowType;
     private Class colType;
     private ObjectFactoryWrapper objectFactoryWrapper;
     private MappedColumn[] primaryList = new MappedColumn[0];
     private MappedColumn[] mappedColumnList = new MappedColumn[0];
     private Map<String, MappedResult> childResultMappingMap = new HashMap<>();
     private PropertyInfo propertyInfo;
-    public MappedResult(Class<?extends Collection>rowType,Class colType,PropertyInfo propertyInfo) {
-        this.rowType=rowType;
-        this.colType=colType;
-        this.propertyInfo=propertyInfo;
-        this.objectFactoryWrapper=ObjectFactoryWrapper.wrapper(colType);
+
+    public MappedResult(Class<? extends Collection> rowType, Class colType, PropertyInfo propertyInfo) {
+        this.rowType = rowType;
+        this.colType = colType;
+        this.propertyInfo = propertyInfo;
+        this.objectFactoryWrapper = ObjectFactoryWrapper.wrapper(colType);
     }
 
     public Class<? extends Collection> getRowType() {

@@ -1,6 +1,6 @@
 package com.moxa.dream.module.producer;
 
-public class ProducerException extends RuntimeException{
+public class ProducerException extends RuntimeException {
     public ProducerException(String msg) {
         super(msg);
     }

@@ -6,11 +6,12 @@ import com.moxa.dream.module.producer.PropertyInfo;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapObjectFactory implements ObjectFactory{
-    Map<String,Object> result=new HashMap<>();
+public class MapObjectFactory implements ObjectFactory {
+    Map<String, Object> result = new HashMap<>();
+
     @Override
     public void set(PropertyInfo propertyInfo, Object value) {
-        result.put(propertyInfo.getLabel(),value);
+        result.put(propertyInfo.getLabel(), value);
     }
 
     @Override

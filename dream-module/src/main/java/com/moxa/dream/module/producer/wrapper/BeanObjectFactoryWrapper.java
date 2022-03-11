@@ -5,8 +5,9 @@ import com.moxa.dream.module.producer.factory.ObjectFactory;
 
 public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
     private Class type;
+
     public BeanObjectFactoryWrapper(Class type) {
-        this.type=type;
+        this.type = type;
     }
 
     @Override

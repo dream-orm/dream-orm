@@ -122,19 +122,20 @@ public class DreamTest {
             System.out.println(value);
         }
     }
-    public void test(){
-                long l=System.currentTimeMillis();
+
+    public void test() {
+        long l = System.currentTimeMillis();
 
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
 
-                    for (int i = 0; i < 1000000; i++) {
+            for (int i = 0; i < 1000000; i++) {
 
-            CityMapper cityMapper = sqlSession.getMapper(CityMapper.class);
+                CityMapper cityMapper = sqlSession.getMapper(CityMapper.class);
 
-            cityMapper.findByState("CA"+i);
+                cityMapper.findByState("CA" + i);
             }
 
         }
-        System.out.println(System.currentTimeMillis()-l);
+        System.out.println(System.currentTimeMillis() - l);
     }
 }

@@ -29,7 +29,7 @@ public class DefaultSqlSession implements SqlSession {
     @Override
     public <T> T getMapper(Class<T> type) {
         return mapperFactory.getMapper(type, (methodInfo, arg, args)
-                ->execute(methodInfo, arg)
+                -> execute(methodInfo, arg)
         );
     }
 

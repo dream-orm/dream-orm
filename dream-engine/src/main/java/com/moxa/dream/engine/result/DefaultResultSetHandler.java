@@ -68,7 +68,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     protected Object doNestedResult(ResultSet resultSet, MappedStatement mappedStatement, MappedResult mappedResult, Map<CacheKey, Object> cacheMap) throws SQLException {
         Map<String, MappedResult> childResultMappingMap = mappedResult.getChildResultMappingMap();
         Object target = null;
-        ObjectFactory targetObjectFactory=null;
+        ObjectFactory targetObjectFactory = null;
         boolean returnNull = false;
         for (String fieldName : childResultMappingMap.keySet()) {
             MappedResult childMappedResult = childResultMappingMap.get(fieldName);
@@ -100,18 +100,18 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 } else {
                     returnNull = true;
                 }
-                targetObjectFactory=ObjectFactory.of(target);
+                targetObjectFactory = ObjectFactory.of(target);
             }
             Class<? extends Collection> rowType = childMappedResult.getRowType();
-            if(rowType!=null){
-                Collection rowList =(Collection)targetObjectFactory.get(childMappedResult.getPropertyInfo());
-                if(rowList==null){
-                    rowList=(Collection)ObjectFactoryWrapper.wrapper(rowType).newObjectFactory().getObject();
+            if (rowType != null) {
+                Collection rowList = (Collection) targetObjectFactory.get(childMappedResult.getPropertyInfo());
+                if (rowList == null) {
+                    rowList = (Collection) ObjectFactoryWrapper.wrapper(rowType).newObjectFactory().getObject();
                     targetObjectFactory.set(childMappedResult.getPropertyInfo(), rowList);
                 }
                 rowList.add(childObject);
-            }else{
-                targetObjectFactory.set(childMappedResult.getPropertyInfo(),childObject);
+            } else {
+                targetObjectFactory.set(childMappedResult.getPropertyInfo(), childObject);
             }
         }
         if (returnNull)
