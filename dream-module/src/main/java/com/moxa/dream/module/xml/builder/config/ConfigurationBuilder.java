@@ -128,7 +128,6 @@ public class ConfigurationBuilder extends XMLBuilder {
             configBuilder.dataSourceFactory(dataSourceFactory.getType());
             configBuilder.dataSourceProperties(getProperties(dataSourceFactory.getPropertyList()));
         }
-        ObjectWrapper.clear();
         return configBuilder.builder();
     }
 

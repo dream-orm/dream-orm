@@ -1,13 +1,10 @@
 package com.moxa.dream.util.wrapper;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class ObjectWrapper {
-    protected static Map<Class, ReflectClass> reflectClassMap = new HashMap<>();
     protected ObjectWrapper tempWrapper;
-
     public static ObjectWrapper wrapper(Object object) {
         ObjectWrapper wrapper;
         if (object == null)
@@ -19,23 +16,9 @@ public abstract class ObjectWrapper {
         } else if (object instanceof Collection) {
             wrapper = new CollectionWrapper((Collection) object);
         } else {
-            ReflectClass reflectClass = reflectClassMap.get(object.getClass());
-            if (reflectClass == null) {
-                synchronized (ObjectWrapper.class) {
-                    reflectClass = reflectClassMap.get(object.getClass());
-                    if (reflectClass == null) {
-                        reflectClass = new ReflectClass(object);
-                        reflectClassMap.put(object.getClass(), reflectClass);
-                    }
-                }
-            }
-            wrapper = new BeanWrapper(reflectClass);
+            wrapper = new BeanWrapper(new ReflectClass(object));
         }
         return wrapper;
-    }
-
-    public static void clear() {
-        reflectClassMap.clear();
     }
 
     public void set(String property, Object value) throws WrapperException {

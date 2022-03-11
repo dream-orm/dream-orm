@@ -39,7 +39,6 @@ public class MethodInfoBuilder extends XMLBuilder {
 
     @Override
     public Object endElement(String uri, String localName, String qName) {
-        ObjectWrapper.clear();
         return methodInfo;
     }
 

@@ -4,25 +4,24 @@ import com.moxa.dream.module.producer.PropertyInfo;
 import com.moxa.dream.module.producer.factory.ObjectFactory;
 import com.moxa.dream.module.producer.wrapper.ObjectFactoryWrapper;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MappedResult {
     private Class<? extends Collection> rowType;
     private Class colType;
-    private ObjectFactoryWrapper objectFactoryWrapper;
+    private ObjectFactoryWrapper rowObjectFactoryWrapper;
+    private ObjectFactoryWrapper colObjectFactoryWrapper;
     private MappedColumn[] primaryList = new MappedColumn[0];
     private MappedColumn[] mappedColumnList = new MappedColumn[0];
     private Map<String, MappedResult> childResultMappingMap = new HashMap<>();
     private PropertyInfo propertyInfo;
 
     public MappedResult(Class<? extends Collection> rowType, Class colType, PropertyInfo propertyInfo) {
-        this.rowType = rowType;
-        this.colType = colType;
+        this.rowType = rowType = rowType == null ? List.class : rowType;
+        this.colType = colType = colType == null ? Object.class : colType;
         this.propertyInfo = propertyInfo;
-        this.objectFactoryWrapper = ObjectFactoryWrapper.wrapper(colType);
+        this.rowObjectFactoryWrapper = ObjectFactoryWrapper.wrapper(rowType);
+        this.colObjectFactoryWrapper = ObjectFactoryWrapper.wrapper(colType);
     }
 
     public Class<? extends Collection> getRowType() {
@@ -68,7 +67,12 @@ public class MappedResult {
         }
     }
 
-    public ObjectFactory newObjectFactory() {
-        return objectFactoryWrapper.newObjectFactory();
+    public ObjectFactory newColObjectFactory() {
+        return colObjectFactoryWrapper.newObjectFactory();
     }
+
+    public ObjectFactory newRowObjectFactory() {
+        return rowObjectFactoryWrapper.newObjectFactory();
+    }
+
 }

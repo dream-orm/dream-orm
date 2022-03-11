@@ -16,7 +16,6 @@ import com.moxa.dream.module.producer.wrapper.ObjectFactoryWrapper;
 import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableInfo;
 import com.moxa.dream.module.type.handler.TypeHandler;
-import com.moxa.dream.module.util.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.wrapper.ObjectWrapper;
@@ -44,11 +43,11 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     @Override
     public Object result(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException {
         MappedResult mappedResult = getMappedResult(resultSet, mappedStatement);
-        Collection collection = getCollection(mappedStatement);
+        ObjectFactory resultObjectFactory = mappedResult.newRowObjectFactory();
         if (mappedResult.isSimple()) {
             while (resultSet.next()) {
                 Object result = doSimpleResult(resultSet, mappedStatement, mappedResult);
-                collection.add(result);
+                resultObjectFactory.set(null, result);
                 eachList(result, mappedStatement.getEachInfoList());
             }
         } else {
@@ -56,22 +55,22 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             while (resultSet.next()) {
                 Object result = doNestedResult(resultSet, mappedStatement, mappedResult, cacheMap);
                 if (result != null) {
-                    collection.add(result);
+                    resultObjectFactory.set(null, result);
                     eachList(result, mappedStatement.getEachInfoList());
                 }
             }
             cacheMap.clear();
         }
-        return collection instanceof NonCollection ? ((NonCollection<?>) collection).toObject() : collection.isEmpty() ? null : collection;
+        return resultObjectFactory.getObject();
     }
 
     protected Object doNestedResult(ResultSet resultSet, MappedStatement mappedStatement, MappedResult mappedResult, Map<CacheKey, Object> cacheMap) throws SQLException {
-        Map<String, MappedResult> childResultMappingMap = mappedResult.getChildResultMappingMap();
+        Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
         Object target = null;
         ObjectFactory targetObjectFactory = null;
         boolean returnNull = false;
-        for (String fieldName : childResultMappingMap.keySet()) {
-            MappedResult childMappedResult = childResultMappingMap.get(fieldName);
+        for (String fieldName : childMappedResultMap.keySet()) {
+            MappedResult childMappedResult = childMappedResultMap.get(fieldName);
             Object childObject;
             boolean simple;
             if (simple = childMappedResult.isSimple()) {
@@ -122,7 +121,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
     protected Object doSimpleResult(ResultSet resultSet, MappedStatement mappedStatement, MappedResult mappedResult) throws SQLException {
         MappedColumn[] mappedColumnList = mappedResult.getColumnMappingList();
-        ObjectFactory objectFactory = mappedResult.newObjectFactory();
+        ObjectFactory objectFactory = mappedResult.newColObjectFactory();
         for (MappedColumn mappedColumn : mappedColumnList) {
             objectFactory.set(mappedColumn.getPropertyInfo(), mappedColumn.getValue(resultSet));
         }
@@ -147,8 +146,6 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         ResultSetMetaData metaData = resultSet.getMetaData();
         int columnCount = metaData.getColumnCount();
         Class colType = mappedStatement.getColType();
-        if (colType == null)
-            colType = Object.class;
         if (colType == Object.class && columnCount > 1)
             colType = HashMap.class;
         MappedResult mappedResult = new MappedResult(mappedStatement.getRowType(), colType, null);
@@ -245,18 +242,18 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 Type genericType = field.getGenericType();
                 String table = getTableName(genericType);
                 if (!ObjectUtil.isNull(table) && tableSet.contains(table)) {
-                    Map<String, MappedResult> childResultMappingMap = mappedResult.getChildResultMappingMap();
-                    MappedResult childResultMapping = childResultMappingMap.get(fieldName);
-                    if (childResultMapping == null) {
+                    Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
+                    MappedResult childMappedResult = childMappedResultMap.get(fieldName);
+                    if (childMappedResult == null) {
                         PropertyInfo childPropertyInfo = new PropertyInfo();
                         childPropertyInfo.setField(field);
-                        childResultMapping = new MappedResult(ReflectUtil.getRowType(colType, field), ReflectUtil.getColType(colType, field), childPropertyInfo);
-                        if (linkHandler(mappedColumn, mappedStatement, childResultMapping, tableSet)) {
-                            childResultMappingMap.put(fieldName, childResultMapping);
+                        childMappedResult = new MappedResult(ReflectUtil.getRowType(colType, field), ReflectUtil.getColType(colType, field), childPropertyInfo);
+                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
+                            childMappedResultMap.put(fieldName, childMappedResult);
                             return true;
                         }
                     } else {
-                        if (linkHandler(mappedColumn, mappedStatement, childResultMapping, tableSet)) {
+                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
                             return true;
                         }
                     }
@@ -276,15 +273,6 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         if (view == null)
             return null;
         return view.value();
-    }
-
-    protected Collection getCollection(MappedStatement mappedStatement) {
-        Class<? extends Collection> collectionType = mappedStatement.getRowType();
-        if (collectionType == null) {
-            return new ArrayList();
-        } else {
-            return ReflectUtil.create(collectionType);
-        }
     }
 
     protected void eachList(Object object, List<EachInfo> eachInfoList) {

@@ -19,7 +19,7 @@ import com.moxa.dream.module.mapper.MethodInfo;
 import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableFactory;
 import com.moxa.dream.module.table.TableInfo;
-import com.moxa.dream.module.util.NonCollection;
+import com.moxa.dream.module.producer.util.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.List;

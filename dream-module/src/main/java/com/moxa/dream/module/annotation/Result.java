@@ -1,6 +1,6 @@
 package com.moxa.dream.module.annotation;
 
-import com.moxa.dream.module.util.NullObject;
+import com.moxa.dream.module.producer.util.NullObject;
 
 import java.util.Collection;
 

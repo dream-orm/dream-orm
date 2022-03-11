@@ -1,15 +1,9 @@
-package com.moxa.dream.module.util;
-
-
-import com.moxa.dream.util.common.ObjectUtil;
+package com.moxa.dream.module.producer.util;
 
 import java.util.Collection;
 import java.util.Iterator;
 
-public final class NonCollection<T> implements Collection<T> {
-    private Object value;
-    private boolean disable = false;
-
+public final class NullObject implements Collection {
     @Override
     public int size() {
         throw new UnsupportedOperationException();
@@ -26,7 +20,7 @@ public final class NonCollection<T> implements Collection<T> {
     }
 
     @Override
-    public Iterator<T> iterator() {
+    public Iterator iterator() {
         throw new UnsupportedOperationException();
     }
 
@@ -36,15 +30,8 @@ public final class NonCollection<T> implements Collection<T> {
     }
 
     @Override
-    public <T1> T1[] toArray(T1[] a) {
+    public boolean add(Object o) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean add(T t) {
-        ObjectUtil.requireTrue(!disable, "Capacity of " + this.getClass().getSimpleName() + " is '1'");
-        value = t;
-        return disable = true;
     }
 
     @Override
@@ -53,22 +40,7 @@ public final class NonCollection<T> implements Collection<T> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends T> c) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean addAll(Collection c) {
         throw new UnsupportedOperationException();
     }
 
@@ -77,7 +49,23 @@ public final class NonCollection<T> implements Collection<T> {
         throw new UnsupportedOperationException();
     }
 
-    public Object toObject() {
-        return value;
+    @Override
+    public boolean retainAll(Collection c) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean removeAll(Collection c) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean containsAll(Collection c) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Object[] toArray(Object[] a) {
+        throw new UnsupportedOperationException();
     }
 }

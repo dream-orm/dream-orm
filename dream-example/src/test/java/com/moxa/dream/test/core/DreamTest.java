@@ -5,6 +5,7 @@ import com.moxa.dream.driver.session.SqlSession;
 import com.moxa.dream.driver.session.SqlSessionFactory;
 import com.moxa.dream.driver.session.SqlSessionFactoryBuilder;
 import com.moxa.dream.module.mapper.MethodInfo;
+import com.moxa.dream.module.producer.util.NonCollection;
 import com.moxa.dream.test.core.mapper.CityMapper;
 import com.moxa.dream.test.core.mapper.UserMapper;
 import com.moxa.dream.test.core.table.User;
@@ -20,10 +21,10 @@ public class DreamTest {
 
     public static void main(String[] args) {
         DreamTest dreamTest = new DreamTest();
-//        dreamTest.selectMap();
+        dreamTest.selectMap();
 //        dreamTest.selectBean();
 //        dreamTest.selectField();
-        dreamTest.selectTableList();
+//        dreamTest.selectTableList();
 //        dreamTest.selectAll();
 //        dreamTest.selectMapper();
 //        dreamTest.selectMyView();
@@ -39,6 +40,7 @@ public class DreamTest {
                     .Builder(sqlSessionFactory.getConfiguration())
                     .sql("select * from user where id=@$(id)")
                     .colType(Object.class)
+                    .rowType(NonCollection.class)
                     .build();
             Object value = sqlSession.execute(methodInfo, user);
             System.out.println(value);
