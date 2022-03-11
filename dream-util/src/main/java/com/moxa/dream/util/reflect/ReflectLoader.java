@@ -14,6 +14,8 @@ class ReflectLoader {
                 type = HashMap.class;
             else if (type.isAssignableFrom(HashSet.class))
                 type = HashSet.class;
+            else if (type.isAssignableFrom(LinkedList.class))
+                type = LinkedList.class;
             else
                 throw new ReflectException("抽象类'" + type + "'未发现实现类");
         }

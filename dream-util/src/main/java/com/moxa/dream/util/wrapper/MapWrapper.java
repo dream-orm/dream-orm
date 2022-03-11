@@ -21,7 +21,7 @@ public class MapWrapper extends ObjectWrapper {
     }
 
     @Override
-    public Object set(PropertyToken propertyToken, Object value) throws WrapperException {
+    public void set(PropertyToken propertyToken, Object value) throws WrapperException {
         String name = propertyToken.getName();
         if (propertyToken.hasNext()) {
             ObjectWrapper resultWrapper;
@@ -32,11 +32,9 @@ public class MapWrapper extends ObjectWrapper {
                 object.put(name, result);
             } else
                 resultWrapper = wrapper(result);
-            return resultWrapper.set(propertyToken.next(), value);
+            resultWrapper.set(propertyToken.next(), value);
         } else {
-            Object result = object.get(name);
             object.put(name, value);
-            return result;
         }
     }
 

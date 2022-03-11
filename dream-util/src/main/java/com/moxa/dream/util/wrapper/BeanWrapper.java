@@ -1,6 +1,5 @@
 package com.moxa.dream.util.wrapper;
 
-
 import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
@@ -23,7 +22,7 @@ public class BeanWrapper extends ObjectWrapper {
     }
 
     @Override
-    public Object set(PropertyToken propertyToken, Object value) throws WrapperException {
+    public void set(PropertyToken propertyToken, Object value) throws WrapperException {
         String name = propertyToken.getName();
         if (propertyToken.hasNext()) {
             ObjectWrapper resultWrapper;
@@ -34,9 +33,9 @@ public class BeanWrapper extends ObjectWrapper {
                 object.set(name, result);
             }
             resultWrapper = wrapper(result);
-            return resultWrapper.set(propertyToken.next(), value);
+            resultWrapper.set(propertyToken.next(), value);
         } else
-            return object.set(name, value);
+            object.set(name, value);
     }
 
     @Override

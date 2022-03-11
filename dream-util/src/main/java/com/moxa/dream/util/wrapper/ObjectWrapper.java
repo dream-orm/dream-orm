@@ -34,9 +34,12 @@ public abstract class ObjectWrapper {
         return wrapper;
     }
 
+    public static void clear() {
+        reflectClassMap.clear();
+    }
 
-    public Object set(String property, Object value) throws WrapperException {
-        return set(new PropertyToken(property), value);
+    public void set(String property, Object value) throws WrapperException {
+        set(new PropertyToken(property), value);
     }
 
     public Object get(String property) throws WrapperException {
@@ -52,7 +55,7 @@ public abstract class ObjectWrapper {
 
     public abstract Object getObject();
 
-    protected abstract Object set(PropertyToken propertyToken, Object value) throws WrapperException;
+    protected abstract void set(PropertyToken propertyToken, Object value) throws WrapperException;
 
     protected abstract Object get(PropertyToken propertyToken);
 

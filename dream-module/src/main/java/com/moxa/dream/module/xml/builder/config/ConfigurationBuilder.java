@@ -5,6 +5,7 @@ import com.moxa.dream.module.xml.builder.XMLBuilder;
 import com.moxa.dream.module.xml.moudle.XmlConstant;
 import com.moxa.dream.module.xml.moudle.XmlHandler;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.wrapper.ObjectWrapper;
 import org.xml.sax.Attributes;
 
 import java.util.List;
@@ -127,6 +128,7 @@ public class ConfigurationBuilder extends XMLBuilder {
             configBuilder.dataSourceFactory(dataSourceFactory.getType());
             configBuilder.dataSourceProperties(getProperties(dataSourceFactory.getPropertyList()));
         }
+        ObjectWrapper.clear();
         return configBuilder.builder();
     }
 

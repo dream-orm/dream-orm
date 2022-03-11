@@ -15,9 +15,6 @@ public class CollectionWrapper extends ObjectWrapper {
 
     @Override
     public Object get(PropertyToken propertyToken) {
-        if (!(object instanceof List)) {
-            throw new RuntimeException(object.getClass().getName() + "不支持Get方法");
-        }
         String name = propertyToken.getName();
         if (name != null && name.startsWith("[") && name.endsWith("]")) {
             int index = Integer.valueOf(name.substring(1, name.length() - 1));
@@ -35,39 +32,35 @@ public class CollectionWrapper extends ObjectWrapper {
     }
 
     @Override
-    public Object set(PropertyToken propertyToken, Object value) throws WrapperException {
+    public void set(PropertyToken propertyToken, Object value) throws WrapperException {
         String name = propertyToken.getName();
         if (name.startsWith("[") && name.endsWith("]")) {
             int index = Integer.valueOf(name.substring(1, name.length() - 1));
             if (propertyToken.hasNext()) {
-                if (object instanceof List) {
-                    ObjectWrapper resultWrapper;
-                    Object result = ((List) object).get(index);
-                    if (result == null) {
-                        result = new HashMap<>();
-                        ((List) object).set(index, result);
-                    }
-                    resultWrapper = wrapper(result);
-                    return resultWrapper.set(propertyToken.next(), value);
+                ObjectWrapper resultWrapper;
+                Object result = ((List) object).get(index);
+                if (result == null) {
+                    result = new HashMap<>();
+                    ((List) object).set(index, result);
                 }
-                throw new WrapperException("类对象:" + object.getClass().getName() + "，不支持Set方法");
+                resultWrapper = wrapper(result);
+                resultWrapper.set(propertyToken.next(), value);
             } else {
                 if (index < 0) {
                     if (value instanceof Collection) {
                         object.addAll((Collection) value);
                     } else
                         object.add(value);
-                    return null;
                 } else {
-                    if (object instanceof List) {
-                        Object result = ((List) object).get(index);
-                        ((List) object).set(index, value);
-                        return result;
-                    }
-                    throw new WrapperException("类对象:" + object.getClass().getName() + "，不支持Set方法");
+                    ((List) object).set(index, value);
                 }
             }
-        } else throw new WrapperException("类对象：" + object.getClass().getName() + "，下标：" + name + "必须是整数");
+        } else {
+            if (beanWrapper == null) {
+                beanWrapper = new BeanWrapper(new ReflectClass(object));
+            }
+            beanWrapper.set(propertyToken, value);
+        }
     }
 
     @Override

@@ -1,11 +1,10 @@
 package com.moxa.dream.util.wrapper;
 
-
 public class NullWrapper extends ObjectWrapper {
 
     @Override
-    public Object set(PropertyToken propertyToken, Object value) throws WrapperException {
-        throw new WrapperException("null对象不支持Set方法");
+    public void set(PropertyToken propertyToken, Object value) throws WrapperException {
+
     }
 
     @Override
