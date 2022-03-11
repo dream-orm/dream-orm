@@ -90,8 +90,9 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                     String table = paramScanInfo.getTable();
                     String column = paramScanInfo.getColumn();
                     TableInfo tableInfo = null;
+                    Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = scanInfo.getTableScanInfoMap();
                     if (ObjectUtil.isNull(table)) {
-                        Collection<ScanInvoker.TableScanInfo> tableScanInfoList = scanInfo.getTableScanInfoMap().values();
+                        Collection<ScanInvoker.TableScanInfo> tableScanInfoList = tableScanInfoMap.values();
                         ObjectUtil.requireNonNull(tableScanInfoList, "@Function '" + ScanInvoker.class.getName() + "' has no scan table");
                         for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoList) {
                             tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
@@ -100,6 +101,10 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                             }
                         }
                     } else {
+                        ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(table);
+                        if(tableScanInfo!=null){
+                            table=tableScanInfo.getTable();
+                        }
                         tableInfo = tableFactory.getTableInfo(table);
                     }
                     ObjectUtil.requireNonNull(tableInfo, "tableInfo was not found,table is '" + table + "',column is '" + column + "'");
