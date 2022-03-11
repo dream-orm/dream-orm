@@ -7,6 +7,7 @@ import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 public class BeanObjectFactory implements ObjectFactory {
 
@@ -17,8 +18,13 @@ public class BeanObjectFactory implements ObjectFactory {
     }
 
     public BeanObjectFactory(Class type) {
+        result = newInstance(type);
+
+    }
+
+    protected Collection newInstance(Class<? extends Collection> type) {
         try {
-            result = type.getConstructor().newInstance();
+            return type.getConstructor().newInstance();
         } catch (Exception e) {
             throw new ProducerException(e);
         }
@@ -45,6 +51,9 @@ public class BeanObjectFactory implements ObjectFactory {
 
     @Override
     public Object get(PropertyInfo propertyInfo) {
+        return get(result,propertyInfo);
+    }
+    protected Object get(Object result,PropertyInfo propertyInfo){
         Method readMethod = propertyInfo.getReadMethod();
         if (readMethod != null) {
             try {

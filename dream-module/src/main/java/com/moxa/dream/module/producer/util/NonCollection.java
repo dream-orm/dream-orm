@@ -1,15 +1,12 @@
 package com.moxa.dream.module.producer.util;
 
 
-import com.moxa.dream.util.common.ObjectUtil;
-
 import java.util.Collection;
 import java.util.Iterator;
 
 public final class NonCollection<T> implements Collection<T> {
-    private Object value;
-    private boolean disable = false;
-
+    private Object[]value=new Object[1];
+    private int index=0;
     @Override
     public int size() {
         throw new UnsupportedOperationException();
@@ -42,9 +39,8 @@ public final class NonCollection<T> implements Collection<T> {
 
     @Override
     public boolean add(T t) {
-        ObjectUtil.requireTrue(!disable, "Capacity of " + this.getClass().getSimpleName() + " is '1'");
-        value = t;
-        return disable = true;
+        value[index++]=t;
+        return true;
     }
 
     @Override
@@ -77,7 +73,7 @@ public final class NonCollection<T> implements Collection<T> {
         throw new UnsupportedOperationException();
     }
 
-    public Object toObject() {
-        return value;
+    public Object getObject() {
+        return value[0];
     }
 }

@@ -99,7 +99,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 } else {
                     returnNull = true;
                 }
-                targetObjectFactory = ObjectFactory.of(target);
+//                targetObjectFactory = ObjectFactory.of(target);
             }
             Class<? extends Collection> rowType = childMappedResult.getRowType();
             if (rowType != null) {
