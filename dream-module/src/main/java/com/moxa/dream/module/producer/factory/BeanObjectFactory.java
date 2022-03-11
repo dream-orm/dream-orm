@@ -19,7 +19,7 @@ public class BeanObjectFactory implements ObjectFactory {
         result = newInstance(type);
     }
 
-    protected Collection newInstance(Class<? extends Collection> type) {
+    protected Object newInstance(Class<?> type) {
         try {
             return type.getConstructor().newInstance();
         } catch (Exception e) {
@@ -36,13 +36,14 @@ public class BeanObjectFactory implements ObjectFactory {
             } catch (Exception e) {
                 throw new ProducerException(e);
             }
-        }
-        Field field = propertyInfo.getField();
-        ObjectUtil.requireNonNull(field, "Property 'field' is required");
-        try {
-            field.set(result, value);
-        } catch (Exception e) {
-            throw new ProducerException(e);
+        }else {
+            Field field = propertyInfo.getField();
+            ObjectUtil.requireNonNull(field, "Property 'field' is required");
+            try {
+                field.set(result, value);
+            } catch (Exception e) {
+                throw new ProducerException(e);
+            }
         }
     }
 

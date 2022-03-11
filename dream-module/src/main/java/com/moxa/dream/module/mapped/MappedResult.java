@@ -2,6 +2,7 @@ package com.moxa.dream.module.mapped;
 
 import com.moxa.dream.module.producer.PropertyInfo;
 import com.moxa.dream.module.producer.factory.ObjectFactory;
+import com.moxa.dream.module.producer.util.NonCollection;
 import com.moxa.dream.module.producer.wrapper.ObjectFactoryWrapper;
 
 import java.util.*;
@@ -17,7 +18,7 @@ public class MappedResult {
     private PropertyInfo propertyInfo;
 
     public MappedResult(Class<? extends Collection> rowType, Class colType, PropertyInfo propertyInfo) {
-        this.rowType = rowType = rowType == null ? List.class : rowType;
+        this.rowType = rowType = rowType == null ? NonCollection.class : rowType;
         this.colType = colType = colType == null ? Object.class : colType;
         this.propertyInfo = propertyInfo;
         this.rowObjectFactoryWrapper = ObjectFactoryWrapper.wrapper(rowType);

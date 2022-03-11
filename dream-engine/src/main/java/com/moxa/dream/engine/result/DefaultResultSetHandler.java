@@ -22,6 +22,7 @@ import com.moxa.dream.util.wrapper.ObjectWrapper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -46,15 +47,17 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         ObjectFactory resultObjectFactory = mappedResult.newRowObjectFactory();
         if (mappedResult.isSimple()) {
             while (resultSet.next()) {
-                Object result = doSimpleResult(resultSet, mappedStatement, mappedResult);
+                ObjectFactory objectFactory = doSimpleResult(resultSet, mappedStatement, mappedResult);
+                Object result = objectFactory.getObject();
                 resultObjectFactory.set(null, result);
                 eachList(result, mappedStatement.getEachInfoList());
             }
         } else {
             Map<CacheKey, Object> cacheMap = new HashMap<>();
             while (resultSet.next()) {
-                Object result = doNestedResult(resultSet, mappedStatement, mappedResult, cacheMap);
-                if (result != null) {
+                ObjectFactory objectFactory = doNestedResult(resultSet, mappedStatement, mappedResult, cacheMap);
+                if (objectFactory != null) {
+                    Object result = objectFactory.getObject();
                     resultObjectFactory.set(null, result);
                     eachList(result, mappedStatement.getEachInfoList());
                 }
@@ -64,23 +67,22 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         return resultObjectFactory.getObject();
     }
 
-    protected Object doNestedResult(ResultSet resultSet, MappedStatement mappedStatement, MappedResult mappedResult, Map<CacheKey, Object> cacheMap) throws SQLException {
+    protected ObjectFactory doNestedResult(ResultSet resultSet, MappedStatement mappedStatement, MappedResult mappedResult, Map<CacheKey, Object> cacheMap) throws SQLException {
         Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
-        Object target = null;
         ObjectFactory targetObjectFactory = null;
         boolean returnNull = false;
         for (String fieldName : childMappedResultMap.keySet()) {
             MappedResult childMappedResult = childMappedResultMap.get(fieldName);
-            Object childObject;
+            ObjectFactory childObjectFactory;
             boolean simple;
             if (simple = childMappedResult.isSimple()) {
-                childObject = doSimpleResult(resultSet, mappedStatement, childMappedResult);
+                childObjectFactory = doSimpleResult(resultSet, mappedStatement, childMappedResult);
             } else {
-                childObject = doNestedResult(resultSet, mappedStatement, mappedResult, cacheMap);
+                childObjectFactory = doNestedResult(resultSet, mappedStatement, mappedResult, cacheMap);
             }
-            if (!simple && childObject == null)
+            if (!simple && childObjectFactory == null)
                 continue;
-            if (target == null) {
+            if (targetObjectFactory == null) {
                 CacheKey cacheKey = new CacheKey();
                 MappedColumn[] primaryList = mappedResult.getPrimaryList();
                 if (ObjectUtil.isNull(primaryList)) {
@@ -92,14 +94,13 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     idList[i + 1] = primaryList[i].getValue(resultSet);
                 }
                 cacheKey.update(idList);
-                target = cacheMap.get(cacheKey);
-                if (target == null) {
-                    target = doSimpleResult(resultSet, mappedStatement, mappedResult);
-                    cacheMap.put(cacheKey, target);
+                targetObjectFactory = (ObjectFactory) cacheMap.get(cacheKey);
+                if (targetObjectFactory == null) {
+                    targetObjectFactory = doSimpleResult(resultSet, mappedStatement, mappedResult);
+                    cacheMap.put(cacheKey, targetObjectFactory);
                 } else {
                     returnNull = true;
                 }
-//                targetObjectFactory = ObjectFactory.of(target);
             }
             Class<? extends Collection> rowType = childMappedResult.getRowType();
             if (rowType != null) {
@@ -108,24 +109,24 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     rowList = (Collection) ObjectFactoryWrapper.wrapper(rowType).newObjectFactory().getObject();
                     targetObjectFactory.set(childMappedResult.getPropertyInfo(), rowList);
                 }
-                rowList.add(childObject);
+                rowList.add(childObjectFactory.getObject());
             } else {
-                targetObjectFactory.set(childMappedResult.getPropertyInfo(), childObject);
+                targetObjectFactory.set(childMappedResult.getPropertyInfo(), childObjectFactory.getObject());
             }
         }
         if (returnNull)
             return null;
         else
-            return target;
+            return targetObjectFactory;
     }
 
-    protected Object doSimpleResult(ResultSet resultSet, MappedStatement mappedStatement, MappedResult mappedResult) throws SQLException {
+    protected ObjectFactory doSimpleResult(ResultSet resultSet, MappedStatement mappedStatement, MappedResult mappedResult) throws SQLException {
         MappedColumn[] mappedColumnList = mappedResult.getColumnMappingList();
         ObjectFactory objectFactory = mappedResult.newColObjectFactory();
         for (MappedColumn mappedColumn : mappedColumnList) {
             objectFactory.set(mappedColumn.getPropertyInfo(), mappedColumn.getValue(resultSet));
         }
-        return objectFactory.getObject();
+        return objectFactory;
     }
 
     protected MappedResult getMappedResult(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException {
@@ -214,6 +215,61 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         return true;
     }
 
+    protected String toLow(String name) {
+        return Character.toLowerCase(name.charAt(0)) + name.substring(1);
+    }
+
+    protected void fillPropertyInfo(List<Method> methodList, Field field, PropertyInfo propertyInfo) {
+        String fieldName = field.getName();
+        Class<?> fieldType = field.getType();
+        if (!fieldName.equals(propertyInfo.getLabel()))
+            propertyInfo.setLabel(field.getName());
+        if(field!=propertyInfo.getField()){
+            propertyInfo.setField(field);
+        }
+        if (!ObjectUtil.isNull(methodList)) {
+            for (Method method : methodList) {
+                String name = method.getName();
+                if (name.startsWith("set")) {
+                    if (name.length() > 3) {
+                        name = toLow(name.substring(3));
+                        if (fieldName.equals(name) && propertyInfo.getWriteMethod() == null) {
+                            Parameter[] parameters = method.getParameters();
+                            if (parameters.length == 1) {
+                                if (fieldType == parameters[0].getType()) {
+                                    propertyInfo.setWriteMethod(method);
+                                }
+                            }
+                        }
+                    }
+                } else if (name.startsWith("get")) {
+                    if (name.length() > 3) {
+                        name = toLow(name.substring(3));
+                        if (fieldName.equals(name) && propertyInfo.getReadMethod() == null) {
+                            Parameter[] parameters = method.getParameters();
+                            if (parameters.length == 0) {
+                                propertyInfo.setReadMethod(method);
+                            }
+                        }
+                    }
+                } else if (name.startsWith("is") && (fieldType == boolean.class || fieldType == Boolean.class)) {
+                    if (name.length() > 2) {
+                        name = toLow(name.substring(2));
+                        if (fieldName.equals(name) && propertyInfo.getReadMethod() == null) {
+                            Parameter[] parameters = method.getParameters();
+                            if (parameters.length == 0) {
+                                propertyInfo.setReadMethod(method);
+                            }
+                        }
+                    }
+                }
+                if(propertyInfo.getReadMethod()!=null&&propertyInfo.getWriteMethod()!=null){
+                    break;
+                }
+            }
+        }
+    }
+
     protected boolean linkHandlerForClass(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
         Class colType = mappedResult.getColType();
         String curTableName = getTableName(colType);
@@ -224,13 +280,11 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             for (Field field : fieldList) {
                 String fieldName = field.getName();
                 String link = propertyInfo.getLabel();
-                if (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || curTableName.equalsIgnoreCase(mappedColumn.getTable())) {
+                if (!lazyLoad&&(ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
                     if (fieldName.equalsIgnoreCase(link)) {
-                        if (!fieldName.equals(link))
-                            propertyInfo.setLabel(fieldName);
                         TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), mappedColumn.getJdbcType());
                         mappedColumn.setTypeHandler(typeHandler);
-                        propertyInfo.setField(field);
+                        fillPropertyInfo(ReflectUtil.findMethod(colType),field,propertyInfo);
                         if (!ObjectUtil.isNull(curTableName)) {
                             mappedResult.add(mappedColumn);
                             return true;
@@ -241,7 +295,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 }
                 Type genericType = field.getGenericType();
                 String table = getTableName(genericType);
-                if (!ObjectUtil.isNull(table) && tableSet.contains(table)) {
+                if (!ObjectUtil.isNull(table) && table.equalsIgnoreCase(mappedColumn.getTable())) {
                     Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
                     MappedResult childMappedResult = childMappedResultMap.get(fieldName);
                     if (childMappedResult == null) {

@@ -21,10 +21,10 @@ public class DreamTest {
 
     public static void main(String[] args) {
         DreamTest dreamTest = new DreamTest();
-        dreamTest.selectMap();
+//        dreamTest.selectMap();
 //        dreamTest.selectBean();
 //        dreamTest.selectField();
-//        dreamTest.selectTableList();
+        dreamTest.selectTableList();
 //        dreamTest.selectAll();
 //        dreamTest.selectMapper();
 //        dreamTest.selectMyView();

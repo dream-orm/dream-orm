@@ -9,6 +9,4 @@ import java.util.List;
 public class ViewUser extends User {
 
     private List<ViewDept> viewDeptList;
-
-    private ViewDept viewDept;
 }

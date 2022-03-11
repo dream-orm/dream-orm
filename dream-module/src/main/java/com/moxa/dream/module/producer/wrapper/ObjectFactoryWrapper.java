@@ -8,7 +8,9 @@ import java.util.*;
 
 public interface ObjectFactoryWrapper {
     static ObjectFactoryWrapper wrapper(Class type) {
-        if (type.isAssignableFrom(ArrayDeque.class)) {
+        if (ReflectUtil.isBaseClass(type)) {
+            return new BaseObjectFactoryWrapper();
+        } else if (type.isAssignableFrom(ArrayDeque.class)) {
             return new ArrayDequeObjectFactoryWrapper();
         } else if (type.isAssignableFrom(ArrayList.class)) {
             return new ArrayListObjectFactoryWrapper();
@@ -28,8 +30,6 @@ public interface ObjectFactoryWrapper {
             return new NonCollectionObjectFactoryWrapper();
         } else if (Collection.class.isAssignableFrom(type)) {
             return new CollectionObjectFactoryWrapper(type);
-        } else if (ReflectUtil.isBaseClass(type)) {
-            return new BaseObjectFactoryWrapper();
         } else {
             return new BeanObjectFactoryWrapper(type);
         }

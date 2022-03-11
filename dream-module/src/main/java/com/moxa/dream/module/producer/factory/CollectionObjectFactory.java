@@ -5,8 +5,6 @@ import com.moxa.dream.module.producer.PropertyInfo;
 import java.util.Collection;
 
 public class CollectionObjectFactory extends BeanObjectFactory {
-    Collection result;
-
     CollectionObjectFactory() {
 
     }
@@ -18,7 +16,7 @@ public class CollectionObjectFactory extends BeanObjectFactory {
     @Override
     public void set(PropertyInfo propertyInfo, Object value) {
         if (propertyInfo == null)
-            result.add(value);
+            ((Collection)result).add(value);
         else {
             super.set(propertyInfo, value);
         }
