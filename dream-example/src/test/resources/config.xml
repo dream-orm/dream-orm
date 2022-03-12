@@ -11,7 +11,7 @@
     <mapperFactory>
         <mapping package="com.moxa.dream.test.core.mapper"/>
     </mapperFactory>
-    <typeHandlerFactory type="com.moxa.dream.module.type.factory.BaseTypeHandlerFactory">
+    <typeHandlerFactory type="com.moxa.dream.module.engine.type.factory.BaseTypeHandlerFactory">
         <typeHandlerWrapper type="com.moxa.dream.test.core.MyTypeHandlerWrapper"/>
     </typeHandlerFactory>
     <dialectFactory type="com.moxa.dream.driver.factory.DefaultDialectFactory" dialect="${mysql}">
@@ -20,7 +20,7 @@
     <pluginFactory type="com.moxa.dream.driver.factory.DefaultPluginFactory">
         <interceptor type="com.moxa.dream.test.core.MyInterceptor"/>
     </pluginFactory>
-    <transactionFactory type="com.moxa.dream.module.transaction.JdbcTransactionFactory">
+    <transactionFactory type="com.moxa.dream.module.engine.transaction.JdbcTransactionFactory">
         <property name="a" value="b"/>
     </transactionFactory>
     <dataSourceFactory type="${ds}">

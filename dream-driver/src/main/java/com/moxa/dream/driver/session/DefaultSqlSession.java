@@ -1,9 +1,9 @@
 package com.moxa.dream.driver.session;
 
 import com.moxa.dream.antlr.bind.Command;
-import com.moxa.dream.engine.executor.Executor;
 import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.dialect.DialectFactory;
+import com.moxa.dream.module.engine.executor.Executor;
 import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.module.mapper.MapperFactory;
 import com.moxa.dream.module.mapper.MethodInfo;
@@ -67,29 +67,20 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public void commit() {
-        try {
-            executor.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        executor.commit();
+
     }
 
     @Override
     public void rollback() {
-        try {
-            executor.rollback();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        executor.rollback();
     }
 
     @Override
     public void close() {
-        try {
-            executor.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        executor.close();
+
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.moxa.dream.module.mapped;
 
-import com.moxa.dream.module.type.handler.TypeHandler;
+import com.moxa.dream.module.engine.type.handler.TypeHandler;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
