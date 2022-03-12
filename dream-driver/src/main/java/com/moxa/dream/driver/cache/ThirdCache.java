@@ -1,8 +1,8 @@
 package com.moxa.dream.driver.cache;
 
 import com.moxa.dream.antlr.invoker.ScanInvoker;
-import com.moxa.dream.module.cache.CacheKey;
-import com.moxa.dream.module.mapped.MappedStatement;
+import com.moxa.dream.module.engine.cache.CacheKey;
+import com.moxa.dream.module.hold.mapped.MappedStatement;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ThreadUtil;
 
@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ThirdCache implements com.moxa.dream.module.cache.Cache {
+public class ThirdCache implements com.moxa.dream.module.engine.cache.Cache {
     protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>();
     protected Map<CacheKey, Set<CacheKey>> indexMap = new ConcurrentHashMap<>();
     protected Cache<CacheKey, Object> pointCache;

@@ -4,7 +4,7 @@ import com.moxa.dream.antlr.sql.ToMSSQL;
 import com.moxa.dream.antlr.sql.ToMYSQL;
 import com.moxa.dream.antlr.sql.ToORACLE;
 import com.moxa.dream.antlr.sql.ToPGSQL;
-import com.moxa.dream.module.alias.AbstractAliasFactory;
+import com.moxa.dream.module.hold.alias.AbstractAliasFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.Properties;

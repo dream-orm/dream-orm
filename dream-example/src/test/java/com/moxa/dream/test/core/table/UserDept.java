@@ -1,7 +1,7 @@
 package com.moxa.dream.test.core.table;
 
-import com.moxa.dream.module.annotation.Column;
-import com.moxa.dream.module.annotation.Table;
+import com.moxa.dream.module.hold.annotation.Column;
+import com.moxa.dream.module.hold.annotation.Table;
 
 @Table
 public class UserDept {

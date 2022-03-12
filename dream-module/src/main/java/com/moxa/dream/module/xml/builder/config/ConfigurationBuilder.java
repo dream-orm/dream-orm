@@ -1,6 +1,7 @@
 package com.moxa.dream.module.xml.builder.config;
 
-import com.moxa.dream.module.config.DefaultConfig;
+import com.moxa.dream.module.hold.config.ConfigBuilder;
+import com.moxa.dream.module.hold.config.DefaultConfig;
 import com.moxa.dream.module.xml.builder.XMLBuilder;
 import com.moxa.dream.module.xml.moudle.XmlConstant;
 import com.moxa.dream.module.xml.moudle.XmlHandler;

@@ -1,10 +1,10 @@
 package com.moxa.dream.driver.session;
 
 import com.moxa.dream.driver.util.ConfigUtil;
-import com.moxa.dream.module.config.Configuration;
-import com.moxa.dream.module.config.ConfigurationFactory;
-import com.moxa.dream.module.config.DefaultConfig;
-import com.moxa.dream.module.config.DefaultConfigurationFactory;
+import com.moxa.dream.module.hold.config.Configuration;
+import com.moxa.dream.module.hold.config.ConfigurationFactory;
+import com.moxa.dream.module.hold.config.DefaultConfig;
+import com.moxa.dream.module.hold.config.DefaultConfigurationFactory;
 
 import java.io.InputStream;
 import java.io.Reader;

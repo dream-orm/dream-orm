@@ -1,6 +1,6 @@
 package com.moxa.dream.test.core.view;
 
-import com.moxa.dream.module.annotation.View;
+import com.moxa.dream.module.hold.annotation.View;
 
 import java.sql.Timestamp;
 

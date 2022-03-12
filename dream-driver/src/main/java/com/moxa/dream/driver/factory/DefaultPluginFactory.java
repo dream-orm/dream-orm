@@ -1,8 +1,8 @@
 package com.moxa.dream.driver.factory;
 
 import com.moxa.dream.driver.interceptor.PageInterceptor;
-import com.moxa.dream.module.plugin.Interceptor;
-import com.moxa.dream.module.plugin.JavaPluginFactory;
+import com.moxa.dream.module.hold.plugin.Interceptor;
+import com.moxa.dream.module.hold.plugin.JavaPluginFactory;
 
 public class DefaultPluginFactory extends JavaPluginFactory {
     @Override

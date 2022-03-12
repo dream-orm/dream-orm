@@ -1,6 +1,6 @@
 package com.moxa.dream.module.engine.statement;
 
-import com.moxa.dream.module.mapped.MappedStatement;
+import com.moxa.dream.module.hold.mapped.MappedStatement;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
