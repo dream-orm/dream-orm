@@ -4,7 +4,6 @@ package com.moxa.dream.engine.executor;
 import com.moxa.dream.engine.result.ResultSetHandler;
 import com.moxa.dream.engine.statement.StatementHandler;
 import com.moxa.dream.module.mapped.MappedStatement;
-import com.moxa.dream.module.transaction.Transaction;
 
 import java.sql.SQLException;
 
@@ -77,11 +76,6 @@ public abstract class CacheExecutor implements Executor {
     protected abstract void clearObject(MappedStatement mappedStatement);
 
     @Override
-    public Transaction getTransaction(MappedStatement mappedStatement) {
-        return executor.getTransaction(mappedStatement);
-    }
-
-    @Override
     public StatementHandler getStatementHandler(MappedStatement mappedStatement) {
         return executor.getStatementHandler(mappedStatement);
     }
@@ -92,7 +86,7 @@ public abstract class CacheExecutor implements Executor {
     }
 
     @Override
-    public Boolean isAutoCommit() {
+    public boolean isAutoCommit() {
         return executor.isAutoCommit();
     }
 }

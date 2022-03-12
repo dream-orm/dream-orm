@@ -16,12 +16,11 @@ public abstract class AbstractExecutor implements Executor {
     protected Configuration configuration;
     protected StatementHandler statementHandler;
     protected ResultSetHandler resultSetHandler;
-    private boolean autoCommit;
-    private PluginFactory pluginFactory;
+    protected PluginFactory pluginFactory;
 
     public AbstractExecutor(Configuration configuration, boolean autoCommit) {
         this.configuration = configuration;
-        this.autoCommit = autoCommit;
+        this.transaction = configuration.getTransaction(autoCommit);
         this.pluginFactory = configuration.getPluginFactory();
     }
 
@@ -32,7 +31,7 @@ public abstract class AbstractExecutor implements Executor {
         try {
             statementHandler = getStatementHandler(mappedStatement);
             resultSetHandler = getResultSetHandler(mappedStatement);
-            ResultSet resultSet = statementHandler.doQuery(getTransaction(mappedStatement).getConnection(mappedStatement), mappedStatement);
+            ResultSet resultSet = statementHandler.doQuery(transaction.getConnection(mappedStatement), mappedStatement);
             return resultSetHandler.result(resultSet, mappedStatement);
         } finally {
             if (statementHandler != null) {
@@ -45,7 +44,7 @@ public abstract class AbstractExecutor implements Executor {
     public Object update(MappedStatement mappedStatement) throws SQLException {
         try {
             statementHandler = getStatementHandler(mappedStatement);
-            return statementHandler.doUpdate(getTransaction(mappedStatement).getConnection(mappedStatement), mappedStatement);
+            return statementHandler.doUpdate(transaction.getConnection(mappedStatement), mappedStatement);
         } finally {
             if (statementHandler != null) {
                 statementHandler.close();
@@ -85,21 +84,6 @@ public abstract class AbstractExecutor implements Executor {
         return resultSetHandler;
     }
 
-    @Override
-    public Transaction getTransaction(MappedStatement mappedStatement) {
-        if (transaction == null) {
-            transaction = createTransaction(mappedStatement, autoCommit);
-            if (pluginFactory != null) {
-                transaction = (Transaction) pluginFactory.plugin(transaction);
-            }
-        }
-        return transaction;
-    }
-
-    public Transaction createTransaction(MappedStatement mappedStatement, boolean autoCommit) {
-        return configuration.getTransaction(mappedStatement, autoCommit);
-    }
-
     protected abstract StatementHandler createStatementHandler(MappedStatement mappedStatement);
 
     protected ResultSetHandler createResultSetHandler(MappedStatement mappedStatement) {
@@ -107,9 +91,7 @@ public abstract class AbstractExecutor implements Executor {
     }
 
     @Override
-    public Boolean isAutoCommit() {
-        if (transaction == null)
-            return null;
+    public boolean isAutoCommit() {
         return transaction.isAutoCommit();
     }
 

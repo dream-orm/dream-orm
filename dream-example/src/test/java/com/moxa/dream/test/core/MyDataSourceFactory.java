@@ -1,7 +1,6 @@
 package com.moxa.dream.test.core;
 
 import com.moxa.dream.module.datasource.DataSourceFactory;
-import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.util.resource.ResourceUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -46,7 +45,7 @@ public class MyDataSourceFactory implements DataSourceFactory {
     }
 
     @Override
-    public DataSource getDataSource(MappedStatement mappedStatement) {
+    public DataSource getDataSource() {
         return dataSource;
     }
 }

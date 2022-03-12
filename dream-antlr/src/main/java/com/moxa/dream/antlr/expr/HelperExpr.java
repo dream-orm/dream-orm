@@ -4,7 +4,6 @@ import com.moxa.dream.antlr.bind.ExprInfo;
 import com.moxa.dream.antlr.bind.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.util.common.ObjectUtil;
 
 public abstract class HelperExpr extends SqlExpr {
     protected Helper helper;
@@ -14,7 +13,8 @@ public abstract class HelperExpr extends SqlExpr {
 
     public HelperExpr(ExprReader exprReader, Helper helper) {
         super(exprReader);
-        ObjectUtil.requireNonNull(helper, "Property 'helper' is required");
+        if (helper == null)
+            throw new NullPointerException("Property 'helper' is required");
         this.helper = helper;
         this.helpExpr = helper.helper();
         setExprTypes(ExprType.HELP, ExprType.NIL);

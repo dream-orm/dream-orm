@@ -1,7 +1,5 @@
 package com.moxa.dream.module.transaction;
 
-import com.moxa.dream.module.mapped.MappedStatement;
-
 import java.util.Properties;
 
 public interface TransactionFactory {
@@ -9,6 +7,6 @@ public interface TransactionFactory {
 
     }
 
-    Transaction getTransaction(MappedStatement mappedStatement);
+    Transaction getTransaction();
 
 }

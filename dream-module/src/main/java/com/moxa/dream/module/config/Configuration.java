@@ -3,7 +3,6 @@ package com.moxa.dream.module.config;
 import com.moxa.dream.module.cache.CacheFactory;
 import com.moxa.dream.module.datasource.DataSourceFactory;
 import com.moxa.dream.module.dialect.DialectFactory;
-import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.module.mapper.MapperFactory;
 import com.moxa.dream.module.plugin.PluginFactory;
 import com.moxa.dream.module.table.TableFactory;
@@ -28,9 +27,9 @@ public class Configuration {
         mapperFactory.addMapper(this, type);
     }
 
-    public Transaction getTransaction(MappedStatement mappedStatement, boolean autoCommit) {
-        DataSource dataSource = dataSourceFactory.getDataSource(mappedStatement);
-        Transaction transaction = transactionFactory.getTransaction(mappedStatement);
+    public Transaction getTransaction(boolean autoCommit) {
+        DataSource dataSource = dataSourceFactory.getDataSource();
+        Transaction transaction = transactionFactory.getTransaction();
         transaction.setDataSource(dataSource);
         transaction.setAutoCommit(autoCommit);
         return transaction;
