@@ -8,7 +8,7 @@ import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.driver.factory.DefaultInvokerFactory;
 import com.moxa.dream.driver.interceptor.PageInterceptor;
 import com.moxa.dream.module.antlr.wrapper.Wrapper;
-import com.moxa.dream.module.hold.mapper.MethodInfo;
+import com.moxa.dream.module.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 
 public abstract class AbstractPageWrapper implements Wrapper {

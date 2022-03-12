@@ -1,7 +1,7 @@
 package com.moxa.dream.driver.wrapper;
 
 import com.moxa.dream.driver.annotation.AutoPage;
-import com.moxa.dream.module.hold.mapper.MethodInfo;
+import com.moxa.dream.module.mapper.MethodInfo;
 
 import java.lang.reflect.Method;
 

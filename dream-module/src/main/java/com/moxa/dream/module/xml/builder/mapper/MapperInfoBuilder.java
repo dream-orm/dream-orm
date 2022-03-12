@@ -1,8 +1,8 @@
 package com.moxa.dream.module.xml.builder.mapper;
 
-import com.moxa.dream.module.hold.config.Configuration;
-import com.moxa.dream.module.hold.mapper.EachInfo;
-import com.moxa.dream.module.hold.mapper.MethodInfo;
+import com.moxa.dream.module.config.Configuration;
+import com.moxa.dream.module.mapper.EachInfo;
+import com.moxa.dream.module.mapper.MethodInfo;
 import com.moxa.dream.module.xml.builder.XMLBuilder;
 import com.moxa.dream.module.xml.moudle.XmlConstant;
 import com.moxa.dream.module.xml.moudle.XmlHandler;

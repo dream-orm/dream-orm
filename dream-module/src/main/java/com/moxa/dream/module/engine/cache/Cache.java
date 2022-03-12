@@ -1,6 +1,6 @@
 package com.moxa.dream.module.engine.cache;
 
-import com.moxa.dream.module.hold.mapped.MappedStatement;
+import com.moxa.dream.module.mapped.MappedStatement;
 
 public interface Cache {
     void put(MappedStatement mappedStatement, Object value);

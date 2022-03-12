@@ -10,7 +10,7 @@ import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.driver.handler.PageHandler;
-import com.moxa.dream.module.hold.mapper.MethodInfo;
+import com.moxa.dream.module.mapper.MethodInfo;
 
 import java.util.List;
 

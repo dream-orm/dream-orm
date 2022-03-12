@@ -15,8 +15,8 @@
  */
 package com.moxa.dream.test.core.mapper;
 
-import com.moxa.dream.module.hold.annotation.Mapper;
-import com.moxa.dream.module.hold.annotation.Sql;
+import com.moxa.dream.module.annotation.Mapper;
+import com.moxa.dream.module.annotation.Sql;
 import com.moxa.dream.test.core.table.City;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.moxa.dream.driver.session;
 
-import com.moxa.dream.module.hold.config.Configuration;
-import com.moxa.dream.module.hold.mapper.MethodInfo;
+import com.moxa.dream.module.config.Configuration;
+import com.moxa.dream.module.mapper.MethodInfo;
 
 import java.io.Closeable;
 

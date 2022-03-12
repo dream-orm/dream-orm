@@ -1,7 +1,7 @@
 package com.moxa.dream.driver.session;
 
+import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.engine.executor.Executor;
-import com.moxa.dream.module.hold.config.Configuration;
 
 public interface SqlSessionFactory {
 

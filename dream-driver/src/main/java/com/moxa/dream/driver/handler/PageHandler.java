@@ -15,11 +15,11 @@ import com.moxa.dream.antlr.sql.ToDREAM;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.ExprUtil;
 import com.moxa.dream.driver.interceptor.PageInterceptor;
-import com.moxa.dream.module.hold.mapper.MethodInfo;
-import com.moxa.dream.module.hold.table.ColumnInfo;
-import com.moxa.dream.module.hold.table.TableFactory;
-import com.moxa.dream.module.hold.table.TableInfo;
+import com.moxa.dream.module.mapper.MethodInfo;
 import com.moxa.dream.module.reflect.util.NonCollection;
+import com.moxa.dream.module.table.ColumnInfo;
+import com.moxa.dream.module.table.TableFactory;
+import com.moxa.dream.module.table.TableInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.List;

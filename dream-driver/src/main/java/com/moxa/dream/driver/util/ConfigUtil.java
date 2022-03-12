@@ -1,11 +1,11 @@
 package com.moxa.dream.driver.util;
 
 import com.moxa.dream.driver.alias.DefaultAliasFactory;
+import com.moxa.dream.module.config.DefaultConfig;
 import com.moxa.dream.module.engine.cache.DefaultCacheFactory;
-import com.moxa.dream.module.engine.type.factory.BaseTypeHandlerFactory;
-import com.moxa.dream.module.hold.config.DefaultConfig;
-import com.moxa.dream.module.hold.mapper.DefaultMapperFactory;
-import com.moxa.dream.module.hold.table.DefaultTableFactory;
+import com.moxa.dream.module.engine.typehandler.factory.BaseTypeHandlerFactory;
+import com.moxa.dream.module.mapper.DefaultMapperFactory;
+import com.moxa.dream.module.table.DefaultTableFactory;
 
 public class ConfigUtil {
 

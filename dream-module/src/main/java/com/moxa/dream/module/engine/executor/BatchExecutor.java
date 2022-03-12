@@ -1,8 +1,8 @@
 package com.moxa.dream.module.engine.executor;
 
-import com.moxa.dream.module.engine.statement.BatchStatementHandler;
-import com.moxa.dream.module.engine.statement.StatementHandler;
-import com.moxa.dream.module.hold.config.Configuration;
+import com.moxa.dream.module.config.Configuration;
+import com.moxa.dream.module.engine.statementhandler.BatchStatementHandler;
+import com.moxa.dream.module.engine.statementhandler.StatementHandler;
 
 public class BatchExecutor extends AbstractExecutor {
     private Executor executor;

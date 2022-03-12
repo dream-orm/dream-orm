@@ -4,7 +4,7 @@ import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.util.InvokerUtil;
-import com.moxa.dream.module.hold.mapper.MethodInfo;
+import com.moxa.dream.module.mapper.MethodInfo;
 
 public class ScanWrapper implements Wrapper {
     @Override
