@@ -17,6 +17,7 @@ import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
 import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableInfo;
 import com.moxa.dream.module.typehandler.handler.TypeHandler;
+import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.wrapper.ObjectWrapper;
@@ -28,10 +29,7 @@ import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DefaultResultSetHandler implements ResultSetHandler {
     private MapperFactory mapperFactory;
@@ -154,6 +152,10 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         if (colType == Object.class && columnCount > 1)
             colType = HashMap.class;
         MappedResult mappedResult = new MappedResult(mappedStatement.getRowType(), colType, null);
+        Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = mappedStatement.getTableScanInfoMap();
+        LowHashSet tableSet = tableScanInfoMap.values().stream().map(tableScanInfo -> tableScanInfo.getTable()).collect(LowHashSet::new, LowHashSet::add, (left, right) -> {
+            left.addAll(right);
+        });
         for (int i = 1; i <= columnCount; i++) {
             int jdbcType = metaData.getColumnType(i);
             String columnLabel = metaData.getColumnLabel(i);
@@ -163,7 +165,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             propertyInfo.setLabel(link);
             boolean primary = isPrimary(tableName, columnLabel, mappedStatement);
             MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName, propertyInfo, primary);
-            boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, mappedStatement.getTableScanInfoMap());
+            boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, tableSet);
             ObjectUtil.requireTrue(success, "Property '" + link + "' mapping failure");
         }
         return mappedResult;
@@ -196,24 +198,24 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
 
-    protected boolean linkHandler(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap) {
+    protected boolean linkHandler(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
         Class colType = mappedResult.getColType();
         if (ReflectUtil.isBaseClass(colType))
-            return linkHandlerForBase(mappedColumn, mappedStatement, mappedResult, tableScanInfoMap);
+            return linkHandlerForBase(mappedColumn, mappedStatement, mappedResult, tableSet);
         else if (Map.class.isAssignableFrom(colType)) {
-            return linkHandlerForMap(mappedColumn, mappedStatement, mappedResult, tableScanInfoMap);
+            return linkHandlerForMap(mappedColumn, mappedStatement, mappedResult, tableSet);
         } else {
-            return linkHandlerForClass(mappedColumn, mappedStatement, mappedResult, tableScanInfoMap);
+            return linkHandlerForClass(mappedColumn, mappedStatement, mappedResult, tableSet);
         }
     }
 
-    protected boolean linkHandlerForBase(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap) {
+    protected boolean linkHandlerForBase(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
         mappedColumn.setTypeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(mappedResult.getColType(), mappedColumn.getJdbcType()));
         mappedResult.add(mappedColumn);
         return true;
     }
 
-    protected boolean linkHandlerForMap(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap) {
+    protected boolean linkHandlerForMap(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
         mappedColumn.setTypeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(Object.class, mappedColumn.getJdbcType()));
         mappedResult.add(mappedColumn);
         return true;
@@ -274,7 +276,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         }
     }
 
-    protected boolean linkHandlerForClass(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap) {
+    protected boolean linkHandlerForClass(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
         Class colType = mappedResult.getColType();
         String curTableName = getTableName(colType);
         List<Field> fieldList = ReflectUtil.findField(colType);
@@ -299,19 +301,19 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 }
                 Type genericType = field.getGenericType();
                 String table = getTableName(genericType);
-                if (!ObjectUtil.isNull(table) && tableScanInfoMap.containsKey(table)) {
+                if (!ObjectUtil.isNull(table) && tableSet.contains(table)) {
                     Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
                     MappedResult childMappedResult = childMappedResultMap.get(fieldName);
                     if (childMappedResult == null) {
                         PropertyInfo childPropertyInfo = new PropertyInfo();
                         childPropertyInfo.setField(field);
                         childMappedResult = new MappedResult(ReflectUtil.getRowType(colType, field), ReflectUtil.getColType(colType, field), childPropertyInfo);
-                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableScanInfoMap)) {
+                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
                             childMappedResultMap.put(fieldName, childMappedResult);
                             return true;
                         }
                     } else {
-                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableScanInfoMap)) {
+                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
                             return true;
                         }
                     }
