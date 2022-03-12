@@ -3,14 +3,13 @@ package com.moxa.dream.module.producer.factory;
 
 import com.moxa.dream.module.producer.PropertyInfo;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TreeMap;
 
 public class TreeMapObjectFactory extends HashMapObjectFactory {
-    public TreeMapObjectFactory(){
-        result=new TreeMap<>();
+    public TreeMapObjectFactory() {
+        result = new TreeMap<>();
     }
+
     @Override
     public void set(PropertyInfo propertyInfo, Object value) {
         result.put(propertyInfo.getLabel(), value);

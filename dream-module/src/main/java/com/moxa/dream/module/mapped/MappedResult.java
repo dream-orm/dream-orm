@@ -5,7 +5,10 @@ import com.moxa.dream.module.producer.factory.ObjectFactory;
 import com.moxa.dream.module.producer.util.NonCollection;
 import com.moxa.dream.module.producer.wrapper.ObjectFactoryWrapper;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MappedResult {
     private Class<? extends Collection> rowType;

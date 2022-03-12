@@ -7,14 +7,15 @@ import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Collection;
 
 public class BeanObjectFactory implements ObjectFactory {
 
     Object result;
-    BeanObjectFactory(){
+
+    BeanObjectFactory() {
 
     }
+
     public BeanObjectFactory(Class type) {
         result = newInstance(type);
     }
@@ -36,7 +37,7 @@ public class BeanObjectFactory implements ObjectFactory {
             } catch (Exception e) {
                 throw new ProducerException(e);
             }
-        }else {
+        } else {
             Field field = propertyInfo.getField();
             ObjectUtil.requireNonNull(field, "Property 'field' is required");
             try {

@@ -102,8 +102,8 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                         }
                     } else {
                         ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(table);
-                        if(tableScanInfo!=null){
-                            table=tableScanInfo.getTable();
+                        if (tableScanInfo != null) {
+                            table = tableScanInfo.getTable();
                         }
                         tableInfo = tableFactory.getTableInfo(table);
                     }

@@ -28,7 +28,10 @@ import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DefaultResultSetHandler implements ResultSetHandler {
     private MapperFactory mapperFactory;
@@ -193,7 +196,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
 
-    protected boolean linkHandler(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo>tableScanInfoMap) {
+    protected boolean linkHandler(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap) {
         Class colType = mappedResult.getColType();
         if (ReflectUtil.isBaseClass(colType))
             return linkHandlerForBase(mappedColumn, mappedStatement, mappedResult, tableScanInfoMap);
@@ -204,13 +207,13 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         }
     }
 
-    protected boolean linkHandlerForBase(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult,Map<String, ScanInvoker.TableScanInfo>tableScanInfoMap) {
+    protected boolean linkHandlerForBase(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap) {
         mappedColumn.setTypeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(mappedResult.getColType(), mappedColumn.getJdbcType()));
         mappedResult.add(mappedColumn);
         return true;
     }
 
-    protected boolean linkHandlerForMap(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo>tableScanInfoMap) {
+    protected boolean linkHandlerForMap(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap) {
         mappedColumn.setTypeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(Object.class, mappedColumn.getJdbcType()));
         mappedResult.add(mappedColumn);
         return true;
@@ -225,7 +228,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         Class<?> fieldType = field.getType();
         if (!fieldName.equals(propertyInfo.getLabel()))
             propertyInfo.setLabel(field.getName());
-        if(field!=propertyInfo.getField()){
+        if (field != propertyInfo.getField()) {
             propertyInfo.setField(field);
         }
         if (!ObjectUtil.isNull(methodList)) {
@@ -264,14 +267,14 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                         }
                     }
                 }
-                if(propertyInfo.getReadMethod()!=null&&propertyInfo.getWriteMethod()!=null){
+                if (propertyInfo.getReadMethod() != null && propertyInfo.getWriteMethod() != null) {
                     break;
                 }
             }
         }
     }
 
-    protected boolean linkHandlerForClass(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo>tableScanInfoMap) {
+    protected boolean linkHandlerForClass(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap) {
         Class colType = mappedResult.getColType();
         String curTableName = getTableName(colType);
         List<Field> fieldList = ReflectUtil.findField(colType);
@@ -281,11 +284,11 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             for (Field field : fieldList) {
                 String fieldName = field.getName();
                 String link = propertyInfo.getLabel();
-                if (!lazyLoad&&(ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
+                if (!lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
                     if (fieldName.equalsIgnoreCase(link)) {
                         TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), mappedColumn.getJdbcType());
                         mappedColumn.setTypeHandler(typeHandler);
-                        fillPropertyInfo(ReflectUtil.findMethod(colType),field,propertyInfo);
+                        fillPropertyInfo(ReflectUtil.findMethod(colType), field, propertyInfo);
                         if (!ObjectUtil.isNull(curTableName)) {
                             mappedResult.add(mappedColumn);
                             return true;

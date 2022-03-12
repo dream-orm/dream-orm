@@ -2,15 +2,15 @@ package com.moxa.dream.module.producer.factory;
 
 
 import com.moxa.dream.module.producer.PropertyInfo;
-import com.moxa.dream.module.producer.wrapper.HashMapObjectFactoryWrapper;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class HashMapObjectFactory implements ObjectFactory {
     Map<String, Object> result;
-    public HashMapObjectFactory(){
-        result=new HashMap<>();
+
+    public HashMapObjectFactory() {
+        result = new HashMap<>();
     }
 
     @Override
