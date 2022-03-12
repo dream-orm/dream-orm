@@ -4,7 +4,7 @@ import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.engine.resultsethandler.DefaultResultSetHandler;
 import com.moxa.dream.module.engine.resultsethandler.ResultSetHandler;
 import com.moxa.dream.module.engine.statementhandler.StatementHandler;
-import com.moxa.dream.module.engine.transaction.Transaction;
+import com.moxa.dream.module.transaction.Transaction;
 import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.module.plugin.PluginFactory;
 

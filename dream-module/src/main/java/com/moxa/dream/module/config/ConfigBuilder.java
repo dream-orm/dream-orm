@@ -2,12 +2,12 @@ package com.moxa.dream.module.config;
 
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.module.alias.AliasFactory;
-import com.moxa.dream.module.antlr.dialect.DialectFactory;
-import com.moxa.dream.module.engine.cache.CacheFactory;
-import com.moxa.dream.module.engine.datasource.DataSourceFactory;
-import com.moxa.dream.module.engine.transaction.TransactionFactory;
-import com.moxa.dream.module.engine.typehandler.factory.TypeHandlerFactory;
-import com.moxa.dream.module.engine.typehandler.wrapper.TypeHandlerWrapper;
+import com.moxa.dream.module.dialect.DialectFactory;
+import com.moxa.dream.module.cache.CacheFactory;
+import com.moxa.dream.module.datasource.DataSourceFactory;
+import com.moxa.dream.module.transaction.TransactionFactory;
+import com.moxa.dream.module.typehandler.factory.TypeHandlerFactory;
+import com.moxa.dream.module.typehandler.wrapper.TypeHandlerWrapper;
 import com.moxa.dream.module.mapper.MapperFactory;
 import com.moxa.dream.module.plugin.Interceptor;
 import com.moxa.dream.module.plugin.PluginFactory;

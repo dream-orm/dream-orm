@@ -1,6 +1,6 @@
 package com.moxa.dream.module.mapped;
 
-import com.moxa.dream.module.engine.typehandler.handler.TypeHandler;
+import com.moxa.dream.module.typehandler.handler.TypeHandler;
 import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
 
 import java.sql.ResultSet;

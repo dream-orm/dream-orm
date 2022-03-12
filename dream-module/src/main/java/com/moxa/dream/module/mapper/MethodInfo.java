@@ -1,9 +1,9 @@
 package com.moxa.dream.module.mapper;
 
 import com.moxa.dream.antlr.smt.PackageStatement;
-import com.moxa.dream.module.antlr.dialect.DialectFactory;
+import com.moxa.dream.module.dialect.DialectFactory;
 import com.moxa.dream.module.config.Configuration;
-import com.moxa.dream.module.engine.cache.CacheKey;
+import com.moxa.dream.module.cache.CacheKey;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.reflect.Method;

@@ -1,6 +1,6 @@
 package com.moxa.dream.test.core;
 
-import com.moxa.dream.module.engine.datasource.DataSourceFactory;
+import com.moxa.dream.module.datasource.DataSourceFactory;
 import com.moxa.dream.util.resource.ResourceUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

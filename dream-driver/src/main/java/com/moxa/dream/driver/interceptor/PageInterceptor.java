@@ -1,7 +1,7 @@
 package com.moxa.dream.driver.interceptor;
 
 import com.moxa.dream.driver.page.Page;
-import com.moxa.dream.module.antlr.dialect.DialectFactory;
+import com.moxa.dream.module.dialect.DialectFactory;
 import com.moxa.dream.module.engine.executor.Executor;
 import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.module.mapper.MethodInfo;

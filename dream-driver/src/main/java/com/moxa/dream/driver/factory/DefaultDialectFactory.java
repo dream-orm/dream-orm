@@ -3,8 +3,8 @@ package com.moxa.dream.driver.factory;
 import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.factory.MyFunctionFactory;
 import com.moxa.dream.driver.wrapper.DefaultPageWrapper;
-import com.moxa.dream.module.antlr.dialect.AbstractDialectFactory;
-import com.moxa.dream.module.antlr.wrapper.Wrapper;
+import com.moxa.dream.module.dialect.AbstractDialectFactory;
+import com.moxa.dream.module.wrapper.Wrapper;
 import com.moxa.dream.module.mapper.MethodInfo;
 
 import java.util.Arrays;

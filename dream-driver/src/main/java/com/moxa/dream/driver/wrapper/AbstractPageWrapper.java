@@ -7,7 +7,7 @@ import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.driver.factory.DefaultInvokerFactory;
 import com.moxa.dream.driver.interceptor.PageInterceptor;
-import com.moxa.dream.module.antlr.wrapper.Wrapper;
+import com.moxa.dream.module.wrapper.Wrapper;
 import com.moxa.dream.module.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 

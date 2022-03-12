@@ -1,7 +1,7 @@
 package com.moxa.dream.driver.session;
 
 import com.moxa.dream.antlr.bind.Command;
-import com.moxa.dream.module.antlr.dialect.DialectFactory;
+import com.moxa.dream.module.dialect.DialectFactory;
 import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.engine.executor.Executor;
 import com.moxa.dream.module.mapped.MappedStatement;

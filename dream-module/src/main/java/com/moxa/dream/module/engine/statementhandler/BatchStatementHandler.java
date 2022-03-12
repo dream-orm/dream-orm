@@ -1,7 +1,7 @@
 package com.moxa.dream.module.engine.statementhandler;
 
 import com.moxa.dream.antlr.bind.Command;
-import com.moxa.dream.module.engine.cache.CacheKey;
+import com.moxa.dream.module.cache.CacheKey;
 import com.moxa.dream.module.mapped.MappedStatement;
 
 import java.sql.Connection;

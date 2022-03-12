@@ -1,7 +1,7 @@
 package com.moxa.dream.test.core;
 
-import com.moxa.dream.module.engine.typehandler.handler.TypeHandler;
-import com.moxa.dream.module.engine.typehandler.wrapper.TypeHandlerWrapper;
+import com.moxa.dream.module.typehandler.handler.TypeHandler;
+import com.moxa.dream.module.typehandler.wrapper.TypeHandlerWrapper;
 
 public class MyTypeHandlerWrapper implements TypeHandlerWrapper {
     @Override
