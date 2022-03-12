@@ -1,6 +1,6 @@
-package com.moxa.dream.module.engine.listener;
+package com.moxa.dream.module.listener;
 
-import com.moxa.dream.module.engine.executor.Executor;
+import com.moxa.dream.module.executor.Executor;
 import com.moxa.dream.module.mapped.MappedStatement;
 
 public interface ExecutorListener {
