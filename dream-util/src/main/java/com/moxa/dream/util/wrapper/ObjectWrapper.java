@@ -17,7 +17,7 @@ public abstract class ObjectWrapper {
         } else if (object instanceof Collection) {
             wrapper = new CollectionWrapper((Collection) object);
         } else {
-            wrapper = new BeanWrapper(new ReflectClass(object));
+            wrapper = new BeanWrapper(ReflectClass.newInstance(object));
         }
         return wrapper;
     }

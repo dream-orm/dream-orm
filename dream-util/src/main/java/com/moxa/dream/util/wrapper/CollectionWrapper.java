@@ -25,7 +25,7 @@ public class CollectionWrapper extends ObjectWrapper {
                 return o;
         } else {
             if (beanWrapper == null) {
-                beanWrapper = new BeanWrapper(new ReflectClass(object));
+                beanWrapper = new BeanWrapper(ReflectClass.newInstance(object));
             }
             return beanWrapper.get(propertyToken);
         }
@@ -57,7 +57,7 @@ public class CollectionWrapper extends ObjectWrapper {
             }
         } else {
             if (beanWrapper == null) {
-                beanWrapper = new BeanWrapper(new ReflectClass(object));
+                beanWrapper = new BeanWrapper(ReflectClass.newInstance(object));
             }
             beanWrapper.set(propertyToken, value);
         }

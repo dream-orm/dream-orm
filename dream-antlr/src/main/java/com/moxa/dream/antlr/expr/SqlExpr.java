@@ -5,7 +5,6 @@ import com.moxa.dream.antlr.bind.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.util.ExprUtil;
-import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -28,7 +27,8 @@ public abstract class SqlExpr {
     }
 
     public Statement expr() {
-        ObjectUtil.requireTrue(!isClose(), "SQL parsing is closed");
+        if (isClose())
+            throw new IllegalStateException("SQL parsing is closed");
         tryMark();
         ExprInfo exprInfo = exprReader.getLastInfo();
         if (exprInfo == null)
