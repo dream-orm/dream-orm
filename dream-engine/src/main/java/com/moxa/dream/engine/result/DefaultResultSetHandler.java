@@ -1,5 +1,6 @@
 package com.moxa.dream.engine.result;
 
+import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.engine.executor.Executor;
 import com.moxa.dream.module.annotation.View;
 import com.moxa.dream.module.cache.CacheKey;
@@ -159,7 +160,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             propertyInfo.setLabel(link);
             boolean primary = isPrimary(tableName, columnLabel, mappedStatement);
             MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName, propertyInfo, primary);
-            boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, mappedStatement.getTableSet());
+            boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, mappedStatement.getTableScanInfoMap());
             ObjectUtil.requireTrue(success, "Property '" + link + "' mapping failure");
         }
         return mappedResult;
@@ -192,24 +193,24 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
 
-    protected boolean linkHandler(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+    protected boolean linkHandler(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo>tableScanInfoMap) {
         Class colType = mappedResult.getColType();
         if (ReflectUtil.isBaseClass(colType))
-            return linkHandlerForBase(mappedColumn, mappedStatement, mappedResult, tableSet);
+            return linkHandlerForBase(mappedColumn, mappedStatement, mappedResult, tableScanInfoMap);
         else if (Map.class.isAssignableFrom(colType)) {
-            return linkHandlerForMap(mappedColumn, mappedStatement, mappedResult, tableSet);
+            return linkHandlerForMap(mappedColumn, mappedStatement, mappedResult, tableScanInfoMap);
         } else {
-            return linkHandlerForClass(mappedColumn, mappedStatement, mappedResult, tableSet);
+            return linkHandlerForClass(mappedColumn, mappedStatement, mappedResult, tableScanInfoMap);
         }
     }
 
-    protected boolean linkHandlerForBase(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+    protected boolean linkHandlerForBase(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult,Map<String, ScanInvoker.TableScanInfo>tableScanInfoMap) {
         mappedColumn.setTypeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(mappedResult.getColType(), mappedColumn.getJdbcType()));
         mappedResult.add(mappedColumn);
         return true;
     }
 
-    protected boolean linkHandlerForMap(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+    protected boolean linkHandlerForMap(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo>tableScanInfoMap) {
         mappedColumn.setTypeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(Object.class, mappedColumn.getJdbcType()));
         mappedResult.add(mappedColumn);
         return true;
@@ -270,7 +271,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         }
     }
 
-    protected boolean linkHandlerForClass(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+    protected boolean linkHandlerForClass(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Map<String, ScanInvoker.TableScanInfo>tableScanInfoMap) {
         Class colType = mappedResult.getColType();
         String curTableName = getTableName(colType);
         List<Field> fieldList = ReflectUtil.findField(colType);
@@ -295,19 +296,19 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 }
                 Type genericType = field.getGenericType();
                 String table = getTableName(genericType);
-                if (!ObjectUtil.isNull(table) && table.equalsIgnoreCase(mappedColumn.getTable())) {
+                if (!ObjectUtil.isNull(table) && tableScanInfoMap.containsKey(table)) {
                     Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
                     MappedResult childMappedResult = childMappedResultMap.get(fieldName);
                     if (childMappedResult == null) {
                         PropertyInfo childPropertyInfo = new PropertyInfo();
                         childPropertyInfo.setField(field);
                         childMappedResult = new MappedResult(ReflectUtil.getRowType(colType, field), ReflectUtil.getColType(colType, field), childPropertyInfo);
-                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
+                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableScanInfoMap)) {
                             childMappedResultMap.put(fieldName, childMappedResult);
                             return true;
                         }
                     } else {
-                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
+                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableScanInfoMap)) {
                             return true;
                         }
                     }

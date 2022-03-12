@@ -1,6 +1,7 @@
 package com.moxa.dream.module.mapped;
 
 import com.moxa.dream.antlr.bind.Command;
+import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.module.cache.CacheKey;
 import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.mapper.EachInfo;
@@ -10,6 +11,7 @@ import com.moxa.dream.util.common.ObjectUtil;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -75,8 +77,8 @@ public class MappedStatement {
         return methodInfo.getSqlKey();
     }
 
-    public Set<String> getTableSet() {
-        return mappedSql.getTableSet();
+    public Map<String, ScanInvoker.TableScanInfo> getTableScanInfoMap() {
+        return mappedSql.getTableScanInfoMap();
     }
 
     public Integer getTimeOut() {

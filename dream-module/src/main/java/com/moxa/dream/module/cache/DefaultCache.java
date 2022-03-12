@@ -1,5 +1,6 @@
 package com.moxa.dream.module.cache;
 
+import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ThreadUtil;
@@ -26,11 +27,11 @@ public class DefaultCache implements Cache {
 
     @Override
     public void put(MappedStatement mappedStatement, Object value) {
-        Set<String> tableSet = mappedStatement.getTableSet();
+        Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = mappedStatement.getTableScanInfoMap();
         CacheKey sqlKey = mappedStatement.getSqlKey();
         CacheKey uniqueKey = mappedStatement.getUniqueKey();
-        if (!ObjectUtil.isNull(tableSet)) {
-            for (String table : tableSet) {
+        if (!ObjectUtil.isNull(tableScanInfoMap)) {
+            for (String table : tableScanInfoMap.keySet()) {
                 Set<CacheKey> cacheKeySet = tableMap.get(table);
                 if (cacheKeySet == null) {
                     synchronized (this) {
@@ -83,9 +84,9 @@ public class DefaultCache implements Cache {
 
     @Override
     public void remove(MappedStatement mappedStatement) {
-        Set<String> tableSet = mappedStatement.getTableSet();
-        if (!ObjectUtil.isNull(tableSet)) {
-            for (String table : tableSet) {
+        Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = mappedStatement.getTableScanInfoMap();
+        if (!ObjectUtil.isNull(tableScanInfoMap)) {
+            for (String table : tableScanInfoMap.keySet()) {
                 Set<CacheKey> cacheKeySet = tableMap.get(table);
                 if (!ObjectUtil.isNull(cacheKeySet)) {
                     for (CacheKey cacheKey : cacheKeySet) {
