@@ -17,10 +17,10 @@
     <dialectFactory type="com.moxa.dream.driver.factory.DefaultDialectFactory" dialect="${mysql}">
         <property name="a" value="b"/>
     </dialectFactory>
-    <pluginFactory type="com.moxa.dream.driver.factory.DefaultPluginFactory">
+    <pluginFactory type="com.moxa.dream.module.plugin.factory.JavaPluginFactory">
         <interceptor type="com.moxa.dream.test.core.MyInterceptor"/>
     </pluginFactory>
-    <transactionFactory type="com.moxa.dream.module.transaction.JdbcTransactionFactory">
+    <transactionFactory type="com.moxa.dream.module.transaction.factory.JdbcTransactionFactory">
         <property name="a" value="b"/>
     </transactionFactory>
     <dataSourceFactory type="${ds}">

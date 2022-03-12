@@ -5,10 +5,10 @@ import com.moxa.dream.driver.executor.SessionCacheExecutor;
 import com.moxa.dream.module.cache.Cache;
 import com.moxa.dream.module.cache.CacheFactory;
 import com.moxa.dream.module.config.Configuration;
-import com.moxa.dream.module.executor.BatchExecutor;
-import com.moxa.dream.module.executor.Executor;
-import com.moxa.dream.module.executor.JdbcExecutor;
-import com.moxa.dream.module.plugin.PluginFactory;
+import com.moxa.dream.module.core.executor.BatchExecutor;
+import com.moxa.dream.module.core.executor.Executor;
+import com.moxa.dream.module.core.executor.JdbcExecutor;
+import com.moxa.dream.module.plugin.factory.PluginFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 
 

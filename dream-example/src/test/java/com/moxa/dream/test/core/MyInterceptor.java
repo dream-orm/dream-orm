@@ -1,7 +1,7 @@
 package com.moxa.dream.test.core;
 
-import com.moxa.dream.module.plugin.Interceptor;
-import com.moxa.dream.module.plugin.Invocation;
+import com.moxa.dream.module.plugin.interceptor.Interceptor;
+import com.moxa.dream.module.plugin.invocation.Invocation;
 
 import java.lang.reflect.Method;
 import java.util.Set;

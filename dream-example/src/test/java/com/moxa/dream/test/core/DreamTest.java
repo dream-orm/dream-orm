@@ -1,10 +1,10 @@
 package com.moxa.dream.test.core;
 
-import com.moxa.dream.driver.page.Page;
 import com.moxa.dream.driver.session.SqlSession;
 import com.moxa.dream.driver.session.SqlSessionFactory;
 import com.moxa.dream.driver.session.SqlSessionFactoryBuilder;
 import com.moxa.dream.module.mapper.MethodInfo;
+import com.moxa.dream.module.plugin.Page;
 import com.moxa.dream.module.reflect.util.NonCollection;
 import com.moxa.dream.test.core.mapper.CityMapper;
 import com.moxa.dream.test.core.mapper.UserMapper;

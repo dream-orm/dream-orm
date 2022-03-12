@@ -3,11 +3,11 @@ package com.moxa.dream.module.config;
 import com.moxa.dream.module.cache.CacheFactory;
 import com.moxa.dream.module.datasource.DataSourceFactory;
 import com.moxa.dream.module.dialect.DialectFactory;
-import com.moxa.dream.module.mapper.MapperFactory;
-import com.moxa.dream.module.plugin.PluginFactory;
-import com.moxa.dream.module.table.TableFactory;
+import com.moxa.dream.module.mapper.factory.MapperFactory;
+import com.moxa.dream.module.plugin.factory.PluginFactory;
+import com.moxa.dream.module.table.factory.TableFactory;
 import com.moxa.dream.module.transaction.Transaction;
-import com.moxa.dream.module.transaction.TransactionFactory;
+import com.moxa.dream.module.transaction.factory.TransactionFactory;
 import com.moxa.dream.module.typehandler.factory.TypeHandlerFactory;
 
 import javax.sql.DataSource;
