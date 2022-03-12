@@ -3,7 +3,7 @@ package com.moxa.dream.driver.util;
 import com.moxa.dream.driver.alias.DefaultAliasFactory;
 import com.moxa.dream.driver.config.DefaultConfig;
 import com.moxa.dream.driver.factory.DefaultMapperFactory;
-import com.moxa.dream.module.cache.DefaultCacheFactory;
+import com.moxa.dream.module.cache.factory.DefaultCacheFactory;
 import com.moxa.dream.module.table.factory.DefaultTableFactory;
 import com.moxa.dream.module.typehandler.factory.BaseTypeHandlerFactory;
 

@@ -3,7 +3,7 @@ package com.moxa.dream.driver.session;
 import com.moxa.dream.driver.executor.CustomCacheExecutor;
 import com.moxa.dream.driver.executor.SessionCacheExecutor;
 import com.moxa.dream.module.cache.Cache;
-import com.moxa.dream.module.cache.CacheFactory;
+import com.moxa.dream.module.cache.factory.CacheFactory;
 import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.core.executor.BatchExecutor;
 import com.moxa.dream.module.core.executor.Executor;

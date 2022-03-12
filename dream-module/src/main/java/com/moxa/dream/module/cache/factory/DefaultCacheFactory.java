@@ -1,4 +1,7 @@
-package com.moxa.dream.module.cache;
+package com.moxa.dream.module.cache.factory;
+
+import com.moxa.dream.module.cache.Cache;
+import com.moxa.dream.module.cache.DefaultCache;
 
 import java.util.Properties;
 

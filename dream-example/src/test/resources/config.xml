@@ -2,7 +2,7 @@
     <aliasFactory type="com.moxa.dream.driver.alias.DefaultAliasFactory">
         <property name="ds" value="com.moxa.dream.test.core.MyDataSourceFactory"/>
     </aliasFactory>
-    <cacheFactory type="com.moxa.dream.module.cache.DefaultCacheFactory">
+    <cacheFactory type="com.moxa.dream.module.cache.factory.DefaultCacheFactory">
         <!--        <property name="enabled" value="false"/>-->
     </cacheFactory>
     <tableFactory>

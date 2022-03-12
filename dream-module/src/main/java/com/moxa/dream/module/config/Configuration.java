@@ -1,6 +1,6 @@
 package com.moxa.dream.module.config;
 
-import com.moxa.dream.module.cache.CacheFactory;
+import com.moxa.dream.module.cache.factory.CacheFactory;
 import com.moxa.dream.module.datasource.DataSourceFactory;
 import com.moxa.dream.module.dialect.DialectFactory;
 import com.moxa.dream.module.mapper.factory.MapperFactory;
