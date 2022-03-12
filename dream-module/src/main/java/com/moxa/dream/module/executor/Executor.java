@@ -1,8 +1,8 @@
 package com.moxa.dream.module.executor;
 
+import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.module.resultsethandler.ResultSetHandler;
 import com.moxa.dream.module.statementhandler.StatementHandler;
-import com.moxa.dream.module.mapped.MappedStatement;
 
 import java.sql.SQLException;
 

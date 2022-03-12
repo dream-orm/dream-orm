@@ -2,8 +2,8 @@ package com.moxa.dream.module.mapped;
 
 import com.moxa.dream.antlr.bind.Command;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
-import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.cache.CacheKey;
+import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.mapper.EachInfo;
 import com.moxa.dream.module.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;

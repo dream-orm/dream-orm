@@ -1,7 +1,7 @@
 package com.moxa.dream.test.core;
 
+import com.moxa.dream.driver.alias.AliasFactory;
 import com.moxa.dream.driver.alias.DefaultAliasFactory;
-import com.moxa.dream.module.alias.AliasFactory;
 
 import java.util.Properties;
 

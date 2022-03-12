@@ -1,7 +1,7 @@
 package com.moxa.dream.module.mapped;
 
-import com.moxa.dream.module.typehandler.handler.TypeHandler;
 import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
+import com.moxa.dream.module.typehandler.handler.TypeHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
