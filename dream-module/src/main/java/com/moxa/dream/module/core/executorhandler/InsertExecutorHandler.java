@@ -14,10 +14,10 @@ public class InsertExecutorHandler extends UpdateExecutorHandler {
 
     @Override
     public Object execute(MappedStatement mappedStatement) throws SQLException {
-        Object result=super.execute(mappedStatement);
+        Object result = super.execute(mappedStatement);
         ResultSet generatedKeys = statementHandler.getStatement().getGeneratedKeys();
-        if(generatedKeys.next()){
-            result=generatedKeys.getLong(0);
+        if (generatedKeys.next()) {
+            result = generatedKeys.getLong(0);
         }
         return result;
     }

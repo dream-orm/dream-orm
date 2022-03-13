@@ -2,10 +2,7 @@ package com.moxa.dream.module.antlr.factory;
 
 import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.invoker.Invoker;
-import com.moxa.dream.module.antlr.invoker.$LimitInvoker;
-import com.moxa.dream.module.antlr.invoker.$OffSetInvoker;
-import com.moxa.dream.module.antlr.invoker.AllInvoker;
-import com.moxa.dream.module.antlr.invoker.TableInvoker;
+import com.moxa.dream.module.antlr.invoker.*;
 
 public class DreamInvokerFactory implements InvokerFactory {
     public static final String NAMESPACE = "dream";
@@ -13,6 +10,7 @@ public class DreamInvokerFactory implements InvokerFactory {
     public static final String $LIMIT = "$limit";
     public static final String $OFFSET = "$offset";
     public static final String TABLE = "table";
+    public static final String INSERT = "insert";
 
     @Override
     public Invoker create(String function) {
@@ -25,6 +23,8 @@ public class DreamInvokerFactory implements InvokerFactory {
                 return new $OffSetInvoker();
             case TABLE:
                 return new TableInvoker();
+            case INSERT:
+                return new InsertInvoker();
             default:
                 return null;
         }

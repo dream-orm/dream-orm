@@ -41,4 +41,14 @@ public class InvokerUtil {
         invokerStatement.setParamStatement(listColumnStatement);
         return invokerStatement;
     }
+    public static String wrapperInvokerSQL(String namespace, String function, String cut, String... paramList){
+        StringBuilder paramBuilder=new StringBuilder();
+        if(!ObjectUtil.isNull(paramList)){
+            for(String param:paramList){
+                paramBuilder.append(param).append(cut);
+            }
+            paramBuilder.delete(paramBuilder.length()-cut.length(),paramBuilder.length());
+        }
+        return "@"+function+":"+namespace+"("+paramBuilder+")";
+    }
 }

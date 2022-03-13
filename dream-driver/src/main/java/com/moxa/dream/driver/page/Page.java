@@ -3,7 +3,6 @@ package com.moxa.dream.driver.page;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class Page<E> extends ArrayList<E> implements Serializable {
     public static final long serialVersionUID = 42L;
