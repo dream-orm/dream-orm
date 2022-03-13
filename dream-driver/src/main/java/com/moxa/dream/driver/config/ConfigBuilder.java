@@ -6,6 +6,8 @@ import com.moxa.dream.module.cache.factory.CacheFactory;
 import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.datasource.DataSourceFactory;
 import com.moxa.dream.module.dialect.DialectFactory;
+import com.moxa.dream.module.listener.Listener;
+import com.moxa.dream.module.listener.factory.ListenerFactory;
 import com.moxa.dream.module.mapper.factory.MapperFactory;
 import com.moxa.dream.module.plugin.factory.PluginFactory;
 import com.moxa.dream.module.plugin.interceptor.Interceptor;
@@ -262,8 +264,33 @@ public class ConfigBuilder {
                 String value = interceptorList.get(i);
                 Class<? extends Interceptor> interceptorClass = ReflectUtil.loadClass(value);
                 interceptors[i] = ReflectUtil.create(interceptorClass);
-                pluginFactory.interceptor(interceptors);
             }
+            pluginFactory.interceptor(interceptors);
+        }
+        return this;
+    }
+
+    public ConfigBuilder listenerFactory(String type) {
+        if (!ObjectUtil.isNull(type)) {
+            type = getValue(type);
+            Class<? extends ListenerFactory> listenerFactoryClass = ReflectUtil.loadClass(type);
+            ListenerFactory listenerFactory = ReflectUtil.create(listenerFactoryClass);
+            configuration.setListenerFactory(listenerFactory);
+        }
+        return this;
+    }
+
+    public ConfigBuilder listener(List<String> listenerList) {
+        if (!ObjectUtil.isNull(listenerList)) {
+            Listener[] listeners = new Listener[listenerList.size()];
+            ListenerFactory listenerFactory = configuration.getListenerFactory();
+            ObjectUtil.requireNonNull(listenerFactory, "Property 'listenerFactory' is required");
+            for (int i = 0; i < listenerList.size(); i++) {
+                String value = listenerList.get(i);
+                Class<? extends Listener> listenerClass = ReflectUtil.loadClass(value);
+                listeners[i] = ReflectUtil.create(listenerClass);
+            }
+            listenerFactory.listener(listeners);
         }
         return this;
     }

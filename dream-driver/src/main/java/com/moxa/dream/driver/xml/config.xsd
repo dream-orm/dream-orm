@@ -14,6 +14,7 @@
                 <xs:element ref="tableFactory" minOccurs="0"/>
                 <xs:element ref="dialectFactory" minOccurs="0"/>
                 <xs:element ref="pluginFactory" minOccurs="0"/>
+                <xs:element ref="listenerFactory" minOccurs="0"/>
                 <xs:element ref="transactionFactory" minOccurs="0"/>
                 <xs:element ref="dataSourceFactory" minOccurs="0"/>
             </xs:all>
@@ -76,6 +77,14 @@
             <xs:attribute name="type"/>
         </xs:complexType>
     </xs:element>
+    <xs:element name="listenerFactory">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="listener"/>
+            </xs:choice>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
 
     <xs:element name="transactionFactory">
         <xs:complexType>
@@ -120,5 +129,9 @@
             <xs:attribute name="type" use="required"/>
         </xs:complexType>
     </xs:element>
-
+    <xs:element name="listener">
+        <xs:complexType>
+            <xs:attribute name="type" use="required"/>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>

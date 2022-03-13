@@ -9,10 +9,12 @@ public class XmlConstant {
     public static final String CACHEFACTORY = "cacheFactory";
     public static final String TYPEHANDLERFACTORY = "typeHandlerFactory";
     public static final String PLUGINFACTORY = "pluginFactory";
+    public static final String LISTENERFACTORY = "listenerFactory";
     public static final String TRANSACTIONFACTORY = "transactionFactory";
     public static final String DATASOURCEFACTORY = "dataSourceFactory";
     public static final String TYPEHANDLERWRAPPER = "typeHandlerWrapper";
     public static final String INTERCEPTOR = "interceptor";
+    public static final String LISTENER = "listener";
     public static final String MAPPING = "mapping";
     public static final String PROPERTY = "property";
     public static final String MAPPER = "mapper";

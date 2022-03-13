@@ -24,7 +24,8 @@ public class MappedStatement {
     private Object arg;
     private Class<? extends Collection> rowType;
     private Class<?> colType;
-    private Map<String,Object>envMap;
+    private Map<String, Object> envMap;
+
     private MappedStatement() {
 
     }
@@ -101,6 +102,7 @@ public class MappedStatement {
         List<EachInfo> eachInfoList = methodInfo.getEachInfoList();
         return eachInfoList;
     }
+
     public void put(String key, Object value) {
         if (envMap == null) {
             envMap = new HashMap<String, Object>();

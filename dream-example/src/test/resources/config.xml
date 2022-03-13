@@ -20,6 +20,9 @@
     <pluginFactory type="com.moxa.dream.module.plugin.factory.JavaPluginFactory">
         <interceptor type="com.moxa.dream.test.core.MyInterceptor"/>
     </pluginFactory>
+    <listenerFactory type="com.moxa.dream.test.core.DebugListenerFactory">
+        <listener type="com.moxa.dream.test.core.DebugListener"></listener>
+    </listenerFactory>
     <transactionFactory type="com.moxa.dream.module.transaction.factory.JdbcTransactionFactory">
         <property name="a" value="b"/>
     </transactionFactory>

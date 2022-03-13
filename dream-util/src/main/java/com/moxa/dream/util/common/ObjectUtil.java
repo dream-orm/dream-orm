@@ -12,7 +12,7 @@ public class ObjectUtil {
 
     public static void requireTrue(boolean value, String msg) {
         if (!value)
-            throw new AssertionError(msg);
+            throw new IllegalStateException(msg);
     }
 
     public static boolean isNull(Map value) {

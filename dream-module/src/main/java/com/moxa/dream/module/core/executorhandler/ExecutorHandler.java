@@ -6,6 +6,6 @@ import java.sql.SQLException;
 
 public interface ExecutorHandler {
 
-     Object execute(MappedStatement mappedStatement) throws SQLException;
+    Object execute(MappedStatement mappedStatement) throws SQLException;
 
 }

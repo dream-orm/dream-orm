@@ -21,6 +21,7 @@ public class ConfigurationBuilder extends XMLBuilder {
     private CacheFactoryBuilder.CacheFactory cacheFactory;
     private TypeHandlerFactoryBuilder.TypeHandlerFactory typeHandlerFactory;
     private PluginFactoryBuilder.PluginFactory pluginFactory;
+    private ListenerFactoryBuilder.ListenerFactory listenerFactory;
     private TransactionFactoryBuilder.TransactionFactory transactionFactory;
     private DataSourceFactoryBuilder.DataSourceFactory dataSourceFactory;
     private DefaultConfig defaultConfig;
@@ -63,6 +64,10 @@ public class ConfigurationBuilder extends XMLBuilder {
             case XmlConstant.PLUGINFACTORY:
                 PluginFactoryBuilder pluginFactoryBuilder = new PluginFactoryBuilder(workHandler);
                 pluginFactoryBuilder.startElement(uri, localName, qName, attributes);
+                break;
+            case XmlConstant.LISTENERFACTORY:
+                ListenerFactoryBuilder listenerFactoryBuilder = new ListenerFactoryBuilder(workHandler);
+                listenerFactoryBuilder.startElement(uri, localName, qName, attributes);
                 break;
             case XmlConstant.TRANSACTIONFACTORY:
                 TransactionFactoryBuilder transactionFactoryBuilder = new TransactionFactoryBuilder(workHandler);
@@ -120,6 +125,10 @@ public class ConfigurationBuilder extends XMLBuilder {
             configBuilder.pluginFactory(pluginFactory.getType());
             configBuilder.interceptor(pluginFactory.getInterceptorList().stream().map(interceptor -> interceptor.getType()).collect(Collectors.toList()));
         }
+        if (listenerFactory != null) {
+            configBuilder.listenerFactory(listenerFactory.getType());
+            configBuilder.listener(listenerFactory.getListenerList().stream().map(listener -> listener.getType()).collect(Collectors.toList()));
+        }
         if (transactionFactory != null) {
             configBuilder.transactionFactory(transactionFactory.getType());
             configBuilder.transactionProperties(getProperties(transactionFactory.getPropertyList()));
@@ -154,6 +163,9 @@ public class ConfigurationBuilder extends XMLBuilder {
                 break;
             case XmlConstant.PLUGINFACTORY:
                 pluginFactory = (PluginFactoryBuilder.PluginFactory) obj;
+                break;
+            case XmlConstant.LISTENERFACTORY:
+                listenerFactory = (ListenerFactoryBuilder.ListenerFactory) obj;
                 break;
             case XmlConstant.TRANSACTIONFACTORY:
                 transactionFactory = (TransactionFactoryBuilder.TransactionFactory) obj;

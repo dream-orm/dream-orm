@@ -12,8 +12,6 @@ import com.moxa.dream.module.transaction.Transaction;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class AbstractExecutor implements Executor {
     protected Transaction transaction;
@@ -71,14 +69,14 @@ public abstract class AbstractExecutor implements Executor {
         try {
             before(listeners, mappedStatement);
             Object result = executorHandler.execute(mappedStatement);
-            afterReturn( listeners, result, mappedStatement);
+            afterReturn(listeners, result, mappedStatement);
             return result;
-        } catch (SQLException e) {
-            exception( listeners, e, mappedStatement);
+        } catch (Exception e) {
+            exception(listeners, e, mappedStatement);
             throw e;
         } finally {
             statementHandler.close();
-            after( listeners, mappedStatement);
+            after(listeners, mappedStatement);
         }
     }
 
@@ -124,7 +122,7 @@ public abstract class AbstractExecutor implements Executor {
         transaction.close();
     }
 
-    protected void before( Listener[] listeners, MappedStatement mappedStatement) {
+    protected void before(Listener[] listeners, MappedStatement mappedStatement) {
         if (!ObjectUtil.isNull(listeners)) {
             for (Listener listener : listeners) {
                 listener.before(mappedStatement);
@@ -132,26 +130,26 @@ public abstract class AbstractExecutor implements Executor {
         }
     }
 
-    protected void afterReturn( Listener[] listeners, Object result, MappedStatement mappedStatement) {
+    protected void afterReturn(Listener[] listeners, Object result, MappedStatement mappedStatement) {
         if (!ObjectUtil.isNull(listeners)) {
             for (Listener listener : listeners) {
-                listener.afterReturn(result,  mappedStatement);
+                listener.afterReturn(result, mappedStatement);
             }
         }
     }
 
-    protected void exception( Listener[] listeners, Exception e, MappedStatement mappedStatement) {
+    protected void exception(Listener[] listeners, Exception e, MappedStatement mappedStatement) {
         if (!ObjectUtil.isNull(listeners)) {
             for (Listener listener : listeners) {
-                listener.exception(e,  mappedStatement);
+                listener.exception(e, mappedStatement);
             }
         }
     }
 
-    protected void after( Listener[] listeners, MappedStatement mappedStatement) {
+    protected void after(Listener[] listeners, MappedStatement mappedStatement) {
         if (!ObjectUtil.isNull(listeners)) {
             for (Listener listener : listeners) {
-                listener.after( mappedStatement);
+                listener.after(mappedStatement);
             }
         }
     }
