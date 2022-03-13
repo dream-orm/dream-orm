@@ -39,7 +39,9 @@ public class ParamInvokerTest extends AbstractSqlTest {
             paramMap.put("a", null);
             paramMap.put("b", "'test_b'");
             paramMap.put("c", "'test_c'");
-            System.out.println(new ToMYSQL().toResult(packageStatement, invokerFactoryList, Map.of(ObjectWrapper.class, ObjectWrapper.wrapper(paramMap))).getSql());
+            Map<Class, Object> map = new HashMap<>();
+            map.put(ObjectWrapper.class, ObjectWrapper.wrapper(paramMap));
+            System.out.println(new ToMYSQL().toResult(packageStatement, invokerFactoryList, map).getSql());
         } catch (InvokerException e) {
             throw new RuntimeException(e);
         }
@@ -53,7 +55,9 @@ public class ParamInvokerTest extends AbstractSqlTest {
             paramMap.put("b", "'test_b'");
             paramMap.put("c", "'test_c'");
             ResultInfo resultInfo;
-            System.out.println((resultInfo = new ToMYSQL().toResult(packageStatement, invokerFactoryList, Map.of(ObjectWrapper.class, ObjectWrapper.wrapper(paramMap)))).getSql() + "\t\t参数：" + (resultInfo.getSqlInvoker($Invoker.class)).getParamInfoList());
+            Map<Class, Object> map = new HashMap<>();
+            map.put(ObjectWrapper.class, ObjectWrapper.wrapper(paramMap));
+            System.out.println((resultInfo = new ToMYSQL().toResult(packageStatement, invokerFactoryList, map)).getSql() + "\t\t参数：" + (resultInfo.getSqlInvoker($Invoker.class)).getParamInfoList());
 
         } catch (InvokerException e) {
             throw new RuntimeException(e);
@@ -94,7 +98,9 @@ public class ParamInvokerTest extends AbstractSqlTest {
 //            paramMap.put("a", Arrays.asList(Map.of("name", "a"), Map.of("name", "a"), Map.of("name", "b"), Map.of("name", "c"), Map.of("name", "d"), Map.of("name", "e")));
             paramMap.put("a", new Object[]{Map.of("name", "a"), Map.of("name", "a"), Map.of("name", "b"), Map.of("name", "c"), Map.of("name", "d"), Map.of("name", "e")});
             ResultInfo resultInfo;
-            System.out.println((resultInfo = new ToMYSQL().toResult(packageStatement, invokerFactoryList, Map.of(ObjectWrapper.class, ObjectWrapper.wrapper(paramMap)))).getSql() + "\t\t参数：" + (resultInfo.getSqlInvoker($Invoker.class)).getParamInfoList());
+            Map<Class, Object> map = new HashMap<>();
+            map.put(ObjectWrapper.class, ObjectWrapper.wrapper(paramMap));
+            System.out.println((resultInfo = new ToMYSQL().toResult(packageStatement, invokerFactoryList, map)).getSql() + "\t\t参数：" + (resultInfo.getSqlInvoker($Invoker.class)).getParamInfoList());
 
         } catch (InvokerException e) {
             throw new RuntimeException(e);
@@ -107,7 +113,9 @@ public class ParamInvokerTest extends AbstractSqlTest {
         try {
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("list", Arrays.asList(Map.of("name", "a"), Map.of("name", "a"), Map.of("name", "b"), Map.of("name", "c"), Map.of("name", "d"), Map.of("name", "e")));
-            System.out.println((new ToORACLE().toResult(packageStatement, invokerFactoryList, Map.of(ObjectWrapper.class, ObjectWrapper.wrapper(paramMap)))).getSql());
+            Map<Class, Object> map = new HashMap<>();
+            map.put(ObjectWrapper.class, ObjectWrapper.wrapper(paramMap));
+            System.out.println((new ToORACLE().toResult(packageStatement, invokerFactoryList, map)).getSql());
 
         } catch (InvokerException e) {
             throw new RuntimeException(e);

@@ -15,6 +15,7 @@ import com.moxa.dream.util.wrapper.ObjectWrapper;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public class PageInterceptor extends AbstractInterceptor {
                     }
                     if (target != null && target instanceof Page) {
                         Page page = (Page) target;
-                        mappedStatement.setRowType(ArrayList.class);
+                        mappedStatement.setRowType(Collection.class);
                         if (page.isCount()) {
                             Executor targetExecutor = (Executor) invocation.getTarget();
                             MethodInfo methodInfo = pageCount.getMethodInfo();
@@ -46,7 +47,7 @@ public class PageInterceptor extends AbstractInterceptor {
                             Long total = (Long) targetExecutor.query(countMappedStatement);
                             page.setTotal(total);
                         }
-                        page.setRow((List) invocation.proceed());
+                        page.setRow((Collection) invocation.proceed());
                         return page;
                     }
                 }

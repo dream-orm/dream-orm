@@ -2,6 +2,7 @@ package com.moxa.dream.driver.page;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Page<E> extends ArrayList<E> implements Serializable {
@@ -9,7 +10,7 @@ public class Page<E> extends ArrayList<E> implements Serializable {
     private long total;
     private int pageNum;
     private int pageSize;
-    private List<E> row;
+    private Collection<E> row;
     private long startRow;
     private boolean count = true;
 
@@ -52,11 +53,11 @@ public class Page<E> extends ArrayList<E> implements Serializable {
     }
 
 
-    public List<E> getRow() {
+    public Collection<E> getRow() {
         return row;
     }
 
-    public void setRow(List<E> row) {
+    public void setRow(Collection<E> row) {
         this.row = row;
     }
 

@@ -5,6 +5,7 @@ import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.util.InvokerUtil;
+import com.moxa.dream.driver.page.Page;
 import com.moxa.dream.driver.page.annotation.PageQuery;
 import com.moxa.dream.module.antlr.factory.DreamInvokerFactory;
 import com.moxa.dream.module.antlr.wrapper.Wrapper;
@@ -12,6 +13,7 @@ import com.moxa.dream.module.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 public class PageWrapper implements Wrapper {
     private PageQuery pageQueryAnnotation;
@@ -42,7 +44,9 @@ public class PageWrapper implements Wrapper {
                             AntlrInvokerFactory.$, ",",
                             new SymbolStatement.LetterStatement(pageSize)));
             statement.setStatement(pageStatement);
-            methodInfo.set(PageLink.class, new PageLink(pageLink));
+            Class<? extends Collection> rowType = methodInfo.getRowType();
+            if (rowType != null && Page.class.isAssignableFrom(rowType))
+                methodInfo.set(PageLink.class, new PageLink(pageLink));
         }
     }
 
