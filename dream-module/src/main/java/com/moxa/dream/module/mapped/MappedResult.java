@@ -21,7 +21,7 @@ public class MappedResult {
     private PropertyInfo propertyInfo;
 
     public MappedResult(Class<? extends Collection> rowType, Class colType, PropertyInfo propertyInfo) {
-        this.rowType = rowType = rowType == null ? NonCollection.class : rowType;
+        this.rowType = rowType == null ? Collection.class : rowType;
         this.colType = colType = colType == null ? Object.class : colType;
         this.propertyInfo = propertyInfo;
         this.rowObjectFactoryWrapper = ObjectFactoryWrapper.wrapper(rowType);

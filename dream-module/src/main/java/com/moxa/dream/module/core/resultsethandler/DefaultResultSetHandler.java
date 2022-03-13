@@ -12,6 +12,7 @@ import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.module.mapper.EachInfo;
 import com.moxa.dream.module.mapper.factory.MapperFactory;
 import com.moxa.dream.module.reflect.factory.ObjectFactory;
+import com.moxa.dream.module.reflect.util.NonCollection;
 import com.moxa.dream.module.reflect.wrapper.ObjectFactoryWrapper;
 import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
 import com.moxa.dream.module.table.ColumnInfo;
@@ -105,10 +106,10 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 }
             }
             Class<? extends Collection> rowType = childMappedResult.getRowType();
-            if (rowType != null) {
+            if (NonCollection.class!=rowType) {
                 Collection rowList = (Collection) targetObjectFactory.get(childMappedResult.getPropertyInfo());
                 if (rowList == null) {
-                    rowList = (Collection) ObjectFactoryWrapper.wrapper(rowType).newObjectFactory().getObject();
+                    rowList =(Collection) childMappedResult.newRowObjectFactory().getObject();
                     targetObjectFactory.set(childMappedResult.getPropertyInfo(), rowList);
                 }
                 rowList.add(childObjectFactory.getObject());
@@ -307,7 +308,11 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     if (childMappedResult == null) {
                         PropertyInfo childPropertyInfo = new PropertyInfo();
                         childPropertyInfo.setField(field);
-                        childMappedResult = new MappedResult(ReflectUtil.getRowType(colType, field), ReflectUtil.getColType(colType, field), childPropertyInfo);
+                        Class<? extends Collection> rowType = ReflectUtil.getRowType(colType, field);
+                        if(rowType==null){
+                            rowType= NonCollection.class;
+                        }
+                        childMappedResult = new MappedResult(rowType, ReflectUtil.getColType(colType, field), childPropertyInfo);
                         if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
                             childMappedResultMap.put(fieldName, childMappedResult);
                             return true;

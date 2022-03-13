@@ -129,7 +129,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         if (resultAnnotation == null) {
             colType = ReflectUtil.getColType(mapperClass, method);
         } else {
-            colType = resultAnnotation.rowType();
+            colType = resultAnnotation.colType();
             if (colType == NullObject.class) {
                 colType = ReflectUtil.getColType(mapperClass, method);
             }
