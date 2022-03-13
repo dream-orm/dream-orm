@@ -29,18 +29,13 @@ import java.util.stream.Collectors;
 
 public class AllInvoker extends AbstractInvoker {
     private TableFactory tableFactory;
-    private Class colType;
-
-    @Override
-    public void init(ToAssist assist) {
-        MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
-        colType = methodInfo.getColType();
-        Configuration configuration = methodInfo.getConfiguration();
-        tableFactory = configuration.getTableFactory();
-    }
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+        MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
+        Class colType = methodInfo.getColType();
+        Configuration configuration = methodInfo.getConfiguration();
+        tableFactory = configuration.getTableFactory();
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         String[] tableList = null;
         if (!ObjectUtil.isNull(columnList)) {

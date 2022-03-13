@@ -45,9 +45,6 @@ public class BatchExecutor extends AbstractExecutor {
     }
 
     public int[] flushStatement(boolean rollback) {
-        if (statementHandler != null)
-            return statementHandler.flushStatement(rollback);
-        else
-            return null;
+        return statementHandler.flushStatement(rollback);
     }
 }

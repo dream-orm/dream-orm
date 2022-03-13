@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
 public class JavaPluginFactory extends AbstractPluginFactory {
     Map<Integer, Class[]> interfaceMap = new HashMap<>();
 
+    @Override
+    protected Interceptor[] getDefaultInterceptors() {
+        return null;
+    }
+
     public Object plugin(Object origin, Object target, Interceptor interceptor) {
         int hash = hash(origin, interceptor);
         Class[] interfaces = interfaceMap.get(hash);

@@ -1,11 +1,14 @@
-package com.moxa.dream.module.plugin.interceptor;
+package com.moxa.dream.driver.page.interceptor;
 
+import com.moxa.dream.driver.page.Page;
+import com.moxa.dream.driver.page.wrapper.PageWrapper;
+import com.moxa.dream.module.antlr.handler.PageHandler;
 import com.moxa.dream.module.core.executor.Executor;
 import com.moxa.dream.module.dialect.DialectFactory;
 import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.module.mapper.MethodInfo;
-import com.moxa.dream.module.plugin.Page;
 import com.moxa.dream.module.plugin.PluginException;
+import com.moxa.dream.module.plugin.interceptor.AbstractInterceptor;
 import com.moxa.dream.module.plugin.invocation.Invocation;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.wrapper.ObjectWrapper;
@@ -19,15 +22,21 @@ public class PageInterceptor extends AbstractInterceptor {
     @Override
     public Object interceptor(Invocation invocation) throws Throwable {
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
-        PageCount pageCount = mappedStatement.get(PageCount.class);
-        if (pageCount != null) {
-            String pageLink = pageCount.getPageLink();
-            if (!ObjectUtil.isNull(pageLink)) {
+        PageWrapper.PageLink pageLink = mappedStatement.get(PageWrapper.PageLink.class);
+        if (pageLink != null) {
+            String link = pageLink.getPageLink();
+            PageHandler.PageCount pageCount = mappedStatement.get(PageHandler.PageCount.class);
+            if (pageCount != null) {
                 Object arg = mappedStatement.getArg();
                 if (arg != null) {
-                    Object value = ObjectWrapper.wrapper(arg).get(pageLink);
-                    if (value != null && value instanceof Page) {
-                        Page page = (Page) value;
+                    Object target;
+                    if (ObjectUtil.isNull(link)) {
+                        target = arg;
+                    } else {
+                        target = ObjectWrapper.wrapper(arg).get(link);
+                    }
+                    if (target != null && target instanceof Page) {
+                        Page page = (Page) target;
                         mappedStatement.setRowType(ArrayList.class);
                         if (page.isCount()) {
                             Executor targetExecutor = (Executor) invocation.getTarget();
@@ -54,28 +63,5 @@ public class PageInterceptor extends AbstractInterceptor {
         } catch (Exception e) {
             throw new PluginException(e);
         }
-    }
-
-    public static class PageCount {
-        private String pageLink;
-        private MethodInfo methodInfo;
-
-        public String getPageLink() {
-            return pageLink;
-        }
-
-        public void setPageLink(String pageLink) {
-            this.pageLink = pageLink;
-        }
-
-        public MethodInfo getMethodInfo() {
-            return methodInfo;
-        }
-
-        public void setMethodInfo(MethodInfo methodInfo) {
-            this.methodInfo = methodInfo;
-        }
-
-
     }
 }

@@ -102,9 +102,8 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         Param paramAnnotation = parameter.getDeclaredAnnotation(Param.class);
         if (paramAnnotation != null)
             return paramAnnotation.value();
-        else {
-            return parameter.getName();
-        }
+        else
+            return null;
     }
 
     protected Class<? extends Collection> getRowType(Class mapperClass, Method method) {
@@ -139,11 +138,18 @@ public abstract class AbstractMapperFactory implements MapperFactory {
 
     protected String[] getParamNameList(Method method) {
         Parameter[] parameters = method.getParameters();
-        if (parameters != null && parameters.length > 0) {
+        if (!ObjectUtil.isNull(parameters)) {
             String[] paramList = new String[parameters.length];
-            for (int i = 0; i < parameters.length; i++) {
-                Parameter parameter = parameters[i];
-                paramList[i] = getParamName(parameter);
+            if (parameters.length > 1) {
+                for (int i = 0; i < parameters.length; i++) {
+                    Parameter parameter = parameters[i];
+                    String paramName = getParamName(parameter);
+                    if (paramName == null)
+                        paramName = parameter.getName();
+                    paramList[i] = paramName;
+                }
+            } else {
+                paramList[0] = getParamName(parameters[0]);
             }
             return paramList;
         }
@@ -168,21 +174,30 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         Class[] typeList = mapperTypeMap.get(type);
         ObjectUtil.requireNonNull(typeList, "Class '" + type.getName() + "' was not registered");
         return (T) Proxy.newProxyInstance(type.getClassLoader(), typeList, (proxy, method, args) -> {
-                    MethodInfo methodInfo = methodInfoMap.get(method);
-                    ObjectUtil.requireNonNull(methodInfo, "Class method name '" + method.getDeclaringClass().getName() + "." + method.getName() + "' was not generate 'methodInfo'");
-                    if (ObjectUtil.isNull(args)) {
-                        return mapperHandler.invoke(methodInfo, null);
+            MethodInfo methodInfo = methodInfoMap.get(method);
+            ObjectUtil.requireNonNull(methodInfo, "Class method name '" + method.getDeclaringClass().getName() + "." + method.getName() + "' was not generate 'methodInfo'");
+            Object arg = null;
+            if (!ObjectUtil.isNull(args)) {
+                if (args.length == 1) {
+                    String paramName = methodInfo.getParamNameList()[0];
+                    if (ObjectUtil.isNull(paramName)) {
+                        arg = args[0];
                     } else {
-                        String[] paramNameList = methodInfo.getParamNameList();
-                        ObjectUtil.requireTrue(!ObjectUtil.isNull(paramNameList) && paramNameList.length == args.length, "Parameter name not match the number of parameter values,please check the class method name '" + methodInfo.getId() + "'");
                         Map<String, Object> paramMap = new HashMap<>();
-                        for (int i = 0; i < paramNameList.length; i++) {
-                            paramMap.put(paramNameList[i], args[i]);
-                        }
-                        return mapperHandler.invoke(methodInfo, paramMap);
+                        paramMap.put(paramName, args[0]);
+                        arg = paramMap;
                     }
+                } else {
+                    String[] paramNameList = methodInfo.getParamNameList();
+                    Map<String, Object> paramMap = new HashMap<>();
+                    for (int i = 0; i < paramNameList.length; i++) {
+                        paramMap.put(paramNameList[i], args[i]);
+                    }
+                    arg = paramMap;
                 }
-        );
+            }
+            return mapperHandler.invoke(methodInfo, arg);
+        });
     }
 
     @Override

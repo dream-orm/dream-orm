@@ -10,6 +10,7 @@ import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class MappedStatement {
     private Object arg;
     private Class<? extends Collection> rowType;
     private Class<?> colType;
-
+    private Map<String,Object>envMap;
     private MappedStatement() {
 
     }
@@ -99,6 +100,21 @@ public class MappedStatement {
     public List<EachInfo> getEachInfoList() {
         List<EachInfo> eachInfoList = methodInfo.getEachInfoList();
         return eachInfoList;
+    }
+    public void put(String key, Object value) {
+        if (envMap == null) {
+            envMap = new HashMap<String, Object>();
+        }
+        envMap.put(key, value);
+    }
+
+    public Object get(String key) {
+        if (envMap == null) {
+            return null;
+        } else {
+            return envMap.get(key);
+        }
+
     }
 
     public static class Builder {

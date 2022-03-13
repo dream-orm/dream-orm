@@ -5,7 +5,7 @@ import com.moxa.dream.antlr.expr.QueryExpr;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.antlr.util.ExprUtil;
+import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.util.List;
 
@@ -333,7 +333,7 @@ public class ToMSSQL extends ToPubSQL {
                 sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn between " + minValue + " and " + minValue + "+" + maxValue;
             }
             QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-            ExprUtil.copy(statement, queryStatement);
+            ReflectUtil.copy(statement, queryStatement);
         }
         return super.toString(statement, assist, invokerList);
     }

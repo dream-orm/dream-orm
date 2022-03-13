@@ -17,12 +17,6 @@ public class ForEachInvoker extends AbstractInvoker {
     private String cut = ",";
     private String index = "index";
     private String item = "item";
-    private ObjectWrapper paramWrapper;
-
-    @Override
-    public void init(ToAssist assist) {
-        paramWrapper = assist.getCustom(ObjectWrapper.class);
-    }
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
@@ -31,6 +25,7 @@ public class ForEachInvoker extends AbstractInvoker {
         if (len > 2 || len < 1)
             throw new InvokerException("The number of parameters cannot meet @" + AntlrInvokerFactory.FOREACH + ":" + AntlrInvokerFactory.NAMESPACE + "(list,value?)");
         String list = toSQL.toStr(columnList[0], assist, invokerList);
+        ObjectWrapper paramWrapper = assist.getCustom(ObjectWrapper.class);
         Object arrayList = paramWrapper.get(list);
         ObjectUtil.requireNonNull(arrayList, "Property 'list' is required");
         boolean isArray = false;
@@ -44,15 +39,15 @@ public class ForEachInvoker extends AbstractInvoker {
             if (len == 2) {
                 int index = 0;
                 Map<String, Object> itemMap = new HashMap<>();
-                ObjectWrapper paramWrapper = assist.getCustom(ObjectWrapper.class);
-                paramWrapper.setTemp(itemMap);
+                ObjectWrapper tempWrapper = ObjectWrapper.wrapper(itemMap);
+                assist.setCustom(ObjectWrapper.class, tempWrapper);
                 for (Object item : collection) {
                     itemMap.put(this.index, index++);
                     itemMap.put(this.item, item);
                     String letterItem = toSQL.toStr(columnList[1], assist, invokerList);
                     listColumnStatement.add(new SymbolStatement.LetterStatement(letterItem));
                 }
-                paramWrapper.setTemp(null);
+                assist.setCustom(ObjectWrapper.class, paramWrapper);
             } else {
                 $Invoker sqlInvoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
                 List<$Invoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();

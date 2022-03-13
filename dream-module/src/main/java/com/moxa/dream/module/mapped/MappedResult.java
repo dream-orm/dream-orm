@@ -1,7 +1,6 @@
 package com.moxa.dream.module.mapped;
 
 import com.moxa.dream.module.reflect.factory.ObjectFactory;
-import com.moxa.dream.module.reflect.util.NonCollection;
 import com.moxa.dream.module.reflect.wrapper.ObjectFactoryWrapper;
 import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
 

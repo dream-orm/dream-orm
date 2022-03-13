@@ -1,4 +1,4 @@
-package com.moxa.dream.module.annotation;
+package com.moxa.dream.driver.page.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,10 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface AutoPage {
+public @interface PageQuery {
     boolean offset() default false;
-
-    boolean optim() default true;
 
     String value() default "page";
 

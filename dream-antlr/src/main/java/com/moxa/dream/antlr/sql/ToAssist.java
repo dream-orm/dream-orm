@@ -19,13 +19,7 @@ public class ToAssist {
 
     public ToAssist(List<InvokerFactory> invokerFactoryList, Map<Class, Object> customObjMap) {
         setInvokerFactoryList(invokerFactoryList);
-        setCustomObjMap(customObjMap);
-    }
-
-    public void setCustomObjMap(Map<Class, Object> customObjMap) {
-        if (!ObjectUtil.isNull(customObjMap)) {
-            this.customObjMap = customObjMap;
-        }
+        this.customObjMap = customObjMap;
     }
 
     public void setInvokerFactoryList(List<InvokerFactory> invokerFactoryList) {
@@ -91,13 +85,19 @@ public class ToAssist {
         }
         ObjectUtil.requireNonNull(invoker, invokerKey + " not known");
         sqlInvokerMap.put(invokerKey, invoker);
-        invoker.init(this);
         return invoker;
     }
 
     public <T> T getCustom(Class<T> type) {
         ObjectUtil.requireNonNull(customObjMap, "customObjMap was not registered");
         return (T) customObjMap.get(type);
+    }
+
+    public <T> void setCustom(Class<T> type, T value) {
+        if (customObjMap == null) {
+            customObjMap = new HashMap<>();
+        }
+        customObjMap.put(type, value);
     }
 
     public Map<String, Invoker> getSqlInvokerMap() {

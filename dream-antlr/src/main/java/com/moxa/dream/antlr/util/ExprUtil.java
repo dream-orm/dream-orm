@@ -5,7 +5,6 @@ import com.moxa.dream.antlr.expr.SqlExpr;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.QueryStatement;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.util.reflect.ReflectUtil;
 
 public class ExprUtil {
 
@@ -373,9 +372,5 @@ public class ExprUtil {
             }
         }
         return builder.toString();
-    }
-
-    public static <T extends Statement> void copy(T targetStatement, T sourceStatement) {
-        ReflectUtil.copy(targetStatement, sourceStatement);
     }
 }

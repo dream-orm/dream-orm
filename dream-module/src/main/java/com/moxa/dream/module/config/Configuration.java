@@ -3,6 +3,7 @@ package com.moxa.dream.module.config;
 import com.moxa.dream.module.cache.factory.CacheFactory;
 import com.moxa.dream.module.datasource.DataSourceFactory;
 import com.moxa.dream.module.dialect.DialectFactory;
+import com.moxa.dream.module.listener.factory.ListenerFactory;
 import com.moxa.dream.module.mapper.factory.MapperFactory;
 import com.moxa.dream.module.plugin.factory.PluginFactory;
 import com.moxa.dream.module.table.factory.TableFactory;
@@ -19,6 +20,7 @@ public class Configuration {
     private TypeHandlerFactory typeHandlerFactory;
     private DialectFactory dialectFactory;
     private PluginFactory pluginFactory;
+    private ListenerFactory listenerFactory;
     private TransactionFactory transactionFactory;
     private DataSourceFactory dataSourceFactory;
 
@@ -83,6 +85,14 @@ public class Configuration {
         this.pluginFactory = pluginFactory;
     }
 
+    public ListenerFactory getListenerFactory() {
+        return listenerFactory;
+    }
+
+    public void setListenerFactory(ListenerFactory listenerFactory) {
+        this.listenerFactory = listenerFactory;
+    }
+
     public TransactionFactory getTransactionFactory() {
         return transactionFactory;
     }
@@ -98,5 +108,4 @@ public class Configuration {
     public void setDataSourceFactory(DataSourceFactory dataSourceFactory) {
         this.dataSourceFactory = dataSourceFactory;
     }
-
 }

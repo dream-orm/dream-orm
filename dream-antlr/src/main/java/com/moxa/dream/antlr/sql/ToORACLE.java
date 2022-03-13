@@ -8,8 +8,8 @@ import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.antlr.util.ExprUtil;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -286,7 +286,7 @@ public class ToORACLE extends ToPubSQL {
                 sql = "select* from(select rownum rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn between " + minValue + " and " + minValue + "+" + maxValue;
             }
             QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-            ExprUtil.copy(statement, queryStatement);
+            ReflectUtil.copy(statement, queryStatement);
         }
         return super.toString(statement, assist, invokerList);
     }

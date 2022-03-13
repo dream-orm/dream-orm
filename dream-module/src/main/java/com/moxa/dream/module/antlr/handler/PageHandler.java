@@ -13,14 +13,13 @@ import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToDREAM;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.antlr.util.ExprUtil;
 import com.moxa.dream.module.mapper.MethodInfo;
-import com.moxa.dream.module.plugin.interceptor.PageInterceptor;
 import com.moxa.dream.module.reflect.util.NonCollection;
 import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableInfo;
 import com.moxa.dream.module.table.factory.TableFactory;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class PageHandler extends AbstractHandler {
 
     void handlerCount(QueryStatement statement) throws InvokerException {
         QueryStatement queryStatement = new QueryStatement();
-        ExprUtil.copy(queryStatement, statement);
+        ReflectUtil.copy(queryStatement, statement);
         queryStatement.setOrderStatement(null);
         SelectStatement selectStatement = queryStatement.getSelectStatement();
         PreSelectStatement preSelect = selectStatement.getPreSelect();
@@ -59,7 +58,7 @@ public class PageHandler extends AbstractHandler {
             UnionStatement unionStatement = queryStatement.getUnionStatement();
             if (unionStatement == null) {
                 SelectStatement countSelectStatement = new SelectStatement();
-                ExprUtil.copy(countSelectStatement, selectStatement);
+                ReflectUtil.copy(countSelectStatement, selectStatement);
                 ListColumnStatement listColumnStatement = new ListColumnStatement();
                 listColumnStatement.add(new FunctionExpr(new ExprReader("count(1)")).expr());
                 countSelectStatement.setSelectList(listColumnStatement);
@@ -78,12 +77,7 @@ public class PageHandler extends AbstractHandler {
                 .name(this.methodInfo.getName())
                 .timeOut(this.methodInfo.getTimeOut())
                 .build();
-        PageInterceptor.PageCount pageCount = this.methodInfo.get(PageInterceptor.PageCount.class);
-        if (pageCount == null) {
-            pageCount = new PageInterceptor.PageCount();
-            this.methodInfo.set(PageInterceptor.PageCount.class, pageCount);
-        }
-        pageCount.setMethodInfo(methodInfo);
+        this.methodInfo.set(PageCount.class, new PageCount(methodInfo));
     }
 
     void handlerPage(QueryStatement queryStatement) throws InvokerException {
@@ -131,7 +125,7 @@ public class PageHandler extends AbstractHandler {
         }
         String sql = "select t_tmp.* from(" + toDREAM.toStr(queryStatement, null, null) + ")t_tmp " + toDREAM.toStr(limitStatement, null, null);
         QueryStatement pageQueryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-        ExprUtil.copy(queryStatement, pageQueryStatement);
+        ReflectUtil.copy(queryStatement, pageQueryStatement);
     }
 
     @Override
@@ -145,4 +139,15 @@ public class PageHandler extends AbstractHandler {
         this.offset = offset;
     }
 
+    public static class PageCount {
+        private MethodInfo methodInfo;
+
+        public PageCount(MethodInfo methodInfo) {
+            this.methodInfo = methodInfo;
+        }
+
+        public MethodInfo getMethodInfo() {
+            return methodInfo;
+        }
+    }
 }

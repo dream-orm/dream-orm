@@ -1,4 +1,4 @@
-package com.moxa.dream.module.plugin;
+package com.moxa.dream.driver.page;
 
 import java.io.Serializable;
 import java.util.ArrayList;

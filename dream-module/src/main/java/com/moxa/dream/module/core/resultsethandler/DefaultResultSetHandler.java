@@ -13,7 +13,6 @@ import com.moxa.dream.module.mapper.EachInfo;
 import com.moxa.dream.module.mapper.factory.MapperFactory;
 import com.moxa.dream.module.reflect.factory.ObjectFactory;
 import com.moxa.dream.module.reflect.util.NonCollection;
-import com.moxa.dream.module.reflect.wrapper.ObjectFactoryWrapper;
 import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
 import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableInfo;
@@ -106,10 +105,10 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 }
             }
             Class<? extends Collection> rowType = childMappedResult.getRowType();
-            if (NonCollection.class!=rowType) {
+            if (NonCollection.class != rowType) {
                 Collection rowList = (Collection) targetObjectFactory.get(childMappedResult.getPropertyInfo());
                 if (rowList == null) {
-                    rowList =(Collection) childMappedResult.newRowObjectFactory().getObject();
+                    rowList = (Collection) childMappedResult.newRowObjectFactory().getObject();
                     targetObjectFactory.set(childMappedResult.getPropertyInfo(), rowList);
                 }
                 rowList.add(childObjectFactory.getObject());
@@ -309,8 +308,8 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                         PropertyInfo childPropertyInfo = new PropertyInfo();
                         childPropertyInfo.setField(field);
                         Class<? extends Collection> rowType = ReflectUtil.getRowType(colType, field);
-                        if(rowType==null){
-                            rowType= NonCollection.class;
+                        if (rowType == null) {
+                            rowType = NonCollection.class;
                         }
                         childMappedResult = new MappedResult(rowType, ReflectUtil.getColType(colType, field), childPropertyInfo);
                         if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {

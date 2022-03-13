@@ -10,10 +10,6 @@ import java.util.List;
 
 public interface Invoker {
 
-    default void init(ToAssist assist) {
-
-    }
-
     String invoke(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException;
 
     Handler[] handle();

@@ -13,17 +13,13 @@ import java.util.List;
 
 public class TableInvoker extends AbstractInvoker {
 
-    @Override
-    public void init(ToAssist assist) {
-        super.init(assist);
-    }
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
-        if(columnList.length==0){
+        if (columnList.length == 0) {
 
-        }else{
+        } else {
 
         }
         return null;

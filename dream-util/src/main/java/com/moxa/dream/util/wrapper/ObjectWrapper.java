@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Map;
 
 public abstract class ObjectWrapper {
-    protected ObjectWrapper tempWrapper;
 
     public static ObjectWrapper wrapper(Object object) {
         ObjectWrapper wrapper;
@@ -22,19 +21,12 @@ public abstract class ObjectWrapper {
         return wrapper;
     }
 
-    public void set(String property, Object value) throws WrapperException {
+    public void set(String property, Object value) {
         set(new PropertyToken(property), value);
     }
 
     public Object get(String property) throws WrapperException {
-        if (tempWrapper != null) {
-            Object result = tempWrapper.get(new PropertyToken(property));
-            if (result == null)
-                return get(new PropertyToken(property));
-            else
-                return result;
-        } else
-            return get(new PropertyToken(property));
+        return get(new PropertyToken(property));
     }
 
     public abstract Object getObject();
@@ -43,11 +35,4 @@ public abstract class ObjectWrapper {
 
     protected abstract Object get(PropertyToken propertyToken);
 
-    public void setTemp(Object temp) {
-        if (temp == null) {
-            tempWrapper = null;
-        } else {
-            tempWrapper = ObjectWrapper.wrapper(temp);
-        }
-    }
 }

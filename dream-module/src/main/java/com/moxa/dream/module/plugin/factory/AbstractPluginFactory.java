@@ -1,12 +1,10 @@
 package com.moxa.dream.module.plugin.factory;
 
 import com.moxa.dream.module.plugin.interceptor.Interceptor;
-import com.moxa.dream.module.plugin.interceptor.PageInterceptor;
 import com.moxa.dream.util.common.ObjectUtil;
 
 public abstract class AbstractPluginFactory implements PluginFactory {
     protected Interceptor[] interceptors;
-    protected Interceptor[] defaultInterceptors = new Interceptor[]{new PageInterceptor()};
 
     public void interceptor(Interceptor[] interceptors) {
         this.interceptors = interceptors;
@@ -14,7 +12,7 @@ public abstract class AbstractPluginFactory implements PluginFactory {
 
     public Object plugin(Object target) {
         Object origin = target;
-        return plugin(interceptors, origin, plugin(defaultInterceptors, origin, target));
+        return plugin(interceptors, origin, plugin(getDefaultInterceptors(), origin, target));
     }
 
     private Object plugin(Interceptor[] interceptors, Object origin, Object target) {
@@ -25,6 +23,8 @@ public abstract class AbstractPluginFactory implements PluginFactory {
         }
         return target;
     }
+
+    protected abstract Interceptor[] getDefaultInterceptors();
 
     protected abstract Object plugin(Object origin, Object target, Interceptor interceptor);
 }

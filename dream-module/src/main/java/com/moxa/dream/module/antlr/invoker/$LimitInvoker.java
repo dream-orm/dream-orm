@@ -18,18 +18,14 @@ public class $LimitInvoker extends AbstractInvoker {
     PageHandler pageHandler;
 
     @Override
-    public void init(ToAssist assist) {
-        MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
-        pageHandler = new PageHandler(this, methodInfo);
-    }
-
-    @Override
     public Handler[] handler() {
         return new Handler[]{pageHandler};
     }
 
     @Override
     protected String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+        MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
+        pageHandler = new PageHandler(this, methodInfo);
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         pageHandler.setParamList(columnList[1], columnList[2], false);
         String sql = toSQL.toStr(columnList[0], assist, invokerList);

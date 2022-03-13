@@ -12,15 +12,9 @@ import com.moxa.dream.util.wrapper.ObjectWrapper;
 import java.util.List;
 
 public class RepInvoker extends AbstractInvoker {
-    private ObjectWrapper paramWrapper;
-
-    @Override
-    public void init(ToAssist assist) {
-        paramWrapper = assist.getCustom(ObjectWrapper.class);
-    }
-
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+        ObjectWrapper paramWrapper = assist.getCustom(ObjectWrapper.class);
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         if (columnList.length != 1)
             throw new InvokerException("参数个数错误,不满足@" + AntlrInvokerFactory.REP + ":" + AntlrInvokerFactory.NAMESPACE + "(value)");

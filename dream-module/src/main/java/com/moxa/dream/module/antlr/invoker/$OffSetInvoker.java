@@ -18,13 +18,9 @@ public class $OffSetInvoker extends AbstractInvoker {
     PageHandler pageHandler;
 
     @Override
-    public void init(ToAssist assist) {
+    public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         pageHandler = new PageHandler(this, methodInfo);
-    }
-
-    @Override
-    public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         pageHandler.setParamList(columnList[1], columnList[2], true);
         String sql = toSQL.toStr(columnList[0], assist, invokerList);

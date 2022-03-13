@@ -12,15 +12,10 @@ import java.util.List;
 
 public class $Invoker extends AbstractInvoker {
     private List<ParamInfo> paramInfoList = new ArrayList<>();
-    private ObjectWrapper paramWrapper;
-
-    @Override
-    public void init(ToAssist assist) {
-        paramWrapper = assist.getCustom(ObjectWrapper.class);
-    }
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+        ObjectWrapper paramWrapper = assist.getCustom(ObjectWrapper.class);
         String paramName = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
         Object value = paramWrapper.get(paramName);
         paramInfoList.add(new ParamInfo(paramName, value));

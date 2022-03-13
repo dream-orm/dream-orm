@@ -14,19 +14,12 @@ import com.moxa.dream.util.wrapper.ObjectWrapper;
 import java.util.List;
 
 public class CallInvoker extends AbstractInvoker {
-    private Callback callback;
-    private ObjectWrapper paramWrapper;
-
-    @Override
-    public void init(ToAssist assist) {
-        this.callback = assist.getCustom(Callback.class);
-        this.paramWrapper = assist.getCustom(ObjectWrapper.class);
-        ObjectUtil.requireNonNull(callback, "Property 'callback' is required");
-        this.callback.init(assist);
-    }
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+        Callback callback = assist.getCustom(Callback.class);
+        ObjectWrapper paramWrapper = assist.getCustom(ObjectWrapper.class);
+        ObjectUtil.requireNonNull(callback, "Property 'callback' is required");
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         Statement statement = columnList[0];
         if (statement instanceof SymbolStatement.LetterStatement) {

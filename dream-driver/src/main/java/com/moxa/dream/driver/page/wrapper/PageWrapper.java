@@ -1,44 +1,37 @@
-package com.moxa.dream.module.antlr.wrapper;
+package com.moxa.dream.driver.page.wrapper;
 
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.util.InvokerUtil;
+import com.moxa.dream.driver.page.annotation.PageQuery;
 import com.moxa.dream.module.antlr.factory.DreamInvokerFactory;
+import com.moxa.dream.module.antlr.wrapper.Wrapper;
 import com.moxa.dream.module.mapper.MethodInfo;
-import com.moxa.dream.module.plugin.interceptor.PageInterceptor;
 import com.moxa.dream.util.common.ObjectUtil;
 
-public abstract class AbstractPageWrapper implements Wrapper {
+import java.lang.reflect.Method;
+
+public class PageWrapper implements Wrapper {
+    private PageQuery pageQueryAnnotation;
+
     @Override
     public void wrapper(PackageStatement statement, MethodInfo methodInfo) {
         if (isPage(methodInfo)) {
             String pageNamespace;
             String pageFunction;
-            if (isOptim(methodInfo)) {
-                pageNamespace = DreamInvokerFactory.NAMESPACE;
-                if (isOffSet(methodInfo)) {
-                    pageFunction = DreamInvokerFactory.$OFFSET;
-                } else {
-                    pageFunction = DreamInvokerFactory.$LIMIT;
-                }
+            pageNamespace = DreamInvokerFactory.NAMESPACE;
+            if (isOffSet(methodInfo)) {
+                pageFunction = DreamInvokerFactory.$OFFSET;
             } else {
-                pageNamespace = AntlrInvokerFactory.NAMESPACE;
-                if (isOffSet(methodInfo)) {
-                    pageFunction = AntlrInvokerFactory.OFFSET;
-                } else {
-                    pageFunction = AntlrInvokerFactory.LIMIT;
-                }
+                pageFunction = DreamInvokerFactory.$LIMIT;
             }
             String pageLink = getPageLink(methodInfo);
             String startRow = getStartRow(pageLink, methodInfo);
             String pageSize = getPageSize(pageLink, methodInfo);
             ObjectUtil.requireNonNull(startRow, "Property 'startRow' is required");
             ObjectUtil.requireNonNull(pageSize, "Property 'pageSize' is required");
-            PageInterceptor.PageCount pageCount = new PageInterceptor.PageCount();
-            pageCount.setPageLink(pageLink);
-            methodInfo.set(PageInterceptor.PageCount.class, pageCount);
             InvokerStatement pageStatement = InvokerUtil.wrapperInvoker(pageNamespace,
                     pageFunction, ",",
                     statement.getStatement(),
@@ -49,10 +42,9 @@ public abstract class AbstractPageWrapper implements Wrapper {
                             AntlrInvokerFactory.$, ",",
                             new SymbolStatement.LetterStatement(pageSize)));
             statement.setStatement(pageStatement);
+            methodInfo.set(PageLink.class, new PageLink(pageLink));
         }
     }
-
-    protected abstract boolean isPage(MethodInfo methodInfo);
 
     protected String getStartRow(String pageLink, MethodInfo methodInfo) {
         String startRow = "startRow";
@@ -70,9 +62,31 @@ public abstract class AbstractPageWrapper implements Wrapper {
         return pageSize;
     }
 
-    protected abstract String getPageLink(MethodInfo methodInfo);
+    protected boolean isPage(MethodInfo methodInfo) {
+        Method method = methodInfo.getMethod();
+        if (method == null)
+            return false;
+        pageQueryAnnotation = method.getDeclaredAnnotation(PageQuery.class);
+        return pageQueryAnnotation != null;
+    }
 
-    protected abstract boolean isOffSet(MethodInfo methodInfo);
+    protected String getPageLink(MethodInfo methodInfo) {
+        return pageQueryAnnotation.value();
+    }
 
-    protected abstract boolean isOptim(MethodInfo methodInfo);
+    protected boolean isOffSet(MethodInfo methodInfo) {
+        return pageQueryAnnotation.offset();
+    }
+
+    public static class PageLink {
+        String pageLink;
+
+        public PageLink(String pageLink) {
+            this.pageLink = pageLink;
+        }
+
+        public String getPageLink() {
+            return pageLink;
+        }
+    }
 }
