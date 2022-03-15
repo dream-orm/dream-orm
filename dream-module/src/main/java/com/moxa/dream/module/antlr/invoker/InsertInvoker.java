@@ -7,7 +7,6 @@ import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.InvokerStatement;
-import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
@@ -36,35 +35,35 @@ public class InsertInvoker extends AbstractInvoker {
         Class<?> tableType = target.getClass();
         String table;
         Table tableAnnotation = tableType.getDeclaredAnnotation(Table.class);
-        if(tableAnnotation==null) {
+        if (tableAnnotation == null) {
             View viewAnnotation = tableType.getDeclaredAnnotation(View.class);
-            ObjectUtil.requireNonNull(viewAnnotation,"please check '"+tableType.getName()+"'");
-            table= viewAnnotation.value();
-        }else{
-            table=tableAnnotation.value();
+            ObjectUtil.requireNonNull(viewAnnotation, "please check '" + tableType.getName() + "'");
+            table = viewAnnotation.value();
+        } else {
+            table = tableAnnotation.value();
         }
         TableFactory tableFactory = methodInfo.getConfiguration().getTableFactory();
         TableInfo tableInfo = tableFactory.getTableInfo(table);
-        ObjectUtil.requireNonNull(tableInfo,"please check '"+table+"'");
+        ObjectUtil.requireNonNull(tableInfo, "please check '" + table + "'");
         List<Field> fieldList = ReflectUtil.findField(tableType);
-        List<String>insertList=new ArrayList<>();
-        List<String>valueList=new ArrayList<>();
-        if(ObjectUtil.isNull(fieldList)){
+        List<String> insertList = new ArrayList<>();
+        List<String> valueList = new ArrayList<>();
+        if (ObjectUtil.isNull(fieldList)) {
             List<ColumnInfo> columnInfoList = fieldList.stream().map(field -> tableInfo.getColumnInfo(field.getName()))
                     .filter(columnInfo -> columnInfo != null)
                     .collect(Collectors.toList());
-            if(!ObjectUtil.isNull(columnInfoList)){
-                for(ColumnInfo columnInfo:columnInfoList){
+            if (!ObjectUtil.isNull(columnInfoList)) {
+                for (ColumnInfo columnInfo : columnInfoList) {
                     String column = columnInfo.getColumn();
                     String name = columnInfo.getName();
                     insertList.add(column);
-                    valueList.add(InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE,AntlrInvokerFactory.$,",",name));
+                    valueList.add(InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", name));
                 }
             }
         }
-        String insertSQL="insert into "+table+"("+String.join(",",insertList)+")values("+String.join(",",valueList)+")";
+        String insertSQL = "insert into " + table + "(" + String.join(",", insertList) + ")values(" + String.join(",", valueList) + ")";
         Statement statement = new InsertExpr(new ExprReader(insertSQL)).expr();
         invokerStatement.setStatement(statement);
-        return toSQL.toStr(statement,assist,invokerList);
+        return toSQL.toStr(statement, assist, invokerList);
     }
 }

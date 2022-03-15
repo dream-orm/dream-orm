@@ -1,4 +1,4 @@
-package com.moxa.dream.module.listener;
+package com.moxa.dream.module.core.listener;
 
 import com.moxa.dream.module.mapped.MappedStatement;
 

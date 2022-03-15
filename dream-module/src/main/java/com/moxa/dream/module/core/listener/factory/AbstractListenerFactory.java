@@ -1,6 +1,6 @@
-package com.moxa.dream.module.listener.factory;
+package com.moxa.dream.module.core.listener.factory;
 
-import com.moxa.dream.module.listener.*;
+import com.moxa.dream.module.core.listener.*;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.ArrayList;

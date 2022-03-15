@@ -1,9 +1,9 @@
 package com.moxa.dream.test.core;
 
-import com.moxa.dream.module.listener.DeleteListener;
-import com.moxa.dream.module.listener.InsertListener;
-import com.moxa.dream.module.listener.QueryListener;
-import com.moxa.dream.module.listener.UpdateListener;
+import com.moxa.dream.module.core.listener.DeleteListener;
+import com.moxa.dream.module.core.listener.InsertListener;
+import com.moxa.dream.module.core.listener.QueryListener;
+import com.moxa.dream.module.core.listener.UpdateListener;
 import com.moxa.dream.module.mapped.MappedStatement;
 
 public class DebugListener implements QueryListener, InsertListener, UpdateListener, DeleteListener {

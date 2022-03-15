@@ -9,4 +9,7 @@ public @interface Result {
 
     Class<?> colType() default NullObject.class;
 
+    String[] generatedKeys() default {};
+
+
 }

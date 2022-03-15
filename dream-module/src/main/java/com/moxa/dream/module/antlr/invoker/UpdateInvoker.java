@@ -1,7 +1,6 @@
 package com.moxa.dream.module.antlr.invoker;
 
 import com.moxa.dream.antlr.exception.InvokerException;
-import com.moxa.dream.antlr.expr.InsertExpr;
 import com.moxa.dream.antlr.expr.UpdateExpr;
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.invoker.AbstractInvoker;
@@ -36,33 +35,33 @@ public class UpdateInvoker extends AbstractInvoker {
         Class<?> tableType = target.getClass();
         String table;
         Table tableAnnotation = tableType.getDeclaredAnnotation(Table.class);
-        if(tableAnnotation==null) {
+        if (tableAnnotation == null) {
             View viewAnnotation = tableType.getDeclaredAnnotation(View.class);
-            ObjectUtil.requireNonNull(viewAnnotation,"please check '"+tableType.getName()+"'");
-            table= viewAnnotation.value();
-        }else{
-            table=tableAnnotation.value();
+            ObjectUtil.requireNonNull(viewAnnotation, "please check '" + tableType.getName() + "'");
+            table = viewAnnotation.value();
+        } else {
+            table = tableAnnotation.value();
         }
         TableFactory tableFactory = methodInfo.getConfiguration().getTableFactory();
         TableInfo tableInfo = tableFactory.getTableInfo(table);
-        ObjectUtil.requireNonNull(tableInfo,"please check '"+table+"'");
+        ObjectUtil.requireNonNull(tableInfo, "please check '" + table + "'");
         List<Field> fieldList = ReflectUtil.findField(tableType);
-        List<String>updateList=new ArrayList<>();
-        if(ObjectUtil.isNull(fieldList)){
+        List<String> updateList = new ArrayList<>();
+        if (ObjectUtil.isNull(fieldList)) {
             List<ColumnInfo> columnInfoList = fieldList.stream().map(field -> tableInfo.getColumnInfo(field.getName()))
                     .filter(columnInfo -> columnInfo != null)
                     .collect(Collectors.toList());
-            if(!ObjectUtil.isNull(columnInfoList)){
-                for(ColumnInfo columnInfo:columnInfoList){
+            if (!ObjectUtil.isNull(columnInfoList)) {
+                for (ColumnInfo columnInfo : columnInfoList) {
                     String column = columnInfo.getColumn();
                     String name = columnInfo.getName();
-                    updateList.add(column+"="+InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE,AntlrInvokerFactory.$,",",name));
+                    updateList.add(column + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", name));
                 }
             }
         }
-        String updateSQL="update "+table+"set "+String.join(",",updateList)+" where 1<>1";
+        String updateSQL = "update " + table + "set " + String.join(",", updateList) + " where 1<>1";
         Statement statement = new UpdateExpr(new ExprReader(updateSQL)).expr();
         invokerStatement.setStatement(statement);
-        return toSQL.toStr(statement,assist,invokerList);
+        return toSQL.toStr(statement, assist, invokerList);
     }
 }

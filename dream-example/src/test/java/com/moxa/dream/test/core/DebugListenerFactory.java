@@ -1,7 +1,7 @@
 package com.moxa.dream.test.core;
 
-import com.moxa.dream.module.listener.Listener;
-import com.moxa.dream.module.listener.factory.AbstractListenerFactory;
+import com.moxa.dream.module.core.listener.Listener;
+import com.moxa.dream.module.core.listener.factory.AbstractListenerFactory;
 
 public class DebugListenerFactory extends AbstractListenerFactory {
     @Override

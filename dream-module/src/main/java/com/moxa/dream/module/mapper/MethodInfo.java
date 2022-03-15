@@ -24,6 +24,7 @@ public class MethodInfo {
     private PackageStatement statement;
     private CacheKey sqlKey;
     private Method method;
+    private String[] generatedKeys;
     private Map<Class, Object> builtMap = new HashMap<>();
 
     private MethodInfo() {
@@ -74,6 +75,10 @@ public class MethodInfo {
         return method;
     }
 
+    public String[] getGeneratedKeys() {
+        return generatedKeys;
+    }
+
     public String getId() {
         if (method == null)
             return name;
@@ -109,6 +114,11 @@ public class MethodInfo {
 
         public Builder colType(Class colType) {
             methodInfo.colType = colType;
+            return this;
+        }
+
+        public Builder generatedKeys(String[] generatedKeys) {
+            methodInfo.generatedKeys = generatedKeys;
             return this;
         }
 

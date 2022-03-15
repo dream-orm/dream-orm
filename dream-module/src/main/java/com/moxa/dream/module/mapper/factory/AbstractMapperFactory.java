@@ -56,6 +56,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     protected MethodInfo.Builder createMethodInfoBuilder(Configuration configuration, Class mapperClass, Method method) {
         Class<? extends Collection> rowType = getRowType(mapperClass, method);
         Class colType = getColType(mapperClass, method);
+        String[] generatedKeys = getGeneratedKeys(mapperClass, method);
         String[] paramNameList = getParamNameList(method);
         String sql = getSql(method);
         Integer timeOut = getTimeOut(method);
@@ -64,6 +65,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 .name(method.getName())
                 .rowType(rowType)
                 .colType(colType)
+                .generatedKeys(generatedKeys)
                 .paramNameList(paramNameList)
                 .sql(sql)
                 .timeOut(timeOut)
@@ -134,6 +136,16 @@ public abstract class AbstractMapperFactory implements MapperFactory {
             }
         }
         return colType;
+    }
+
+    protected String[] getGeneratedKeys(Class mapperClass, Method method) {
+        Result resultAnnotation = method.getDeclaredAnnotation(Result.class);
+        String[] generatedKeys = null;
+        if (resultAnnotation != null) {
+            generatedKeys = resultAnnotation.generatedKeys();
+        }
+        return generatedKeys;
+
     }
 
     protected String[] getParamNameList(Method method) {
