@@ -114,4 +114,8 @@ public class DefaultTableFactory implements TableFactory {
         return tableInfoMap.get(table);
     }
 
+    @Override
+    public TableInfo getTableInfo(Class type) {
+        return getTableInfo(getTable(type));
+    }
 }
