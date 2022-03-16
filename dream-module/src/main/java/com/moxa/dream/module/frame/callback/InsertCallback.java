@@ -1,5 +1,6 @@
 package com.moxa.dream.module.frame.callback;
 
+import com.moxa.dream.antlr.expr.InsertExpr;
 import com.moxa.dream.antlr.expr.QueryExpr;
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.read.ExprReader;
@@ -11,11 +12,10 @@ import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableInfo;
 import com.moxa.dream.module.table.factory.TableFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class SelectByIdCallback {
+public class InsertCallback {
     protected Map<Class, Statement> statementMap = new HashMap<>();
 
     public Statement call(MethodInfo methodInfo, Object arg) {
@@ -30,13 +30,18 @@ public class SelectByIdCallback {
                     TableFactory tableFactory = configuration.getTableFactory();
                     TableInfo tableInfo = tableFactory.getTableInfo(colType);
                     String table = tableInfo.getTable();
-                    ColumnInfo primary = tableInfo.getPrimary();
-                    String columns = tableInfo.getColumnInfoList().stream()
-                            .map(columnInfo -> table + "." + columnInfo.getColumn())
-                            .collect(Collectors.joining(","));
-                    String sql = "select " + columns + " from " + table + " where " + table + "." + primary.getColumn() + "="
-                            + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",",  primary.getName());
-                    statement = new QueryExpr(new ExprReader(sql)).expr();
+                    Collection<ColumnInfo> columnInfoList = tableInfo.getColumnInfoList();
+                    List<String> columnList = new ArrayList<>();
+                    List<String> valueList = new ArrayList<>();
+                    for (ColumnInfo columnInfo : columnInfoList) {
+                        String column = columnInfo.getColumn();
+                        String name = columnInfo.getName();
+                        columnList.add(column);
+                        valueList.add(InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",",  name));
+                    }
+                    String sql = "insert into " + table + "(" + String.join(",", columnList) + ")values(" + String.join(",", valueList) + ")";
+                    InsertExpr insertExpr = new InsertExpr(new ExprReader(sql));
+                    statement = insertExpr.expr();
                     statementMap.put(type, statement);
                 }
             }
