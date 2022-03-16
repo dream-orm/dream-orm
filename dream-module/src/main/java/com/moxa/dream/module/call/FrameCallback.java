@@ -20,8 +20,23 @@ import java.util.stream.Collectors;
 
 
 public class FrameCallback implements Callback {
+    public static final String SELECT_BY_ID="selectById";
+    public static final String UPDATE_BY_ID="updateById";
+    public static final String INSERT="insert";
     @Override
     public Statement call(String className, String methodName, String[] params, Object[] args) {
+        Statement statement;
+        switch (methodName){
+            case SELECT_BY_ID:
+                statement=selectById(null,null);
+                break;
+            case UPDATE_BY_ID:
+                statement=updateById(null,null);
+                break;
+            case INSERT:
+                statement=insert(null,null);
+            default:throw new RuntimeException();
+        }
         return null;
     }
 
