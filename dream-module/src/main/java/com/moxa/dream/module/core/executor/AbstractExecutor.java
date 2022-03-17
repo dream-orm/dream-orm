@@ -76,7 +76,6 @@ public abstract class AbstractExecutor implements Executor {
             throw e;
         } finally {
             statementHandler.close();
-            after(listeners, mappedStatement);
         }
     }
 
@@ -142,14 +141,6 @@ public abstract class AbstractExecutor implements Executor {
         if (!ObjectUtil.isNull(listeners)) {
             for (Listener listener : listeners) {
                 listener.exception(e, mappedStatement);
-            }
-        }
-    }
-
-    protected void after(Listener[] listeners, MappedStatement mappedStatement) {
-        if (!ObjectUtil.isNull(listeners)) {
-            for (Listener listener : listeners) {
-                listener.after(mappedStatement);
             }
         }
     }

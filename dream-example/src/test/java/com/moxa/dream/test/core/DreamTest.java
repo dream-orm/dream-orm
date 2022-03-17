@@ -25,10 +25,10 @@ public class DreamTest {
 //        dreamTest.selectBean();
 //        dreamTest.selectField();
 //        dreamTest.selectTableList();
-        dreamTest.selectAll();
+//        dreamTest.selectAll();
 //        dreamTest.selectMapper();
 //        dreamTest.selectMyView();
-//   dreamTest.test();
+   dreamTest.test();
     }
 
 
@@ -107,6 +107,7 @@ public class DreamTest {
 //            Object o = mapper.selectUserById(1);
             Page page = new Page(1, 1);
             Page<ViewUser> viewUserList = mapper.selectUserList(page);
+            System.out.println(viewUserList);
         }
 
     }
@@ -126,18 +127,18 @@ public class DreamTest {
     }
 
     public void test() {
-        long l = System.currentTimeMillis();
+//        long l = System.currentTimeMillis();
 
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
 
-            for (int i = 0; i < 1000000; i++) {
+//            for (int i = 0; i < 1000000; i++) {
 
                 CityMapper cityMapper = sqlSession.getMapper(CityMapper.class);
 
-                cityMapper.findByState("CA" + i);
-            }
+                cityMapper.findByState("CA");
+//            }
 
         }
-        System.out.println(System.currentTimeMillis() - l);
+//        System.out.println(System.currentTimeMillis() - l);
     }
 }

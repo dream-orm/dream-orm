@@ -21,9 +21,4 @@ public class DebugListener implements QueryListener, InsertListener, UpdateListe
     public void exception(Exception e, MappedStatement mappedStatement) {
         System.out.println("exception");
     }
-
-    @Override
-    public void after(MappedStatement mappedStatement) {
-        System.out.println("after");
-    }
 }

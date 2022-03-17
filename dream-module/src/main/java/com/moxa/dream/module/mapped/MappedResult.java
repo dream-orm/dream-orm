@@ -21,10 +21,10 @@ public class MappedResult {
 
     public MappedResult(Class<? extends Collection> rowType, Class colType, PropertyInfo propertyInfo) {
         this.rowType = rowType == null ? Collection.class : rowType;
-        this.colType = colType = colType == null ? Object.class : colType;
+        this.colType = colType == null ? Object.class : colType;
         this.propertyInfo = propertyInfo;
-        this.rowObjectFactoryWrapper = ObjectFactoryWrapper.wrapper(rowType);
-        this.colObjectFactoryWrapper = ObjectFactoryWrapper.wrapper(colType);
+        this.rowObjectFactoryWrapper = ObjectFactoryWrapper.wrapper(this.rowType);
+        this.colObjectFactoryWrapper = ObjectFactoryWrapper.wrapper(this.colType);
     }
 
     public Class<? extends Collection> getRowType() {

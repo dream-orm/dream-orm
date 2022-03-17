@@ -17,7 +17,6 @@ public class AntlrInvokerFactory implements InvokerFactory {
     public static final String REP = "rep";
     public static final String NON = "non";
     public static final String FOREACH = "foreach";
-    public static final String CALL = "call";
 
     @Override
     public Invoker create(String function) {
@@ -48,8 +47,6 @@ public class AntlrInvokerFactory implements InvokerFactory {
                 return new NonInvoker();
             case FOREACH:
                 return new ForEachInvoker();
-            case CALL:
-                return new CallInvoker();
             default:
                 return null;
         }

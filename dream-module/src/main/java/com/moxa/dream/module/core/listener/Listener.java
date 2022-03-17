@@ -8,6 +8,4 @@ public interface Listener {
     void afterReturn(Object result, MappedStatement mappedStatement);
 
     void exception(Exception e, MappedStatement mappedStatement);
-
-    void after(MappedStatement mappedStatement);
 }
