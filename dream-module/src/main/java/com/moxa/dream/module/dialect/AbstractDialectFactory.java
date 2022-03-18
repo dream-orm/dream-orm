@@ -121,8 +121,8 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                     } else {
                         paramType = new ParamType(null, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), Types.NULL));
                     }
-                    mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getValue(), paramType.getTypeHandler()));
                 }
+                mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getValue(), paramType.getTypeHandler()));
             }
         }
         return new MappedStatement
