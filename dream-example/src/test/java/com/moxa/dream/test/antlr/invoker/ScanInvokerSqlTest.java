@@ -36,7 +36,7 @@ public class ScanInvokerSqlTest extends AbstractSqlTest {
         PackageStatement packageStatement = createStatement("@scan(`select dual.a as a0,dual.b,c from dual where a=@$(a) and c between @$(c1) and @$(c2)`)", null);
         Map<String, Object> objectMap = new HashMap<>();
         try {
-            System.out.println(new ToDREAM().toResult(packageStatement, invokerFactoryList, Map.of(ObjectWrapper.class, ObjectWrapper.wrapper(objectMap))) + "\n" + packageStatement.getValue(ScanInvoker.ScanInfo.class));
+            System.out.println(new ToDREAM().toResult(packageStatement, invokerFactoryList, Map.of(ObjectWrapper.class, ObjectWrapper.wrapper(objectMap))).getSql() + "\n" + packageStatement.getValue(ScanInvoker.ScanInfo.class));
         } catch (InvokerException e) {
             throw new RuntimeException(e);
         }
@@ -47,7 +47,7 @@ public class ScanInvokerSqlTest extends AbstractSqlTest {
         PackageStatement packageStatement = createStatement("@scan(`insert into dual(a,b,c) values(@$(a),@$(b),@$(c))`)", null);
         Map<String, Object> objectMap = new HashMap<>();
         try {
-            System.out.println(new ToMYSQL().toResult(packageStatement, invokerFactoryList, Map.of(ObjectWrapper.class, ObjectWrapper.wrapper(objectMap))) + "\n" + packageStatement.getValue(ScanInvoker.ScanInfo.class));
+            System.out.println(new ToMYSQL().toResult(packageStatement, invokerFactoryList, Map.of(ObjectWrapper.class, ObjectWrapper.wrapper(objectMap))).getSql() + "\n" + packageStatement.getValue(ScanInvoker.ScanInfo.class));
         } catch (InvokerException e) {
             throw new RuntimeException(e);
         }
@@ -56,7 +56,7 @@ public class ScanInvokerSqlTest extends AbstractSqlTest {
     public void testUpdateInvoker() {
         PackageStatement packageStatement = createStatement("@scan(`update dual set 1=1`)", null);
         try {
-            System.out.println(new ToMYSQL().toResult(packageStatement, invokerFactoryList, null) + "\n" + packageStatement.getValue(ScanInvoker.ScanInfo.class));
+            System.out.println(new ToMYSQL().toResult(packageStatement, invokerFactoryList, null).getSql() + "\n" + packageStatement.getValue(ScanInvoker.ScanInfo.class));
         } catch (InvokerException e) {
             throw new RuntimeException(e);
         }
@@ -65,7 +65,7 @@ public class ScanInvokerSqlTest extends AbstractSqlTest {
     public void testDeleteInvoker() {
         PackageStatement packageStatement = createStatement("@scan(`delete from dual`)", null);
         try {
-            System.out.println(new ToMYSQL().toResult(packageStatement, invokerFactoryList, null) + "\n" + packageStatement.getValue(ScanInvoker.ScanInfo.class));
+            System.out.println(new ToMYSQL().toResult(packageStatement, invokerFactoryList, null).getSql() + "\n" + packageStatement.getValue(ScanInvoker.ScanInfo.class));
         } catch (InvokerException e) {
             throw new RuntimeException(e);
         }

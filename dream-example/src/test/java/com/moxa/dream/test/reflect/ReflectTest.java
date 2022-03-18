@@ -1,22 +1,25 @@
 package com.moxa.dream.test.reflect;
 
-
-import com.moxa.dream.test.core.view.ViewUser;
+import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.wrapper.ObjectWrapper;
+import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReflectTest {
 
-    public static void main(String[] args) {
-        ViewUser viewUser = new ViewUser();
-        long l = System.currentTimeMillis();
-        for (int i = 0; i < 1000000; i++) {
-            ObjectWrapper wrapper = ObjectWrapper.wrapper(viewUser);
-            wrapper.set("id", i);
-            wrapper.set("name", "name" + i);
-            wrapper.set("viewDept.id", i);
-            wrapper.set("viewDept.name", "name" + i);
-        }
-        System.out.println(System.currentTimeMillis() - l);
+    //动态增加参数
+    @Test
+    public void testAddParam() {
+        Map<String, Object> map = new HashMap<>();
+        MyObject myObject = new MyObject();
+        myObject.setId(1);
+        myObject.setName("object");
+        map.put(null, myObject);
+        ObjectWrapper wrapper = ObjectWrapper.wrapper(map);
+        Object id = wrapper.get("id");
+        Object name = wrapper.get("name");
+        ObjectUtil.requireTrue(id.equals(1) && name.equals("object"), "");
     }
 }

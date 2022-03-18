@@ -11,7 +11,10 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.wrapper.ObjectWrapper;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class ForEachInvoker extends AbstractInvoker {
     private String cut = ",";
@@ -38,16 +41,15 @@ public class ForEachInvoker extends AbstractInvoker {
             ListColumnStatement listColumnStatement = new ListColumnStatement(cut);
             if (len == 2) {
                 int index = 0;
-                Map<String, Object> itemMap = new HashMap<>();
-                ObjectWrapper tempWrapper = ObjectWrapper.wrapper(itemMap);
-                assist.setCustom(ObjectWrapper.class, tempWrapper);
+                Map<String, Object> paramMap = (Map<String, Object>) paramWrapper.getObject();
                 for (Object item : collection) {
-                    itemMap.put(this.index, index++);
-                    itemMap.put(this.item, item);
+                    paramMap.put(this.index, index++);
+                    paramMap.put(this.item, item);
                     String letterItem = toSQL.toStr(columnList[1], assist, invokerList);
                     listColumnStatement.add(new SymbolStatement.LetterStatement(letterItem));
                 }
-                assist.setCustom(ObjectWrapper.class, paramWrapper);
+                paramMap.remove(this.index);
+                paramMap.remove(this.item);
             } else {
                 $Invoker sqlInvoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
                 List<$Invoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();

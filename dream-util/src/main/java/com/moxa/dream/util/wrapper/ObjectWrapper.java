@@ -17,9 +17,9 @@ public abstract class ObjectWrapper {
             wrapper = new MapWrapper((Map) object);
         } else if (object instanceof Collection) {
             wrapper = new CollectionWrapper((Collection) object);
-        } else if(ReflectUtil.isBaseClass(object.getClass())){
-            wrapper=new BasicWrapper(object);
-        }else{
+        } else if (ReflectUtil.isBaseClass(object.getClass())) {
+            wrapper = new BasicWrapper(object);
+        } else {
             wrapper = new BeanWrapper(ReflectClass.newInstance(object));
         }
         return wrapper;

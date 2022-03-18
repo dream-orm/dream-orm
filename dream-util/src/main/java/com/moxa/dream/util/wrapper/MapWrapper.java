@@ -5,16 +5,23 @@ import java.util.Map;
 
 public class MapWrapper extends ObjectWrapper {
     private Map object;
+    private ObjectWrapper targetWrapper;
 
     public MapWrapper(Map map) {
         this.object = map;
+        Object target = map.get(null);
+        if (target != null) {
+            targetWrapper = ObjectWrapper.wrapper(target);
+        }
     }
 
     @Override
     public Object get(PropertyToken propertyToken) {
         String name = propertyToken.getName();
         Object value = object.get(name);
-        if (propertyToken.hasNext()) {
+        if (value == null && targetWrapper != null) {
+            return targetWrapper.get(propertyToken);
+        } else if (propertyToken.hasNext()) {
             return wrapper(value).get(propertyToken.next());
         } else
             return value;

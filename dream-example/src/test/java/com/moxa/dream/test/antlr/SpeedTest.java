@@ -14,9 +14,7 @@ import com.moxa.dream.util.wrapper.ObjectWrapper;
 
 import java.util.*;
 
-/**
- * 简单测试一下性能
- */
+
 public class SpeedTest extends AbstractSqlTest {
     private List<InvokerFactory> invokerFactoryList = new ArrayList<>();
 

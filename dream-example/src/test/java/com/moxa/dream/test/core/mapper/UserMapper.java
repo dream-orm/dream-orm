@@ -3,7 +3,6 @@ package com.moxa.dream.test.core.mapper;
 import com.moxa.dream.driver.page.Page;
 import com.moxa.dream.driver.page.annotation.PageQuery;
 import com.moxa.dream.module.annotation.Mapper;
-import com.moxa.dream.module.annotation.Param;
 import com.moxa.dream.module.annotation.Sql;
 import com.moxa.dream.test.core.view.ViewUser;
 

@@ -1,8 +1,5 @@
 package com.moxa.dream.util.wrapper;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class BasicWrapper extends ObjectWrapper {
     private Object object;
 
@@ -17,7 +14,7 @@ public class BasicWrapper extends ObjectWrapper {
 
     @Override
     public void set(PropertyToken propertyToken, Object value) throws WrapperException {
-        this.object=value;
+        this.object = value;
     }
 
     @Override

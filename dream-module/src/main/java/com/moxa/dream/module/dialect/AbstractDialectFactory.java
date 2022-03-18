@@ -28,6 +28,7 @@ import com.moxa.dream.module.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.wrapper.ObjectWrapper;
 
+import java.sql.Types;
 import java.util.*;
 
 public abstract class AbstractDialectFactory implements DialectFactory {
@@ -87,37 +88,41 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                     TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
                     ObjectUtil.requireNonNull(typeHandlerFactory, "Property 'typeHandlerFactory' is required");
                     ScanInvoker.ParamScanInfo paramScanInfo = paramScanInfoMap.get(paramInfo.getParam());
-                    String table = paramScanInfo.getTable();
-                    String column = paramScanInfo.getColumn();
-                    TableInfo tableInfo = null;
-                    Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = scanInfo.getTableScanInfoMap();
-                    if (ObjectUtil.isNull(table)) {
-                        Collection<ScanInvoker.TableScanInfo> tableScanInfoList = tableScanInfoMap.values();
-                        ObjectUtil.requireNonNull(tableScanInfoList, "@Function '" + ScanInvoker.class.getName() + "' has no scan table");
-                        for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoList) {
-                            tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
-                            if (tableInfo != null) {
-                                break;
-                            }
-                        }
-                    } else {
-                        ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(table);
-                        if (tableScanInfo != null) {
-                            table = tableScanInfo.getTable();
-                        }
-                        tableInfo = tableFactory.getTableInfo(table);
-                    }
-                    ObjectUtil.requireNonNull(tableInfo, "tableInfo was not found,table is '" + table + "',column is '" + column + "'");
-                    String fieldName = tableInfo.getFieldName(column);
-                    if (ObjectUtil.isNull(fieldName))
-                        fieldName = column;
-                    ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-                    int jdbcType = columnInfo.getJdbcType();
                     Object value = paramInfo.getValue();
-                    paramTypeMap.put(paramInfo.getParam(),
-                            paramType = new ParamType(columnInfo, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), jdbcType)));
+                    if (paramScanInfo != null) {
+                        String table = paramScanInfo.getTable();
+                        String column = paramScanInfo.getColumn();
+                        TableInfo tableInfo = null;
+                        Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = scanInfo.getTableScanInfoMap();
+                        if (ObjectUtil.isNull(table)) {
+                            Collection<ScanInvoker.TableScanInfo> tableScanInfoList = tableScanInfoMap.values();
+                            ObjectUtil.requireNonNull(tableScanInfoList, "@Function '" + ScanInvoker.class.getName() + "' has no scan table");
+                            for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoList) {
+                                tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
+                                if (tableInfo != null) {
+                                    break;
+                                }
+                            }
+                        } else {
+                            ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(table);
+                            if (tableScanInfo != null) {
+                                table = tableScanInfo.getTable();
+                            }
+                            tableInfo = tableFactory.getTableInfo(table);
+                        }
+                        ObjectUtil.requireNonNull(tableInfo, "tableInfo was not found,table is '" + table + "',column is '" + column + "'");
+                        String fieldName = tableInfo.getFieldName(column);
+                        if (ObjectUtil.isNull(fieldName))
+                            fieldName = column;
+                        ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
+                        int jdbcType = columnInfo.getJdbcType();
+                        paramTypeMap.put(paramInfo.getParam(),
+                                paramType = new ParamType(columnInfo, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), jdbcType)));
+                    } else {
+                        paramType = new ParamType(null, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), Types.NULL));
+                    }
+                    mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getValue(), paramType.getTypeHandler()));
                 }
-                mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getValue(), paramType.getTypeHandler()));
             }
         }
         return new MappedStatement
@@ -174,7 +179,11 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     protected abstract <T> Map<Class<? extends T>, T> getCustomMap(MethodInfo methodInfo, Object arg);
 
     protected MappedParam getMappedParam(ColumnInfo columnInfo, Object paramValue, TypeHandler typeHandler) {
-        return new MappedParam(columnInfo.getJdbcType(), paramValue, typeHandler);
+        int jdbcType = Types.NULL;
+        if (columnInfo != null) {
+            jdbcType = columnInfo.getJdbcType();
+        }
+        return new MappedParam(jdbcType, paramValue, typeHandler);
     }
 
     @Override

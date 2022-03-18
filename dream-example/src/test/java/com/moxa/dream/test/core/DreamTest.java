@@ -21,14 +21,14 @@ public class DreamTest {
 
     public static void main(String[] args) {
         DreamTest dreamTest = new DreamTest();
-//        dreamTest.selectMap();
+        dreamTest.selectMap();
 //        dreamTest.selectBean();
 //        dreamTest.selectField();
 //        dreamTest.selectTableList();
 //        dreamTest.selectAll();
 //        dreamTest.selectMapper();
 //        dreamTest.selectMyView();
-   dreamTest.test();
+//   dreamTest.test();
     }
 
 
@@ -133,9 +133,9 @@ public class DreamTest {
 
 //            for (int i = 0; i < 1000000; i++) {
 
-                CityMapper cityMapper = sqlSession.getMapper(CityMapper.class);
+            CityMapper cityMapper = sqlSession.getMapper(CityMapper.class);
 
-                cityMapper.findByState("CA");
+            cityMapper.findByState("CA");
 //            }
 
         }
