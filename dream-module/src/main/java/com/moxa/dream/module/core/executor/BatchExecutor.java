@@ -19,7 +19,7 @@ public class BatchExecutor extends AbstractExecutor {
     @Override
     public void commit() {
         try {
-            flushStatement(true);
+            flushStatement(false);
         } finally {
             super.commit();
         }
@@ -28,7 +28,7 @@ public class BatchExecutor extends AbstractExecutor {
     @Override
     public void rollback() {
         try {
-            flushStatement(false);
+            flushStatement(true);
         } finally {
             super.rollback();
         }
