@@ -24,18 +24,12 @@ public class BatchStatementHandler extends AbstractStatementHandler {
         Statement statement;
         switch (command) {
             case QUERY:
-                if(currentBatchResult!=null){
-                    flushStatement(false);
-                }
                 statement = statementHandler.prepare(connection, mappedStatement);
                 break;
             default:
                 if (currentBatchResult != null && mappedStatement.getSqlKey().equals(currentBatchResult.sqlKey)) {
                     statement = currentBatchResult.statement;
                 } else {
-                    if(currentBatchResult!=null){
-                        flushStatement(false);
-                    }
                     statement = statementHandler.prepare(connection, mappedStatement);
                     currentBatchResult = new BatchResult(mappedStatement.getSqlKey(), statement);
                     batchResultList.add(currentBatchResult);

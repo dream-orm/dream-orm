@@ -24,8 +24,8 @@ public abstract class AbstractExecutor implements Executor {
         this.configuration = configuration;
         this.transaction = configuration.getTransaction(autoCommit);
         this.listenerFactory = configuration.getListenerFactory();
-        this.statementHandler = getStatementHandler();
-        this.resultSetHandler = getResultSetHandler();
+        this.statementHandler = createStatementHandler();
+        this.resultSetHandler = createResultSetHandler();
     }
 
     @Override
@@ -77,22 +77,6 @@ public abstract class AbstractExecutor implements Executor {
         } finally {
             statementHandler.close();
         }
-    }
-
-    @Override
-    public StatementHandler getStatementHandler() {
-        if (statementHandler == null) {
-            statementHandler = createStatementHandler();
-        }
-        return statementHandler;
-    }
-
-    @Override
-    public ResultSetHandler getResultSetHandler() {
-        if (resultSetHandler == null) {
-            resultSetHandler = createResultSetHandler();
-        }
-        return resultSetHandler;
     }
 
     protected abstract StatementHandler createStatementHandler();

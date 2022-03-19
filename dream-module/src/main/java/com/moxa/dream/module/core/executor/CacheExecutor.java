@@ -73,16 +73,6 @@ public abstract class CacheExecutor implements Executor {
     protected abstract void clearObject(MappedStatement mappedStatement);
 
     @Override
-    public StatementHandler getStatementHandler() {
-        return executor.getStatementHandler();
-    }
-
-    @Override
-    public ResultSetHandler getResultSetHandler() {
-        return executor.getResultSetHandler();
-    }
-
-    @Override
     public boolean isAutoCommit() {
         return executor.isAutoCommit();
     }
