@@ -36,14 +36,14 @@ public abstract class CacheExecutor implements Executor {
 
     @Override
     public Object insert(MappedStatement mappedStatement) throws SQLException {
-        Object value = executor.update(mappedStatement);
+        Object value = executor.insert(mappedStatement);
         clearObject(mappedStatement);
         return value;
     }
 
     @Override
     public Object delete(MappedStatement mappedStatement) throws SQLException {
-        Object value = executor.update(mappedStatement);
+        Object value = executor.delete(mappedStatement);
         clearObject(mappedStatement);
         return value;
     }
