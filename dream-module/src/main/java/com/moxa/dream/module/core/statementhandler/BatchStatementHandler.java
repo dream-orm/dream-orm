@@ -4,7 +4,10 @@ import com.moxa.dream.antlr.bind.Command;
 import com.moxa.dream.module.cache.CacheKey;
 import com.moxa.dream.module.mapped.MappedStatement;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +68,7 @@ public class BatchStatementHandler extends AbstractStatementHandler {
             if (!rollback) {
                 for (BatchResult batchResult : batchResultList) {
                     try {
-                         statement.executeBatch();
+                        statement.executeBatch();
                     } finally {
                         batchResult.statement.close();
                     }

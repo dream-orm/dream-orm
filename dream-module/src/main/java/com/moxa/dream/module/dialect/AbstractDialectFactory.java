@@ -172,6 +172,11 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     private Map<Class, Object> getDefaultCustomMap(MethodInfo methodInfo, Object arg) {
         Map<Class, Object> customMap = new HashMap<>();
         customMap.put(MethodInfo.class, methodInfo);
+        if (arg != null && !(arg instanceof Map)) {
+            Map<String, Object> paramMap = new HashMap<>();
+            paramMap.put(null, arg);
+            arg = paramMap;
+        }
         customMap.put(ObjectWrapper.class, ObjectWrapper.wrapper(arg));
         return customMap;
 
