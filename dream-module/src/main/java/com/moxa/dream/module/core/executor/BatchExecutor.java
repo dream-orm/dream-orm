@@ -2,19 +2,18 @@ package com.moxa.dream.module.core.executor;
 
 import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.core.statementhandler.BatchStatementHandler;
+import com.moxa.dream.module.core.statementhandler.PrepareStatementHandler;
 import com.moxa.dream.module.core.statementhandler.StatementHandler;
 
 public class BatchExecutor extends AbstractExecutor {
-    private Executor executor;
 
-    public BatchExecutor(Executor executor, Configuration configuration, boolean autoCommit) {
+    public BatchExecutor(Configuration configuration, boolean autoCommit) {
         super(configuration, autoCommit);
-        this.executor = executor;
     }
 
     @Override
     protected StatementHandler createStatementHandler() {
-        return new BatchStatementHandler(executor.getStatementHandler());
+        return new BatchStatementHandler(new PrepareStatementHandler());
     }
 
     @Override
@@ -44,7 +43,7 @@ public class BatchExecutor extends AbstractExecutor {
         }
     }
 
-    public int[] flushStatement(boolean rollback) {
-        return statementHandler.flushStatement(rollback);
+    public void flushStatement(boolean rollback) {
+        statementHandler.flushStatement(rollback);
     }
 }

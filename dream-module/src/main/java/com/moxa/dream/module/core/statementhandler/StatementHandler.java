@@ -13,7 +13,7 @@ public interface StatementHandler {
 
     int doUpdate(Connection connection, MappedStatement mappedStatement) throws SQLException;
 
-    int[] flushStatement(boolean rollback);
+    void flushStatement(boolean rollback);
 
     Statement getStatement();
 

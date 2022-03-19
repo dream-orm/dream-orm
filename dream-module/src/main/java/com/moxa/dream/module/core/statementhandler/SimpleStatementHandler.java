@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class SimpleStatementHandler extends BaseStatementHandler {
+public class SimpleStatementHandler extends AbstractStatementHandler {
 
     @Override
     protected Statement prepare(Connection connection, MappedStatement mappedStatement) throws SQLException {
@@ -36,8 +36,7 @@ public class SimpleStatementHandler extends BaseStatementHandler {
     }
 
     @Override
-    public int[] flushStatement(boolean rollback) {
-        return null;
+    public void flushStatement(boolean rollback) {
     }
 
     @Override

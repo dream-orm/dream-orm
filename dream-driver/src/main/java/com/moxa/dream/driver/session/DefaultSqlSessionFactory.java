@@ -42,9 +42,11 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
         Cache cache = null;
         if (cacheFactory != null)
             cache = cacheFactory.getCache();
-        Executor executor = new JdbcExecutor(configuration, autoCommit);
+        Executor executor;
         if (batch) {
-            executor = new BatchExecutor(executor, configuration, autoCommit);
+            executor = new BatchExecutor(configuration, autoCommit);
+        } else {
+            executor = new JdbcExecutor(configuration, autoCommit);
         }
 
         if (cache != null) {

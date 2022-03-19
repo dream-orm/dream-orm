@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public abstract class BaseStatementHandler implements StatementHandler {
+public abstract class AbstractStatementHandler implements StatementHandler {
     protected Statement statement;
 
     @Override
