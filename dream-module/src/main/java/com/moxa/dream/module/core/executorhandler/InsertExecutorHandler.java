@@ -2,12 +2,13 @@ package com.moxa.dream.module.core.executorhandler;
 
 import com.moxa.dream.module.core.statementhandler.StatementHandler;
 import com.moxa.dream.module.mapped.MappedStatement;
-import com.moxa.dream.util.common.ObjectUtil;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InsertExecutorHandler extends AbstractExecutorHandler {
     public InsertExecutorHandler(StatementHandler statementHandler, Connection connection) {
@@ -21,16 +22,13 @@ public class InsertExecutorHandler extends AbstractExecutorHandler {
             statementHandler.prepare(connection, mappedStatement, Statement.RETURN_GENERATED_KEYS);
             statementHandler.executeUpdate(mappedStatement);
             ResultSet generatedKeysResult = statementHandler.getStatement().getGeneratedKeys();
-            int index=0;
-            int columnCount = generatedKeysResult.getMetaData().getColumnCount();
-            Object[]results=new Object[columnCount];
-            if(columnCount>0) {
-                while (generatedKeysResult.next()) {
-                    Object value = generatedKeysResult.getObject(index + 1);
-                    results[index++] = value;
-                }
+            int index = 1;
+            List<Long> resultList = new ArrayList<>();
+            while (generatedKeysResult.next()) {
+                Long value = generatedKeysResult.getLong(index);
+                resultList.add(value);
             }
-            return results;
+            return resultList;
         } else {
             return super.execute(mappedStatement);
         }
