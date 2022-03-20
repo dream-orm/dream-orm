@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 
-public class BaseTypeHandlerFactory implements TypeHandlerFactory {
+public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
     protected Map<Integer, TypeHandler> typeHandlerMap = new HashMap<>();
 
-    public BaseTypeHandlerFactory() {
+    public DefaultTypeHandlerFactory() {
         wrapper(getTypeHandlerWrapperList());
     }
 
@@ -67,7 +67,8 @@ public class BaseTypeHandlerFactory implements TypeHandlerFactory {
                 new ShortTypeHandlerWrapper(),
                 new StringTypeHandlerWrapper(),
                 new TimeStampTypeHandlerWrapper(),
-                new TimeTypeHandlerWrapper()
+                new TimeTypeHandlerWrapper(),
+                new ObjectTypeHandlerWrapper()
         );
         return defaultTypeHandlerWrapperList;
     }

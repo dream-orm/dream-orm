@@ -11,7 +11,7 @@
     <mapperFactory>
         <mapping package="com.moxa.dream.test.core.mapper"/>
     </mapperFactory>
-    <typeHandlerFactory type="com.moxa.dream.module.typehandler.factory.BaseTypeHandlerFactory">
+    <typeHandlerFactory type="com.moxa.dream.module.typehandler.factory.DefaultTypeHandlerFactory">
         <typeHandlerWrapper type="com.moxa.dream.test.core.MyTypeHandlerWrapper"/>
     </typeHandlerFactory>
     <dialectFactory type="com.moxa.dream.driver.factory.DefaultDialectFactory" dialect="${mysql}">

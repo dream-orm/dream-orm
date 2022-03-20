@@ -5,7 +5,7 @@ import com.moxa.dream.driver.config.DefaultConfig;
 import com.moxa.dream.driver.factory.DefaultMapperFactory;
 import com.moxa.dream.module.cache.factory.DefaultCacheFactory;
 import com.moxa.dream.module.table.factory.DefaultTableFactory;
-import com.moxa.dream.module.typehandler.factory.BaseTypeHandlerFactory;
+import com.moxa.dream.module.typehandler.factory.DefaultTypeHandlerFactory;
 
 public class ConfigUtil {
 
@@ -16,7 +16,7 @@ public class ConfigUtil {
                 .setAliasFactory(new DefaultAliasFactory())
                 .setMapperFactory(new DefaultMapperFactory())
                 .setTableFactory(new DefaultTableFactory())
-                .setTypeHandlerFactory(new BaseTypeHandlerFactory());
+                .setTypeHandlerFactory(new DefaultTypeHandlerFactory());
         return defaultConfig;
     }
 
