@@ -8,26 +8,34 @@ import com.moxa.dream.util.wrapper.ObjectWrapper;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
-public class InsertExecutorHandler extends AbstractExecutorHandler {
-    public InsertExecutorHandler(StatementHandler statementHandler, Connection connection) throws SQLException {
-        super(statementHandler, connection);
+public class InsertExecutorHandler implements ExecutorHandler {
+    protected StatementHandler statementHandler;
+    private Connection connection;
+
+    public InsertExecutorHandler(StatementHandler statementHandler, Connection connection) {
+        this.statementHandler = statementHandler;
+        this.connection = connection;
     }
 
     @Override
     public Object execute(MappedStatement mappedStatement) throws SQLException {
-        Object result = super.execute(mappedStatement);
         String[] generatedKeys = mappedStatement.getGeneratedKeys();
         if (!ObjectUtil.isNull(generatedKeys)) {
-            Object arg = mappedStatement.getArg();
-            ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
+            statementHandler.prepare(connection, mappedStatement, Statement.RETURN_GENERATED_KEYS);
+            int result = statementHandler.executeUpdate(mappedStatement);
             ResultSet generatedKeysResult = statementHandler.getStatement().getGeneratedKeys();
-            int index = 0;
-            while (generatedKeysResult.next()) {
-                result = generatedKeysResult.getLong(0);
-                paramWrapper.set(generatedKeys[index++], result);
+            int index=0;
+            ObjectWrapper targetWrapper = ObjectWrapper.wrapper(mappedStatement.getArg());
+            while (generatedKeysResult.next()){
+                long value = generatedKeysResult.getLong(index+1);
+                targetWrapper.set(generatedKeys[index++],value);
             }
+            return result;
+        } else {
+            statementHandler.prepare(connection, mappedStatement, Statement.NO_GENERATED_KEYS);
+            return statementHandler.executeUpdate(mappedStatement);
         }
-        return result;
     }
 }

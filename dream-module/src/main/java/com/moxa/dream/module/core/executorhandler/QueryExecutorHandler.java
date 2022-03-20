@@ -7,6 +7,7 @@ import com.moxa.dream.module.mapped.MappedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class QueryExecutorHandler implements ExecutorHandler {
     private StatementHandler statementHandler;
@@ -21,7 +22,8 @@ public class QueryExecutorHandler implements ExecutorHandler {
 
     @Override
     public Object execute(MappedStatement mappedStatement) throws SQLException {
-        ResultSet resultSet = statementHandler.doQuery(connection, mappedStatement);
+        statementHandler.prepare(connection,mappedStatement, Statement.NO_GENERATED_KEYS);
+        ResultSet resultSet = statementHandler.executeQuery(mappedStatement);
         return resultSetHandler.result(resultSet, mappedStatement);
     }
 }

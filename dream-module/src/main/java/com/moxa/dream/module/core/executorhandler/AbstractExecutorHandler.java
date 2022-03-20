@@ -5,18 +5,20 @@ import com.moxa.dream.module.mapped.MappedStatement;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public abstract class AbstractExecutorHandler implements ExecutorHandler {
     protected StatementHandler statementHandler;
     private Connection connection;
 
-    public AbstractExecutorHandler(StatementHandler statementHandler, Connection connection) throws SQLException {
+    public AbstractExecutorHandler(StatementHandler statementHandler, Connection connection) {
         this.statementHandler = statementHandler;
         this.connection = connection;
     }
 
     @Override
     public Object execute(MappedStatement mappedStatement) throws SQLException {
-        return statementHandler.doUpdate(connection, mappedStatement);
+        statementHandler.prepare(connection,mappedStatement, Statement.NO_GENERATED_KEYS);
+        return statementHandler.executeUpdate(mappedStatement);
     }
 }

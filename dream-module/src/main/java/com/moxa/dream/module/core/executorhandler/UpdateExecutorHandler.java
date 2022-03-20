@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class UpdateExecutorHandler extends AbstractExecutorHandler {
 
-    public UpdateExecutorHandler(StatementHandler statementHandler, Connection connection) throws SQLException {
+    public UpdateExecutorHandler(StatementHandler statementHandler, Connection connection) {
         super(statementHandler, connection);
     }
 }
