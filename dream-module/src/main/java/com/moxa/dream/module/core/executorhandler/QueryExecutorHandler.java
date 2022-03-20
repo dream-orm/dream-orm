@@ -14,7 +14,7 @@ public class QueryExecutorHandler implements ExecutorHandler {
     private ResultSetHandler resultSetHandler;
     private Connection connection;
 
-    public QueryExecutorHandler(StatementHandler statementHandler, ResultSetHandler resultSetHandler, Connection connection) throws SQLException {
+    public QueryExecutorHandler(StatementHandler statementHandler, ResultSetHandler resultSetHandler, Connection connection){
         this.statementHandler = statementHandler;
         this.resultSetHandler = resultSetHandler;
         this.connection = connection;

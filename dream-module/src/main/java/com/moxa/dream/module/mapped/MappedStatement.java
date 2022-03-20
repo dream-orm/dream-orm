@@ -78,8 +78,8 @@ public class MappedStatement {
         return methodInfo.getSqlKey();
     }
 
-    public String[] getGeneratedKeys() {
-        return methodInfo.getGeneratedKeys();
+    public boolean isGeneratedKeys() {
+        return methodInfo.isGeneratedKeys();
     }
 
     public Map<String, ScanInvoker.TableScanInfo> getTableScanInfoMap() {

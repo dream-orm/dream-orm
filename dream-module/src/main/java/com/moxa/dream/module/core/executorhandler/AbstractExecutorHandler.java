@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public abstract class AbstractExecutorHandler implements ExecutorHandler {
     protected StatementHandler statementHandler;
-    private Connection connection;
+    protected Connection connection;
 
     public AbstractExecutorHandler(StatementHandler statementHandler, Connection connection) {
         this.statementHandler = statementHandler;

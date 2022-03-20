@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DeleteExecutorHandler extends AbstractExecutorHandler {
-    public DeleteExecutorHandler(StatementHandler statementHandler, Connection connection) throws SQLException {
+    public DeleteExecutorHandler(StatementHandler statementHandler, Connection connection) {
         super(statementHandler, connection);
     }
 }

@@ -24,7 +24,7 @@ public class MethodInfo {
     private PackageStatement statement;
     private CacheKey sqlKey;
     private Method method;
-    private String[] generatedKeys;
+    private boolean generatedKeys;
     private Map<Class, Object> builtMap = new HashMap<>();
 
     private MethodInfo() {
@@ -75,7 +75,7 @@ public class MethodInfo {
         return method;
     }
 
-    public String[] getGeneratedKeys() {
+    public boolean isGeneratedKeys() {
         return generatedKeys;
     }
 
@@ -117,7 +117,7 @@ public class MethodInfo {
             return this;
         }
 
-        public Builder generatedKeys(String[] generatedKeys) {
+        public Builder generatedKeys(boolean generatedKeys) {
             methodInfo.generatedKeys = generatedKeys;
             return this;
         }
