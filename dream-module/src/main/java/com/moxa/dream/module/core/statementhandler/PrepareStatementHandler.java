@@ -36,19 +36,19 @@ public class PrepareStatementHandler implements StatementHandler {
     public ResultSet executeQuery(MappedStatement mappedStatement) throws SQLException {
         doParameter(mappedStatement);
         doTimeOut(mappedStatement);
-        return statement.executeQuery(mappedStatement.getSql());
+        return statement.executeQuery();
     }
 
     @Override
     public int executeUpdate(MappedStatement mappedStatement) throws SQLException {
         doParameter(mappedStatement);
-        return statement.executeUpdate(mappedStatement.getSql());
+        return statement.executeUpdate();
     }
 
     @Override
     public void addBatch(MappedStatement mappedStatement) throws SQLException {
         doParameter(mappedStatement);
-        statement.addBatch(mappedStatement.getSql());
+        statement.addBatch();
     }
 
     @Override
