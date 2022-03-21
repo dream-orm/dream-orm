@@ -193,7 +193,7 @@ public class ConfigBuilder {
     }
 
     public ConfigBuilder typeHandlerWrapperList(List<String> typeHandlerWrappers) {
-        if (ObjectUtil.isNull(typeHandlerWrappers)) {
+        if (!ObjectUtil.isNull(typeHandlerWrappers)) {
             List<? extends TypeHandlerWrapper> typeHandlerWrapperList = typeHandlerWrappers.stream().map(typeHandlerWrapper -> {
                 Class<? extends TypeHandlerWrapper> typeHandlerWrapperClass = ReflectUtil.loadClass(typeHandlerWrapper);
                 return ReflectUtil.create(typeHandlerWrapperClass);

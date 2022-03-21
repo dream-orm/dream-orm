@@ -14,7 +14,7 @@ public class QueryExecutorHandler implements ExecutorHandler {
     private ResultSetHandler resultSetHandler;
     private Connection connection;
 
-    public QueryExecutorHandler(StatementHandler statementHandler, ResultSetHandler resultSetHandler, Connection connection){
+    public QueryExecutorHandler(StatementHandler statementHandler, ResultSetHandler resultSetHandler, Connection connection) {
         this.statementHandler = statementHandler;
         this.resultSetHandler = resultSetHandler;
         this.connection = connection;
@@ -22,7 +22,7 @@ public class QueryExecutorHandler implements ExecutorHandler {
 
     @Override
     public Object execute(MappedStatement mappedStatement) throws SQLException {
-        statementHandler.prepare(connection,mappedStatement, Statement.NO_GENERATED_KEYS);
+        statementHandler.prepare(connection, mappedStatement, Statement.NO_GENERATED_KEYS);
         ResultSet resultSet = statementHandler.executeQuery(mappedStatement);
         return resultSetHandler.result(resultSet, mappedStatement);
     }

@@ -18,7 +18,7 @@ public abstract class AbstractExecutorHandler implements ExecutorHandler {
 
     @Override
     public Object execute(MappedStatement mappedStatement) throws SQLException {
-        statementHandler.prepare(connection,mappedStatement, Statement.NO_GENERATED_KEYS);
+        statementHandler.prepare(connection, mappedStatement, Statement.NO_GENERATED_KEYS);
         return statementHandler.executeUpdate(mappedStatement);
     }
 }

@@ -1,7 +1,6 @@
 package com.moxa.dream.module.typehandler.wrapper;
 
 import com.moxa.dream.module.typehandler.handler.BaseTypeHandler;
-import com.moxa.dream.module.typehandler.handler.LongTypeHandler;
 import com.moxa.dream.module.typehandler.handler.ObjectTypeHandler;
 import com.moxa.dream.module.typehandler.util.TypeUtil;
 
