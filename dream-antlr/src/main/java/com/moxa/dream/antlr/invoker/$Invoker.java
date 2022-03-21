@@ -17,8 +17,8 @@ public class $Invoker extends AbstractInvoker {
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         ObjectWrapper paramWrapper = assist.getCustom(ObjectWrapper.class);
         String paramName = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
-        Object value = paramWrapper.get(paramName);
-        paramInfoList.add(new ParamInfo(paramName, value));
+        ParamInfo paramInfo = new ParamInfo(paramName, paramWrapper.get(paramName));
+        paramInfoList.add(paramInfo);
         return "?";
     }
 
@@ -27,31 +27,34 @@ public class $Invoker extends AbstractInvoker {
         return new Handler[0];
     }
 
-
     public List<ParamInfo> getParamInfoList() {
         return paramInfoList;
     }
 
     public static class ParamInfo {
-        private String param;
-        private Object value;
+        private String paramName;
+        private Object paramValue;
 
-        public ParamInfo(String param, Object value) {
-            this.param = param;
-            this.value = value;
+        public ParamInfo(String paramName) {
+            this(paramName, null);
         }
 
-        public String getParam() {
-            return param;
+        public ParamInfo(String paramName, Object paramValue) {
+            this.paramName = paramName;
+            this.paramValue = paramValue;
         }
 
-        public Object getValue() {
-            return value;
+        public String getParamName() {
+            return paramName;
         }
 
-        @Override
-        public String toString() {
-            return String.valueOf(value);
+        public Object getParamValue() {
+            return paramValue;
+        }
+
+        public void setParamValue(Object paramValue) {
+            this.paramValue = paramValue;
         }
     }
+
 }

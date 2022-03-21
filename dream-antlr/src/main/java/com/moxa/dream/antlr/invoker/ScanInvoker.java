@@ -5,17 +5,17 @@ import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.handler.scan.*;
-import com.moxa.dream.antlr.smt.InvokerStatement;
-import com.moxa.dream.antlr.smt.ListColumnStatement;
-import com.moxa.dream.antlr.smt.PackageStatement;
-import com.moxa.dream.antlr.smt.Statement;
+import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.util.common.LowHashMap;
+import com.moxa.dream.util.common.ObjectUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class ScanInvoker extends AbstractInvoker {
@@ -30,6 +30,8 @@ public class ScanInvoker extends AbstractInvoker {
 
     private ParamScanHandler paramScanHandler;
 
+    private InvokerScanHandler invokerScanHandler;
+
     private ScanInfo scanInfo = new ScanInfo();
 
     public ScanInvoker() {
@@ -38,6 +40,7 @@ public class ScanInvoker extends AbstractInvoker {
         updateScanHandler = new UpdateScanHandler(scanInfo);
         deleteScanHandler = new DeleteScanHandler(scanInfo);
         paramScanHandler = new ParamScanHandler(scanInfo);
+        invokerScanHandler = new InvokerScanHandler(scanInfo);
     }
 
     @Override
@@ -54,13 +57,33 @@ public class ScanInvoker extends AbstractInvoker {
         PackageStatement packageStatement = (PackageStatement) parentStatement;
         packageStatement.setValue(ScanInfo.class, scanInfo);
         invokerStatement.setStatement(columnList[0]);
+        List<InvokerStatement> invokerStatementList = scanInfo.getInvokerStatementList()
+                .stream()
+                .filter(invoker -> invoker.getParentStatement() != null)
+                .collect(Collectors.toList());
+        if (!ObjectUtil.isNull(invokerStatementList)) {
+            int i = 0;
+            for (; i < invokerStatementList.size(); i++) {
+                InvokerStatement invoker = invokerStatementList.get(i);
+                if (!invoker.getFunction().equals(AntlrInvokerFactory.$)) {
+                    break;
+                }
+            }
+            if (i == invokerStatementList.size()) {
+                for (InvokerStatement invoker : invokerStatementList) {
+                    invoker.setStatement(new SymbolStatement.MarkStatement());
+                }
+                $Invoker $invoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
+                scanInfo.setParamInfoList($invoker.getParamInfoList());
+            }
+        }
         return sql;
     }
 
 
     @Override
     public Handler[] handler() {
-        return new Handler[]{queryScanHandler, insertScanHandler, updateScanHandler, deleteScanHandler, paramScanHandler};
+        return new Handler[]{queryScanHandler, insertScanHandler, updateScanHandler, deleteScanHandler, paramScanHandler, invokerScanHandler};
     }
 
     public ScanInfo getScanInfo() {
@@ -71,32 +94,19 @@ public class ScanInvoker extends AbstractInvoker {
         private Command command = Command.NONE;
         private Map<String, TableScanInfo> tableScanInfoMap = new LowHashMap<>();
         private Map<String, ParamScanInfo> paramScanInfoMap = new HashMap<>();
-
-        public boolean contains(TableScanInfo tableScanInfo) {
-            if (tableScanInfoMap.containsKey(tableScanInfo.getAlias()))
-                return true;
-            else
-                return false;
-        }
-
-        public boolean contains(ParamScanInfo paramScanInfo) {
-            if (paramScanInfoMap.containsKey(paramScanInfo.getParam()))
-                return true;
-            else return false;
-        }
+        private List<InvokerStatement> invokerStatementList = new ArrayList<>();
+        private List<$Invoker.ParamInfo> paramInfoList;
 
         public void add(TableScanInfo tableScanInfo) {
-            if (contains(tableScanInfo)) {
-                return;
-            }
             tableScanInfoMap.put(tableScanInfo.getAlias(), tableScanInfo);
         }
 
         public void add(ParamScanInfo paramScanInfo) {
-            if (contains(paramScanInfo)) {
-                return;
-            }
             paramScanInfoMap.put(paramScanInfo.getParam(), paramScanInfo);
+        }
+
+        public void add(InvokerStatement invokerStatement) {
+            invokerStatementList.add(invokerStatement);
         }
 
         public Command getCommand() {
@@ -114,6 +124,18 @@ public class ScanInvoker extends AbstractInvoker {
 
         public Map<String, ParamScanInfo> getParamScanInfoMap() {
             return paramScanInfoMap;
+        }
+
+        public List<InvokerStatement> getInvokerStatementList() {
+            return invokerStatementList;
+        }
+
+        public List<$Invoker.ParamInfo> getParamInfoList() {
+            return paramInfoList;
+        }
+
+        public void setParamInfoList(List<$Invoker.ParamInfo> paramInfoList) {
+            this.paramInfoList = paramInfoList;
         }
     }
 

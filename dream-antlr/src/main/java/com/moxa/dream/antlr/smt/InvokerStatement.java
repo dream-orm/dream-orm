@@ -84,7 +84,14 @@ public class InvokerStatement extends Statement {
             }
         }
         if (index < fieldList.length) {
-            statement.parentStatement = parentStatement;
+            Statement parentStatement
+                    = statement.parentStatement
+                    = this.parentStatement;
+            this.parentStatement = null;
+            while (parentStatement != null) {
+                parentStatement.needCache = null;
+                parentStatement = parentStatement.getParentStatement();
+            }
         } else {
             throw new ReflectException("can not set statement");
         }

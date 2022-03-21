@@ -28,7 +28,7 @@ public class $Handler extends AbstractHandler {
         List<$Invoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
         if (paramInfoList != null) {
             int size = paramInfoList.size();
-            Object value = paramInfoList.get(size - 1).getValue();
+            Object value = paramInfoList.get(size - 1).getParamValue();
             //如果为空则参数去除，ok!
             if (ExprUtil.isEmpty(String.valueOf(value))) {
                 paramInfoList.remove(size - 1);

@@ -28,7 +28,9 @@ public abstract class ToSQL {
         Queue<Handler> handlerQueue = null;
         if (!ObjectUtil.isNull(invokerList)) {
             handlerQueue = new ArrayDeque<>();
-            for (Invoker invoker : new ArrayList<>(invokerList)) {
+            ArrayList<Invoker> invokerArrayList = new ArrayList<>(invokerList);
+            for (int i = invokerArrayList.size() - 1; i >= 0; i--) {
+                Invoker invoker = invokerArrayList.get(i);
                 if (invoker.isAccessible()) {
                     statement = assist.beforeChain(statement, this, handlerQueue, invoker.handle(), invokerList);
                     if (statement == null)

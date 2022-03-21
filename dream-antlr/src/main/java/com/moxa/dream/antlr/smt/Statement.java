@@ -3,7 +3,7 @@ package com.moxa.dream.antlr.smt;
 public abstract class Statement {
 
     protected Statement parentStatement;
-    private Boolean needCache;
+    Boolean needCache;
     private String quickValue;
 
     protected abstract Boolean isNeedInnerCache();

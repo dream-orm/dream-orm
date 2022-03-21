@@ -61,34 +61,42 @@ public abstract class AbstractDialectFactory implements DialectFactory {
 
     @Override
     public MappedStatement compile(MethodInfo methodInfo, Object arg) {
+        List<MappedParam> mappedParamList = null;
         PackageStatement statement = methodInfo.getStatement();
         ResultInfo resultInfo = getResultInfo(methodInfo, statement, arg);
-        $Invoker invoker = resultInfo.getSqlInvoker($Invoker.class);
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
-        ParamTypeMap paramTypeMap = methodInfo.get(ParamTypeMap.class);
-        if (paramTypeMap == null) {
-            synchronized (this) {
-                paramTypeMap = methodInfo.get(ParamTypeMap.class);
-                if (paramTypeMap == null) {
-                    paramTypeMap = new ParamTypeMap();
-                    methodInfo.set(ParamTypeMap.class, paramTypeMap);
+        List<$Invoker.ParamInfo> paramInfoList= scanInfo.getParamInfoList();
+        if(!ObjectUtil.isNull(paramInfoList)){
+            ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
+            for($Invoker.ParamInfo paramInfo:paramInfoList){
+                paramInfo.setParamValue(paramWrapper.get(paramInfo.getParamName()));
+            }
+        }else{
+            $Invoker invoker = resultInfo.getSqlInvoker($Invoker.class);
+            paramInfoList=invoker.getParamInfoList();
+        }
+        if(!ObjectUtil.isNull(paramInfoList)){
+            mappedParamList=new ArrayList<>();
+            ParamTypeMap paramTypeMap = methodInfo.get(ParamTypeMap.class);
+            if (paramTypeMap == null) {
+                synchronized (this) {
+                    paramTypeMap = methodInfo.get(ParamTypeMap.class);
+                    if (paramTypeMap == null) {
+                        paramTypeMap = new ParamTypeMap();
+                        methodInfo.set(ParamTypeMap.class, paramTypeMap);
+                    }
                 }
             }
-        }
-        List<MappedParam> mappedParamList = null;
-        if (invoker != null) {
             Configuration configuration = methodInfo.getConfiguration();
             TableFactory tableFactory = configuration.getTableFactory();
-            mappedParamList = new ArrayList<>();
             Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap = scanInfo.getParamScanInfoMap();
-            List<$Invoker.ParamInfo> paramInfoList = invoker.getParamInfoList();
             for ($Invoker.ParamInfo paramInfo : paramInfoList) {
-                ParamType paramType = paramTypeMap.get(paramInfo.getParam());
+                ParamType paramType = paramTypeMap.get(paramInfo.getParamName());
                 if (paramType == null) {
                     TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
                     ObjectUtil.requireNonNull(typeHandlerFactory, "Property 'typeHandlerFactory' is required");
-                    ScanInvoker.ParamScanInfo paramScanInfo = paramScanInfoMap.get(paramInfo.getParam());
-                    Object value = paramInfo.getValue();
+                    ScanInvoker.ParamScanInfo paramScanInfo = paramScanInfoMap.get(paramInfo.getParamName());
+                    Object value = paramInfo.getParamValue();
                     if (paramScanInfo != null) {
                         String table = paramScanInfo.getTable();
                         String column = paramScanInfo.getColumn();
@@ -116,14 +124,14 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                             fieldName = column;
                         ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
                         int jdbcType = columnInfo.getJdbcType();
-                        paramTypeMap.put(paramInfo.getParam(),
+                        paramTypeMap.put(paramInfo.getParamName(),
                                 paramType = new ParamType(columnInfo, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), jdbcType)));
                     } else {
-                        paramTypeMap.put(paramInfo.getParam(),
+                        paramTypeMap.put(paramInfo.getParamName(),
                                 paramType = new ParamType(null, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), Types.NULL)));
                     }
                 }
-                mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getValue(), paramType.getTypeHandler()));
+                mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler()));
             }
         }
         return new MappedStatement
@@ -133,7 +141,6 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                 .mappedParamList(mappedParamList)
                 .arg(arg)
                 .build();
-
     }
 
     protected ResultInfo getResultInfo(MethodInfo methodInfo, PackageStatement statement, Object arg) {

@@ -29,7 +29,7 @@ public abstract class AbstractInvoker implements Invoker {
     }
 
     protected void before(List<Invoker> invokerList) {
-        invokerList.add(0, this);
+        invokerList.add(this);
     }
 
     protected abstract String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException;
