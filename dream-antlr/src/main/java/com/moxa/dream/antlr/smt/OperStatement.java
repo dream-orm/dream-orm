@@ -13,8 +13,7 @@ public abstract class OperStatement extends Statement {
 
     @Override
     protected Boolean isNeedInnerCache() {
-        ConditionStatement conditionStatement = (ConditionStatement) getParentStatement();
-        return isNeedInnerCache(conditionStatement.getLeft(), conditionStatement.getRight());
+        return parentStatement.isNeedInnerCache();
     }
 
     public static class ADDStatement extends OperStatement {

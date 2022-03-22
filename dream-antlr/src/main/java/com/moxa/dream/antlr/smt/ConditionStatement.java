@@ -37,6 +37,6 @@ public class ConditionStatement extends Statement {
 
     @Override
     protected Boolean isNeedInnerCache() {
-        return isNeedInnerCache(left, oper, right);
+        return isNeedInnerCache(left, right);
     }
 }
