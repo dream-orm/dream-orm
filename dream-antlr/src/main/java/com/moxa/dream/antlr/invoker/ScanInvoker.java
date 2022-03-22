@@ -77,6 +77,7 @@ public class ScanInvoker extends AbstractInvoker {
                 scanInfo.setParamInfoList($invoker.getParamInfoList());
             }
         }
+        scanInfo.sql = sql;
         return sql;
     }
 
@@ -96,6 +97,7 @@ public class ScanInvoker extends AbstractInvoker {
         private Map<String, ParamScanInfo> paramScanInfoMap = new HashMap<>();
         private List<InvokerStatement> invokerStatementList = new ArrayList<>();
         private List<$Invoker.ParamInfo> paramInfoList;
+        private String sql;
 
         public void add(TableScanInfo tableScanInfo) {
             tableScanInfoMap.put(tableScanInfo.getAlias(), tableScanInfo);
@@ -136,6 +138,10 @@ public class ScanInvoker extends AbstractInvoker {
 
         public void setParamInfoList(List<$Invoker.ParamInfo> paramInfoList) {
             this.paramInfoList = paramInfoList;
+        }
+
+        public String getSql() {
+            return sql;
         }
     }
 

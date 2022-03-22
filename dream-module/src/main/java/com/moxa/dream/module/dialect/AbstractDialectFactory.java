@@ -63,20 +63,30 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     public MappedStatement compile(MethodInfo methodInfo, Object arg) {
         List<MappedParam> mappedParamList = null;
         PackageStatement statement = methodInfo.getStatement();
-        ResultInfo resultInfo = getResultInfo(methodInfo, statement, arg);
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
-        List<$Invoker.ParamInfo> paramInfoList= scanInfo.getParamInfoList();
-        if(!ObjectUtil.isNull(paramInfoList)){
-            ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
-            for($Invoker.ParamInfo paramInfo:paramInfoList){
-                paramInfo.setParamValue(paramWrapper.get(paramInfo.getParamName()));
+        List<$Invoker.ParamInfo> paramInfoList = null;
+        String sql = null;
+        if (scanInfo != null) {
+            paramInfoList = scanInfo.getParamInfoList();
+            if (paramInfoList != null) {
+                sql = scanInfo.getSql();
+                ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
+                for ($Invoker.ParamInfo paramInfo : paramInfoList) {
+                    paramInfo.setParamValue(paramWrapper.get(paramInfo.getParamName()));
+                }
             }
-        }else{
-            $Invoker invoker = resultInfo.getSqlInvoker($Invoker.class);
-            paramInfoList=invoker.getParamInfoList();
         }
-        if(!ObjectUtil.isNull(paramInfoList)){
-            mappedParamList=new ArrayList<>();
+        if (ObjectUtil.isNull(sql)) {
+            ResultInfo resultInfo = getResultInfo(methodInfo, statement, arg);
+            $Invoker invoker = resultInfo.getSqlInvoker($Invoker.class);
+            paramInfoList = invoker.getParamInfoList();
+            sql = resultInfo.getSql();
+            if(scanInfo==null){
+                scanInfo=statement.getValue(ScanInvoker.ScanInfo.class);
+            }
+        }
+        if (!ObjectUtil.isNull(paramInfoList)) {
+            mappedParamList = new ArrayList<>();
             ParamTypeMap paramTypeMap = methodInfo.get(ParamTypeMap.class);
             if (paramTypeMap == null) {
                 synchronized (this) {
@@ -137,7 +147,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         return new MappedStatement
                 .Builder()
                 .methodInfo(methodInfo)
-                .mappedSql(new MappedSql(scanInfo.getCommand(), resultInfo.getSql(), scanInfo.getTableScanInfoMap()))
+                .mappedSql(new MappedSql(scanInfo.getCommand(), sql, scanInfo.getTableScanInfoMap()))
                 .mappedParamList(mappedParamList)
                 .arg(arg)
                 .build();
