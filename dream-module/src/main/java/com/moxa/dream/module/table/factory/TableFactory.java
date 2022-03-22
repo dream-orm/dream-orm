@@ -8,6 +8,4 @@ public interface TableFactory {
 
     TableInfo getTableInfo(String table);
 
-    TableInfo getTableInfo(Class type);
-
 }
