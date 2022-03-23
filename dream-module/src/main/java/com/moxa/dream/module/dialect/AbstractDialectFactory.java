@@ -78,11 +78,16 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         }
         if (ObjectUtil.isNull(sql)) {
             ResultInfo resultInfo = getResultInfo(methodInfo, statement, arg);
-            $Invoker invoker = resultInfo.getSqlInvoker($Invoker.class);
-            paramInfoList = invoker.getParamInfoList();
             sql = resultInfo.getSql();
-            if(scanInfo==null){
-                scanInfo=statement.getValue(ScanInvoker.ScanInfo.class);
+            if (scanInfo == null) {
+                scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
+            }
+            $Invoker invoker = resultInfo.getSqlInvoker($Invoker.class);
+            if(invoker!=null) {
+                paramInfoList = invoker.getParamInfoList();
+            }else{
+                paramInfoList=new ArrayList<>();
+                scanInfo.setParamInfoList(paramInfoList);
             }
         }
         if (!ObjectUtil.isNull(paramInfoList)) {
