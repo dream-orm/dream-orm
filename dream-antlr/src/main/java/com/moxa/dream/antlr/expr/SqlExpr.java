@@ -1160,7 +1160,7 @@ public abstract class SqlExpr {
             Statement statement = nil();
             exprReader.pop();
             return statement;
-        } else throw new RuntimeException(ExprUtil.wrapper(this, exprReader));
+        } else throw new RuntimeException(ExprUtil.wrapper(exprReader));
     }
 
     protected Statement exprSelf(ExprInfo exprInfo) {

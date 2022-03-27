@@ -12,6 +12,4 @@ PageQuery {
     boolean offset() default false;
 
     String value() default "page";
-
-
 }

@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public class Page<E> extends ArrayList<E> implements Serializable {
     public static final long serialVersionUID = 42L;
-    private long total;
+    private Long total;
     private int pageNum;
     private int pageSize;
     private Collection<E> row;
@@ -35,11 +35,11 @@ public class Page<E> extends ArrayList<E> implements Serializable {
         this.count = count;
     }
 
-    public long getTotal() {
+    public Long getTotal() {
         return total;
     }
 
-    public void setTotal(long total) {
+    public void setTotal(Long total) {
         this.total = total;
     }
 
@@ -60,7 +60,7 @@ public class Page<E> extends ArrayList<E> implements Serializable {
         this.row = row;
     }
 
-    public long getStartRow() {
+    public Long getStartRow() {
         return startRow;
     }
 

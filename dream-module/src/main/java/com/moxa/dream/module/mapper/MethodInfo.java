@@ -151,12 +151,11 @@ public class MethodInfo {
             if (!ObjectUtil.isNull(methodInfo.sql)) {
                 DialectFactory dialectFactory = methodInfo.configuration.getDialectFactory();
                 ObjectUtil.requireNonNull(dialectFactory, "Property 'dialectFactory' is required");
-                PackageStatement statement = dialectFactory.compile(methodInfo);
-                dialectFactory.wrapper(statement, methodInfo);
+                methodInfo.statement = dialectFactory.compile(methodInfo);
+                ObjectUtil.requireNonNull(methodInfo.statement, "Property 'statement' is required");
+                dialectFactory.wrapper(methodInfo);
                 CacheKey sqlKey = dialectFactory.getCacheKey(methodInfo);
-                ObjectUtil.requireNonNull(statement, "Property 'statement' is required");
                 ObjectUtil.requireNonNull(sqlKey, "Property 'sqlKey' is required");
-                methodInfo.statement = statement;
                 methodInfo.sqlKey = sqlKey;
             }
             return methodInfo;

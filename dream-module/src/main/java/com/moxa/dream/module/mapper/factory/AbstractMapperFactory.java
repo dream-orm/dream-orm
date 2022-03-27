@@ -44,16 +44,11 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 MethodInfo.Builder builder = builderMap.get(name);
                 MethodInfo methodInfo = builder.build();
                 if (methodInfo.getStatement() != null) {
-                    applyCustom(methodInfo);
                     methodInfoMap.put(methodInfo.getMethod(), methodInfo);
                 }
             }
             this.mapperTypeMap.put(mapperClass, getAllInterface(mapperClass));
         }
-    }
-
-    protected void applyCustom(MethodInfo methodInfo) {
-
     }
 
     protected abstract void fillMethodInfoFromResource(Configuration configuration, Class type, Map<String, MethodInfo.Builder> builderMap);

@@ -1,7 +1,7 @@
 package com.moxa.dream.driver.page.interceptor;
 
 import com.moxa.dream.driver.page.Page;
-import com.moxa.dream.driver.page.wrapper.PageWrapper;
+import com.moxa.dream.driver.page.annotation.PageQuery;
 import com.moxa.dream.module.antlr.handler.PageHandler;
 import com.moxa.dream.module.core.executor.Executor;
 import com.moxa.dream.module.dialect.DialectFactory;
@@ -21,9 +21,9 @@ public class PageInterceptor extends AbstractInterceptor {
     @Override
     public Object interceptor(Invocation invocation) throws Throwable {
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
-        PageWrapper.PageLink pageLink = mappedStatement.get(PageWrapper.PageLink.class);
-        if (pageLink != null) {
-            String link = pageLink.getPageLink();
+        PageQuery pageQuery = mappedStatement.get(PageQuery.class);
+        if (pageQuery != null) {
+            String link = pageQuery.value();
             PageHandler.PageCount pageCount = mappedStatement.get(PageHandler.PageCount.class);
             if (pageCount != null) {
                 Object arg = mappedStatement.getArg();

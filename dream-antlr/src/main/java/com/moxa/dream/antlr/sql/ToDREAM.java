@@ -19,6 +19,14 @@ public class ToDREAM extends ToSQL {
 
     }
 
+    protected String beforeCache(Statement statement) {
+        return null;
+    }
+
+    protected void afterCache(Statement statement, String sql) {
+
+    }
+
     @Override
     protected String toString(PackageStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return toStr(statement.getStatement(), assist, invokerList);
@@ -320,7 +328,8 @@ public class ToDREAM extends ToSQL {
 
     @Override
     protected String toString(SingleMarkStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "`" + toStr(statement.getStatement(), assist, invokerList) + "`";
+//        return "`" + toStr(statement.getStatement(), assist, invokerList) + "`";
+        return toStr(statement.getStatement(), assist, invokerList);
     }
 
     @Override

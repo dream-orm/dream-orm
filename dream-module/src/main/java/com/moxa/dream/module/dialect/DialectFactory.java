@@ -21,5 +21,5 @@ public interface DialectFactory {
 
     CacheKey getCacheKey(MethodInfo methodInfo);
 
-    void wrapper(PackageStatement statement, MethodInfo methodInfo);
+    void wrapper(MethodInfo methodInfo);
 }

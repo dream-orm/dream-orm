@@ -19,10 +19,14 @@ public abstract class ToSQL {
         return new ResultInfo(toStr(statement, assist, null), assist.getSqlInvokerMap());
     }
 
+    protected abstract String beforeCache(Statement statement);
+
+    protected abstract void afterCache(Statement statement, String sql);
+
     public String toStr(Statement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         if (statement == null)
             return "";
-        String sql = statement.getQuickValue();
+        String sql = beforeCache(statement);
         if (sql != null)
             return sql;
         Queue<Handler> handlerQueue = null;
@@ -528,8 +532,7 @@ public abstract class ToSQL {
         }
         if (assist != null && handlerQueue != null && !handlerQueue.isEmpty())
             sql = assist.afterChain(handlerQueue, sql);
-        if (statement.isNeedCache())
-            statement.setQuickValue(sql);
+        afterCache(statement, sql);
         return sql;
     }
 

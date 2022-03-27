@@ -12,8 +12,9 @@ import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.module.antlr.wrapper.ScanWrapper;
-import com.moxa.dream.module.antlr.wrapper.Wrapper;
+import com.moxa.dream.module.antlr.decoration.AnnotationDecoration;
+import com.moxa.dream.module.antlr.decoration.Decoration;
+import com.moxa.dream.module.antlr.decoration.ScanDecoration;
 import com.moxa.dream.module.cache.CacheKey;
 import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.mapped.MappedParam;
@@ -83,10 +84,10 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                 scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
             }
             $Invoker invoker = resultInfo.getSqlInvoker($Invoker.class);
-            if(invoker!=null) {
+            if (invoker != null) {
                 paramInfoList = invoker.getParamInfoList();
-            }else{
-                paramInfoList=new ArrayList<>();
+            } else {
+                paramInfoList = new ArrayList<>();
                 scanInfo.setParamInfoList(paramInfoList);
             }
         }
@@ -247,24 +248,24 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     protected abstract MyFunctionFactory getMyFunctionFactory();
 
     @Override
-    public void wrapper(PackageStatement statement, MethodInfo methodInfo) {
-        List<Wrapper> allWrapperList = new ArrayList<>();
-        List<Wrapper> defaultWrapperList = getDefaultWrapList();
-        List<Wrapper> wrapperList = getWrapList();
-        if (!ObjectUtil.isNull(wrapperList)) {
-            allWrapperList.addAll(wrapperList);
+    public void wrapper(MethodInfo methodInfo) {
+        List<Decoration> allDecorationList = new ArrayList<>();
+        List<Decoration> defaultDecorationList = getDefaultWrapList();
+        List<Decoration> decorationList = getWrapList();
+        if (!ObjectUtil.isNull(decorationList)) {
+            allDecorationList.addAll(decorationList);
         }
-        allWrapperList.addAll(defaultWrapperList);
-        for (Wrapper wrapper : allWrapperList) {
-            wrapper.wrapper(statement, methodInfo);
+        allDecorationList.addAll(defaultDecorationList);
+        for (Decoration decoration : allDecorationList) {
+            decoration.decorate(methodInfo);
         }
     }
 
-    private List<Wrapper> getDefaultWrapList() {
-        return List.of(new ScanWrapper());
+    private List<Decoration> getDefaultWrapList() {
+        return List.of(new ScanDecoration(), new AnnotationDecoration());
     }
 
-    protected abstract List<Wrapper> getWrapList();
+    protected abstract List<Decoration> getWrapList();
 
 
     static class ParamTypeMap {

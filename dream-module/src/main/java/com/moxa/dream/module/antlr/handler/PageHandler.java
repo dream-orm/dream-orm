@@ -74,7 +74,6 @@ public class PageHandler extends AbstractHandler {
                 .colType(Long.class)
                 .rowType(NonCollection.class)
                 .paramNameList(this.methodInfo.getParamNameList())
-                .name(this.methodInfo.getName())
                 .timeOut(this.methodInfo.getTimeOut())
                 .build();
         this.methodInfo.set(PageCount.class, new PageCount(methodInfo));
@@ -125,7 +124,9 @@ public class PageHandler extends AbstractHandler {
         }
         String sql = "select t_tmp.* from(" + toDREAM.toStr(queryStatement, null, null) + ")t_tmp " + toDREAM.toStr(limitStatement, null, null);
         QueryStatement pageQueryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
+        Statement parentStatement = queryStatement.getParentStatement();
         ReflectUtil.copy(queryStatement, pageQueryStatement);
+        queryStatement.setParentStatement(parentStatement);
     }
 
     @Override

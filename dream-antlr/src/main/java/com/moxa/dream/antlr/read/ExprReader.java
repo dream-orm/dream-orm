@@ -30,6 +30,10 @@ public class ExprReader extends StringReader {
         this.myFunctionFactory = myFunctionFactory;
     }
 
+    public String getSql() {
+        return this.value;
+    }
+
     public ExprInfo push() {
         mark();
         int c = read();

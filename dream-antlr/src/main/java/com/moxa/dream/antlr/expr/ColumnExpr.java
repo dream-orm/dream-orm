@@ -69,11 +69,10 @@ public class ColumnExpr extends SqlExpr {
     }
 
     public static class SingleMarkExpr extends HelperExpr {
-        //        private Statement statement;
         private SingleMarkStatement statement = new SingleMarkStatement();
 
         public SingleMarkExpr(ExprReader exprReader) {
-            this(exprReader, () -> new CompareExpr(exprReader, () -> new ColumnExpr(exprReader)));
+            this(exprReader, () -> new CompareExpr(exprReader));
         }
 
         public SingleMarkExpr(ExprReader exprReader, Helper helper) {
@@ -91,7 +90,28 @@ public class ColumnExpr extends SqlExpr {
         }
 
         @Override
-        protected Statement exprSelf(ExprInfo exprInfo) {
+        protected Statement exprSelect(ExprInfo exprInfo) {
+            statement.setStatement(new CrudExpr(exprReader).expr());
+            setExprTypes(ExprType.SINGLE_MARK);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprInsert(ExprInfo exprInfo) {
+            statement.setStatement(new CrudExpr(exprReader).expr());
+            setExprTypes(ExprType.SINGLE_MARK);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprUpdate(ExprInfo exprInfo) {
+            statement.setStatement(new CrudExpr(exprReader).expr());
+            setExprTypes(ExprType.SINGLE_MARK);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprDelete(ExprInfo exprInfo) {
             statement.setStatement(new CrudExpr(exprReader).expr());
             setExprTypes(ExprType.SINGLE_MARK);
             return expr();

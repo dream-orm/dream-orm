@@ -1,4 +1,4 @@
-package com.moxa.dream.module.antlr.wrapper;
+package com.moxa.dream.module.antlr.decoration;
 
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
@@ -6,9 +6,10 @@ import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.module.mapper.MethodInfo;
 
-public class ScanWrapper implements Wrapper {
+public class ScanDecoration implements Decoration {
     @Override
-    public void wrapper(PackageStatement packageStatement, MethodInfo methodInfo) {
+    public void decorate(MethodInfo methodInfo) {
+        PackageStatement packageStatement = methodInfo.getStatement();
         InvokerStatement scanStatement = InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE,
                 AntlrInvokerFactory.SCAN, ",",
                 packageStatement.getStatement());

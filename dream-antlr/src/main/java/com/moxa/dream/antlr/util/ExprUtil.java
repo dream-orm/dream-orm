@@ -1,14 +1,13 @@
 package com.moxa.dream.antlr.util;
 
+import com.moxa.dream.antlr.bind.ExprInfo;
 import com.moxa.dream.antlr.bind.ExprType;
-import com.moxa.dream.antlr.expr.SqlExpr;
 import com.moxa.dream.antlr.read.ExprReader;
-import com.moxa.dream.antlr.smt.QueryStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
-public class ExprUtil {
+import java.util.Stack;
 
-    private static ExpandWrapper expandWrapper = new ExpandWrapper();
+public class ExprUtil {
 
     public static boolean isLetter(int c) {
         return 65 <= c && c <= 90 || 97 <= c && c <= 122 || c == 95 || c == 83 || c == 36;
@@ -40,10 +39,6 @@ public class ExprUtil {
 
     public static boolean isDot(int c) {
         return c == 46;
-    }
-
-    public static QueryStatement expandQuery(QueryStatement queryStatement) {
-        return expandWrapper.expandQuery(queryStatement);
     }
 
     public static ExprType getExprTypeInLetter(String info) {
@@ -333,8 +328,15 @@ public class ExprUtil {
         }
     }
 
-    public static String wrapper(SqlExpr sqlExpr, ExprReader exprReader) {
-        return expandWrapper.wrapper(sqlExpr, exprReader);
+    public static String wrapper(ExprReader exprReader) {
+        Stack<ExprInfo> exprInfoStack = exprReader.getExprInfoStack();
+        StringBuilder builder = new StringBuilder();
+        builder.append("SQL:'" + exprReader.getSql() + "'parsing failed,accepted type:\n");
+        int size = exprInfoStack.size();
+        while (!exprInfoStack.isEmpty()) {
+            builder.append((size--) + ":\t" + exprInfoStack.pop() + "\n");
+        }
+        return builder.toString();
     }
 
     public static boolean isLBrace(int c) {
