@@ -21,15 +21,7 @@
             </xs:sequence>
             <xs:attribute name="name" use="required"/>
             <xs:attribute name="timeOut"/>
-            <xs:attribute name="proxy">
-                <xs:simpleType>
-                    <xs:restriction>
-                        <xs:enumeration value="false"/>
-                        <xs:enumeration value="true"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
-        </xs:complexType>
+         </xs:complexType>
     </xs:element>
     <xs:element name="methodRef">
         <xs:complexType>
@@ -50,14 +42,6 @@
                 <xs:element ref="methodRef" minOccurs="0"/>
                 <xs:element ref="argList" minOccurs="0"/>
             </xs:sequence>
-            <xs:attribute name="lazy">
-                <xs:simpleType>
-                    <xs:restriction>
-                        <xs:enumeration value="true"/>
-                        <xs:enumeration value="false"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="argList">

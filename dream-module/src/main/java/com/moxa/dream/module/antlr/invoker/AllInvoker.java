@@ -57,7 +57,7 @@ public class AllInvoker extends AbstractInvoker {
             for (String table : tableList) {
                 ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(table);
                 ObjectUtil.requireNonNull(tableScanInfo, "table '" + table + "' was registered");
-                _tableScanInfoMap.put(table, tableScanInfo);
+                _tableScanInfoMap.put(tableScanInfo.getTable(), tableScanInfo);
             }
             tableScanInfoMap = _tableScanInfoMap;
         }

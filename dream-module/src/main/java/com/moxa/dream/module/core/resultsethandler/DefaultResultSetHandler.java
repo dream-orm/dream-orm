@@ -355,6 +355,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                             Object value = wrapper.get(valueName);
                             argWrapper.set(paramName, value);
                         }
+                        arg=argWrapper.getObject();
                     }
                     MappedStatement mappedStatement = dialectFactory.compile(methodInfo, arg);
                     return executor.query(mappedStatement);
