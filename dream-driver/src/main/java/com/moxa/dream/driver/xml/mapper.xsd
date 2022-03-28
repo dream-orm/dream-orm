@@ -21,7 +21,7 @@
             </xs:sequence>
             <xs:attribute name="name" use="required"/>
             <xs:attribute name="timeOut"/>
-         </xs:complexType>
+        </xs:complexType>
     </xs:element>
     <xs:element name="methodRef">
         <xs:complexType>

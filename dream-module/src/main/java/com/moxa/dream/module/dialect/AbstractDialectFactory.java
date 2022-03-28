@@ -248,21 +248,19 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     protected abstract MyFunctionFactory getMyFunctionFactory();
 
     @Override
-    public void wrapper(MethodInfo methodInfo) {
+    public void decoration(MethodInfo methodInfo) {
         List<Decoration> allDecorationList = new ArrayList<>();
-        List<Decoration> defaultDecorationList = getDefaultWrapList();
+        List<Decoration> beforeDecorationList = List.of(new AnnotationDecoration());
         List<Decoration> decorationList = getWrapList();
+        List<Decoration> afterDecorationList = List.of(new ScanDecoration());
+        allDecorationList.addAll(beforeDecorationList);
         if (!ObjectUtil.isNull(decorationList)) {
             allDecorationList.addAll(decorationList);
         }
-        allDecorationList.addAll(defaultDecorationList);
+        allDecorationList.addAll(afterDecorationList);
         for (Decoration decoration : allDecorationList) {
             decoration.decorate(methodInfo);
         }
-    }
-
-    private List<Decoration> getDefaultWrapList() {
-        return List.of(new ScanDecoration(), new AnnotationDecoration());
     }
 
     protected abstract List<Decoration> getWrapList();

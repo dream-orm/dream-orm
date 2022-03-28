@@ -153,7 +153,7 @@ public class MethodInfo {
                 ObjectUtil.requireNonNull(dialectFactory, "Property 'dialectFactory' is required");
                 methodInfo.statement = dialectFactory.compile(methodInfo);
                 ObjectUtil.requireNonNull(methodInfo.statement, "Property 'statement' is required");
-                dialectFactory.wrapper(methodInfo);
+                dialectFactory.decoration(methodInfo);
                 CacheKey sqlKey = dialectFactory.getCacheKey(methodInfo);
                 ObjectUtil.requireNonNull(sqlKey, "Property 'sqlKey' is required");
                 methodInfo.sqlKey = sqlKey;

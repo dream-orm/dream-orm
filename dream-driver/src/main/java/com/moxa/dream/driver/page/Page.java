@@ -1,11 +1,9 @@
 package com.moxa.dream.driver.page;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Page<E> extends ArrayList<E> implements Serializable {
-    public static final long serialVersionUID = 42L;
+public class Page<E> extends ArrayList<E> {
     private Long total;
     private int pageNum;
     private int pageSize;
