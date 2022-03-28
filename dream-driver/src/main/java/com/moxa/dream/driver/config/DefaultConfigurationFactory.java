@@ -1,11 +1,20 @@
 package com.moxa.dream.driver.config;
 
+import com.moxa.dream.driver.alias.DefaultAliasFactory;
+import com.moxa.dream.driver.factory.DefaultDialectFactory;
+import com.moxa.dream.driver.factory.DefaultListenerFactory;
+import com.moxa.dream.driver.factory.DefaultMapperFactory;
 import com.moxa.dream.driver.xml.builder.XMLBuilder;
 import com.moxa.dream.driver.xml.builder.config.ConfigurationBuilder;
 import com.moxa.dream.driver.xml.moudle.XmlCallback;
 import com.moxa.dream.driver.xml.moudle.XmlHandler;
 import com.moxa.dream.driver.xml.moudle.XmlParser;
+import com.moxa.dream.module.cache.factory.DefaultCacheFactory;
 import com.moxa.dream.module.config.Configuration;
+import com.moxa.dream.module.plugin.factory.JavaPluginFactory;
+import com.moxa.dream.module.table.factory.DefaultTableFactory;
+import com.moxa.dream.module.transaction.factory.JdbcTransactionFactory;
+import com.moxa.dream.module.typehandler.factory.DefaultTypeHandlerFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 import org.xml.sax.InputSource;
 
@@ -17,6 +26,19 @@ public class DefaultConfigurationFactory implements ConfigurationFactory {
 
     @Override
     public void setDefaultConfig(DefaultConfig defaultConfig) {
+        if (defaultConfig == null) {
+            defaultConfig = new DefaultConfig();
+            defaultConfig
+                    .setAliasFactory(new DefaultAliasFactory())
+                    .setCacheFactory(new DefaultCacheFactory())
+                    .setMapperFactory(new DefaultMapperFactory())
+                    .setTableFactory(new DefaultTableFactory())
+                    .setDialectFactory(new DefaultDialectFactory())
+                    .setTransactionFactory(new JdbcTransactionFactory())
+                    .setPluginFactory(new JavaPluginFactory())
+                    .setListenerFactory(new DefaultListenerFactory())
+                    .setTypeHandlerFactory(new DefaultTypeHandlerFactory());
+        }
         this.defaultConfig = defaultConfig;
     }
 

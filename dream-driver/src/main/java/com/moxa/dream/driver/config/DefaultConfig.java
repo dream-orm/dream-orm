@@ -2,6 +2,7 @@ package com.moxa.dream.driver.config;
 
 import com.moxa.dream.driver.alias.AliasFactory;
 import com.moxa.dream.module.cache.factory.CacheFactory;
+import com.moxa.dream.module.core.listener.factory.ListenerFactory;
 import com.moxa.dream.module.datasource.DataSourceFactory;
 import com.moxa.dream.module.dialect.DialectFactory;
 import com.moxa.dream.module.mapper.factory.MapperFactory;
@@ -23,7 +24,7 @@ public class DefaultConfig {
     private TransactionFactory transactionFactory;
     private DataSourceFactory dataSourceFactory;
     private PluginFactory pluginFactory;
-
+    private ListenerFactory listenerFactory;
     private List<String> mapperPackages;
     private List<String> tablePackages;
     private String dialect;
@@ -107,6 +108,15 @@ public class DefaultConfig {
 
     public DefaultConfig setPluginFactory(PluginFactory pluginFactory) {
         this.pluginFactory = pluginFactory;
+        return this;
+    }
+
+    public ListenerFactory getListenerFactory() {
+        return listenerFactory;
+    }
+
+    public DefaultConfig setListenerFactory(ListenerFactory listenerFactory) {
+        this.listenerFactory = listenerFactory;
         return this;
     }
 

@@ -44,6 +44,8 @@ public class ConfigBuilder {
             TableFactory tableFactory = defaultConfig.getTableFactory();
             TypeHandlerFactory typeHandlerFactory = defaultConfig.getTypeHandlerFactory();
             DialectFactory dialectFactory = defaultConfig.getDialectFactory();
+            PluginFactory pluginFactory = defaultConfig.getPluginFactory();
+            ListenerFactory listenerFactory = defaultConfig.getListenerFactory();
             TransactionFactory transactionFactory = defaultConfig.getTransactionFactory();
             DataSourceFactory dataSourceFactory = defaultConfig.getDataSourceFactory();
             if (cacheFactory != null) {
@@ -60,6 +62,12 @@ public class ConfigBuilder {
             }
             if (dialectFactory != null) {
                 configuration.setDialectFactory(dialectFactory);
+            }
+            if (pluginFactory != null) {
+                configuration.setPluginFactory(pluginFactory);
+            }
+            if (listenerFactory != null) {
+                configuration.setListenerFactory(listenerFactory);
             }
             if (transactionFactory != null) {
                 configuration.setTransactionFactory(transactionFactory);
