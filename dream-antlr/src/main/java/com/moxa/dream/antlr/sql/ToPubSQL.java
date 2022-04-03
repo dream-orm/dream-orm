@@ -11,13 +11,6 @@ import java.util.List;
 
 public class ToPubSQL extends ToDREAM {
 
-    protected String beforeCache(Statement statement) {
-        String sql = statement.getQuickValue();
-        if (sql != null)
-            return sql;
-        else
-            return null;
-    }
 
     protected void afterCache(Statement statement, String sql) {
         if (statement.isNeedCache())

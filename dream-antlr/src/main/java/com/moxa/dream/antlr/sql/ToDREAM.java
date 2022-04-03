@@ -20,8 +20,13 @@ public class ToDREAM extends ToSQL {
     }
 
     protected String beforeCache(Statement statement) {
-        return null;
+        String sql = statement.getQuickValue();
+        if (sql != null)
+            return sql;
+        else
+            return null;
     }
+
 
     protected void afterCache(Statement statement, String sql) {
 

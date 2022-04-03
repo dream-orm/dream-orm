@@ -9,7 +9,7 @@ import java.util.*;
 public interface ObjectFactoryWrapper {
     static ObjectFactoryWrapper wrapper(Class type) {
         if (ReflectUtil.isBaseClass(type)) {
-            return new BaseObjectFactoryWrapper();
+            return new BasicObjectFactoryWrapper();
         } else if (type.isAssignableFrom(ArrayDeque.class)) {
             return new ArrayDequeObjectFactoryWrapper();
         } else if (type.isAssignableFrom(ArrayList.class)) {

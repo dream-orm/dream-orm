@@ -1,10 +1,10 @@
 package com.moxa.dream.util.reflection.factory;
 
 
-public class BaseObjectFactory implements ObjectFactory {
+public class BasicObjectFactory implements ObjectFactory {
     private Object result;
 
-    public BaseObjectFactory(Object target) {
+    public BasicObjectFactory(Object target) {
         result = target;
     }
 
@@ -15,7 +15,7 @@ public class BaseObjectFactory implements ObjectFactory {
 
     @Override
     public Object get(String property) {
-        return null;
+        return result;
     }
 
     @Override

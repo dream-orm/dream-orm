@@ -81,7 +81,7 @@ public class MethodInfo {
 
     public String getId() {
         if (method == null)
-            return name;
+            return "";
         else
             return method.getDeclaringClass().getName() + "." + method.getName();
     }

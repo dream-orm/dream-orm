@@ -2,6 +2,7 @@ package com.moxa.dream.module.mapped;
 
 import com.moxa.dream.antlr.bind.Command;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
+import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.module.cache.CacheKey;
 import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.mapper.EachInfo;
@@ -42,6 +43,13 @@ public class MappedStatement {
         return methodInfo;
     }
 
+    public String getId() {
+        return methodInfo.getId();
+    }
+
+    public PackageStatement getStatement(){
+        return methodInfo.getStatement();
+    }
     public Object getArg() {
         return arg;
     }

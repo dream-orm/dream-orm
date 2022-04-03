@@ -71,9 +71,11 @@ public abstract class AbstractDialectFactory implements DialectFactory {
             paramInfoList = scanInfo.getParamInfoList();
             if (paramInfoList != null) {
                 sql = scanInfo.getSql();
-                ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
-                for ($Invoker.ParamInfo paramInfo : paramInfoList) {
-                    paramInfo.setParamValue(paramWrapper.get(paramInfo.getParamName()));
+                if(paramInfoList.size()>0) {
+                    ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
+                    for ($Invoker.ParamInfo paramInfo : paramInfoList) {
+                        paramInfo.setParamValue(paramWrapper.get(paramInfo.getParamName()));
+                    }
                 }
             }
         }
@@ -195,10 +197,8 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     private Map<Class, Object> getDefaultCustomMap(MethodInfo methodInfo, Object arg) {
         Map<Class, Object> customMap = new HashMap<>();
         customMap.put(MethodInfo.class, methodInfo);
-        if (arg != null && !(arg instanceof Map)) {
-            Map<String, Object> paramMap = new HashMap<>();
-            paramMap.put(null, arg);
-            arg = paramMap;
+        if (arg == null) {
+            arg = new HashMap<>();
         }
         customMap.put(ObjectWrapper.class, ObjectWrapper.wrapper(arg));
         return customMap;

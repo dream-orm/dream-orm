@@ -53,7 +53,7 @@ public class ObjectWrapper {
                 ObjectWrapper wrapper = ObjectWrapper.wrapper(value);
                 targetFactory = wrapper.objectFactory;
             }
-            return targetFactory.get(propertyList[property.length() - 1]);
+            return targetFactory.get(propertyList[propertyList.length - 1]);
         } else {
             return objectFactory.get(property);
         }
