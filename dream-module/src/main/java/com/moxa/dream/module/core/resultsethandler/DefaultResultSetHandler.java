@@ -11,15 +11,15 @@ import com.moxa.dream.module.mapped.MappedResult;
 import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.module.mapper.EachInfo;
 import com.moxa.dream.module.mapper.factory.MapperFactory;
-import com.moxa.dream.module.reflect.factory.ObjectFactory;
-import com.moxa.dream.module.reflect.util.NonCollection;
 import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableInfo;
 import com.moxa.dream.module.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.reflect.ReflectUtil;
-import com.moxa.dream.util.wrapper.ObjectWrapper;
+import com.moxa.dream.util.reflection.factory.ObjectFactory;
+import com.moxa.dream.util.reflection.util.NonCollection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

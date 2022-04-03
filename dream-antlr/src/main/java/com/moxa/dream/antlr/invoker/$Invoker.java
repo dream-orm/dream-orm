@@ -5,7 +5,7 @@ import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.util.wrapper.ObjectWrapper;
+import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.util.ArrayList;
 import java.util.List;

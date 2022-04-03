@@ -9,7 +9,7 @@ import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.wrapper.ObjectWrapper;
+import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.util.Arrays;
 import java.util.Collection;

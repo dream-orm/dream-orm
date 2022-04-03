@@ -1,7 +1,7 @@
 package com.moxa.dream.driver.xml.util;
 
+import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.reflect.ReflectUtil;
-import com.moxa.dream.util.wrapper.ObjectWrapper;
 import org.xml.sax.Attributes;
 
 import java.util.HashMap;

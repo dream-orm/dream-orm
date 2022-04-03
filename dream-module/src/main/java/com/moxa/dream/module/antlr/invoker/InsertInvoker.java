@@ -18,8 +18,8 @@ import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableInfo;
 import com.moxa.dream.module.table.factory.TableFactory;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.reflect.ReflectUtil;
-import com.moxa.dream.util.wrapper.ObjectWrapper;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

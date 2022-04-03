@@ -1,6 +1,6 @@
 package com.moxa.dream.module.annotation;
 
-import com.moxa.dream.module.reflect.util.NullObject;
+import com.moxa.dream.util.reflection.util.NullObject;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -14,12 +14,12 @@ import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToDREAM;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.module.mapper.MethodInfo;
-import com.moxa.dream.module.reflect.util.NonCollection;
 import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableInfo;
 import com.moxa.dream.module.table.factory.TableFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
+import com.moxa.dream.util.reflection.util.NonCollection;
 
 import java.util.List;
 

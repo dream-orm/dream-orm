@@ -7,7 +7,7 @@ import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.util.wrapper.ObjectWrapper;
+import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.util.List;
 

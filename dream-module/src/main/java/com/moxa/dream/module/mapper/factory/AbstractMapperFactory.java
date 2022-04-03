@@ -8,11 +8,11 @@ import com.moxa.dream.module.config.Configuration;
 import com.moxa.dream.module.mapper.EachInfo;
 import com.moxa.dream.module.mapper.MethodInfo;
 import com.moxa.dream.module.mapper.handler.MapperHandler;
-import com.moxa.dream.module.reflect.util.NonCollection;
-import com.moxa.dream.module.reflect.util.NullObject;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.BaseReflectHandler;
 import com.moxa.dream.util.reflect.ReflectUtil;
+import com.moxa.dream.util.reflection.util.NonCollection;
+import com.moxa.dream.util.reflection.util.NullObject;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;

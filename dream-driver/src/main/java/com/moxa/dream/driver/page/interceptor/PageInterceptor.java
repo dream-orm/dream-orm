@@ -11,7 +11,7 @@ import com.moxa.dream.module.plugin.PluginException;
 import com.moxa.dream.module.plugin.interceptor.AbstractInterceptor;
 import com.moxa.dream.module.plugin.invocation.Invocation;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.wrapper.ObjectWrapper;
+import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.lang.reflect.Method;
 import java.util.Collection;

@@ -27,7 +27,7 @@ import com.moxa.dream.module.table.factory.TableFactory;
 import com.moxa.dream.module.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.module.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.wrapper.ObjectWrapper;
+import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.sql.Types;
 import java.util.*;
