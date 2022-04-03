@@ -2,7 +2,6 @@ package com.moxa.dream.module.mapped;
 
 import com.moxa.dream.module.reflect.factory.ObjectFactory;
 import com.moxa.dream.module.reflect.wrapper.ObjectFactoryWrapper;
-import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,12 +16,12 @@ public class MappedResult {
     private MappedColumn[] primaryList = new MappedColumn[0];
     private MappedColumn[] mappedColumnList = new MappedColumn[0];
     private Map<String, MappedResult> childResultMappingMap = new HashMap<>();
-    private PropertyInfo propertyInfo;
+    private String property;
 
-    public MappedResult(Class<? extends Collection> rowType, Class colType, PropertyInfo propertyInfo) {
+    public MappedResult(Class<? extends Collection> rowType, Class colType, String property) {
         this.rowType = rowType == null ? Collection.class : rowType;
         this.colType = colType == null ? Object.class : colType;
-        this.propertyInfo = propertyInfo;
+        this.property = property;
         this.rowObjectFactoryWrapper = ObjectFactoryWrapper.wrapper(this.rowType);
         this.colObjectFactoryWrapper = ObjectFactoryWrapper.wrapper(this.colType);
     }
@@ -35,8 +34,8 @@ public class MappedResult {
         return colType;
     }
 
-    public PropertyInfo getPropertyInfo() {
-        return propertyInfo;
+    public String getProperty() {
+        return property;
     }
 
     public MappedColumn[] getColumnMappingList() {

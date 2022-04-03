@@ -1,18 +1,20 @@
 package com.moxa.dream.module.reflect.factory;
 
 
-import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
-
 public class BaseObjectFactory implements ObjectFactory {
     private Object result;
 
+    public BaseObjectFactory(Object target) {
+        result = target;
+    }
+
     @Override
-    public void set(PropertyInfo propertyInfo, Object value) {
+    public void set(String property, Object value) {
         this.result = value;
     }
 
     @Override
-    public Object get(PropertyInfo propertyInfo) {
+    public Object get(String property) {
         return null;
     }
 

@@ -2,17 +2,20 @@ package com.moxa.dream.module.reflect.factory;
 
 
 import com.moxa.dream.module.reflect.util.NonCollection;
-import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
 
 
 public class NonCollectionObjectFactory extends CollectionObjectFactory {
     public NonCollectionObjectFactory() {
-        result = new NonCollection();
+        this(new NonCollection());
+    }
+
+    public NonCollectionObjectFactory(NonCollection nonCollection) {
+        super(nonCollection, null);
     }
 
     @Override
-    public Object get(PropertyInfo propertyInfo) {
-        return get(getObject(), propertyInfo);
+    public Object get(String property) {
+        return get(getObject(), property);
     }
 
     @Override

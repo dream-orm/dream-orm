@@ -6,7 +6,7 @@ import com.moxa.dream.module.reflect.factory.ObjectFactory;
 
 public class BaseObjectFactoryWrapper implements ObjectFactoryWrapper {
     @Override
-    public ObjectFactory newObjectFactory() {
-        return new BaseObjectFactory();
+    public ObjectFactory newObjectFactory(Object target) {
+        return new BaseObjectFactory(target);
     }
 }

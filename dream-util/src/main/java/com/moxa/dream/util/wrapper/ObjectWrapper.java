@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Map;
 
 public abstract class ObjectWrapper {
-
     public static ObjectWrapper wrapper(Object object) {
         ObjectWrapper wrapper;
         if (object == null)

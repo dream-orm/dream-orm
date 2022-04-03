@@ -5,6 +5,11 @@ import java.util.ArrayList;
 
 public class ArrayListObjectFactory extends CollectionObjectFactory {
     public ArrayListObjectFactory() {
-        result = new ArrayList();
+        this(new ArrayList());
     }
+
+    public ArrayListObjectFactory(ArrayList arrayList) {
+        super(arrayList, null);
+    }
+
 }

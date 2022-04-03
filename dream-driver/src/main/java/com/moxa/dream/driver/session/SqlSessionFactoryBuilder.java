@@ -10,6 +10,7 @@ import java.io.Reader;
 
 public class SqlSessionFactoryBuilder {
     private ConfigurationFactory configurationFactory = new DefaultConfigurationFactory();
+
     public SqlSessionFactory build(InputStream inputStream) {
         return build(inputStream, null);
     }

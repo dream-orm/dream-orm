@@ -5,6 +5,10 @@ import java.util.HashSet;
 public class HashSetObjectFactory extends CollectionObjectFactory {
 
     public HashSetObjectFactory() {
-        result = new HashSet<>();
+        this(new HashSet());
+    }
+
+    public HashSetObjectFactory(HashSet target) {
+        super(target, null);
     }
 }

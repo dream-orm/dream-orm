@@ -5,6 +5,11 @@ import java.util.LinkedHashSet;
 
 public class LinkedHashSetObjectFactory extends CollectionObjectFactory {
     public LinkedHashSetObjectFactory() {
-        result = new LinkedHashSet();
+        this(new LinkedHashSet());
     }
+
+    public LinkedHashSetObjectFactory(LinkedHashSet target) {
+        super(target, null);
+    }
+
 }

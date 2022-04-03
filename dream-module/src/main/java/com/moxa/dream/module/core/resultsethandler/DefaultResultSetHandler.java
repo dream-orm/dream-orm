@@ -13,7 +13,6 @@ import com.moxa.dream.module.mapper.EachInfo;
 import com.moxa.dream.module.mapper.factory.MapperFactory;
 import com.moxa.dream.module.reflect.factory.ObjectFactory;
 import com.moxa.dream.module.reflect.util.NonCollection;
-import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
 import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableInfo;
 import com.moxa.dream.module.typehandler.handler.TypeHandler;
@@ -24,7 +23,6 @@ import com.moxa.dream.util.wrapper.ObjectWrapper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -106,14 +104,14 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             }
             Class<? extends Collection> rowType = childMappedResult.getRowType();
             if (NonCollection.class != rowType) {
-                Collection rowList = (Collection) targetObjectFactory.get(childMappedResult.getPropertyInfo());
+                Collection rowList = (Collection) targetObjectFactory.get(childMappedResult.getProperty());
                 if (rowList == null) {
                     rowList = (Collection) childMappedResult.newRowObjectFactory().getObject();
-                    targetObjectFactory.set(childMappedResult.getPropertyInfo(), rowList);
+                    targetObjectFactory.set(childMappedResult.getProperty(), rowList);
                 }
                 rowList.add(childObjectFactory.getObject());
             } else {
-                targetObjectFactory.set(childMappedResult.getPropertyInfo(), childObjectFactory.getObject());
+                targetObjectFactory.set(childMappedResult.getProperty(), childObjectFactory.getObject());
             }
         }
         if (returnNull)
@@ -126,7 +124,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         MappedColumn[] mappedColumnList = mappedResult.getColumnMappingList();
         ObjectFactory objectFactory = mappedResult.newColObjectFactory();
         for (MappedColumn mappedColumn : mappedColumnList) {
-            objectFactory.set(mappedColumn.getPropertyInfo(), mappedColumn.getValue(resultSet));
+            objectFactory.set(mappedColumn.getProperty(), mappedColumn.getValue(resultSet));
         }
         return objectFactory;
     }
@@ -161,10 +159,8 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             String columnLabel = metaData.getColumnLabel(i);
             String tableName = metaData.getTableName(i);
             String link = getLink(mappedStatement, tableName, columnLabel);
-            PropertyInfo propertyInfo = new PropertyInfo();
-            propertyInfo.setLabel(link);
             boolean primary = isPrimary(tableName, columnLabel, mappedStatement);
-            MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName, propertyInfo, primary);
+            MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName, link, primary);
             boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, tableSet);
             ObjectUtil.requireTrue(success, "Property '" + link + "' mapping failure");
         }
@@ -221,76 +217,19 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         return true;
     }
 
-    protected String toLow(String name) {
-        return Character.toLowerCase(name.charAt(0)) + name.substring(1);
-    }
-
-    protected void fillPropertyInfo(List<Method> methodList, Field field, PropertyInfo propertyInfo) {
-        String fieldName = field.getName();
-        Class<?> fieldType = field.getType();
-        if (!fieldName.equals(propertyInfo.getLabel()))
-            propertyInfo.setLabel(field.getName());
-        if (field != propertyInfo.getField()) {
-            propertyInfo.setField(field);
-        }
-        if (!ObjectUtil.isNull(methodList)) {
-            for (Method method : methodList) {
-                String name = method.getName();
-                if (name.startsWith("set")) {
-                    if (name.length() > 3) {
-                        name = toLow(name.substring(3));
-                        if (fieldName.equals(name) && propertyInfo.getWriteMethod() == null) {
-                            Parameter[] parameters = method.getParameters();
-                            if (parameters.length == 1) {
-                                if (fieldType == parameters[0].getType()) {
-                                    propertyInfo.setWriteMethod(method);
-                                }
-                            }
-                        }
-                    }
-                } else if (name.startsWith("get")) {
-                    if (name.length() > 3) {
-                        name = toLow(name.substring(3));
-                        if (fieldName.equals(name) && propertyInfo.getReadMethod() == null) {
-                            Parameter[] parameters = method.getParameters();
-                            if (parameters.length == 0) {
-                                propertyInfo.setReadMethod(method);
-                            }
-                        }
-                    }
-                } else if (name.startsWith("is") && (fieldType == boolean.class || fieldType == Boolean.class)) {
-                    if (name.length() > 2) {
-                        name = toLow(name.substring(2));
-                        if (fieldName.equals(name) && propertyInfo.getReadMethod() == null) {
-                            Parameter[] parameters = method.getParameters();
-                            if (parameters.length == 0) {
-                                propertyInfo.setReadMethod(method);
-                            }
-                        }
-                    }
-                }
-                if (propertyInfo.getReadMethod() != null && propertyInfo.getWriteMethod() != null) {
-                    break;
-                }
-            }
-        }
-    }
-
     protected boolean linkHandlerForClass(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
         Class colType = mappedResult.getColType();
         String curTableName = getTableName(colType);
         List<Field> fieldList = ReflectUtil.findField(colType);
         if (!ObjectUtil.isNull(fieldList)) {
-            PropertyInfo propertyInfo = mappedColumn.getPropertyInfo();
+            String property = mappedColumn.getProperty();
             boolean lazyLoad = false;
             for (Field field : fieldList) {
                 String fieldName = field.getName();
-                String link = propertyInfo.getLabel();
                 if (!lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
-                    if (fieldName.equalsIgnoreCase(link)) {
+                    if (fieldName.equalsIgnoreCase(property)) {
                         TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), mappedColumn.getJdbcType());
                         mappedColumn.setTypeHandler(typeHandler);
-                        fillPropertyInfo(ReflectUtil.findMethod(colType), field, propertyInfo);
                         if (!ObjectUtil.isNull(curTableName)) {
                             mappedResult.add(mappedColumn);
                             return true;
@@ -305,13 +244,11 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
                     MappedResult childMappedResult = childMappedResultMap.get(fieldName);
                     if (childMappedResult == null) {
-                        PropertyInfo childPropertyInfo = new PropertyInfo();
-                        childPropertyInfo.setField(field);
                         Class<? extends Collection> rowType = ReflectUtil.getRowType(colType, field);
                         if (rowType == null) {
                             rowType = NonCollection.class;
                         }
-                        childMappedResult = new MappedResult(rowType, ReflectUtil.getColType(colType, field), childPropertyInfo);
+                        childMappedResult = new MappedResult(rowType, ReflectUtil.getColType(colType, field), fieldName);
                         if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
                             childMappedResultMap.put(fieldName, childMappedResult);
                             return true;

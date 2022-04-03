@@ -1,4 +1,4 @@
-package com.moxa.dream.module.reflect.wrapper;
+package com.moxa.dream.module.reflect.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

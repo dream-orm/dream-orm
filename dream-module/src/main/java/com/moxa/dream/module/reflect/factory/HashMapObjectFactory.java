@@ -1,8 +1,6 @@
 package com.moxa.dream.module.reflect.factory;
 
 
-import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,17 +8,21 @@ public class HashMapObjectFactory implements ObjectFactory {
     Map<String, Object> result;
 
     public HashMapObjectFactory() {
-        result = new HashMap<>();
+        this(new HashMap<>());
+    }
+
+    public HashMapObjectFactory(Map<String, Object> target) {
+        result = target;
     }
 
     @Override
-    public void set(PropertyInfo propertyInfo, Object value) {
-        result.put(propertyInfo.getLabel(), value);
+    public void set(String property, Object value) {
+        result.put(property, value);
     }
 
     @Override
-    public Object get(PropertyInfo propertyInfo) {
-        return result.get(propertyInfo.getLabel());
+    public Object get(String property) {
+        return result.get(property);
     }
 
     @Override

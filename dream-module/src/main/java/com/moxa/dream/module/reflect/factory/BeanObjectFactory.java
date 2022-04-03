@@ -1,22 +1,20 @@
 package com.moxa.dream.module.reflect.factory;
 
-
-import com.moxa.dream.module.reflect.wrapper.PropertyInfo;
-import com.moxa.dream.util.common.ObjectUtil;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import com.moxa.dream.module.reflect.wrapper.BeanObjectFactoryWrapper;
 
 public class BeanObjectFactory implements ObjectFactory {
 
+    protected BeanObjectFactoryWrapper factoryWrapper;
     Object result;
 
-    BeanObjectFactory() {
-
+    public BeanObjectFactory(Class type, BeanObjectFactoryWrapper factoryWrapper) {
+        result = newInstance(type);
+        this.factoryWrapper = factoryWrapper;
     }
 
-    public BeanObjectFactory(Class type) {
-        result = newInstance(type);
+    public BeanObjectFactory(Object target, BeanObjectFactoryWrapper factoryWrapper) {
+        result = target;
+        this.factoryWrapper = factoryWrapper;
     }
 
     protected Object newInstance(Class<?> type) {
@@ -28,46 +26,17 @@ public class BeanObjectFactory implements ObjectFactory {
     }
 
     @Override
-    public void set(PropertyInfo propertyInfo, Object value) {
-        Method writeMethod = propertyInfo.getWriteMethod();
-        if (writeMethod != null) {
-            try {
-                writeMethod.invoke(result, value);
-            } catch (Exception e) {
-                throw new IllegalCallerException(e);
-            }
-        } else {
-            Field field = propertyInfo.getField();
-            ObjectUtil.requireNonNull(field, "Property 'field' is required");
-            try {
-                field.set(result, value);
-            } catch (Exception e) {
-                throw new IllegalCallerException(e);
-            }
-        }
+    public void set(String property, Object value) {
+        factoryWrapper.set(result, property, value);
     }
 
     @Override
-    public Object get(PropertyInfo propertyInfo) {
-        return get(result, propertyInfo);
+    public Object get(String property) {
+        return get(result, property);
     }
 
-    protected Object get(Object result, PropertyInfo propertyInfo) {
-        Method readMethod = propertyInfo.getReadMethod();
-        if (readMethod != null) {
-            try {
-                return readMethod.invoke(result);
-            } catch (Exception e) {
-                throw new IllegalCallerException(e);
-            }
-        }
-        Field field = propertyInfo.getField();
-        ObjectUtil.requireNonNull(field, "Property 'field' is required");
-        try {
-            return field.get(result);
-        } catch (Exception e) {
-            throw new IllegalCallerException(e);
-        }
+    protected Object get(Object result, String property) {
+        return factoryWrapper.get(result, property);
     }
 
     @Override

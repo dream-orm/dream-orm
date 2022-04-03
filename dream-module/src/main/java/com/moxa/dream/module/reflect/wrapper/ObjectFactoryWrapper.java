@@ -35,5 +35,10 @@ public interface ObjectFactoryWrapper {
         }
     }
 
-    ObjectFactory newObjectFactory();
+    default ObjectFactory newObjectFactory() {
+        return newObjectFactory(null);
+    }
+
+    ObjectFactory newObjectFactory(Object target);
+
 }
