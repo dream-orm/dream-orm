@@ -228,6 +228,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 String fieldName = field.getName();
                 if (!lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
                     if (fieldName.equalsIgnoreCase(property)) {
+                        mappedColumn.setProperty(fieldName);
                         TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), mappedColumn.getJdbcType());
                         mappedColumn.setTypeHandler(typeHandler);
                         if (!ObjectUtil.isNull(curTableName)) {

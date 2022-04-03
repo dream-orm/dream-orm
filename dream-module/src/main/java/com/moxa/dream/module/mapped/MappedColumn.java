@@ -41,6 +41,10 @@ public class MappedColumn {
         return typeHandler;
     }
 
+    public void setProperty(String property) {
+        this.property = property;
+    }
+
     public void setTypeHandler(TypeHandler typeHandler) {
         this.typeHandler = typeHandler;
     }
