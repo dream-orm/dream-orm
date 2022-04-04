@@ -99,9 +99,9 @@ public class PageHandler extends AbstractHandler {
                     String alias = tableScanInfo.getAlias();
                     TableInfo tableInfo = tableFactory.getTableInfo(table);
                     if (tableInfo != null) {
-                        ColumnInfo primary = tableInfo.getPrimary();
-                        if (primary != null) {
-                            String column = primary.getColumn();
+                        ColumnInfo columnInfo = tableInfo.getColumnInfo();
+                        if (columnInfo != null) {
+                            String column = columnInfo.getColumn();
                             String sql = alias + "." + column + " in(select " + column + " from " + table + " " + toDREAM.toStr(limitStatement, null, null) + ")";
                             Statement inStatement = new CompareExpr(new ExprReader(sql)).expr();
                             WhereStatement whereStatement = queryStatement.getWhereStatement();

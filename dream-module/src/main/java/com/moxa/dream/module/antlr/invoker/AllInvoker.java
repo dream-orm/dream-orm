@@ -54,13 +54,13 @@ public class AllInvoker extends AbstractInvoker {
         ScanInvoker.ScanInfo scanInfo = scanInvoker.getScanInfo();
         Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = scanInfo.getTableScanInfoMap();
         if (!ObjectUtil.isNull(tableList)) {
-            Map<String, ScanInvoker.TableScanInfo> _tableScanInfoMap = scanInfo.getTableScanInfoMap();
+            Map<String, ScanInvoker.TableScanInfo> scanInfoMap =new LowHashMap<>();
             for (String table : tableList) {
                 ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(table);
                 ObjectUtil.requireNonNull(tableScanInfo, "table '" + table + "' was registered");
-                _tableScanInfoMap.put(table, tableScanInfo);
+                scanInfoMap.put(table, tableScanInfo);
             }
-            tableScanInfoMap = _tableScanInfoMap;
+            tableScanInfoMap = scanInfoMap;
         }
         Map<String, ScanInvoker.TableScanInfo> lowHashMap = new LowHashMap();
         for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {

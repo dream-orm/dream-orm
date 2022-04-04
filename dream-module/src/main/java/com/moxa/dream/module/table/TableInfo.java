@@ -8,11 +8,11 @@ public class TableInfo {
     private Map<String, ColumnInfo> columnInfoMap;
     private Map<String, JoinInfo> joinInfoMap;
     private Map<String, String> fieldMap;
-    private ColumnInfo primary;
+    private ColumnInfo columnInfo;
 
-    public TableInfo(String table, ColumnInfo primary, Map<String, ColumnInfo> columnInfoMap, Map<String, JoinInfo> joinInfoMap, Map<String, String> fieldMap) {
+    public TableInfo(String table, ColumnInfo columnInfo, Map<String, ColumnInfo> columnInfoMap, Map<String, JoinInfo> joinInfoMap, Map<String, String> fieldMap) {
         this.table = table;
-        this.primary = primary;
+        this.columnInfo = columnInfo;
         this.columnInfoMap = columnInfoMap;
         this.joinInfoMap = joinInfoMap;
         this.fieldMap = fieldMap;
@@ -34,7 +34,11 @@ public class TableInfo {
         return table;
     }
 
-    public ColumnInfo getPrimary() {
-        return primary;
+    public ColumnInfo getColumnInfo() {
+        return columnInfo;
+    }
+
+    public JoinInfo getJoinInfo(String joinTable) {
+        return joinInfoMap.get(joinTable);
     }
 }

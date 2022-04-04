@@ -83,7 +83,7 @@ public class DefaultTableFactory implements TableFactory {
         Class<?> colType = ReflectUtil.getColType(field.getGenericType());
         String joinTable = getTable(colType);
         ObjectUtil.requireNonNull(joinTable, "Property 'table' is required");
-        JoinInfo joinInfo = new JoinInfo(table, joinAnnotation.column(), field, joinTable, joinAnnotation.joinColumn(), joinAnnotation.joinType());
+        JoinInfo joinInfo = new JoinInfo(table, joinAnnotation.column(), joinTable, joinAnnotation.joinColumn(), joinAnnotation.joinType());
         return joinInfo;
     }
 
