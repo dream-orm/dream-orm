@@ -19,6 +19,8 @@ import com.moxa.dream.module.mapper.MethodInfo;
 import com.moxa.dream.module.table.ColumnInfo;
 import com.moxa.dream.module.table.TableInfo;
 import com.moxa.dream.module.table.factory.TableFactory;
+import com.moxa.dream.util.common.LowHashMap;
+import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
@@ -28,14 +30,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AllInvoker extends AbstractInvoker {
-    private TableFactory tableFactory;
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         Class colType = methodInfo.getColType();
         Configuration configuration = methodInfo.getConfiguration();
-        tableFactory = configuration.getTableFactory();
+        TableFactory tableFactory = configuration.getTableFactory();
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         String[] tableList = null;
         if (!ObjectUtil.isNull(columnList)) {
@@ -57,12 +58,16 @@ public class AllInvoker extends AbstractInvoker {
             for (String table : tableList) {
                 ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(table);
                 ObjectUtil.requireNonNull(tableScanInfo, "table '" + table + "' was registered");
-                _tableScanInfoMap.put(tableScanInfo.getTable(), tableScanInfo);
+                _tableScanInfoMap.put(table, tableScanInfo);
             }
             tableScanInfoMap = _tableScanInfoMap;
         }
+        Map<String, ScanInvoker.TableScanInfo> lowHashMap = new LowHashMap();
+        for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {
+            lowHashMap.put(tableScanInfo.getTable(), tableScanInfo);
+        }
         List<String> queryColumnList = new ArrayList<>();
-        getQuery(colType, tableScanInfoMap, getQueryColumnInfoList(invokerStatement), queryColumnList);
+        getQuery(tableFactory, colType, lowHashMap, getQueryColumnInfoList(invokerStatement), queryColumnList);
         String selectColumn = String.join(",", queryColumnList);
         ExprReader exprReader = new ExprReader(selectColumn);
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new AliasColumnExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
@@ -71,28 +76,31 @@ public class AllInvoker extends AbstractInvoker {
         return toSQL.toStr(statement, assist, invokerList);
     }
 
-    protected void getQuery(Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {
+    protected void getQuery(TableFactory tableFactory, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {
         if (Map.class.isAssignableFrom(colType)) {
-            getQueryFromMap(tableScanInfoMap, queryColumnInfoList, queryColumnList);
+            getQueryFromMap(tableFactory, tableScanInfoMap, queryColumnInfoList, queryColumnList);
         } else {
             View viewAnnotation = (View) colType.getDeclaredAnnotation(View.class);
             String table = null;
             if (viewAnnotation != null) {
                 table = viewAnnotation.value();
             }
-            getQueryFromBean(table, colType, tableScanInfoMap, queryColumnInfoList, queryColumnList);
+            getQueryFromBean(tableFactory, table, colType, tableScanInfoMap, queryColumnInfoList, queryColumnList);
         }
 
     }
 
-    protected void getQueryFromMap(Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {
-        Set<String> columnSet = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getColumn()).collect(Collectors.toSet());
-        Set<String> fieldSet = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getAlias()).collect(Collectors.toSet());
+    protected void getQueryFromMap(TableFactory tableFactory, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {
+        Set<String> _columnSet = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getColumn()).collect(Collectors.toSet());
+        LowHashSet columnSet = new LowHashSet(_columnSet);
+        Set<String> _fieldSet = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getAlias()).collect(Collectors.toSet());
+        LowHashSet fieldSet = new LowHashSet(_fieldSet);
         Collection<ScanInvoker.TableScanInfo> tableScanInfoList = tableScanInfoMap.values();
         for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoList) {
             String table = tableScanInfo.getTable();
             String alias = tableScanInfo.getAlias();
             TableInfo tableInfo = tableFactory.getTableInfo(table);
+            ObjectUtil.requireNonNull(tableInfo, "Property 'tableInfo' is required");
             Collection<ColumnInfo> columnInfoList = tableInfo.getColumnInfoList();
             List<String> columnList = columnInfoList.stream()
                     .filter(columnInfo -> !columnSet.contains(columnInfo.getColumn())
@@ -103,15 +111,15 @@ public class AllInvoker extends AbstractInvoker {
         }
     }
 
-    protected void getQueryFromBean(String rowTable, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {
+    protected void getQueryFromBean(TableFactory tableFactory, String table, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {
         TableInfo tableInfo = null;
         String alias = null;
-        if (!ObjectUtil.isNull(rowTable)) {
-            ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(rowTable);
+        if (!ObjectUtil.isNull(table)) {
+            ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.remove(table);
             if (tableScanInfo == null)
                 return;
-            String table = tableScanInfo.getTable();
             tableInfo = tableFactory.getTableInfo(table);
+            ObjectUtil.requireNonNull(tableInfo, "Property 'tableInfo' is required");
             alias = tableScanInfo.getAlias();
         }
 
@@ -122,17 +130,16 @@ public class AllInvoker extends AbstractInvoker {
                 Type genericType = field.getGenericType();
                 String fieldTable = getTableName(genericType);
                 if (ObjectUtil.isNull(fieldTable)) {
-                    if (tableInfo == null) {
+                    if (ObjectUtil.isNull(table)) {
                         for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {
-                            String table = tableScanInfo.getTable();
                             alias = tableScanInfo.getAlias();
-                            tableInfo = tableFactory.getTableInfo(table);
+                            tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
                             ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
                             if (columnInfo != null) {
                                 boolean add = true;
                                 for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
-                                    if (columnInfo.getColumn().equals(queryColumnInfo.getColumn())
-                                            || columnInfo.getName().equals(queryColumnInfo.getAlias())) {
+                                    if (columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
+                                            || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias())) {
                                         add = false;
                                         break;
                                     }
@@ -147,11 +154,11 @@ public class AllInvoker extends AbstractInvoker {
                         if (columnInfo != null) {
                             boolean add = true;
                             for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
-                                String table = queryColumnInfo.getTable();
-                                if ((columnInfo.getColumn().equals(queryColumnInfo.getColumn())
-                                        || columnInfo.getName().equals(queryColumnInfo.getAlias()))
-                                        && (ObjectUtil.isNull(table)
-                                        || table.equals(rowTable))) {
+                                String _table = queryColumnInfo.getTable();
+                                if ((columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
+                                        || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias()))
+                                        && (ObjectUtil.isNull(_table)
+                                        || _table.equalsIgnoreCase(table))) {
                                     add = false;
                                     break;
                                 }
@@ -162,7 +169,7 @@ public class AllInvoker extends AbstractInvoker {
                         }
                     }
                 } else {
-                    getQueryFromBean(fieldTable, ReflectUtil.getColType(colType, field), tableScanInfoMap, queryColumnInfoList, queryColumnList);
+                    getQueryFromBean(tableFactory, fieldTable, ReflectUtil.getColType(colType, field), tableScanInfoMap, queryColumnInfoList, queryColumnList);
                 }
             }
         }

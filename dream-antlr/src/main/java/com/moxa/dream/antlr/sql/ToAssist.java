@@ -85,6 +85,7 @@ public class ToAssist {
         }
         ObjectUtil.requireNonNull(invoker, invokerKey + " not known");
         sqlInvokerMap.put(invokerKey, invoker);
+        invoker.init(this);
         return invoker;
     }
 

@@ -3,8 +3,17 @@ package com.moxa.dream.util.common;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class LowHashSet extends HashSet<String> {
+    public LowHashSet() {
+    }
+
+    public LowHashSet(Set<String> set) {
+        if (!ObjectUtil.isNull(set)) {
+            addAll(set);
+        }
+    }
 
     @Override
     public boolean add(String s) {
