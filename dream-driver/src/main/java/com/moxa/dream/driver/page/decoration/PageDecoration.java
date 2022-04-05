@@ -7,7 +7,7 @@ import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.driver.page.annotation.PageQuery;
 import com.moxa.dream.module.antlr.decoration.Decoration;
-import com.moxa.dream.module.antlr.factory.DreamInvokerFactory;
+import com.moxa.dream.module.antlr.factory.ModuleInvokerFactory;
 import com.moxa.dream.module.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 
@@ -21,11 +21,11 @@ public class PageDecoration implements Decoration {
         if (pageQuery != null) {
             String pageNamespace;
             String pageFunction;
-            pageNamespace = DreamInvokerFactory.NAMESPACE;
+            pageNamespace = ModuleInvokerFactory.NAMESPACE;
             if (pageQuery.offset()) {
-                pageFunction = DreamInvokerFactory.$OFFSET;
+                pageFunction = ModuleInvokerFactory.$OFFSET;
             } else {
-                pageFunction = DreamInvokerFactory.$LIMIT;
+                pageFunction = ModuleInvokerFactory.$LIMIT;
             }
             String value = pageQuery.value();
             String prefix = ObjectUtil.isNull(value) ? "" : (value + ".");
