@@ -2,7 +2,7 @@ package com.moxa.dream.antlr.sql;
 
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.invoker.Invoker;
-import com.moxa.dream.antlr.smt.CustomFunctionStatement;
+import com.moxa.dream.antlr.smt.MyFunctionStatement;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
@@ -26,7 +26,7 @@ public class ToPubSQL extends ToDREAM {
     }
 
     @Override
-    protected String toString(CustomFunctionStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(MyFunctionStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return statement.toString(this, assist, invokerList);
     }
 }

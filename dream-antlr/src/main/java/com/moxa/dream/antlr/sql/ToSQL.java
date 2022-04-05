@@ -525,7 +525,7 @@ public abstract class ToSQL {
                 sql = toString((InvokerStatement) statement, assist, invokerList);
                 break;
             case -996762854://CustomFunctionStatement
-                sql = toString((CustomFunctionStatement) statement, assist, invokerList);
+                sql = toString((MyFunctionStatement) statement, assist, invokerList);
                 break;
             default:
                 throw new InvokerException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
@@ -856,6 +856,6 @@ public abstract class ToSQL {
 
     protected abstract String toString(InvokerStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 
-    protected abstract String toString(CustomFunctionStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(MyFunctionStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 
 }

@@ -918,7 +918,7 @@ public class ToDREAM extends ToSQL {
     }
 
     @Override
-    protected String toString(CustomFunctionStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(MyFunctionStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return statement.getFunctionName() + "(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 }

@@ -697,8 +697,8 @@ public class FunctionExpr extends SqlExpr {
 
     @Override
     protected Statement exprMyFunction(ExprInfo exprInfo) {
-        CustomFunctionStatement customFunctionStatement = (CustomFunctionStatement) exprInfo.getObjInfo();
-        CustomFunctionExpr customFunctionExpr = new CustomFunctionExpr(exprReader, customFunctionStatement.getHelper(exprReader));
+        MyFunctionStatement myFunctionStatement = (MyFunctionStatement) exprInfo.getObjInfo();
+        CustomFunctionExpr customFunctionExpr = new CustomFunctionExpr(exprReader, myFunctionStatement.getHelper(exprReader));
         functionStatement = customFunctionExpr.expr();
         setExprTypes(ExprType.NIL);
         return expr();
@@ -1267,7 +1267,7 @@ public class FunctionExpr extends SqlExpr {
     }
 
     public static class CustomFunctionExpr extends HelperExpr {
-        private CustomFunctionStatement customFunctionStatement;
+        private MyFunctionStatement myFunctionStatement;
 
         public CustomFunctionExpr(ExprReader exprReader, Helper helper) {
             super(exprReader, helper);
@@ -1277,7 +1277,7 @@ public class FunctionExpr extends SqlExpr {
         @Override
         protected Statement exprMyFunction(ExprInfo exprInfo) {
             push();
-            this.customFunctionStatement = (CustomFunctionStatement) exprInfo.getObjInfo();
+            this.myFunctionStatement = (MyFunctionStatement) exprInfo.getObjInfo();
             setExprTypes(ExprType.LBRACE, ExprType.NIL);
             return expr();
         }
@@ -1291,7 +1291,7 @@ public class FunctionExpr extends SqlExpr {
 
         @Override
         public Statement exprHelp(Statement statement) {
-            customFunctionStatement.setParamsStatement(statement);
+            myFunctionStatement.setParamsStatement(statement);
             setExprTypes(ExprType.RBRACE);
             return expr();
         }
@@ -1305,7 +1305,7 @@ public class FunctionExpr extends SqlExpr {
 
         @Override
         protected Statement nil() {
-            return customFunctionStatement;
+            return myFunctionStatement;
         }
     }
 }

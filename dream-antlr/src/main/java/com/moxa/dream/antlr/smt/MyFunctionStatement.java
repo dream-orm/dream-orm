@@ -13,11 +13,11 @@ import com.moxa.dream.antlr.sql.ToSQL;
 
 import java.util.List;
 
-public abstract class CustomFunctionStatement extends FunctionStatement {
+public abstract class MyFunctionStatement extends FunctionStatement {
 
     @Override
     public int getNameId() {
-        return CustomFunctionStatement.class.getSimpleName().hashCode();
+        return MyFunctionStatement.class.getSimpleName().hashCode();
     }
 
     public abstract String toString(ToSQL toSQL, ToAssist assist, List<Invoker> invokerList) throws InvokerException;

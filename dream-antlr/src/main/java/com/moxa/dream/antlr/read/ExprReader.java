@@ -4,7 +4,7 @@ import com.moxa.dream.antlr.bind.ExprInfo;
 import com.moxa.dream.antlr.bind.ExprType;
 import com.moxa.dream.antlr.expr.SqlExpr;
 import com.moxa.dream.antlr.factory.MyFunctionFactory;
-import com.moxa.dream.antlr.smt.CustomFunctionStatement;
+import com.moxa.dream.antlr.smt.MyFunctionStatement;
 import com.moxa.dream.antlr.util.ExprUtil;
 
 import java.util.Locale;
@@ -236,10 +236,10 @@ public class ExprReader extends StringReader {
         }
         ExprType exprType = ExprUtil.getExprTypeInLetter(info);
         if (ExprUtil.isLBrace(c) && myFunctionFactory != null) {
-            CustomFunctionStatement customFunctionStatement = myFunctionFactory.create(info);
-            if (customFunctionStatement != null) {
-                customFunctionStatement.setFunctionName(info.toUpperCase(Locale.ENGLISH));
-                return new ExprInfo(ExprType.MY_FUNCTION, customFunctionStatement, getStart(), getEnd());
+            MyFunctionStatement myFunctionStatement = myFunctionFactory.create(info);
+            if (myFunctionStatement != null) {
+                myFunctionStatement.setFunctionName(info.toUpperCase(Locale.ENGLISH));
+                return new ExprInfo(ExprType.MY_FUNCTION, myFunctionStatement, getStart(), getEnd());
             }
         } else if (ExprUtil.isBoolean(info)) {
             return new ExprInfo(ExprType.BOOLEAN, info, getStart(), getEnd());

@@ -42,7 +42,7 @@ public class InvokerUtil {
         return invokerStatement;
     }
 
-    public static final String wrapperInvokerSQL(String namespace, String function, String cut, String... paramList) {
+    public static String wrapperInvokerSQL(String namespace, String function, String cut, String... paramList) {
         StringBuilder paramBuilder = new StringBuilder();
         if (!ObjectUtil.isNull(paramList)) {
             for (String param : paramList) {

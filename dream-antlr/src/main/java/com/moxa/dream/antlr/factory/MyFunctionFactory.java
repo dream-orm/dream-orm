@@ -1,7 +1,7 @@
 package com.moxa.dream.antlr.factory;
 
-import com.moxa.dream.antlr.smt.CustomFunctionStatement;
+import com.moxa.dream.antlr.smt.MyFunctionStatement;
 
 public interface MyFunctionFactory {
-    CustomFunctionStatement create(String function);
+    MyFunctionStatement create(String function);
 }
