@@ -3,7 +3,10 @@ package com.moxa.dream.driver.listener;
 
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.ToDREAM;
-import com.moxa.dream.module.core.listener.*;
+import com.moxa.dream.module.core.listener.DeleteListener;
+import com.moxa.dream.module.core.listener.InsertListener;
+import com.moxa.dream.module.core.listener.QueryListener;
+import com.moxa.dream.module.core.listener.UpdateListener;
 import com.moxa.dream.module.mapped.MappedParam;
 import com.moxa.dream.module.mapped.MappedStatement;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -28,13 +31,8 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
 		}else{
 			paramList=new ArrayList<>();
 		}
-		String sql;
-		try {
-			sql=toDREAM.toStr(statement, null, null);
-		}catch (Exception e){
-			sql=mappedStatement.getSql();
-		}
-		StringBuilder builder=new StringBuilder();
+		String sql = mappedStatement.getSql();
+		StringBuilder builder = new StringBuilder();
 		builder.append("SQL:"+sql).append(lineSeparator);
 		builder.append("PARAM:"+paramList).append(lineSeparator);
 		mappedStatement.put(LOGS,builder);

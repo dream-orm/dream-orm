@@ -21,7 +21,7 @@ public class $Handler extends AbstractHandler {
 
     //@?函数翻译之后情形
     @Override
-    public String handlerAfter(ToAssist assist, String sql, int life) throws InvokerException {
+    public String handlerAfter(ToAssist assist, String sql, int life) {
         //获取@$函数
         $Invoker sqlInvoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
         //获取参数
@@ -32,7 +32,7 @@ public class $Handler extends AbstractHandler {
             //如果为空则参数去除，ok!
             if (ExprUtil.isEmpty(String.valueOf(value))) {
                 paramInfoList.remove(size - 1);
-                return null;
+                return "";
             }
         }
         return sql;
