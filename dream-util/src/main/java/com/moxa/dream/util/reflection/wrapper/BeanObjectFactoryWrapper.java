@@ -40,7 +40,7 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
     @Override
     public ObjectFactory newObjectFactory(Object target) {
         if (target == null) {
-            return new BeanObjectFactory(type, this);
+            return new BeanObjectFactory(newInstance(type), this);
         } else {
             return new BeanObjectFactory(target, this);
         }
