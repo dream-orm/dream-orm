@@ -7,8 +7,8 @@ import com.moxa.dream.system.antlr.invoker.$OffSetInvoker;
 import com.moxa.dream.system.antlr.invoker.AllInvoker;
 import com.moxa.dream.system.antlr.invoker.TableInvoker;
 
-public class ModuleInvokerFactory implements InvokerFactory {
-    public static final String NAMESPACE = "module";
+public class SystemInvokerFactory implements InvokerFactory {
+    public static final String NAMESPACE = "system";
     public static final String ALL = "all";
     public static final String $LIMIT = "$limit";
     public static final String $OFFSET = "$offset";

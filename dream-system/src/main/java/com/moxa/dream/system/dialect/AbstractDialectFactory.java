@@ -15,7 +15,7 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.antlr.decoration.AnnotationDecoration;
 import com.moxa.dream.system.antlr.decoration.Decoration;
 import com.moxa.dream.system.antlr.decoration.ScanDecoration;
-import com.moxa.dream.system.antlr.factory.ModuleInvokerFactory;
+import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapped.MappedParam;
@@ -189,7 +189,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
 
     private List<InvokerFactory> getDefaultInvokerFactoryList() {
         List<InvokerFactory> invokerFactoryList = new ArrayList<>();
-        invokerFactoryList.addAll(Arrays.asList(new AntlrInvokerFactory(), new ModuleInvokerFactory()));
+        invokerFactoryList.addAll(Arrays.asList(new AntlrInvokerFactory(), new SystemInvokerFactory()));
         return invokerFactoryList;
     }
 
