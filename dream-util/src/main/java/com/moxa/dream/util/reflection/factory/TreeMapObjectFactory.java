@@ -3,7 +3,7 @@ package com.moxa.dream.util.reflection.factory;
 
 import java.util.TreeMap;
 
-public class TreeMapObjectFactory extends HashMapObjectFactory {
+public class TreeMapObjectFactory extends MapObjectFactory {
     public TreeMapObjectFactory() {
         super(new TreeMap<>());
     }

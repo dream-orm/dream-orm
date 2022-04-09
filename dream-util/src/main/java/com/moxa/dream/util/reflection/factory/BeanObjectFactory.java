@@ -7,22 +7,9 @@ public class BeanObjectFactory implements ObjectFactory {
     protected BeanObjectFactoryWrapper factoryWrapper;
     Object result;
 
-    public BeanObjectFactory(Class type, BeanObjectFactoryWrapper factoryWrapper) {
-        result = newInstance(type);
-        this.factoryWrapper = factoryWrapper;
-    }
-
     public BeanObjectFactory(Object target, BeanObjectFactoryWrapper factoryWrapper) {
         result = target;
         this.factoryWrapper = factoryWrapper;
-    }
-
-    protected Object newInstance(Class<?> type) {
-        try {
-            return type.getConstructor().newInstance();
-        } catch (Exception e) {
-            throw new IllegalCallerException(e);
-        }
     }
 
     @Override

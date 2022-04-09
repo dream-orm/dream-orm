@@ -1,15 +1,15 @@
 package com.moxa.dream.driver.config;
 
 import com.moxa.dream.driver.alias.AliasFactory;
-import com.moxa.dream.module.cache.factory.CacheFactory;
-import com.moxa.dream.module.core.listener.factory.ListenerFactory;
-import com.moxa.dream.module.datasource.DataSourceFactory;
-import com.moxa.dream.module.dialect.DialectFactory;
-import com.moxa.dream.module.mapper.factory.MapperFactory;
-import com.moxa.dream.module.plugin.factory.PluginFactory;
-import com.moxa.dream.module.table.factory.TableFactory;
-import com.moxa.dream.module.transaction.factory.TransactionFactory;
-import com.moxa.dream.module.typehandler.factory.TypeHandlerFactory;
+import com.moxa.dream.system.cache.factory.CacheFactory;
+import com.moxa.dream.system.core.listener.factory.ListenerFactory;
+import com.moxa.dream.system.datasource.DataSourceFactory;
+import com.moxa.dream.system.dialect.DialectFactory;
+import com.moxa.dream.system.mapper.factory.MapperFactory;
+import com.moxa.dream.system.plugin.factory.PluginFactory;
+import com.moxa.dream.system.table.factory.TableFactory;
+import com.moxa.dream.system.transaction.factory.TransactionFactory;
+import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 
 import java.util.List;
 

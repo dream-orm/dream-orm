@@ -2,9 +2,9 @@ package com.moxa.dream.driver.factory;
 
 import com.moxa.dream.antlr.factory.MyFunctionFactory;
 import com.moxa.dream.driver.page.decoration.PageDecoration;
-import com.moxa.dream.module.antlr.decoration.Decoration;
-import com.moxa.dream.module.dialect.AbstractDialectFactory;
-import com.moxa.dream.module.mapper.MethodInfo;
+import com.moxa.dream.system.antlr.decoration.Decoration;
+import com.moxa.dream.system.dialect.AbstractDialectFactory;
+import com.moxa.dream.system.mapper.MethodInfo;
 
 import java.util.List;
 import java.util.Map;

@@ -11,7 +11,7 @@
     <modules>
         <module>dream-antlr</module>
         <module>dream-util</module>
-        <module>dream-module</module>
+        <module>dream-system</module>
         <module>dream-driver</module>
     </modules>
 

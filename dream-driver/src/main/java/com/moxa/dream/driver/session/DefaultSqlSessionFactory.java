@@ -2,13 +2,13 @@ package com.moxa.dream.driver.session;
 
 import com.moxa.dream.driver.executor.CustomCacheExecutor;
 import com.moxa.dream.driver.executor.SessionCacheExecutor;
-import com.moxa.dream.module.cache.Cache;
-import com.moxa.dream.module.cache.factory.CacheFactory;
-import com.moxa.dream.module.config.Configuration;
-import com.moxa.dream.module.core.executor.BatchExecutor;
-import com.moxa.dream.module.core.executor.Executor;
-import com.moxa.dream.module.core.executor.JdbcExecutor;
-import com.moxa.dream.module.plugin.factory.PluginFactory;
+import com.moxa.dream.system.cache.Cache;
+import com.moxa.dream.system.cache.factory.CacheFactory;
+import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.core.executor.BatchExecutor;
+import com.moxa.dream.system.core.executor.Executor;
+import com.moxa.dream.system.core.executor.JdbcExecutor;
+import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 
 

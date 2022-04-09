@@ -9,6 +9,6 @@ public class ArrayDequeObjectFactory extends CollectionObjectFactory {
     }
 
     public ArrayDequeObjectFactory(ArrayDeque target) {
-        super(target, null);
+        super(target);
     }
 }

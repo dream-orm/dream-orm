@@ -1,7 +1,7 @@
 package com.moxa.dream.driver.factory;
 
-import com.moxa.dream.module.core.listener.Listener;
-import com.moxa.dream.module.core.listener.factory.AbstractListenerFactory;
+import com.moxa.dream.system.core.listener.Listener;
+import com.moxa.dream.system.core.listener.factory.AbstractListenerFactory;
 
 public class DefaultListenerFactory extends AbstractListenerFactory {
     @Override

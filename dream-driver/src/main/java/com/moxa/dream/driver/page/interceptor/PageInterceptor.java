@@ -2,14 +2,14 @@ package com.moxa.dream.driver.page.interceptor;
 
 import com.moxa.dream.driver.page.Page;
 import com.moxa.dream.driver.page.annotation.PageQuery;
-import com.moxa.dream.module.antlr.handler.PageHandler;
-import com.moxa.dream.module.core.executor.Executor;
-import com.moxa.dream.module.dialect.DialectFactory;
-import com.moxa.dream.module.mapped.MappedStatement;
-import com.moxa.dream.module.mapper.MethodInfo;
-import com.moxa.dream.module.plugin.PluginException;
-import com.moxa.dream.module.plugin.interceptor.AbstractInterceptor;
-import com.moxa.dream.module.plugin.invocation.Invocation;
+import com.moxa.dream.system.antlr.handler.PageHandler;
+import com.moxa.dream.system.core.executor.Executor;
+import com.moxa.dream.system.dialect.DialectFactory;
+import com.moxa.dream.system.mapped.MappedStatement;
+import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.plugin.PluginException;
+import com.moxa.dream.system.plugin.interceptor.AbstractInterceptor;
+import com.moxa.dream.system.plugin.invocation.Invocation;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 

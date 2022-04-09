@@ -9,7 +9,7 @@ public class LinkedListObjectFactory extends CollectionObjectFactory {
     }
 
     public LinkedListObjectFactory(LinkedList target) {
-        super(target, null);
+        super(target);
     }
 
 }

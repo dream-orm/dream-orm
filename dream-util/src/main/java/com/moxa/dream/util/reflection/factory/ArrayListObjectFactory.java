@@ -8,8 +8,8 @@ public class ArrayListObjectFactory extends CollectionObjectFactory {
         this(new ArrayList());
     }
 
-    public ArrayListObjectFactory(ArrayList arrayList) {
-        super(arrayList, null);
+    public ArrayListObjectFactory(ArrayList target) {
+        super(target);
     }
 
 }

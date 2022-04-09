@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class $Invoker extends AbstractInvoker {
-    private List<ParamInfo> paramInfoList = new ArrayList<>();
     ObjectWrapper paramWrapper;
+    private List<ParamInfo> paramInfoList = new ArrayList<>();
 
     @Override
     public void init(ToAssist assist) {

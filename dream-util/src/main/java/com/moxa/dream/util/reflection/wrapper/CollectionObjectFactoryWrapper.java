@@ -14,7 +14,7 @@ public class CollectionObjectFactoryWrapper extends BeanObjectFactoryWrapper {
     @Override
     public ObjectFactory newObjectFactory(Object target) {
         if (target == null) {
-            return new CollectionObjectFactory(type, this);
+            return new CollectionObjectFactory((Collection) newInstance(type), this);
         } else {
             return new CollectionObjectFactory((Collection) target, this);
         }

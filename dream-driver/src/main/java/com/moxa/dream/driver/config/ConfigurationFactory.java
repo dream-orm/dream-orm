@@ -1,6 +1,6 @@
 package com.moxa.dream.driver.config;
 
-import com.moxa.dream.module.config.Configuration;
+import com.moxa.dream.system.config.Configuration;
 
 import java.io.InputStream;
 import java.io.Reader;

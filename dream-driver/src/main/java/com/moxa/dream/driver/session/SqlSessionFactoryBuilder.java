@@ -3,7 +3,7 @@ package com.moxa.dream.driver.session;
 import com.moxa.dream.driver.config.ConfigurationFactory;
 import com.moxa.dream.driver.config.DefaultConfig;
 import com.moxa.dream.driver.config.DefaultConfigurationFactory;
-import com.moxa.dream.module.config.Configuration;
+import com.moxa.dream.system.config.Configuration;
 
 import java.io.InputStream;
 import java.io.Reader;

@@ -9,7 +9,7 @@ public class LinkedHashSetObjectFactory extends CollectionObjectFactory {
     }
 
     public LinkedHashSetObjectFactory(LinkedHashSet target) {
-        super(target, null);
+        super(target);
     }
 
 }

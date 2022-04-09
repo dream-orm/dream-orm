@@ -5,6 +5,7 @@ import com.moxa.dream.util.reflection.factory.ObjectFactory;
 import com.moxa.dream.util.reflection.util.NonCollection;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public interface ObjectFactoryWrapper {
     static ObjectFactoryWrapper wrapper(Class type) {
@@ -22,6 +23,8 @@ public interface ObjectFactoryWrapper {
             return new TreeSetObjectFactoryWrapper();
         } else if (type.isAssignableFrom(TreeMap.class)) {
             return new TreeMapObjectFactoryWrapper();
+        } else if (type.isAssignableFrom(ConcurrentHashMap.class)) {
+            return new ConcurrentHashMapObjectFactoryWrapper();
         } else if (type.isAssignableFrom(LinkedList.class)) {
             return new LinkedListObjectFactoryWrapper();
         } else if (type.isAssignableFrom(LinkedHashSet.class)) {
@@ -30,6 +33,8 @@ public interface ObjectFactoryWrapper {
             return new NonCollectionObjectFactoryWrapper();
         } else if (Collection.class.isAssignableFrom(type)) {
             return new CollectionObjectFactoryWrapper(type);
+        } else if (Map.class.isAssignableFrom(type)) {
+            return new MapObjectFactoryWrapper(type);
         } else {
             return new BeanObjectFactoryWrapper(type);
         }

@@ -8,8 +8,8 @@ public class TreeSetObjectFactory extends CollectionObjectFactory {
         this(new TreeSet());
     }
 
-    public TreeSetObjectFactory(TreeSet treeSet) {
-        super(treeSet, null);
+    public TreeSetObjectFactory(TreeSet target) {
+        super(target);
     }
 
 }

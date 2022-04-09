@@ -9,12 +9,12 @@ import com.moxa.dream.driver.xml.builder.config.ConfigurationBuilder;
 import com.moxa.dream.driver.xml.moudle.XmlCallback;
 import com.moxa.dream.driver.xml.moudle.XmlHandler;
 import com.moxa.dream.driver.xml.moudle.XmlParser;
-import com.moxa.dream.module.cache.factory.DefaultCacheFactory;
-import com.moxa.dream.module.config.Configuration;
-import com.moxa.dream.module.plugin.factory.JavaPluginFactory;
-import com.moxa.dream.module.table.factory.DefaultTableFactory;
-import com.moxa.dream.module.transaction.factory.JdbcTransactionFactory;
-import com.moxa.dream.module.typehandler.factory.DefaultTypeHandlerFactory;
+import com.moxa.dream.system.cache.factory.DefaultCacheFactory;
+import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.plugin.factory.JavaPluginFactory;
+import com.moxa.dream.system.table.factory.DefaultTableFactory;
+import com.moxa.dream.system.transaction.factory.JdbcTransactionFactory;
+import com.moxa.dream.system.typehandler.factory.DefaultTypeHandlerFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 import org.xml.sax.InputSource;
 

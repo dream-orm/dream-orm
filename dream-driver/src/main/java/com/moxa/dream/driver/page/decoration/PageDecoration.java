@@ -6,9 +6,9 @@ import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.driver.page.annotation.PageQuery;
-import com.moxa.dream.module.antlr.decoration.Decoration;
-import com.moxa.dream.module.antlr.factory.ModuleInvokerFactory;
-import com.moxa.dream.module.mapper.MethodInfo;
+import com.moxa.dream.system.antlr.decoration.Decoration;
+import com.moxa.dream.system.antlr.factory.ModuleInvokerFactory;
+import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 
 public class PageDecoration implements Decoration {

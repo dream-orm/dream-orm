@@ -1,6 +1,7 @@
 package com.moxa.dream.util.reflection.wrapper;
 
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.reflect.ReflectException;
 import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.reflection.factory.BeanObjectFactory;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
@@ -26,6 +27,14 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
             propertyInfoMap.put(field.getName(), propertyInfo);
         }
 
+    }
+
+    protected Object newInstance(Class<?> type) {
+        try {
+            return type.getConstructor().newInstance();
+        } catch (Exception e) {
+            throw new ReflectException(e);
+        }
     }
 
     @Override

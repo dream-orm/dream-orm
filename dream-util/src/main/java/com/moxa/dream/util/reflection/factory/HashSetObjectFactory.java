@@ -9,6 +9,6 @@ public class HashSetObjectFactory extends CollectionObjectFactory {
     }
 
     public HashSetObjectFactory(HashSet target) {
-        super(target, null);
+        super(target);
     }
 }

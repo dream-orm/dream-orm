@@ -1,9 +1,9 @@
 package com.moxa.dream.driver.executor;
 
-import com.moxa.dream.module.cache.Cache;
-import com.moxa.dream.module.core.executor.CacheExecutor;
-import com.moxa.dream.module.core.executor.Executor;
-import com.moxa.dream.module.mapped.MappedStatement;
+import com.moxa.dream.system.cache.Cache;
+import com.moxa.dream.system.core.executor.CacheExecutor;
+import com.moxa.dream.system.core.executor.Executor;
+import com.moxa.dream.system.mapped.MappedStatement;
 
 public class CustomCacheExecutor extends CacheExecutor {
     private Cache cache;
