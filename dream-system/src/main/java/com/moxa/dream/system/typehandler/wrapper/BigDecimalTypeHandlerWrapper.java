@@ -1,7 +1,7 @@
 package com.moxa.dream.system.typehandler.wrapper;
 
-import com.moxa.dream.system.typehandler.handler.BaseTypeHandler;
 import com.moxa.dream.system.typehandler.handler.BigDecimalTypeHandler;
+import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.system.typehandler.util.TypeUtil;
 
 import java.math.BigDecimal;
@@ -9,7 +9,7 @@ import java.sql.Types;
 
 public class BigDecimalTypeHandlerWrapper implements TypeHandlerWrapper {
     @Override
-    public BaseTypeHandler getTypeHandler() {
+    public TypeHandler<BigDecimal> getTypeHandler() {
         return new BigDecimalTypeHandler();
     }
 

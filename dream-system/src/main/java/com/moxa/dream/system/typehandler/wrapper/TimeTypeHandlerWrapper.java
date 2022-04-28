@@ -1,6 +1,7 @@
 package com.moxa.dream.system.typehandler.wrapper;
 
-import com.moxa.dream.system.typehandler.handler.BaseTypeHandler;
+import com.moxa.dream.system.typehandler.handler.TimeTypeHandler;
+import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.system.typehandler.util.TypeUtil;
 
 import java.sql.Time;
@@ -8,8 +9,8 @@ import java.sql.Types;
 
 public class TimeTypeHandlerWrapper implements TypeHandlerWrapper {
     @Override
-    public BaseTypeHandler getTypeHandler() {
-        return null;
+    public TypeHandler<Time> getTypeHandler() {
+        return new TimeTypeHandler();
     }
 
     @Override

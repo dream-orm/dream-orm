@@ -1,14 +1,14 @@
 package com.moxa.dream.system.typehandler.wrapper;
 
-import com.moxa.dream.system.typehandler.handler.BaseTypeHandler;
 import com.moxa.dream.system.typehandler.handler.ByteTypeHandler;
+import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.system.typehandler.util.TypeUtil;
 
 import java.sql.Types;
 
 public class ByteTypeHandlerWrapper implements TypeHandlerWrapper {
     @Override
-    public BaseTypeHandler getTypeHandler() {
+    public TypeHandler<Byte> getTypeHandler() {
         return new ByteTypeHandler();
     }
 

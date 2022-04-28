@@ -1,6 +1,6 @@
 package com.moxa.dream.system.typehandler.wrapper;
 
-import com.moxa.dream.system.typehandler.handler.BaseTypeHandler;
+import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.system.typehandler.handler.UtilDateTypeHandler;
 import com.moxa.dream.system.typehandler.util.TypeUtil;
 
@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class UtilDateTypeHandlerWrapper implements TypeHandlerWrapper {
     @Override
-    public BaseTypeHandler getTypeHandler() {
+    public TypeHandler<Date> getTypeHandler() {
         return new UtilDateTypeHandler();
     }
 
