@@ -107,14 +107,14 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
             try {
                 writeMethod.invoke(result, value);
             } catch (Exception e) {
-                throw new IllegalCallerException(e);
+                throw new RuntimeException(e);
             }
         } else {
             Field field = propertyInfo.getField();
             try {
                 field.set(result, value);
             } catch (Exception e) {
-                throw new IllegalCallerException(e);
+                throw new RuntimeException(e);
             }
         }
     }
@@ -126,14 +126,14 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
             try {
                 return readMethod.invoke(result);
             } catch (Exception e) {
-                throw new IllegalCallerException(e);
+                throw new RuntimeException(e);
             }
         }
         Field field = propertyInfo.getField();
         try {
             return field.get(result);
         } catch (Exception e) {
-            throw new IllegalCallerException(e);
+            throw new RuntimeException(e);
         }
     }
 

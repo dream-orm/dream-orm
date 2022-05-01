@@ -6,6 +6,7 @@ import com.moxa.dream.system.antlr.decoration.Decoration;
 import com.moxa.dream.system.dialect.AbstractDialectFactory;
 import com.moxa.dream.system.mapper.MethodInfo;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,6 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
 
     @Override
     protected List<Decoration> getWrapList() {
-        return List.of(new PageDecoration());
+        return Arrays.asList(new PageDecoration());
     }
 }

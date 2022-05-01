@@ -31,7 +31,7 @@ public class PropertyInfo {
 
     public void setField(Field field) {
         if (field != null) {
-            field.trySetAccessible();
+            field.setAccessible(true);
             this.field = field;
         }
     }
@@ -42,7 +42,7 @@ public class PropertyInfo {
 
     public void setWriteMethod(Method writeMethod) {
         if (writeMethod != null) {
-            writeMethod.trySetAccessible();
+            writeMethod.setAccessible(true);
             this.writeMethod = writeMethod;
         }
     }

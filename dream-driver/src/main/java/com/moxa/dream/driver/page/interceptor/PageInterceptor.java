@@ -14,9 +14,7 @@ import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PageInterceptor extends AbstractInterceptor {
     @Override
@@ -64,7 +62,7 @@ public class PageInterceptor extends AbstractInterceptor {
     public Set<Method> methodSet() {
         try {
             Method method = Executor.class.getDeclaredMethod("query", MappedStatement.class);
-            return Set.of(method);
+            return new HashSet<>(Arrays.asList(method));
         } catch (Exception e) {
             throw new PluginException(e);
         }
