@@ -137,7 +137,7 @@ public class ConfigurationBuilder extends XMLBuilder {
             configBuilder.dataSourceFactory(dataSourceFactory.getType());
             configBuilder.dataSourceProperties(getProperties(dataSourceFactory.getPropertyList()));
         }
-        return configBuilder.builder();
+        return configBuilder.build();
     }
 
     @Override

@@ -2,17 +2,26 @@ package com.moxa.dream.driver.config;
 
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.driver.alias.AliasFactory;
+import com.moxa.dream.driver.alias.DefaultAliasFactory;
+import com.moxa.dream.driver.factory.DefaultDialectFactory;
+import com.moxa.dream.driver.factory.DefaultListenerFactory;
+import com.moxa.dream.driver.factory.DefaultMapperFactory;
 import com.moxa.dream.system.cache.factory.CacheFactory;
+import com.moxa.dream.system.cache.factory.DefaultCacheFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
+import com.moxa.dream.system.plugin.factory.JavaPluginFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.plugin.interceptor.Interceptor;
+import com.moxa.dream.system.table.factory.DefaultTableFactory;
 import com.moxa.dream.system.table.factory.TableFactory;
+import com.moxa.dream.system.transaction.factory.JdbcTransactionFactory;
 import com.moxa.dream.system.transaction.factory.TransactionFactory;
+import com.moxa.dream.system.typehandler.factory.DefaultTypeHandlerFactory;
 import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.wrapper.TypeHandlerWrapper;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -38,37 +47,49 @@ public class ConfigBuilder {
     }
 
     private void init() {
-        if (defaultConfig != null) {
-            CacheFactory cacheFactory = defaultConfig.getCacheFactory();
-            MapperFactory mapperFactory = defaultConfig.getMapperFactory();
-            TableFactory tableFactory = defaultConfig.getTableFactory();
-            TypeHandlerFactory typeHandlerFactory = defaultConfig.getTypeHandlerFactory();
-            DialectFactory dialectFactory = defaultConfig.getDialectFactory();
-            PluginFactory pluginFactory = defaultConfig.getPluginFactory();
-            ListenerFactory listenerFactory = defaultConfig.getListenerFactory();
-            TransactionFactory transactionFactory = defaultConfig.getTransactionFactory();
-            DataSourceFactory dataSourceFactory = defaultConfig.getDataSourceFactory();
-            if (cacheFactory != null) {
-                configuration.setCacheFactory(cacheFactory);
-            }
-            if (mapperFactory != null) {
-                configuration.setMapperFactory(mapperFactory);
-            }
-            if (tableFactory != null) {
-                configuration.setTableFactory(tableFactory);
-            }
-            if (typeHandlerFactory != null) {
-                configuration.setTypeHandlerFactory(typeHandlerFactory);
-            }
-            if (dialectFactory != null) {
-                configuration.setDialectFactory(dialectFactory);
-            }
-            if (pluginFactory != null) {
-                configuration.setPluginFactory(pluginFactory);
-            }
-            if (listenerFactory != null) {
-                configuration.setListenerFactory(listenerFactory);
-            }
+        if (defaultConfig == null) {
+            defaultConfig = new DefaultConfig();
+            defaultConfig
+                    .setAliasFactory(new DefaultAliasFactory())
+                    .setCacheFactory(new DefaultCacheFactory())
+                    .setMapperFactory(new DefaultMapperFactory())
+                    .setTableFactory(new DefaultTableFactory())
+                    .setDialectFactory(new DefaultDialectFactory())
+                    .setTransactionFactory(new JdbcTransactionFactory())
+                    .setPluginFactory(new JavaPluginFactory())
+                    .setListenerFactory(new DefaultListenerFactory())
+                    .setTypeHandlerFactory(new DefaultTypeHandlerFactory());
+        }
+        CacheFactory cacheFactory = defaultConfig.getCacheFactory();
+        MapperFactory mapperFactory = defaultConfig.getMapperFactory();
+        TableFactory tableFactory = defaultConfig.getTableFactory();
+        TypeHandlerFactory typeHandlerFactory = defaultConfig.getTypeHandlerFactory();
+        DialectFactory dialectFactory = defaultConfig.getDialectFactory();
+        PluginFactory pluginFactory = defaultConfig.getPluginFactory();
+        ListenerFactory listenerFactory = defaultConfig.getListenerFactory();
+        TransactionFactory transactionFactory = defaultConfig.getTransactionFactory();
+        DataSourceFactory dataSourceFactory = defaultConfig.getDataSourceFactory();
+        if (cacheFactory != null) {
+            configuration.setCacheFactory(cacheFactory);
+        }
+        if (mapperFactory != null) {
+            configuration.setMapperFactory(mapperFactory);
+        }
+        if (tableFactory != null) {
+            configuration.setTableFactory(tableFactory);
+        }
+        if (typeHandlerFactory != null) {
+            configuration.setTypeHandlerFactory(typeHandlerFactory);
+        }
+        if (dialectFactory != null) {
+            configuration.setDialectFactory(dialectFactory);
+        }
+        if (pluginFactory != null) {
+            configuration.setPluginFactory(pluginFactory);
+        }
+        if (listenerFactory != null) {
+            configuration.setListenerFactory(listenerFactory);
+        }
             if (transactionFactory != null) {
                 configuration.setTransactionFactory(transactionFactory);
             }
@@ -76,7 +97,6 @@ public class ConfigBuilder {
                 configuration.setDataSourceFactory(dataSourceFactory);
             }
             aliasFactory = defaultConfig.getAliasFactory();
-        }
     }
 
     private String getValue(String value) {
@@ -153,7 +173,7 @@ public class ConfigBuilder {
         return this;
     }
 
-    public Configuration builder() {
+    public Configuration build() {
         List<String> mapperPackages = defaultConfig.getMapperPackages();
         if (!addMapperPackage && !ObjectUtil.isNull(mapperPackages)) {
             for (String mapperPackage : mapperPackages) {
