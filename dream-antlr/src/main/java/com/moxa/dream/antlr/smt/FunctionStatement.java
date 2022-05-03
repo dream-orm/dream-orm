@@ -42,6 +42,10 @@ public abstract class FunctionStatement extends Statement {
 
     }
 
+    public static class GroupConcatStatement extends FunctionStatement {
+
+    }
+
     public static class CoalesceStatement extends FunctionStatement {
 
     }

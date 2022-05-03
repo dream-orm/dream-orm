@@ -86,6 +86,7 @@ public final class Constant {
             ExprType.CONVERT,
             ExprType.COALESCE,
             ExprType.CONCAT,
+            ExprType.GROUP_CONCAT,
             ExprType.ISNULL,
             ExprType.LEFT,
             ExprType.RIGHT,
@@ -145,6 +146,7 @@ public final class Constant {
             ExprType.DISTINCT,
             ExprType.FROM,
             ExprType.SELECT,
+            ExprType.SEPARATOR,
             ExprType.AS
     };
 

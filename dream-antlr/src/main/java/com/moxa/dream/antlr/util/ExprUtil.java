@@ -83,6 +83,8 @@ public class ExprUtil {
                 return ExprType.WHERE;
             case 68091487://GROUP
                 return ExprType.GROUP;
+            case -7778060://GROUP_CONCAT
+                return ExprType.GROUP_CONCAT;
             case 2123962405://HAVING
                 return ExprType.HAVING;
             case 75468590://ORDER
@@ -261,6 +263,8 @@ public class ExprUtil {
                 return ExprType.TIME;
             case 79100134://SPACE
                 return ExprType.SPACE;
+            case 224457413://SEPARATOR;
+                return ExprType.SEPARATOR;
             case 2660340://WEEK
                 return ExprType.WEEK;
             case 90085256://WEEKOFYEAR
@@ -374,5 +378,9 @@ public class ExprUtil {
             }
         }
         return builder.toString();
+    }
+
+    public static boolean isBlank(int c) {
+        return c == 9 || c == 10 || c == 32;
     }
 }

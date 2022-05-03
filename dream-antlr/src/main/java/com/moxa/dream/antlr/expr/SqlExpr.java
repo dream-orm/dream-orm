@@ -139,6 +139,9 @@ public abstract class SqlExpr {
             case STRCMP:
                 statement = exprStrcmp(exprInfo);
                 break;
+            case SEPARATOR:
+                statement = exprSeparator(exprInfo);
+                break;
             case SUBSTR:
             case SUBSTRING:
                 statement = exprSubStr(exprInfo);
@@ -354,6 +357,9 @@ public abstract class SqlExpr {
                 break;
             case CONCAT:
                 statement = exprConcat(exprInfo);
+                break;
+            case GROUP_CONCAT:
+                statement = exprGroupConcat(exprInfo);
                 break;
             case IFNULL:
                 statement = exprIfNull(exprInfo);
@@ -752,6 +758,10 @@ public abstract class SqlExpr {
         return exprFunction(exprInfo);
     }
 
+    protected Statement exprGroupConcat(ExprInfo exprInfo) {
+        return exprFunction(exprInfo);
+    }
+
     protected Statement exprCoalesce(ExprInfo exprInfo) {
         return exprFunction(exprInfo);
     }
@@ -1002,6 +1012,10 @@ public abstract class SqlExpr {
 
     protected Statement exprStrcmp(ExprInfo exprInfo) {
         return exprFunction(exprInfo);
+    }
+
+    protected Statement exprSeparator(ExprInfo exprInfo) {
+        return exprKeyWord(exprInfo);
     }
 
     protected Statement exprRtrim(ExprInfo exprInfo) {

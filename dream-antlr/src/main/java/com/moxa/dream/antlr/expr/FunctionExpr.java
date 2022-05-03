@@ -45,6 +45,16 @@ public class FunctionExpr extends SqlExpr {
     }
 
     @Override
+    protected Statement exprGroupConcat(ExprInfo exprInfo) {
+        FunctionStatement func = new FunctionStatement.GroupConcatStatement();
+        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
+                new FunctionParamerExpr.GroupConcatExpr(exprReader)
+        ).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     protected Statement exprCoalesce(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.CoalesceStatement();
         functionStatement = new FunctionParamerExpr(exprReader, func).expr();
@@ -279,9 +289,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprAvg(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.AvgStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
-                new FunctionParamerExpr.DistinctAllExpr(exprReader)
-                , new ExprInfo(ExprType.COMMA, ","))).expr();
+        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
+                new FunctionParamerExpr.DistinctAllExpr(exprReader)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -321,9 +330,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprCount(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.CountStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
-                new FunctionParamerExpr.DistinctAllExpr(exprReader)
-                , new ExprInfo(ExprType.COMMA, ","))).expr();
+        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
+                new FunctionParamerExpr.DistinctAllExpr(exprReader)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -379,9 +387,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprMax(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.MaxStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
-                new FunctionParamerExpr.DistinctAllExpr(exprReader)
-                , new ExprInfo(ExprType.COMMA, ","))).expr();
+        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
+                new FunctionParamerExpr.DistinctAllExpr(exprReader)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -389,9 +396,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprMin(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.MinStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
-                new FunctionParamerExpr.DistinctAllExpr(exprReader)
-                , new ExprInfo(ExprType.COMMA, ","))).expr();
+        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
+                new FunctionParamerExpr.DistinctAllExpr(exprReader)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -463,9 +469,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprSum(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.SumStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
-                new FunctionParamerExpr.DistinctAllExpr(exprReader)
-                , new ExprInfo(ExprType.COMMA, ","))).expr();
+        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
+                new FunctionParamerExpr.DistinctAllExpr(exprReader)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -758,7 +763,7 @@ public class FunctionExpr extends SqlExpr {
         }
 
         public static class DistinctAllExpr extends HelperExpr {
-            private ListColumnStatement listColumnStatement = new ListColumnStatement();
+            private ListColumnStatement listColumnStatement = new ListColumnStatement(" ");
 
             public DistinctAllExpr(ExprReader exprReader) {
                 this(exprReader, () -> new CompareExpr(exprReader));
@@ -794,6 +799,65 @@ public class FunctionExpr extends SqlExpr {
             public Statement exprHelp(Statement statement) {
                 listColumnStatement.add(statement);
                 setExprTypes(ExprType.NIL);
+                return expr();
+            }
+        }
+
+        public static class GroupConcatExpr extends HelperExpr {
+            private ListColumnStatement listColumnStatement = new ListColumnStatement(" ");
+
+            public GroupConcatExpr(ExprReader exprReader) {
+                this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")));
+            }
+
+            public GroupConcatExpr(ExprReader exprReader, Helper helper) {
+                super(exprReader, helper);
+                setExprTypes(ExprType.DISTINCT, ExprType.ALL, ExprType.HELP);
+            }
+
+            @Override
+            protected Statement exprDistinct(ExprInfo exprInfo) {
+                push();
+                setExprTypes(ExprType.HELP);
+                listColumnStatement.add(new SymbolStatement.LetterStatement("DISTINCT"));
+                return expr();
+            }
+
+            @Override
+            protected Statement exprAll(ExprInfo exprInfo) {
+                push();
+                setExprTypes(ExprType.HELP);
+                listColumnStatement.add(new SymbolStatement.LetterStatement("ALL"));
+                return expr();
+            }
+
+            @Override
+            protected Statement exprOrder(ExprInfo exprInfo) {
+                QueryExpr.OrderExpr orderExpr = new QueryExpr.OrderExpr(exprReader);
+                listColumnStatement.add(orderExpr.expr());
+                setExprTypes(ExprType.SEPARATOR, ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprSeparator(ExprInfo exprInfo) {
+                push();
+                listColumnStatement.add(new SymbolStatement.LetterStatement("SEPARATOR"));
+                ColumnExpr columnExpr = new ColumnExpr(exprReader);
+                listColumnStatement.add(columnExpr.expr());
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            public Statement nil() {
+                return listColumnStatement;
+            }
+
+            @Override
+            public Statement exprHelp(Statement statement) {
+                listColumnStatement.add(statement);
+                setExprTypes(ExprType.ORDER, ExprType.NIL);
                 return expr();
             }
         }
