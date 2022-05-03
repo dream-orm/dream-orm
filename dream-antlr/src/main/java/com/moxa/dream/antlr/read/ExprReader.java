@@ -231,8 +231,17 @@ public class ExprReader extends StringReader {
         char[] chars = new char[count];
         int len = read(chars, 0, count);
         String info = new String(chars, 0, len);
+        int skip = 1;
+        if (ExprUtil.isBlank(c)) {
+            mark();
+            while (ExprUtil.isBlank(c)) {
+                c = read();
+                skip++;
+            }
+            reset();
+        }
         if (ExprUtil.isDot(c)) {
-            info += pushDotLetter();
+            info += pushDotLetter(skip);
         }
         ExprType exprType = ExprUtil.getExprTypeInLetter(info);
         if (ExprUtil.isLBrace(c) && myFunctionFactory != null) {
@@ -247,22 +256,24 @@ public class ExprReader extends StringReader {
         return new ExprInfo(exprType, info, getStart(), getEnd());
     }
 
-    private String pushDotLetter() {
-        mark();
-        skip(1);
-        int count = 1;
-        int c;
-        while ((c = read()) != -1 && (ExprUtil.isLetter(c) || ExprUtil.isNumber(c) || ExprUtil.isStar(c))) {
-            count++;
+    private String pushDotLetter(int skip) {
+        skip(skip);
+        ExprInfo exprInfo = push();
+        int c = getEnd();
+        skip = 1;
+        if (ExprUtil.isBlank(c)) {
+            mark();
+            while (ExprUtil.isBlank(c)) {
+                c = read();
+                skip++;
+            }
+            reset();
         }
-        reset();
-        char[] chars = new char[count];
-        int len = read(chars, 0, count);
-        String info = new String(chars, 0, len);
+        String result = "." + exprInfo.getInfo();
         if (ExprUtil.isDot(c)) {
-            info += pushDotLetter();
+            result += pushDotLetter(skip);
         }
-        return info;
+        return result;
     }
 
     private ExprInfo pushStr() {

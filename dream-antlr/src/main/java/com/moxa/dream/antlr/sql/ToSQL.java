@@ -178,6 +178,9 @@ public abstract class ToSQL {
             case 11485339://ConcatStatement
                 sql = toString((FunctionStatement.ConcatStatement) statement, assist, invokerList);
                 break;
+            case -1658466212://GroupConcatStatement
+                sql = toString((FunctionStatement.GroupConcatStatement) statement, assist, invokerList);
+                break;
             case 231026207://ConcatWsStatement
                 sql = toString((FunctionStatement.ConcatWsStatement) statement, assist, invokerList);
                 break;
@@ -643,6 +646,8 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.LenStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(FunctionStatement.ConcatStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
+
+    protected abstract String toString(FunctionStatement.GroupConcatStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(FunctionStatement.ConcatWsStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 

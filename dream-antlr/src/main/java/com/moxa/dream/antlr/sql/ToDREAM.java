@@ -376,6 +376,11 @@ public class ToDREAM extends ToSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.GroupConcatStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
+        return "GROUP_CONCAT(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.ConcatWsStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return "CONCAT_WS(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
