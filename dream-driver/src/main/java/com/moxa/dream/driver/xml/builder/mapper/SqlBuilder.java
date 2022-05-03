@@ -4,6 +4,7 @@ import com.moxa.dream.driver.xml.builder.XMLBuilder;
 import com.moxa.dream.driver.xml.moudle.XmlConstant;
 import com.moxa.dream.driver.xml.moudle.XmlHandler;
 import com.moxa.dream.driver.xml.util.XmlUtil;
+import com.moxa.dream.util.common.ObjectUtil;
 import org.xml.sax.Attributes;
 
 public class SqlBuilder extends XMLBuilder {
@@ -26,10 +27,13 @@ public class SqlBuilder extends XMLBuilder {
 
     @Override
     public void characters(String value) {
-        String trimValue;
-        if (value == null || (trimValue = value.trim()).equals(""))
+        if(ObjectUtil.isNull(value))
             return;
-        sql.setValue(trimValue);
+        String sqlValue = sql.getValue();
+        if(sqlValue==null){
+            sqlValue="";
+        }
+        sql.setValue(sqlValue+value);
     }
 
     @Override
