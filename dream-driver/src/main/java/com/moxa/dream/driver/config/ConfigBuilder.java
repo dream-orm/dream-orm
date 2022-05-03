@@ -6,6 +6,7 @@ import com.moxa.dream.driver.alias.DefaultAliasFactory;
 import com.moxa.dream.driver.factory.DefaultDialectFactory;
 import com.moxa.dream.driver.factory.DefaultListenerFactory;
 import com.moxa.dream.driver.factory.DefaultMapperFactory;
+import com.moxa.dream.driver.resource.ResourceUtil;
 import com.moxa.dream.system.cache.factory.CacheFactory;
 import com.moxa.dream.system.cache.factory.DefaultCacheFactory;
 import com.moxa.dream.system.config.Configuration;
@@ -26,7 +27,6 @@ import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.wrapper.TypeHandlerWrapper;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
-import com.moxa.dream.util.resource.ResourceUtil;
 
 import java.util.List;
 import java.util.Properties;

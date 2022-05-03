@@ -1,5 +1,6 @@
 package com.moxa.dream.driver.factory;
 
+import com.moxa.dream.driver.resource.ResourceUtil;
 import com.moxa.dream.driver.xml.builder.XMLBuilder;
 import com.moxa.dream.driver.xml.builder.mapper.MapperInfoBuilder;
 import com.moxa.dream.driver.xml.moudle.XmlCallback;
@@ -10,7 +11,6 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.mapper.factory.AbstractMapperFactory;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.resource.ResourceUtil;
 import org.xml.sax.InputSource;
 
 import java.util.Map;
