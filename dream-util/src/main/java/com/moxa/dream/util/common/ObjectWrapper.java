@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ObjectWrapper {
     static Map<Class, ObjectFactoryWrapper> factoryWrapperMap = new ConcurrentHashMap<>();
-    private ObjectFactory objectFactory;
+    private final ObjectFactory objectFactory;
 
     ObjectWrapper(ObjectFactory objectFactory) {
         this.objectFactory = objectFactory;

@@ -12,8 +12,8 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import java.util.List;
 
 public class SortHandler extends AbstractHandler {
-    private SortInvoker sortInvoker;
-    private Statement[] statementList;
+    private final SortInvoker sortInvoker;
+    private final Statement[] statementList;
 
     public SortHandler(SortInvoker sortInvoker, Statement[] statementList) {
         this.sortInvoker = sortInvoker;

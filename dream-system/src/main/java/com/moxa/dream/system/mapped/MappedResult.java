@@ -9,14 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MappedResult {
-    private Class<? extends Collection> rowType;
-    private Class colType;
-    private ObjectFactoryWrapper rowObjectFactoryWrapper;
-    private ObjectFactoryWrapper colObjectFactoryWrapper;
+    private final Class<? extends Collection> rowType;
+    private final Class colType;
+    private final ObjectFactoryWrapper rowObjectFactoryWrapper;
+    private final ObjectFactoryWrapper colObjectFactoryWrapper;
     private MappedColumn[] primaryList = new MappedColumn[0];
     private MappedColumn[] mappedColumnList = new MappedColumn[0];
-    private Map<String, MappedResult> childResultMappingMap = new HashMap<>();
-    private String property;
+    private final Map<String, MappedResult> childResultMappingMap = new HashMap<>();
+    private final String property;
 
     public MappedResult(Class<? extends Collection> rowType, Class colType, String property) {
         this.rowType = rowType == null ? Collection.class : rowType;

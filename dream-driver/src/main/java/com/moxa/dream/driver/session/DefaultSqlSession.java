@@ -12,10 +12,10 @@ import com.moxa.dream.util.common.ObjectUtil;
 import java.sql.SQLException;
 
 public class DefaultSqlSession implements SqlSession {
-    private Configuration configuration;
-    private Executor executor;
-    private MapperFactory mapperFactory;
-    private DialectFactory dialectFactory;
+    private final Configuration configuration;
+    private final Executor executor;
+    private final MapperFactory mapperFactory;
+    private final DialectFactory dialectFactory;
 
     public DefaultSqlSession(Configuration configuration, Executor executor) {
         ObjectUtil.requireNonNull(configuration, "Property 'configuration' is required");

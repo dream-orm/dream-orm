@@ -19,7 +19,7 @@ public class OrderStatement extends Statement {
     }
 
     public static class AscStatement extends Statement {
-        private Statement statement;
+        private final Statement statement;
 
         public AscStatement(Statement statement) {
             this.statement = statement;
@@ -39,7 +39,7 @@ public class OrderStatement extends Statement {
     }
 
     public static class DescStatement extends Statement {
-        private Statement statement;
+        private final Statement statement;
 
         public DescStatement(Statement statement) {
             this.statement = statement;

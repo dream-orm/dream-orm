@@ -12,9 +12,9 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import java.util.List;
 
 public class OffSetHandler extends AbstractHandler {
-    private OffSetInvoker offSetInvoker;
-    private Statement firstStatement;
-    private Statement secondStatement;
+    private final OffSetInvoker offSetInvoker;
+    private final Statement firstStatement;
+    private final Statement secondStatement;
 
     public OffSetHandler(OffSetInvoker offSetInvoker, Statement firstStatement, Statement secondStatement) {
         this.offSetInvoker = offSetInvoker;

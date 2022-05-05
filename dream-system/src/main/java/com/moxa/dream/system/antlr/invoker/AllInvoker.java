@@ -225,10 +225,10 @@ public class AllInvoker extends AbstractInvoker {
     }
 
     public static class QueryColumnInfo {
-        private String database;
-        private String table;
-        private String column;
-        private String alias;
+        private final String database;
+        private final String table;
+        private final String column;
+        private final String alias;
 
         public QueryColumnInfo(String database, String table, String column, String alias) {
             this.database = database;

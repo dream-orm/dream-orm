@@ -15,10 +15,10 @@ import java.util.List;
 
 public class QueryScanHandler extends AbstractHandler {
     //From监控处理器
-    private FromScanHandler fromScanHandler = new FromScanHandler(this);
+    private final FromScanHandler fromScanHandler = new FromScanHandler(this);
     //Join监控处理器
-    private JoinScanHandler joinScanHandler = new JoinScanHandler(this);
-    private ScanInvoker.ScanInfo scanInfo;
+    private final JoinScanHandler joinScanHandler = new JoinScanHandler(this);
+    private final ScanInvoker.ScanInfo scanInfo;
 
     public QueryScanHandler(ScanInvoker.ScanInfo scanInfo) {
         this.scanInfo = scanInfo;
@@ -64,7 +64,7 @@ public class QueryScanHandler extends AbstractHandler {
     }
 
     static class FromScanHandler extends AbstractHandler {
-        private QueryScanHandler queryScanHandler;
+        private final QueryScanHandler queryScanHandler;
 
         public FromScanHandler(QueryScanHandler queryScanHandler) {
             this.queryScanHandler = queryScanHandler;

@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class ReflectUtil {
-    private static ReflectLoader reflectLoader = new ReflectLoader();
+    private static final ReflectLoader reflectLoader = new ReflectLoader();
 
     public static <T> T create(Class<T> type) {
         return create(type, false);

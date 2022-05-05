@@ -7,7 +7,7 @@ import com.moxa.dream.antlr.smt.BraceStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
 public class BraceExpr extends HelperExpr {
-    private BraceStatement brace = new BraceStatement();
+    private final BraceStatement brace = new BraceStatement();
 
     public BraceExpr(ExprReader exprReader) {
         this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")));

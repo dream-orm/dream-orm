@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 
 public class XmlHandler extends DefaultHandler {
-    private ArrayDeque<XMLBuilder> builderStack = new ArrayDeque<>();
-    private XmlCallback xmlCallback;
+    private final ArrayDeque<XMLBuilder> builderStack = new ArrayDeque<>();
+    private final XmlCallback xmlCallback;
     private XMLBuilder xmlBuilder;
 
     public XmlHandler(XmlCallback xmlCallback) {

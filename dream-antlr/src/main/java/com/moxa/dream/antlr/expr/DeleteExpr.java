@@ -8,7 +8,7 @@ import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 
 public class DeleteExpr extends SqlExpr {
-    private DeleteStatement deleteStatement = new DeleteStatement();
+    private final DeleteStatement deleteStatement = new DeleteStatement();
 
     public DeleteExpr(ExprReader exprReader) {
         super(exprReader);

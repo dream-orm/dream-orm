@@ -5,7 +5,7 @@ import com.moxa.dream.util.reflection.util.NonCollection;
 
 
 public class NonCollectionObjectFactory implements ObjectFactory {
-    private NonCollection result;
+    private final NonCollection result;
 
     public NonCollectionObjectFactory() {
         this(new NonCollection());

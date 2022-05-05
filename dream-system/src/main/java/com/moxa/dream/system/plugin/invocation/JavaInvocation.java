@@ -3,9 +3,9 @@ package com.moxa.dream.system.plugin.invocation;
 import java.lang.reflect.Method;
 
 public class JavaInvocation implements Invocation {
-    private Object target;
-    private Method method;
-    private Object[] args;
+    private final Object target;
+    private final Method method;
+    private final Object[] args;
 
     public JavaInvocation(Object target, Method method, Object[] args) {
         this.target = target;

@@ -8,7 +8,7 @@ import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 
 public class InsertExpr extends SqlExpr {
-    private InsertStatement insertStatement = new InsertStatement();
+    private final InsertStatement insertStatement = new InsertStatement();
 
     public InsertExpr(ExprReader exprReader) {
         super(exprReader);
@@ -69,7 +69,7 @@ public class InsertExpr extends SqlExpr {
     }
 
     public static class ValuesExpr extends SqlExpr {
-        private InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
+        private final InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
 
         public ValuesExpr(ExprReader exprReader) {
             super(exprReader);

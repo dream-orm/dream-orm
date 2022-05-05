@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResultInfo {
-    private String sql;
-    private Map<Class, Invoker> sqlInvokerMap = new HashMap<>();
+    private final String sql;
+    private final Map<Class, Invoker> sqlInvokerMap = new HashMap<>();
 
     public ResultInfo(String sql, Map<String, Invoker> sqlInvokerMap) {
         this.sql = sql;

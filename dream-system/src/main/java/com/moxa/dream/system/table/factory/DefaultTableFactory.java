@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DefaultTableFactory implements TableFactory {
-    private Map<String, TableInfo> tableInfoMap = new LowHashMap<>();
+    private final Map<String, TableInfo> tableInfoMap = new LowHashMap<>();
 
     protected TableInfo createTableInfo(Class tableClass) {
         String table = getTable(tableClass);

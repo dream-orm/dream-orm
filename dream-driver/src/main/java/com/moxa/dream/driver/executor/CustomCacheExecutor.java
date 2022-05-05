@@ -6,7 +6,7 @@ import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.mapped.MappedStatement;
 
 public class CustomCacheExecutor extends CacheExecutor {
-    private Cache cache;
+    private final Cache cache;
 
     public CustomCacheExecutor(Cache cache, Executor executor) {
         super(executor);

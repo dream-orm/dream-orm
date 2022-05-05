@@ -6,7 +6,7 @@ import com.moxa.dream.system.mapped.MappedStatement;
 import java.sql.SQLException;
 
 public abstract class CacheExecutor implements Executor {
-    private Executor executor;
+    private final Executor executor;
 
     public CacheExecutor(Executor executor) {
         this.executor = executor;

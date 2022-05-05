@@ -170,7 +170,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     public static class BetweenAndExpr extends HelperExpr {
-        private ConditionStatement bet = new ConditionStatement();
+        private final ConditionStatement bet = new ConditionStatement();
 
         public BetweenAndExpr(ExprReader exprReader) {
             this(exprReader, () -> new OperExpr(exprReader));

@@ -38,6 +38,10 @@ public abstract class FunctionStatement extends Statement {
 
     }
 
+    public static class LengthStatement extends FunctionStatement {
+
+    }
+
     public static class ConcatStatement extends FunctionStatement {
 
     }

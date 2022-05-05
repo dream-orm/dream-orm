@@ -20,19 +20,19 @@ import java.util.stream.Collectors;
 
 public class ScanInvoker extends AbstractInvoker {
 
-    private QueryScanHandler queryScanHandler;
+    private final QueryScanHandler queryScanHandler;
 
-    private InsertScanHandler insertScanHandler;
+    private final InsertScanHandler insertScanHandler;
 
-    private UpdateScanHandler updateScanHandler;
+    private final UpdateScanHandler updateScanHandler;
 
-    private DeleteScanHandler deleteScanHandler;
+    private final DeleteScanHandler deleteScanHandler;
 
-    private ParamScanHandler paramScanHandler;
+    private final ParamScanHandler paramScanHandler;
 
-    private InvokerScanHandler invokerScanHandler;
+    private final InvokerScanHandler invokerScanHandler;
 
-    private ScanInfo scanInfo = new ScanInfo();
+    private final ScanInfo scanInfo = new ScanInfo();
 
     public ScanInvoker() {
         queryScanHandler = new QueryScanHandler(scanInfo);
@@ -93,9 +93,9 @@ public class ScanInvoker extends AbstractInvoker {
 
     public static class ScanInfo {
         private Command command = Command.NONE;
-        private Map<String, TableScanInfo> tableScanInfoMap = new LowHashMap<>();
-        private Map<String, ParamScanInfo> paramScanInfoMap = new HashMap<>();
-        private List<InvokerStatement> invokerStatementList = new ArrayList<>();
+        private final Map<String, TableScanInfo> tableScanInfoMap = new LowHashMap<>();
+        private final Map<String, ParamScanInfo> paramScanInfoMap = new HashMap<>();
+        private final List<InvokerStatement> invokerStatementList = new ArrayList<>();
         private List<$Invoker.ParamInfo> paramInfoList;
         private String sql;
 
@@ -146,10 +146,10 @@ public class ScanInvoker extends AbstractInvoker {
     }
 
     public static class TableScanInfo {
-        private String database;
-        private String table;
-        private String alias;
-        private boolean master;
+        private final String database;
+        private final String table;
+        private final String alias;
+        private final boolean master;
 
         public TableScanInfo(String database, String table, String alias, boolean master) {
             if (alias == null)
@@ -179,10 +179,10 @@ public class ScanInvoker extends AbstractInvoker {
     }
 
     public static class ParamScanInfo {
-        private String database;
-        private String table;
-        private String column;
-        private String param;
+        private final String database;
+        private final String table;
+        private final String column;
+        private final String param;
 
         public ParamScanInfo(String database, String table, String column, String param) {
             this.database = database;

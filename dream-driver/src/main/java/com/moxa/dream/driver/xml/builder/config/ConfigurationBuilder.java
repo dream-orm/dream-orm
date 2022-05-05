@@ -24,7 +24,7 @@ public class ConfigurationBuilder extends XMLBuilder {
     private ListenerFactoryBuilder.ListenerFactory listenerFactory;
     private TransactionFactoryBuilder.TransactionFactory transactionFactory;
     private DataSourceFactoryBuilder.DataSourceFactory dataSourceFactory;
-    private DefaultConfig defaultConfig;
+    private final DefaultConfig defaultConfig;
 
     public ConfigurationBuilder(XmlHandler xmlHandler, DefaultConfig defaultConfig) {
         super(xmlHandler);

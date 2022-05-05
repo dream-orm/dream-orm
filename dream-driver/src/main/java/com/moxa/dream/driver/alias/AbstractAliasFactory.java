@@ -8,8 +8,8 @@ public abstract class AbstractAliasFactory implements AliasFactory {
     public static final String OPEN_TOKEN = "${";
     public static final String CLOSE_TOKEN = "}";
     protected Properties properties = new Properties();
-    private String openToken;
-    private String closeToken;
+    private final String openToken;
+    private final String closeToken;
 
     public AbstractAliasFactory() {
         this(OPEN_TOKEN, CLOSE_TOKEN);

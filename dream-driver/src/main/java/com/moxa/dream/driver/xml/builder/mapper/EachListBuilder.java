@@ -52,7 +52,7 @@ public class EachListBuilder extends XMLBuilder {
     }
 
     static class EachList {
-        private List<EachBuilder.Each> eachList = new ArrayList<>();
+        private final List<EachBuilder.Each> eachList = new ArrayList<>();
 
         public void addEachList(EachBuilder.Each each) {
             eachList.add(each);

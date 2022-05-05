@@ -13,7 +13,7 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import java.util.List;
 
 public class UpdateScanHandler extends AbstractHandler {
-    private ScanInvoker.ScanInfo scanInfo;
+    private final ScanInvoker.ScanInfo scanInfo;
 
     public UpdateScanHandler(ScanInvoker.ScanInfo scanInfo) {
         this.scanInfo = scanInfo;

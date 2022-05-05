@@ -47,8 +47,7 @@ class ReflectLoader {
                             if (!ReflectUtil.castClass(parameterType).isAssignableFrom(ReflectUtil.castClass(constructorArgs[i].getClass())))
                                 break;
                         }
-                        if (i == parameterTypes.length)
-                            return true;
+                        return i == parameterTypes.length;
                     }
                     return false;
                 }).findFirst();

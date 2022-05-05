@@ -7,7 +7,7 @@ import com.moxa.dream.antlr.smt.CaseStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
 public class CaseExpr extends SqlExpr {
-    private CaseStatement caseStatement = new CaseStatement();
+    private final CaseStatement caseStatement = new CaseStatement();
 
     public CaseExpr(ExprReader exprReader) {
         super(exprReader);
@@ -78,8 +78,8 @@ public class CaseExpr extends SqlExpr {
     }
 
     public static class WhenThenExpr extends SqlExpr {
-        private CaseStatement.WhenThenStatement whenThenStatement = new CaseStatement.WhenThenStatement();
-        private boolean compare;
+        private final CaseStatement.WhenThenStatement whenThenStatement = new CaseStatement.WhenThenStatement();
+        private final boolean compare;
 
         public WhenThenExpr(ExprReader exprReader, boolean compare) {
             super(exprReader);

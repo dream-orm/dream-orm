@@ -7,10 +7,10 @@ import java.lang.reflect.Parameter;
 import java.util.Map;
 
 public class EachInfo {
-    private Class type;
-    private Method method;
-    private Map<String, String> argMap;
-    private String field;
+    private final Class type;
+    private final Method method;
+    private final Map<String, String> argMap;
+    private final String field;
     private Object[] args;
 
     public EachInfo(Class type, Method method, String field, Map<String, String> argMap) {

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ParamScanHandler extends AbstractHandler {
 
-    private ConditionHandler conditionHandler;
+    private final ConditionHandler conditionHandler;
 
     public ParamScanHandler(ScanInvoker.ScanInfo scanInfo) {
         conditionHandler = new ConditionHandler(scanInfo);
@@ -37,7 +37,7 @@ public class ParamScanHandler extends AbstractHandler {
 
 
     class ConditionHandler extends AbstractHandler {
-        private ScanInvoker.ScanInfo scanInfo;
+        private final ScanInvoker.ScanInfo scanInfo;
 
         public ConditionHandler(ScanInvoker.ScanInfo scanInfo) {
             this.scanInfo = scanInfo;

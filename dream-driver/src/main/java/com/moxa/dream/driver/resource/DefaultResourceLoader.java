@@ -69,7 +69,7 @@ public class DefaultResourceLoader implements ResourceLoader {
                 } else if (files[i].isFile()) {
                     String name = files[i].getName();
                     if (name.endsWith(".class")) {
-                        classList.add(getClassLoader().loadClass(pkg.replace("/", ".") + "."+name.substring(0, name.length() - 6)));
+                        classList.add(getClassLoader().loadClass(pkg.replace("/", ".") + "." + name.substring(0, name.length() - 6)));
                     }
                 }
             }

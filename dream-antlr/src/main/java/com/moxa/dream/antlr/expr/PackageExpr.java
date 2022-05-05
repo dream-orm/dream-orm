@@ -8,7 +8,7 @@ import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
 public class PackageExpr extends HelperExpr {
-    private PackageStatement statement = new PackageStatement();
+    private final PackageStatement statement = new PackageStatement();
 
     public PackageExpr(ExprReader exprReader) {
         this(exprReader, () -> new CrudExpr(exprReader));

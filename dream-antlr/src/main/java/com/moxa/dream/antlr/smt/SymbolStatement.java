@@ -23,7 +23,7 @@ public abstract class SymbolStatement extends Statement {
 
     public static class LetterStatement extends SymbolStatement {
         private String prefix;
-        private String suffix;
+        private final String suffix;
 
         public LetterStatement(String symbol) {
             super(symbol);

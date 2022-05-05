@@ -7,7 +7,7 @@ import com.moxa.dream.antlr.smt.*;
 import java.util.List;
 
 public class ToPGSQL extends ToPubSQL {
-    private int num = 1;
+    private final int num = 1;
 
     private String getPattern(String pattern) {
         char[] patternArray = pattern.toCharArray();

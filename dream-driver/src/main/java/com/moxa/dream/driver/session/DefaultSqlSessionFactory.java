@@ -13,7 +13,7 @@ import com.moxa.dream.util.common.ObjectUtil;
 
 
 public class DefaultSqlSessionFactory implements SqlSessionFactory {
-    private Configuration configuration;
+    private final Configuration configuration;
 
     public DefaultSqlSessionFactory(Configuration configuration) {
         ObjectUtil.requireNonNull(configuration, "Property 'configuration' is required");

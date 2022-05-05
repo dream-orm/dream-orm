@@ -53,7 +53,7 @@ public class TypeHandlerFactoryBuilder extends XMLBuilder {
 
     static class TypeHandlerFactory {
         private String type;
-        private List<TypeHandlerWrapperBuilder.TypeHandlerWrapper> typeHandlerWrapperList = new ArrayList<>();
+        private final List<TypeHandlerWrapperBuilder.TypeHandlerWrapper> typeHandlerWrapperList = new ArrayList<>();
 
         public String getType() {
             return type;

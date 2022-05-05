@@ -7,7 +7,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 public class XmlParser {
-    private SAXParser saxParser;
+    private final SAXParser saxParser;
 
     public XmlParser() {
         try {

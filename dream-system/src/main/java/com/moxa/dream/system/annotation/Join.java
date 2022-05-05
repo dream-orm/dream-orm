@@ -16,7 +16,7 @@ public @interface Join {
 
     enum JoinType {
         LEFT_JOIN("left join"), RIGHT_JOIN("right join"), INNER_JOIN("inner join");
-        private String join;
+        private final String join;
 
         JoinType(String join) {
             this.join = join;

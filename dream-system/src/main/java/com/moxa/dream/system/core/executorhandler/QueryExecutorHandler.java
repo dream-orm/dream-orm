@@ -10,9 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class QueryExecutorHandler implements ExecutorHandler {
-    private StatementHandler statementHandler;
-    private ResultSetHandler resultSetHandler;
-    private Connection connection;
+    private final StatementHandler statementHandler;
+    private final ResultSetHandler resultSetHandler;
+    private final Connection connection;
 
     public QueryExecutorHandler(StatementHandler statementHandler, ResultSetHandler resultSetHandler, Connection connection) {
         this.statementHandler = statementHandler;

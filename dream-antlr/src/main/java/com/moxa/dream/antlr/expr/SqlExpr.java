@@ -106,6 +106,9 @@ public abstract class SqlExpr {
             case LEN:
                 statement = exprLen(exprInfo);
                 break;
+            case LENGTH:
+                statement = exprLength(exprInfo);
+                break;
             case CONCAT_WS:
                 statement = exprConcatWs(exprInfo);
                 break;
@@ -1055,6 +1058,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprLen(ExprInfo exprInfo) {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprLength(ExprInfo exprInfo) {
         return exprFunction(exprInfo);
     }
 

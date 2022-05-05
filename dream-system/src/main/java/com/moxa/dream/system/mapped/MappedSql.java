@@ -6,9 +6,9 @@ import com.moxa.dream.antlr.invoker.ScanInvoker;
 import java.util.Map;
 
 public class MappedSql {
-    private Command command;
-    private String sql;
-    private Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap;
+    private final Command command;
+    private final String sql;
+    private final Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap;
 
     public MappedSql(Command command, String sql, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap) {
         this.command = command;

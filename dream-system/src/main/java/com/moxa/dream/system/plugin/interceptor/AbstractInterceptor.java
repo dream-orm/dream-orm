@@ -8,7 +8,11 @@ public abstract class AbstractInterceptor implements Interceptor {
 
     public Set<Method> methods() {
         if (methods == null) {
-            methods = methodSet();
+            synchronized (this) {
+                if (methods == null) {
+                    methods = methodSet();
+                }
+            }
         }
         return methods;
     }

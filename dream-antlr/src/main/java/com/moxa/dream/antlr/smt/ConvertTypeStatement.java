@@ -1,7 +1,7 @@
 package com.moxa.dream.antlr.smt;
 
 public abstract class ConvertTypeStatement extends Statement {
-    private Statement statement;
+    private final Statement statement;
 
     public ConvertTypeStatement(Statement statement) {
         this.statement = statement;

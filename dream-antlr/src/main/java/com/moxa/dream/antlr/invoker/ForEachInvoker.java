@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ForEachInvoker extends AbstractInvoker {
-    private String cut = ",";
-    private String index = "index";
-    private String item = "item";
+    private final String cut = ",";
+    private final String index = "index";
+    private final String item = "item";
 
     @Override
     public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {

@@ -9,7 +9,7 @@ import com.moxa.dream.antlr.smt.Statement;
 
 public class InvokerExpr extends SqlExpr {
 
-    private InvokerStatement invokerStatement = new InvokerStatement();
+    private final InvokerStatement invokerStatement = new InvokerStatement();
 
     public InvokerExpr(ExprReader exprReader) {
         super(exprReader);

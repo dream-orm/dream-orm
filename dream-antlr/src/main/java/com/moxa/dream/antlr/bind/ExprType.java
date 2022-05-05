@@ -44,6 +44,7 @@ public enum ExprType {
     ALL,
     ASCII,
     LEN,
+    LENGTH,
     CHAR_LENGTH,
     CHARACTER_LENGTH,
     CONVERT,

@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 public class VariableReflectHandler implements ReflectHandler {
-    private Class rootClass;
-    private Map<String, Class> variableMap = new HashMap<>();
+    private final Class rootClass;
+    private final Map<String, Class> variableMap = new HashMap<>();
 
     public VariableReflectHandler(Class rootClass) {
         this.rootClass = rootClass;

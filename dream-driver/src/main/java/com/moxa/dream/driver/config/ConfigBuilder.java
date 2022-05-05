@@ -33,7 +33,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class ConfigBuilder {
-    private Configuration configuration;
+    private final Configuration configuration;
     private AliasFactory aliasFactory;
     private DefaultConfig defaultConfig;
     private boolean addMapperPackage = false;
@@ -90,13 +90,13 @@ public class ConfigBuilder {
         if (listenerFactory != null) {
             configuration.setListenerFactory(listenerFactory);
         }
-            if (transactionFactory != null) {
-                configuration.setTransactionFactory(transactionFactory);
-            }
-            if (dataSourceFactory != null) {
-                configuration.setDataSourceFactory(dataSourceFactory);
-            }
-            aliasFactory = defaultConfig.getAliasFactory();
+        if (transactionFactory != null) {
+            configuration.setTransactionFactory(transactionFactory);
+        }
+        if (dataSourceFactory != null) {
+            configuration.setDataSourceFactory(dataSourceFactory);
+        }
+        aliasFactory = defaultConfig.getAliasFactory();
     }
 
     private String getValue(String value) {

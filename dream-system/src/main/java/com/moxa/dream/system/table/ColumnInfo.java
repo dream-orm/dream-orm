@@ -3,12 +3,12 @@ package com.moxa.dream.system.table;
 import java.lang.reflect.Field;
 
 public class ColumnInfo {
-    private String table;
-    private String column;
-    private String name;
-    private Field field;
-    private boolean primary;
-    private int jdbcType;
+    private final String table;
+    private final String column;
+    private final String name;
+    private final Field field;
+    private final boolean primary;
+    private final int jdbcType;
 
     public ColumnInfo(String table, String column, Field field, boolean primary, int jdbcType) {
         this.table = table;

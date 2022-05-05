@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MappedColumn {
-    private int index;
-    private int jdbcType;
-    private String table;
-    private boolean primary;
+    private final int index;
+    private final int jdbcType;
+    private final String table;
+    private final boolean primary;
     private TypeHandler typeHandler;
     private String property;
 

@@ -27,13 +27,13 @@ public class SqlBuilder extends XMLBuilder {
 
     @Override
     public void characters(String value) {
-        if(ObjectUtil.isNull(value))
+        if (ObjectUtil.isNull(value))
             return;
         String sqlValue = sql.getValue();
-        if(sqlValue==null){
-            sqlValue="";
+        if (sqlValue == null) {
+            sqlValue = "";
         }
-        sql.setValue(sqlValue+value);
+        sql.setValue(sqlValue + value);
     }
 
     @Override

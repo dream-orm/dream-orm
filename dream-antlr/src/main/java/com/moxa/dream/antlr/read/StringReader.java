@@ -2,7 +2,7 @@ package com.moxa.dream.antlr.read;
 
 public class StringReader {
     protected String value;
-    private int length;
+    private final int length;
     private int next = 0;
     private int mark = 0;
     private int start = 0;
@@ -23,7 +23,7 @@ public class StringReader {
         return c;
     }
 
-    protected int read(char cbuf[], int off, int len) {
+    protected int read(char[] cbuf, int off, int len) {
         value.getChars(next, next + len, cbuf, off);
         start = next;
         next += len;
@@ -41,6 +41,9 @@ public class StringReader {
     protected void mark() {
         mark = next;
 
+    }
+    protected int value(){
+        return value.charAt(end);
     }
 
     protected void reset() {

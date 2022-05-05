@@ -21,10 +21,7 @@ public class ToDREAM extends ToSQL {
 
     protected String beforeCache(Statement statement) {
         String sql = statement.getQuickValue();
-        if (sql != null)
-            return sql;
-        else
-            return null;
+        return sql;
     }
 
 
@@ -368,6 +365,11 @@ public class ToDREAM extends ToSQL {
     @Override
     protected String toString(FunctionStatement.LenStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return "LEN(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.LengthStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
+        return "LENGTH(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override

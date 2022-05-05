@@ -53,7 +53,7 @@ public class PluginFactoryBuilder extends XMLBuilder {
 
     static class PluginFactory {
         private String type;
-        private List<InterceptorBuilder.Interceptor> interceptorList = new ArrayList<>();
+        private final List<InterceptorBuilder.Interceptor> interceptorList = new ArrayList<>();
 
         public String getType() {
             return type;

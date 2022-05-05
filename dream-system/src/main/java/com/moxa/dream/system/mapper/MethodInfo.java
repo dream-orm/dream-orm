@@ -25,7 +25,7 @@ public class MethodInfo {
     private CacheKey sqlKey;
     private Method method;
     private boolean generatedKeys;
-    private Map<Class, Object> builtMap = new HashMap<>();
+    private final Map<Class, Object> builtMap = new HashMap<>();
 
     private MethodInfo() {
 
@@ -95,7 +95,7 @@ public class MethodInfo {
     }
 
     public static class Builder {
-        private MethodInfo methodInfo;
+        private final MethodInfo methodInfo;
 
         public Builder(Configuration configuration) {
             methodInfo = new MethodInfo();

@@ -37,6 +37,14 @@ public class FunctionExpr extends SqlExpr {
     }
 
     @Override
+    protected Statement exprLength(ExprInfo exprInfo) {
+        FunctionStatement func = new FunctionStatement.LengthStatement();
+        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     protected Statement exprConcat(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.ConcatStatement();
         functionStatement = new FunctionParamerExpr(exprReader, func).expr();
@@ -710,7 +718,7 @@ public class FunctionExpr extends SqlExpr {
     }
 
     public static class FunctionParamerExpr extends HelperExpr {
-        private FunctionStatement func;
+        private final FunctionStatement func;
 
         public FunctionParamerExpr(ExprReader exprReader, FunctionStatement func) {
             this(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
@@ -763,7 +771,7 @@ public class FunctionExpr extends SqlExpr {
         }
 
         public static class DistinctAllExpr extends HelperExpr {
-            private ListColumnStatement listColumnStatement = new ListColumnStatement(" ");
+            private final ListColumnStatement listColumnStatement = new ListColumnStatement(" ");
 
             public DistinctAllExpr(ExprReader exprReader) {
                 this(exprReader, () -> new CompareExpr(exprReader));
@@ -804,7 +812,7 @@ public class FunctionExpr extends SqlExpr {
         }
 
         public static class GroupConcatExpr extends HelperExpr {
-            private ListColumnStatement listColumnStatement = new ListColumnStatement(" ");
+            private final ListColumnStatement listColumnStatement = new ListColumnStatement(" ");
 
             public GroupConcatExpr(ExprReader exprReader) {
                 this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")));
@@ -866,7 +874,7 @@ public class FunctionExpr extends SqlExpr {
             private DateOperStatement dateOperStatement;
             private Statement date;
             private Statement qty;
-            private boolean positive;
+            private final boolean positive;
 
             public DateOperExpr(ExprReader exprReader, boolean positive) {
                 this(exprReader, () -> new CompareExpr(exprReader), positive);

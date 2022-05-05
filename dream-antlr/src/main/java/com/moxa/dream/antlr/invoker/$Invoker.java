@@ -12,7 +12,7 @@ import java.util.List;
 
 public class $Invoker extends AbstractInvoker {
     ObjectWrapper paramWrapper;
-    private List<ParamInfo> paramInfoList = new ArrayList<>();
+    private final List<ParamInfo> paramInfoList = new ArrayList<>();
 
     @Override
     public void init(ToAssist assist) {
@@ -37,7 +37,7 @@ public class $Invoker extends AbstractInvoker {
     }
 
     public static class ParamInfo {
-        private String paramName;
+        private final String paramName;
         private Object paramValue;
 
         public ParamInfo(String paramName) {

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public final class NonCollection<T> implements Collection<T> {
-    private Object[] value = new Object[1];
+    private final Object[] value = new Object[1];
     private int index = 0;
 
     @Override

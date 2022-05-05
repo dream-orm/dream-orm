@@ -12,8 +12,8 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import java.util.List;
 
 public class GroupHandler extends AbstractHandler {
-    private GroupInvoker groupInvoker;
-    private Statement[] statementList;
+    private final GroupInvoker groupInvoker;
+    private final Statement[] statementList;
 
     public GroupHandler(GroupInvoker groupInvoker, Statement[] statementList) {
         this.groupInvoker = groupInvoker;

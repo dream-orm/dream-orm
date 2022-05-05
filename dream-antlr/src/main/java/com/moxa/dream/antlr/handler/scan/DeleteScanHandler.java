@@ -13,7 +13,7 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import java.util.List;
 
 public class DeleteScanHandler extends AbstractHandler {
-    private ScanInvoker.ScanInfo scanInfo;
+    private final ScanInvoker.ScanInfo scanInfo;
 
     public DeleteScanHandler(ScanInvoker.ScanInfo scanInfo) {
         this.scanInfo = scanInfo;

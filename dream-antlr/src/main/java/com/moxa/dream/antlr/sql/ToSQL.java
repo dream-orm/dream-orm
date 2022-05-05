@@ -175,6 +175,9 @@ public abstract class ToSQL {
             case -105938182://LenStatement
                 sql = toString((FunctionStatement.LenStatement) statement, assist, invokerList);
                 break;
+            case 252356873://LengthStatement
+                sql = toString((FunctionStatement.LengthStatement) statement, assist, invokerList);
+                break;
             case 11485339://ConcatStatement
                 sql = toString((FunctionStatement.ConcatStatement) statement, assist, invokerList);
                 break;
@@ -644,6 +647,8 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.AsciiStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(FunctionStatement.LenStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
+
+    protected abstract String toString(FunctionStatement.LengthStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(FunctionStatement.ConcatStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 

@@ -12,8 +12,8 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import java.util.List;
 
 public class HavingHandler extends AbstractHandler {
-    private HavingInvoker havingInvoker;
-    private Statement statement;
+    private final HavingInvoker havingInvoker;
+    private final Statement statement;
 
     public HavingHandler(HavingInvoker havingInvoker, Statement statement) {
         this.havingInvoker = havingInvoker;

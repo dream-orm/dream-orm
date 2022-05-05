@@ -12,8 +12,8 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import java.util.List;
 
 public class WhereHandler extends AbstractHandler {
-    private WhereInvoker whereInvoker;
-    private Statement statement;
+    private final WhereInvoker whereInvoker;
+    private final Statement statement;
 
     public WhereHandler(WhereInvoker whereInvoker, Statement statement) {
         this.whereInvoker = whereInvoker;

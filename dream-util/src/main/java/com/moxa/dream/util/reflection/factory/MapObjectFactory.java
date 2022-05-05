@@ -4,7 +4,7 @@ package com.moxa.dream.util.reflection.factory;
 import java.util.Map;
 
 public class MapObjectFactory implements ObjectFactory {
-    private Map result;
+    private final Map result;
 
     public MapObjectFactory(Map<String, Object> target) {
         this.result = target;

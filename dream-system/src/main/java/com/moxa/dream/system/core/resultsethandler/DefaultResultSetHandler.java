@@ -30,9 +30,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class DefaultResultSetHandler implements ResultSetHandler {
-    private MapperFactory mapperFactory;
-    private DialectFactory dialectFactory;
-    private Executor executor;
+    private final MapperFactory mapperFactory;
+    private final DialectFactory dialectFactory;
+    private final Executor executor;
 
     public DefaultResultSetHandler(Configuration configuration, Executor executor) {
         this.mapperFactory = configuration.getMapperFactory();

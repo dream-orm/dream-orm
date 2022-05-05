@@ -3,9 +3,9 @@ package com.moxa.dream.antlr.bind;
 public class ExprInfo {
 
     private ExprType exprType;
-    private Object objInfo;
-    private int start;
-    private int end;
+    private final Object objInfo;
+    private final int start;
+    private final int end;
 
     public ExprInfo(ExprType exprType, String info) {
         this(exprType, info, 0, 0);
@@ -46,7 +46,7 @@ public class ExprInfo {
     public String toString() {
         return "ExprInfo{" +
                 "exprType=" + exprType +
-                ", info='" + String.valueOf(objInfo) + '\'' +
+                ", info='" + objInfo + '\'' +
                 ", start=" + start +
                 ", end=" + end +
                 '}';

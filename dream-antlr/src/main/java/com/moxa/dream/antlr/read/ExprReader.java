@@ -12,13 +12,13 @@ import java.util.Stack;
 
 public class ExprReader extends StringReader {
 
-    private Stack<SqlExpr> exprStack = new Stack();
+    private final Stack<SqlExpr> exprStack = new Stack();
 
     private ExprInfo lastInfo;
 
-    private Stack<ExprInfo> exprInfoStack = new Stack<>();
+    private final Stack<ExprInfo> exprInfoStack = new Stack<>();
 
-    private MyFunctionFactory myFunctionFactory;
+    private final MyFunctionFactory myFunctionFactory;
 
     public ExprReader(String sql) {
         this(sql, null);
@@ -259,7 +259,7 @@ public class ExprReader extends StringReader {
     private String pushDotLetter(int skip) {
         skip(skip);
         ExprInfo exprInfo = push();
-        int c = getEnd();
+        int c = value();
         skip = 1;
         if (ExprUtil.isBlank(c)) {
             mark();

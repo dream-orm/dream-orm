@@ -133,7 +133,7 @@ public class MappedStatement {
     }
 
     public static class Builder {
-        private MappedStatement mappedStatement;
+        private final MappedStatement mappedStatement;
 
         public Builder() {
             mappedStatement = new MappedStatement();

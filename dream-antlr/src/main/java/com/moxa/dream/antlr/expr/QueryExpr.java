@@ -6,7 +6,7 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 
 public class QueryExpr extends SqlExpr {
-    private QueryStatement queryStatement = new QueryStatement();
+    private final QueryStatement queryStatement = new QueryStatement();
 
 
     public QueryExpr(ExprReader exprReader) {
@@ -96,7 +96,7 @@ public class QueryExpr extends SqlExpr {
     }
 
     public static class SelectExpr extends SqlExpr {
-        private SelectStatement selectStatement = new SelectStatement();
+        private final SelectStatement selectStatement = new SelectStatement();
 
         public SelectExpr(ExprReader exprReader) {
             super(exprReader);
@@ -126,7 +126,7 @@ public class QueryExpr extends SqlExpr {
         }
 
         public static class PreSelectExpr extends SqlExpr {
-            private PreSelectStatement preSelectStatement = new PreSelectStatement();
+            private final PreSelectStatement preSelectStatement = new PreSelectStatement();
 
             public PreSelectExpr(ExprReader exprReader) {
                 super(exprReader);
@@ -156,7 +156,7 @@ public class QueryExpr extends SqlExpr {
     }
 
     public static class FromExpr extends SqlExpr {
-        private FromStatement fromStatement = new FromStatement();
+        private final FromStatement fromStatement = new FromStatement();
 
         public FromExpr(ExprReader exprReader) {
             super(exprReader);
@@ -287,7 +287,7 @@ public class QueryExpr extends SqlExpr {
     }
 
     public static class WhereExpr extends SqlExpr {
-        private WhereStatement whereStatement = new WhereStatement();
+        private final WhereStatement whereStatement = new WhereStatement();
 
         public WhereExpr(ExprReader exprReader) {
             super(exprReader);
@@ -311,7 +311,7 @@ public class QueryExpr extends SqlExpr {
     }
 
     public static class GroupExpr extends SqlExpr {
-        private GroupStatement groupStatement = new GroupStatement();
+        private final GroupStatement groupStatement = new GroupStatement();
 
         public GroupExpr(ExprReader exprReader) {
             super(exprReader);
@@ -342,7 +342,7 @@ public class QueryExpr extends SqlExpr {
     }
 
     public static class HavingExpr extends SqlExpr {
-        private HavingStatement havingStatement = new HavingStatement();
+        private final HavingStatement havingStatement = new HavingStatement();
 
         public HavingExpr(ExprReader exprReader) {
             super(exprReader);
@@ -365,7 +365,7 @@ public class QueryExpr extends SqlExpr {
     }
 
     public static class OrderExpr extends SqlExpr {
-        private OrderStatement orderStatement = new OrderStatement();
+        private final OrderStatement orderStatement = new OrderStatement();
 
         public OrderExpr(ExprReader exprReader) {
             super(exprReader);
@@ -439,7 +439,7 @@ public class QueryExpr extends SqlExpr {
     }
 
     public static class LimitExpr extends HelperExpr {
-        private LimitStatement limitStatement = new LimitStatement();
+        private final LimitStatement limitStatement = new LimitStatement();
 
         public LimitExpr(ExprReader exprReader) {
             this(exprReader, () -> new CompareExpr(exprReader));
@@ -508,7 +508,7 @@ public class QueryExpr extends SqlExpr {
     }
 
     public static class UnionExpr extends HelperExpr {
-        private UnionStatement unionStatement = new UnionStatement();
+        private final UnionStatement unionStatement = new UnionStatement();
 
         public UnionExpr(ExprReader exprReader) {
             this(exprReader, () -> new QueryExpr(exprReader));

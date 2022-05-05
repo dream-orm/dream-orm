@@ -14,9 +14,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DefaultCache implements Cache {
     protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>();
     protected Map<CacheKey, Map<CacheKey, Object>> indexMap = new ConcurrentHashMap<>();
-    private int limit;
-    private double rate;
-    private AtomicBoolean canDelete = new AtomicBoolean(true);
+    private final int limit;
+    private final double rate;
+    private final AtomicBoolean canDelete = new AtomicBoolean(true);
 
     public DefaultCache(int limit, double rate) {
         ObjectUtil.requireTrue(limit > 0, "Property 'limit' must gt 0");

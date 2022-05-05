@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BatchStatementHandler implements StatementHandler {
-    private StatementHandler statementHandler;
-    private List<BatchResult> batchResultList = new ArrayList<>();
+    private final StatementHandler statementHandler;
+    private final List<BatchResult> batchResultList = new ArrayList<>();
     private BatchResult currentBatchResult;
 
     public BatchStatementHandler(StatementHandler statementHandler) {
@@ -87,8 +87,8 @@ public class BatchStatementHandler implements StatementHandler {
     }
 
     public static class BatchResult {
-        private CacheKey sqlKey;
-        private Statement statement;
+        private final CacheKey sqlKey;
+        private final Statement statement;
 
         public BatchResult(CacheKey sqlKey, Statement statement) {
             this.sqlKey = sqlKey;

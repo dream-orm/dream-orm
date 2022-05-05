@@ -5,10 +5,10 @@ import java.util.Collection;
 
 public class Page<E> extends ArrayList<E> {
     private Long total;
-    private int pageNum;
-    private int pageSize;
+    private final int pageNum;
+    private final int pageSize;
     private Collection<E> row;
-    private long startRow;
+    private final long startRow;
     private boolean count = true;
 
     public Page() {

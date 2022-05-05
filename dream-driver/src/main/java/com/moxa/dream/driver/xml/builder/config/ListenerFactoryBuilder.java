@@ -53,7 +53,7 @@ public class ListenerFactoryBuilder extends XMLBuilder {
 
     static class ListenerFactory {
         private String type;
-        private List<ListenerBuilder.Listener> listenerList = new ArrayList<>();
+        private final List<ListenerBuilder.Listener> listenerList = new ArrayList<>();
 
         public String getType() {
             return type;

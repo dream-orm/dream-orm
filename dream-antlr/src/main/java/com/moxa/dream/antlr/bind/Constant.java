@@ -5,6 +5,7 @@ public final class Constant {
     public static final ExprType[] FUNCTION = {
             ExprType.ASCII,
             ExprType.LEN,
+            ExprType.LENGTH,
             ExprType.CHAR_LENGTH,
             ExprType.CONCAT_WS,
             ExprType.INSTR,

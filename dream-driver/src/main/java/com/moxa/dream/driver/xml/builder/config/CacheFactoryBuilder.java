@@ -52,7 +52,7 @@ public class CacheFactoryBuilder extends XMLBuilder {
 
     static class CacheFactory {
         private String type;
-        private List<PropertyBuilder.Property> propertyList = new ArrayList<>();
+        private final List<PropertyBuilder.Property> propertyList = new ArrayList<>();
 
 
         public String getType() {

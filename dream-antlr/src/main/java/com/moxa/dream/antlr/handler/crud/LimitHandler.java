@@ -12,9 +12,9 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import java.util.List;
 
 public class LimitHandler extends AbstractHandler {
-    private LimitInvoker limitInvoker;
-    private Statement firstStatement;
-    private Statement secondStatement;
+    private final LimitInvoker limitInvoker;
+    private final Statement firstStatement;
+    private final Statement secondStatement;
 
     public LimitHandler(LimitInvoker limitInvoker, Statement firstStatement, Statement secondStatement) {
         this.limitInvoker = limitInvoker;

@@ -53,7 +53,7 @@ public class DataSourceFactoryBuilder extends XMLBuilder {
 
     static class DataSourceFactory {
         private String type;
-        private List<PropertyBuilder.Property> propertyList = new ArrayList<>(4);
+        private final List<PropertyBuilder.Property> propertyList = new ArrayList<>(4);
 
         public String getType() {
             return type;

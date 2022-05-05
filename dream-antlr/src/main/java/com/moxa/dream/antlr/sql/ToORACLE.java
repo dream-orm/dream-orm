@@ -542,7 +542,7 @@ public class ToORACLE extends ToPubSQL {
 
     protected class InsertInvoker extends AbstractInvoker {
 
-        private InsertStatement insertStatement;
+        private final InsertStatement insertStatement;
         private String batchSQL;
 
         public InsertInvoker(InsertStatement statement) {
@@ -574,7 +574,7 @@ public class ToORACLE extends ToPubSQL {
 
     protected class ValuesHandler extends AbstractHandler {
 
-        private InsertInvoker insertInvoker;
+        private final InsertInvoker insertInvoker;
 
         public ValuesHandler(InsertInvoker insertInvoker) {
             this.insertInvoker = insertInvoker;
@@ -596,7 +596,7 @@ public class ToORACLE extends ToPubSQL {
         }
 
         protected class ListColumnHandler extends AbstractHandler {
-            private InsertInvoker insertInvoker;
+            private final InsertInvoker insertInvoker;
 
             public ListColumnHandler(InsertInvoker insertInvoker) {
                 this.insertInvoker = insertInvoker;

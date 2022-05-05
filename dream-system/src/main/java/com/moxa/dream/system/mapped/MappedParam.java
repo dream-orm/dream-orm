@@ -6,9 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class MappedParam {
-    private int jdbcType;
-    private Object paramValue;
-    private TypeHandler typeHandler;
+    private final int jdbcType;
+    private final Object paramValue;
+    private final TypeHandler typeHandler;
 
     public MappedParam(int jdbcType, Object paramValue, TypeHandler typeHandler) {
         this.jdbcType = jdbcType;

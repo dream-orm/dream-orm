@@ -1,7 +1,7 @@
 package com.moxa.dream.antlr.smt;
 
 public abstract class CastTypeStatement extends Statement {
-    private Statement statement;
+    private final Statement statement;
 
     public CastTypeStatement(Statement statement) {
         this.statement = statement;

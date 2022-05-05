@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 
 public class MapperInfoBuilder extends XMLBuilder {
     private List<MethodInfo> resultList;
-    private Configuration configuration;
-    private Map<String, MethodInfo.Builder> builderMap;
+    private final Configuration configuration;
+    private final Map<String, MethodInfo.Builder> builderMap;
 
     public MapperInfoBuilder(Configuration configuration, XmlHandler workHandler, Map<String, MethodInfo.Builder> builderMap) {
         super(workHandler);

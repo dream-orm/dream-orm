@@ -8,7 +8,7 @@ import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.smt.UpdateStatement;
 
 public class UpdateExpr extends SqlExpr {
-    private UpdateStatement updateStatement = new UpdateStatement();
+    private final UpdateStatement updateStatement = new UpdateStatement();
 
     public UpdateExpr(ExprReader exprReader) {
         super(exprReader);

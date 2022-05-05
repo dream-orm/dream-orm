@@ -10,7 +10,7 @@ import com.moxa.dream.util.reflect.ReflectUtil;
 import java.util.List;
 
 public class ToMSSQL extends ToPubSQL {
-    private int num = 1;
+    private final int num = 1;
 
     private String getPattern(String pattern) {
         char[] patternArray = pattern.toCharArray();
@@ -340,6 +340,11 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.LenStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
+        return "LEN(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.LengthStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return "LEN(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 

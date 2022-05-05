@@ -27,10 +27,10 @@ public class PageHandler extends AbstractHandler {
     private boolean offset;
     private Statement first;
     private Statement second;
-    private TableFactory tableFactory;
-    private MethodInfo methodInfo;
-    private Invoker invoker;
-    private ToDREAM toDREAM = new ToDREAM();
+    private final TableFactory tableFactory;
+    private final MethodInfo methodInfo;
+    private final Invoker invoker;
+    private final ToDREAM toDREAM = new ToDREAM();
 
     public PageHandler(Invoker invoker, MethodInfo methodInfo) {
         ObjectUtil.requireNonNull(methodInfo, "Property 'methodInfo' is required");
@@ -141,7 +141,7 @@ public class PageHandler extends AbstractHandler {
     }
 
     public static class PageCount {
-        private MethodInfo methodInfo;
+        private final MethodInfo methodInfo;
 
         public PageCount(MethodInfo methodInfo) {
             this.methodInfo = methodInfo;

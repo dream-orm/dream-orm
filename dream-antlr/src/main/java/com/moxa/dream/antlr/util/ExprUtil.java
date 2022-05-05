@@ -117,6 +117,8 @@ public class ExprUtil {
                 return ExprType.CHARACTER_LENGTH;
             case 75253://LEN
                 return ExprType.LEN;
+            case -2053034266://LENGTH
+                return ExprType.LENGTH;
             case 1993501460://CONCAT
                 return ExprType.CONCAT;
             case 1889287143://CONCAT_WS

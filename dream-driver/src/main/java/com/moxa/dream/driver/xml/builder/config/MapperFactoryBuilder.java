@@ -51,7 +51,7 @@ public class MapperFactoryBuilder extends XMLBuilder {
 
     static class MapperFactory {
         private String type;
-        private List<MappingBuilder.Mapping> mappingList = new ArrayList<>();
+        private final List<MappingBuilder.Mapping> mappingList = new ArrayList<>();
 
         public String getType() {
             return type;

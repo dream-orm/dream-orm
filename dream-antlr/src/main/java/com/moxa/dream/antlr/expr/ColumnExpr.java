@@ -69,7 +69,7 @@ public class ColumnExpr extends SqlExpr {
     }
 
     public static class SingleMarkExpr extends HelperExpr {
-        private SingleMarkStatement statement = new SingleMarkStatement();
+        private final SingleMarkStatement statement = new SingleMarkStatement();
 
         public SingleMarkExpr(ExprReader exprReader) {
             this(exprReader, () -> new CompareExpr(exprReader));

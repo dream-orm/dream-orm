@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.Map;
 
 public class TableInfo {
-    private String table;
-    private Map<String, ColumnInfo> columnInfoMap;
-    private Map<String, JoinInfo> joinInfoMap;
-    private Map<String, String> fieldMap;
-    private ColumnInfo columnInfo;
+    private final String table;
+    private final Map<String, ColumnInfo> columnInfoMap;
+    private final Map<String, JoinInfo> joinInfoMap;
+    private final Map<String, String> fieldMap;
+    private final ColumnInfo columnInfo;
 
     public TableInfo(String table, ColumnInfo columnInfo, Map<String, ColumnInfo> columnInfoMap, Map<String, JoinInfo> joinInfoMap, Map<String, String> fieldMap) {
         this.table = table;

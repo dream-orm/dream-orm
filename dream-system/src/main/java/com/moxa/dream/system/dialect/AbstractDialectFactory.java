@@ -255,7 +255,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         List<Decoration> allDecorationList = new ArrayList<>();
         List<Decoration> beforeDecorationList = Arrays.asList(new AnnotationDecoration());
         List<Decoration> decorationList = getWrapList();
-        List<Decoration> afterDecorationList =Arrays.asList(new ScanDecoration());
+        List<Decoration> afterDecorationList = Arrays.asList(new ScanDecoration());
         allDecorationList.addAll(beforeDecorationList);
         if (!ObjectUtil.isNull(decorationList)) {
             allDecorationList.addAll(decorationList);
@@ -270,7 +270,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
 
 
     static class ParamTypeMap {
-        private Map<String, ParamType> paramTypeMap = new HashMap<>();
+        private final Map<String, ParamType> paramTypeMap = new HashMap<>();
 
         public ParamType get(String param) {
             return paramTypeMap.get(param);
@@ -282,8 +282,8 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     }
 
     static class ParamType {
-        private ColumnInfo columnInfo;
-        private TypeHandler typeHandler;
+        private final ColumnInfo columnInfo;
+        private final TypeHandler typeHandler;
 
         public ParamType(ColumnInfo columnInfo, TypeHandler typeHandler) {
             this.columnInfo = columnInfo;

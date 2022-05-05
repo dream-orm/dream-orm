@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ResourceUtil {
 
-    private static ResourceLoader resourceLoader = new DefaultResourceLoader();
+    private static final ResourceLoader resourceLoader = new DefaultResourceLoader();
 
     public static InputStream getResourceAsStream(String resource) {
         return resourceLoader.getResourceAsStream(resource);

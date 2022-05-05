@@ -9,7 +9,7 @@ import com.moxa.dream.antlr.smt.SymbolStatement;
 
 public class ListColumnExpr extends HelperExpr {
     private final ExprType cut;
-    private ListColumnStatement listColumnStatement = new ListColumnStatement();
+    private final ListColumnStatement listColumnStatement = new ListColumnStatement();
 
     public ListColumnExpr(ExprReader exprReader, ExprInfo exprInfo) {
         this(exprReader, () -> new CompareExpr(exprReader), exprInfo);
