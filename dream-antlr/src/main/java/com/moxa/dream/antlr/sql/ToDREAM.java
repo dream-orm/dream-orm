@@ -668,6 +668,16 @@ public class ToDREAM extends ToSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.UnixTimeStampStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
+        return "UNIX_TIMESTAMP(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.FromUnixTimeStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
+        return "FROM_UNIXTIME(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return "DATE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

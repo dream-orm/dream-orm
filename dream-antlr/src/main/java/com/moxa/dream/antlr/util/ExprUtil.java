@@ -289,6 +289,10 @@ public class ExprUtil {
                 return ExprType.FLOAT;
             case 2067286://CHAR
                 return ExprType.CHAR;
+            case 1534573311://UNIX_TIMESTAMP
+                return ExprType.UNIX_TIMESTAMP;
+            case 1044724042://FROM_UNIXTIME
+                return ExprType.FROM_UNIXTIME;
             case 2090926://DATE
                 return ExprType.DATE;
             case -1718637701://DATETIME

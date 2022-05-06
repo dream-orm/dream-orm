@@ -373,6 +373,12 @@ public abstract class ToSQL {
             case 1501217519://MonthStatement
                 sql = toString((FunctionStatement.MonthStatement) statement, assist, invokerList);
                 break;
+            case 181908705://UnixTimeStampStatement
+                sql=toString((FunctionStatement.UnixTimeStampStatement)statement,assist,invokerList);
+                break;
+            case 323576272://FromUnixTimeStatement
+                sql=toString((FunctionStatement.FromUnixTimeStatement)statement,assist,invokerList);
+                break;
             case 417418561://DateStatement
                 sql = toString((FunctionStatement.DateStatement) statement, assist, invokerList);
                 break;
@@ -767,6 +773,10 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.LastDayStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(FunctionStatement.MonthStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
+
+    protected abstract String toString(FunctionStatement.UnixTimeStampStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
+
+    protected abstract String toString(FunctionStatement.FromUnixTimeStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(FunctionStatement.DateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 

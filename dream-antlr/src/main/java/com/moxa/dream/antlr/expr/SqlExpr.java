@@ -27,8 +27,9 @@ public abstract class SqlExpr {
     }
 
     public Statement expr() {
-        if (isClose())
+        if (exprReader.isClose()) {
             throw new IllegalStateException("SQL parsing is closed");
+        }
         tryMark();
         ExprInfo exprInfo = exprReader.getLastInfo();
         if (exprInfo == null)
@@ -339,6 +340,12 @@ public abstract class SqlExpr {
                 break;
             case CHAR:
                 statement = exprChar(exprInfo);
+                break;
+            case UNIX_TIMESTAMP:
+                statement=exprUnixTimeStamp(exprInfo);
+                break;
+            case FROM_UNIXTIME:
+                statement=exprFromUnixTime(exprInfo);
                 break;
             case DATE:
                 statement = exprDate(exprInfo);
@@ -778,6 +785,14 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprChar(ExprInfo exprInfo) {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprUnixTimeStamp(ExprInfo exprInfo) {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprFromUnixTime(ExprInfo exprInfo) {
         return exprFunction(exprInfo);
     }
 
@@ -1269,9 +1284,4 @@ public abstract class SqlExpr {
     private boolean tryMark() {
         return exprReader.tryMark(this);
     }
-
-    public boolean isClose() {
-        return exprReader.isClose();
-    }
-
 }

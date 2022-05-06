@@ -101,6 +101,8 @@ public enum ExprType {
     TAN,
     TRUNCATE,
     CURDATE,
+    UNIX_TIMESTAMP,
+    FROM_UNIXTIME,
     DATEDIFF,
     DATE_ADD,
     DATE_SUB,

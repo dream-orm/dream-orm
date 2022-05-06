@@ -12,7 +12,7 @@ public class ColumnExpr extends SqlExpr {
 
     public ColumnExpr(ExprReader exprReader) {
         super(exprReader);
-        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.SYMBOL).addExprTypes(ExprType.CASE, ExprType.LBRACE, ExprType.INVOKER, ExprType.SINGLE_MARK);
+        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.SYMBOL).addExprTypes(ExprType.STAR,ExprType.CASE, ExprType.LBRACE, ExprType.INVOKER, ExprType.SINGLE_MARK);
     }
 
     @Override
@@ -24,9 +24,16 @@ public class ColumnExpr extends SqlExpr {
     }
 
     @Override
+    protected Statement exprStar(ExprInfo exprInfo) {
+        SymbolExpr symbolExpr = new SymbolExpr(exprReader);
+        statement = symbolExpr.expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     protected Statement exprSymbol(ExprInfo exprInfo) {
         SymbolExpr symbolExpr = new SymbolExpr(exprReader);
-        symbolExpr.setExprTypes(Constant.SYMBOL);
         statement = symbolExpr.expr();
         setExprTypes(ExprType.NIL);
         return expr();

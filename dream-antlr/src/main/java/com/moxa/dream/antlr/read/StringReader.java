@@ -43,7 +43,9 @@ public class StringReader {
 
     }
     protected int value(){
-        return value.charAt(end);
+        if (next >= length)
+            return -1;
+        return value.charAt(next);
     }
 
     protected void reset() {

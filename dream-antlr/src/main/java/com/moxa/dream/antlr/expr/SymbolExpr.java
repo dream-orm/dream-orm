@@ -12,12 +12,20 @@ public class SymbolExpr extends SqlExpr {
 
     public SymbolExpr(ExprReader exprReader) {
         super(exprReader);
-        setExprTypes(Constant.SYMBOL);
+        setExprTypes(Constant.SYMBOL).addExprTypes(ExprType.STAR);
     }
 
     @Override
     public Statement nil() {
         return symbolStatement;
+    }
+
+    @Override
+    protected Statement exprStar(ExprInfo exprInfo) {
+        push();
+        symbolStatement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
+        setExprTypes(ExprType.NIL);
+        return expr();
     }
 
     @Override

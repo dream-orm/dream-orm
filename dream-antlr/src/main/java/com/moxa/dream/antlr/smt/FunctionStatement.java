@@ -409,4 +409,9 @@ public abstract class FunctionStatement extends Statement {
 
     }
 
+    public static class UnixTimeStampStatement extends FunctionStatement {
+    }
+
+    public static class FromUnixTimeStatement extends FunctionStatement {
+    }
 }

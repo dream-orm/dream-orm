@@ -563,6 +563,22 @@ public class FunctionExpr extends SqlExpr {
     }
 
     @Override
+    protected Statement exprUnixTimeStamp(ExprInfo exprInfo) {
+        FunctionStatement func = new FunctionStatement.UnixTimeStampStatement();
+        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprFromUnixTime(ExprInfo exprInfo) {
+        FunctionStatement func = new FunctionStatement.FromUnixTimeStatement();
+        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     protected Statement exprDate(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.DateStatement();
         functionStatement = new FunctionParamerExpr(exprReader, func).expr();
