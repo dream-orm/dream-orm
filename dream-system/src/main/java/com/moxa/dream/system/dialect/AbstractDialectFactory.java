@@ -1,6 +1,5 @@
 package com.moxa.dream.system.dialect;
 
-import com.moxa.dream.antlr.bind.ResultInfo;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.expr.PackageExpr;
 import com.moxa.dream.antlr.expr.SqlExpr;
@@ -11,6 +10,7 @@ import com.moxa.dream.antlr.invoker.$Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.PackageStatement;
+import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.antlr.decoration.AnnotationDecoration;
 import com.moxa.dream.system.antlr.decoration.Decoration;
@@ -32,6 +32,7 @@ import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.sql.Types;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class AbstractDialectFactory implements DialectFactory {
     private static final int SPLIT = 5;
@@ -64,6 +65,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     @Override
     public MappedStatement compile(MethodInfo methodInfo, Object arg) {
         List<MappedParam> mappedParamList = null;
+        CacheKey uniqueKey;
         PackageStatement statement = methodInfo.getStatement();
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
         List<$Invoker.ParamInfo> paramInfoList = null;
@@ -81,18 +83,25 @@ public abstract class AbstractDialectFactory implements DialectFactory {
             }
         }
         if (ObjectUtil.isNull(sql)) {
-            ResultInfo resultInfo = getResultInfo(methodInfo, statement, arg);
-            sql = resultInfo.getSql();
+            ToAssist toAssist = toAssist(methodInfo, arg);
+            try {
+                sql = toSQL.toStr(statement, toAssist, null);
+                uniqueKey = toAssist.getCustom(CacheKey.class);
+            } catch (InvokerException e) {
+                throw new DialectException(e);
+            }
             if (scanInfo == null) {
                 scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
             }
-            $Invoker invoker = resultInfo.getSqlInvoker($Invoker.class);
+            $Invoker invoker = ($Invoker) toAssist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
             if (invoker != null) {
                 paramInfoList = invoker.getParamInfoList();
             } else {
                 paramInfoList = new ArrayList<>();
                 scanInfo.setParamInfoList(paramInfoList);
             }
+        } else {
+            uniqueKey = methodInfo.getSqlKey();
         }
         if (!ObjectUtil.isNull(paramInfoList)) {
             mappedParamList = new ArrayList<>();
@@ -153,16 +162,24 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                 mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler()));
             }
         }
+
+        if (!ObjectUtil.isNull(mappedParamList)) {
+            uniqueKey.update(mappedParamList.stream()
+                    .map(mappedParam -> mappedParam.getParamValue())
+                    .collect(Collectors.toList())
+                    .toArray());
+        }
         return new MappedStatement
                 .Builder()
                 .methodInfo(methodInfo)
                 .mappedSql(new MappedSql(scanInfo.getCommand(), sql, scanInfo.getTableScanInfoMap()))
                 .mappedParamList(mappedParamList)
                 .arg(arg)
+                .uniqueKey(uniqueKey)
                 .build();
     }
 
-    protected ResultInfo getResultInfo(MethodInfo methodInfo, PackageStatement statement, Object arg) {
+    protected ToAssist toAssist(MethodInfo methodInfo, Object arg) {
         Map<Class, Object> allCustomMap = new HashMap<>();
         Map<Class, Object> defaultCustomMap = getDefaultCustomMap(methodInfo, arg);
         Map<Class<?>, Object> customMap = getCustomMap(methodInfo, arg);
@@ -179,12 +196,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         if (!ObjectUtil.isNull(invokerFactoryList)) {
             allInvokerFactoryList.addAll(invokerFactoryList);
         }
-        try {
-            ResultInfo resultInfo = toSQL.toResult(statement, allInvokerFactoryList, allCustomMap);
-            return resultInfo;
-        } catch (InvokerException e) {
-            throw new DialectException(e);
-        }
+        return new ToAssist(allInvokerFactoryList, allCustomMap);
     }
 
     private List<InvokerFactory> getDefaultInvokerFactoryList() {
@@ -200,6 +212,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     private Map<Class, Object> getDefaultCustomMap(MethodInfo methodInfo, Object arg) {
         Map<Class, Object> customMap = new HashMap<>();
         customMap.put(MethodInfo.class, methodInfo);
+        customMap.put(CacheKey.class, methodInfo.getSqlKey());
         if (arg == null) {
             arg = new HashMap<>();
         }

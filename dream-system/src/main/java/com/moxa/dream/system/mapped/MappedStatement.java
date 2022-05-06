@@ -161,14 +161,12 @@ public class MappedStatement {
             return this;
         }
 
+        public Builder uniqueKey(CacheKey uniqueKey) {
+            mappedStatement.uniqueKey = uniqueKey;
+            return this;
+        }
+
         public MappedStatement build() {
-            mappedStatement.uniqueKey = mappedStatement.getSqlKey();
-            if (!ObjectUtil.isNull(mappedStatement.mappedParamList)) {
-                mappedStatement.uniqueKey.update(mappedStatement.mappedParamList.stream()
-                        .map(mappedParam -> mappedParam.getParamValue())
-                        .collect(Collectors.toList())
-                        .toArray());
-            }
             return mappedStatement;
         }
     }

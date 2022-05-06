@@ -1,8 +1,6 @@
 package com.moxa.dream.antlr.sql;
 
-import com.moxa.dream.antlr.bind.ResultInfo;
 import com.moxa.dream.antlr.exception.InvokerException;
-import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
@@ -13,11 +11,6 @@ import java.util.*;
 public abstract class ToSQL {
 
     public abstract String getName();
-
-    public ResultInfo toResult(PackageStatement statement, List<InvokerFactory> invokerFactoryList, Map<Class, Object> customObjList) throws InvokerException {
-        ToAssist assist = new ToAssist(invokerFactoryList, customObjList);
-        return new ResultInfo(toStr(statement, assist, null), assist.getSqlInvokerMap());
-    }
 
     protected abstract String beforeCache(Statement statement);
 
@@ -36,9 +29,14 @@ public abstract class ToSQL {
             for (int i = invokerArrayList.size() - 1; i >= 0; i--) {
                 Invoker invoker = invokerArrayList.get(i);
                 if (invoker.isAccessible()) {
-                    statement = assist.beforeChain(statement, this, handlerQueue, invoker.handle(), invokerList);
-                    if (statement == null)
-                        return "";
+                    Handler[] handlerList = invoker.handle();
+                    if (!ObjectUtil.isNull(handlerList)) {
+                        for (Handler handler : handlerList) {
+                            statement = handler.handlerBefore(statement, assist, this, handlerQueue, invokerList);
+                        }
+                        if (statement == null)
+                            return "";
+                    }
                 }
             }
         }
@@ -374,10 +372,10 @@ public abstract class ToSQL {
                 sql = toString((FunctionStatement.MonthStatement) statement, assist, invokerList);
                 break;
             case 181908705://UnixTimeStampStatement
-                sql=toString((FunctionStatement.UnixTimeStampStatement)statement,assist,invokerList);
+                sql = toString((FunctionStatement.UnixTimeStampStatement) statement, assist, invokerList);
                 break;
             case 323576272://FromUnixTimeStatement
-                sql=toString((FunctionStatement.FromUnixTimeStatement)statement,assist,invokerList);
+                sql = toString((FunctionStatement.FromUnixTimeStatement) statement, assist, invokerList);
                 break;
             case 417418561://DateStatement
                 sql = toString((FunctionStatement.DateStatement) statement, assist, invokerList);
@@ -527,7 +525,7 @@ public abstract class ToSQL {
             case 1749719820://RowNumberStatement
                 sql = toString((RowNumberStatement) statement, assist, invokerList);
                 break;
-            case -1469486373://OverStatment
+            case -1469486373://OverStatement
                 sql = toString((RowNumberStatement.OverStatement) statement, assist, invokerList);
                 break;
             case -1989568059://PartitionStatement
@@ -536,14 +534,18 @@ public abstract class ToSQL {
             case 792918965://InvokerStatement
                 sql = toString((InvokerStatement) statement, assist, invokerList);
                 break;
-            case -996762854://CustomFunctionStatement
+            case -1652936693://MyFunctionStatement
                 sql = toString((MyFunctionStatement) statement, assist, invokerList);
                 break;
             default:
                 throw new InvokerException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
         }
-        if (assist != null && handlerQueue != null && !handlerQueue.isEmpty())
-            sql = assist.afterChain(handlerQueue, sql);
+        if (!ObjectUtil.isNull(handlerQueue)) {
+            while (!handlerQueue.isEmpty()) {
+                sql = handlerQueue.poll().handlerAfter(assist, sql);
+            }
+            return sql;
+        }
         afterCache(statement, sql);
         return sql;
     }

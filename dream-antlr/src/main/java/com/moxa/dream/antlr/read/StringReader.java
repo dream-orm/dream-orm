@@ -42,7 +42,8 @@ public class StringReader {
         mark = next;
 
     }
-    protected int value(){
+
+    protected int value() {
         if (next >= length)
             return -1;
         return value.charAt(next);

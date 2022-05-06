@@ -5,6 +5,7 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.List;
 import java.util.Queue;
@@ -32,7 +33,7 @@ public abstract class AbstractHandler implements Handler {
 
             if (boundHandlerList == null) {
                 boundHandlerList = handlerBound();
-                if (boundHandlerList != null && boundHandlerList.length > 0) {
+                if (!ObjectUtil.isNull(boundHandlerList)) {
                     for (Handler boundHandler : boundHandlerList) {
                         if (boundHandler instanceof AbstractHandler) {
                             ((AbstractHandler) boundHandler).setParentHandler(this);
@@ -40,8 +41,10 @@ public abstract class AbstractHandler implements Handler {
                     }
                 }
             }
-            if (boundHandlerList != null && this.isLife()) {
-                statement = assist.beforeChain(statement, toSQL, handlerQueue, boundHandlerList, invokerList);
+            if (!ObjectUtil.isNull(boundHandlerList) && this.isLife()) {
+                for (Handler handler : boundHandlerList) {
+                    statement = handler.handlerBefore(statement, assist, toSQL, handlerQueue, invokerList);
+                }
             }
         }
         return statement;

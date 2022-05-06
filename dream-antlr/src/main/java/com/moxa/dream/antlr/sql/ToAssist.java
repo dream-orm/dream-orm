@@ -34,23 +34,6 @@ public class ToAssist {
         }
     }
 
-
-    public Statement beforeChain(Statement statement, ToSQL toSQL, Queue<Handler> handlerQueue, Handler[] handlerList, List<Invoker> invokerList) throws InvokerException {
-        if (statement == null)
-            return null;
-        if (!ObjectUtil.isNull(handlerList))
-            for (Handler handler : handlerList) {
-                statement = handler.handlerBefore(statement, this, toSQL, handlerQueue, invokerList);
-            }
-        return statement;
-    }
-
-    public String afterChain(Queue<? extends Handler> handlerQueue, String sql) throws InvokerException {
-        while (!handlerQueue.isEmpty())
-            sql = handlerQueue.poll().handlerAfter(this, sql);
-        return sql;
-    }
-
     public Invoker getInvoker(String namespace, String function) {
         ObjectUtil.requireNonNull(function, "Property 'function' is required");
         function = function.toLowerCase();
