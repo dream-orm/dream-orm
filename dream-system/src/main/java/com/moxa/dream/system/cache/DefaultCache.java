@@ -12,11 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DefaultCache implements Cache {
-    protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>();
-    protected Map<CacheKey, Map<CacheKey, Object>> indexMap = new ConcurrentHashMap<>();
     private final int limit;
     private final double rate;
     private final AtomicBoolean canDelete = new AtomicBoolean(true);
+    protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>();
+    protected Map<CacheKey, Map<CacheKey, Object>> indexMap = new ConcurrentHashMap<>();
 
     public DefaultCache(int limit, double rate) {
         ObjectUtil.requireTrue(limit > 0, "Property 'limit' must gt 0");

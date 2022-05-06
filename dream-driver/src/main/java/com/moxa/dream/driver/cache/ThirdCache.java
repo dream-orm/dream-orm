@@ -13,12 +13,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ThirdCache implements com.moxa.dream.system.cache.Cache {
-    protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>();
-    protected Map<CacheKey, Set<CacheKey>> indexMap = new ConcurrentHashMap<>();
-    protected Cache<CacheKey, Object> pointCache;
     private final int limit;
     private final double rate;
     private final AtomicBoolean canDelete = new AtomicBoolean(true);
+    protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>();
+    protected Map<CacheKey, Set<CacheKey>> indexMap = new ConcurrentHashMap<>();
+    protected Cache<CacheKey, Object> pointCache;
 
     public ThirdCache(Cache<CacheKey, Object> pointCache) {
         this(pointCache, 1000, 0.25);

@@ -7,9 +7,9 @@ import java.util.Properties;
 public abstract class AbstractAliasFactory implements AliasFactory {
     public static final String OPEN_TOKEN = "${";
     public static final String CLOSE_TOKEN = "}";
-    protected Properties properties = new Properties();
     private final String openToken;
     private final String closeToken;
+    protected Properties properties = new Properties();
 
     public AbstractAliasFactory() {
         this(OPEN_TOKEN, CLOSE_TOKEN);

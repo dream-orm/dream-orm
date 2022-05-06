@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MethodInfo {
+    private final Map<Class, Object> builtMap = new HashMap<>();
     private Configuration configuration;
     private String name;
     private Class<? extends Collection> rowType;
@@ -25,7 +26,6 @@ public class MethodInfo {
     private CacheKey sqlKey;
     private Method method;
     private boolean generatedKeys;
-    private final Map<Class, Object> builtMap = new HashMap<>();
 
     private MethodInfo() {
 

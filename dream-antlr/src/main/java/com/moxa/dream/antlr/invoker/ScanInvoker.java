@@ -92,10 +92,10 @@ public class ScanInvoker extends AbstractInvoker {
     }
 
     public static class ScanInfo {
-        private Command command = Command.NONE;
         private final Map<String, TableScanInfo> tableScanInfoMap = new LowHashMap<>();
         private final Map<String, ParamScanInfo> paramScanInfoMap = new HashMap<>();
         private final List<InvokerStatement> invokerStatementList = new ArrayList<>();
+        private Command command = Command.NONE;
         private List<$Invoker.ParamInfo> paramInfoList;
         private String sql;
 

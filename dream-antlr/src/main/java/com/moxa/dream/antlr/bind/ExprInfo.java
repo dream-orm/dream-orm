@@ -2,10 +2,10 @@ package com.moxa.dream.antlr.bind;
 
 public class ExprInfo {
 
-    private ExprType exprType;
     private final Object objInfo;
     private final int start;
     private final int end;
+    private ExprType exprType;
 
     public ExprInfo(ExprType exprType, String info) {
         this(exprType, info, 0, 0);

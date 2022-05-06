@@ -52,8 +52,8 @@ public class PluginFactoryBuilder extends XMLBuilder {
     }
 
     static class PluginFactory {
-        private String type;
         private final List<InterceptorBuilder.Interceptor> interceptorList = new ArrayList<>();
+        private String type;
 
         public String getType() {
             return type;

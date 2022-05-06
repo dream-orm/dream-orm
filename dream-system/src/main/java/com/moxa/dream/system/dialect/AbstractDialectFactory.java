@@ -122,7 +122,6 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                 ParamType paramType = paramTypeMap.get(paramInfo.getParamName());
                 if (paramType == null) {
                     TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
-                    ObjectUtil.requireNonNull(typeHandlerFactory, "Property 'typeHandlerFactory' is required");
                     ScanInvoker.ParamScanInfo paramScanInfo = paramScanInfoMap.get(paramInfo.getParamName());
                     Object value = paramInfo.getParamValue();
                     if (paramScanInfo != null) {
@@ -132,11 +131,12 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                         Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = scanInfo.getTableScanInfoMap();
                         if (ObjectUtil.isNull(table)) {
                             Collection<ScanInvoker.TableScanInfo> tableScanInfoList = tableScanInfoMap.values();
-                            ObjectUtil.requireNonNull(tableScanInfoList, "@Function '" + ScanInvoker.class.getName() + "' has no scan table");
-                            for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoList) {
-                                tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
-                                if (tableInfo != null) {
-                                    break;
+                            if (tableFactory != null) {
+                                for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoList) {
+                                    tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
+                                    if (tableInfo != null) {
+                                        break;
+                                    }
                                 }
                             }
                         } else {
@@ -144,14 +144,22 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                             if (tableScanInfo != null) {
                                 table = tableScanInfo.getTable();
                             }
-                            tableInfo = tableFactory.getTableInfo(table);
+                            if (tableFactory != null) {
+                                tableInfo = tableFactory.getTableInfo(table);
+                            }
                         }
-                        ObjectUtil.requireNonNull(tableInfo, "tableInfo was not found,table is '" + table + "',column is '" + column + "'");
-                        String fieldName = tableInfo.getFieldName(column);
-                        if (ObjectUtil.isNull(fieldName))
-                            fieldName = column;
-                        ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-                        int jdbcType = columnInfo.getJdbcType();
+                        int jdbcType = Types.NULL;
+                        ColumnInfo columnInfo = null;
+                        if (tableInfo != null) {
+                            String fieldName = tableInfo.getFieldName(column);
+                            if (ObjectUtil.isNull(fieldName)) {
+                                fieldName = column;
+                            }
+                            columnInfo = tableInfo.getColumnInfo(fieldName);
+                            if (columnInfo != null) {
+                                jdbcType = columnInfo.getJdbcType();
+                            }
+                        }
                         paramTypeMap.put(paramInfo.getParamName(),
                                 paramType = new ParamType(columnInfo, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), jdbcType)));
                     } else {

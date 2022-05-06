@@ -1,16 +1,12 @@
 package com.moxa.dream.antlr.sql;
 
-import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.factory.InvokerFactory;
-import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.Invoker;
-import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 public class ToAssist {
     private Map<Class, Object> customObjMap;

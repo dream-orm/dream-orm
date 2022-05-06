@@ -51,9 +51,8 @@ public class AliasFactoryBuilder extends XMLBuilder {
     }
 
     static class AliasFactory {
-        private String type;
         private final List<PropertyBuilder.Property> propertyList = new ArrayList<>();
-
+        private String type;
 
         public String getType() {
             return type;

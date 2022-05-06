@@ -342,10 +342,10 @@ public abstract class SqlExpr {
                 statement = exprChar(exprInfo);
                 break;
             case UNIX_TIMESTAMP:
-                statement=exprUnixTimeStamp(exprInfo);
+                statement = exprUnixTimeStamp(exprInfo);
                 break;
             case FROM_UNIXTIME:
-                statement=exprFromUnixTime(exprInfo);
+                statement = exprFromUnixTime(exprInfo);
                 break;
             case DATE:
                 statement = exprDate(exprInfo);

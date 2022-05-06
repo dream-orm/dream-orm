@@ -50,8 +50,8 @@ public class TableFactoryBuilder extends XMLBuilder {
     }
 
     static class TableFactory {
-        private String type;
         private final List<MappingBuilder.Mapping> mappingList = new ArrayList<>();
+        private String type;
 
         public String getType() {
             return type;

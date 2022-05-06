@@ -52,8 +52,8 @@ public class TypeHandlerFactoryBuilder extends XMLBuilder {
     }
 
     static class TypeHandlerFactory {
-        private String type;
         private final List<TypeHandlerWrapperBuilder.TypeHandlerWrapper> typeHandlerWrapperList = new ArrayList<>();
+        private String type;
 
         public String getType() {
             return type;

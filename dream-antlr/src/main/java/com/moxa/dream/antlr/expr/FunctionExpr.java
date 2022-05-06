@@ -887,10 +887,10 @@ public class FunctionExpr extends SqlExpr {
         }
 
         public static class DateOperExpr extends HelperExpr {
+            private final boolean positive;
             private DateOperStatement dateOperStatement;
             private Statement date;
             private Statement qty;
-            private final boolean positive;
 
             public DateOperExpr(ExprReader exprReader, boolean positive) {
                 this(exprReader, () -> new CompareExpr(exprReader), positive);

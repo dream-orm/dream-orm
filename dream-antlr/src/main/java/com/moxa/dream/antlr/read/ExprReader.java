@@ -13,12 +13,9 @@ import java.util.Stack;
 public class ExprReader extends StringReader {
 
     private final Stack<SqlExpr> exprStack = new Stack();
-
-    private ExprInfo lastInfo;
-
     private final Stack<ExprInfo> exprInfoStack = new Stack<>();
-
     private final MyFunctionFactory myFunctionFactory;
+    private ExprInfo lastInfo;
 
     public ExprReader(String sql) {
         this(sql, null);

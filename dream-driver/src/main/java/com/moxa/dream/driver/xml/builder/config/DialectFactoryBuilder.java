@@ -51,9 +51,9 @@ public class DialectFactoryBuilder extends XMLBuilder {
     }
 
     static class DialectFactory {
+        private final List<PropertyBuilder.Property> propertyList = new ArrayList<>();
         private String type;
         private String dialect;
-        private final List<PropertyBuilder.Property> propertyList = new ArrayList<>();
 
         public String getType() {
             return type;

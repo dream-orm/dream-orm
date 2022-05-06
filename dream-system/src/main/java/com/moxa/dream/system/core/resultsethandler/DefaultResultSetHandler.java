@@ -13,6 +13,7 @@ import com.moxa.dream.system.mapper.EachInfo;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
+import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -171,7 +172,11 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         if (ObjectUtil.isNull(tableName))
             return false;
         Configuration configuration = mappedStatement.getConfiguration();
-        TableInfo tableInfo = configuration.getTableFactory().getTableInfo(tableName);
+        TableFactory tableFactory = configuration.getTableFactory();
+        TableInfo tableInfo = null;
+        if (tableFactory != null) {
+            tableInfo = tableFactory.getTableInfo(tableName);
+        }
         if (tableInfo == null)
             return false;
         String fieldName = tableInfo.getFieldName(columnLabel);
@@ -183,7 +188,11 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
     protected String getLink(MappedStatement mappedStatement, String tableName, String columnLabel) {
         Configuration configuration = mappedStatement.getConfiguration();
-        TableInfo tableInfo = configuration.getTableFactory().getTableInfo(tableName);
+        TableFactory tableFactory = configuration.getTableFactory();
+        TableInfo tableInfo = null;
+        if (tableFactory != null) {
+            tableInfo = tableFactory.getTableInfo(tableName);
+        }
         String link = null;
         if (tableInfo != null) {
             link = tableInfo.getFieldName(columnLabel);

@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class ConfigurationBuilder extends XMLBuilder {
+    private final DefaultConfig defaultConfig;
     private ConfigBuilder configBuilder;
     private AliasFactoryBuilder.AliasFactory aliasFactory;
     private TableFactoryBuilder.TableFactory tableFactory;
@@ -24,7 +25,6 @@ public class ConfigurationBuilder extends XMLBuilder {
     private ListenerFactoryBuilder.ListenerFactory listenerFactory;
     private TransactionFactoryBuilder.TransactionFactory transactionFactory;
     private DataSourceFactoryBuilder.DataSourceFactory dataSourceFactory;
-    private final DefaultConfig defaultConfig;
 
     public ConfigurationBuilder(XmlHandler xmlHandler, DefaultConfig defaultConfig) {
         super(xmlHandler);

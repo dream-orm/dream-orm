@@ -1,8 +1,8 @@
 package com.moxa.dream.antlr.read;
 
 public class StringReader {
-    protected String value;
     private final int length;
+    protected String value;
     private int next = 0;
     private int mark = 0;
     private int start = 0;

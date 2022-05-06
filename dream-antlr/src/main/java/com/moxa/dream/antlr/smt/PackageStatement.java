@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PackageStatement extends Statement {
-    private Statement statement;
     private final Map<Class, Object> infoMap = new HashMap<>();
+    private Statement statement;
 
     public Statement getStatement() {
         return statement;

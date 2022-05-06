@@ -24,13 +24,13 @@ import com.moxa.dream.util.reflection.util.NonCollection;
 import java.util.List;
 
 public class PageHandler extends AbstractHandler {
-    private boolean offset;
-    private Statement first;
-    private Statement second;
     private final TableFactory tableFactory;
     private final MethodInfo methodInfo;
     private final Invoker invoker;
     private final ToDREAM toDREAM = new ToDREAM();
+    private boolean offset;
+    private Statement first;
+    private Statement second;
 
     public PageHandler(Invoker invoker, MethodInfo methodInfo) {
         ObjectUtil.requireNonNull(methodInfo, "Property 'methodInfo' is required");

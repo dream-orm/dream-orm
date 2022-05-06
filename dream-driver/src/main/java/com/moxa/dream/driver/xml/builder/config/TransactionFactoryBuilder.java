@@ -52,8 +52,8 @@ public class TransactionFactoryBuilder extends XMLBuilder {
     }
 
     static class TransactionFactory {
-        private String type;
         private final List<PropertyBuilder.Property> propertyList = new ArrayList<>();
+        private String type;
 
         public String getType() {
             return type;

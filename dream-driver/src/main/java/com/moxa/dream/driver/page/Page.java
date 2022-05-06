@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Page<E> extends ArrayList<E> {
-    private Long total;
     private final int pageNum;
     private final int pageSize;
-    private Collection<E> row;
     private final long startRow;
+    private Long total;
+    private Collection<E> row;
     private boolean count = true;
 
     public Page() {
