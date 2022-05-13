@@ -85,6 +85,14 @@ public class SymbolExpr extends SqlExpr {
     }
 
     @Override
+    protected Statement exprJavaStr(ExprInfo exprInfo) {
+        push();
+        symbolStatement = new SymbolStatement.JavaStrStatement(exprInfo.getInfo());
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     protected Statement exprSkip(ExprInfo exprInfo) {
         push();
         symbolStatement = new SymbolStatement.SKipStatement(exprInfo.getInfo());

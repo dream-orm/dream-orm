@@ -4,6 +4,7 @@ public enum ExprType {
     INT,
     FLOAT,
     STR,
+    JAVA_STR,
     LONG,
     DOUBLE,
     BOOLEAN,

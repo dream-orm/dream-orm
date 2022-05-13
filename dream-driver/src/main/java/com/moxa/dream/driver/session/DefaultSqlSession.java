@@ -9,8 +9,6 @@ import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 
-import java.sql.SQLException;
-
 public class DefaultSqlSession implements SqlSession {
     private final Configuration configuration;
     private final Executor executor;
@@ -53,7 +51,7 @@ public class DefaultSqlSession implements SqlSession {
                     value = executor.delete(mappedStatement);
                     break;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new DriverException(e);
         }
         return value;
@@ -78,9 +76,7 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public void close() {
-
         executor.close();
-
     }
 
     @Override

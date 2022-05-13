@@ -49,39 +49,36 @@ public class ParamScanHandler extends AbstractHandler {
                 SymbolStatement.LetterStatement letterStatement = (SymbolStatement.LetterStatement) paramStatement;
                 String field = letterStatement.getSymbol();
                 Statement parentStatement = invokerStatement.getParentStatement();
-                while (!(parentStatement instanceof PackageStatement)) {
-                    if (!(parentStatement instanceof ConditionStatement)) {
+                if (parentStatement instanceof ConditionStatement) {
+                    ConditionStatement conditionStatement = (ConditionStatement) parentStatement;
+                    OperStatement oper = conditionStatement.getOper();
+                    if (oper instanceof OperStatement.ANDStatement) {
                         parentStatement = parentStatement.getParentStatement();
-                    } else {
-                        ConditionStatement conditionStatement = (ConditionStatement) parentStatement;
-                        OperStatement oper = conditionStatement.getOper();
-                        if (oper instanceof OperStatement.ANDStatement || oper instanceof OperStatement.ORStatement) {
-                            parentStatement = parentStatement.getParentStatement();
-                        } else {
-                            Statement left = conditionStatement.getLeft();
-                            if (left instanceof SymbolStatement.LetterStatement) {
-                                SymbolStatement.LetterStatement letter = (SymbolStatement.LetterStatement) left;
-                                String database = null;
-                                String table = null;
-                                String column = letter.getSuffix();
-                                String prefix = letter.getPrefix();
-                                if (prefix != null) {
-                                    String[] s = prefix.split("\\.");
-                                    switch (s.length) {
-                                        case 1:
-                                            table = s[0];
-                                            break;
-                                        case 2:
-                                            database = s[0];
-                                            table = s[1];
-                                            break;
-                                        default:
-                                            break;
-                                    }
+                        if (paramStatement instanceof ConditionStatement) {
+                            conditionStatement = (ConditionStatement) parentStatement;
+                        }
+                        Statement left = conditionStatement.getLeft();
+                        if (left instanceof SymbolStatement.LetterStatement) {
+                            SymbolStatement.LetterStatement letter = (SymbolStatement.LetterStatement) left;
+                            String database = null;
+                            String table = null;
+                            String column = letter.getSuffix();
+                            String prefix = letter.getPrefix();
+                            if (prefix != null) {
+                                String[] s = prefix.split("\\.");
+                                switch (s.length) {
+                                    case 1:
+                                        table = s[0];
+                                        break;
+                                    case 2:
+                                        database = s[0];
+                                        table = s[1];
+                                        break;
+                                    default:
+                                        break;
                                 }
-                                scanInfo.add(new ScanInvoker.ParamScanInfo(database, table, column, field));
-                                break;
                             }
+                            scanInfo.add(new ScanInvoker.ParamScanInfo(database, table, column, field));
                         }
                     }
                 }

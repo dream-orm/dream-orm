@@ -102,7 +102,7 @@ public class PageHandler extends AbstractHandler {
                         ColumnInfo columnInfo = tableInfo.getColumnInfo();
                         if (columnInfo != null) {
                             String column = columnInfo.getColumn();
-                            String sql = alias + "." + column + " in(select " + column + " from " + table + " " + toDREAM.toStr(limitStatement, null, null) + ")";
+                            String sql = alias + "." + column + " in(select " + column + " from (select " + column + " from " + table + " " + toDREAM.toStr(limitStatement, null, null) + ")t_tmp)";
                             Statement inStatement = new CompareExpr(new ExprReader(sql)).expr();
                             WhereStatement whereStatement = queryStatement.getWhereStatement();
                             if (whereStatement == null) {
@@ -115,6 +115,7 @@ public class PageHandler extends AbstractHandler {
                                 conditionStatement.setLeft(condition);
                                 conditionStatement.setOper(new OperStatement.ANDStatement());
                                 conditionStatement.setRight(inStatement);
+                                whereStatement.setCondition(conditionStatement);
                             }
                             return;
                         }

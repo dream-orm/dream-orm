@@ -2,16 +2,11 @@ package com.moxa.dream.antlr.sql;
 
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.expr.QueryExpr;
-import com.moxa.dream.antlr.handler.AbstractHandler;
-import com.moxa.dream.antlr.handler.Handler;
-import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ToORACLE extends ToPubSQL {
@@ -240,18 +235,21 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(InsertStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        if (invokerList == null) {
-            invokerList = new ArrayList<>();
-        }
-        InsertInvoker insertInvoker = new InsertInvoker(statement);
-        invokerList.add(0, insertInvoker);
-        String result = toStr(statement.getValues(), assist, invokerList);
-        invokerList.remove(insertInvoker);
-        String batchSQL = insertInvoker.getBatchSQL();
-        if (!ObjectUtil.isNull(batchSQL)) {
-            return batchSQL;
+        if (statement.isAll()) {
+            String table = toStr(statement.getTable(), assist, invokerList);
+            String param = " ";
+            if (statement.getParams() != null) {
+                param = toStr(statement.getParams(), assist, invokerList);
+            }
+            ListColumnStatement listColumnStatement = (ListColumnStatement) (((InsertStatement.ValuesStatement) statement.getValues()).getStatement());
+            StringBuilder builder = new StringBuilder();
+            builder.append("INSERT ALL");
+            for (Statement columnStatement : listColumnStatement.getColumnList()) {
+                builder.append(" INTO " + table + param + "VALUES" + toStr(columnStatement, assist, invokerList));
+            }
+            return builder.toString();
         } else {
-            return "INSERT INTO " + toStr(statement.getTable(), assist, invokerList) + (statement.getParams() != null ? toStr(statement.getParams(), assist, invokerList) : " ") + result;
+            return super.toString(statement, assist, invokerList);
         }
     }
 
@@ -538,94 +536,5 @@ public class ToORACLE extends ToPubSQL {
         String left = toStr(conditionStatement.getLeft(), assist, invokerList);
         String right = toStr(conditionStatement.getRight(), assist, invokerList);
         return left + right + "-2*BITAND(" + left + "," + right + ")";
-    }
-
-    protected class InsertInvoker extends AbstractInvoker {
-
-        private final InsertStatement insertStatement;
-        private String batchSQL;
-
-        public InsertInvoker(InsertStatement statement) {
-            this.insertStatement = statement;
-        }
-
-        @Override
-        protected String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
-            throw new InvokerException("not support InsertInvoker");
-        }
-
-        @Override
-        public Handler[] handler() {
-            return new Handler[]{new ValuesHandler(this)};
-        }
-
-        public InsertStatement getInsertStatement() {
-            return insertStatement;
-        }
-
-        public String getBatchSQL() {
-            return batchSQL;
-        }
-
-        public void setBatchSQL(String batchSQL) {
-            this.batchSQL = batchSQL;
-        }
-    }
-
-    protected class ValuesHandler extends AbstractHandler {
-
-        private final InsertInvoker insertInvoker;
-
-        public ValuesHandler(InsertInvoker insertInvoker) {
-            this.insertInvoker = insertInvoker;
-        }
-
-        @Override
-        protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
-            return statement;
-        }
-
-        @Override
-        protected boolean interest(Statement statement, ToAssist sqlAssist) {
-            return statement instanceof InsertStatement.ValuesStatement;
-        }
-
-        @Override
-        protected Handler[] handlerBound() {
-            return new Handler[]{new ListColumnHandler(insertInvoker)};
-        }
-
-        protected class ListColumnHandler extends AbstractHandler {
-            private final InsertInvoker insertInvoker;
-
-            public ListColumnHandler(InsertInvoker insertInvoker) {
-                this.insertInvoker = insertInvoker;
-            }
-
-            @Override
-            protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
-                insertInvoker.setAccessible(false);
-                ListColumnStatement listColumnStatement = (ListColumnStatement) statement;
-                Statement[] columnList = listColumnStatement.getColumnList();
-                InsertStatement insertStatement = insertInvoker.getInsertStatement();
-                String insertColumns = "INTO " + toStr(insertStatement.getTable(), assist, invokerList) + (insertStatement.getParams() != null ? toStr(insertStatement.getParams(), assist, invokerList) : " ");
-                StringBuilder sqlBuilder = new StringBuilder("INSERT ALL ");
-                for (Statement column : columnList) {
-                    String insertValues = toSQL.toStr(column, assist, invokerList);
-                    sqlBuilder.append(insertColumns + "VALUES" + insertValues);
-                }
-                sqlBuilder.append(" SELECT 1 FROM DUAL");
-                insertInvoker.setBatchSQL(sqlBuilder.toString());
-                return null;
-            }
-
-            @Override
-            protected boolean interest(Statement statement, ToAssist sqlAssist) {
-                return statement instanceof ListColumnStatement
-                        && ((ListColumnStatement) statement).getColumnList().length > 1
-                        && statement.getParentStatement() != null
-                        && statement.getParentStatement() instanceof InsertStatement.ValuesStatement;
-            }
-        }
     }
 }

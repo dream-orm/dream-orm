@@ -57,6 +57,9 @@ public abstract class SqlExpr {
             case STR:
                 statement = exprStr(exprInfo);
                 break;
+            case JAVA_STR:
+                statement = exprJavaStr(exprInfo);
+                break;
             case LETTER:
                 statement = exprLetter(exprInfo);
                 break;
@@ -1237,6 +1240,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprStr(ExprInfo exprInfo) {
+        return exprSymbol(exprInfo);
+    }
+
+    protected Statement exprJavaStr(ExprInfo exprInfo) {
         return exprSymbol(exprInfo);
     }
 

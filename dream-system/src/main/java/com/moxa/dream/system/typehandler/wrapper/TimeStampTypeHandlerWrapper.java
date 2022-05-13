@@ -6,6 +6,7 @@ import com.moxa.dream.system.typehandler.util.TypeUtil;
 
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.Date;
 
 public class TimeStampTypeHandlerWrapper implements TypeHandlerWrapper {
     @Override
@@ -19,6 +20,7 @@ public class TimeStampTypeHandlerWrapper implements TypeHandlerWrapper {
                 TypeUtil.hash(Object.class, Types.TIMESTAMP),
                 TypeUtil.hash(Timestamp.class, Types.TIMESTAMP),
                 TypeUtil.hash(Timestamp.class, Types.NULL),
+                TypeUtil.hash(Date.class, Types.TIMESTAMP),
         };
     }
 

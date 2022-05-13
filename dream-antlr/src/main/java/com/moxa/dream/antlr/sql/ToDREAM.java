@@ -3,6 +3,7 @@ package com.moxa.dream.antlr.sql;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
+import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.List;
 
@@ -315,7 +316,7 @@ public class ToDREAM extends ToSQL {
         int i;
         for (i = 0; i < columnList.length; i++) {
             String column = toStr(columnList[i], assist, invokerList);
-            if (!column.equals(""))
+            if (!ObjectUtil.isNull(column))
                 stringBuilder.append(column + cut);
         }
         if (stringBuilder.length() > 0)
@@ -364,7 +365,7 @@ public class ToDREAM extends ToSQL {
 
     @Override
     protected String toString(FunctionStatement.LenStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        return "LEN(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+        return "CHAR_LENGTH(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override

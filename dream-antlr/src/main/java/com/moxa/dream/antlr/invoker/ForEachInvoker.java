@@ -8,7 +8,6 @@ import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.util.Arrays;
@@ -30,7 +29,9 @@ public class ForEachInvoker extends AbstractInvoker {
         String list = toSQL.toStr(columnList[0], assist, invokerList);
         ObjectWrapper paramWrapper = assist.getCustom(ObjectWrapper.class);
         Object arrayList = paramWrapper.get(list);
-        ObjectUtil.requireNonNull(arrayList, "Property 'list' is required");
+        if (arrayList == null) {
+            return null;
+        }
         boolean isArray = false;
         if (arrayList instanceof Collection || (isArray = arrayList.getClass().isArray())) {
             Collection collection;

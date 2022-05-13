@@ -107,6 +107,7 @@ public final class Constant {
             ExprType.DOUBLE,
             ExprType.BOOLEAN,
             ExprType.STR,
+            ExprType.JAVA_STR,
             ExprType.LETTER,
             ExprType.SKIP,
             ExprType.MARK

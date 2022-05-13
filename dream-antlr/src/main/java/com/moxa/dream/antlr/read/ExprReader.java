@@ -55,6 +55,10 @@ public class ExprReader extends StringReader {
                 reset();
                 lastInfo = pushStr();
                 break;
+            case 34:
+                reset();
+                lastInfo = pushJavaStr();
+                break;
             case 36:
             case 65:
             case 66:
@@ -287,6 +291,22 @@ public class ExprReader extends StringReader {
         int len = read(chars, 0, count);
         String info = new String(chars, 0, len);
         return new ExprInfo(ExprType.STR, info, getStart(), getEnd());
+    }
+
+    private ExprInfo pushJavaStr() {
+        mark();
+        skip(1);
+        int count = 1;
+        int c;
+        while ((c = read()) != -1 && !ExprUtil.isJavaStr(c)) {
+            count++;
+        }
+        count++;
+        reset();
+        char[] chars = new char[count];
+        int len = read(chars, 0, count);
+        String info = new String(chars, 0, len);
+        return new ExprInfo(ExprType.JAVA_STR, info, getStart(), getEnd());
     }
 
     public ExprInfo pushSkip() {

@@ -17,6 +17,10 @@ public class ExprUtil {
         return c == 39;
     }
 
+    public static boolean isJavaStr(int c) {
+        return c == 34;
+    }
+
     public static boolean isNumber(int c) {
         return 48 <= c && c <= 57;
     }

@@ -79,6 +79,18 @@ public abstract class SymbolStatement extends Statement {
         }
     }
 
+
+    public static class JavaStrStatement extends ConstantStatement<String> {
+        public JavaStrStatement(String symbol) {
+            super(symbol);
+        }
+
+        @Override
+        public String getValue() {
+            return symbol.substring(1, symbol.length() - 1);
+        }
+    }
+
     public static class IntStatement extends ConstantStatement<Integer> {
 
         public IntStatement(String symbol) {
@@ -138,6 +150,5 @@ public abstract class SymbolStatement extends Statement {
             return Boolean.valueOf(symbol);
         }
     }
-
 
 }
