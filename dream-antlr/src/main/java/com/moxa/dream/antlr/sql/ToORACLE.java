@@ -235,22 +235,24 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(InsertStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-        if (statement.isAll()) {
-            String table = toStr(statement.getTable(), assist, invokerList);
-            String param = " ";
-            if (statement.getParams() != null) {
-                param = toStr(statement.getParams(), assist, invokerList);
+        Statement values = statement.getValues();
+        if (values instanceof InsertStatement.ValuesStatement) {
+            ListColumnStatement listColumnStatement = (ListColumnStatement)(((InsertStatement.ValuesStatement) values).getStatement());
+            if (listColumnStatement.getColumnList().length > 1) {
+                String table = toStr(statement.getTable(), assist, invokerList);
+                String param = " ";
+                if (statement.getParams() != null) {
+                    param = toStr(statement.getParams(), assist, invokerList);
+                }
+                StringBuilder builder = new StringBuilder();
+                builder.append("INSERT ALL");
+                for (Statement columnStatement : listColumnStatement.getColumnList()) {
+                    builder.append(" INTO " + table + param + "VALUES" + toStr(columnStatement, assist, invokerList));
+                }
+                return builder.toString();
             }
-            ListColumnStatement listColumnStatement = (ListColumnStatement) (((InsertStatement.ValuesStatement) statement.getValues()).getStatement());
-            StringBuilder builder = new StringBuilder();
-            builder.append("INSERT ALL");
-            for (Statement columnStatement : listColumnStatement.getColumnList()) {
-                builder.append(" INTO " + table + param + "VALUES" + toStr(columnStatement, assist, invokerList));
-            }
-            return builder.toString();
-        } else {
-            return super.toString(statement, assist, invokerList);
         }
+        return super.toString(statement, assist, invokerList);
     }
 
     @Override

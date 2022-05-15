@@ -100,7 +100,7 @@ public class ScanInvoker extends AbstractInvoker {
         private String sql;
 
         public void add(TableScanInfo tableScanInfo) {
-            tableScanInfoMap.put(tableScanInfo.getAlias(), tableScanInfo);
+            tableScanInfoMap.put(tableScanInfo.getTable(), tableScanInfo);
         }
 
         public void add(ParamScanInfo paramScanInfo) {

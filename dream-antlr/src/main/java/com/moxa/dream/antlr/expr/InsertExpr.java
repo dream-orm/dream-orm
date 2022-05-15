@@ -18,15 +18,7 @@ public class InsertExpr extends SqlExpr {
     @Override
     protected Statement exprInsert(ExprInfo exprInfo) {
         push();
-        setExprTypes(ExprType.ALL,ExprType.INTO);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprAll(ExprInfo exprInfo) {
-        push();
         setExprTypes(ExprType.INTO);
-        insertStatement.setAll(true);
         return expr();
     }
 

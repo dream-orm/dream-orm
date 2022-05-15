@@ -762,6 +762,7 @@ public class FunctionExpr extends SqlExpr {
         protected Statement exprLBrace(ExprInfo exprInfo) {
             push();
             setExprTypes(ExprType.HELP, ExprType.RBRACE);
+            func.setParamsStatement(new ListColumnStatement());
             return expr();
         }
 

@@ -4,17 +4,8 @@ public class InsertStatement extends Statement {
     private SymbolStatement.LetterStatement table;
     private Statement params;
     private Statement values;
-    private boolean all=false;
     public SymbolStatement.LetterStatement getTable() {
         return table;
-    }
-
-    public void setAll(boolean all) {
-        this.all = all;
-    }
-
-    public boolean isAll() {
-        return all;
     }
 
     public void setTable(SymbolStatement.LetterStatement table) {

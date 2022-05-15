@@ -91,7 +91,9 @@ public class DefaultCache implements Cache {
                 if (!ObjectUtil.isNull(cacheKeySet)) {
                     for (CacheKey cacheKey : cacheKeySet) {
                         Map<CacheKey, Object> keyMap = indexMap.remove(cacheKey);
-                        keyMap.clear();
+                        if(!ObjectUtil.isNull(keyMap)) {
+                            keyMap.clear();
+                        }
                     }
                     cacheKeySet.clear();
                 }
