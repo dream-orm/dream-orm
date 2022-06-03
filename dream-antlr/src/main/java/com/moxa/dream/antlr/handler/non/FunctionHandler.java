@@ -15,7 +15,6 @@ import com.moxa.dream.util.common.ObjectUtil;
 import java.util.List;
 
 public class FunctionHandler extends AbstractHandler {
-    private boolean returnNull = false;
 
     @Override
     protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
@@ -34,7 +33,8 @@ public class FunctionHandler extends AbstractHandler {
 
     @Override
     protected String handlerAfter(ToAssist assist, String sql, int life) throws InvokerException {
-        if (returnNull) {
+        if (assist.getCustom(NullFlag.class)!=null) {
+            assist.setCustom(NullFlag.class,null);
             return "";
         } else {
             return super.handlerAfter(assist, sql, life);
@@ -59,7 +59,7 @@ public class FunctionHandler extends AbstractHandler {
                 for (int i = 0; i < columnList.length; i++) {
                     String column = toSQL.toStr(columnList[i], assist, invokerList);
                     if ("".equals(column)) {
-                        functionHandler.returnNull = true;
+                        assist.setCustom(NullFlag.class,new NullFlag());
                         return null;
                     }
                     statementList.add(new SymbolStatement.LetterStatement(column));
@@ -73,5 +73,8 @@ public class FunctionHandler extends AbstractHandler {
         protected boolean interest(Statement statement, ToAssist sqlAssist) {
             return statement instanceof ListColumnStatement;
         }
+    }
+    private static class NullFlag{
+
     }
 }
