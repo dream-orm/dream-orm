@@ -117,6 +117,7 @@ public enum ExprType {
     MINUTE,
     MONTH,
     NOW,
+    SYSDATE,
     QUARTER,
     TO_NUMBER,
     TO_CHAR,

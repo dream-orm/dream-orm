@@ -376,11 +376,6 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.NowStatement statement, ToAssist assist, List<Invoker> invokerList) {
-        return "NOW()";
-    }
-
-    @Override
     protected String toString(FunctionStatement.QuarterStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'q')) AS INTEGER)";
     }

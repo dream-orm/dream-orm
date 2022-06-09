@@ -386,6 +386,9 @@ public abstract class ToSQL {
             case 1888928601://NowStatement
                 sql = toString((FunctionStatement.NowStatement) statement, assist, invokerList);
                 break;
+            case 713230260://SysDateStatement
+                sql = toString((FunctionStatement.SysDateStatement) statement, assist, invokerList);
+                break;
             case 979905603://QuarterStatement
                 sql = toString((FunctionStatement.QuarterStatement) statement, assist, invokerList);
                 break;
@@ -786,6 +789,8 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.DateStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(FunctionStatement.NowStatement statement, ToAssist assist, List<Invoker> invokerList);
+
+    protected abstract String toString(FunctionStatement.SysDateStatement statement, ToAssist assist, List<Invoker> invokerList);
 
     protected abstract String toString(FunctionStatement.QuarterStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException;
 

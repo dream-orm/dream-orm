@@ -499,12 +499,17 @@ public class FunctionExpr extends SqlExpr {
         return expr();
     }
 
-    /**
-     * 时间函数
-     */
     @Override
     protected Statement exprNow(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.NowStatement();
+        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprSysDate(ExprInfo exprInfo) {
+        FunctionStatement func = new FunctionStatement.SysDateStatement();
         functionStatement = new FunctionParamerExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();

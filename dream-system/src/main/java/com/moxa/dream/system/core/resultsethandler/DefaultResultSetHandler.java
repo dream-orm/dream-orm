@@ -152,7 +152,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             colType = HashMap.class;
         MappedResult mappedResult = new MappedResult(mappedStatement.getRowType(), colType, null);
         Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = mappedStatement.getTableScanInfoMap();
-        LowHashSet tableSet =new LowHashSet(tableScanInfoMap.keySet());
+        LowHashSet tableSet = new LowHashSet(tableScanInfoMap.keySet());
         for (int i = 1; i <= columnCount; i++) {
             int jdbcType = metaData.getColumnType(i);
             String columnLabel = metaData.getColumnLabel(i);

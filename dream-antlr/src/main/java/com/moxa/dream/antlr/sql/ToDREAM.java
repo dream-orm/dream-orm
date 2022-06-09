@@ -689,6 +689,11 @@ public class ToDREAM extends ToSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.SysDateStatement statement, ToAssist assist, List<Invoker> invokerList) {
+        return "SYSDATE()";
+    }
+
+    @Override
     protected String toString(FunctionStatement.QuarterStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return "QUARTER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

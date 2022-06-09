@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class ObjectUtil {
     public static void requireNonNull(Object obj, String msg) {
-        if (obj==null)
+        if (obj == null)
             throw new NullPointerException(msg);
     }
 

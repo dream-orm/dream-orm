@@ -103,7 +103,7 @@ public class PageHandler extends AbstractHandler {
                         if (columnInfo != null) {
                             String column = columnInfo.getColumn();
                             String where = new ToDREAM().toStr(queryStatement.getWhereStatement(), null, null);
-                            String sql = alias + "." + column + " in(select " + column + " from (select " + column + " from " + table + " "+alias+" " + where + " " + toDREAM.toStr(limitStatement, null, null) + ")t_tmp)";
+                            String sql = alias + "." + column + " in(select " + column + " from (select " + column + " from " + table + " " + alias + " " + where + " " + toDREAM.toStr(limitStatement, null, null) + ")t_tmp)";
                             Statement inStatement = new CompareExpr(new ExprReader(sql)).expr();
                             WhereStatement whereStatement = new WhereStatement();
                             whereStatement.setCondition(inStatement);

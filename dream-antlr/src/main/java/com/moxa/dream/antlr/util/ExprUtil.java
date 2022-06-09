@@ -259,6 +259,8 @@ public class ExprUtil {
                 return ExprType.MONTH;
             case 77494://NOW
                 return ExprType.NOW;
+            case -1019868197://SYSDATE
+                return ExprType.SYSDATE;
             case 1369386636://QUARTER
                 return ExprType.QUARTER;
             case -1852950412://SECOND

@@ -4,6 +4,7 @@ public class InsertStatement extends Statement {
     private SymbolStatement.LetterStatement table;
     private Statement params;
     private Statement values;
+
     public SymbolStatement.LetterStatement getTable() {
         return table;
     }

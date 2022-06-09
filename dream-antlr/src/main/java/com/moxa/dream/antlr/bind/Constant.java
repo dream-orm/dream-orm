@@ -76,6 +76,7 @@ public final class Constant {
             ExprType.MINUTE,
             ExprType.MONTH,
             ExprType.NOW,
+            ExprType.SYSDATE,
             ExprType.QUARTER,
             ExprType.SECOND,
             ExprType.TIME,

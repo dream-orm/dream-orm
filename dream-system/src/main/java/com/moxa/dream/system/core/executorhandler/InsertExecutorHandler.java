@@ -25,7 +25,7 @@ public class InsertExecutorHandler extends AbstractExecutorHandler {
             int index = 1;
             List<Long> resultList = new ArrayList<>();
             while (generatedKeysResult.next()) {
-                Long value = generatedKeysResult.getLong(index);
+                Long value = generatedKeysResult.getLong(index++);
                 resultList.add(value);
             }
             return resultList;

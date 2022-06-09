@@ -508,6 +508,11 @@ public class ToMSSQL extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.SysDateStatement statement, ToAssist assist, List<Invoker> invokerList) {
+        return "GETDATE()";
+    }
+
+    @Override
     protected String toString(FunctionStatement.QuarterStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return "DATEPART(" + "q," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }

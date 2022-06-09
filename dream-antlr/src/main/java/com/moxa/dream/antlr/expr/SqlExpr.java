@@ -311,6 +311,9 @@ public abstract class SqlExpr {
             case NOW:
                 statement = exprNow(exprInfo);
                 break;
+            case SYSDATE:
+                statement = exprSysDate(exprInfo);
+                break;
             case QUARTER:
                 statement = exprQuarter(exprInfo);
                 break;
@@ -848,6 +851,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprNow(ExprInfo exprInfo) {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprSysDate(ExprInfo exprInfo) {
         return exprFunction(exprInfo);
     }
 

@@ -33,8 +33,8 @@ public class FunctionHandler extends AbstractHandler {
 
     @Override
     protected String handlerAfter(ToAssist assist, String sql, int life) throws InvokerException {
-        if (assist.getCustom(NullFlag.class)!=null) {
-            assist.setCustom(NullFlag.class,null);
+        if (assist.getCustom(NullFlag.class) != null) {
+            assist.setCustom(NullFlag.class, null);
             return "";
         } else {
             return super.handlerAfter(assist, sql, life);
@@ -59,7 +59,7 @@ public class FunctionHandler extends AbstractHandler {
                 for (int i = 0; i < columnList.length; i++) {
                     String column = toSQL.toStr(columnList[i], assist, invokerList);
                     if ("".equals(column)) {
-                        assist.setCustom(NullFlag.class,new NullFlag());
+                        assist.setCustom(NullFlag.class, new NullFlag());
                         return null;
                     }
                     statementList.add(new SymbolStatement.LetterStatement(column));
@@ -74,7 +74,8 @@ public class FunctionHandler extends AbstractHandler {
             return statement instanceof ListColumnStatement;
         }
     }
-    private static class NullFlag{
+
+    private static class NullFlag {
 
     }
 }

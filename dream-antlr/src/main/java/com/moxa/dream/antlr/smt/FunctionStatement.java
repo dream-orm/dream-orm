@@ -353,6 +353,10 @@ public abstract class FunctionStatement extends Statement {
 
     }
 
+    public static class SysDateStatement extends FunctionStatement {
+
+    }
+
     public static class QuarterStatement extends FunctionStatement {
 
     }

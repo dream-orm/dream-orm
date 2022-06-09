@@ -237,7 +237,7 @@ public class ToORACLE extends ToPubSQL {
     protected String toString(InsertStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         Statement values = statement.getValues();
         if (values instanceof InsertStatement.ValuesStatement) {
-            ListColumnStatement listColumnStatement = (ListColumnStatement)(((InsertStatement.ValuesStatement) values).getStatement());
+            ListColumnStatement listColumnStatement = (ListColumnStatement) (((InsertStatement.ValuesStatement) values).getStatement());
             if (listColumnStatement.getColumnList().length > 1) {
                 String table = toStr(statement.getTable(), assist, invokerList);
                 String param = " ";
@@ -468,6 +468,11 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.NowStatement statement, ToAssist assist, List<Invoker> invokerList) {
+        return "SYSDATE";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.SysDateStatement statement, ToAssist assist, List<Invoker> invokerList) {
         return "SYSDATE";
     }
 
