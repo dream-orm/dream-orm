@@ -389,6 +389,11 @@ public class ToDREAM extends ToSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.FindInSetStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
+        return "FIND_IN_SET(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.LcaseStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         return "LCASE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

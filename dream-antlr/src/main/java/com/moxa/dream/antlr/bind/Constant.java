@@ -8,6 +8,7 @@ public final class Constant {
             ExprType.LENGTH,
             ExprType.CHAR_LENGTH,
             ExprType.CONCAT_WS,
+            ExprType.FIND_IN_SET,
             ExprType.INSTR,
             ExprType.LOCATE,
             ExprType.LCASE,

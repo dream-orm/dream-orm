@@ -50,6 +50,10 @@ public abstract class FunctionStatement extends Statement {
 
     }
 
+    public static class FindInSetStatement extends FunctionStatement {
+
+    }
+
     public static class CoalesceStatement extends FunctionStatement {
 
     }

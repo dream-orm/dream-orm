@@ -127,6 +127,8 @@ public class ExprUtil {
                 return ExprType.CONCAT;
             case 1889287143://CONCAT_WS
                 return ExprType.CONCAT_WS;
+            case 1184709486://FIND_IN_SET
+                return ExprType.FIND_IN_SET;
             case 69823180://INSTR
                 return ExprType.INSTR;
             case -2044132526://LOCATE

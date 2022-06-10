@@ -63,6 +63,16 @@ public class FunctionExpr extends SqlExpr {
     }
 
     @Override
+    protected Statement exprFindInSet(ExprInfo exprInfo) {
+        FunctionStatement func = new FunctionStatement.FindInSetStatement();
+        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
+                new FunctionParamerExpr.GroupConcatExpr(exprReader)
+        ).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     protected Statement exprCoalesce(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.CoalesceStatement();
         functionStatement = new FunctionParamerExpr(exprReader, func).expr();

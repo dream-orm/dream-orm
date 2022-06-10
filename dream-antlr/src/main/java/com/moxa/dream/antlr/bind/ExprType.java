@@ -52,6 +52,7 @@ public enum ExprType {
     CONCAT,
     GROUP_CONCAT,
     CONCAT_WS,
+    FIND_IN_SET,
     INSTR,
     LOCATE,
     LCASE,
