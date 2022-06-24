@@ -6,6 +6,7 @@ import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.BaseReflectHandler;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
@@ -42,10 +43,14 @@ public class JavaPluginFactory extends AbstractPluginFactory {
         }
         if (interfaces.length > 0) {
             return Proxy.newProxyInstance(target.getClass().getClassLoader(), interfaces, (proxy, method, args) -> {
-                        if (interceptor.methods().contains(method)) {
-                            return interceptor.interceptor(new JavaInvocation(target, method, args));
-                        } else {
-                            return method.invoke(target, args);
+                        try {
+                            if (interceptor.methods().contains(method)) {
+                                return interceptor.interceptor(new JavaInvocation(target, method, args));
+                            } else {
+                                return method.invoke(target, args);
+                            }
+                        } catch (InvocationTargetException e) {
+                            throw e.getTargetException();
                         }
                     }
             );

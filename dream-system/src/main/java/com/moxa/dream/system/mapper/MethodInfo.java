@@ -156,7 +156,7 @@ public class MethodInfo {
                 CacheKey sqlKey = dialectFactory.getCacheKey(methodInfo);
                 ObjectUtil.requireNonNull(sqlKey, "Property 'sqlKey' is required");
                 methodInfo.sqlKey = sqlKey;
-                dialectFactory.decoration(methodInfo);
+                dialectFactory.wrapper(methodInfo);
             }
             return methodInfo;
         }

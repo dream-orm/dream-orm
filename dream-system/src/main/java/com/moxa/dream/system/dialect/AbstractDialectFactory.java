@@ -12,9 +12,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.system.antlr.decoration.AnnotationDecoration;
-import com.moxa.dream.system.antlr.decoration.Decoration;
-import com.moxa.dream.system.antlr.decoration.ScanDecoration;
+import com.moxa.dream.system.antlr.wrapper.AnnotationWrapper;
+import com.moxa.dream.system.antlr.wrapper.Wrapper;
+import com.moxa.dream.system.antlr.wrapper.ScanWrapper;
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
@@ -272,22 +272,22 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     protected abstract MyFunctionFactory getMyFunctionFactory();
 
     @Override
-    public void decoration(MethodInfo methodInfo) {
-        List<Decoration> allDecorationList = new ArrayList<>();
-        List<Decoration> beforeDecorationList = Arrays.asList(new AnnotationDecoration());
-        List<Decoration> decorationList = getWrapList();
-        List<Decoration> afterDecorationList = Arrays.asList(new ScanDecoration());
-        allDecorationList.addAll(beforeDecorationList);
-        if (!ObjectUtil.isNull(decorationList)) {
-            allDecorationList.addAll(decorationList);
+    public void wrapper(MethodInfo methodInfo) {
+        List<Wrapper> allWrapperList = new ArrayList<>();
+        List<Wrapper> beforeWrapperList = Arrays.asList(new AnnotationWrapper());
+        List<Wrapper> wrapperList = getWrapList();
+        List<Wrapper> afterWrapperList = Arrays.asList(new ScanWrapper());
+        allWrapperList.addAll(beforeWrapperList);
+        if (!ObjectUtil.isNull(wrapperList)) {
+            allWrapperList.addAll(wrapperList);
         }
-        allDecorationList.addAll(afterDecorationList);
-        for (Decoration decoration : allDecorationList) {
-            decoration.decorate(methodInfo);
+        allWrapperList.addAll(afterWrapperList);
+        for (Wrapper wrapper : allWrapperList) {
+            wrapper.wrapper(methodInfo);
         }
     }
 
-    protected abstract List<Decoration> getWrapList();
+    protected abstract List<Wrapper> getWrapList();
 
 
     static class ParamTypeMap {

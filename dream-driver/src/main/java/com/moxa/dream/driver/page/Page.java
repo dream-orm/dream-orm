@@ -1,14 +1,13 @@
 package com.moxa.dream.driver.page;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
-public class Page<E> extends ArrayList<E> {
+public class Page<E> {
     private final int pageNum;
     private final int pageSize;
     private final long startRow;
-    private Long total;
-    private Collection<E> row;
+    private long total;
+    private Collection<E> rows;
     private boolean count = true;
 
     public Page() {
@@ -21,10 +20,6 @@ public class Page<E> extends ArrayList<E> {
         this.startRow = (pageNum - 1) * pageSize;
     }
 
-    public static Page of(int pageNum, int pageSize) {
-        return new Page(pageNum, pageSize);
-    }
-
     public boolean isCount() {
         return count;
     }
@@ -33,11 +28,11 @@ public class Page<E> extends ArrayList<E> {
         this.count = count;
     }
 
-    public Long getTotal() {
+    public long getTotal() {
         return total;
     }
 
-    public void setTotal(Long total) {
+    public void setTotal(long total) {
         this.total = total;
     }
 
@@ -49,28 +44,15 @@ public class Page<E> extends ArrayList<E> {
         return pageSize;
     }
 
-
-    public Collection<E> getRow() {
-        return row;
+    public Collection<E> getRows() {
+        return rows;
     }
 
-    public void setRow(Collection<E> row) {
-        this.row = row;
+    public void setRows(Collection<E> rows) {
+        this.rows = rows;
     }
 
-    public Long getStartRow() {
+    public long getStartRow() {
         return startRow;
-    }
-
-    @Override
-    public String toString() {
-        return "Page{" +
-                "total=" + total +
-                ", pageNum=" + pageNum +
-                ", pageSize=" + pageSize +
-                ", startRow=" + startRow +
-                ", count=" + count +
-                ", row=" + row +
-                '}';
     }
 }

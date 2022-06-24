@@ -1,4 +1,4 @@
-package com.moxa.dream.system.antlr.decoration;
+package com.moxa.dream.system.antlr.wrapper;
 
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -6,9 +6,9 @@ import com.moxa.dream.util.common.ObjectUtil;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-public class AnnotationDecoration implements Decoration {
+public class AnnotationWrapper implements Wrapper {
     @Override
-    public void decorate(MethodInfo methodInfo) {
+    public void wrapper(MethodInfo methodInfo) {
         Method method = methodInfo.getMethod();
         if (method != null) {
             Annotation[] annotations = method.getDeclaredAnnotations();

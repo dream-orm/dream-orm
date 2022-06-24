@@ -1,8 +1,8 @@
 package com.moxa.dream.driver.factory;
 
 import com.moxa.dream.antlr.factory.MyFunctionFactory;
-import com.moxa.dream.driver.page.decoration.PageDecoration;
-import com.moxa.dream.system.antlr.decoration.Decoration;
+import com.moxa.dream.driver.page.wrapper.PageWrapper;
+import com.moxa.dream.system.antlr.wrapper.Wrapper;
 import com.moxa.dream.system.dialect.AbstractDialectFactory;
 import com.moxa.dream.system.mapper.MethodInfo;
 
@@ -23,7 +23,7 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
     }
 
     @Override
-    protected List<Decoration> getWrapList() {
-        return Arrays.asList(new PageDecoration());
+    protected List<Wrapper> getWrapList() {
+        return Arrays.asList(new PageWrapper());
     }
 }

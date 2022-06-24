@@ -52,7 +52,7 @@ public class DefaultSqlSession implements SqlSession {
                     break;
             }
         } catch (Exception e) {
-            throw new DriverException(e);
+            throw new RuntimeException(e);
         }
         return value;
     }

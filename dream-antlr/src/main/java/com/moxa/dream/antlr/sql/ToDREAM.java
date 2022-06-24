@@ -331,8 +331,7 @@ public class ToDREAM extends ToSQL {
 
     @Override
     protected String toString(SingleMarkStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
-//        return "`" + toStr(statement.getStatement(), assist, invokerList) + "`";
-        return toStr(statement.getStatement(), assist, invokerList);
+        return "`" + toStr(statement.getStatement(), assist, invokerList) + "`";
     }
 
     @Override

@@ -378,7 +378,7 @@ public abstract class SqlExpr {
                 statement = exprGroupConcat(exprInfo);
                 break;
             case FIND_IN_SET:
-                statement=exprFindInSet(exprInfo);
+                statement = exprFindInSet(exprInfo);
                 break;
             case IFNULL:
                 statement = exprIfNull(exprInfo);

@@ -1,4 +1,4 @@
-package com.moxa.dream.driver.page.decoration;
+package com.moxa.dream.driver.page.wrapper;
 
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
@@ -6,17 +6,17 @@ import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.driver.page.annotation.PageQuery;
-import com.moxa.dream.system.antlr.decoration.Decoration;
+import com.moxa.dream.system.antlr.wrapper.Wrapper;
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 
-public class PageDecoration implements Decoration {
+public class PageWrapper implements Wrapper {
     public static final String START_ROW = "startRow";
     public static final String PAGE_SIZE = "pageSize";
 
     @Override
-    public void decorate(MethodInfo methodInfo) {
+    public void wrapper(MethodInfo methodInfo) {
         PageQuery pageQuery = methodInfo.get(PageQuery.class);
         if (pageQuery != null) {
             String pageNamespace;

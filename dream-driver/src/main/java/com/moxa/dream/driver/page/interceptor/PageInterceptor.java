@@ -14,7 +14,9 @@ import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PageInterceptor extends AbstractInterceptor {
     @Override
@@ -43,14 +45,9 @@ public class PageInterceptor extends AbstractInterceptor {
                             Long total = (Long) targetExecutor.query(countMappedStatement);
                             page.setTotal(total);
                         }
-                        Class<? extends Collection> rowType = mappedStatement.getRowType();
-                        if (Page.class == rowType) {
-                            mappedStatement.setRowType(List.class);
-                            page.setRow((Collection) invocation.proceed());
-                            return page;
-                        } else {
-                            return invocation.proceed();
-                        }
+                        return invocation.proceed();
+                    } else {
+                        throw new PluginException(Page.class.getName() + " not found");
                     }
                 }
             }

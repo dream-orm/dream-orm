@@ -132,7 +132,7 @@ public class CompareExpr extends TreeExpr {
     protected Statement exprNot(ExprInfo exprInfo) {
         push();
         exprTree(new OperStatement.NOTStatement());
-        setExprTypes(ExprType.NOT, ExprType.IS, ExprType.EXISTS, ExprType.HELP);
+        setExprTypes(ExprType.NOT, ExprType.IN, ExprType.LIKE, ExprType.IS, ExprType.EXISTS, ExprType.HELP);
         return expr();
     }
 

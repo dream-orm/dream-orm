@@ -152,7 +152,6 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             colType = HashMap.class;
         MappedResult mappedResult = new MappedResult(mappedStatement.getRowType(), colType, null);
         Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = mappedStatement.getTableScanInfoMap();
-        LowHashSet tableSet = new LowHashSet(tableScanInfoMap.keySet());
         for (int i = 1; i <= columnCount; i++) {
             int jdbcType = metaData.getColumnType(i);
             String columnLabel = metaData.getColumnLabel(i);
@@ -160,7 +159,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             String link = getLink(mappedStatement, tableName, columnLabel);
             boolean primary = isPrimary(tableName, columnLabel, mappedStatement);
             MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName, link, primary);
-            boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, tableSet);
+            boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, new LowHashSet(tableScanInfoMap.keySet()));
             ObjectUtil.requireTrue(success, "Property '" + link + "' mapping failure");
         }
         return mappedResult;
@@ -248,7 +247,8 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 }
                 Type genericType = field.getGenericType();
                 String table = getTableName(genericType);
-                if (!ObjectUtil.isNull(table) && tableSet.contains(table)) {
+                if (!ObjectUtil.isNull(table) && tableSet.contains(table) && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || !curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
+                    tableSet.remove(table);
                     Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
                     MappedResult childMappedResult = childMappedResultMap.get(fieldName);
                     if (childMappedResult == null) {
