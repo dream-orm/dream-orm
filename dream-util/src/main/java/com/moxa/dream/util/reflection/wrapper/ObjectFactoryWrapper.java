@@ -35,6 +35,8 @@ public interface ObjectFactoryWrapper {
             return new CollectionObjectFactoryWrapper(type);
         } else if (Map.class.isAssignableFrom(type)) {
             return new MapObjectFactoryWrapper(type);
+        } else if (type.isArray()) {
+            return new ArrayObjectFactoryWrapper();
         } else {
             return new BeanObjectFactoryWrapper(type);
         }

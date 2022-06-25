@@ -1,6 +1,7 @@
 package com.moxa.dream.system.core.resultsethandler;
 
 import com.moxa.dream.antlr.invoker.ScanInvoker;
+import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
@@ -79,7 +80,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             if (simple = childMappedResult.isSimple()) {
                 childObjectFactory = doSimpleResult(resultSet, mappedStatement, childMappedResult);
             } else {
-                childObjectFactory = doNestedResult(resultSet, mappedStatement, mappedResult, cacheMap);
+                childObjectFactory = doNestedResult(resultSet, mappedStatement, childMappedResult, cacheMap);
             }
             if (!simple && childObjectFactory == null)
                 continue;
@@ -231,39 +232,41 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             String property = mappedColumn.getProperty();
             boolean lazyLoad = false;
             for (Field field : fieldList) {
-                String fieldName = field.getName();
-                if (!lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
-                    if (fieldName.equalsIgnoreCase(property)) {
-                        mappedColumn.setProperty(fieldName);
-                        TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), mappedColumn.getJdbcType());
-                        mappedColumn.setTypeHandler(typeHandler);
-                        if (!ObjectUtil.isNull(curTableName)) {
-                            mappedResult.add(mappedColumn);
-                            return true;
-                        } else {
-                            lazyLoad = true;
+                if (!field.isAnnotationPresent(Ignore.class)) {
+                    String fieldName = field.getName();
+                    if (!lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
+                        if (fieldName.equalsIgnoreCase(property)) {
+                            mappedColumn.setProperty(fieldName);
+                            TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), mappedColumn.getJdbcType());
+                            mappedColumn.setTypeHandler(typeHandler);
+                            if (!ObjectUtil.isNull(curTableName)) {
+                                mappedResult.add(mappedColumn);
+                                return true;
+                            } else {
+                                lazyLoad = true;
+                            }
                         }
                     }
-                }
-                Type genericType = field.getGenericType();
-                String table = getTableName(genericType);
-                if (!ObjectUtil.isNull(table) && tableSet.contains(table) && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || !curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
-                    tableSet.remove(table);
-                    Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
-                    MappedResult childMappedResult = childMappedResultMap.get(fieldName);
-                    if (childMappedResult == null) {
-                        Class<? extends Collection> rowType = ReflectUtil.getRowType(colType, field);
-                        if (rowType == null) {
-                            rowType = NonCollection.class;
-                        }
-                        childMappedResult = new MappedResult(rowType, ReflectUtil.getColType(colType, field), fieldName);
-                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
-                            childMappedResultMap.put(fieldName, childMappedResult);
-                            return true;
-                        }
-                    } else {
-                        if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
-                            return true;
+                    Type genericType = field.getGenericType();
+                    String table = getTableName(genericType);
+                    if (!ObjectUtil.isNull(table) && tableSet.contains(table) && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || !curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
+                        tableSet.remove(table);
+                        Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
+                        MappedResult childMappedResult = childMappedResultMap.get(fieldName);
+                        if (childMappedResult == null) {
+                            Class<? extends Collection> rowType = ReflectUtil.getRowType(colType, field);
+                            if (rowType == null) {
+                                rowType = NonCollection.class;
+                            }
+                            childMappedResult = new MappedResult(rowType, ReflectUtil.getColType(colType, field), fieldName);
+                            if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
+                                childMappedResultMap.put(fieldName, childMappedResult);
+                                return true;
+                            }
+                        } else {
+                            if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
+                                return true;
+                            }
                         }
                     }
                 }

@@ -9,19 +9,25 @@ import com.moxa.dream.antlr.smt.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToPubSQL extends ToDREAM {
+public abstract class ToPubSQL extends ToNativeSQL {
 
+    protected String beforeCache(Statement statement) {
+        String sql = statement.getQuickValue();
+        return sql;
+    }
 
     protected void afterCache(Statement statement, String sql) {
-        if (statement.isNeedCache())
+        if (statement.isNeedCache()) {
             statement.setQuickValue(sql);
+        }
     }
 
     @Override
     protected String toString(InvokerStatement statement, ToAssist assist, List<Invoker> invokerList) throws InvokerException {
         Invoker invoker = assist.getInvoker(statement.getNamespace(), statement.getFunction());
-        if (invokerList == null)
+        if (invokerList == null) {
             invokerList = new ArrayList<>();
+        }
         return invoker.invoke(statement, assist, this, invokerList);
     }
 

@@ -11,7 +11,7 @@ import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToAssist;
-import com.moxa.dream.antlr.sql.ToDREAM;
+import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
@@ -27,7 +27,7 @@ public class PageHandler extends AbstractHandler {
     private final TableFactory tableFactory;
     private final MethodInfo methodInfo;
     private final Invoker invoker;
-    private final ToDREAM toDREAM = new ToDREAM();
+    private final ToNativeSQL toNativeSQL = new ToNativeSQL();
     private boolean offset;
     private Statement first;
     private Statement second;
@@ -63,11 +63,11 @@ public class PageHandler extends AbstractHandler {
                 listColumnStatement.add(new FunctionExpr(new ExprReader("count(1)")).expr());
                 countSelectStatement.setSelectList(listColumnStatement);
                 queryStatement.setSelectStatement(countSelectStatement);
-                countSql = toDREAM.toStr(queryStatement, null, null);
+                countSql = toNativeSQL.toStr(queryStatement, null, null);
             }
         }
         if (ObjectUtil.isNull(countSql)) {
-            countSql = "select count(1) from (" + toDREAM.toStr(queryStatement, null, null) + ")t_tmp";
+            countSql = "select count(1) from (" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp";
         }
         MethodInfo methodInfo = new MethodInfo.Builder(this.methodInfo.getConfiguration())
                 .sql(countSql)
@@ -102,8 +102,8 @@ public class PageHandler extends AbstractHandler {
                         ColumnInfo columnInfo = tableInfo.getColumnInfo();
                         if (columnInfo != null) {
                             String column = columnInfo.getColumn();
-                            String where = new ToDREAM().toStr(queryStatement.getWhereStatement(), null, null);
-                            String sql = alias + "." + column + " in(select " + column + " from (select " + column + " from " + table + " " + alias + " " + where + " " + toDREAM.toStr(limitStatement, null, null) + ")t_tmp)";
+                            String where = new ToNativeSQL().toStr(queryStatement.getWhereStatement(), null, null);
+                            String sql = alias + "." + column + " in(select " + column + " from (select " + column + " from " + table + " " + alias + " " + where + " " + toNativeSQL.toStr(limitStatement, null, null) + ")t_tmp)";
                             Statement inStatement = new CompareExpr(new ExprReader(sql)).expr();
                             WhereStatement whereStatement = new WhereStatement();
                             whereStatement.setCondition(inStatement);
@@ -114,7 +114,7 @@ public class PageHandler extends AbstractHandler {
                 }
             }
         }
-        String sql = "select t_tmp.* from(" + toDREAM.toStr(queryStatement, null, null) + ")t_tmp " + toDREAM.toStr(limitStatement, null, null);
+        String sql = "select t_tmp.* from(" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp " + toNativeSQL.toStr(limitStatement, null, null);
         QueryStatement pageQueryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
         Statement parentStatement = queryStatement.getParentStatement();
         ReflectUtil.copy(queryStatement, pageQueryStatement);

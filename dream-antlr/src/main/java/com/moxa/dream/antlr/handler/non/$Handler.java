@@ -9,7 +9,6 @@ import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToAssist;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.antlr.util.ExprUtil;
 
 import java.util.List;
 
@@ -19,7 +18,6 @@ public class $Handler extends AbstractHandler {
         return statement instanceof InvokerStatement && AntlrInvokerFactory.$.equals(((InvokerStatement) statement).getFunction());
     }
 
-    //@?函数翻译之后情形
     @Override
     public String handlerAfter(ToAssist assist, String sql, int life) {
         //获取@$函数
@@ -29,7 +27,7 @@ public class $Handler extends AbstractHandler {
         if (paramInfoList != null) {
             int size = paramInfoList.size();
             Object value = paramInfoList.get(size - 1).getParamValue();
-            if (ExprUtil.isEmpty(String.valueOf(value))) {
+            if (value == null) {
                 paramInfoList.remove(size - 1);
                 return "";
             }
@@ -37,7 +35,6 @@ public class $Handler extends AbstractHandler {
         return sql;
     }
 
-    //处理之前，不处理
     @Override
     protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
         return statement;

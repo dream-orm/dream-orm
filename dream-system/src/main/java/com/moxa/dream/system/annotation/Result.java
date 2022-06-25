@@ -17,5 +17,7 @@ public @interface Result {
 
     boolean generatedKeys() default false;
 
+    String keyProperty() default "";
+
 
 }

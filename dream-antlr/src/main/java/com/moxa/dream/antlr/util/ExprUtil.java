@@ -366,9 +366,7 @@ public class ExprUtil {
     }
 
     public static boolean isEmpty(String val) {
-        if (val == null)
-            return true;
-        return "null".equals(val) || "".equals(val);
+        return val == null || "".equals(val);
     }
 
     public static boolean isBoolean(String info) {

@@ -26,6 +26,7 @@ public class MethodInfo {
     private CacheKey sqlKey;
     private Method method;
     private boolean generatedKeys;
+    private String keyProperty;
 
     private MethodInfo() {
 
@@ -79,6 +80,10 @@ public class MethodInfo {
         return generatedKeys;
     }
 
+    public String getKeyProperty() {
+        return keyProperty;
+    }
+
     public String getId() {
         if (method == null)
             return "";
@@ -119,6 +124,11 @@ public class MethodInfo {
 
         public Builder generatedKeys(boolean generatedKeys) {
             methodInfo.generatedKeys = generatedKeys;
+            return this;
+        }
+
+        public Builder keyProperty(String keyProperty) {
+            methodInfo.keyProperty = keyProperty;
             return this;
         }
 

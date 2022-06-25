@@ -7,7 +7,7 @@ import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.List;
 
-public class ToDREAM extends ToSQL {
+public class ToNativeSQL extends ToSQL {
     @Override
     public String getName() {
         String name;

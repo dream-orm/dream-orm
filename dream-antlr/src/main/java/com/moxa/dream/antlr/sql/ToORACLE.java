@@ -272,17 +272,17 @@ public class ToORACLE extends ToPubSQL {
             Statement first = limitStatement.getFirst();
             Statement second = limitStatement.getSecond();
             statement.setLimitStatement(null);
-            ToSQL toDREAM = new ToDREAM();
+            ToSQL toNativeSQL = new ToNativeSQL();
             String minValue;
             String maxValue;
-            String querySql = toDREAM.toStr(statement, null, null);
+            String querySql = toNativeSQL.toStr(statement, null, null);
             String sql;
             if (second == null) {
-                maxValue = toDREAM.toStr(first, null, null);
+                maxValue = toNativeSQL.toStr(first, null, null);
                 sql = "select* from(select rownum rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn <=" + maxValue;
             } else {
-                maxValue = toDREAM.toStr(second, null, null);
-                minValue = toDREAM.toStr(first, null, null);
+                maxValue = toNativeSQL.toStr(second, null, null);
+                minValue = toNativeSQL.toStr(first, null, null);
                 sql = "select* from(select rownum rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn between " + minValue + " and " + minValue + "+" + maxValue;
             }
             QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();

@@ -21,4 +21,9 @@ public class CollectionObjectFactory extends BeanObjectFactory {
             super.set(property, value);
         }
     }
+
+    @Override
+    protected Object get(Object result, String property) {
+        return result;
+    }
 }
