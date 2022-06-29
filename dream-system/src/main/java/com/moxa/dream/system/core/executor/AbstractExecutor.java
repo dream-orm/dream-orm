@@ -110,6 +110,12 @@ public abstract class AbstractExecutor implements Executor {
 
     protected boolean before(Listener[] listeners, MappedStatement mappedStatement) {
         boolean success = true;
+        Listener[] tempListeners = mappedStatement.getListeners();
+        if (ObjectUtil.isNull(tempListeners)) {
+            for (Listener listener : tempListeners) {
+                success = success & listener.before(mappedStatement);
+            }
+        }
         if (!ObjectUtil.isNull(listeners)) {
             for (Listener listener : listeners) {
                 success = success & listener.before(mappedStatement);

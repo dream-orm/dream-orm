@@ -3,6 +3,7 @@ package com.moxa.dream.system.mapper;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 
@@ -25,6 +26,7 @@ public class MethodInfo {
     private PackageStatement statement;
     private CacheKey sqlKey;
     private Method method;
+    private Listener[] listeners;
     private boolean generatedKeys;
     private String keyProperty;
 
@@ -76,6 +78,10 @@ public class MethodInfo {
         return method;
     }
 
+    public Listener[] getListeners() {
+        return listeners;
+    }
+
     public boolean isGeneratedKeys() {
         return generatedKeys;
     }
@@ -119,6 +125,11 @@ public class MethodInfo {
 
         public Builder colType(Class colType) {
             methodInfo.colType = colType;
+            return this;
+        }
+
+        public Builder listeners(Listener[] listeners) {
+            methodInfo.listeners = listeners;
             return this;
         }
 

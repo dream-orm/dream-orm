@@ -5,6 +5,7 @@ import com.moxa.dream.system.annotation.Param;
 import com.moxa.dream.system.annotation.Result;
 import com.moxa.dream.system.annotation.Sql;
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.mapper.EachInfo;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.mapper.handler.MapperHandler;
@@ -56,6 +57,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     protected MethodInfo.Builder createMethodInfoBuilder(Configuration configuration, Class mapperClass, Method method) {
         Class<? extends Collection> rowType = getRowType(mapperClass, method);
         Class colType = getColType(mapperClass, method);
+        Listener[] listeners = getListeners(mapperClass, method);
         boolean generatedKeys = isGeneratedKeys(mapperClass, method);
         String keyProperty = getKeyProperty(mapperClass, method);
         String[] paramNameList = getParamNameList(method);
@@ -66,6 +68,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 .name(method.getName())
                 .rowType(rowType)
                 .colType(colType)
+                .listeners(listeners)
                 .generatedKeys(generatedKeys)
                 .keyProperty(keyProperty)
                 .paramNameList(paramNameList)
@@ -138,6 +141,21 @@ public abstract class AbstractMapperFactory implements MapperFactory {
             }
         }
         return colType;
+    }
+
+    protected Listener[] getListeners(Class mapperClass, Method method) {
+        Result resultAnnotation = method.getDeclaredAnnotation(Result.class);
+        if (resultAnnotation != null) {
+            Class<? extends Listener>[] listenerClasses = resultAnnotation.listeners();
+            if (!ObjectUtil.isNull(listenerClasses)) {
+                Listener[] listeners = new Listener[listenerClasses.length];
+                for (int i = 0; i < listenerClasses.length; i++) {
+                    listeners[i] = ReflectUtil.create(listenerClasses[i]);
+                }
+                return listeners;
+            }
+        }
+        return null;
     }
 
     protected boolean isGeneratedKeys(Class mapperClass, Method method) {
