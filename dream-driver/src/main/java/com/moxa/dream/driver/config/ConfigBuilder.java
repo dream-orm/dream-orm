@@ -8,7 +8,7 @@ import com.moxa.dream.driver.factory.DefaultListenerFactory;
 import com.moxa.dream.driver.factory.DefaultMapperFactory;
 import com.moxa.dream.driver.resource.ResourceUtil;
 import com.moxa.dream.system.cache.factory.CacheFactory;
-import com.moxa.dream.system.cache.factory.DefaultCacheFactory;
+import com.moxa.dream.system.cache.factory.MemoryCacheFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
@@ -51,7 +51,7 @@ public class ConfigBuilder {
             defaultConfig = new DefaultConfig();
             defaultConfig
                     .setAliasFactory(new DefaultAliasFactory())
-                    .setCacheFactory(new DefaultCacheFactory())
+                    .setCacheFactory(new MemoryCacheFactory())
                     .setMapperFactory(new DefaultMapperFactory())
                     .setTableFactory(new DefaultTableFactory())
                     .setDialectFactory(new DefaultDialectFactory())

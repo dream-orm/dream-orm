@@ -1,5 +1,6 @@
 package com.moxa.dream.system.mapped;
 
+import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 
 import java.sql.ResultSet;
@@ -9,16 +10,18 @@ public class MappedColumn {
     private final int index;
     private final int jdbcType;
     private final String table;
-    private final boolean primary;
     private TypeHandler typeHandler;
     private String property;
+    private String columnLabel;
+    private ColumnInfo columnInfo;
 
-    public MappedColumn(int index, int jdbcType, String table, String property, boolean primary) {
+    public MappedColumn(int index, int jdbcType, String table, String columnLabel, ColumnInfo columnInfo) {
         this.index = index;
         this.jdbcType = jdbcType;
         this.table = table;
-        this.property = property;
-        this.primary = primary;
+        this.columnLabel = columnLabel;
+        this.columnInfo = columnInfo;
+        this.property = columnInfo == null ? columnLabel : columnInfo.getName();
     }
 
     public Object getValue(ResultSet resultSet) throws SQLException {
@@ -29,12 +32,20 @@ public class MappedColumn {
         return table;
     }
 
+    public String getColumnLabel() {
+        return columnLabel;
+    }
+
     public String getProperty() {
         return property;
     }
 
     public void setProperty(String property) {
         this.property = property;
+    }
+
+    public ColumnInfo getColumnInfo() {
+        return columnInfo;
     }
 
     public int getJdbcType() {
@@ -50,6 +61,6 @@ public class MappedColumn {
     }
 
     public boolean isPrimary() {
-        return primary;
+        return columnInfo == null ? false : columnInfo.isPrimary();
     }
 }

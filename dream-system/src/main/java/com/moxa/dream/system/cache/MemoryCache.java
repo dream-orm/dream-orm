@@ -1,7 +1,6 @@
-package com.moxa.dream.driver.cache;
+package com.moxa.dream.system.cache;
 
 import com.moxa.dream.antlr.invoker.ScanInvoker;
-import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ThreadUtil;
@@ -12,23 +11,16 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ThirdCache implements com.moxa.dream.system.cache.Cache {
+public class MemoryCache implements Cache {
     private final int limit;
     private final double rate;
     private final AtomicBoolean canDelete = new AtomicBoolean(true);
     protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>();
-    protected Map<CacheKey, Set<CacheKey>> indexMap = new ConcurrentHashMap<>();
-    protected Cache<CacheKey, Object> pointCache;
+    protected Map<CacheKey, Map<CacheKey, Object>> indexMap = new ConcurrentHashMap<>();
 
-    public ThirdCache(Cache<CacheKey, Object> pointCache) {
-        this(pointCache, 1000, 0.25);
-    }
-
-    public ThirdCache(com.moxa.dream.driver.cache.Cache<CacheKey, Object> pointCache, int limit, double rate) {
-        ObjectUtil.requireNonNull(pointCache, "Property 'pointCache' is required");
+    public MemoryCache(int limit, double rate) {
         ObjectUtil.requireTrue(limit > 0, "Property 'limit' must gt 0");
         ObjectUtil.requireTrue(rate > 0 && rate <= 1, "Property 'rate' must gt 0 and leq 1");
-        this.pointCache = pointCache;
         this.limit = limit;
         this.rate = rate;
     }
@@ -53,40 +45,39 @@ public class ThirdCache implements com.moxa.dream.system.cache.Cache {
                 cacheKeySet.add(sqlKey);
             }
         }
-        Set<CacheKey> cacheKeySet = indexMap.get(sqlKey);
-        if (cacheKeySet == null) {
+        Map<CacheKey, Object> keyMap = indexMap.get(sqlKey);
+        if (keyMap == null) {
             synchronized (this) {
-                cacheKeySet = indexMap.get(sqlKey);
-                if (cacheKeySet == null) {
-                    cacheKeySet = Collections.newSetFromMap(new ConcurrentHashMap<>());
-                    indexMap.put(sqlKey, cacheKeySet);
+                keyMap = indexMap.get(sqlKey);
+                if (keyMap == null) {
+                    keyMap = new ConcurrentHashMap<>();
+                    indexMap.put(sqlKey, keyMap);
                 }
-                indexMap.put(sqlKey, cacheKeySet);
             }
-        } else if (cacheKeySet.size() > limit) {
+        } else if (keyMap.size() > limit) {
             if (canDelete.compareAndSet(true, false)) {
-                Set<CacheKey> finalCacheKeySet = cacheKeySet;
+                Map<CacheKey, Object> finalMap = keyMap;
                 ThreadUtil.execute(() -> {
-                    for (CacheKey cacheKey : finalCacheKeySet) {
+                    for (CacheKey cacheKey : finalMap.keySet()) {
                         double random = Math.random();
                         if (random <= rate) {
-                            finalCacheKeySet.remove(cacheKey);
+                            finalMap.remove(cacheKey);
                         }
                     }
+                    canDelete.set(true);
                 });
             }
         }
-        cacheKeySet.add(uniqueKey);
-        pointCache.put(uniqueKey, value);
+        keyMap.put(uniqueKey, value);
     }
 
     @Override
     public Object get(MappedStatement mappedStatement) {
         CacheKey sqlKey = mappedStatement.getSqlKey();
+        Map<CacheKey, Object> keyMap = indexMap.get(sqlKey);
         CacheKey uniqueKey = mappedStatement.getUniqueKey();
-        Set<CacheKey> cacheKeySet = indexMap.get(sqlKey);
-        if (!ObjectUtil.isNull(cacheKeySet) && cacheKeySet.contains(uniqueKey)) {
-            return pointCache.get(uniqueKey);
+        if (keyMap != null) {
+            return keyMap.get(uniqueKey);
         } else
             return null;
     }
@@ -99,14 +90,9 @@ public class ThirdCache implements com.moxa.dream.system.cache.Cache {
                 Set<CacheKey> cacheKeySet = tableMap.get(table);
                 if (!ObjectUtil.isNull(cacheKeySet)) {
                     for (CacheKey cacheKey : cacheKeySet) {
-                        Set<CacheKey> uniqueCacheKeySet = indexMap.remove(cacheKey);
-                        if (!ObjectUtil.isNull(uniqueCacheKeySet)) {
-                            ThreadUtil.execute(() -> {
-                                for (CacheKey uniqueCacheKey : uniqueCacheKeySet) {
-                                    pointCache.remove(uniqueCacheKey);
-                                }
-                            });
-                            uniqueCacheKeySet.clear();
+                        Map<CacheKey, Object> keyMap = indexMap.remove(cacheKey);
+                        if (!ObjectUtil.isNull(keyMap)) {
+                            keyMap.clear();
                         }
                     }
                     cacheKeySet.clear();

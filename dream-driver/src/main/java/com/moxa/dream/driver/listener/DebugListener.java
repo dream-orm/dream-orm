@@ -18,7 +18,7 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
     static final String lineSeparator = System.getProperty("line.separator", "\n");
 
     @Override
-    public void before(MappedStatement mappedStatement) {
+    public boolean before(MappedStatement mappedStatement) {
         mappedStatement.put(START_DATE, System.currentTimeMillis());
         List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
         List<Object> paramList;
@@ -32,11 +32,13 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
         builder.append("SQL:" + sql).append(lineSeparator);
         builder.append("PARAM:" + paramList).append(lineSeparator);
         mappedStatement.put(LOGS, builder);
+        return true;
     }
 
     @Override
-    public void afterReturn(Object result, MappedStatement mappedStatement) {
+    public Object afterReturn(Object result, MappedStatement mappedStatement) {
         after(mappedStatement);
+        return result;
     }
 
     @Override

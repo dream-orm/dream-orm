@@ -66,16 +66,19 @@ public abstract class AbstractExecutor implements Executor {
 
 
     protected Object doExecutor(Listener[] listeners, MappedStatement mappedStatement, ExecutorHandler executorHandler) throws SQLException {
-        try {
-            before(listeners, mappedStatement);
-            Object result = executorHandler.execute(mappedStatement);
-            afterReturn(listeners, result, mappedStatement);
-            return result;
-        } catch (Exception e) {
-            exception(listeners, e, mappedStatement);
-            throw e;
-        } finally {
-            statementHandler.close();
+        if (before(listeners, mappedStatement)) {
+            Object result = null;
+            try {
+                result = executorHandler.execute(mappedStatement);
+            } catch (Exception e) {
+                exception(listeners, e, mappedStatement);
+                throw e;
+            } finally {
+                statementHandler.close();
+            }
+            return afterReturn(listeners, result, mappedStatement);
+        } else {
+            return null;
         }
     }
 
@@ -105,20 +108,23 @@ public abstract class AbstractExecutor implements Executor {
         transaction.close();
     }
 
-    protected void before(Listener[] listeners, MappedStatement mappedStatement) {
+    protected boolean before(Listener[] listeners, MappedStatement mappedStatement) {
+        boolean success = true;
         if (!ObjectUtil.isNull(listeners)) {
             for (Listener listener : listeners) {
-                listener.before(mappedStatement);
+                success = success & listener.before(mappedStatement);
             }
         }
+        return success;
     }
 
-    protected void afterReturn(Listener[] listeners, Object result, MappedStatement mappedStatement) {
+    protected Object afterReturn(Listener[] listeners, Object result, MappedStatement mappedStatement) {
         if (!ObjectUtil.isNull(listeners)) {
             for (Listener listener : listeners) {
-                listener.afterReturn(result, mappedStatement);
+                result = listener.afterReturn(result, mappedStatement);
             }
         }
+        return result;
     }
 
     protected void exception(Listener[] listeners, Exception e, MappedStatement mappedStatement) {

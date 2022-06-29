@@ -1,11 +1,11 @@
 package com.moxa.dream.system.cache.factory;
 
 import com.moxa.dream.system.cache.Cache;
-import com.moxa.dream.system.cache.DefaultCache;
+import com.moxa.dream.system.cache.MemoryCache;
 
 import java.util.Properties;
 
-public class DefaultCacheFactory extends AbstractCacheFactory {
+public class MemoryCacheFactory extends AbstractCacheFactory {
     public static final String ENABLED = "enabled";
     public static final String LIMIT = "limit";
     public static final String RATE = "rate";
@@ -33,6 +33,6 @@ public class DefaultCacheFactory extends AbstractCacheFactory {
         if (disabled)
             return null;
         else
-            return new DefaultCache(limit, rate);
+            return new MemoryCache(limit, rate);
     }
 }

@@ -157,47 +157,33 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             int jdbcType = metaData.getColumnType(i);
             String columnLabel = metaData.getColumnLabel(i);
             String tableName = metaData.getTableName(i);
-            String link = getLink(mappedStatement, tableName, columnLabel);
-            boolean primary = isPrimary(tableName, columnLabel, mappedStatement);
-            MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName, link, primary);
+            ColumnInfo columnInfo = getColumnInfo(mappedStatement, tableName, columnLabel);
+            MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName, columnLabel, columnInfo);
             boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, new LowHashSet(tableScanInfoMap.keySet()));
-            ObjectUtil.requireTrue(success, "Property '" + link + "' mapping failure");
+            ObjectUtil.requireTrue(success, "Property '" + mappedColumn.getProperty() + "' mapping failure");
         }
         return mappedResult;
     }
 
-    protected boolean isPrimary(String tableName, String columnLabel, MappedStatement mappedStatement) {
-        if (ObjectUtil.isNull(tableName))
-            return false;
+    protected ColumnInfo getColumnInfo(MappedStatement mappedStatement, String tableName, String columnLabel) {
         Configuration configuration = mappedStatement.getConfiguration();
         TableFactory tableFactory = configuration.getTableFactory();
-        TableInfo tableInfo = null;
+        TableInfo tableInfo;
         if (tableFactory != null) {
             tableInfo = tableFactory.getTableInfo(tableName);
+            if (tableInfo != null) {
+                String link = null;
+                if (tableInfo != null) {
+                    link = tableInfo.getFieldName(columnLabel);
+                }
+                if (ObjectUtil.isNull(link)) {
+                    link = columnLabel;
+                }
+                return tableInfo.getColumnInfo(link);
+            }
         }
-        if (tableInfo == null)
-            return false;
-        String fieldName = tableInfo.getFieldName(columnLabel);
-        if (ObjectUtil.isNull(fieldName))
-            return false;
-        ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-        return columnInfo.isPrimary();
-    }
+        return null;
 
-    protected String getLink(MappedStatement mappedStatement, String tableName, String columnLabel) {
-        Configuration configuration = mappedStatement.getConfiguration();
-        TableFactory tableFactory = configuration.getTableFactory();
-        TableInfo tableInfo = null;
-        if (tableFactory != null) {
-            tableInfo = tableFactory.getTableInfo(tableName);
-        }
-        String link = null;
-        if (tableInfo != null) {
-            link = tableInfo.getFieldName(columnLabel);
-        }
-        if (ObjectUtil.isNull(link))
-            return columnLabel;
-        else return link;
     }
 
 
@@ -232,7 +218,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             String property = mappedColumn.getProperty();
             boolean lazyLoad = false;
             for (Field field : fieldList) {
-                if (!field.isAnnotationPresent(Ignore.class)) {
+                if (!ignore(field)) {
                     String fieldName = field.getName();
                     if (!lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
                         if (fieldName.equalsIgnoreCase(property)) {
@@ -277,6 +263,10 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             }
         }
         return false;
+    }
+
+    protected boolean ignore(Field field) {
+        return field.isAnnotationPresent(Ignore.class);
     }
 
     protected String getTableName(Type type) {
