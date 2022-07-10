@@ -90,10 +90,6 @@ public class MappedStatement {
         return methodInfo.getSqlKey();
     }
 
-    public boolean isGeneratedKeys() {
-        return methodInfo.isGeneratedKeys();
-    }
-
     public String getKeyProperty() {
         return methodInfo.getKeyProperty();
     }

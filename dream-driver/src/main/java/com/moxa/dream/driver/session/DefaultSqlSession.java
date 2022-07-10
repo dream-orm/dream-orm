@@ -26,7 +26,7 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public <T> T getMapper(Class<T> type) {
-        return mapperFactory.getMapper(type, (methodInfo, arg, args)
+        return mapperFactory.getMapper(type, (methodInfo, arg)
                 -> execute(methodInfo, arg)
         );
     }

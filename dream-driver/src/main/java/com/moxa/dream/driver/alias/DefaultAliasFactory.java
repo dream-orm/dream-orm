@@ -10,16 +10,16 @@ import java.util.Properties;
 
 public class DefaultAliasFactory extends AbstractAliasFactory {
     public DefaultAliasFactory() {
-        properties.put("mysql", ToMYSQL.class.getName());
-        properties.put("pgsql", ToPGSQL.class.getName());
-        properties.put("mssql", ToMSSQL.class.getName());
-        properties.put("sqlserver", ToMSSQL.class.getName());
-        properties.put("oracle", ToORACLE.class.getName());
-        properties.put("MYSQL", ToMYSQL.class.getName());
-        properties.put("PGSQL", ToPGSQL.class.getName());
-        properties.put("MSSQL", ToMSSQL.class.getName());
-        properties.put("SQLSERVER", ToMSSQL.class.getName());
-        properties.put("ORACLE", ToORACLE.class.getName());
+        properties.put("mysql" , ToMYSQL.class.getName());
+        properties.put("pgsql" , ToPGSQL.class.getName());
+        properties.put("mssql" , ToMSSQL.class.getName());
+        properties.put("sqlserver" , ToMSSQL.class.getName());
+        properties.put("oracle" , ToORACLE.class.getName());
+        properties.put("MYSQL" , ToMYSQL.class.getName());
+        properties.put("PGSQL" , ToPGSQL.class.getName());
+        properties.put("MSSQL" , ToMSSQL.class.getName());
+        properties.put("SQLSERVER" , ToMSSQL.class.getName());
+        properties.put("ORACLE" , ToORACLE.class.getName());
     }
 
     @Override

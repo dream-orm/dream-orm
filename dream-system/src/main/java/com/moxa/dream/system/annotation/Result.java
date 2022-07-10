@@ -18,8 +18,6 @@ public @interface Result {
 
     Class<? extends Listener>[] listeners() default {};
 
-    boolean generatedKeys() default false;
-
     String keyProperty() default "";
 
 }

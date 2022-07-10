@@ -27,7 +27,6 @@ public class MethodInfo {
     private CacheKey sqlKey;
     private Method method;
     private Listener[] listeners;
-    private boolean generatedKeys;
     private String keyProperty;
 
     private MethodInfo() {
@@ -82,10 +81,6 @@ public class MethodInfo {
         return listeners;
     }
 
-    public boolean isGeneratedKeys() {
-        return generatedKeys;
-    }
-
     public String getKeyProperty() {
         return keyProperty;
     }
@@ -130,11 +125,6 @@ public class MethodInfo {
 
         public Builder listeners(Listener[] listeners) {
             methodInfo.listeners = listeners;
-            return this;
-        }
-
-        public Builder generatedKeys(boolean generatedKeys) {
-            methodInfo.generatedKeys = generatedKeys;
             return this;
         }
 

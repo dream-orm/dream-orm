@@ -7,7 +7,6 @@ import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.system.mapper.MethodInfo;
-import com.moxa.dream.system.plugin.PluginException;
 import com.moxa.dream.system.plugin.interceptor.AbstractInterceptor;
 import com.moxa.dream.system.plugin.invocation.Invocation;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -42,12 +41,12 @@ public class PageInterceptor extends AbstractInterceptor {
                             MethodInfo methodInfo = pageCount.getMethodInfo();
                             DialectFactory dialectFactory = mappedStatement.getConfiguration().getDialectFactory();
                             MappedStatement countMappedStatement = dialectFactory.compile(methodInfo, mappedStatement.getArg());
-                            Long total = (Long) targetExecutor.query(countMappedStatement);
+                            long total = ((Number) targetExecutor.query(countMappedStatement)).longValue();
                             page.setTotal(total);
                         }
                         return invocation.proceed();
                     } else {
-                        throw new PluginException(Page.class.getName() + " not found");
+                        throw new RuntimeException(Page.class.getName() + " not found");
                     }
                 }
             }
@@ -58,10 +57,10 @@ public class PageInterceptor extends AbstractInterceptor {
     @Override
     public Set<Method> methodSet() {
         try {
-            Method method = Executor.class.getDeclaredMethod("query", MappedStatement.class);
+            Method method = Executor.class.getDeclaredMethod("query" , MappedStatement.class);
             return new HashSet<>(Arrays.asList(method));
         } catch (Exception e) {
-            throw new PluginException(e);
+            throw new RuntimeException(e);
         }
     }
 }

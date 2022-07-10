@@ -1,28 +1,20 @@
 package com.moxa.dream.driver.config;
 
+import com.moxa.dream.antlr.sql.ToMYSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.driver.alias.AliasFactory;
-import com.moxa.dream.driver.alias.DefaultAliasFactory;
-import com.moxa.dream.driver.factory.DefaultDialectFactory;
-import com.moxa.dream.driver.factory.DefaultListenerFactory;
-import com.moxa.dream.driver.factory.DefaultMapperFactory;
 import com.moxa.dream.driver.resource.ResourceUtil;
 import com.moxa.dream.system.cache.factory.CacheFactory;
-import com.moxa.dream.system.cache.factory.MemoryCacheFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
-import com.moxa.dream.system.plugin.factory.JavaPluginFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.plugin.interceptor.Interceptor;
-import com.moxa.dream.system.table.factory.DefaultTableFactory;
 import com.moxa.dream.system.table.factory.TableFactory;
-import com.moxa.dream.system.transaction.factory.JdbcTransactionFactory;
 import com.moxa.dream.system.transaction.factory.TransactionFactory;
-import com.moxa.dream.system.typehandler.factory.DefaultTypeHandlerFactory;
 import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.wrapper.TypeHandlerWrapper;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -36,29 +28,16 @@ public class ConfigBuilder {
     private final Configuration configuration;
     private AliasFactory aliasFactory;
     private DefaultConfig defaultConfig;
-    private boolean addMapperPackage = false;
-    private boolean addTablePackage = false;
-    private boolean addDialect = false;
 
     public ConfigBuilder(DefaultConfig defaultConfig) {
         this.configuration = new Configuration();
         this.defaultConfig = defaultConfig;
-        init();
+        initConfiguration();
     }
 
-    private void init() {
+    private void initConfiguration() {
         if (defaultConfig == null) {
-            defaultConfig = new DefaultConfig();
-            defaultConfig
-                    .setAliasFactory(new DefaultAliasFactory())
-                    .setCacheFactory(new MemoryCacheFactory())
-                    .setMapperFactory(new DefaultMapperFactory())
-                    .setTableFactory(new DefaultTableFactory())
-                    .setDialectFactory(new DefaultDialectFactory())
-                    .setTransactionFactory(new JdbcTransactionFactory())
-                    .setPluginFactory(new JavaPluginFactory())
-                    .setListenerFactory(new DefaultListenerFactory())
-                    .setTypeHandlerFactory(new DefaultTypeHandlerFactory());
+            defaultConfig = ConfigUtil.getDefaultConfig(ToMYSQL.class.getName(), null, null);
         }
         CacheFactory cacheFactory = defaultConfig.getCacheFactory();
         MapperFactory mapperFactory = defaultConfig.getMapperFactory();
@@ -134,7 +113,7 @@ public class ConfigBuilder {
     public ConfigBuilder tableMapping(String type) {
         if (!ObjectUtil.isNull(type)) {
             type = getValue(type);
-            type = type.replace(".", "/");
+            type = type.replace("." , "/");
             List<Class> resourceAsClass = ResourceUtil.getResourceAsClass(type);
             if (!ObjectUtil.isNull(resourceAsClass)) {
                 TableFactory tableFactory = configuration.getTableFactory();
@@ -143,7 +122,7 @@ public class ConfigBuilder {
                     tableFactory.addTableInfo(classType);
                 }
             }
-            addTablePackage = true;
+            defaultConfig.setTablePackages(null);
         }
         return this;
     }
@@ -161,13 +140,13 @@ public class ConfigBuilder {
     public ConfigBuilder mapperMapping(String type) {
         if (!ObjectUtil.isNull(type)) {
             type = getValue(type);
-            String resourcePath = type.replace(".", "/");
+            String resourcePath = type.replace("." , "/");
             List<Class> resourceAsClass = ResourceUtil.getResourceAsClass(resourcePath);
             if (!ObjectUtil.isNull(resourceAsClass)) {
                 for (Class classType : resourceAsClass) {
                     configuration.addMapper(classType);
                 }
-                addMapperPackage = true;
+                defaultConfig.setMapperPackages(null);
             }
         }
         return this;
@@ -175,19 +154,19 @@ public class ConfigBuilder {
 
     public Configuration build() {
         List<String> mapperPackages = defaultConfig.getMapperPackages();
-        if (!addMapperPackage && !ObjectUtil.isNull(mapperPackages)) {
+        if (!ObjectUtil.isNull(mapperPackages)) {
             for (String mapperPackage : mapperPackages) {
                 mapperMapping(mapperPackage);
             }
         }
         List<String> tablePackages = defaultConfig.getTablePackages();
-        if (!addTablePackage && !ObjectUtil.isNull(tablePackages)) {
+        if (!ObjectUtil.isNull(tablePackages)) {
             for (String tablePackage : tablePackages) {
                 tableMapping(tablePackage);
             }
         }
         String dialect = defaultConfig.getDialect();
-        if (!addDialect && !ObjectUtil.isNull(dialect)) {
+        if (!ObjectUtil.isNull(dialect)) {
             dialectToSQL(dialect);
         }
         return configuration;
@@ -261,7 +240,7 @@ public class ConfigBuilder {
             DialectFactory dialectFactory = configuration.getDialectFactory();
             ObjectUtil.requireNonNull(dialectFactory, "Property 'dialectFactory' is required");
             dialectFactory.setDialect(toSQL);
-            addDialect = true;
+            defaultConfig.setDialect(null);
         }
         return this;
     }

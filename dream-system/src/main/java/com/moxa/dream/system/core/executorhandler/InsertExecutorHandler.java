@@ -17,14 +17,13 @@ public class InsertExecutorHandler extends AbstractExecutorHandler {
 
     @Override
     public Object execute(MappedStatement mappedStatement) throws SQLException {
-        boolean generatedKeys = mappedStatement.isGeneratedKeys();
-        if (generatedKeys) {
+        String keyProperty = mappedStatement.getKeyProperty();
+        if (!ObjectUtil.isNull(keyProperty)) {
             statementHandler.prepare(connection, mappedStatement, Statement.RETURN_GENERATED_KEYS);
             int result = statementHandler.executeUpdate(mappedStatement);
             ResultSet generatedKeysResult = statementHandler.getStatement().getGeneratedKeys();
             if (generatedKeysResult.next()) {
                 Long value = generatedKeysResult.getLong(1);
-                String keyProperty = mappedStatement.getKeyProperty();
                 ObjectUtil.requireNonNull(keyProperty, "Property 'keyProperty' is required");
                 ObjectWrapper.wrapper(mappedStatement.getArg()).set(keyProperty, value);
             }

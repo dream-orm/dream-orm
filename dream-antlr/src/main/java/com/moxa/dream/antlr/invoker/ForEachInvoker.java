@@ -56,7 +56,7 @@ public class ForEachInvoker extends AbstractInvoker {
                 List<$Invoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
                 int index = 0;
                 for (Object item : collection) {
-                    paramInfoList.add(new $Invoker.ParamInfo(list + "[" + index++ + "]", item));
+                    paramInfoList.add(new $Invoker.ParamInfo(list + "[" + index++ + "]" , item));
                     listColumnStatement.add(new SymbolStatement.MarkStatement());
                 }
             }

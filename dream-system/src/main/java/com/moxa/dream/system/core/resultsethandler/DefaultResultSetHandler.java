@@ -285,7 +285,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 Method method = eachInfo.getMethod();
                 Map<String, String> argMap = eachInfo.getArgMap();
                 String field = eachInfo.getField();
-                Object mapper = mapperFactory.getMapper(type, (methodInfo, arg, args) -> {
+                Object mapper = mapperFactory.getMapper(type, (methodInfo, arg) -> {
                     if (argMap != null) {
                         ObjectWrapper argWrapper = ObjectWrapper.wrapper(arg);
                         for (String paramName : argMap.keySet()) {

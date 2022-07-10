@@ -55,11 +55,11 @@ public class UpdateInvoker extends AbstractInvoker {
                 for (ColumnInfo columnInfo : columnInfoList) {
                     String column = columnInfo.getColumn();
                     String name = columnInfo.getName();
-                    updateList.add(column + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", name));
+                    updateList.add(column + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, "," , name));
                 }
             }
         }
-        String updateSQL = "update " + table + "set " + String.join(",", updateList) + " where 1<>1";
+        String updateSQL = "update " + table + "set " + String.join("," , updateList) + " where 1<>1";
         Statement statement = new UpdateExpr(new ExprReader(updateSQL)).expr();
         invokerStatement.setStatement(statement);
         return toSQL.toStr(statement, assist, invokerList);

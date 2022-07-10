@@ -68,7 +68,7 @@ public class AllInvoker extends AbstractInvoker {
         }
         List<String> queryColumnList = new ArrayList<>();
         getQuery(tableFactory, colType, lowHashMap, getQueryColumnInfoList(invokerStatement), queryColumnList);
-        String selectColumn = String.join(",", queryColumnList);
+        String selectColumn = String.join("," , queryColumnList);
         ExprReader exprReader = new ExprReader(selectColumn);
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new AliasColumnExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
         Statement statement = listColumnExpr.expr();

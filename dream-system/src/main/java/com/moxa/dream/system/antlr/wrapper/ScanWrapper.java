@@ -11,7 +11,7 @@ public class ScanWrapper implements Wrapper {
     public void wrapper(MethodInfo methodInfo) {
         PackageStatement packageStatement = methodInfo.getStatement();
         InvokerStatement scanStatement = InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE,
-                AntlrInvokerFactory.SCAN, ",",
+                AntlrInvokerFactory.SCAN, "," ,
                 packageStatement.getStatement());
         packageStatement.setStatement(scanStatement);
     }
