@@ -113,7 +113,7 @@ public class ConfigBuilder {
     public ConfigBuilder tableMapping(String type) {
         if (!ObjectUtil.isNull(type)) {
             type = getValue(type);
-            type = type.replace("." , "/");
+            type = type.replace(".", "/");
             List<Class> resourceAsClass = ResourceUtil.getResourceAsClass(type);
             if (!ObjectUtil.isNull(resourceAsClass)) {
                 TableFactory tableFactory = configuration.getTableFactory();
@@ -140,7 +140,7 @@ public class ConfigBuilder {
     public ConfigBuilder mapperMapping(String type) {
         if (!ObjectUtil.isNull(type)) {
             type = getValue(type);
-            String resourcePath = type.replace("." , "/");
+            String resourcePath = type.replace(".", "/");
             List<Class> resourceAsClass = ResourceUtil.getResourceAsClass(resourcePath);
             if (!ObjectUtil.isNull(resourceAsClass)) {
                 for (Class classType : resourceAsClass) {

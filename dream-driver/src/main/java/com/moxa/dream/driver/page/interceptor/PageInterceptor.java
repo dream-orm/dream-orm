@@ -57,7 +57,7 @@ public class PageInterceptor extends AbstractInterceptor {
     @Override
     public Set<Method> methodSet() {
         try {
-            Method method = Executor.class.getDeclaredMethod("query" , MappedStatement.class);
+            Method method = Executor.class.getDeclaredMethod("query", MappedStatement.class);
             return new HashSet<>(Arrays.asList(method));
         } catch (Exception e) {
             throw new RuntimeException(e);

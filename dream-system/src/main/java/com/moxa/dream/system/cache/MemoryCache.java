@@ -3,9 +3,9 @@ package com.moxa.dream.system.cache;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.common.ThreadUtil;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,15 +57,14 @@ public class MemoryCache implements Cache {
         } else if (keyMap.size() > limit) {
             if (canDelete.compareAndSet(true, false)) {
                 Map<CacheKey, Object> finalMap = keyMap;
-                ThreadUtil.execute(() -> {
-                    for (CacheKey cacheKey : finalMap.keySet()) {
-                        double random = Math.random();
-                        if (random <= rate) {
-                            finalMap.remove(cacheKey);
-                        }
+                Iterator<Map.Entry<CacheKey, Object>> iterator = finalMap.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    double random = Math.random();
+                    if (random <= rate) {
+                        iterator.remove();
                     }
-                    canDelete.set(true);
-                });
+                }
+                canDelete.set(true);
             }
         }
         keyMap.put(uniqueKey, value);
@@ -103,6 +102,13 @@ public class MemoryCache implements Cache {
 
     @Override
     public void clear() {
-
+        for (Set<CacheKey> cacheKeySet : tableMap.values()) {
+            cacheKeySet.clear();
+        }
+        tableMap.clear();
+        for (Map<CacheKey, Object> cacheKeyMap : indexMap.values()) {
+            cacheKeyMap.clear();
+        }
+        indexMap.clear();
     }
 }

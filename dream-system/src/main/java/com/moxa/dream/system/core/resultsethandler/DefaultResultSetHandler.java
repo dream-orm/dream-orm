@@ -2,6 +2,7 @@ package com.moxa.dream.system.core.resultsethandler;
 
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.system.annotation.Ignore;
+import com.moxa.dream.system.annotation.Table;
 import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
@@ -82,7 +83,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             } else {
                 childObjectFactory = doNestedResult(resultSet, mappedStatement, childMappedResult, cacheMap);
             }
-            if (!simple && childObjectFactory == null)
+            if (childObjectFactory == null)
                 continue;
             if (targetObjectFactory == null) {
                 CacheKey cacheKey = new CacheKey();
@@ -270,11 +271,24 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
     protected String getTableName(Type type) {
-        Class colType = ReflectUtil.getColType(type);
-        View view = (View) colType.getDeclaredAnnotation(View.class);
-        if (view == null)
-            return null;
-        return view.value();
+        Class<?> colType = ReflectUtil.getColType(type);
+        if (colType.isAnnotationPresent(View.class)) {
+            return colType.getDeclaredAnnotation(View.class).value();
+        }
+        if (colType.isAnnotationPresent(Table.class)) {
+            return colType.getDeclaredAnnotation(Table.class).value();
+        }
+        return null;
+    }
+
+    protected String getTableName(Class<?> type) {
+        if (type.isAnnotationPresent(View.class)) {
+            return type.getDeclaredAnnotation(View.class).value();
+        }
+        if (type.isAnnotationPresent(Table.class)) {
+            return type.getDeclaredAnnotation(Table.class).value();
+        }
+        return null;
     }
 
     protected void eachList(Object object, List<EachInfo> eachInfoList) {

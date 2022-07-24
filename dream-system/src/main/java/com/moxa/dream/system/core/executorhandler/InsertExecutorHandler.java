@@ -24,7 +24,6 @@ public class InsertExecutorHandler extends AbstractExecutorHandler {
             ResultSet generatedKeysResult = statementHandler.getStatement().getGeneratedKeys();
             if (generatedKeysResult.next()) {
                 Long value = generatedKeysResult.getLong(1);
-                ObjectUtil.requireNonNull(keyProperty, "Property 'keyProperty' is required");
                 ObjectWrapper.wrapper(mappedStatement.getArg()).set(keyProperty, value);
             }
             return result;

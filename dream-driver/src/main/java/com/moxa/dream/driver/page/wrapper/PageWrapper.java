@@ -33,13 +33,13 @@ public class PageWrapper implements Wrapper {
             String pageSize = prefix + PAGE_SIZE;
             PackageStatement statement = methodInfo.getStatement();
             InvokerStatement pageStatement = InvokerUtil.wrapperInvoker(pageNamespace,
-                    pageFunction, "," ,
+                    pageFunction, ",",
                     statement.getStatement(),
                     InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE,
-                            AntlrInvokerFactory.$, "," ,
+                            AntlrInvokerFactory.$, ",",
                             new SymbolStatement.LetterStatement(startRow)),
                     InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE,
-                            AntlrInvokerFactory.$, "," ,
+                            AntlrInvokerFactory.$, ",",
                             new SymbolStatement.LetterStatement(pageSize)));
             statement.setStatement(pageStatement);
         }

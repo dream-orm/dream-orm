@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class DebugListener implements QueryListener, UpdateListener, InsertListener, DeleteListener {
     static final String START_DATE = "startDate";
     static final String LOGS = "logs";
-    static final String lineSeparator = System.getProperty("line.separator" , "\n");
+    static final String lineSeparator = System.getProperty("line.separator", "\n");
 
     @Override
     public boolean before(MappedStatement mappedStatement) {

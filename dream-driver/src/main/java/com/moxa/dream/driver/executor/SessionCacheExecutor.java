@@ -1,7 +1,6 @@
 package com.moxa.dream.driver.executor;
 
 import com.moxa.dream.system.cache.CacheKey;
-import com.moxa.dream.system.core.executor.CacheExecutor;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.mapped.MappedStatement;
 

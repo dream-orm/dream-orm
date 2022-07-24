@@ -37,7 +37,7 @@ public class DefaultTableFactory implements TableFactory {
                     fieldMap.put(columnInfo.getColumn(), name);
                     columnInfoMap.put(name, columnInfo);
                     if (columnInfo.isPrimary()) {
-                        ObjectUtil.requireTrue(primaryColumnInfo == null, "only have one primary Key");
+                        ObjectUtil.requireTrue(primaryColumnInfo == null, tableClass.getName()+" already exist primary Key");
                         primaryColumnInfo = columnInfo;
                     }
                 } else {

@@ -11,7 +11,7 @@ public class XmlUtil {
     static Map<String, String> map = new HashMap<>();
 
     static {
-        map.put("package" , "type");
+        map.put("package", "type");
     }
 
     public static <T> T applyAttributes(Class<T> typeClass, Attributes attributes) {
