@@ -10,7 +10,7 @@ import com.moxa.dream.antlr.invoker.$Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.PackageStatement;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.antlr.wrapper.AnnotationWrapper;
@@ -83,17 +83,17 @@ public abstract class AbstractDialectFactory implements DialectFactory {
             }
         }
         if (ObjectUtil.isNull(sql)) {
-            ToAssist toAssist = toAssist(methodInfo, arg);
+            Assist assist = toAssist(methodInfo, arg);
             try {
-                sql = toSQL.toStr(statement, toAssist, null);
-                uniqueKey = toAssist.getCustom(CacheKey.class);
+                sql = toSQL.toStr(statement, assist, null);
+                uniqueKey = assist.getCustom(CacheKey.class);
             } catch (InvokerException e) {
                 throw new DialectException(e);
             }
             if (scanInfo == null) {
                 scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
             }
-            $Invoker invoker = ($Invoker) toAssist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
+            $Invoker invoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
             if (invoker != null) {
                 paramInfoList = invoker.getParamInfoList();
             } else {
@@ -187,7 +187,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                 .build();
     }
 
-    protected ToAssist toAssist(MethodInfo methodInfo, Object arg) {
+    protected Assist toAssist(MethodInfo methodInfo, Object arg) {
         Map<Class, Object> allCustomMap = new HashMap<>();
         Map<Class, Object> defaultCustomMap = getDefaultCustomMap(methodInfo, arg);
         Map<Class<?>, Object> customMap = getCustomMap(methodInfo, arg);
@@ -204,7 +204,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         if (!ObjectUtil.isNull(invokerFactoryList)) {
             allInvokerFactoryList.addAll(invokerFactoryList);
         }
-        return new ToAssist(allInvokerFactoryList, allCustomMap);
+        return new Assist(allInvokerFactoryList, allCustomMap);
     }
 
     private List<InvokerFactory> getDefaultInvokerFactoryList() {

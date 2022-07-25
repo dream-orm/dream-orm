@@ -8,7 +8,7 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.system.annotation.Table;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 public class UpdateInvoker extends AbstractInvoker {
     @Override
-    protected String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         ObjectWrapper paramWrapper = assist.getCustom(ObjectWrapper.class);
         Object target = paramWrapper.getObject();

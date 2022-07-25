@@ -3,7 +3,7 @@ package com.moxa.dream.antlr.invoker;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.smt.InvokerStatement;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public abstract class AbstractInvoker implements Invoker {
     private Handler[] handlers = null;
 
     @Override
-    public Handler[] handle() {
+    public Handler[] handlers() {
         if (handlers == null) {
             handlers = handler();
         }
@@ -21,7 +21,7 @@ public abstract class AbstractInvoker implements Invoker {
     }
 
     @Override
-    public String invoke(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    public String invoke(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         before(invokerList);
         String sql = invoker(invokerStatement, assist, toSQL, invokerList);
         after(invokerList);
@@ -32,7 +32,7 @@ public abstract class AbstractInvoker implements Invoker {
         invokerList.add(this);
     }
 
-    protected abstract String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException;
 
     protected void after(List<Invoker> invokerList) {
         invokerList.remove(this);

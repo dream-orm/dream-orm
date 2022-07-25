@@ -7,7 +7,7 @@ import com.moxa.dream.antlr.smt.ConditionStatement;
 import com.moxa.dream.antlr.smt.OperStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.ExprUtil;
 
@@ -16,7 +16,7 @@ import java.util.List;
 //通过解析成抽象树，知道ConditionStatement是一棵二叉树，仅仅是遍历二叉树，如果右节点为空，根据条件类型返回即可
 public class ConditionHandler extends AbstractHandler {
     @Override
-    protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
         //获取条件抽象树
         ConditionStatement conditionStatement = (ConditionStatement) statement;
         //获取条件抽象树左边孩子
@@ -128,7 +128,7 @@ public class ConditionHandler extends AbstractHandler {
     }
 
     @Override
-    protected boolean interest(Statement statement, ToAssist sqlAssist) {
+    protected boolean interest(Statement statement, Assist sqlAssist) {
         return statement instanceof ConditionStatement;
     }
 }

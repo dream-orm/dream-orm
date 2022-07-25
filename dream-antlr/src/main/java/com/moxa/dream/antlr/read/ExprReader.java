@@ -1,7 +1,7 @@
 package com.moxa.dream.antlr.read;
 
-import com.moxa.dream.antlr.bind.ExprInfo;
-import com.moxa.dream.antlr.bind.ExprType;
+import com.moxa.dream.antlr.config.ExprInfo;
+import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.expr.SqlExpr;
 import com.moxa.dream.antlr.factory.MyFunctionFactory;
 import com.moxa.dream.antlr.smt.MyFunctionStatement;

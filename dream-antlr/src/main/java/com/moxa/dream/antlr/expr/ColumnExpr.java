@@ -1,8 +1,8 @@
 package com.moxa.dream.antlr.expr;
 
-import com.moxa.dream.antlr.bind.Constant;
-import com.moxa.dream.antlr.bind.ExprInfo;
-import com.moxa.dream.antlr.bind.ExprType;
+import com.moxa.dream.antlr.config.Constant;
+import com.moxa.dream.antlr.config.ExprInfo;
+import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.SingleMarkStatement;
 import com.moxa.dream.antlr.smt.Statement;

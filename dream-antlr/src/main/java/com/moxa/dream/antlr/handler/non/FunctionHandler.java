@@ -8,7 +8,7 @@ import com.moxa.dream.antlr.smt.FunctionStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.util.common.ObjectUtil;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class FunctionHandler extends AbstractHandler {
 
     @Override
-    protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
         return statement;
     }
 
@@ -27,12 +27,12 @@ public class FunctionHandler extends AbstractHandler {
     }
 
     @Override
-    protected boolean interest(Statement statement, ToAssist sqlAssist) {
+    protected boolean interest(Statement statement, Assist sqlAssist) {
         return statement instanceof FunctionStatement;
     }
 
     @Override
-    protected String handlerAfter(ToAssist assist, String sql, int life) throws InvokerException {
+    protected String handlerAfter(Assist assist, String sql, int life) throws InvokerException {
         if (assist.getCustom(NullFlag.class) != null) {
             assist.setCustom(NullFlag.class, null);
             return "";
@@ -50,7 +50,7 @@ public class FunctionHandler extends AbstractHandler {
         }
 
         @Override
-        protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
             ListColumnStatement listColumnStatement = (ListColumnStatement) statement;
             Statement[] columnList = listColumnStatement.getColumnList();
             if (!ObjectUtil.isNull(columnList)) {
@@ -70,7 +70,7 @@ public class FunctionHandler extends AbstractHandler {
         }
 
         @Override
-        protected boolean interest(Statement statement, ToAssist sqlAssist) {
+        protected boolean interest(Statement statement, Assist sqlAssist) {
             return statement instanceof ListColumnStatement;
         }
     }

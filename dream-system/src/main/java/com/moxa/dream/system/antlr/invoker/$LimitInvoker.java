@@ -7,7 +7,7 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.antlr.handler.PageHandler;
 import com.moxa.dream.system.mapper.MethodInfo;
@@ -23,7 +23,7 @@ public class $LimitInvoker extends AbstractInvoker {
     }
 
     @Override
-    protected String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         pageHandler = new PageHandler(this, methodInfo);
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();

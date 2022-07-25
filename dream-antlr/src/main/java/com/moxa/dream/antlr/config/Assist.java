@@ -1,4 +1,4 @@
-package com.moxa.dream.antlr.sql;
+package com.moxa.dream.antlr.config;
 
 import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.invoker.Invoker;
@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ToAssist {
+public class Assist {
     private Map<Class, Object> customObjMap;
     private Map<String, InvokerFactory> invokerFactoryMap;
     private Map<String, Invoker> sqlInvokerMap;
 
-    public ToAssist(List<InvokerFactory> invokerFactoryList, Map<Class, Object> customObjMap) {
+    public Assist(List<InvokerFactory> invokerFactoryList, Map<Class, Object> customObjMap) {
         setInvokerFactoryList(invokerFactoryList);
         this.customObjMap = customObjMap;
     }

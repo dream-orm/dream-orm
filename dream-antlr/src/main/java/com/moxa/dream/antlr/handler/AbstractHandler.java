@@ -3,7 +3,7 @@ package com.moxa.dream.antlr.handler;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.util.common.ObjectUtil;
 
@@ -19,7 +19,7 @@ public abstract class AbstractHandler implements Handler {
     private Handler parentHandler;
 
     @Override
-    public final Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, Queue<Handler> handlerQueue, List<Invoker> invokerList) throws InvokerException {
+    public final Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, Queue<Handler> handlerQueue, List<Invoker> invokerList) throws InvokerException {
 
         if ((parentHandler == null || (!(parentHandler instanceof AbstractHandler)) || ((AbstractHandler) parentHandler).isLife())) {
 
@@ -52,18 +52,18 @@ public abstract class AbstractHandler implements Handler {
 
 
     @Override
-    public final String handlerAfter(ToAssist assist, String sql) throws InvokerException {
+    public final String handlerAfter(Assist assist, String sql) throws InvokerException {
 
         life--;
         return handlerAfter(assist, sql, life);
     }
 
-    protected String handlerAfter(ToAssist assist, String sql, int life) throws InvokerException {
+    protected String handlerAfter(Assist assist, String sql, int life) throws InvokerException {
         return sql;
     }
 
 
-    protected abstract Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException;
+    protected abstract Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException;
 
     protected Handler[] handlerBound() {
         return new Handler[0];
@@ -74,7 +74,7 @@ public abstract class AbstractHandler implements Handler {
     }
 
 
-    protected abstract boolean interest(Statement statement, ToAssist sqlAssist);
+    protected abstract boolean interest(Statement statement, Assist sqlAssist);
 
     private void setParentHandler(Handler parentHandler) {
         this.parentHandler = parentHandler;

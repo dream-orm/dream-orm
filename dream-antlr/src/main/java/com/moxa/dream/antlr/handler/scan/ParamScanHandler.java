@@ -6,7 +6,7 @@ import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.InvokerUtil;
 
@@ -21,7 +21,7 @@ public class ParamScanHandler extends AbstractHandler {
     }
 
     @Override
-    protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
         return statement;
     }
 
@@ -31,7 +31,7 @@ public class ParamScanHandler extends AbstractHandler {
     }
 
     @Override
-    protected boolean interest(Statement statement, ToAssist sqlAssist) {
+    protected boolean interest(Statement statement, Assist sqlAssist) {
         return statement instanceof ConditionStatement;
     }
 
@@ -87,13 +87,13 @@ public class ParamScanHandler extends AbstractHandler {
         }
 
         @Override
-        protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
             scanStatement((InvokerStatement) statement);
             return statement;
         }
 
         @Override
-        protected boolean interest(Statement statement, ToAssist sqlAssist) {
+        protected boolean interest(Statement statement, Assist sqlAssist) {
             return InvokerUtil.is$(statement);
         }
     }

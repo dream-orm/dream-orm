@@ -1,13 +1,13 @@
 package com.moxa.dream.antlr.handler.scan;
 
-import com.moxa.dream.antlr.bind.Command;
+import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.handler.AbstractHandler;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class QueryScanHandler extends AbstractHandler {
 
     //处理之前操作
     @Override
-    protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
         if (Command.NONE == scanInfo.getCommand())
             scanInfo.setCommand(Command.QUERY);
         return statement;
@@ -34,7 +34,7 @@ public class QueryScanHandler extends AbstractHandler {
 
     //是否感兴趣
     @Override
-    protected boolean interest(Statement statement, ToAssist sqlAssist) {
+    protected boolean interest(Statement statement, Assist sqlAssist) {
         return statement instanceof QueryStatement;
     }
 
@@ -71,14 +71,14 @@ public class QueryScanHandler extends AbstractHandler {
         }
 
         @Override
-        protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
             FromStatement fromStatement = (FromStatement) statement;
             queryScanHandler.scanStatement(fromStatement.getMainTable(), true);
             return statement;
         }
 
         @Override
-        protected boolean interest(Statement statement, ToAssist sqlAssist) {
+        protected boolean interest(Statement statement, Assist sqlAssist) {
             return statement instanceof FromStatement;
         }
     }
@@ -91,14 +91,14 @@ public class QueryScanHandler extends AbstractHandler {
         }
 
         @Override
-        protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
             JoinStatement joinStatement = (JoinStatement) statement;
             queryScanHandler.scanStatement(joinStatement.getJoinTable(), false);
             return statement;
         }
 
         @Override
-        protected boolean interest(Statement statement, ToAssist sqlAssist) {
+        protected boolean interest(Statement statement, Assist sqlAssist) {
             return statement instanceof JoinStatement;
         }
     }

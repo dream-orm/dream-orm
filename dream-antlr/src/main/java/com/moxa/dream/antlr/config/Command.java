@@ -1,4 +1,4 @@
-package com.moxa.dream.antlr.bind;
+package com.moxa.dream.antlr.config;
 
 public enum Command {
     QUERY,

@@ -1,6 +1,6 @@
 package com.moxa.dream.system.mapped;
 
-import com.moxa.dream.antlr.bind.Command;
+import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;

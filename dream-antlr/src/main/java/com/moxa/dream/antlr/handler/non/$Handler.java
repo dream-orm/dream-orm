@@ -7,19 +7,19 @@ import com.moxa.dream.antlr.invoker.$Invoker;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 
 import java.util.List;
 
 public class $Handler extends AbstractHandler {
     @Override
-    protected boolean interest(Statement statement, ToAssist assist) {
+    protected boolean interest(Statement statement, Assist assist) {
         return statement instanceof InvokerStatement && AntlrInvokerFactory.$.equals(((InvokerStatement) statement).getFunction());
     }
 
     @Override
-    public String handlerAfter(ToAssist assist, String sql, int life) {
+    public String handlerAfter(Assist assist, String sql, int life) {
         //获取@$函数
         $Invoker sqlInvoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
         //获取参数
@@ -36,7 +36,7 @@ public class $Handler extends AbstractHandler {
     }
 
     @Override
-    protected Statement handlerBefore(Statement statement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
         return statement;
     }
 }

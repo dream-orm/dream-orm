@@ -1,6 +1,6 @@
 package com.moxa.dream.system.core.statementhandler;
 
-import com.moxa.dream.antlr.bind.Command;
+import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.mapped.MappedStatement;
 

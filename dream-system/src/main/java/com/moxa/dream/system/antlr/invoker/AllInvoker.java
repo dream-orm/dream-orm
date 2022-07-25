@@ -1,7 +1,7 @@
 package com.moxa.dream.system.antlr.invoker;
 
-import com.moxa.dream.antlr.bind.ExprInfo;
-import com.moxa.dream.antlr.bind.ExprType;
+import com.moxa.dream.antlr.config.ExprInfo;
+import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.expr.AliasColumnExpr;
 import com.moxa.dream.antlr.expr.ListColumnExpr;
@@ -11,7 +11,7 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.system.config.Configuration;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class AllInvoker extends AbstractInvoker {
 
     @Override
-    public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         Class colType = methodInfo.getColType();
         Configuration configuration = methodInfo.getConfiguration();

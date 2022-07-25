@@ -5,7 +5,7 @@ import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.handler.crud.OffSetHandler;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.antlr.sql.ToAssist;
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class OffSetInvoker extends AbstractInvoker {
     private OffSetHandler offSetHandler;
 
     @Override
-    public String invoker(InvokerStatement invokerStatement, ToAssist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         Statement secondStatement = null;
         if (columnList.length == 2 || (columnList.length == 3 && (secondStatement = columnList[2]) != null)) {
