@@ -1,5 +1,6 @@
 package com.moxa.dream.system.dialect;
 
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.expr.PackageExpr;
 import com.moxa.dream.antlr.expr.SqlExpr;
@@ -10,7 +11,6 @@ import com.moxa.dream.antlr.invoker.$Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.PackageStatement;
-import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.antlr.wrapper.AnnotationWrapper;
@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractDialectFactory implements DialectFactory {
     private static final int SPLIT = 5;
-    protected ToSQL toSQL;
     private int split;
+    private ToSQL toSQL;
 
     public AbstractDialectFactory() {
         this(SPLIT);
@@ -46,11 +46,8 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     public AbstractDialectFactory(int split) {
         this.split = split;
         ObjectUtil.requireTrue(split > 0, "Property 'split' must be greater than 0");
-    }
-
-    @Override
-    public void setDialect(ToSQL toSQL) {
-        this.toSQL = toSQL;
+        toSQL = getToSQL();
+        ObjectUtil.requireNonNull(toSQL, "Property toSQL is required");
     }
 
     @Override
@@ -270,6 +267,8 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     }
 
     protected abstract MyFunctionFactory getMyFunctionFactory();
+
+    protected abstract ToSQL getToSQL();
 
     @Override
     public void wrapper(MethodInfo methodInfo) {

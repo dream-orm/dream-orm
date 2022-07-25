@@ -1,5 +1,6 @@
 package com.moxa.dream.system.antlr.invoker;
 
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.exception.InvokerException;
@@ -11,7 +12,6 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.system.config.Configuration;
@@ -68,7 +68,7 @@ public class AllInvoker extends AbstractInvoker {
         }
         List<String> queryColumnList = new ArrayList<>();
         getQuery(tableFactory, colType, lowHashMap, getQueryColumnInfoList(invokerStatement), queryColumnList);
-        String selectColumn = String.join("," , queryColumnList);
+        String selectColumn = String.join(",", queryColumnList);
         ExprReader exprReader = new ExprReader(selectColumn);
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new AliasColumnExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
         Statement statement = listColumnExpr.expr();

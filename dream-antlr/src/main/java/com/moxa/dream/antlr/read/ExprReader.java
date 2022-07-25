@@ -49,7 +49,7 @@ public class ExprReader extends StringReader {
                 lastInfo = pushNumber();
                 break;
             case 38:
-                lastInfo = new ExprInfo(ExprType.BITAND, "&" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.BITAND, "&", getStart(), getEnd());
                 break;
             case 39:
                 reset();
@@ -122,72 +122,72 @@ public class ExprReader extends StringReader {
                 lastInfo = push();
                 break;
             case 37:
-                lastInfo = new ExprInfo(ExprType.MOD, "%" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.MOD, "%", getStart(), getEnd());
                 break;
             case 40:
-                lastInfo = new ExprInfo(ExprType.LBRACE, "(" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.LBRACE, "(", getStart(), getEnd());
                 break;
             case 41:
-                lastInfo = new ExprInfo(ExprType.RBRACE, ")" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.RBRACE, ")", getStart(), getEnd());
                 break;
             case 42:
-                lastInfo = new ExprInfo(ExprType.STAR, "*" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.STAR, "*", getStart(), getEnd());
                 break;
             case 43:
-                lastInfo = new ExprInfo(ExprType.ADD, "+" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.ADD, "+", getStart(), getEnd());
                 break;
             case 45:
-                lastInfo = new ExprInfo(ExprType.SUB, "-" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.SUB, "-", getStart(), getEnd());
                 break;
             case 47:
-                lastInfo = new ExprInfo(ExprType.DIVIDE, "/" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.DIVIDE, "/", getStart(), getEnd());
                 break;
             case 44:
-                lastInfo = new ExprInfo(ExprType.COMMA, "," , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.COMMA, ",", getStart(), getEnd());
                 break;
             case 58:
-                lastInfo = new ExprInfo(ExprType.COLON, ":" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.COLON, ":", getStart(), getEnd());
                 break;
             case 60:
                 mark();
                 c = read();
                 switch (c) {
                     case 60:
-                        lastInfo = new ExprInfo(ExprType.LLM, "<<" , getStart(), getEnd());
+                        lastInfo = new ExprInfo(ExprType.LLM, "<<", getStart(), getEnd());
                         break;
                     case 61:
-                        lastInfo = new ExprInfo(ExprType.LEQ, "<=" , getStart(), getEnd());
+                        lastInfo = new ExprInfo(ExprType.LEQ, "<=", getStart(), getEnd());
                         break;
                     case 62:
-                        lastInfo = new ExprInfo(ExprType.NEQ, "<>" , getStart(), getEnd());
+                        lastInfo = new ExprInfo(ExprType.NEQ, "<>", getStart(), getEnd());
                         break;
                     default:
                         reset();
-                        lastInfo = new ExprInfo(ExprType.LT, "<" , getStart(), getEnd());
+                        lastInfo = new ExprInfo(ExprType.LT, "<", getStart(), getEnd());
                         break;
                 }
                 break;
             case 61:
-                lastInfo = new ExprInfo(ExprType.EQ, "=" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.EQ, "=", getStart(), getEnd());
                 break;
             case 62:
                 mark();
                 c = read();
                 switch (c) {
                     case 61:
-                        lastInfo = new ExprInfo(ExprType.GEQ, ">=" , getStart(), getEnd());
+                        lastInfo = new ExprInfo(ExprType.GEQ, ">=", getStart(), getEnd());
                         break;
                     case 62:
-                        lastInfo = new ExprInfo(ExprType.RRM, ">>" , getStart(), getEnd());
+                        lastInfo = new ExprInfo(ExprType.RRM, ">>", getStart(), getEnd());
                         break;
                     default:
                         reset();
-                        lastInfo = new ExprInfo(ExprType.GT, ">" , getStart(), getEnd());
+                        lastInfo = new ExprInfo(ExprType.GT, ">", getStart(), getEnd());
                         break;
                 }
                 break;
             case 63:
-                lastInfo = new ExprInfo(ExprType.MARK, "?" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.MARK, "?", getStart(), getEnd());
                 break;
             case 64:
                 mark();
@@ -198,21 +198,21 @@ public class ExprReader extends StringReader {
                         break;
                     default:
                         reset();
-                        lastInfo = new ExprInfo(ExprType.INVOKER, "@" , getStart(), getEnd());
+                        lastInfo = new ExprInfo(ExprType.INVOKER, "@", getStart(), getEnd());
                         break;
                 }
                 break;
             case 94:
-                lastInfo = new ExprInfo(ExprType.BITXOR, "^" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.BITXOR, "^", getStart(), getEnd());
                 break;
             case 96:
-                lastInfo = new ExprInfo(ExprType.SINGLE_MARK, "`" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.SINGLE_MARK, "`", getStart(), getEnd());
                 break;
             case 124:
-                lastInfo = new ExprInfo(ExprType.BITOR, "|" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.BITOR, "|", getStart(), getEnd());
                 break;
             case -1:
-                lastInfo = new ExprInfo(ExprType.ACC, "ACC" , getStart(), getEnd());
+                lastInfo = new ExprInfo(ExprType.ACC, "ACC", getStart(), getEnd());
                 break;
             default:
                 lastInfo = new ExprInfo(ExprType.ERR, String.valueOf((char) c), getStart(), getEnd());

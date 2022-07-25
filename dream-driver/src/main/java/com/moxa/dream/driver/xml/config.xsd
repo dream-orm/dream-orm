@@ -62,11 +62,7 @@
     </xs:element>
     <xs:element name="dialectFactory">
         <xs:complexType>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="property"/>
-            </xs:choice>
             <xs:attribute name="type"/>
-            <xs:attribute name="dialect"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="pluginFactory">

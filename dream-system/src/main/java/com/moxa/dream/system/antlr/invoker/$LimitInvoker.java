@@ -1,5 +1,6 @@
 package com.moxa.dream.system.antlr.invoker;
 
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.AbstractInvoker;
@@ -7,7 +8,6 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.antlr.handler.PageHandler;
 import com.moxa.dream.system.mapper.MethodInfo;

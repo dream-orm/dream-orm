@@ -27,7 +27,6 @@ public class DefaultConfig {
     private ListenerFactory listenerFactory;
     private List<String> mapperPackages;
     private List<String> tablePackages;
-    private String dialect;
 
     public AliasFactory getAliasFactory() {
         return aliasFactory;
@@ -135,15 +134,6 @@ public class DefaultConfig {
 
     public DefaultConfig setTablePackages(List<String> tablePackages) {
         this.tablePackages = tablePackages;
-        return this;
-    }
-
-    public String getDialect() {
-        return dialect;
-    }
-
-    public DefaultConfig setDialect(String dialect) {
-        this.dialect = dialect;
         return this;
     }
 }

@@ -1,12 +1,12 @@
 package com.moxa.dream.system.antlr.invoker;
 
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.expr.QueryExpr;
 import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapper.MethodInfo;
@@ -78,9 +78,9 @@ public class TableInvoker extends AbstractInvoker {
             SymbolStatement.LetterStatement letterStatement = new SymbolStatement.LetterStatement(mainTable);
             invokerStatement.setStatement(letterStatement);
             List<String> list = tableSQLMap.get(mainTable);
-            String joinSQL="";
-            if(!ObjectUtil.isNull(list)){
-                joinSQL = String.join(" " , tableSQLMap.get(mainTable));
+            String joinSQL = "";
+            if (!ObjectUtil.isNull(list)) {
+                joinSQL = String.join(" ", tableSQLMap.get(mainTable));
             }
             QueryExpr.FromExpr fromExpr = new QueryExpr.FromExpr(new ExprReader("from " + mainTable + " " + joinSQL));
             FromStatement statement = (FromStatement) fromExpr.expr();

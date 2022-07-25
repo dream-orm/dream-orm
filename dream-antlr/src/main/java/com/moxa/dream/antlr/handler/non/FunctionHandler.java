@@ -1,5 +1,6 @@
 package com.moxa.dream.antlr.handler.non;
 
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.handler.AbstractHandler;
 import com.moxa.dream.antlr.handler.Handler;
@@ -8,7 +9,6 @@ import com.moxa.dream.antlr.smt.FunctionStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
-import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.util.common.ObjectUtil;
 

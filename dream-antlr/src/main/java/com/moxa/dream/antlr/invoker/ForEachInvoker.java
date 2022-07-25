@@ -1,12 +1,12 @@
 package com.moxa.dream.antlr.invoker;
 
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
-import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.util.common.ObjectWrapper;
 
@@ -56,7 +56,7 @@ public class ForEachInvoker extends AbstractInvoker {
                 List<$Invoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
                 int index = 0;
                 for (Object item : collection) {
-                    paramInfoList.add(new $Invoker.ParamInfo(list + "[" + index++ + "]" , item));
+                    paramInfoList.add(new $Invoker.ParamInfo(list + "[" + index++ + "]", item));
                     listColumnStatement.add(new SymbolStatement.MarkStatement());
                 }
             }

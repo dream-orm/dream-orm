@@ -1,5 +1,6 @@
 package com.moxa.dream.system.antlr.invoker;
 
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.expr.UpdateExpr;
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
@@ -8,7 +9,6 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.system.annotation.Table;
@@ -55,11 +55,11 @@ public class UpdateInvoker extends AbstractInvoker {
                 for (ColumnInfo columnInfo : columnInfoList) {
                     String column = columnInfo.getColumn();
                     String name = columnInfo.getName();
-                    updateList.add(column + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, "," , name));
+                    updateList.add(column + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", name));
                 }
             }
         }
-        String updateSQL = "update " + table + "set " + String.join("," , updateList) + " where 1<>1";
+        String updateSQL = "update " + table + "set " + String.join(",", updateList) + " where 1<>1";
         Statement statement = new UpdateExpr(new ExprReader(updateSQL)).expr();
         invokerStatement.setStatement(statement);
         return toSQL.toStr(statement, assist, invokerList);

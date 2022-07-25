@@ -22,10 +22,6 @@ public class DialectFactoryBuilder extends XMLBuilder {
             case XmlConstant.DIALECTFACTORY:
                 dialectFactory = XmlUtil.applyAttributes(DialectFactory.class, attributes);
                 break;
-            case XmlConstant.PROPERTY:
-                PropertyBuilder propertyBuilder = new PropertyBuilder(workHandler);
-                propertyBuilder.startElement(uri, localName, qName, attributes);
-                break;
             default:
                 throwXmlException(uri, localName, qName, attributes, XmlConstant.DIALECTFACTORY);
                 break;
@@ -44,23 +40,15 @@ public class DialectFactoryBuilder extends XMLBuilder {
 
     @Override
     public void builder(String uri, String localName, String qName, Object obj) {
-        switch (qName) {
-            case XmlConstant.PROPERTY:
-                dialectFactory.propertyList.add((PropertyBuilder.Property) obj);
-        }
+
     }
 
     static class DialectFactory {
         private final List<PropertyBuilder.Property> propertyList = new ArrayList<>();
         private String type;
-        private String dialect;
 
         public String getType() {
             return type;
-        }
-
-        public String getDialect() {
-            return dialect;
         }
 
         public List<PropertyBuilder.Property> getPropertyList() {

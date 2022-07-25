@@ -1,5 +1,6 @@
 package com.moxa.dream.antlr.invoker;
 
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.handler.non.$Handler;
@@ -7,7 +8,6 @@ import com.moxa.dream.antlr.handler.non.BraceHandler;
 import com.moxa.dream.antlr.handler.non.ConditionHandler;
 import com.moxa.dream.antlr.handler.non.FunctionHandler;
 import com.moxa.dream.antlr.smt.InvokerStatement;
-import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.ExprUtil;
 

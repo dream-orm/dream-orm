@@ -1,4 +1,4 @@
-package com.moxa.dream.driver.factory;
+package com.moxa.dream.driver.dialect;
 
 import com.moxa.dream.antlr.factory.MyFunctionFactory;
 import com.moxa.dream.driver.page.wrapper.PageWrapper;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultDialectFactory extends AbstractDialectFactory {
+public abstract class AbstractPageDialectFactory extends AbstractDialectFactory {
 
     @Override
     protected <T> Map<Class<? extends T>, T> getCustomMap(MethodInfo methodInfo, Object arg) {

@@ -1,7 +1,5 @@
 package com.moxa.dream.driver.config;
 
-import com.moxa.dream.antlr.sql.ToMYSQL;
-import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.driver.alias.AliasFactory;
 import com.moxa.dream.driver.resource.ResourceUtil;
 import com.moxa.dream.system.cache.factory.CacheFactory;
@@ -37,7 +35,7 @@ public class ConfigBuilder {
 
     private void initConfiguration() {
         if (defaultConfig == null) {
-            defaultConfig = ConfigUtil.getDefaultConfig(ToMYSQL.class.getName(), null, null);
+            defaultConfig = ConfigUtil.getDefaultConfig(null, null);
         }
         CacheFactory cacheFactory = defaultConfig.getCacheFactory();
         MapperFactory mapperFactory = defaultConfig.getMapperFactory();
@@ -165,10 +163,6 @@ public class ConfigBuilder {
                 tableMapping(tablePackage);
             }
         }
-        String dialect = defaultConfig.getDialect();
-        if (!ObjectUtil.isNull(dialect)) {
-            dialectToSQL(dialect);
-        }
         return configuration;
     }
 
@@ -229,26 +223,6 @@ public class ConfigBuilder {
             DialectFactory dialectFactory = ReflectUtil.create(dialectFactoryClass);
             configuration.setDialectFactory(dialectFactory);
         }
-        return this;
-    }
-
-    public ConfigBuilder dialectToSQL(String type) {
-        if (!ObjectUtil.isNull(type)) {
-            type = getValue(type);
-            Class<? extends ToSQL> toSQLClass = ReflectUtil.loadClass(type);
-            ToSQL toSQL = ReflectUtil.create(toSQLClass);
-            DialectFactory dialectFactory = configuration.getDialectFactory();
-            ObjectUtil.requireNonNull(dialectFactory, "Property 'dialectFactory' is required");
-            dialectFactory.setDialect(toSQL);
-            defaultConfig.setDialect(null);
-        }
-        return this;
-    }
-
-    public ConfigBuilder dialectProperties(Properties properties) {
-        DialectFactory dialectFactory = configuration.getDialectFactory();
-        ObjectUtil.requireNonNull(dialectFactory, "Property 'dialectFactory' is required");
-        dialectFactory.setProperties(getProperties(properties));
         return this;
     }
 

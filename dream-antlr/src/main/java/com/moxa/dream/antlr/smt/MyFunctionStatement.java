@@ -1,5 +1,6 @@
 package com.moxa.dream.antlr.smt;
 
+import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.exception.InvokerException;
@@ -8,7 +9,6 @@ import com.moxa.dream.antlr.expr.HelperExpr;
 import com.moxa.dream.antlr.expr.ListColumnExpr;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
-import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.sql.ToSQL;
 
 import java.util.List;
