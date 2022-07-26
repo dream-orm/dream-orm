@@ -14,9 +14,6 @@ import java.util.stream.Collectors;
 
 public class DebugListener implements QueryListener, UpdateListener, InsertListener, DeleteListener {
     static final String START_DATE = "startDate";
-    static final String LOGS = "logs";
-    static final String lineSeparator = System.getProperty("line.separator", "\n");
-
     @Override
     public boolean before(MappedStatement mappedStatement) {
         mappedStatement.put(START_DATE, System.currentTimeMillis());
@@ -28,10 +25,8 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
             paramList = new ArrayList<>();
         }
         String sql = mappedStatement.getSql();
-        StringBuilder builder = new StringBuilder();
-        builder.append("SQL:" + sql).append(lineSeparator);
-        builder.append("PARAM:" + paramList).append(lineSeparator);
-        mappedStatement.put(LOGS, builder);
+        System.out.println("SQL:" + sql);
+        System.out.println("PARAM:" + paramList);
         return true;
     }
 
@@ -43,14 +38,11 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
 
     @Override
     public void exception(Exception e, MappedStatement mappedStatement) {
-        StringBuilder builder = (StringBuilder) mappedStatement.get(LOGS);
-        builder.append("ERROR:" + e).append(lineSeparator);
+        System.err.println("ERROR:" + e);
         after(mappedStatement);
     }
 
     public void after(MappedStatement mappedStatement) {
-        StringBuilder builder = (StringBuilder) mappedStatement.get(LOGS);
-        builder.append("TIME:" + (System.currentTimeMillis() - (long) mappedStatement.get(START_DATE)) + "ms").append(lineSeparator);
-        System.out.println(builder);
+        System.out.println("TIME:" + (System.currentTimeMillis() - (long) mappedStatement.get(START_DATE)) + "ms");
     }
 }

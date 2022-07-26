@@ -10,7 +10,7 @@ import java.sql.Types;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Column {
-    String value() default "";
+    String value();
 
     int jdbcType() default Types.NULL;
 }

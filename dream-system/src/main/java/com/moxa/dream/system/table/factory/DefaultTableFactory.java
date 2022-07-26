@@ -50,13 +50,11 @@ public class DefaultTableFactory implements TableFactory {
         return new TableInfo(table, primaryColumnInfo, columnInfoMap, joinInfoMap, fieldMap);
     }
 
-    protected String getTable(Class tableClass) {
-        Table tableAnnotation = (Table) tableClass.getDeclaredAnnotation(Table.class);
+    protected String getTable(Class<?>tableClass) {
+        Table tableAnnotation = tableClass.getDeclaredAnnotation(Table.class);
         if (tableAnnotation == null)
             return null;
         String table = tableAnnotation.value();
-        if (ObjectUtil.isNull(table))
-            table = humpToLine(tableClass.getSimpleName());
         return table;
     }
 
@@ -69,10 +67,6 @@ public class DefaultTableFactory implements TableFactory {
         if (columnAnnotation == null)
             return null;
         String column = columnAnnotation.value();
-        if (ObjectUtil.isNull(column))
-            column = humpToLine(field.getName());
-        else
-            column = columnAnnotation.value();
         return new ColumnInfo(table, column, field, isPrimary(field), columnAnnotation.jdbcType());
     }
 
@@ -85,19 +79,6 @@ public class DefaultTableFactory implements TableFactory {
         ObjectUtil.requireNonNull(joinTable, "Property 'table' is required");
         JoinInfo joinInfo = new JoinInfo(table, joinAnnotation.column(), joinTable, joinAnnotation.joinColumn(), joinAnnotation.joinType());
         return joinInfo;
-    }
-
-    protected String humpToLine(String name) {
-        StringBuilder builder = new StringBuilder();
-        for (char c : name.toCharArray()) {
-            if (c >= 'A' && c <= 'Z') {
-                if (builder.length() != 0)
-                    builder.append("_");
-                builder.append(Character.toLowerCase(c));
-            } else
-                builder.append(c);
-        }
-        return builder.toString();
     }
 
     @Override
