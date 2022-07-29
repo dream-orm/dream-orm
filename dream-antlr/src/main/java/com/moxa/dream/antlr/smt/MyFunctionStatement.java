@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class MyFunctionStatement extends FunctionStatement {
 
     @Override
-    public int getNameId() {
+    public final int getNameId() {
         return MyFunctionStatement.class.getSimpleName().hashCode();
     }
 

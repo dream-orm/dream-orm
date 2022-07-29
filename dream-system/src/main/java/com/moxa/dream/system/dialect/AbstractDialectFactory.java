@@ -64,7 +64,6 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         PackageStatement statement = methodInfo.getStatement();
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
         List<MappedParam> mappedParamList = null;
-        CacheKey uniqueKey;
         List<$Invoker.ParamInfo> paramInfoList = null;
         String sql = null;
         if (scanInfo != null) {
@@ -83,7 +82,6 @@ public abstract class AbstractDialectFactory implements DialectFactory {
             Assist assist = getAssist(methodInfo, arg);
             try {
                 sql = toSQL.toStr(statement, assist, null);
-                uniqueKey = assist.getCustom(CacheKey.class);
             } catch (InvokerException e) {
                 throw new RuntimeException(e);
             }
@@ -97,8 +95,6 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                 paramInfoList = new ArrayList<>();
                 scanInfo.setParamInfoList(paramInfoList);
             }
-        } else {
-            uniqueKey = methodInfo.getSqlKey();
         }
         if (!ObjectUtil.isNull(paramInfoList)) {
             mappedParamList = new ArrayList<>();
@@ -123,7 +119,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                 mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler()));
             }
         }
-
+        CacheKey uniqueKey=methodInfo.getSqlKey();
         if (!ObjectUtil.isNull(mappedParamList)) {
             uniqueKey.update(mappedParamList.stream()
                     .map(mappedParam -> mappedParam.getParamValue())
@@ -141,45 +137,20 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     }
 
     protected Assist getAssist(MethodInfo methodInfo, Object arg) {
-        Map<Class, Object> allCustomMap = new HashMap<>();
-        Map<Class, Object> defaultCustomMap = getDefaultCustomMap(methodInfo, arg);
-        Map<Class<?>, Object> customMap = getCustomMap(methodInfo, arg);
-        allCustomMap.putAll(defaultCustomMap);
-        if (!ObjectUtil.isNull(customMap)) {
-            for (Class<?> key : customMap.keySet()) {
-                allCustomMap.put(key, customMap.get(key));
-            }
-        }
-        List<InvokerFactory> allInvokerFactoryList = new ArrayList<>();
-        List<InvokerFactory> defaultInvokerFactoryList = getDefaultInvokerFactoryList();
-        List<InvokerFactory> invokerFactoryList = getInvokerFactoryList();
-        allInvokerFactoryList.addAll(defaultInvokerFactoryList);
-        if (!ObjectUtil.isNull(invokerFactoryList)) {
-            allInvokerFactoryList.addAll(invokerFactoryList);
-        }
-        return new Assist(allInvokerFactoryList, allCustomMap);
-    }
-
-    private List<InvokerFactory> getDefaultInvokerFactoryList() {
-        List<InvokerFactory> invokerFactoryList = new ArrayList<>();
-        invokerFactoryList.addAll(Arrays.asList(new AntlrInvokerFactory(), new SystemInvokerFactory()));
-        return invokerFactoryList;
-    }
-
-    protected List<InvokerFactory> getInvokerFactoryList() {
-        return null;
-    }
-
-    private Map<Class, Object> getDefaultCustomMap(MethodInfo methodInfo, Object arg) {
         Map<Class, Object> customMap = new HashMap<>();
         customMap.put(MethodInfo.class, methodInfo);
-        customMap.put(CacheKey.class, methodInfo.getSqlKey());
         if (arg == null) {
             arg = new HashMap<>();
         }
         customMap.put(ObjectWrapper.class, ObjectWrapper.wrapper(arg));
-        return customMap;
+        List<InvokerFactory> invokerFactoryList = getDefaultInvokerFactoryList();
+        return new Assist(invokerFactoryList, customMap);
+    }
 
+    protected List<InvokerFactory> getDefaultInvokerFactoryList() {
+        List<InvokerFactory> invokerFactoryList = new ArrayList<>();
+        invokerFactoryList.addAll(Arrays.asList(new AntlrInvokerFactory(), new SystemInvokerFactory()));
+        return invokerFactoryList;
     }
 
     protected ParamType getParamType(Configuration configuration, ScanInvoker.ScanInfo scanInfo, Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap, $Invoker.ParamInfo paramInfo) {
@@ -229,8 +200,6 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         }
     }
 
-    protected abstract <T> Map<Class<? extends T>, T> getCustomMap(MethodInfo methodInfo, Object arg);
-
     protected MappedParam getMappedParam(ColumnInfo columnInfo, Object paramValue, TypeHandler typeHandler) {
         int jdbcType = Types.NULL;
         if (columnInfo != null) {
@@ -269,7 +238,9 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         return cacheKey;
     }
 
-    protected abstract MyFunctionFactory getMyFunctionFactory();
+    protected  MyFunctionFactory getMyFunctionFactory(){
+        return null;
+    }
 
     protected abstract ToSQL getToSQL();
 
@@ -289,7 +260,9 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         }
     }
 
-    protected abstract List<Wrapper> getWrapList();
+    protected  List<Wrapper> getWrapList(){
+        return null;
+    }
 
 
     static class ParamTypeMap {
@@ -321,6 +294,4 @@ public abstract class AbstractDialectFactory implements DialectFactory {
             return typeHandler;
         }
     }
-
-
 }
