@@ -12,8 +12,8 @@ public class DoubleTypeHandler extends BaseTypeHandler<Double> {
     }
 
     @Override
-    public Double getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        double result = rs.getDouble(columnIndex);
+    public Double getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        double result = rs.getDouble(i);
         return result == 0 && rs.wasNull() ? null : result;
     }
 

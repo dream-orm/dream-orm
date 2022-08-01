@@ -12,8 +12,8 @@ public class StringTypeHandler extends BaseTypeHandler<String> {
     }
 
     @Override
-    public String getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        return rs.getString(columnIndex);
+    public String getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        return rs.getString(i);
     }
 
     @Override

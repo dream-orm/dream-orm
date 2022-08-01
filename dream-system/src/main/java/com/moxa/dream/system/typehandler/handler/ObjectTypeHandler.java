@@ -12,8 +12,8 @@ public class ObjectTypeHandler extends BaseTypeHandler<Object> {
     }
 
     @Override
-    public Object getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        return rs.getObject(columnIndex);
+    public Object getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        return rs.getObject(i);
     }
 
     @Override

@@ -16,6 +16,7 @@ public class AntlrInvokerFactory implements InvokerFactory {
     public static final String $ = "$";
     public static final String REP = "rep";
     public static final String NON = "non";
+    public static final String NOT = "not";
     public static final String FOREACH = "foreach";
 
     @Override
@@ -45,6 +46,8 @@ public class AntlrInvokerFactory implements InvokerFactory {
                 return new $Invoker();
             case NON:
                 return new NonInvoker();
+            case NOT:
+                return new NotInvoker();
             case FOREACH:
                 return new ForEachInvoker();
             default:

@@ -12,8 +12,8 @@ public class BooleanTypeHandler extends BaseTypeHandler<Boolean> {
     }
 
     @Override
-    public Boolean getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        boolean result = rs.getBoolean(columnIndex);
+    public Boolean getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        boolean result = rs.getBoolean(i);
         return !result && rs.wasNull() ? null : result;
     }
 

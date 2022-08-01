@@ -12,8 +12,8 @@ public class BlobTypeHandler extends BaseTypeHandler<byte[]> {
     }
 
     @Override
-    public byte[] getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        Blob blob = rs.getBlob(columnIndex);
+    public byte[] getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        Blob blob = rs.getBlob(i);
         if (null != blob) {
             return blob.getBytes(1, (int) blob.length());
         }

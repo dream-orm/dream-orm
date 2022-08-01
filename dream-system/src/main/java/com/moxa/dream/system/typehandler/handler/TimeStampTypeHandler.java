@@ -9,8 +9,8 @@ public class TimeStampTypeHandler extends BaseTypeHandler<Timestamp> {
     }
 
     @Override
-    public Timestamp getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        return rs.getTimestamp(columnIndex);
+    public Timestamp getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        return rs.getTimestamp(i);
     }
 
     @Override

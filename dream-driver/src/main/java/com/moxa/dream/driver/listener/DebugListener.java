@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 public class DebugListener implements QueryListener, UpdateListener, InsertListener, DeleteListener {
     static final String START_DATE = "startDate";
+
     @Override
     public boolean before(MappedStatement mappedStatement) {
         mappedStatement.put(START_DATE, System.currentTimeMillis());

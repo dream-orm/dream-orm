@@ -9,8 +9,8 @@ public class TimeTypeHandler extends BaseTypeHandler<Time> {
     }
 
     @Override
-    public Time getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        return rs.getTime(columnIndex);
+    public Time getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        return rs.getTime(i);
     }
 
     @Override

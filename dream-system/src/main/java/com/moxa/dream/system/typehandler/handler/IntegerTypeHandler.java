@@ -12,8 +12,8 @@ public class IntegerTypeHandler extends BaseTypeHandler<Integer> {
     }
 
     @Override
-    public Integer getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        Integer result = rs.getInt(columnIndex);
+    public Integer getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        Integer result = rs.getInt(i);
         return result == 0 && rs.wasNull() ? null : result;
     }
 

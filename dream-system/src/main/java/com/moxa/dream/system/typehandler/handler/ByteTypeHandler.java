@@ -12,8 +12,8 @@ public class ByteTypeHandler extends BaseTypeHandler<Byte> {
     }
 
     @Override
-    public Byte getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        byte result = rs.getByte(columnIndex);
+    public Byte getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        byte result = rs.getByte(i);
         return result == 0 && rs.wasNull() ? null : result;
     }
 

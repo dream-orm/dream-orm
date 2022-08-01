@@ -50,7 +50,7 @@ public class DefaultTableFactory implements TableFactory {
         return new TableInfo(table, primaryColumnInfo, columnInfoMap, joinInfoMap, fieldMap);
     }
 
-    protected String getTable(Class<?>tableClass) {
+    protected String getTable(Class<?> tableClass) {
         Table tableAnnotation = tableClass.getDeclaredAnnotation(Table.class);
         if (tableAnnotation == null)
             return null;

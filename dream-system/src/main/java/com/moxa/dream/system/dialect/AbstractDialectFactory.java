@@ -119,7 +119,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                 mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler()));
             }
         }
-        CacheKey uniqueKey=methodInfo.getSqlKey();
+        CacheKey uniqueKey = methodInfo.getSqlKey();
         if (!ObjectUtil.isNull(mappedParamList)) {
             uniqueKey.update(mappedParamList.stream()
                     .map(mappedParam -> mappedParam.getParamValue())
@@ -238,7 +238,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         return cacheKey;
     }
 
-    protected  MyFunctionFactory getMyFunctionFactory(){
+    protected MyFunctionFactory getMyFunctionFactory() {
         return null;
     }
 
@@ -260,7 +260,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         }
     }
 
-    protected  List<Wrapper> getWrapList(){
+    protected List<Wrapper> getWrapList() {
         return null;
     }
 

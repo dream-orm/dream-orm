@@ -36,6 +36,7 @@
             </plugin>
         </plugins>
     </build>
+
     <repositories>
         <repository>
             <id>inner-nexus</id>
@@ -46,14 +47,18 @@
             <id>pentaho-nexus</id>
             <url>https://nexus.pentaho.org/content/groups/omni/</url>
         </repository>
-
-        <repository>
-            <id>cdh.repo</id>
-            <url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
-            <name>Cloudera Repositories</name>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
     </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>inner-nexus-release</name>
+            <url>http://192.168.0.243:8081/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>inner-nexus-snapshot</name>
+            <url>http://192.168.0.243:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

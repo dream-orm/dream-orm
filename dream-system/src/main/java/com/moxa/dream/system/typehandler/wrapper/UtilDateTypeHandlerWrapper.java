@@ -19,6 +19,7 @@ public class UtilDateTypeHandlerWrapper implements TypeHandlerWrapper {
                 TypeUtil.hash(Object.class, Types.DATE),
                 TypeUtil.hash(Date.class, Types.DATE),
                 TypeUtil.hash(Date.class, Types.NULL),
+                TypeUtil.hash(Date.class, Types.TIMESTAMP),
         };
     }
 

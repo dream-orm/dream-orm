@@ -12,8 +12,8 @@ public class LongTypeHandler extends BaseTypeHandler<Long> {
     }
 
     @Override
-    public Long getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        Long result = rs.getLong(columnIndex);
+    public Long getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        Long result = rs.getLong(i);
         return result == 0 && rs.wasNull() ? null : result;
     }
 

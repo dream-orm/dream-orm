@@ -14,8 +14,8 @@ public class BigDecimalTypeHandler extends BaseTypeHandler<BigDecimal> {
     }
 
     @Override
-    public BigDecimal getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        return rs.getBigDecimal(columnIndex);
+    public BigDecimal getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        return rs.getBigDecimal(i);
     }
 
     @Override

@@ -19,6 +19,7 @@ public class SqlDateTypeHandlerWrapper implements TypeHandlerWrapper {
                 TypeUtil.hash(Object.class, Types.DATE),
                 TypeUtil.hash(Date.class, Types.DATE),
                 TypeUtil.hash(Date.class, Types.NULL),
+                TypeUtil.hash(java.util.Date.class, Types.TIMESTAMP),
         };
     }
 

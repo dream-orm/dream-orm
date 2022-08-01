@@ -1,24 +1,27 @@
 package com.moxa.dream.system.typehandler.handler;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.Date;
 
 public class UtilDateTypeHandler extends BaseTypeHandler<Date> {
     @Override
     public void setParameter(PreparedStatement ps, int i, Date parameter, int jdbcType) throws SQLException {
-        ps.setDate(i, new java.sql.Date(parameter.getTime()));
+        if (Types.DATE == jdbcType) {
+            ps.setDate(i, new java.sql.Date(parameter.getTime()));
+        } else {
+            ps.setTimestamp(i, new Timestamp(parameter.getTime()));
+        }
     }
 
     @Override
-    public Date getResult(ResultSet rs, int columnIndex, int jdbcType) throws SQLException {
-        java.sql.Date date = rs.getDate(columnIndex);
-        if (date != null)
-            return new Date(date.getTime());
-        else
-            return null;
+    public Date getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+        Date date;
+        if (Types.DATE == jdbcType) {
+            date = rs.getDate(i);
+        } else {
+            date = rs.getTimestamp(i);
+        }
+        return date;
     }
 
     @Override

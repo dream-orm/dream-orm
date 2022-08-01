@@ -13,7 +13,6 @@ import com.moxa.dream.antlr.util.ExprUtil;
 
 import java.util.List;
 
-//通过解析成抽象树，知道ConditionStatement是一棵二叉树，仅仅是遍历二叉树，如果右节点为空，根据条件类型返回即可
 public class ConditionHandler extends AbstractHandler {
     @Override
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
