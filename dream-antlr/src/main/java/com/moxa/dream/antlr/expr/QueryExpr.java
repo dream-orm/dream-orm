@@ -166,12 +166,7 @@ public class QueryExpr extends SqlExpr {
         @Override
         protected Statement exprFrom(ExprInfo exprInfo) {
             push();
-            AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader,
-                    () -> {
-                        ColumnExpr columnExpr = new ColumnExpr(exprReader);
-                        columnExpr.setExprTypes(ExprType.LETTER, ExprType.LBRACE, ExprType.INVOKER);
-                        return columnExpr;
-                    });
+            AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader);
             aliasColumnExpr.setExprTypes(ExprType.HELP);
             fromStatement.setMainTable(aliasColumnExpr.expr());
             ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new JoinExpr(exprReader), new ExprInfo(ExprType.BLANK, " "));
@@ -194,19 +189,14 @@ public class QueryExpr extends SqlExpr {
 
             public JoinExpr(ExprReader exprReader) {
                 super(exprReader);
-                setExprTypes(ExprType.COMMA, ExprType.LEFT, ExprType.RIGHT, ExprType.CROSS, ExprType.INNER, ExprType.NIL);
+                setExprTypes(ExprType.COMMA, ExprType.LEFT, ExprType.RIGHT, ExprType.CROSS, ExprType.INNER, ExprType.JOIN, ExprType.NIL);
             }
 
             @Override
             protected Statement exprComma(ExprInfo exprInfo) {
                 push();
                 joinStatement = new JoinStatement.CommaJoinStatement();
-                AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader,
-                        () -> {
-                            ColumnExpr columnExpr = new ColumnExpr(exprReader);
-                            columnExpr.setExprTypes(ExprType.LETTER, ExprType.LBRACE);
-                            return columnExpr;
-                        });
+                AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader);
                 aliasColumnExpr.setExprTypes(ExprType.HELP);
                 joinStatement.setJoinTable(aliasColumnExpr.expr());
                 ON = new ExprType[]{ExprType.NIL};
@@ -234,6 +224,7 @@ public class QueryExpr extends SqlExpr {
             @Override
             protected Statement exprRight(ExprInfo exprInfo) {
                 push();
+                joinStatement = new JoinStatement.RightJoinStatement();
                 setExprTypes(ExprType.OUTER, ExprType.JOIN);
                 return expr();
             }
@@ -256,13 +247,11 @@ public class QueryExpr extends SqlExpr {
             @Override
             protected Statement exprJoin(ExprInfo exprInfo) {
                 push();
-                AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader,
-                        () -> {
-                            ColumnExpr columnExpr = new ColumnExpr(exprReader);
-                            columnExpr.setExprTypes(ExprType.LETTER, ExprType.LBRACE);
-                            return columnExpr;
-                        });
+                AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader);
                 aliasColumnExpr.setExprTypes(ExprType.HELP);
+                if (joinStatement == null) {
+                    joinStatement = new JoinStatement.InnerJoinStatement();
+                }
                 joinStatement.setJoinTable(aliasColumnExpr.expr());
                 setExprTypes(ON);
                 return expr();

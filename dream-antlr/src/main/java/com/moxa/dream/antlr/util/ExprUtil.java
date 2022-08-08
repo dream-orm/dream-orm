@@ -21,6 +21,9 @@ public class ExprUtil {
         return c == 34;
     }
 
+    public static boolean isSingleMark(int c) {
+        return c == 96;
+    }
     public static boolean isNumber(int c) {
         return 48 <= c && c <= 57;
     }
@@ -367,10 +370,6 @@ public class ExprUtil {
 
     public static boolean isEmpty(String val) {
         return val == null || "".equals(val);
-    }
-
-    public static boolean isBoolean(String info) {
-        return "true".equals(info) || "false".equals(info);
     }
 
     public static String toString(Statement statement, String cut) {

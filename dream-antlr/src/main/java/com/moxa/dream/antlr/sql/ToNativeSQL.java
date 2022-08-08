@@ -331,8 +331,8 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
-    protected String toString(SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "`" + toStr(statement.getStatement(), assist, invokerList) + "`";
+    protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+        return statement.getSymbol();
     }
 
     @Override

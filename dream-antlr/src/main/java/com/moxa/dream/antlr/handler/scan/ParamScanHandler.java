@@ -63,26 +63,20 @@ public class ParamScanHandler extends AbstractHandler {
                         }
                     }
                     Statement left = conditionStatement.getLeft();
-                    if (left instanceof SymbolStatement.LetterStatement) {
-                        SymbolStatement.LetterStatement letter = (SymbolStatement.LetterStatement) left;
-                        String database = null;
-                        String table = null;
-                        String column = letter.getSuffix();
-                        String prefix = letter.getPrefix();
-                        if (prefix != null) {
-                            String[] s = prefix.split("\\.");
-                            switch (s.length) {
-                                case 1:
-                                    table = s[0];
-                                    break;
-                                case 2:
-                                    database = s[0];
-                                    table = s[1];
-                                    break;
-                                default:
-                                    break;
-                            }
+                    String database = null;
+                    String table = null;
+                    String column=null;
+                    if (left instanceof ListColumnStatement) {
+                        Statement[] columnList = ((ListColumnStatement) left).getColumnList();
+                        column = ((SymbolStatement) columnList[columnList.length - 1]).getValue();
+                        table = ((SymbolStatement) columnList[columnList.length - 2]).getValue();
+                        if (columnList.length >= 3) {
+                            database = ((SymbolStatement) columnList[columnList.length - 3]).getValue();
                         }
+                    } else if(left instanceof SymbolStatement){
+                        column = ((SymbolStatement) left).getValue();
+                    }
+                    if(column!=null){
                         scanInfo.add(new ScanInvoker.ParamScanInfo(database, table, column, field));
                     }
                 }

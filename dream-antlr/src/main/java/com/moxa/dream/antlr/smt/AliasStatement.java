@@ -3,7 +3,7 @@ package com.moxa.dream.antlr.smt;
 public class AliasStatement extends Statement {
     private boolean showAlias;
     private Statement column;
-    private SymbolStatement.LetterStatement alias;
+    private Statement alias;
 
     public boolean isShowAlias() {
         return showAlias;
@@ -23,11 +23,11 @@ public class AliasStatement extends Statement {
             column.parentStatement = this;
     }
 
-    public SymbolStatement.LetterStatement getAlias() {
+    public Statement getAlias() {
         return alias;
     }
 
-    public void setAlias(SymbolStatement.LetterStatement alias) {
+    public void setAlias(Statement alias) {
         this.alias = alias;
         if (alias != null)
             alias.parentStatement = this;

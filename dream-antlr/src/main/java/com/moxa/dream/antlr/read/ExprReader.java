@@ -1,5 +1,6 @@
 package com.moxa.dream.antlr.read;
 
+import com.moxa.dream.antlr.config.Constant;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.expr.SqlExpr;
@@ -7,6 +8,8 @@ import com.moxa.dream.antlr.factory.MyFunctionFactory;
 import com.moxa.dream.antlr.smt.MyFunctionStatement;
 import com.moxa.dream.antlr.util.ExprUtil;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Stack;
 
@@ -121,6 +124,19 @@ public class ExprReader extends StringReader {
             case 32:
                 lastInfo = push();
                 break;
+            case 33:
+                mark();
+                c = read();
+                switch (c) {
+                    case 61:
+                        lastInfo = new ExprInfo(ExprType.NEQ, "<>", getStart(), getEnd());
+                        break;
+                    default:
+                        reset();
+                        lastInfo = new ExprInfo(ExprType.ERR, "!", getStart(), getEnd());
+                        break;
+                }
+                break;
             case 37:
                 lastInfo = new ExprInfo(ExprType.MOD, "%", getStart(), getEnd());
                 break;
@@ -138,6 +154,9 @@ public class ExprReader extends StringReader {
                 break;
             case 45:
                 lastInfo = new ExprInfo(ExprType.SUB, "-", getStart(), getEnd());
+                break;
+            case 46:
+                lastInfo = new ExprInfo(ExprType.DOT, ".", getStart(), getEnd());
                 break;
             case 47:
                 lastInfo = new ExprInfo(ExprType.DIVIDE, "/", getStart(), getEnd());
@@ -206,7 +225,8 @@ public class ExprReader extends StringReader {
                 lastInfo = new ExprInfo(ExprType.BITXOR, "^", getStart(), getEnd());
                 break;
             case 96:
-                lastInfo = new ExprInfo(ExprType.SINGLE_MARK, "`", getStart(), getEnd());
+                reset();
+                lastInfo = pushSingleMark();
                 break;
             case 124:
                 lastInfo = new ExprInfo(ExprType.BITOR, "|", getStart(), getEnd());
@@ -232,49 +252,18 @@ public class ExprReader extends StringReader {
         char[] chars = new char[count];
         int len = read(chars, 0, count);
         String info = new String(chars, 0, len);
-        int skip = 1;
-        if (ExprUtil.isBlank(c)) {
-            mark();
-            while (ExprUtil.isBlank(c)) {
-                c = read();
-                skip++;
-            }
-            reset();
-        }
-        if (ExprUtil.isDot(c)) {
-            info += pushDotLetter(skip);
-        }
         ExprType exprType = ExprUtil.getExprTypeInLetter(info);
-        if (ExprUtil.isLBrace(c) && myFunctionFactory != null) {
+        if(ExprType.LETTER!=exprType&&!ExprUtil.isLBrace(c)&& !Arrays.asList(Constant.KEYWORD).contains(exprType)){
+            exprType=ExprType.LETTER;
+        }
+        if(ExprUtil.isLBrace(c) && myFunctionFactory != null) {
             MyFunctionStatement myFunctionStatement = myFunctionFactory.create(info);
             if (myFunctionStatement != null) {
                 myFunctionStatement.setFunctionName(info.toUpperCase(Locale.ENGLISH));
                 return new ExprInfo(ExprType.MY_FUNCTION, myFunctionStatement, getStart(), getEnd());
             }
-        } else if (ExprUtil.isBoolean(info)) {
-            return new ExprInfo(ExprType.BOOLEAN, info, getStart(), getEnd());
         }
         return new ExprInfo(exprType, info, getStart(), getEnd());
-    }
-
-    private String pushDotLetter(int skip) {
-        skip(skip);
-        ExprInfo exprInfo = push();
-        int c = value();
-        skip = 1;
-        if (ExprUtil.isBlank(c)) {
-            mark();
-            while (ExprUtil.isBlank(c)) {
-                c = read();
-                skip++;
-            }
-            reset();
-        }
-        String result = "." + exprInfo.getInfo();
-        if (ExprUtil.isDot(c)) {
-            result += pushDotLetter(skip);
-        }
-        return result;
     }
 
     private ExprInfo pushStr() {
@@ -308,7 +297,21 @@ public class ExprReader extends StringReader {
         String info = new String(chars, 0, len);
         return new ExprInfo(ExprType.JAVA_STR, info, getStart(), getEnd());
     }
-
+    private ExprInfo pushSingleMark() {
+        mark();
+        skip(1);
+        int count = 1;
+        int c;
+        while ((c = read()) != -1 && !ExprUtil.isSingleMark(c)) {
+            count++;
+        }
+        count++;
+        reset();
+        char[] chars = new char[count];
+        int len = read(chars, 0, count);
+        String info = new String(chars, 0, len);
+        return new ExprInfo(ExprType.SINGLE_MARK, info, getStart(), getEnd());
+    }
     public ExprInfo pushSkip() {
         mark();
         int c, count = 1;

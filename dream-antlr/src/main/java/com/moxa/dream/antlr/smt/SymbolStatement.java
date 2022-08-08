@@ -15,6 +15,9 @@ public abstract class SymbolStatement extends Statement {
     public String getSymbol() {
         return symbol;
     }
+    public  String getValue(){
+        return symbol;
+    }
 
     @Override
     protected Boolean isNeedInnerCache() {
@@ -22,26 +25,8 @@ public abstract class SymbolStatement extends Statement {
     }
 
     public static class LetterStatement extends SymbolStatement {
-        private final String suffix;
-        private String prefix;
-
         public LetterStatement(String symbol) {
             super(symbol);
-            int index = symbol.lastIndexOf(".");
-            if (index == -1) {
-                suffix = symbol;
-            } else {
-                prefix = symbol.substring(0, index);
-                suffix = symbol.substring(index + 1);
-            }
-        }
-
-        public String getPrefix() {
-            return prefix;
-        }
-
-        public String getSuffix() {
-            return suffix;
         }
     }
 
@@ -58,16 +43,7 @@ public abstract class SymbolStatement extends Statement {
         }
     }
 
-    public static abstract class ConstantStatement<T> extends SymbolStatement {
-
-        public ConstantStatement(String symbol) {
-            super(symbol);
-        }
-
-        public abstract T getValue();
-    }
-
-    public static class StrStatement extends ConstantStatement<String> {
+    public static class StrStatement extends SymbolStatement {
 
         public StrStatement(String symbol) {
             super(symbol);
@@ -80,7 +56,7 @@ public abstract class SymbolStatement extends Statement {
     }
 
 
-    public static class JavaStrStatement extends ConstantStatement<String> {
+    public static class JavaStrStatement extends SymbolStatement{
         public JavaStrStatement(String symbol) {
             super(symbol);
         }
@@ -90,65 +66,48 @@ public abstract class SymbolStatement extends Statement {
             return symbol.substring(1, symbol.length() - 1);
         }
     }
+    public static class SingleMarkStatement extends SymbolStatement {
+        public SingleMarkStatement(String symbol) {
+            super(symbol);
+        }
 
-    public static class IntStatement extends ConstantStatement<Integer> {
+        @Override
+        public int getNameId() {
+            return SingleMarkStatement.class.getSimpleName().hashCode();
+        }
+
+        @Override
+        public String getValue() {
+            return symbol.substring(1, symbol.length() - 1);
+        }
+    }
+
+    public static class IntStatement extends SymbolStatement{
 
         public IntStatement(String symbol) {
             super(symbol);
         }
 
-        @Override
-        public Integer getValue() {
-            return Integer.valueOf(symbol);
-        }
     }
 
-    public static class LongStatement extends ConstantStatement<Long> {
+    public static class LongStatement extends SymbolStatement {
 
         public LongStatement(String symbol) {
             super(symbol);
         }
-
-        @Override
-        public Long getValue() {
-            return Long.valueOf(symbol);
-        }
     }
 
-    public static class FloatStatement extends ConstantStatement<Float> {
+    public static class FloatStatement extends SymbolStatement {
 
         public FloatStatement(String symbol) {
             super(symbol);
         }
-
-        @Override
-        public Float getValue() {
-            return Float.valueOf(symbol);
-        }
     }
 
-    public static class DoubleStatement extends ConstantStatement<Double> {
+    public static class DoubleStatement extends SymbolStatement {
 
         public DoubleStatement(String symbol) {
             super(symbol);
         }
-
-        @Override
-        public Double getValue() {
-            return Double.valueOf(symbol);
-        }
     }
-
-    public static class BooleanStatement extends ConstantStatement<Boolean> {
-
-        public BooleanStatement(String symbol) {
-            super(symbol);
-        }
-
-        @Override
-        public Boolean getValue() {
-            return Boolean.valueOf(symbol);
-        }
-    }
-
 }

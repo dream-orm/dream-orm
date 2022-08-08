@@ -8,8 +8,6 @@ import com.moxa.dream.antlr.smt.*;
 import java.util.List;
 
 public class ToPGSQL extends ToPubSQL {
-    private final int num = 1;
-
     private String getPattern(String pattern) {
         char[] patternArray = pattern.toCharArray();
         StringBuilder builder = new StringBuilder();
@@ -61,6 +59,16 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
+    protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+        return "\"" +statement.getValue()+ "\"";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.GroupConcatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+        return "STRING_AGG(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",',')";
+    }
+
+    @Override
     protected String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         if (columnList.length == 2) {
@@ -103,7 +111,7 @@ public class ToPGSQL extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.ToDateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        return "TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[1], assist, invokerList) + ")";
+        return "TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[1], assist, invokerList) + ")::TIMESTAMP";
     }
 
     @Override
@@ -126,7 +134,7 @@ public class ToPGSQL extends ToPubSQL {
             pattern = getPattern(toStr(columnList[1], assist, invokerList));
             statement.setPattern(pattern);
         }
-        return "TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")";
+        return "TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")::TIMESTAMP";
     }
 
     @Override

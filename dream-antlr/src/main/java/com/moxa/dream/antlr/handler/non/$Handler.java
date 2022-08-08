@@ -15,9 +15,11 @@ import java.util.List;
 
 public class $Handler extends AbstractHandler {
     private NonInvoker nonInvoker;
-    public $Handler(NonInvoker nonInvoker){
-        this.nonInvoker=nonInvoker;
+
+    public $Handler(NonInvoker nonInvoker) {
+        this.nonInvoker = nonInvoker;
     }
+
     @Override
     protected boolean interest(Statement statement, Assist assist) {
         return statement instanceof InvokerStatement && AntlrInvokerFactory.$.equals(((InvokerStatement) statement).getFunction());

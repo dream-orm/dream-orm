@@ -51,8 +51,8 @@ public abstract class SqlExpr {
             case DOUBLE:
                 statement = exprDouble(exprInfo);
                 break;
-            case BOOLEAN:
-                statement = exprBoolean(exprInfo);
+            case DOT:
+                statement = exprDot(exprInfo);
                 break;
             case STR:
                 statement = exprStr(exprInfo);
@@ -566,7 +566,7 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprSingleMark(ExprInfo exprInfo) {
-        return exprDefault(exprInfo);
+        return exprSymbol(exprInfo);
     }
 
     protected Statement exprMark(ExprInfo exprInfo) {
@@ -1277,8 +1277,8 @@ public abstract class SqlExpr {
         return exprSymbol(exprInfo);
     }
 
-    protected Statement exprBoolean(ExprInfo exprInfo) {
-        return exprSymbol(exprInfo);
+    protected Statement exprDot(ExprInfo exprInfo) {
+        return exprDefault(exprInfo);
     }
 
     protected abstract Statement nil();

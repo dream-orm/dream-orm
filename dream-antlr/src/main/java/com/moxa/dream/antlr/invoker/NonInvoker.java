@@ -27,7 +27,8 @@ public class NonInvoker extends AbstractInvoker {
     public Handler[] handler() {
         return new Handler[]{new $Handler(this), new ConditionHandler(), new BraceHandler(), new FunctionHandler()};
     }
-    public boolean isEmpty(Object value){
-        return value==null;
+
+    public boolean isEmpty(Object value) {
+        return value == null;
     }
 }

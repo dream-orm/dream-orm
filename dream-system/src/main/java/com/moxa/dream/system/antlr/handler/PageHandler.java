@@ -42,7 +42,7 @@ public class PageHandler extends AbstractHandler {
     @Override
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
         handlerCount((QueryStatement) statement);
-        handlerPage((QueryStatement) statement);
+        handlerPage(assist, toSQL, invokerList, (QueryStatement) statement);
         invoker.setAccessible(false);
         return statement;
     }
@@ -79,7 +79,7 @@ public class PageHandler extends AbstractHandler {
         this.methodInfo.set(PageCount.class, new PageCount(methodInfo));
     }
 
-    void handlerPage(QueryStatement queryStatement) throws InvokerException {
+    void handlerPage(Assist assist, ToSQL toSQL, List<Invoker> invokerList, QueryStatement queryStatement) throws InvokerException {
         LimitStatement limitStatement = new LimitStatement();
         limitStatement.setOffset(offset);
         limitStatement.setFirst(first);
@@ -91,7 +91,7 @@ public class PageHandler extends AbstractHandler {
                 Statement mainTable = fromStatement.getMainTable();
                 ScanInvoker.ScanInfo scanInfo = new ScanInvoker.ScanInfo();
                 QueryScanHandler queryScanHandler = new QueryScanHandler(scanInfo);
-                queryScanHandler.scanStatement(mainTable, true);
+                queryScanHandler.scanStatement(assist, toSQL, invokerList, mainTable, true);
                 ScanInvoker.TableScanInfo[] tableScanInfoList = scanInfo.getTableScanInfoMap().values().toArray(new ScanInvoker.TableScanInfo[0]);
                 if (tableScanInfoList.length == 1) {
                     ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoList[0];

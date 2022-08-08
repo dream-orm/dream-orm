@@ -67,7 +67,7 @@ public class AllInvoker extends AbstractInvoker {
             lowHashMap.put(tableScanInfo.getTable(), tableScanInfo);
         }
         List<String> queryColumnList = new ArrayList<>();
-        getQuery(tableFactory, colType, lowHashMap, getQueryColumnInfoList(invokerStatement), queryColumnList);
+        getQuery(tableFactory, colType, lowHashMap, getQueryColumnInfoList(assist, toSQL, invokerList, invokerStatement), queryColumnList);
         String selectColumn = String.join(",", queryColumnList);
         ExprReader exprReader = new ExprReader(selectColumn);
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new AliasColumnExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
@@ -183,7 +183,7 @@ public class AllInvoker extends AbstractInvoker {
         return view.value();
     }
 
-    protected List<QueryColumnInfo> getQueryColumnInfoList(InvokerStatement invokerStatement) {
+    protected List<QueryColumnInfo> getQueryColumnInfoList(Assist assist, ToSQL toSQL, List<Invoker> invokerList, InvokerStatement invokerStatement) throws InvokerException {
         Statement parentStatement = invokerStatement.getParentStatement();
         ListColumnStatement listColumnStatement = (ListColumnStatement) parentStatement;
         Statement[] columnList = listColumnStatement.getColumnList();
@@ -196,8 +196,7 @@ public class AllInvoker extends AbstractInvoker {
             if (statement instanceof AliasStatement) {
                 AliasStatement aliasStatement = (AliasStatement) statement;
                 statement = aliasStatement.getColumn();
-                SymbolStatement.LetterStatement aliasLetterStatement = aliasStatement.getAlias();
-                alias = aliasLetterStatement.getSymbol();
+                alias = toSQL.toStr(aliasStatement.getAlias(), assist, invokerList);
             }
             if (statement instanceof SymbolStatement.LetterStatement) {
                 SymbolStatement.LetterStatement letterStatement = (SymbolStatement.LetterStatement) statement;

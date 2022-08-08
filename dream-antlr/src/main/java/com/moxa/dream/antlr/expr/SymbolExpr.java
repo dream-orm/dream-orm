@@ -4,11 +4,12 @@ import com.moxa.dream.antlr.config.Constant;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;
+import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 
 public class SymbolExpr extends SqlExpr {
-    SymbolStatement symbolStatement = null;
+    Statement statement = null;
 
     public SymbolExpr(ExprReader exprReader) {
         super(exprReader);
@@ -17,13 +18,13 @@ public class SymbolExpr extends SqlExpr {
 
     @Override
     public Statement nil() {
-        return symbolStatement;
+        return statement;
     }
 
     @Override
     protected Statement exprStar(ExprInfo exprInfo) {
         push();
-        symbolStatement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
+        statement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -31,7 +32,7 @@ public class SymbolExpr extends SqlExpr {
     @Override
     protected Statement exprInt(ExprInfo exprInfo) {
         push();
-        symbolStatement = new SymbolStatement.IntStatement(exprInfo.getInfo());
+        statement = new SymbolStatement.IntStatement(exprInfo.getInfo());
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -39,7 +40,7 @@ public class SymbolExpr extends SqlExpr {
     @Override
     protected Statement exprLong(ExprInfo exprInfo) {
         push();
-        symbolStatement = new SymbolStatement.LongStatement(exprInfo.getInfo());
+        statement = new SymbolStatement.LongStatement(exprInfo.getInfo());
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -47,7 +48,7 @@ public class SymbolExpr extends SqlExpr {
     @Override
     protected Statement exprFloat(ExprInfo exprInfo) {
         push();
-        symbolStatement = new SymbolStatement.FloatStatement(exprInfo.getInfo());
+        statement = new SymbolStatement.FloatStatement(exprInfo.getInfo());
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -55,15 +56,7 @@ public class SymbolExpr extends SqlExpr {
     @Override
     protected Statement exprDouble(ExprInfo exprInfo) {
         push();
-        symbolStatement = new SymbolStatement.DoubleStatement(exprInfo.getInfo());
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprBoolean(ExprInfo exprInfo) {
-        push();
-        symbolStatement = new SymbolStatement.BooleanStatement(exprInfo.getInfo());
+        statement = new SymbolStatement.DoubleStatement(exprInfo.getInfo());
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -71,7 +64,21 @@ public class SymbolExpr extends SqlExpr {
     @Override
     protected Statement exprLetter(ExprInfo exprInfo) {
         push();
-        symbolStatement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
+        statement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
+        setExprTypes(ExprType.DOT, ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprDot(ExprInfo exprInfo) {
+        push();
+        ListColumnStatement listColumnStatement = (ListColumnStatement) new ListColumnExpr(exprReader, () -> {
+            SymbolExpr symbolExpr = new SymbolExpr(exprReader);
+            symbolExpr.setExprTypes(ExprType.LETTER, ExprType.STR, ExprType.JAVA_STR, ExprType.STAR, ExprType.SINGLE_MARK);
+            return symbolExpr;
+        }, new ExprInfo(ExprType.DOT, ".")).expr();
+        listColumnStatement.addFirst(statement);
+        statement = listColumnStatement;
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -79,7 +86,7 @@ public class SymbolExpr extends SqlExpr {
     @Override
     protected Statement exprStr(ExprInfo exprInfo) {
         push();
-        symbolStatement = new SymbolStatement.StrStatement(exprInfo.getInfo());
+        statement = new SymbolStatement.StrStatement(exprInfo.getInfo());
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -87,15 +94,23 @@ public class SymbolExpr extends SqlExpr {
     @Override
     protected Statement exprJavaStr(ExprInfo exprInfo) {
         push();
-        symbolStatement = new SymbolStatement.JavaStrStatement(exprInfo.getInfo());
+        statement = new SymbolStatement.JavaStrStatement(exprInfo.getInfo());
         setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprSingleMark(ExprInfo exprInfo) {
+        push();
+        statement = new SymbolStatement.SingleMarkStatement(exprInfo.getInfo());
+        setExprTypes(ExprType.DOT, ExprType.NIL);
         return expr();
     }
 
     @Override
     protected Statement exprSkip(ExprInfo exprInfo) {
         push();
-        symbolStatement = new SymbolStatement.SKipStatement(exprInfo.getInfo());
+        statement = new SymbolStatement.SKipStatement(exprInfo.getInfo());
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -103,7 +118,7 @@ public class SymbolExpr extends SqlExpr {
     @Override
     protected Statement exprMark(ExprInfo exprInfo) {
         push();
-        symbolStatement = new SymbolStatement.MarkStatement();
+        statement = new SymbolStatement.MarkStatement();
         setExprTypes(ExprType.NIL);
         return expr();
     }

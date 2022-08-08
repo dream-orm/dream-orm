@@ -32,35 +32,35 @@ public class QueryScanHandler extends AbstractHandler {
         return statement;
     }
 
-    //是否感兴趣
     @Override
     protected boolean interest(Statement statement, Assist sqlAssist) {
         return statement instanceof QueryStatement;
     }
 
-    //绑定的处理器
     @Override
     protected Handler[] handlerBound() {
         return new Handler[]{fromScanHandler, joinScanHandler};
     }
 
-    public void scanStatement(Statement statement, boolean master) {
+    public void scanStatement(Assist assist, ToSQL toSQL, List<Invoker> invokerList, Statement statement, boolean master) throws InvokerException {
         String database = null;
-        String table = null;
+        String table=null;
         String alias = null;
         if (statement instanceof AliasStatement) {
             AliasStatement aliasStatement = (AliasStatement) statement;
             statement = aliasStatement.getColumn();
-            alias = aliasStatement.getAlias().getSymbol();
+            alias = toSQL.toStr(aliasStatement.getAlias(), assist, invokerList);
         }
-        if (statement instanceof SymbolStatement.LetterStatement) {
-            SymbolStatement.LetterStatement letterStatement = (SymbolStatement.LetterStatement) statement;
-            table = letterStatement.getSuffix();
-            database = letterStatement.getPrefix();
+        if (statement instanceof ListColumnStatement) {
+            Statement[] columnList = ((ListColumnStatement) statement).getColumnList();
+            database = ((SymbolStatement) columnList[columnList.length - 2]).getValue();
+            table = ((SymbolStatement) columnList[columnList.length - 1]).getValue();
+        } else if(statement instanceof SymbolStatement) {
+            table = ((SymbolStatement) statement).getValue();
         }
-        if (table != null)
+        if(table!=null){
             scanInfo.add(new ScanInvoker.TableScanInfo(database, table, alias, master));
-
+        }
     }
 
     static class FromScanHandler extends AbstractHandler {
@@ -73,7 +73,7 @@ public class QueryScanHandler extends AbstractHandler {
         @Override
         protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
             FromStatement fromStatement = (FromStatement) statement;
-            queryScanHandler.scanStatement(fromStatement.getMainTable(), true);
+            queryScanHandler.scanStatement(assist, toSQL, invokerList, fromStatement.getMainTable(), true);
             return statement;
         }
 
@@ -93,7 +93,7 @@ public class QueryScanHandler extends AbstractHandler {
         @Override
         protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
             JoinStatement joinStatement = (JoinStatement) statement;
-            queryScanHandler.scanStatement(joinStatement.getJoinTable(), false);
+            queryScanHandler.scanStatement(assist, toSQL, invokerList, joinStatement.getJoinTable(), false);
             return statement;
         }
 

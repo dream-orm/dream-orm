@@ -169,7 +169,7 @@ public abstract class ToSQL {
                 sql = toString((SymbolStatement) statement, assist, invokerList);
                 break;
             case -918666854://SingleMarkStatement
-                sql = toString((SingleMarkStatement) statement, assist, invokerList);
+                sql = toString((SymbolStatement.SingleMarkStatement) statement, assist, invokerList);
                 break;
             case -1225453250://AsciiStatement
                 sql = toString((FunctionStatement.AsciiStatement) statement, assist, invokerList);
@@ -654,7 +654,7 @@ public abstract class ToSQL {
 
     protected abstract String toString(SymbolStatement statement, Assist assist, List<Invoker> invokerList);
 
-    protected abstract String toString(SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
 

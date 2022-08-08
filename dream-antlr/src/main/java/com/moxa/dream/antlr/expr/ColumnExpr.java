@@ -4,7 +4,6 @@ import com.moxa.dream.antlr.config.Constant;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;
-import com.moxa.dream.antlr.smt.SingleMarkStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
 public class ColumnExpr extends SqlExpr {
@@ -12,7 +11,7 @@ public class ColumnExpr extends SqlExpr {
 
     public ColumnExpr(ExprReader exprReader) {
         super(exprReader);
-        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.SYMBOL).addExprTypes(ExprType.STAR, ExprType.CASE, ExprType.LBRACE, ExprType.INVOKER, ExprType.SINGLE_MARK);
+        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.SYMBOL).addExprTypes(ExprType.STAR, ExprType.CASE, ExprType.LBRACE, ExprType.INVOKER);
     }
 
     @Override
@@ -63,77 +62,10 @@ public class ColumnExpr extends SqlExpr {
         return expr();
     }
 
-    @Override
-    protected Statement exprSingleMark(ExprInfo exprInfo) {
-        statement = new SingleMarkExpr(exprReader).expr();
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
 
     @Override
     public Statement nil() {
         return statement;
     }
 
-    public static class SingleMarkExpr extends HelperExpr {
-        private final SingleMarkStatement statement = new SingleMarkStatement();
-
-        public SingleMarkExpr(ExprReader exprReader) {
-            this(exprReader, () -> new CompareExpr(exprReader));
-        }
-
-        public SingleMarkExpr(ExprReader exprReader, Helper helper) {
-            super(exprReader, helper);
-            setExprTypes(ExprType.SINGLE_MARK);
-        }
-
-        @Override
-        protected Statement exprSingleMark(ExprInfo exprInfo) {
-            push();
-            if (statement.getStatement() == null) {
-                setExprTypes(ExprType.SELECT, ExprType.INSERT, ExprType.UPDATE, ExprType.DELETE, ExprType.HELP);
-            } else setExprTypes(ExprType.NIL);
-            return expr();
-        }
-
-        @Override
-        protected Statement exprSelect(ExprInfo exprInfo) {
-            statement.setStatement(new CrudExpr(exprReader).expr());
-            setExprTypes(ExprType.SINGLE_MARK);
-            return expr();
-        }
-
-        @Override
-        protected Statement exprInsert(ExprInfo exprInfo) {
-            statement.setStatement(new CrudExpr(exprReader).expr());
-            setExprTypes(ExprType.SINGLE_MARK);
-            return expr();
-        }
-
-        @Override
-        protected Statement exprUpdate(ExprInfo exprInfo) {
-            statement.setStatement(new CrudExpr(exprReader).expr());
-            setExprTypes(ExprType.SINGLE_MARK);
-            return expr();
-        }
-
-        @Override
-        protected Statement exprDelete(ExprInfo exprInfo) {
-            statement.setStatement(new CrudExpr(exprReader).expr());
-            setExprTypes(ExprType.SINGLE_MARK);
-            return expr();
-        }
-
-        @Override
-        public Statement exprHelp(Statement statement) {
-            this.statement.setStatement(statement);
-            setExprTypes(ExprType.SINGLE_MARK);
-            return expr();
-        }
-
-        @Override
-        protected Statement nil() {
-            return statement;
-        }
-    }
 }
