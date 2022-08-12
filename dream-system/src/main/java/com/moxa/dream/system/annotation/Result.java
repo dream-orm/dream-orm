@@ -1,6 +1,5 @@
 package com.moxa.dream.system.annotation;
 
-import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.util.reflection.util.NullObject;
 
 import java.lang.annotation.ElementType;
@@ -15,8 +14,6 @@ public @interface Result {
     Class<? extends Collection> rowType() default NullObject.class;
 
     Class<?> colType() default NullObject.class;
-
-    Class<? extends Listener>[] listeners() default {};
 
     String keyProperty() default "";
 

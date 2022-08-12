@@ -33,19 +33,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class DefaultResultSetHandler implements ResultSetHandler {
-    private final MapperFactory mapperFactory;
-    private final DialectFactory dialectFactory;
-    private final Executor executor;
-
-    public DefaultResultSetHandler(Configuration configuration, Executor executor) {
-        this.mapperFactory = configuration.getMapperFactory();
-        this.dialectFactory = configuration.getDialectFactory();
-        this.executor = executor;
-
-    }
 
     @Override
-    public Object result(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException {
+    public Object result(ResultSet resultSet, MappedStatement mappedStatement, Executor executor) throws SQLException {
         MappedResult mappedResult = getMappedResult(resultSet, mappedStatement);
         ObjectFactory resultObjectFactory = mappedResult.newRowObjectFactory();
         if (mappedResult.isSimple()) {
@@ -53,7 +43,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 ObjectFactory objectFactory = doSimpleResult(resultSet, mappedStatement, mappedResult);
                 Object result = objectFactory.getObject();
                 resultObjectFactory.set(null, result);
-                eachList(result, mappedStatement.getEachInfoList());
+                eachList(result, mappedStatement, executor);
             }
         } else {
             Map<CacheKey, Object> cacheMap = new HashMap<>();
@@ -62,7 +52,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 if (objectFactory != null) {
                     Object result = objectFactory.getObject();
                     resultObjectFactory.set(null, result);
-                    eachList(result, mappedStatement.getEachInfoList());
+                    eachList(result, mappedStatement, executor);
                 }
             }
             cacheMap.clear();
@@ -77,8 +67,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         for (String fieldName : childMappedResultMap.keySet()) {
             MappedResult childMappedResult = childMappedResultMap.get(fieldName);
             ObjectFactory childObjectFactory;
-            boolean simple;
-            if (simple = childMappedResult.isSimple()) {
+            if (childMappedResult.isSimple()) {
                 childObjectFactory = doSimpleResult(resultSet, mappedStatement, childMappedResult);
             } else {
                 childObjectFactory = doNestedResult(resultSet, mappedStatement, childMappedResult, cacheMap);
@@ -291,8 +280,12 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         return null;
     }
 
-    protected void eachList(Object object, List<EachInfo> eachInfoList) {
+    protected void eachList(Object object, MappedStatement mappedStatement, Executor executor) {
+        List<EachInfo> eachInfoList = mappedStatement.getEachInfoList();
         if (!ObjectUtil.isNull(eachInfoList)) {
+            Configuration configuration = mappedStatement.getConfiguration();
+            MapperFactory mapperFactory = configuration.getMapperFactory();
+            DialectFactory dialectFactory = configuration.getDialectFactory();
             ObjectWrapper wrapper = ObjectWrapper.wrapper(object);
             for (EachInfo eachInfo : eachInfoList) {
                 Class type = eachInfo.getType();
@@ -309,8 +302,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                         }
                         arg = argWrapper.getObject();
                     }
-                    MappedStatement mappedStatement = dialectFactory.compile(methodInfo, arg);
-                    return executor.query(mappedStatement);
+                    return executor.query(dialectFactory.compile(methodInfo, arg));
                 });
                 Object result;
                 try {

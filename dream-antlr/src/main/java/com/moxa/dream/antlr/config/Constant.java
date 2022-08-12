@@ -115,6 +115,7 @@ public final class Constant {
             ExprType.SKIP,
     };
     public static final ExprType[] KEYWORD = {
+            ExprType.CHAR,
             ExprType.UNION,
             ExprType.NOT,
             ExprType.IS,

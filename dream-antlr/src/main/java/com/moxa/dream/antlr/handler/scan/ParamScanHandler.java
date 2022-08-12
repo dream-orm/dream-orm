@@ -7,6 +7,7 @@ import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.*;
+import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.InvokerUtil;
 
@@ -130,7 +131,7 @@ public class ParamScanHandler extends AbstractHandler {
 
         class ValuesHandler extends AbstractHandler {
             private InsertHandler insertHandler;
-
+            private ToSQL toNativeSQL=new ToNativeSQL();
             public ValuesHandler(InsertHandler insertHandler) {
                 this.insertHandler = insertHandler;
             }
@@ -142,7 +143,7 @@ public class ParamScanHandler extends AbstractHandler {
                     Statement[] columnList = ((ListColumnStatement) ((BraceStatement) ((ListColumnStatement) valuesStatement.getStatement()).getColumnList()[0]).getStatement()).getColumnList();
                     for (int i = 0; i < columnList.length; i++) {
                         if (InvokerUtil.is$(columnList[i])) {
-                            String field = ((SymbolStatement.LetterStatement) ((ListColumnStatement) ((InvokerStatement) columnList[i]).getParamStatement()).getColumnList()[0]).getSymbol();
+                            String field=toNativeSQL.toStr(((InvokerStatement)columnList[i]).getParamStatement(),null,null);
                             scanInfo.add(new ScanInvoker.ParamScanInfo(null, table, insertHandler.columnList.get(i), field));
                         }
                     }

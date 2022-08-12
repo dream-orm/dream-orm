@@ -1,5 +1,6 @@
 package com.moxa.dream.driver.listener;
 
+import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.listener.DeleteListener;
 import com.moxa.dream.system.core.listener.InsertListener;
 import com.moxa.dream.system.core.listener.QueryListener;
@@ -16,7 +17,7 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
     static final String START_DATE = "startDate";
 
     @Override
-    public boolean before(MappedStatement mappedStatement) {
+    public boolean before(MappedStatement mappedStatement, Executor executor) {
         mappedStatement.put(START_DATE, System.currentTimeMillis());
         List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
         List<Object> paramList;
@@ -32,13 +33,13 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
     }
 
     @Override
-    public Object afterReturn(Object result, MappedStatement mappedStatement) {
+    public Object afterReturn(Object result, MappedStatement mappedStatement,Executor executor) {
         after(mappedStatement);
         return result;
     }
 
     @Override
-    public void exception(Exception e, MappedStatement mappedStatement) {
+    public void exception(Exception e, MappedStatement mappedStatement,Executor executor) {
         System.err.println("ERROR:" + e);
         after(mappedStatement);
     }

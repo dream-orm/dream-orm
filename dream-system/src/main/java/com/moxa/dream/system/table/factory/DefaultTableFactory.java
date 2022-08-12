@@ -12,6 +12,7 @@ import com.moxa.dream.util.common.LowHashMap;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,7 @@ public class DefaultTableFactory implements TableFactory {
         Map<String, String> fieldMap = new LowHashMap<>();
         Map<String, ColumnInfo> columnInfoMap = new HashMap<>();
         List<Field> fieldList = ReflectUtil.findField(tableClass);
-        ColumnInfo primaryColumnInfo = null;
+        ColumnInfo primColumnInfo = null;
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
                 String name = field.getName();
@@ -37,8 +38,8 @@ public class DefaultTableFactory implements TableFactory {
                     fieldMap.put(columnInfo.getColumn(), name);
                     columnInfoMap.put(name, columnInfo);
                     if (columnInfo.isPrimary()) {
-                        ObjectUtil.requireTrue(primaryColumnInfo == null, tableClass.getName() + " already exist primary Key");
-                        primaryColumnInfo = columnInfo;
+                        ObjectUtil.requireTrue(primColumnInfo == null, tableClass.getName() + " already exist primary Key");
+                        primColumnInfo = columnInfo;
                     }
                 } else {
                     JoinInfo joinInfo = getJoinInfo(table, field);
@@ -47,7 +48,7 @@ public class DefaultTableFactory implements TableFactory {
                 }
             }
         }
-        return new TableInfo(table, primaryColumnInfo, columnInfoMap, joinInfoMap, fieldMap);
+        return new TableInfo(table, primColumnInfo, columnInfoMap, joinInfoMap, fieldMap);
     }
 
     protected String getTable(Class<?> tableClass) {
@@ -58,8 +59,15 @@ public class DefaultTableFactory implements TableFactory {
         return table;
     }
 
-    protected boolean isPrimary(Field field) {
-        return field.isAnnotationPresent(Id.class);
+    protected Map<Class<?extends Annotation>,Annotation>annotationMap(Field field) {
+        Annotation[] annotations = field.getDeclaredAnnotations();
+        Map<Class<?extends Annotation>,Annotation>annotationMap=new HashMap();
+        if(!ObjectUtil.isNull(annotations)){
+            for(Annotation annotation:annotations){
+                annotationMap.put(annotation.getClass(),annotation);
+            }
+        }
+        return annotationMap;
     }
 
     protected ColumnInfo getColumnInfo(String table, Field field) {
@@ -67,7 +75,7 @@ public class DefaultTableFactory implements TableFactory {
         if (columnAnnotation == null)
             return null;
         String column = columnAnnotation.value();
-        return new ColumnInfo(table, column, field, isPrimary(field), columnAnnotation.jdbcType());
+        return new ColumnInfo(table, column, field, annotationMap(field), columnAnnotation.jdbcType());
     }
 
     protected JoinInfo getJoinInfo(String table, Field field) {

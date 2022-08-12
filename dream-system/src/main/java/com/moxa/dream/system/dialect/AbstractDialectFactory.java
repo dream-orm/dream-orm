@@ -1,6 +1,7 @@
 package com.moxa.dream.system.dialect;
 
 import com.moxa.dream.antlr.config.Assist;
+import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.expr.PackageExpr;
 import com.moxa.dream.antlr.expr.SqlExpr;
@@ -35,12 +36,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractDialectFactory implements DialectFactory {
-    private static final int SPLIT = 5;
     private int split;
     private ToSQL toSQL;
 
     public AbstractDialectFactory() {
-        this(SPLIT);
+        this(5);
     }
 
     public AbstractDialectFactory(int split) {
@@ -116,7 +116,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                     paramType = getParamType(configuration, scanInfo, paramScanInfoMap, paramInfo);
                     paramTypeMap.put(paramInfo.getParamName(), paramType);
                 }
-                mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler()));
+                mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler(),scanInfo.getCommand()));
             }
         }
         CacheKey uniqueKey = methodInfo.getSqlKey();
@@ -200,10 +200,12 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         }
     }
 
-    protected MappedParam getMappedParam(ColumnInfo columnInfo, Object paramValue, TypeHandler typeHandler) {
-        int jdbcType = Types.NULL;
+    protected MappedParam getMappedParam(ColumnInfo columnInfo, Object paramValue, TypeHandler typeHandler, Command command) {
+        int jdbcType;
         if (columnInfo != null) {
             jdbcType = columnInfo.getJdbcType();
+        }else{
+            jdbcType=Types.NULL;
         }
         return new MappedParam(jdbcType, paramValue, typeHandler);
     }

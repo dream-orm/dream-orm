@@ -70,10 +70,6 @@ public class MappedStatement {
         this.colType = colType;
     }
 
-    public Listener[] getListeners() {
-        return methodInfo.getListeners();
-    }
-
     public Class<? extends Collection> getRowType() {
         return rowType;
     }
@@ -88,10 +84,6 @@ public class MappedStatement {
 
     public CacheKey getSqlKey() {
         return methodInfo.getSqlKey();
-    }
-
-    public String getKeyProperty() {
-        return methodInfo.getKeyProperty();
     }
 
     public Map<String, ScanInvoker.TableScanInfo> getTableScanInfoMap() {

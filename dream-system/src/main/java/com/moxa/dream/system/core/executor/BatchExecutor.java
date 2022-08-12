@@ -12,7 +12,7 @@ public class BatchExecutor extends AbstractExecutor {
     }
 
     @Override
-    protected StatementHandler createStatementHandler() {
+    protected StatementHandler getStatementHandler() {
         return new BatchStatementHandler(new PrepareStatementHandler());
     }
 

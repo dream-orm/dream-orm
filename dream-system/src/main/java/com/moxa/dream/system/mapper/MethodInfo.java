@@ -26,9 +26,6 @@ public class MethodInfo {
     private PackageStatement statement;
     private CacheKey sqlKey;
     private Method method;
-    private Listener[] listeners;
-    private String keyProperty;
-
     private MethodInfo() {
 
     }
@@ -77,14 +74,6 @@ public class MethodInfo {
         return method;
     }
 
-    public Listener[] getListeners() {
-        return listeners;
-    }
-
-    public String getKeyProperty() {
-        return keyProperty;
-    }
-
     public String getId() {
         if (method == null)
             return "";
@@ -120,16 +109,6 @@ public class MethodInfo {
 
         public Builder colType(Class colType) {
             methodInfo.colType = colType;
-            return this;
-        }
-
-        public Builder listeners(Listener[] listeners) {
-            methodInfo.listeners = listeners;
-            return this;
-        }
-
-        public Builder keyProperty(String keyProperty) {
-            methodInfo.keyProperty = keyProperty;
             return this;
         }
 

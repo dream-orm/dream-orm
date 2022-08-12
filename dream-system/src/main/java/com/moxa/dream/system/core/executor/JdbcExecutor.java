@@ -12,7 +12,7 @@ public class JdbcExecutor extends AbstractExecutor {
     }
 
     @Override
-    public StatementHandler createStatementHandler() {
+    public StatementHandler getStatementHandler() {
         return new PrepareStatementHandler();
     }
 }

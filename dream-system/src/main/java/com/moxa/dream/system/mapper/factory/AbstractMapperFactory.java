@@ -57,8 +57,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     protected MethodInfo.Builder createMethodInfoBuilder(Configuration configuration, Class mapperClass, Method method) {
         Class<? extends Collection> rowType = getRowType(mapperClass, method);
         Class colType = getColType(mapperClass, method);
-        Listener[] listeners = getListeners(mapperClass, method);
-        String keyProperty = getKeyProperty(mapperClass, method);
         String[] paramNameList = getParamNameList(method);
         String sql = getSql(method);
         Integer timeOut = getTimeOut(method);
@@ -67,8 +65,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 .name(method.getName())
                 .rowType(rowType)
                 .colType(colType)
-                .listeners(listeners)
-                .keyProperty(keyProperty)
                 .paramNameList(paramNameList)
                 .sql(sql)
                 .timeOut(timeOut)
@@ -139,29 +135,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
             }
         }
         return colType;
-    }
-
-    protected Listener[] getListeners(Class mapperClass, Method method) {
-        Result resultAnnotation = method.getDeclaredAnnotation(Result.class);
-        if (resultAnnotation != null) {
-            Class<? extends Listener>[] listenerClasses = resultAnnotation.listeners();
-            if (!ObjectUtil.isNull(listenerClasses)) {
-                Listener[] listeners = new Listener[listenerClasses.length];
-                for (int i = 0; i < listenerClasses.length; i++) {
-                    listeners[i] = ReflectUtil.create(listenerClasses[i]);
-                }
-                return listeners;
-            }
-        }
-        return null;
-    }
-
-    protected String getKeyProperty(Class mapperClass, Method method) {
-        Result resultAnnotation = method.getDeclaredAnnotation(Result.class);
-        if (resultAnnotation != null) {
-            return resultAnnotation.keyProperty();
-        }
-        return null;
     }
 
     protected String[] getParamNameList(Method method) {

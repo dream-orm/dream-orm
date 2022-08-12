@@ -1,13 +1,13 @@
 package com.moxa.dream.system.core.executor;
 
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.core.executorhandler.*;
+import com.moxa.dream.system.core.executorhandler.DefaultExecutorHandler;
+import com.moxa.dream.system.core.executorhandler.ExecutorHandler;
 import com.moxa.dream.system.core.listener.*;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
-import com.moxa.dream.system.core.resultsethandler.DefaultResultSetHandler;
-import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.mapped.MappedStatement;
+import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.transaction.Transaction;
 import com.moxa.dream.util.common.ObjectUtil;
 
@@ -15,77 +15,134 @@ import java.sql.SQLException;
 
 public abstract class AbstractExecutor implements Executor {
     protected Transaction transaction;
-    protected Configuration configuration;
+    protected ExecutorHandler executorHandler;
     protected StatementHandler statementHandler;
-    protected ResultSetHandler resultSetHandler;
     protected ListenerFactory listenerFactory;
 
     public AbstractExecutor(Configuration configuration, boolean autoCommit) {
-        this.configuration = configuration;
         this.transaction = configuration.getTransaction(autoCommit);
         this.listenerFactory = configuration.getListenerFactory();
-        this.statementHandler = createStatementHandler();
-        this.resultSetHandler = createResultSetHandler();
+        this.statementHandler = getStatementHandler();
+        this.executorHandler = getExecutorHandler(configuration);
     }
 
     @Override
     public Object query(MappedStatement mappedStatement) throws SQLException {
-        QueryListener[] queryListeners = null;
         if (listenerFactory != null) {
-            queryListeners = listenerFactory.getQueryListener();
+            QueryListener[] queryListeners = listenerFactory.getQueryListener();
+            if (!ObjectUtil.isNull(queryListeners)) {
+                if (before(queryListeners, mappedStatement)) {
+                    try {
+                        Object result = executorHandler.query(statementHandler, transaction.getConnection(), mappedStatement, this);
+                        return afterReturn(queryListeners, result, mappedStatement);
+                    } catch (Exception e) {
+                        exception(queryListeners, e, mappedStatement);
+                        throw e;
+                    } finally {
+                        statementHandler.close();
+                    }
+                } else {
+                    return null;
+                }
+            }
         }
-        return doExecutor(queryListeners, mappedStatement, new QueryExecutorHandler(statementHandler, resultSetHandler, transaction.getConnection()));
+        try {
+            return executorHandler.query(statementHandler, transaction.getConnection(), mappedStatement, this);
+        } finally {
+            statementHandler.close();
+        }
     }
 
     @Override
     public Object update(MappedStatement mappedStatement) throws SQLException {
-        UpdateListener[] updateListeners = null;
         if (listenerFactory != null) {
-            updateListeners = listenerFactory.getUpdateListener();
+            UpdateListener[] updateListeners = listenerFactory.getUpdateListener();
+            if (!ObjectUtil.isNull(updateListeners)) {
+                if (before(updateListeners, mappedStatement)) {
+                    try {
+                        Object result = executorHandler.update(statementHandler, transaction.getConnection(), mappedStatement, this);
+                        return afterReturn(updateListeners, result, mappedStatement);
+                    } catch (Exception e) {
+                        exception(updateListeners, e, mappedStatement);
+                        throw e;
+                    } finally {
+                        statementHandler.close();
+                    }
+                } else {
+                    return null;
+                }
+            }
         }
-        return doExecutor(updateListeners, mappedStatement, new UpdateExecutorHandler(statementHandler, transaction.getConnection()));
+        try {
+            return executorHandler.update(statementHandler, transaction.getConnection(), mappedStatement, this);
+        } finally {
+            statementHandler.close();
+        }
     }
 
     @Override
     public Object insert(MappedStatement mappedStatement) throws SQLException {
-        InsertListener[] insertListeners = null;
         if (listenerFactory != null) {
-            insertListeners = listenerFactory.getInsertListener();
+            InsertListener[] insertListeners = listenerFactory.getInsertListener();
+            if (!ObjectUtil.isNull(insertListeners)) {
+                if (before(insertListeners, mappedStatement)) {
+                    try {
+                        Object result = executorHandler.insert(statementHandler, transaction.getConnection(), mappedStatement, this);
+                        return afterReturn(insertListeners, result, mappedStatement);
+                    } catch (Exception e) {
+                        exception(insertListeners, e, mappedStatement);
+                        throw e;
+                    } finally {
+                        statementHandler.close();
+                    }
+                } else {
+                    return null;
+                }
+            }
         }
-        return doExecutor(insertListeners, mappedStatement, new InsertExecutorHandler(statementHandler, transaction.getConnection()));
+        try {
+            return executorHandler.insert(statementHandler, transaction.getConnection(), mappedStatement, this);
+        } finally {
+            statementHandler.close();
+        }
     }
 
     @Override
     public Object delete(MappedStatement mappedStatement) throws SQLException {
-        DeleteListener[] deleteListeners = null;
         if (listenerFactory != null) {
-            deleteListeners = listenerFactory.getDeleteListener();
-        }
-        return doExecutor(deleteListeners, mappedStatement, new DeleteExecutorHandler(statementHandler, transaction.getConnection()));
-    }
-
-
-    protected Object doExecutor(Listener[] listeners, MappedStatement mappedStatement, ExecutorHandler executorHandler) throws SQLException {
-        if (before(listeners, mappedStatement)) {
-            Object result = null;
-            try {
-                result = executorHandler.execute(mappedStatement);
-            } catch (Exception e) {
-                exception(listeners, e, mappedStatement);
-                throw e;
-            } finally {
-                statementHandler.close();
+            DeleteListener[] deleteListeners = listenerFactory.getDeleteListener();
+            if (!ObjectUtil.isNull(deleteListeners)) {
+                if (before(deleteListeners, mappedStatement)) {
+                    try {
+                        Object result = executorHandler.delete(statementHandler, transaction.getConnection(), mappedStatement, this);
+                        return afterReturn(deleteListeners, result, mappedStatement);
+                    } catch (Exception e) {
+                        exception(deleteListeners, e, mappedStatement);
+                        throw e;
+                    } finally {
+                        statementHandler.close();
+                    }
+                } else {
+                    return null;
+                }
             }
-            return afterReturn(listeners, result, mappedStatement);
-        } else {
-            return null;
+        }
+        try {
+            return executorHandler.insert(statementHandler, transaction.getConnection(), mappedStatement, this);
+        } finally {
+            statementHandler.close();
         }
     }
 
-    protected abstract StatementHandler createStatementHandler();
+    protected abstract StatementHandler getStatementHandler();
 
-    protected ResultSetHandler createResultSetHandler() {
-        return new DefaultResultSetHandler(configuration, this);
+    protected ExecutorHandler getExecutorHandler(Configuration configuration) {
+        ExecutorHandler executorHandler = new DefaultExecutorHandler();
+        PluginFactory pluginFactory = configuration.getPluginFactory();
+        if (pluginFactory != null) {
+            executorHandler = (ExecutorHandler) pluginFactory.plugin(executorHandler);
+        }
+        return executorHandler;
     }
 
     @Override
@@ -110,34 +167,22 @@ public abstract class AbstractExecutor implements Executor {
 
     protected boolean before(Listener[] listeners, MappedStatement mappedStatement) {
         boolean success = true;
-        Listener[] tempListeners = mappedStatement.getListeners();
-        if (!ObjectUtil.isNull(tempListeners)) {
-            for (Listener listener : tempListeners) {
-                success = success & listener.before(mappedStatement);
-            }
-        }
-        if (!ObjectUtil.isNull(listeners)) {
-            for (Listener listener : listeners) {
-                success = success & listener.before(mappedStatement);
-            }
+        for (Listener listener : listeners) {
+            success = success & listener.before(mappedStatement,this);
         }
         return success;
     }
 
     protected Object afterReturn(Listener[] listeners, Object result, MappedStatement mappedStatement) {
-        if (!ObjectUtil.isNull(listeners)) {
-            for (Listener listener : listeners) {
-                result = listener.afterReturn(result, mappedStatement);
-            }
+        for (Listener listener : listeners) {
+            result = listener.afterReturn(result, mappedStatement,this);
         }
         return result;
     }
 
     protected void exception(Listener[] listeners, Exception e, MappedStatement mappedStatement) {
-        if (!ObjectUtil.isNull(listeners)) {
-            for (Listener listener : listeners) {
-                listener.exception(e, mappedStatement);
-            }
+        for (Listener listener : listeners) {
+            listener.exception(e, mappedStatement,this);
         }
     }
 }
