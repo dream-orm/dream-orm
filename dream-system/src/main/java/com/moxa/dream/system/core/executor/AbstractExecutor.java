@@ -209,12 +209,12 @@ public abstract class AbstractExecutor implements Executor {
     }
 
     protected void initActions(MappedStatement mappedStatement) {
-        Action[] beforeActionList = mappedStatement.getBeforeActionList();
-        if (!ObjectUtil.isNull(beforeActionList)) {
+        Action[] initActionList = mappedStatement.getInitActionList();
+        if (!ObjectUtil.isNull(initActionList)) {
             Object arg = mappedStatement.getArg();
             ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
             try {
-                for (Action action : beforeActionList) {
+                for (Action action : initActionList) {
                     action.doAction(this, paramWrapper);
                 }
             } catch (Exception e) {

@@ -1,26 +1,24 @@
 package com.moxa.dream.driver.xml.builder.mapper;
 
+import com.moxa.dream.antlr.config.Command;
+import com.moxa.dream.driver.action.MapperAction;
+import com.moxa.dream.driver.action.ServiceAction;
+import com.moxa.dream.driver.action.SqlAction;
 import com.moxa.dream.driver.xml.builder.XMLBuilder;
 import com.moxa.dream.driver.xml.moudle.XmlConstant;
 import com.moxa.dream.driver.xml.moudle.XmlHandler;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.mapper.EachInfo;
+import com.moxa.dream.system.mapper.Action;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.reflect.ReflectUtil;
 import org.xml.sax.Attributes;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MapperInfoBuilder extends XMLBuilder {
     private final Configuration configuration;
     private final Map<String, MethodInfo.Builder> builderMap;
-    private List<MethodInfo> resultList;
 
     public MapperInfoBuilder(Configuration configuration, XmlHandler workHandler, Map<String, MethodInfo.Builder> builderMap) {
         super(workHandler);
@@ -32,7 +30,6 @@ public class MapperInfoBuilder extends XMLBuilder {
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         switch (qName) {
             case XmlConstant.MAPPER:
-                resultList = new ArrayList<>();
                 break;
             case XmlConstant.METHOD:
                 MethodInfoBuilder methodInfoBuilder = new MethodInfoBuilder(workHandler);
@@ -64,46 +61,75 @@ public class MapperInfoBuilder extends XMLBuilder {
                 methodBuilder
                         .name(methodInfo.getName())
                         .timeOut(timeOut == null ? null : Integer.valueOf(timeOut));
-                SqlBuilder.Sql sql = methodInfo.getSql();
-                if (sql != null) {
-                    methodBuilder.sql(sql.getValue());
+                String sql = methodInfo.getValue();
+                if (sql != null && !sql.trim().equals("")) {
+                    methodBuilder.sql(sql);
                 }
-                EachListBuilder.EachList _eachList = methodInfo.getEachList();
-                if (_eachList != null) {
-                    List<EachBuilder.Each> eachList = _eachList.getEachList();
-                    if (!ObjectUtil.isNull(eachList)) {
-                        List<EachInfo> eachInfoList = new ArrayList<>(eachList.size());
-                        for (EachBuilder.Each each : eachList) {
-                            MethodRefBuilder.MethodRef methodRef = each.getMethodRef();
-                            String methodClassName = methodRef.getValue();
-                            int index = methodClassName.lastIndexOf(".");
-                            ObjectUtil.requireTrue(index > 0, methodClassName + " not class method name");
-                            Class type = ReflectUtil.loadClass(methodClassName.substring(0, index));
-                            String methodName = methodClassName.substring(index + 1);
-                            List<Method> methodList = ReflectUtil.findMethod(type)
-                                    .stream()
-                                    .filter(method -> method.getName().equals(methodName))
-                                    .collect(Collectors.toList());
-                            ObjectUtil.requireNonNull(methodList, methodClassName + " not exist");
-                            ObjectUtil.requireTrue(methodList.size() == 1, methodClassName + " must exist one");
-                            List<ArgBuilder.Arg> argList = each.getArgList();
-                            eachInfoList.add(new EachInfo(type, methodList.get(0), methodRef.getField(), getArgMap(argList)));
-                        }
-                        methodBuilder.eachInfoList(eachInfoList);
-                    }
+                InitBuilder.Init init = methodInfo.getInit();
+                LoopBuilder.Loop loop = methodInfo.getLoop();
+                DestroyBuilder.Destroy destroy = methodInfo.getDestroy();
+                if (init != null) {
+                    methodBuilder.initActionList(getActionList(init.getActionList()));
+                }
+                if (loop != null) {
+                    methodBuilder.initActionList(getActionList(loop.getActionList()));
+                }
+                if (destroy != null) {
+                    methodBuilder.initActionList(getActionList(destroy.getActionList()));
                 }
                 break;
         }
     }
 
-    Map<String, String> getArgMap(List<ArgBuilder.Arg> argList) {
-        Map<String, String> argMap = null;
-        if (!ObjectUtil.isNull(argList)) {
-            argMap = new HashMap<>();
-            for (ArgBuilder.Arg arg : argList) {
-                argMap.put(arg.getName(), arg.getValue());
+    public Action[] getActionList(List<Object> actionList) {
+        Action[] actions = null;
+        if (!ObjectUtil.isNull(actionList)) {
+            actions = new Action[actionList.size()];
+            for (int i = 0; i < actionList.size(); i++) {
+                Object action = actionList.get(i);
+                if (action instanceof SqlActionBuilder.SqlAction) {
+                    SqlActionBuilder.SqlAction sqlAction = (SqlActionBuilder.SqlAction) action;
+                    Command command = getCommand(sqlAction.getCommand());
+                    boolean antlr = true;
+                    if (!ObjectUtil.isNull(sqlAction.getAntlr())) {
+                        antlr = Boolean.valueOf(sqlAction.getAntlr());
+                    }
+                    String sql = sqlAction.getValue();
+                    if (!antlr) {
+                        sql = "@(" + sql + ")";
+                    }
+                    actions[i] = new SqlAction(configuration, sql, sqlAction.getProperty(), command);
+                } else if (action instanceof MapperActionBuilder.MapperAction) {
+                    MapperActionBuilder.MapperAction mapperAction = (MapperActionBuilder.MapperAction) action;
+                    actions[i] = new MapperAction(configuration, mapperAction.getMethodRef(), mapperAction.getProperty());
+                } else {
+                    ServiceActionBuilder.ServiceAction serviceAction = (ServiceActionBuilder.ServiceAction) action;
+                    actions[i] = new ServiceAction(serviceAction.getProperty(), serviceAction.getMethodRef());
+                }
             }
         }
-        return argMap;
+        return actions;
     }
+
+    private Command getCommand(String cmd) {
+        Command command = Command.NONE;
+        if (!ObjectUtil.isNull(cmd)) {
+            switch (cmd.toLowerCase()) {
+                case "query":
+                    command = Command.QUERY;
+                    break;
+                case "update":
+                    command = Command.UPDATE;
+                    break;
+                case "insert":
+                    command = Command.INSERT;
+                    break;
+                case "delete":
+                    command = Command.DELETE;
+                    break;
+            }
+        }
+        return command;
+    }
+
 }

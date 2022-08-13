@@ -20,9 +20,8 @@ public class MapperAction implements Action {
     private Method method;
     private String property;
     private Configuration configuration;
-    private Command command;
 
-    public MapperAction(Configuration configuration, String property, String classMethodName, Command command) {
+    public MapperAction(Configuration configuration, String property, String classMethodName) {
         int index = classMethodName.lastIndexOf(".");
         ObjectUtil.requireTrue(index > 0, classMethodName + " not class method name");
         Class type = ReflectUtil.loadClass(classMethodName.substring(0, index));
@@ -38,21 +37,11 @@ public class MapperAction implements Action {
         this.type = type;
         this.method = method;
         this.property = property;
-        this.command = command;
     }
 
     @Override
     public void doAction(Executor executor, Object arg) throws Exception {
-        SqlSession sqlSession = new DefaultSqlSession(configuration, executor) {
-            @Override
-            protected Command getCommand(MappedStatement mappedStatement) {
-                Command command = mappedStatement.getCommand();
-                if (command == Command.NONE && MapperAction.this.command != null) {
-                    command = MapperAction.this.command;
-                }
-                return command;
-            }
-        };
+        SqlSession sqlSession = new DefaultSqlSession(configuration, executor);
         Object mapper = sqlSession.getMapper(type);
         Object result = method.invoke(mapper, arg);
         if (!ObjectUtil.isNull(property)) {

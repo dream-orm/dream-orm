@@ -19,13 +19,17 @@ public class MethodInfoBuilder extends XMLBuilder {
             case XmlConstant.METHOD:
                 methodInfo = XmlUtil.applyAttributes(MethodInfo.class, attributes);
                 break;
-            case XmlConstant.SQL:
-                SqlBuilder sqlXmlBuilder = new SqlBuilder(workHandler);
-                sqlXmlBuilder.startElement(uri, localName, qName, attributes);
+            case XmlConstant.INIT:
+                InitBuilder initBuilder=new InitBuilder(workHandler);
+                initBuilder.startElement(uri, localName, qName, attributes);
                 break;
-            case XmlConstant.EACHLIST:
-                EachListBuilder unionsBuilder = new EachListBuilder(workHandler);
-                unionsBuilder.startElement(uri, localName, qName, attributes);
+            case XmlConstant.LOOP:
+                LoopBuilder loopBuilder=new LoopBuilder(workHandler);
+                loopBuilder.startElement(uri, localName, qName, attributes);
+                break;
+            case XmlConstant.DESTROY:
+                DestroyBuilder destroyBuilder=new DestroyBuilder(workHandler);
+                destroyBuilder.startElement(uri, localName, qName, attributes);
                 break;
             default:
                 throwXmlException(uri, localName, qName, attributes, XmlConstant.METHOD);
@@ -34,6 +38,7 @@ public class MethodInfoBuilder extends XMLBuilder {
 
     @Override
     public void characters(String s) {
+        methodInfo.value= methodInfo.value+s;
     }
 
     @Override
@@ -44,13 +49,14 @@ public class MethodInfoBuilder extends XMLBuilder {
     @Override
     public void builder(String uri, String localName, String qName, Object obj) {
         switch (qName) {
-            case XmlConstant.SQL:
-                SqlBuilder.Sql sql = (SqlBuilder.Sql) obj;
-                methodInfo.setSql(sql);
+            case XmlConstant.INIT:
+                methodInfo.init=(InitBuilder.Init) obj;
                 break;
-            case XmlConstant.EACHLIST:
-                EachListBuilder.EachList eachList = (EachListBuilder.EachList) obj;
-                methodInfo.setEachList(eachList);
+            case XmlConstant.LOOP:
+                methodInfo.loop=(LoopBuilder.Loop) obj;
+                break;
+            case XmlConstant.DESTROY:
+                methodInfo.destroy=(DestroyBuilder.Destroy) obj;
                 break;
         }
     }
@@ -58,9 +64,12 @@ public class MethodInfoBuilder extends XMLBuilder {
     static class MethodInfo {
         private String name;
         private String timeOut;
-        private SqlBuilder.Sql sql;
-        private EachListBuilder.EachList eachList;
 
+        private String value="";
+
+        private InitBuilder.Init init;
+        private LoopBuilder.Loop loop;
+        private DestroyBuilder.Destroy destroy;
         public String getName() {
             return name;
         }
@@ -73,20 +82,20 @@ public class MethodInfoBuilder extends XMLBuilder {
             return timeOut;
         }
 
-        public SqlBuilder.Sql getSql() {
-            return sql;
+        public String getValue() {
+            return value;
         }
 
-        public void setSql(SqlBuilder.Sql sql) {
-            this.sql = sql;
+        public InitBuilder.Init getInit() {
+            return init;
         }
 
-        public EachListBuilder.EachList getEachList() {
-            return eachList;
+        public LoopBuilder.Loop getLoop() {
+            return loop;
         }
 
-        public void setEachList(EachListBuilder.EachList eachList) {
-            this.eachList = eachList;
+        public DestroyBuilder.Destroy getDestroy() {
+            return destroy;
         }
     }
 }

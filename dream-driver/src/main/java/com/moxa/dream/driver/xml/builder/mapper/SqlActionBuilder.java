@@ -6,57 +6,58 @@ import com.moxa.dream.driver.xml.moudle.XmlHandler;
 import com.moxa.dream.driver.xml.util.XmlUtil;
 import org.xml.sax.Attributes;
 
-public class ArgBuilder extends XMLBuilder {
-    private Arg arg;
+public class SqlActionBuilder extends XMLBuilder {
+    private SqlAction sqlAction;
 
-    public ArgBuilder(XmlHandler workHandler) {
+    public SqlActionBuilder(XmlHandler workHandler) {
         super(workHandler);
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         switch (qName) {
-            case XmlConstant.ARG:
-                arg = XmlUtil.applyAttributes(Arg.class, attributes);
+            case XmlConstant.SQLACTION:
+                sqlAction=XmlUtil.applyAttributes(SqlAction.class,attributes);
                 break;
             default:
-                throwXmlException(uri, localName, qName, attributes, XmlConstant.ARG);
+                throwXmlException(uri, localName, qName, attributes, XmlConstant.SQLACTION);
         }
     }
 
     @Override
     public void characters(String s) {
-
+        sqlAction.value= sqlAction.value+s;
     }
 
     @Override
     public Object endElement(String uri, String localName, String qName) {
-        return arg;
+        return sqlAction;
     }
 
     @Override
     public void builder(String uri, String localName, String qName, Object obj) {
-
     }
 
-    static class Arg {
-        private String name;
-        private String value;
+    static class SqlAction {
+        private String property;
+        private String antlr;
+        private String command;
 
-        public String getName() {
-            return name;
+        private String value="";
+        public String getProperty() {
+            return property;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public String getAntlr() {
+            return antlr;
+        }
+
+        public String getCommand() {
+            return command;
         }
 
         public String getValue() {
             return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
         }
     }
 }

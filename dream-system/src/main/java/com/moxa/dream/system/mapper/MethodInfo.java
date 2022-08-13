@@ -21,7 +21,7 @@ public class MethodInfo {
     private String sql;
     private Integer timeOut;
 
-    private Action[] beforeActionList;
+    private Action[] initActionList;
     private Action[] loopActionList;
     private Action[] destroyActionList;
     private List<EachInfo> eachInfoList;
@@ -62,8 +62,8 @@ public class MethodInfo {
         return eachInfoList;
     }
 
-    public Action[] getBeforeActionList() {
-        return beforeActionList;
+    public Action[] getInitActionList() {
+        return initActionList;
     }
 
     public Action[] getLoopActionList() {
@@ -143,8 +143,18 @@ public class MethodInfo {
             return this;
         }
 
-        public Builder eachInfoList(List<EachInfo> eachInfoList) {
-            methodInfo.eachInfoList = eachInfoList;
+        public Builder initActionList(Action[] actionList) {
+            methodInfo.initActionList = actionList;
+            return this;
+        }
+
+        public Builder loopActionList(Action[] actionList) {
+            methodInfo.loopActionList = actionList;
+            return this;
+        }
+
+        public Builder destroyActionList(Action[] actionList) {
+            methodInfo.destroyActionList = actionList;
             return this;
         }
 

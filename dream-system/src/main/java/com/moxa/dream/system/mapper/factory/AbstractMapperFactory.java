@@ -5,7 +5,7 @@ import com.moxa.dream.system.annotation.Param;
 import com.moxa.dream.system.annotation.Result;
 import com.moxa.dream.system.annotation.Sql;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.mapper.EachInfo;
+import com.moxa.dream.system.mapper.Action;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.mapper.handler.MapperHandler;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -59,7 +59,9 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         String[] paramNameList = getParamNameList(method);
         String sql = getSql(method);
         Integer timeOut = getTimeOut(method);
-        List<EachInfo> eachInfoList = getEachInfoList(method);
+        Action[] initActionList = getInitActionList(method);
+        Action[] loopActionList = getLoopActionList(method);
+        Action[] destroyActionList = getDestroyActionList(method);
         MethodInfo.Builder builder = new MethodInfo.Builder(configuration)
                 .name(method.getName())
                 .rowType(rowType)
@@ -67,12 +69,22 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 .paramNameList(paramNameList)
                 .sql(sql)
                 .timeOut(timeOut)
-                .eachInfoList(eachInfoList)
+                .initActionList(initActionList)
+                .loopActionList(loopActionList)
+                .destroyActionList(destroyActionList)
                 .method(method);
         return builder;
     }
 
-    protected List<EachInfo> getEachInfoList(Method method) {
+    protected Action[] getInitActionList(Method method) {
+        return null;
+    }
+
+    protected Action[] getLoopActionList(Method method) {
+        return null;
+    }
+
+    protected Action[] getDestroyActionList(Method method) {
         return null;
     }
 

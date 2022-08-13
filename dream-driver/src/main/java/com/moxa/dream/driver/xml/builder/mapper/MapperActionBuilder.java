@@ -6,21 +6,21 @@ import com.moxa.dream.driver.xml.moudle.XmlHandler;
 import com.moxa.dream.driver.xml.util.XmlUtil;
 import org.xml.sax.Attributes;
 
-public class MethodRefBuilder extends XMLBuilder {
-    private MethodRef methodRef;
+public class MapperActionBuilder extends XMLBuilder {
+    private MapperAction mapperAction;
 
-    public MethodRefBuilder(XmlHandler workHandler) {
+    public MapperActionBuilder(XmlHandler workHandler) {
         super(workHandler);
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         switch (qName) {
-            case XmlConstant.METHODREF:
-                methodRef = XmlUtil.applyAttributes(MethodRef.class, attributes);
+            case XmlConstant.MAPPERACTION:
+                mapperAction = XmlUtil.applyAttributes(MapperAction.class, attributes);
                 break;
             default:
-                throwXmlException(uri, localName, qName, attributes, XmlConstant.METHODREF);
+                throwXmlException(uri, localName, qName, attributes, XmlConstant.MAPPERACTION);
         }
     }
 
@@ -30,24 +30,23 @@ public class MethodRefBuilder extends XMLBuilder {
 
     @Override
     public Object endElement(String uri, String localName, String qName) {
-        return methodRef;
+        return mapperAction;
     }
 
     @Override
     public void builder(String uri, String localName, String qName, Object obj) {
-
     }
 
-    static class MethodRef {
-        private String value;
-        private String field;
+    static class MapperAction {
+        private String property;
+        private String methodRef;
 
-        public String getValue() {
-            return value;
+        public String getProperty() {
+            return property;
         }
 
-        public String getField() {
-            return field;
+        public String getMethodRef() {
+            return methodRef;
         }
     }
 }

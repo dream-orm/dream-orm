@@ -111,8 +111,8 @@ public class MappedStatement {
         return eachInfoList;
     }
 
-    public Action[] getBeforeActionList() {
-        return methodInfo.getBeforeActionList();
+    public Action[] getInitActionList() {
+        return methodInfo.getInitActionList();
     }
 
     public Action[] getLoopActionList() {

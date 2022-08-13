@@ -19,10 +19,10 @@ public class XmlConstant {
     public static final String PROPERTY = "property";
     public static final String MAPPER = "mapper";
     public static final String METHOD = "method";
-    public static final String SQL = "sql";
-    public static final String EACHLIST = "eachList";
-    public static final String EACH = "each";
-    public static final String METHODREF = "methodRef";
-    public static final String ARGLIST = "argList";
-    public static final String ARG = "arg";
+    public static final String INIT = "init";
+    public static final String LOOP = "loop";
+    public static final String DESTROY = "destroy";
+    public static final String SQLACTION = "sqlAction";
+    public static final String MAPPERACTION = "mapperAction";
+    public static final String SERVICERACTION = "serviceAction";
 }
