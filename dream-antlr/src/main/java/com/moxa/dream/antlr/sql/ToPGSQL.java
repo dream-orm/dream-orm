@@ -327,6 +327,10 @@ public class ToPGSQL extends ToPubSQL {
         return "FLOOR(" + s1 + "*POWER(10," + s2 + "))*POWER(10,-" + s2 + ")";
     }
 
+    @Override
+    protected String toString(FunctionStatement.UnixTimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+        return "EXTRACT(epoch FROM "+toStr(statement.getParamsStatement(),assist,invokerList)+")::INTEGER";
+    }
 
     @Override
     protected String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
@@ -379,10 +383,6 @@ public class ToPGSQL extends ToPubSQL {
         return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'mm')) AS INTEGER)";
     }
 
-    @Override
-    protected String toString(FunctionStatement.DateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        throw new RuntimeException("尚未完成DATE");
-    }
 
     @Override
     protected String toString(FunctionStatement.QuarterStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {

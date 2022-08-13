@@ -4,7 +4,6 @@ import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.smt.UpdateStatement;
 
 public class UpdateExpr extends SqlExpr {
@@ -24,8 +23,8 @@ public class UpdateExpr extends SqlExpr {
 
     @Override
     protected Statement exprLetter(ExprInfo exprInfo) {
-        push();
-        updateStatement.setTable(new SymbolStatement.LetterStatement(exprInfo.getInfo()));
+        AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader);
+        updateStatement.setTable(aliasColumnExpr.expr());
         setExprTypes(ExprType.SET);
         return expr();
     }
