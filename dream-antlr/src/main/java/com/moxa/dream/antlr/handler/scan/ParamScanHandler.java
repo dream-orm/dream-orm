@@ -66,7 +66,7 @@ public class ParamScanHandler extends AbstractHandler {
                     Statement left = conditionStatement.getLeft();
                     String database = null;
                     String table = null;
-                    String column=null;
+                    String column = null;
                     if (left instanceof ListColumnStatement) {
                         Statement[] columnList = ((ListColumnStatement) left).getColumnList();
                         column = ((SymbolStatement) columnList[columnList.length - 1]).getValue();
@@ -74,10 +74,10 @@ public class ParamScanHandler extends AbstractHandler {
                         if (columnList.length >= 3) {
                             database = ((SymbolStatement) columnList[columnList.length - 3]).getValue();
                         }
-                    } else if(left instanceof SymbolStatement){
+                    } else if (left instanceof SymbolStatement) {
                         column = ((SymbolStatement) left).getValue();
                     }
-                    if(column!=null){
+                    if (column != null) {
                         scanInfo.add(new ScanInvoker.ParamScanInfo(database, table, column, field));
                     }
                 }
@@ -131,7 +131,8 @@ public class ParamScanHandler extends AbstractHandler {
 
         class ValuesHandler extends AbstractHandler {
             private InsertHandler insertHandler;
-            private ToSQL toNativeSQL=new ToNativeSQL();
+            private ToSQL toNativeSQL = new ToNativeSQL();
+
             public ValuesHandler(InsertHandler insertHandler) {
                 this.insertHandler = insertHandler;
             }
@@ -143,7 +144,7 @@ public class ParamScanHandler extends AbstractHandler {
                     Statement[] columnList = ((ListColumnStatement) ((BraceStatement) ((ListColumnStatement) valuesStatement.getStatement()).getColumnList()[0]).getStatement()).getColumnList();
                     for (int i = 0; i < columnList.length; i++) {
                         if (InvokerUtil.is$(columnList[i])) {
-                            String field=toNativeSQL.toStr(((InvokerStatement)columnList[i]).getParamStatement(),null,null);
+                            String field = toNativeSQL.toStr(((InvokerStatement) columnList[i]).getParamStatement(), null, null);
                             scanInfo.add(new ScanInvoker.ParamScanInfo(null, table, insertHandler.columnList.get(i), field));
                         }
                     }

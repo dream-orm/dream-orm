@@ -12,49 +12,82 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="method">
-        <xs:complexType>
+        <xs:complexType mixed="true">
             <xs:sequence>
-                <xs:element name="sql"/>
                 <xs:choice minOccurs="0" maxOccurs="1">
-                    <xs:element ref="eachList"/>
+                    <xs:element ref="init"/>
+                </xs:choice>
+                <xs:choice minOccurs="0" maxOccurs="1">
+                    <xs:element ref="loop"/>
+                </xs:choice>
+                <xs:choice minOccurs="0" maxOccurs="1">
+                    <xs:element ref="destroy"/>
                 </xs:choice>
             </xs:sequence>
             <xs:attribute name="name" use="required"/>
             <xs:attribute name="timeOut"/>
         </xs:complexType>
     </xs:element>
-    <xs:element name="methodRef">
-        <xs:complexType>
-            <xs:attribute name="field"/>
-            <xs:attribute name="value" use="required"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="eachList">
+    <xs:element name="init">
         <xs:complexType>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="each"/>
+                <xs:element ref="sqlAction"/>
+                <xs:element ref="mapperAction"/>
+                <xs:element ref="serviceAction"/>
             </xs:choice>
         </xs:complexType>
     </xs:element>
-    <xs:element name="each">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="methodRef" minOccurs="0"/>
-                <xs:element ref="argList" minOccurs="0"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="argList">
+    <xs:element name="loop">
         <xs:complexType>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="arg"/>
+                <xs:element ref="sqlAction"/>
+                <xs:element ref="mapperAction"/>
+                <xs:element ref="serviceAction"/>
             </xs:choice>
         </xs:complexType>
     </xs:element>
-    <xs:element name="arg">
+    <xs:element name="destroy">
         <xs:complexType>
-            <xs:attribute name="name" use="required"/>
-            <xs:attribute name="value" use="required"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="sqlAction"/>
+                <xs:element ref="mapperAction"/>
+                <xs:element ref="serviceAction"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="sqlAction">
+        <xs:complexType mixed="true">
+            <xs:attribute name="property"></xs:attribute>
+            <xs:attribute name="antlr">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="true"></xs:enumeration>
+                        <xs:enumeration value="false"></xs:enumeration>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="command">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="query"></xs:enumeration>
+                        <xs:enumeration value="update"></xs:enumeration>
+                        <xs:enumeration value="insert"></xs:enumeration>
+                        <xs:enumeration value="delete"></xs:enumeration>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="mapperAction">
+        <xs:complexType>
+            <xs:attribute name="property"></xs:attribute>
+            <xs:attribute name="methodRef"></xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="serviceAction">
+        <xs:complexType>
+            <xs:attribute name="property"></xs:attribute>
+            <xs:attribute name="methodRef"></xs:attribute>
         </xs:complexType>
     </xs:element>
 </xs:schema>

@@ -116,7 +116,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                     paramType = getParamType(configuration, scanInfo, paramScanInfoMap, paramInfo);
                     paramTypeMap.put(paramInfo.getParamName(), paramType);
                 }
-                mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler(),scanInfo.getCommand()));
+                mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler(), scanInfo.getCommand()));
             }
         }
         CacheKey uniqueKey = methodInfo.getSqlKey();
@@ -204,8 +204,8 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         int jdbcType;
         if (columnInfo != null) {
             jdbcType = columnInfo.getJdbcType();
-        }else{
-            jdbcType=Types.NULL;
+        } else {
+            jdbcType = Types.NULL;
         }
         return new MappedParam(jdbcType, paramValue, typeHandler);
     }

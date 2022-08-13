@@ -22,7 +22,7 @@ public class AliasColumnExpr extends HelperExpr {
     @Override
     public Statement exprHelp(Statement statement) {
         aliasStatement.setColumn(statement);
-        setExprTypes(ExprType.LETTER, ExprType.SINGLE_MARK, ExprType.STR,ExprType.JAVA_STR,ExprType.AS, ExprType.NIL);
+        setExprTypes(ExprType.LETTER, ExprType.SINGLE_MARK, ExprType.STR, ExprType.JAVA_STR, ExprType.AS, ExprType.NIL);
         return expr();
     }
 
@@ -45,8 +45,9 @@ public class AliasColumnExpr extends HelperExpr {
     protected Statement exprJavaStr(ExprInfo exprInfo) {
         return exprAlias(exprInfo);
     }
-    protected Statement exprAlias(ExprInfo exprInfo){
-        SymbolExpr symbolExpr=new SymbolExpr(exprReader);
+
+    protected Statement exprAlias(ExprInfo exprInfo) {
+        SymbolExpr symbolExpr = new SymbolExpr(exprReader);
         aliasStatement.setAlias(symbolExpr.expr());
         setExprTypes(ExprType.NIL);
         return expr();
@@ -64,7 +65,7 @@ public class AliasColumnExpr extends HelperExpr {
     protected Statement exprAs(ExprInfo exprInfo) {
         push();
         aliasStatement.setShowAlias(true);
-        setExprTypes(ExprType.LETTER, ExprType.SINGLE_MARK, ExprType.STR,ExprType.JAVA_STR);
+        setExprTypes(ExprType.LETTER, ExprType.SINGLE_MARK, ExprType.STR, ExprType.JAVA_STR);
         return expr();
     }
 

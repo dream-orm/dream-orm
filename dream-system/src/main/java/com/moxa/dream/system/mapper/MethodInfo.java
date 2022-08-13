@@ -3,7 +3,6 @@ package com.moxa.dream.system.mapper;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 
@@ -21,11 +20,16 @@ public class MethodInfo {
     private Class colType;
     private String sql;
     private Integer timeOut;
+
+    private Action[] beforeActionList;
+    private Action[] loopActionList;
+    private Action[] destroyActionList;
     private List<EachInfo> eachInfoList;
     private String[] paramNameList;
     private PackageStatement statement;
     private CacheKey sqlKey;
     private Method method;
+
     private MethodInfo() {
 
     }
@@ -56,6 +60,18 @@ public class MethodInfo {
 
     public List<EachInfo> getEachInfoList() {
         return eachInfoList;
+    }
+
+    public Action[] getBeforeActionList() {
+        return beforeActionList;
+    }
+
+    public Action[] getLoopActionList() {
+        return loopActionList;
+    }
+
+    public Action[] getDestroyActionList() {
+        return destroyActionList;
     }
 
     public String[] getParamNameList() {

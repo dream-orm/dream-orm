@@ -60,7 +60,7 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "\"" +statement.getValue()+ "\"";
+        return "\"" + statement.getValue() + "\"";
     }
 
     @Override
@@ -329,7 +329,7 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.UnixTimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "EXTRACT(epoch FROM "+toStr(statement.getParamsStatement(),assist,invokerList)+")::INTEGER";
+        return "EXTRACT(epoch FROM " + toStr(statement.getParamsStatement(), assist, invokerList) + ")::INTEGER";
     }
 
     @Override

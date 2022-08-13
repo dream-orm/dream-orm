@@ -9,7 +9,6 @@ import com.moxa.dream.antlr.smt.MyFunctionStatement;
 import com.moxa.dream.antlr.util.ExprUtil;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Stack;
 
@@ -253,10 +252,10 @@ public class ExprReader extends StringReader {
         int len = read(chars, 0, count);
         String info = new String(chars, 0, len);
         ExprType exprType = ExprUtil.getExprTypeInLetter(info);
-        if(ExprType.LETTER!=exprType&&!ExprUtil.isLBrace(c)&& !Arrays.asList(Constant.KEYWORD).contains(exprType)){
-            exprType=ExprType.LETTER;
+        if (ExprType.LETTER != exprType && !ExprUtil.isLBrace(c) && !Arrays.asList(Constant.KEYWORD).contains(exprType)) {
+            exprType = ExprType.LETTER;
         }
-        if(ExprUtil.isLBrace(c) && myFunctionFactory != null) {
+        if (ExprUtil.isLBrace(c) && myFunctionFactory != null) {
             MyFunctionStatement myFunctionStatement = myFunctionFactory.create(info);
             if (myFunctionStatement != null) {
                 myFunctionStatement.setFunctionName(info.toUpperCase(Locale.ENGLISH));
@@ -297,6 +296,7 @@ public class ExprReader extends StringReader {
         String info = new String(chars, 0, len);
         return new ExprInfo(ExprType.JAVA_STR, info, getStart(), getEnd());
     }
+
     private ExprInfo pushSingleMark() {
         mark();
         skip(1);
@@ -312,6 +312,7 @@ public class ExprReader extends StringReader {
         String info = new String(chars, 0, len);
         return new ExprInfo(ExprType.SINGLE_MARK, info, getStart(), getEnd());
     }
+
     public ExprInfo pushSkip() {
         mark();
         int c, count = 1;

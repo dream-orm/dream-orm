@@ -24,6 +24,7 @@ public class ExprUtil {
     public static boolean isSingleMark(int c) {
         return c == 96;
     }
+
     public static boolean isNumber(int c) {
         return 48 <= c && c <= 57;
     }

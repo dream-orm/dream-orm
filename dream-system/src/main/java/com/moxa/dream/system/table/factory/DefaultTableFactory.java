@@ -2,7 +2,6 @@ package com.moxa.dream.system.table.factory;
 
 
 import com.moxa.dream.system.annotation.Column;
-import com.moxa.dream.system.annotation.Id;
 import com.moxa.dream.system.annotation.Join;
 import com.moxa.dream.system.annotation.Table;
 import com.moxa.dream.system.table.ColumnInfo;
@@ -59,12 +58,12 @@ public class DefaultTableFactory implements TableFactory {
         return table;
     }
 
-    protected Map<Class<?extends Annotation>,Annotation>annotationMap(Field field) {
+    protected Map<Class<? extends Annotation>, Annotation> annotationMap(Field field) {
         Annotation[] annotations = field.getDeclaredAnnotations();
-        Map<Class<?extends Annotation>,Annotation>annotationMap=new HashMap();
-        if(!ObjectUtil.isNull(annotations)){
-            for(Annotation annotation:annotations){
-                annotationMap.put(annotation.getClass(),annotation);
+        Map<Class<? extends Annotation>, Annotation> annotationMap = new HashMap();
+        if (!ObjectUtil.isNull(annotations)) {
+            for (Annotation annotation : annotations) {
+                annotationMap.put(annotation.getClass(), annotation);
             }
         }
         return annotationMap;

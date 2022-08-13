@@ -5,7 +5,6 @@ import com.moxa.dream.system.annotation.Param;
 import com.moxa.dream.system.annotation.Result;
 import com.moxa.dream.system.annotation.Sql;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.mapper.EachInfo;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.mapper.handler.MapperHandler;

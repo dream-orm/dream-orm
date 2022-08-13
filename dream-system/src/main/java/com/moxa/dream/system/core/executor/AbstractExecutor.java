@@ -7,9 +7,11 @@ import com.moxa.dream.system.core.listener.*;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.mapped.MappedStatement;
+import com.moxa.dream.system.mapper.Action;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.transaction.Transaction;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.sql.SQLException;
 
@@ -31,12 +33,14 @@ public abstract class AbstractExecutor implements Executor {
         if (listenerFactory != null) {
             QueryListener[] queryListeners = listenerFactory.getQueryListener();
             if (!ObjectUtil.isNull(queryListeners)) {
-                if (before(queryListeners, mappedStatement)) {
+                if (beforeListeners(queryListeners, mappedStatement)) {
                     try {
+                        initActions(mappedStatement);
                         Object result = executorHandler.query(statementHandler, transaction.getConnection(), mappedStatement, this);
-                        return afterReturn(queryListeners, result, mappedStatement);
+                        destroyActions(mappedStatement);
+                        return afterReturnListeners(queryListeners, result, mappedStatement);
                     } catch (Exception e) {
-                        exception(queryListeners, e, mappedStatement);
+                        exceptionListeners(queryListeners, e, mappedStatement);
                         throw e;
                     } finally {
                         statementHandler.close();
@@ -47,7 +51,10 @@ public abstract class AbstractExecutor implements Executor {
             }
         }
         try {
-            return executorHandler.query(statementHandler, transaction.getConnection(), mappedStatement, this);
+            initActions(mappedStatement);
+            Object result = executorHandler.query(statementHandler, transaction.getConnection(), mappedStatement, this);
+            destroyActions(mappedStatement);
+            return result;
         } finally {
             statementHandler.close();
         }
@@ -58,12 +65,14 @@ public abstract class AbstractExecutor implements Executor {
         if (listenerFactory != null) {
             UpdateListener[] updateListeners = listenerFactory.getUpdateListener();
             if (!ObjectUtil.isNull(updateListeners)) {
-                if (before(updateListeners, mappedStatement)) {
+                if (beforeListeners(updateListeners, mappedStatement)) {
                     try {
+                        initActions(mappedStatement);
                         Object result = executorHandler.update(statementHandler, transaction.getConnection(), mappedStatement, this);
-                        return afterReturn(updateListeners, result, mappedStatement);
+                        destroyActions(mappedStatement);
+                        return afterReturnListeners(updateListeners, result, mappedStatement);
                     } catch (Exception e) {
-                        exception(updateListeners, e, mappedStatement);
+                        exceptionListeners(updateListeners, e, mappedStatement);
                         throw e;
                     } finally {
                         statementHandler.close();
@@ -74,7 +83,10 @@ public abstract class AbstractExecutor implements Executor {
             }
         }
         try {
-            return executorHandler.update(statementHandler, transaction.getConnection(), mappedStatement, this);
+            initActions(mappedStatement);
+            Object result = executorHandler.update(statementHandler, transaction.getConnection(), mappedStatement, this);
+            destroyActions(mappedStatement);
+            return result;
         } finally {
             statementHandler.close();
         }
@@ -85,12 +97,14 @@ public abstract class AbstractExecutor implements Executor {
         if (listenerFactory != null) {
             InsertListener[] insertListeners = listenerFactory.getInsertListener();
             if (!ObjectUtil.isNull(insertListeners)) {
-                if (before(insertListeners, mappedStatement)) {
+                if (beforeListeners(insertListeners, mappedStatement)) {
                     try {
+                        initActions(mappedStatement);
                         Object result = executorHandler.insert(statementHandler, transaction.getConnection(), mappedStatement, this);
-                        return afterReturn(insertListeners, result, mappedStatement);
+                        destroyActions(mappedStatement);
+                        return afterReturnListeners(insertListeners, result, mappedStatement);
                     } catch (Exception e) {
-                        exception(insertListeners, e, mappedStatement);
+                        exceptionListeners(insertListeners, e, mappedStatement);
                         throw e;
                     } finally {
                         statementHandler.close();
@@ -101,7 +115,10 @@ public abstract class AbstractExecutor implements Executor {
             }
         }
         try {
-            return executorHandler.insert(statementHandler, transaction.getConnection(), mappedStatement, this);
+            initActions(mappedStatement);
+            Object result = executorHandler.insert(statementHandler, transaction.getConnection(), mappedStatement, this);
+            destroyActions(mappedStatement);
+            return result;
         } finally {
             statementHandler.close();
         }
@@ -112,12 +129,14 @@ public abstract class AbstractExecutor implements Executor {
         if (listenerFactory != null) {
             DeleteListener[] deleteListeners = listenerFactory.getDeleteListener();
             if (!ObjectUtil.isNull(deleteListeners)) {
-                if (before(deleteListeners, mappedStatement)) {
+                if (beforeListeners(deleteListeners, mappedStatement)) {
                     try {
+                        initActions(mappedStatement);
                         Object result = executorHandler.delete(statementHandler, transaction.getConnection(), mappedStatement, this);
-                        return afterReturn(deleteListeners, result, mappedStatement);
+                        destroyActions(mappedStatement);
+                        return afterReturnListeners(deleteListeners, result, mappedStatement);
                     } catch (Exception e) {
-                        exception(deleteListeners, e, mappedStatement);
+                        exceptionListeners(deleteListeners, e, mappedStatement);
                         throw e;
                     } finally {
                         statementHandler.close();
@@ -128,7 +147,10 @@ public abstract class AbstractExecutor implements Executor {
             }
         }
         try {
-            return executorHandler.insert(statementHandler, transaction.getConnection(), mappedStatement, this);
+            initActions(mappedStatement);
+            Object result = executorHandler.insert(statementHandler, transaction.getConnection(), mappedStatement, this);
+            destroyActions(mappedStatement);
+            return result;
         } finally {
             statementHandler.close();
         }
@@ -165,24 +187,54 @@ public abstract class AbstractExecutor implements Executor {
         transaction.close();
     }
 
-    protected boolean before(Listener[] listeners, MappedStatement mappedStatement) {
+    protected boolean beforeListeners(Listener[] listeners, MappedStatement mappedStatement) {
         boolean success = true;
         for (Listener listener : listeners) {
-            success = success & listener.before(mappedStatement,this);
+            success = success & listener.before(mappedStatement);
         }
         return success;
     }
 
-    protected Object afterReturn(Listener[] listeners, Object result, MappedStatement mappedStatement) {
+    protected Object afterReturnListeners(Listener[] listeners, Object result, MappedStatement mappedStatement) {
         for (Listener listener : listeners) {
-            result = listener.afterReturn(result, mappedStatement,this);
+            result = listener.afterReturn(result, mappedStatement);
         }
         return result;
     }
 
-    protected void exception(Listener[] listeners, Exception e, MappedStatement mappedStatement) {
+    protected void exceptionListeners(Listener[] listeners, Exception e, MappedStatement mappedStatement) {
         for (Listener listener : listeners) {
-            listener.exception(e, mappedStatement,this);
+            listener.exception(e, mappedStatement);
+        }
+    }
+
+    protected void initActions(MappedStatement mappedStatement) {
+        Action[] beforeActionList = mappedStatement.getBeforeActionList();
+        if (!ObjectUtil.isNull(beforeActionList)) {
+            Object arg = mappedStatement.getArg();
+            ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
+            try {
+                for (Action action : beforeActionList) {
+                    action.doAction(this, paramWrapper);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    protected void destroyActions(MappedStatement mappedStatement) {
+        Action[] destroyActionList = mappedStatement.getDestroyActionList();
+        if (!ObjectUtil.isNull(destroyActionList)) {
+            Object arg = mappedStatement.getArg();
+            ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
+            try {
+                for (Action action : destroyActionList) {
+                    action.doAction(this, paramWrapper);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

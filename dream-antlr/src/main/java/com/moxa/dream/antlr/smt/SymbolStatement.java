@@ -15,7 +15,8 @@ public abstract class SymbolStatement extends Statement {
     public String getSymbol() {
         return symbol;
     }
-    public  String getValue(){
+
+    public String getValue() {
         return symbol;
     }
 
@@ -56,7 +57,7 @@ public abstract class SymbolStatement extends Statement {
     }
 
 
-    public static class JavaStrStatement extends SymbolStatement{
+    public static class JavaStrStatement extends SymbolStatement {
         public JavaStrStatement(String symbol) {
             super(symbol);
         }
@@ -66,6 +67,7 @@ public abstract class SymbolStatement extends Statement {
             return symbol.substring(1, symbol.length() - 1);
         }
     }
+
     public static class SingleMarkStatement extends SymbolStatement {
         public SingleMarkStatement(String symbol) {
             super(symbol);
@@ -82,7 +84,7 @@ public abstract class SymbolStatement extends Statement {
         }
     }
 
-    public static class IntStatement extends SymbolStatement{
+    public static class IntStatement extends SymbolStatement {
 
         public IntStatement(String symbol) {
             super(symbol);

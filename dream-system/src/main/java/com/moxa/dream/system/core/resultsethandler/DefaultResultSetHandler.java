@@ -7,12 +7,10 @@ import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.executor.Executor;
-import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapped.MappedColumn;
 import com.moxa.dream.system.mapped.MappedResult;
 import com.moxa.dream.system.mapped.MappedStatement;
-import com.moxa.dream.system.mapper.EachInfo;
-import com.moxa.dream.system.mapper.factory.MapperFactory;
+import com.moxa.dream.system.mapper.Action;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
@@ -25,7 +23,6 @@ import com.moxa.dream.util.reflection.factory.ObjectFactory;
 import com.moxa.dream.util.reflection.util.NonCollection;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -43,7 +40,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 ObjectFactory objectFactory = doSimpleResult(resultSet, mappedStatement, mappedResult);
                 Object result = objectFactory.getObject();
                 resultObjectFactory.set(null, result);
-                eachList(result, mappedStatement, executor);
+                loopActions(executor, mappedStatement, result);
             }
         } else {
             Map<CacheKey, Object> cacheMap = new HashMap<>();
@@ -52,7 +49,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 if (objectFactory != null) {
                     Object result = objectFactory.getObject();
                     resultObjectFactory.set(null, result);
-                    eachList(result, mappedStatement, executor);
+                    loopActions(executor, mappedStatement, result);
                 }
             }
             cacheMap.clear();
@@ -280,39 +277,16 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         return null;
     }
 
-    protected void eachList(Object object, MappedStatement mappedStatement, Executor executor) {
-        List<EachInfo> eachInfoList = mappedStatement.getEachInfoList();
-        if (!ObjectUtil.isNull(eachInfoList)) {
-            Configuration configuration = mappedStatement.getConfiguration();
-            MapperFactory mapperFactory = configuration.getMapperFactory();
-            DialectFactory dialectFactory = configuration.getDialectFactory();
-            ObjectWrapper wrapper = ObjectWrapper.wrapper(object);
-            for (EachInfo eachInfo : eachInfoList) {
-                Class type = eachInfo.getType();
-                Method method = eachInfo.getMethod();
-                Map<String, String> argMap = eachInfo.getArgMap();
-                String field = eachInfo.getField();
-                Object mapper = mapperFactory.getMapper(type, (methodInfo, arg) -> {
-                    if (argMap != null) {
-                        ObjectWrapper argWrapper = ObjectWrapper.wrapper(arg);
-                        for (String paramName : argMap.keySet()) {
-                            String valueName = argMap.get(paramName);
-                            Object value = wrapper.get(valueName);
-                            argWrapper.set(paramName, value);
-                        }
-                        arg = argWrapper.getObject();
-                    }
-                    return executor.query(dialectFactory.compile(methodInfo, arg));
-                });
-                Object result;
-                try {
-                    result = method.invoke(mapper, eachInfo.getArgs());
-                } catch (ReflectiveOperationException e) {
-                    throw new RuntimeException(e);
+    protected void loopActions(Executor executor, MappedStatement mappedStatement, Object arg) {
+        Action[] loopActionList = mappedStatement.getLoopActionList();
+        if (!ObjectUtil.isNull(loopActionList)) {
+            ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
+            try {
+                for (Action action : loopActionList) {
+                    action.doAction(executor, paramWrapper);
                 }
-                if (!ObjectUtil.isNull(field)) {
-                    wrapper.set(field, result);
-                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
     }

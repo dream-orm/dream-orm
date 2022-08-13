@@ -20,10 +20,10 @@ public class DefaultExecutorHandler implements ExecutorHandler {
 
 
     @Override
-    public Object query(StatementHandler statementHandler, Connection connection,MappedStatement mappedStatement, Executor executor) throws SQLException {
+    public Object query(StatementHandler statementHandler, Connection connection, MappedStatement mappedStatement, Executor executor) throws SQLException {
         statementHandler.prepare(connection, mappedStatement, Statement.NO_GENERATED_KEYS);
         ResultSet resultSet = statementHandler.executeQuery(mappedStatement);
-        return resultSetHandler.result(resultSet, mappedStatement,executor);
+        return resultSetHandler.result(resultSet, mappedStatement, executor);
     }
 
     @Override

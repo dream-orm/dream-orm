@@ -27,16 +27,16 @@ public class UpdateScanHandler extends AbstractHandler {
             scanInfo.setCommand(Command.UPDATE);
         UpdateStatement updateStatement = (UpdateStatement) statement;
         Statement tableStatement = updateStatement.getTable();
-        String table=null;
-        String alias=null;
-        if(tableStatement instanceof AliasStatement){
-            tableStatement=((AliasStatement) tableStatement).getColumn();
-            alias=((SymbolStatement)((AliasStatement) tableStatement).getAlias()).getSymbol();
+        String table = null;
+        String alias = null;
+        if (tableStatement instanceof AliasStatement) {
+            tableStatement = ((AliasStatement) tableStatement).getColumn();
+            alias = ((SymbolStatement) ((AliasStatement) tableStatement).getAlias()).getSymbol();
         }
-        if(tableStatement instanceof SymbolStatement){
-            table=((SymbolStatement) tableStatement).getSymbol();
+        if (tableStatement instanceof SymbolStatement) {
+            table = ((SymbolStatement) tableStatement).getSymbol();
         }
-        if(table!=null){
+        if (table != null) {
             scanInfo.add(new ScanInvoker.TableScanInfo(null, table, alias, true));
         }
         return statement;

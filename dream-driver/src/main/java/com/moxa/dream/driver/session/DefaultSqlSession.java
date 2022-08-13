@@ -36,7 +36,7 @@ public class DefaultSqlSession implements SqlSession {
         MappedStatement mappedStatement = dialectFactory.compile(methodInfo, arg);
         Object value = null;
         try {
-            Command command = mappedStatement.getCommand();
+            Command command = getCommand(mappedStatement);
             switch (command) {
                 case QUERY:
                     value = executor.query(mappedStatement);
@@ -84,4 +84,7 @@ public class DefaultSqlSession implements SqlSession {
         return configuration;
     }
 
+    protected Command getCommand(MappedStatement mappedStatement) {
+        return mappedStatement.getCommand();
+    }
 }

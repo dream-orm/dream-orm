@@ -1,11 +1,6 @@
 package com.moxa.dream.driver.action;
 
-import com.moxa.dream.antlr.config.Command;
-import com.moxa.dream.driver.session.DefaultSqlSession;
-import com.moxa.dream.driver.session.SqlSession;
-import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.executor.Executor;
-import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.system.mapper.Action;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
@@ -15,17 +10,16 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MapperAction implements Action {
-    private Class type;
+public class ServiceAction implements Action {
+    private Object target;
     private Method method;
     private String property;
-    private Configuration configuration;
-    private Command command;
 
-    public MapperAction(Configuration configuration, String property, String classMethodName, Command command) {
+    public ServiceAction(String property, String classMethodName) {
         int index = classMethodName.lastIndexOf(".");
         ObjectUtil.requireTrue(index > 0, classMethodName + " not class method name");
         Class type = ReflectUtil.loadClass(classMethodName.substring(0, index));
+        target = ReflectUtil.create(type);
         String methodName = classMethodName.substring(index + 1);
         List<Method> methodList = ReflectUtil.findMethod(type)
                 .stream()
@@ -34,27 +28,13 @@ public class MapperAction implements Action {
         ObjectUtil.requireNonNull(methodList, methodName + " not exist");
         ObjectUtil.requireTrue(methodList.size() == 1, methodName + " must exist one");
         Method method = methodList.get(0);
-        this.configuration = configuration;
-        this.type = type;
-        this.method = method;
         this.property = property;
-        this.command = command;
+        this.method = method;
     }
 
     @Override
     public void doAction(Executor executor, Object arg) throws Exception {
-        SqlSession sqlSession = new DefaultSqlSession(configuration, executor) {
-            @Override
-            protected Command getCommand(MappedStatement mappedStatement) {
-                Command command = mappedStatement.getCommand();
-                if (command == Command.NONE && MapperAction.this.command != null) {
-                    command = MapperAction.this.command;
-                }
-                return command;
-            }
-        };
-        Object mapper = sqlSession.getMapper(type);
-        Object result = method.invoke(mapper, arg);
+        Object result = method.invoke(target, arg);
         if (!ObjectUtil.isNull(property)) {
             if (arg == null) {
                 throw new RuntimeException("Property 'arg' is required");

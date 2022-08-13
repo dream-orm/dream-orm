@@ -44,7 +44,7 @@ public class QueryScanHandler extends AbstractHandler {
 
     public void scanStatement(Assist assist, ToSQL toSQL, List<Invoker> invokerList, Statement statement, boolean master) throws InvokerException {
         String database = null;
-        String table=null;
+        String table = null;
         String alias = null;
         if (statement instanceof AliasStatement) {
             AliasStatement aliasStatement = (AliasStatement) statement;
@@ -55,10 +55,10 @@ public class QueryScanHandler extends AbstractHandler {
             Statement[] columnList = ((ListColumnStatement) statement).getColumnList();
             database = ((SymbolStatement) columnList[columnList.length - 2]).getValue();
             table = ((SymbolStatement) columnList[columnList.length - 1]).getValue();
-        } else if(statement instanceof SymbolStatement) {
+        } else if (statement instanceof SymbolStatement) {
             table = ((SymbolStatement) statement).getValue();
         }
-        if(table!=null){
+        if (table != null) {
             scanInfo.add(new ScanInvoker.TableScanInfo(database, table, alias, master));
         }
     }

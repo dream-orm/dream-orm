@@ -5,7 +5,7 @@ import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.core.listener.Listener;
+import com.moxa.dream.system.mapper.Action;
 import com.moxa.dream.system.mapper.EachInfo;
 import com.moxa.dream.system.mapper.MethodInfo;
 
@@ -109,6 +109,18 @@ public class MappedStatement {
     public List<EachInfo> getEachInfoList() {
         List<EachInfo> eachInfoList = methodInfo.getEachInfoList();
         return eachInfoList;
+    }
+
+    public Action[] getBeforeActionList() {
+        return methodInfo.getBeforeActionList();
+    }
+
+    public Action[] getLoopActionList() {
+        return methodInfo.getLoopActionList();
+    }
+
+    public Action[] getDestroyActionList() {
+        return methodInfo.getDestroyActionList();
     }
 
     public void put(String key, Object value) {
