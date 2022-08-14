@@ -1,7 +1,6 @@
-package com.moxa.dream.system.dialect;
+package com.moxa.dream.driver.dialect;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.expr.PackageExpr;
 import com.moxa.dream.antlr.expr.SqlExpr;
@@ -13,12 +12,14 @@ import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
-import com.moxa.dream.system.antlr.wrapper.AnnotationWrapper;
-import com.moxa.dream.system.antlr.wrapper.ScanWrapper;
-import com.moxa.dream.system.antlr.wrapper.Wrapper;
+import com.moxa.dream.driver.antlr.factory.DriverInvokerFactory;
+import com.moxa.dream.driver.antlr.wrapper.AnnotationWrapper;
+import com.moxa.dream.driver.antlr.wrapper.ScanWrapper;
+import com.moxa.dream.driver.antlr.wrapper.Wrapper;
+import com.moxa.dream.driver.page.wrapper.PageWrapper;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapped.MappedParam;
 import com.moxa.dream.system.mapped.MappedSql;
 import com.moxa.dream.system.mapped.MappedStatement;
@@ -30,6 +31,7 @@ import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.Types;
 import java.util.*;
@@ -45,9 +47,10 @@ public abstract class AbstractDialectFactory implements DialectFactory {
 
     public AbstractDialectFactory(int split) {
         this.split = split;
-        ObjectUtil.requireTrue(split > 0, "Property 'split' must be greater than 0");
+        if (split <= 0) {
+            throw new DreamRunTimeException("SQL分割次数必须大于0");
+        }
         toSQL = getToSQL();
-        ObjectUtil.requireNonNull(toSQL, "Property toSQL is required");
     }
 
     @Override
@@ -116,7 +119,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                     paramType = getParamType(configuration, scanInfo, paramScanInfoMap, paramInfo);
                     paramTypeMap.put(paramInfo.getParamName(), paramType);
                 }
-                mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler(), scanInfo.getCommand()));
+                mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler()));
             }
         }
         CacheKey uniqueKey = methodInfo.getSqlKey();
@@ -149,7 +152,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
 
     protected List<InvokerFactory> getDefaultInvokerFactoryList() {
         List<InvokerFactory> invokerFactoryList = new ArrayList<>();
-        invokerFactoryList.addAll(Arrays.asList(new AntlrInvokerFactory(), new SystemInvokerFactory()));
+        invokerFactoryList.addAll(Arrays.asList(new AntlrInvokerFactory(), new DriverInvokerFactory()));
         return invokerFactoryList;
     }
 
@@ -200,7 +203,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         }
     }
 
-    protected MappedParam getMappedParam(ColumnInfo columnInfo, Object paramValue, TypeHandler typeHandler, Command command) {
+    protected MappedParam getMappedParam(ColumnInfo columnInfo, Object paramValue, TypeHandler typeHandler) {
         int jdbcType;
         if (columnInfo != null) {
             jdbcType = columnInfo.getJdbcType();
@@ -213,7 +216,6 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     @Override
     public CacheKey getCacheKey(MethodInfo methodInfo) {
         String sql = methodInfo.getSql();
-        ObjectUtil.requireTrue(!ObjectUtil.isNull(sql), "Property 'sql' is required");
         char[] charList = sql.toCharArray();
         int index = 0;
         for (int i = 0; i < charList.length; i++) {
@@ -263,7 +265,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     }
 
     protected List<Wrapper> getWrapList() {
-        return null;
+        return Arrays.asList(new PageWrapper());
     }
 
 

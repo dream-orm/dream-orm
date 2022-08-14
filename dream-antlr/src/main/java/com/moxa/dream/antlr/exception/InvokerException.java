@@ -1,6 +1,8 @@
 package com.moxa.dream.antlr.exception;
 
-public class InvokerException extends Exception {
+import com.moxa.dream.util.exception.DreamException;
+
+public class InvokerException extends DreamException {
     public InvokerException(String message) {
         super(message);
     }

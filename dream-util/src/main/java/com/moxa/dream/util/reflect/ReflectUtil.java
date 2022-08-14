@@ -148,8 +148,6 @@ public class ReflectUtil {
     }
 
     public static <T> void copy(T target, T source) {
-        ObjectUtil.requireNonNull(target, "Property 'target' is required");
-        ObjectUtil.requireNonNull(source, "Property 'source' is required");
         List<Field> fieldList = ReflectUtil.findField(source.getClass());
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {

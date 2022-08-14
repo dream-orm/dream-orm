@@ -1,6 +1,7 @@
-package com.moxa.dream.system.antlr.handler;
+package com.moxa.dream.driver.antlr.handler;
 
 import com.moxa.dream.antlr.config.Assist;
+import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.expr.CompareExpr;
 import com.moxa.dream.antlr.expr.FunctionExpr;
@@ -13,13 +14,16 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.driver.action.SqlAction;
+import com.moxa.dream.driver.page.annotation.PageQuery;
+import com.moxa.dream.system.mapper.Action;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.reflect.ReflectUtil;
-import com.moxa.dream.util.reflection.util.NonCollection;
 
 import java.util.List;
 
@@ -33,7 +37,6 @@ public class PageHandler extends AbstractHandler {
     private Statement second;
 
     public PageHandler(Invoker invoker, MethodInfo methodInfo) {
-        ObjectUtil.requireNonNull(methodInfo, "Property 'methodInfo' is required");
         this.invoker = invoker;
         this.methodInfo = methodInfo;
         this.tableFactory = methodInfo.getConfiguration().getTableFactory();
@@ -69,14 +72,22 @@ public class PageHandler extends AbstractHandler {
         if (ObjectUtil.isNull(countSql)) {
             countSql = "select count(1) from (" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp";
         }
-        MethodInfo methodInfo = new MethodInfo.Builder(this.methodInfo.getConfiguration())
-                .sql(countSql)
-                .colType(Long.class)
-                .rowType(NonCollection.class)
-                .paramNameList(this.methodInfo.getParamNameList())
-                .timeOut(this.methodInfo.getTimeOut())
-                .build();
-        this.methodInfo.set(PageCount.class, new PageCount(methodInfo));
+        Action[] initActionList = this.methodInfo.getInitActionList();
+        Action[] countInitActionList;
+        if (initActionList == null) {
+            countInitActionList = new Action[1];
+        } else {
+            countInitActionList = new Action[initActionList.length + 1];
+            System.arraycopy(initActionList, 0, countInitActionList, 0, initActionList.length);
+        }
+        PageQuery pageQuery = methodInfo.get(PageQuery.class);
+        String value = pageQuery.value();
+        String property = "total";
+        if (!ObjectUtil.isNull(value)) {
+            property = value + "." + property;
+        }
+        countInitActionList[countInitActionList.length - 1] = new SqlAction(methodInfo.getConfiguration(), countSql, property, Command.QUERY);
+        ObjectWrapper.wrapper(methodInfo).set("initActionList", countInitActionList);
     }
 
     void handlerPage(Assist assist, ToSQL toSQL, List<Invoker> invokerList, QueryStatement queryStatement) throws InvokerException {

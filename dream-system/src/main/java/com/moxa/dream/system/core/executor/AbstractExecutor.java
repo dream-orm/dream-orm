@@ -11,7 +11,6 @@ import com.moxa.dream.system.mapper.Action;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.transaction.Transaction;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.sql.SQLException;
 
@@ -212,10 +211,9 @@ public abstract class AbstractExecutor implements Executor {
         Action[] initActionList = mappedStatement.getInitActionList();
         if (!ObjectUtil.isNull(initActionList)) {
             Object arg = mappedStatement.getArg();
-            ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
             try {
                 for (Action action : initActionList) {
-                    action.doAction(this, paramWrapper);
+                    action.doAction(this, arg);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -227,10 +225,9 @@ public abstract class AbstractExecutor implements Executor {
         Action[] destroyActionList = mappedStatement.getDestroyActionList();
         if (!ObjectUtil.isNull(destroyActionList)) {
             Object arg = mappedStatement.getArg();
-            ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
             try {
                 for (Action action : destroyActionList) {
-                    action.doAction(this, paramWrapper);
+                    action.doAction(this, arg);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);

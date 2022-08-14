@@ -3,6 +3,7 @@ package com.moxa.dream.antlr.config;
 import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,15 +24,15 @@ public class Assist {
             invokerFactoryMap = new HashMap<>();
             sqlInvokerMap = new HashMap<>();
             for (InvokerFactory invokerFactory : invokerFactoryList) {
-                ObjectUtil.requireNonNull(invokerFactory, "Property  'sqlInvokerFactory' is required");
-                ObjectUtil.requireTrue(!invokerFactoryMap.containsKey(invokerFactory.namespace()), "The namespace '" + invokerFactory.namespace() + "' already exists");
+                if (invokerFactoryMap.containsKey(invokerFactory.namespace())) {
+                    throw new DreamRunTimeException("命名空间'" + invokerFactory.namespace() + "已经存在");
+                }
                 invokerFactoryMap.put(invokerFactory.namespace(), invokerFactory);
             }
         }
     }
 
     public Invoker getInvoker(String namespace, String function) {
-        ObjectUtil.requireNonNull(function, "Property 'function' is required");
         function = function.toLowerCase();
         String invokerKey;
         Invoker invoker;
@@ -54,7 +55,7 @@ public class Assist {
             invoker = sqlInvokerMap.get(invokerKey);
             if (invoker == null) {
                 InvokerFactory invokerFactory = invokerFactoryMap.get(namespace);
-                ObjectUtil.requireNonNull(invokerFactory, namespace + " not known");
+                ObjectUtil.requireNonNull(invokerFactory, "命名空间'" + namespace + "'尚未注册");
                 invoker = invokerFactory.create(function);
                 if (!sqlInvokerMap.containsKey(function)) {
                     sqlInvokerMap.put(function, invoker);
@@ -62,14 +63,13 @@ public class Assist {
             } else
                 return invoker;
         }
-        ObjectUtil.requireNonNull(invoker, invokerKey + " not known");
+        ObjectUtil.requireNonNull(invoker, "函数@" + invokerKey + "尚未注册");
         sqlInvokerMap.put(invokerKey, invoker);
         invoker.init(this);
         return invoker;
     }
 
     public <T> T getCustom(Class<T> type) {
-        ObjectUtil.requireNonNull(customObjMap, "customObjMap was not registered");
         return (T) customObjMap.get(type);
     }
 

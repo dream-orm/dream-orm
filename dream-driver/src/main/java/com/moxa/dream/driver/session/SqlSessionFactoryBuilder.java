@@ -7,7 +7,6 @@ import com.moxa.dream.driver.xml.moudle.XmlCallback;
 import com.moxa.dream.driver.xml.moudle.XmlHandler;
 import com.moxa.dream.driver.xml.moudle.XmlParser;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.util.common.ObjectUtil;
 import org.xml.sax.InputSource;
 
 import java.io.InputStream;
@@ -31,7 +30,6 @@ public class SqlSessionFactoryBuilder {
     }
 
     public SqlSessionFactory build(InputSource inputSource, DefaultConfig defaultConfig) {
-        ObjectUtil.requireNonNull(inputSource, "Property 'inputSource' is required");
         XmlParser xmlParser = new XmlParser();
         final Configuration[] configuration = new Configuration[1];
         xmlParser.parse(inputSource, new XmlCallback() {

@@ -7,7 +7,6 @@ import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
-import com.moxa.dream.util.common.ObjectUtil;
 
 public class DefaultSqlSession implements SqlSession {
     private final Configuration configuration;
@@ -16,8 +15,6 @@ public class DefaultSqlSession implements SqlSession {
     private final DialectFactory dialectFactory;
 
     public DefaultSqlSession(Configuration configuration, Executor executor) {
-        ObjectUtil.requireNonNull(configuration, "Property 'configuration' is required");
-        ObjectUtil.requireNonNull(executor, "Property 'executor' is required");
         this.configuration = configuration;
         this.executor = executor;
         this.mapperFactory = configuration.getMapperFactory();

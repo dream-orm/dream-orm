@@ -25,7 +25,6 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
                 TypeHandler typeHandler = typeHandlerWrapper.getTypeHandler();
                 if (typeHandler != null) {
                     typeHandler = wrapper(typeHandler);
-                    ObjectUtil.requireNonNull(typeHandler, "Property 'typeHandler' is required");
                     Integer[] typeCode = typeHandlerWrapper.typeCode();
                     if (!ObjectUtil.isNull(typeCode)) {
                         for (int typeHandlerCode : typeCode) {

@@ -9,6 +9,7 @@ import com.moxa.dream.system.table.JoinInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.util.common.LowHashMap;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.lang.annotation.Annotation;
@@ -37,7 +38,9 @@ public class DefaultTableFactory implements TableFactory {
                     fieldMap.put(columnInfo.getColumn(), name);
                     columnInfoMap.put(name, columnInfo);
                     if (columnInfo.isPrimary()) {
-                        ObjectUtil.requireTrue(primColumnInfo == null, tableClass.getName() + " already exist primary Key");
+                        if (primColumnInfo != null) {
+                            throw new DreamRunTimeException("类'" + tableClass.getName() + "只能存在一个主键");
+                        }
                         primColumnInfo = columnInfo;
                     }
                 } else {
@@ -63,7 +66,7 @@ public class DefaultTableFactory implements TableFactory {
         Map<Class<? extends Annotation>, Annotation> annotationMap = new HashMap();
         if (!ObjectUtil.isNull(annotations)) {
             for (Annotation annotation : annotations) {
-                annotationMap.put(annotation.getClass(), annotation);
+                annotationMap.put(annotation.annotationType(), annotation);
             }
         }
         return annotationMap;
@@ -83,7 +86,7 @@ public class DefaultTableFactory implements TableFactory {
             return null;
         Class<?> colType = ReflectUtil.getColType(field.getGenericType());
         String joinTable = getTable(colType);
-        ObjectUtil.requireNonNull(joinTable, "Property 'table' is required");
+        ObjectUtil.requireNonNull(joinTable, "@Join修饰的属性'" + field.getName() + "'未获取关联表名");
         JoinInfo joinInfo = new JoinInfo(table, joinAnnotation.column(), joinTable, joinAnnotation.joinColumn(), joinAnnotation.joinType());
         return joinInfo;
     }

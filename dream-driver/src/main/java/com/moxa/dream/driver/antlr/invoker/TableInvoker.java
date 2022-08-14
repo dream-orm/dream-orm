@@ -1,4 +1,4 @@
-package com.moxa.dream.system.antlr.invoker;
+package com.moxa.dream.driver.antlr.invoker;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
@@ -7,6 +7,7 @@ import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
+import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapper.MethodInfo;
@@ -25,7 +26,7 @@ public class TableInvoker extends AbstractInvoker {
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         if (ObjectUtil.isNull(columnList)) {
-            throw new InvokerException("parameter type is incorrect");
+            throw new InvokerException("@table要求参数至少一个");
         }
         LowHashMap<List<String>> tableSQLMap = new LowHashMap<>();
         String[] tableList = new String[columnList.length];
@@ -35,7 +36,7 @@ public class TableInvoker extends AbstractInvoker {
                 tableList[i] = table;
                 tableSQLMap.put(table, null);
             } else {
-                throw new InvokerException("parameter type is incorrect");
+                throw new InvokerException("@table参数类型不合法，不合法参数：'" + new ToNativeSQL().toStr(columnList[i], null, null) + "'");
             }
         }
         MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
@@ -43,7 +44,7 @@ public class TableInvoker extends AbstractInvoker {
         TableFactory tableFactory = configuration.getTableFactory();
         for (String table : tableList) {
             TableInfo tableInfo = tableFactory.getTableInfo(table);
-            ObjectUtil.requireNonNull(tableInfo, "Property 'tableInfo' is required");
+            ObjectUtil.requireNonNull(tableInfo, "表'" + table + "'没有生成对应TableInfo");
             for (String joinTable : tableList) {
                 if (!table.equalsIgnoreCase(joinTable)) {
                     JoinInfo joinInfo = tableInfo.getJoinInfo(joinTable);
@@ -67,11 +68,11 @@ public class TableInvoker extends AbstractInvoker {
             }
         }
         if (tableSQLMap.size() != 1) {
-            throw new InvokerException(tableSQLMap.keySet() + " no associate");
+            throw new InvokerException("表:" + tableSQLMap.keySet() + "没有建立关联关系");
         } else {
             Statement parentStatement = invokerStatement.getParentStatement();
             if (!(parentStatement instanceof FromStatement)) {
-                throw new InvokerException("parentStatement is not FromStatement");
+                throw new InvokerException("@table只能跟在from后面");
             }
             FromStatement fromStatement = (FromStatement) parentStatement;
             String mainTable = tableSQLMap.keySet().toArray(new String[0])[0];

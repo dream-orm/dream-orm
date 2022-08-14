@@ -9,14 +9,12 @@ import com.moxa.dream.system.core.executor.BatchExecutor;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.executor.JdbcExecutor;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
-import com.moxa.dream.util.common.ObjectUtil;
 
 
 public class DefaultSqlSessionFactory implements SqlSessionFactory {
     private final Configuration configuration;
 
     public DefaultSqlSessionFactory(Configuration configuration) {
-        ObjectUtil.requireNonNull(configuration, "Property 'configuration' is required");
         this.configuration = configuration;
     }
 

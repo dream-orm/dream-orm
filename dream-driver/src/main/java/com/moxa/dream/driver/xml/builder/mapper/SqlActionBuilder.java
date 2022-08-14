@@ -17,7 +17,7 @@ public class SqlActionBuilder extends XMLBuilder {
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         switch (qName) {
             case XmlConstant.SQLACTION:
-                sqlAction=XmlUtil.applyAttributes(SqlAction.class,attributes);
+                sqlAction = XmlUtil.applyAttributes(SqlAction.class, attributes);
                 break;
             default:
                 throwXmlException(uri, localName, qName, attributes, XmlConstant.SQLACTION);
@@ -26,7 +26,7 @@ public class SqlActionBuilder extends XMLBuilder {
 
     @Override
     public void characters(String s) {
-        sqlAction.value= sqlAction.value+s;
+        sqlAction.value = sqlAction.value + s;
     }
 
     @Override
@@ -43,7 +43,8 @@ public class SqlActionBuilder extends XMLBuilder {
         private String antlr;
         private String command;
 
-        private String value="";
+        private String value = "";
+
         public String getProperty() {
             return property;
         }

@@ -56,7 +56,7 @@ public class MapperInfoBuilder extends XMLBuilder {
                 MethodInfoBuilder.MethodInfo methodInfo = (MethodInfoBuilder.MethodInfo) obj;
                 String name = methodInfo.getName();
                 MethodInfo.Builder methodBuilder = builderMap.get(name);
-                ObjectUtil.requireNonNull(methodBuilder, "Method '" + name + "' not found in class");
+                ObjectUtil.requireNonNull(methodBuilder, "方法 '" + name + "'未在类注册");
                 String timeOut = methodInfo.getTimeOut();
                 methodBuilder
                         .name(methodInfo.getName())

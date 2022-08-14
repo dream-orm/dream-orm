@@ -1,5 +1,7 @@
 package com.moxa.dream.util.common;
 
+import com.moxa.dream.util.exception.DreamRunTimeException;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -7,12 +9,7 @@ import java.util.Map;
 public class ObjectUtil {
     public static void requireNonNull(Object obj, String msg) {
         if (obj == null)
-            throw new NullPointerException(msg);
-    }
-
-    public static void requireTrue(boolean value, String msg) {
-        if (!value)
-            throw new IllegalStateException(msg);
+            throw new DreamRunTimeException(msg);
     }
 
     public static boolean isNull(Map value) {

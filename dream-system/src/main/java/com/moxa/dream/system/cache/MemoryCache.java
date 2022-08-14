@@ -3,6 +3,7 @@ package com.moxa.dream.system.cache;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -19,8 +20,12 @@ public class MemoryCache implements Cache {
     protected Map<CacheKey, Map<CacheKey, Object>> indexMap = new ConcurrentHashMap<>();
 
     public MemoryCache(int limit, double rate) {
-        ObjectUtil.requireTrue(limit > 0, "Property 'limit' must gt 0");
-        ObjectUtil.requireTrue(rate > 0 && rate <= 1, "Property 'rate' must gt 0 and leq 1");
+        if (limit <= 0) {
+            throw new DreamRunTimeException("参数limit必须大于0");
+        }
+        if (rate <= 0 || rate > 1) {
+            throw new DreamRunTimeException("参数rate介于0-1之间");
+        }
         this.limit = limit;
         this.rate = rate;
     }

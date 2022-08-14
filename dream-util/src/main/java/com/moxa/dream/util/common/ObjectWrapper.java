@@ -15,7 +15,6 @@ public class ObjectWrapper {
     }
 
     public static ObjectWrapper wrapper(Object target) {
-        ObjectUtil.requireNonNull(target, "Property 'target' is required");
         Class<?> type = target.getClass();
         ObjectFactoryWrapper factoryWrapper = factoryWrapperMap.get(type);
         if (factoryWrapper == null) {

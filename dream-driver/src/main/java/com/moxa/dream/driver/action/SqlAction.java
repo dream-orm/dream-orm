@@ -45,7 +45,15 @@ public class SqlAction implements Action {
             if (methodInfo == null) {
                 synchronized (this) {
                     if (methodInfo == null) {
-                        Field field = arg.getClass().getDeclaredField(property);
+                        int len;
+                        Field field;
+                        if((len=property.lastIndexOf("."))>=0){
+                            Object target = ObjectWrapper.wrapper(arg).get(property.substring(0, len));
+                            ObjectUtil.requireNonNull(target,"对象地址'"+property.substring(0, len)+"'为空");
+                            field=target.getClass().getDeclaredField(property.substring(len+1));
+                        }else{
+                            field = arg.getClass().getDeclaredField(property);
+                        }
                         Type type = field.getGenericType();
                         methodInfo = new MethodInfo.Builder(configuration)
                                 .rowType(ReflectUtil.getRowType(type))

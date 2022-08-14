@@ -17,7 +17,7 @@ import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.common.ObjectWrapper;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
 import com.moxa.dream.util.reflection.util.NonCollection;
@@ -147,7 +147,9 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             ColumnInfo columnInfo = getColumnInfo(mappedStatement, tableName, columnLabel);
             MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName, columnLabel, columnInfo);
             boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, new LowHashSet(tableScanInfoMap.keySet()));
-            ObjectUtil.requireTrue(success, "Property '" + mappedColumn.getProperty() + "' mapping failure");
+            if (!success) {
+                throw new DreamRunTimeException("映射失败，映射字段:" + columnLabel + "，归属表名：" + tableName);
+            }
         }
         return mappedResult;
     }
@@ -280,10 +282,9 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     protected void loopActions(Executor executor, MappedStatement mappedStatement, Object arg) {
         Action[] loopActionList = mappedStatement.getLoopActionList();
         if (!ObjectUtil.isNull(loopActionList)) {
-            ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
             try {
                 for (Action action : loopActionList) {
-                    action.doAction(executor, paramWrapper);
+                    action.doAction(executor, arg);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);

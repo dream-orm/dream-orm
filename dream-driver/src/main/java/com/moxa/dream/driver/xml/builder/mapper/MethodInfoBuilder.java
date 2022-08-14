@@ -20,15 +20,15 @@ public class MethodInfoBuilder extends XMLBuilder {
                 methodInfo = XmlUtil.applyAttributes(MethodInfo.class, attributes);
                 break;
             case XmlConstant.INIT:
-                InitBuilder initBuilder=new InitBuilder(workHandler);
+                InitBuilder initBuilder = new InitBuilder(workHandler);
                 initBuilder.startElement(uri, localName, qName, attributes);
                 break;
             case XmlConstant.LOOP:
-                LoopBuilder loopBuilder=new LoopBuilder(workHandler);
+                LoopBuilder loopBuilder = new LoopBuilder(workHandler);
                 loopBuilder.startElement(uri, localName, qName, attributes);
                 break;
             case XmlConstant.DESTROY:
-                DestroyBuilder destroyBuilder=new DestroyBuilder(workHandler);
+                DestroyBuilder destroyBuilder = new DestroyBuilder(workHandler);
                 destroyBuilder.startElement(uri, localName, qName, attributes);
                 break;
             default:
@@ -38,7 +38,13 @@ public class MethodInfoBuilder extends XMLBuilder {
 
     @Override
     public void characters(String s) {
-        methodInfo.value= methodInfo.value+s;
+        if (s != null && !s.trim().equals("")) {
+            if (methodInfo.value == null) {
+                methodInfo.value = s;
+            } else {
+                methodInfo.value = methodInfo.value + s;
+            }
+        }
     }
 
     @Override
@@ -50,26 +56,28 @@ public class MethodInfoBuilder extends XMLBuilder {
     public void builder(String uri, String localName, String qName, Object obj) {
         switch (qName) {
             case XmlConstant.INIT:
-                methodInfo.init=(InitBuilder.Init) obj;
+                methodInfo.init = (InitBuilder.Init) obj;
                 break;
             case XmlConstant.LOOP:
-                methodInfo.loop=(LoopBuilder.Loop) obj;
+                methodInfo.loop = (LoopBuilder.Loop) obj;
                 break;
             case XmlConstant.DESTROY:
-                methodInfo.destroy=(DestroyBuilder.Destroy) obj;
+                methodInfo.destroy = (DestroyBuilder.Destroy) obj;
                 break;
         }
     }
 
     static class MethodInfo {
         private String name;
+
         private String timeOut;
 
-        private String value="";
+        private String value;
 
         private InitBuilder.Init init;
         private LoopBuilder.Loop loop;
         private DestroyBuilder.Destroy destroy;
+
         public String getName() {
             return name;
         }

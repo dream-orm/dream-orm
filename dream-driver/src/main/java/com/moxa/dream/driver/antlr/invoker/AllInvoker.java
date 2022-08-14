@@ -1,4 +1,4 @@
-package com.moxa.dream.system.antlr.invoker;
+package com.moxa.dream.driver.antlr.invoker;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.config.ExprInfo;
@@ -12,6 +12,7 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
+import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.system.config.Configuration;
@@ -46,7 +47,7 @@ public class AllInvoker extends AbstractInvoker {
                     String symbol = ((SymbolStatement.LetterStatement) columnList[i]).getSymbol();
                     tableList[i] = symbol;
                 } else {
-                    throw new InvokerException("parameter type is incorrect");
+                    throw new InvokerException("@all参数类型不合法，不合法参数：'" + new ToNativeSQL().toStr(columnList[i], null, null) + "'");
                 }
             }
         }
@@ -57,7 +58,7 @@ public class AllInvoker extends AbstractInvoker {
             Map<String, ScanInvoker.TableScanInfo> scanInfoMap = new LowHashMap<>();
             for (String table : tableList) {
                 ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(table);
-                ObjectUtil.requireNonNull(tableScanInfo, "table '" + table + "' was registered");
+                ObjectUtil.requireNonNull(tableScanInfo, "@all参数'" + table + "'未在操作表注册");
                 scanInfoMap.put(table, tableScanInfo);
             }
             tableScanInfoMap = scanInfoMap;
@@ -100,7 +101,7 @@ public class AllInvoker extends AbstractInvoker {
             String table = tableScanInfo.getTable();
             String alias = tableScanInfo.getAlias();
             TableInfo tableInfo = tableFactory.getTableInfo(table);
-            ObjectUtil.requireNonNull(tableInfo, "Property 'tableInfo' is required");
+            ObjectUtil.requireNonNull(tableInfo, "表'" + table + "'未在TableFactory注册");
             Collection<ColumnInfo> columnInfoList = tableInfo.getColumnInfoList();
             List<String> columnList = columnInfoList.stream()
                     .filter(columnInfo -> !columnSet.contains(columnInfo.getColumn())
@@ -119,7 +120,7 @@ public class AllInvoker extends AbstractInvoker {
             if (tableScanInfo == null)
                 return;
             tableInfo = tableFactory.getTableInfo(table);
-            ObjectUtil.requireNonNull(tableInfo, "Property 'tableInfo' is required");
+            ObjectUtil.requireNonNull(tableInfo, "表'" + table + "'未在TableFactory注册");
             alias = tableScanInfo.getAlias();
         }
 

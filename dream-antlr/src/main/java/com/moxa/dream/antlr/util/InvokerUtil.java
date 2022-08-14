@@ -25,16 +25,12 @@ public class InvokerUtil {
     }
 
     public static InvokerStatement wrapperInvoker(String namespace, String function, String cut, Statement... statementList) {
-        ObjectUtil.requireNonNull(namespace, "Property 'namespace' is required");
-        ObjectUtil.requireNonNull(function, "Property 'function' is required");
-        ObjectUtil.requireNonNull(cut, "Property 'cut' is required");
         InvokerStatement invokerStatement = new InvokerStatement();
         invokerStatement.setNamespace(namespace);
         invokerStatement.setFunction(function);
         ListColumnStatement listColumnStatement = new ListColumnStatement(cut);
         if (!ObjectUtil.isNull(statementList)) {
             for (Statement statement : statementList) {
-                ObjectUtil.requireNonNull(statement, "Property 'statement' is required");
                 listColumnStatement.add(statement);
             }
         }

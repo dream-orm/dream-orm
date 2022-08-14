@@ -9,7 +9,6 @@ import com.moxa.dream.util.common.ObjectUtil;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MethodInfo {
@@ -24,7 +23,6 @@ public class MethodInfo {
     private Action[] initActionList;
     private Action[] loopActionList;
     private Action[] destroyActionList;
-    private List<EachInfo> eachInfoList;
     private String[] paramNameList;
     private PackageStatement statement;
     private CacheKey sqlKey;
@@ -56,10 +54,6 @@ public class MethodInfo {
 
     public Integer getTimeOut() {
         return timeOut;
-    }
-
-    public List<EachInfo> getEachInfoList() {
-        return eachInfoList;
     }
 
     public Action[] getInitActionList() {
@@ -166,11 +160,9 @@ public class MethodInfo {
         public MethodInfo build() {
             if (!ObjectUtil.isNull(methodInfo.sql)) {
                 DialectFactory dialectFactory = methodInfo.configuration.getDialectFactory();
-                ObjectUtil.requireNonNull(dialectFactory, "Property 'dialectFactory' is required");
+                ObjectUtil.requireNonNull(dialectFactory, "DialectFactory未在Configuration注册");
                 methodInfo.statement = dialectFactory.compile(methodInfo);
-                ObjectUtil.requireNonNull(methodInfo.statement, "Property 'statement' is required");
                 CacheKey sqlKey = dialectFactory.getCacheKey(methodInfo);
-                ObjectUtil.requireNonNull(sqlKey, "Property 'sqlKey' is required");
                 methodInfo.sqlKey = sqlKey;
                 dialectFactory.wrapper(methodInfo);
             }

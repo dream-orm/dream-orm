@@ -115,7 +115,7 @@ public class ConfigBuilder {
             List<Class> resourceAsClass = ResourceUtil.getResourceAsClass(type);
             if (!ObjectUtil.isNull(resourceAsClass)) {
                 TableFactory tableFactory = configuration.getTableFactory();
-                ObjectUtil.requireNonNull(tableFactory, "Property 'tableFactory' is required");
+                ObjectUtil.requireNonNull(tableFactory, "TableFactory未在Configuration注册");
                 for (Class classType : resourceAsClass) {
                     tableFactory.addTableInfo(classType);
                 }
@@ -178,7 +178,7 @@ public class ConfigBuilder {
 
     public ConfigBuilder cacheProperties(Properties properties) {
         CacheFactory cacheFactory = configuration.getCacheFactory();
-        ObjectUtil.requireNonNull(cacheFactory, "Property 'cacheFactory' is required");
+        ObjectUtil.requireNonNull(cacheFactory, "CacheFactory未在Configuration注册");
         cacheFactory.setProperties(getProperties(properties));
         return this;
     }
@@ -200,7 +200,7 @@ public class ConfigBuilder {
                 return ReflectUtil.create(typeHandlerWrapperClass);
             }).collect(Collectors.toList());
             TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
-            ObjectUtil.requireNonNull(typeHandlerFactory, "Property 'typeHandlerFactory' is required");
+            ObjectUtil.requireNonNull(typeHandlerFactory, "TypeHandlerFactory未在Configuration注册");
             typeHandlerFactory.wrapper(typeHandlerWrapperList);
         }
         return this;
@@ -240,7 +240,7 @@ public class ConfigBuilder {
         if (!ObjectUtil.isNull(interceptorList)) {
             Interceptor[] interceptors = new Interceptor[interceptorList.size()];
             PluginFactory pluginFactory = configuration.getPluginFactory();
-            ObjectUtil.requireNonNull(pluginFactory, "Property 'pluginFactory' is required");
+            ObjectUtil.requireNonNull(pluginFactory, "PluginFactory未在Configuration注册");
             for (int i = 0; i < interceptorList.size(); i++) {
                 String value = interceptorList.get(i);
                 Class<? extends Interceptor> interceptorClass = ReflectUtil.loadClass(value);
@@ -265,7 +265,7 @@ public class ConfigBuilder {
         if (!ObjectUtil.isNull(listenerList)) {
             Listener[] listeners = new Listener[listenerList.size()];
             ListenerFactory listenerFactory = configuration.getListenerFactory();
-            ObjectUtil.requireNonNull(listenerFactory, "Property 'listenerFactory' is required");
+            ObjectUtil.requireNonNull(listenerFactory, "ListenerFactory未在Configuration注册");
             for (int i = 0; i < listenerList.size(); i++) {
                 String value = listenerList.get(i);
                 Class<? extends Listener> listenerClass = ReflectUtil.loadClass(value);
@@ -288,7 +288,7 @@ public class ConfigBuilder {
 
     public ConfigBuilder transactionProperties(Properties properties) {
         TransactionFactory transactionFactory = configuration.getTransactionFactory();
-        ObjectUtil.requireNonNull(transactionFactory, "Property 'transactionFactory' is required");
+        ObjectUtil.requireNonNull(transactionFactory, "TransactionFactory未在Configuration注册");
         transactionFactory.setProperties(getProperties(properties));
         return this;
     }
@@ -305,7 +305,7 @@ public class ConfigBuilder {
 
     public ConfigBuilder dataSourceProperties(Properties properties) {
         DataSourceFactory dataSourceFactory = configuration.getDataSourceFactory();
-        ObjectUtil.requireNonNull(dataSourceFactory, "Property 'dataSourceFactory' is required");
+        ObjectUtil.requireNonNull(dataSourceFactory, "DataSourceFactory未在Configuration注册");
         dataSourceFactory.setProperties(getProperties(properties));
         return this;
     }

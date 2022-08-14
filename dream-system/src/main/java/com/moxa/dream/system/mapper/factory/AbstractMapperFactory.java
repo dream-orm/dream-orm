@@ -30,7 +30,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
             if (mapperTypeMap.containsKey(mapperClass)) {
                 return;
             }
-            ObjectUtil.requireNonNull(configuration, "Property 'configuration' is required");
             Map<String, MethodInfo.Builder> builderMap = new HashMap<>();
             List<Method> methodList = ReflectUtil.findMethod(mapperClass);
             if (!ObjectUtil.isNull(methodList)) {
@@ -169,7 +168,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     }
 
     protected Class[] getAllInterface(Class type) {
-        ObjectUtil.requireNonNull(type, "Property 'type' is required");
         return ReflectUtil.find(type, new BaseReflectHandler<Class>() {
             @Override
             public List<Class> doHandler(Class type) {
@@ -184,10 +182,9 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     @Override
     public <T> T getMapper(Class<T> type, MapperHandler mapperHandler) {
         Class[] typeList = mapperTypeMap.get(type);
-        ObjectUtil.requireNonNull(typeList, "Class '" + type.getName() + "' was not registered");
+        ObjectUtil.requireNonNull(typeList, "类 '" + type.getName() + "'未在Mapper注册");
         return (T) Proxy.newProxyInstance(type.getClassLoader(), typeList, (proxy, method, args) -> {
             MethodInfo methodInfo = methodInfoMap.get(method);
-            ObjectUtil.requireNonNull(methodInfo, "Class method name '" + method.getDeclaringClass().getName() + "." + method.getName() + "' was not generate 'methodInfo'");
             Object arg = null;
             if (!ObjectUtil.isNull(args)) {
                 if (args.length == 1) {

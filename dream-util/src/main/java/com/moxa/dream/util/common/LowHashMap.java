@@ -7,13 +7,11 @@ import java.util.Locale;
 public class LowHashMap<T> extends HashMap<String, T> {
     @Override
     public T put(String key, T value) {
-        ObjectUtil.requireNonNull(key, "Property 'key' is required");
         return super.put(key.toLowerCase(Locale.ENGLISH), value);
     }
 
     @Override
     public T get(Object key) {
-        ObjectUtil.requireNonNull(key, "Property 'key' is required");
         if (!(key instanceof String))
             return null;
         return super.get(((String) key).toLowerCase(Locale.ENGLISH));
@@ -21,7 +19,6 @@ public class LowHashMap<T> extends HashMap<String, T> {
 
     @Override
     public boolean containsKey(Object key) {
-        ObjectUtil.requireNonNull(key, "Property 'key' is required");
         if (!(key instanceof String))
             return false;
         return super.containsKey(((String) key).toLowerCase(Locale.ENGLISH));

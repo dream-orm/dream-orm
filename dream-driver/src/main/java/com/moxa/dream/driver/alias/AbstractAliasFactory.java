@@ -1,6 +1,7 @@
 package com.moxa.dream.driver.alias;
 
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.Properties;
 
@@ -16,8 +17,6 @@ public abstract class AbstractAliasFactory implements AliasFactory {
     }
 
     public AbstractAliasFactory(String openToken, String closeToken) {
-        ObjectUtil.requireTrue(!ObjectUtil.isNull(openToken), "Property 'openToken' is required");
-        ObjectUtil.requireTrue(!ObjectUtil.isNull(closeToken), "Property 'closeToken' is required");
         this.openToken = openToken;
         this.closeToken = closeToken;
     }
@@ -34,7 +33,9 @@ public abstract class AbstractAliasFactory implements AliasFactory {
             value = value.substring(pos + openToken.length());
             int openStart = value.indexOf(openToken);
             int closeStart = value.indexOf(closeToken);
-            ObjectUtil.requireTrue(closeStart != -1, "Start symbol '" + openToken + "' does not match with close symbol '" + closeToken + "'");
+            if (closeStart == -1) {
+                throw new DreamRunTimeException("开始符号'" + openToken + "'没有匹配结束符号'" + closeToken + "'");
+            }
             if (openStart != -1 && openStart < closeStart) {
                 StringBuilder variableBuilder = new StringBuilder();
                 while (openStart != -1 && openStart < closeStart) {
@@ -57,7 +58,9 @@ public abstract class AbstractAliasFactory implements AliasFactory {
     }
 
     protected String getValue(Properties properties, String val) {
-        ObjectUtil.requireTrue(properties.containsKey(val), "Property 'properties' not included '" + val + "'");
+        if (!properties.containsKey(val)) {
+            throw new DreamRunTimeException("参数变量'" + val + "'未注册");
+        }
         return properties.getProperty(val);
     }
 

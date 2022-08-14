@@ -6,7 +6,6 @@ import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapper.Action;
-import com.moxa.dream.system.mapper.EachInfo;
 import com.moxa.dream.system.mapper.MethodInfo;
 
 import java.lang.reflect.Method;
@@ -104,11 +103,6 @@ public class MappedStatement {
 
     public List<MappedParam> getMappedParamList() {
         return mappedParamList;
-    }
-
-    public List<EachInfo> getEachInfoList() {
-        List<EachInfo> eachInfoList = methodInfo.getEachInfoList();
-        return eachInfoList;
     }
 
     public Action[] getInitActionList() {

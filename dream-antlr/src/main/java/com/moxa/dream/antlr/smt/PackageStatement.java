@@ -1,7 +1,5 @@
 package com.moxa.dream.antlr.smt;
 
-import com.moxa.dream.util.common.ObjectUtil;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +18,6 @@ public class PackageStatement extends Statement {
     }
 
     public <T> void setValue(Class<T> type, T value) {
-        ObjectUtil.requireNonNull(type, "Property 'type' is required");
         infoMap.put(type, value);
     }
 
