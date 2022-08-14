@@ -21,26 +21,26 @@ public class DefaultExecutorHandler implements ExecutorHandler {
 
     @Override
     public Object query(StatementHandler statementHandler, Connection connection, MappedStatement mappedStatement, Executor executor) throws SQLException {
-        statementHandler.prepare(connection, mappedStatement, Statement.NO_GENERATED_KEYS);
+        statementHandler.prepare(connection, mappedStatement);
         ResultSet resultSet = statementHandler.executeQuery(mappedStatement);
         return resultSetHandler.result(resultSet, mappedStatement, executor);
     }
 
     @Override
     public Object update(StatementHandler statementHandler, Connection connection, MappedStatement mappedStatement, Executor executor) throws SQLException {
-        statementHandler.prepare(connection, mappedStatement, Statement.NO_GENERATED_KEYS);
+        statementHandler.prepare(connection, mappedStatement);
         return statementHandler.executeUpdate(mappedStatement);
     }
 
     @Override
     public Object insert(StatementHandler statementHandler, Connection connection, MappedStatement mappedStatement, Executor executor) throws SQLException {
-        statementHandler.prepare(connection, mappedStatement, Statement.NO_GENERATED_KEYS);
+        statementHandler.prepare(connection, mappedStatement);
         return statementHandler.executeUpdate(mappedStatement);
     }
 
     @Override
     public Object delete(StatementHandler statementHandler, Connection connection, MappedStatement mappedStatement, Executor executor) throws SQLException {
-        statementHandler.prepare(connection, mappedStatement, Statement.NO_GENERATED_KEYS);
+        statementHandler.prepare(connection, mappedStatement);
         return statementHandler.executeUpdate(mappedStatement);
     }
 

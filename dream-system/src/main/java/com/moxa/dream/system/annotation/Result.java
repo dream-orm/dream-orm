@@ -15,6 +15,6 @@ public @interface Result {
 
     Class<?> colType() default NullObject.class;
 
-    String keyProperty() default "";
+    String[]columnNames() default {};
 
 }

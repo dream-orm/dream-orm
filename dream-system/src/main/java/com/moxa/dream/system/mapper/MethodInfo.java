@@ -17,6 +17,7 @@ public class MethodInfo {
     private String name;
     private Class<? extends Collection> rowType;
     private Class colType;
+    private String[]columnNames;
     private String sql;
     private Integer timeOut;
 
@@ -46,6 +47,10 @@ public class MethodInfo {
 
     public Class getColType() {
         return colType;
+    }
+
+    public String[] getColumnNames() {
+        return columnNames;
     }
 
     public String getSql() {
@@ -119,6 +124,10 @@ public class MethodInfo {
 
         public Builder colType(Class colType) {
             methodInfo.colType = colType;
+            return this;
+        }
+        public Builder columnNames(String[]columnNames){
+            methodInfo.columnNames=columnNames;
             return this;
         }
 

@@ -76,7 +76,9 @@ public class MappedStatement {
     public void setRowType(Class<? extends Collection> rowType) {
         this.rowType = rowType;
     }
-
+    public String[] getColumnNames() {
+        return methodInfo.getColumnNames();
+    }
     public Method getMethod() {
         return methodInfo.getMethod();
     }
