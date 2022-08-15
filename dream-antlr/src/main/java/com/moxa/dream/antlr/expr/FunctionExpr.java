@@ -281,30 +281,6 @@ public class FunctionExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprToChar(ExprInfo exprInfo) {
-        FunctionStatement func = new FunctionStatement.ToCharStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprToNumber(ExprInfo exprInfo) {
-        FunctionStatement func = new FunctionStatement.ToNumberStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprToDate(ExprInfo exprInfo) {
-        FunctionStatement func = new FunctionStatement.ToDateStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
-
-    @Override
     protected Statement exprAvg(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.AvgStatement();
         functionStatement = new FunctionParamerExpr(exprReader, func, () ->

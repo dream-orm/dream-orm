@@ -13,6 +13,7 @@ import com.moxa.dream.system.transaction.Transaction;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public abstract class AbstractExecutor implements Executor {
     protected Transaction transaction;
@@ -184,6 +185,11 @@ public abstract class AbstractExecutor implements Executor {
     @Override
     public void close() {
         transaction.close();
+    }
+
+    @Override
+    public Statement getStatement() {
+        return statementHandler.getStatement();
     }
 
     protected boolean beforeListeners(Listener[] listeners, MappedStatement mappedStatement) {

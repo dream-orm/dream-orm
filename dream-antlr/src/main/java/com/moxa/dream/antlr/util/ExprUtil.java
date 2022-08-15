@@ -41,10 +41,6 @@ public class ExprUtil {
         return 76 == c || c == 108;
     }
 
-    public static boolean isStar(int c) {
-        return c == 42;
-    }
-
     public static boolean isDot(int c) {
         return c == 46;
     }
@@ -249,12 +245,6 @@ public class ExprUtil {
                 return ExprType.DAYOFWEEK;
             case -1321778928://DAYOFYEAR
                 return ExprType.DAYOFYEAR;
-            case -531820147://TO_NUMBER
-                return ExprType.TO_NUMBER;
-            case -407597414://TO_CHAR
-                return ExprType.TO_CHAR;
-            case -407573774://TO_DATE
-                return ExprType.TO_DATE;
             case 2223588://HOUR
                 return ExprType.HOUR;
             case -675510701://LAST_DAY

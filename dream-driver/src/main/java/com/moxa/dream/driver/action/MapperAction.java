@@ -43,12 +43,13 @@ public class MapperAction implements Action {
     }
 
     @Override
-    public void doAction(Executor executor, Object arg) throws Exception {
+    public Object doAction(Executor executor, Object arg) throws Exception {
         SqlSession sqlSession = new DefaultSqlSession(configuration, executor);
         Object mapper = sqlSession.getMapper(type);
         Object result = method.invoke(mapper, arg);
         if (!ObjectUtil.isNull(property)) {
             ObjectWrapper.wrapper(arg).set(property, result);
         }
+        return null;
     }
 }

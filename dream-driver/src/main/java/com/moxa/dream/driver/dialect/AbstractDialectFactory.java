@@ -11,7 +11,7 @@ import com.moxa.dream.antlr.invoker.$Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.PackageStatement;
-import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.antlr.sql.*;
 import com.moxa.dream.driver.antlr.factory.DriverInvokerFactory;
 import com.moxa.dream.driver.antlr.wrapper.AnnotationWrapper;
 import com.moxa.dream.driver.antlr.wrapper.ScanWrapper;
@@ -246,7 +246,20 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         return null;
     }
 
-    protected abstract ToSQL getToSQL();
+    protected ToSQL getToSQL() {
+        switch (getDbType()) {
+            case MYSQL:
+                return new ToMYSQL();
+            case MSSQL:
+                return new ToMSSQL();
+            case PGSQL:
+                return new ToPGSQL();
+            case ORACLE:
+                return new ToORACLE();
+            default:
+                throw new DreamRunTimeException(getDbType() + "类型尚未不支持");
+        }
+    }
 
     @Override
     public void wrapper(MethodInfo methodInfo) {

@@ -62,15 +62,6 @@ public class ToORACLE extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    protected String toString(FunctionStatement.ToNumberStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_NUMBER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
     protected String toString(FunctionStatement.RepeatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String tar = toStr(columnList[0], assist, invokerList);
@@ -90,12 +81,6 @@ public class ToORACLE extends ToPubSQL {
         columnList[0] = columnList[1];
         columnList[1] = tempStatement;
         return "INSTR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.ToDateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        return "TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[1], assist, invokerList) + ")";
     }
 
     @Override
@@ -254,7 +239,7 @@ public class ToORACLE extends ToPubSQL {
             } else {
                 maxValue = toNativeSQL.toStr(second, null, null);
                 minValue = toNativeSQL.toStr(first, null, null);
-                sql = "select* from(select rownum rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn between " + minValue + " and " + minValue + "+" + maxValue;
+                sql = "select* from(select rownum rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn > " + minValue + " and rn<=" + minValue + "+" + maxValue;
             }
             QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
             ReflectUtil.copy(statement, queryStatement);

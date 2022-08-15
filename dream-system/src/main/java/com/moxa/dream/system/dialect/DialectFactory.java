@@ -13,4 +13,10 @@ public interface DialectFactory {
     CacheKey getCacheKey(MethodInfo methodInfo);
 
     void wrapper(MethodInfo methodInfo);
+
+    DbType getDbType();
+
+    enum DbType {
+        MYSQL, MSSQL, PGSQL, ORACLE,
+    }
 }

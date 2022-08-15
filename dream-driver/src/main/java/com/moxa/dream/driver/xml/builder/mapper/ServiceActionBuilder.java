@@ -39,14 +39,14 @@ public class ServiceActionBuilder extends XMLBuilder {
 
     static class ServiceAction {
         private String property;
-        private String methodRef;
+        private String classRef;
 
         public String getProperty() {
             return property;
         }
 
-        public String getMethodRef() {
-            return methodRef;
+        public String getClassRef() {
+            return classRef;
         }
     }
 }

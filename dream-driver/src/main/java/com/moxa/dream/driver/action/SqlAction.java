@@ -37,7 +37,7 @@ public class SqlAction implements Action {
     }
 
     @Override
-    public void doAction(Executor executor, Object arg) throws Exception {
+    public Object doAction(Executor executor, Object arg) throws Exception {
         if (!ObjectUtil.isNull(property)) {
             if (arg == null) {
                 throw new RuntimeException("Property 'arg' is required");
@@ -47,11 +47,11 @@ public class SqlAction implements Action {
                     if (methodInfo == null) {
                         int len;
                         Field field;
-                        if((len=property.lastIndexOf("."))>=0){
+                        if ((len = property.lastIndexOf(".")) >= 0) {
                             Object target = ObjectWrapper.wrapper(arg).get(property.substring(0, len));
-                            ObjectUtil.requireNonNull(target,"对象地址'"+property.substring(0, len)+"'为空");
-                            field=target.getClass().getDeclaredField(property.substring(len+1));
-                        }else{
+                            ObjectUtil.requireNonNull(target, "对象地址'" + property.substring(0, len) + "'为空");
+                            field = target.getClass().getDeclaredField(property.substring(len + 1));
+                        } else {
                             field = arg.getClass().getDeclaredField(property);
                         }
                         Type type = field.getGenericType();
@@ -90,5 +90,6 @@ public class SqlAction implements Action {
         if (!ObjectUtil.isNull(property)) {
             ObjectWrapper.wrapper(arg).set(property, result);
         }
+        return null;
     }
 }

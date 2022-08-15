@@ -87,7 +87,7 @@
     <xs:element name="serviceAction">
         <xs:complexType>
             <xs:attribute name="property"></xs:attribute>
-            <xs:attribute name="methodRef"></xs:attribute>
+            <xs:attribute name="classRef"></xs:attribute>
         </xs:complexType>
     </xs:element>
 </xs:schema>

@@ -2,8 +2,11 @@ package com.moxa.dream.antlr.sql;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.expr.QueryExpr;
 import com.moxa.dream.antlr.invoker.Invoker;
+import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
+import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.util.List;
 
@@ -59,6 +62,33 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
+    protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+        LimitStatement limitStatement = statement.getLimitStatement();
+        if (limitStatement != null && !limitStatement.isOffset()) {
+            Statement first = limitStatement.getFirst();
+            Statement second = limitStatement.getSecond();
+            statement.setLimitStatement(null);
+            ToSQL toNativeSQL = new ToNativeSQL();
+            String minValue;
+            String maxValue;
+            String querySql = toNativeSQL.toStr(statement, null, null);
+            String sql;
+            if (second == null) {
+                maxValue = toNativeSQL.toStr(first, null, null);
+                sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn<=" + maxValue;
+            } else {
+                querySql = toNativeSQL.toStr(statement, null, null);
+                maxValue = toNativeSQL.toStr(second, null, null);
+                minValue = toNativeSQL.toStr(first, null, null);
+                sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn>" + minValue + " and rn<=" + minValue + "+" + maxValue;
+            }
+            QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
+            ReflectUtil.copy(statement, queryStatement);
+        }
+        return super.toString(statement, assist, invokerList);
+    }
+
+    @Override
     protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
         return "\"" + statement.getValue() + "\"";
     }
@@ -68,18 +98,6 @@ public class ToPGSQL extends ToPubSQL {
         return "STRING_AGG(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",',')";
     }
 
-    @Override
-    protected String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        if (columnList.length == 2) {
-            return "TO_CHAR(" + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[1], assist, invokerList) + ")";
-        } else
-            return "CAST(" + toStr(columnList[0], assist, invokerList) + " AS VARCHAR)";
-    }
-
-    protected String toString(FunctionStatement.ToNumberStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "CAST(" + toStr(statement.getParamsStatement(), assist, invokerList) + " AS INT)";
-    }
 
     @Override
     protected String toString(FunctionStatement.RepeatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
@@ -106,12 +124,6 @@ public class ToPGSQL extends ToPubSQL {
             String search = "STRPOS(SUBSTRING(" + targetStr + "," + point + ")," + likeStr + ")";
             return "CASE " + search + "+" + point + " WHEN " + point + " THEN 0 ELSE " + search + "+" + point + "-1 END";
         }
-    }
-
-    @Override
-    protected String toString(FunctionStatement.ToDateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        return "TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[1], assist, invokerList) + ")::TIMESTAMP";
     }
 
     @Override

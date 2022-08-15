@@ -52,21 +52,6 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.ToDateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_DATE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.ToNumberStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "TO_NUMBER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
     protected String toString(FunctionStatement.DateForMatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
         return "DATE_FORMAT(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

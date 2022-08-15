@@ -25,7 +25,7 @@ public class ForEachInvoker extends AbstractInvoker {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         int len = columnList.length;
         if (len > 2 || len < 1)
-            throw new InvokerException("The number of parameters cannot meet @" + AntlrInvokerFactory.FOREACH + ":" + AntlrInvokerFactory.NAMESPACE + "(list,value?)");
+            throw new InvokerException("@foreach参数个数不合法");
         String list = toSQL.toStr(columnList[0], assist, invokerList);
         ObjectWrapper paramWrapper = assist.getCustom(ObjectWrapper.class);
         Object arrayList = paramWrapper.get(list);
@@ -62,6 +62,6 @@ public class ForEachInvoker extends AbstractInvoker {
             }
             listColumnStatement.setParentStatement(invokerStatement.getParentStatement());
             return toSQL.toStr(listColumnStatement, assist, invokerList);
-        } else throw new InvokerException("Class name '" + arrayList.getClass().getName() + "' not a collection type");
+        } else throw new InvokerException("类'" + arrayList.getClass().getName() + "'不是集合或数组类型");
     }
 }

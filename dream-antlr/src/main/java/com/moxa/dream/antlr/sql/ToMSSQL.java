@@ -11,143 +11,6 @@ import com.moxa.dream.util.reflect.ReflectUtil;
 import java.util.List;
 
 public class ToMSSQL extends ToPubSQL {
-    private final int num = 1;
-
-    private String getPattern(String pattern) {
-        char[] patternArray = pattern.toCharArray();
-        StringBuilder builder = new StringBuilder();
-        int i = 0;
-        while (i < patternArray.length) {
-            char sign = Character.toUpperCase(patternArray[i]);
-            switch (sign) {
-                case 'Y':
-                    switch (Character.toUpperCase(patternArray[i + 1])) {
-                        case 'Y':
-                            switch (Character.toUpperCase(patternArray[i + 2])) {
-                                case 'Y':
-                                    switch (Character.toUpperCase(patternArray[i + 3])) {
-                                        case 'Y':
-                                            builder.append("yyyy");
-                                            i += 4;
-                                            break;
-                                        default:
-                                            builder.append("yy");
-                                            i += 2;
-                                            break;
-                                    }
-                                    break;
-                                default:
-                                    builder.append("yy");
-                                    i += 2;
-                                    break;
-                            }
-                            break;
-                        default:
-                            builder.append(patternArray[i++]);
-                            break;
-                    }
-                    break;
-                case 'M':
-                    switch (Character.toUpperCase(patternArray[i + 1])) {
-                        case 'M':
-                            builder.append("mm");
-                            i += 2;
-                            break;
-                        case 'I':
-                            builder.append("mi");
-                            i += 2;
-                            break;
-                        default:
-                            builder.append(patternArray[i++]);
-                            break;
-                    }
-                    break;
-                case 'D':
-                    switch (Character.toUpperCase(patternArray[i + 1])) {
-                        case 'D':
-                            builder.append("dd");
-                            i += 2;
-                            break;
-                        default:
-                            builder.append(patternArray[i++]);
-                            break;
-                    }
-                    break;
-                case 'H':
-                    switch (Character.toUpperCase(patternArray[i + 1])) {
-                        case 'H':
-                            switch (Character.toUpperCase(patternArray[i + 2])) {
-                                case '2':
-                                    switch (Character.toUpperCase(patternArray[i + 3])) {
-                                        case '4':
-                                            builder.append("HH");
-                                            i += 4;
-                                            break;
-                                        default:
-                                            builder.append("hh");
-                                            i += 2;
-                                            break;
-                                    }
-                                    break;
-                                case '1':
-                                    switch (Character.toUpperCase(patternArray[i + 3])) {
-                                        case '2':
-                                            builder.append("hh");
-                                            i += 4;
-                                            break;
-                                        default:
-                                            builder.append("hh");
-                                            i += 2;
-                                            break;
-                                    }
-                                    break;
-                                default:
-                                    builder.append("hh");
-                                    i += 2;
-                                    break;
-                            }
-                            break;
-                        default:
-                            builder.append(patternArray[i++]);
-                            break;
-                    }
-                    break;
-                case 'S':
-                    switch (Character.toUpperCase(patternArray[i + 1])) {
-                        case 'S':
-                            builder.append("ss");
-                            i += 2;
-                            break;
-                        default:
-                            builder.append(patternArray[i++]);
-                            break;
-                    }
-                    break;
-                default:
-                    builder.append(patternArray[i++]);
-                    break;
-            }
-        }
-        return builder.toString();
-    }
-
-    @Override
-    protected String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        if (columnList.length == 2) {
-            String pattern = statement.getPattern();
-            if (pattern == null) {
-                pattern = getPattern(toStr(columnList[1], assist, invokerList));
-                statement.setPattern(pattern);
-            }
-            return "FORMAT(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")";
-        } else
-            return "CONVERT(VARCHAR," + toStr(columnList[0], assist, invokerList) + ")";
-    }
-
-    protected String toString(FunctionStatement.ToNumberStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "CONVERT(INT," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
 
     @Override
     protected String toString(FunctionStatement.RepeatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
@@ -163,12 +26,6 @@ public class ToMSSQL extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.LocateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
         return "CHARINDEX(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.ToDateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        return "CONVERT(datetime," + toStr(columnList[0], assist, invokerList) + ")";
     }
 
     @Override
@@ -331,7 +188,7 @@ public class ToMSSQL extends ToPubSQL {
                 querySql = toNativeSQL.toStr(statement, null, null);
                 maxValue = toNativeSQL.toStr(second, null, null);
                 minValue = toNativeSQL.toStr(first, null, null);
-                sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn between " + minValue + " and " + minValue + "+" + maxValue;
+                sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn > " + minValue + " and rn<=" + minValue + "+" + maxValue;
             }
             QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
             ReflectUtil.copy(statement, queryStatement);

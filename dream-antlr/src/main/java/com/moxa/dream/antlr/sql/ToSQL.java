@@ -354,15 +354,6 @@ public abstract class ToSQL {
             case -954783318://DateForMatStatement
                 sql = toString((FunctionStatement.DateForMatStatement) statement, assist, invokerList);
                 break;
-            case 639930334://ToCharStatement
-                sql = toString((FunctionStatement.ToCharStatement) statement, assist, invokerList);
-                break;
-            case -485043189://ToNumberStatement
-                sql = toString((FunctionStatement.ToNumberStatement) statement, assist, invokerList);
-                break;
-            case -2079680890://ToDateStatement
-                sql = toString((FunctionStatement.ToDateStatement) statement, assist, invokerList);
-                break;
             case 1095504383://DayOfYearStatement
                 sql = toString((FunctionStatement.DayOfYearStatement) statement, assist, invokerList);
                 break;
@@ -567,12 +558,6 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.InStrStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(FunctionStatement.LocateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
-
-    protected abstract String toString(FunctionStatement.ToDateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
-
-    protected abstract String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
-
-    protected abstract String toString(FunctionStatement.ToNumberStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(FunctionStatement.DateForMatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
 

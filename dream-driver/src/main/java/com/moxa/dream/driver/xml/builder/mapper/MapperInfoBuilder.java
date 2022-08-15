@@ -104,7 +104,7 @@ public class MapperInfoBuilder extends XMLBuilder {
                     actions[i] = new MapperAction(configuration, mapperAction.getMethodRef(), mapperAction.getProperty());
                 } else {
                     ServiceActionBuilder.ServiceAction serviceAction = (ServiceActionBuilder.ServiceAction) action;
-                    actions[i] = new ServiceAction(serviceAction.getProperty(), serviceAction.getMethodRef());
+                    actions[i] = ServiceAction.of(serviceAction.getProperty(), serviceAction.getClassRef());
                 }
             }
         }

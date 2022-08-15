@@ -277,15 +277,6 @@ public abstract class SqlExpr {
             case DATE_FORMAT:
                 statement = exprDateFormat(exprInfo);
                 break;
-            case TO_CHAR:
-                statement = exprToChar(exprInfo);
-                break;
-            case TO_NUMBER:
-                statement = exprToNumber(exprInfo);
-                break;
-            case TO_DATE:
-                statement = exprToDate(exprInfo);
-                break;
             case DAY:
             case DAYOFMONTH:
                 statement = exprDay(exprInfo);
@@ -590,18 +581,6 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprRepeat(ExprInfo exprInfo) {
-        return exprFunction(exprInfo);
-    }
-
-    protected Statement exprToChar(ExprInfo exprInfo) {
-        return exprFunction(exprInfo);
-    }
-
-    protected Statement exprToNumber(ExprInfo exprInfo) {
-        return exprFunction(exprInfo);
-    }
-
-    protected Statement exprToDate(ExprInfo exprInfo) {
         return exprFunction(exprInfo);
     }
 

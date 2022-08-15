@@ -109,7 +109,7 @@ public class ParamScanHandler extends AbstractHandler {
 
         @Override
         protected Handler[] handlerBound() {
-            return new Handler[]{new ValuesHandler(this)};
+            return new Handler[]{new ValuesHandler()};
         }
 
         @Override
@@ -130,31 +130,45 @@ public class ParamScanHandler extends AbstractHandler {
         }
 
         class ValuesHandler extends AbstractHandler {
-            private InsertHandler insertHandler;
-            private ToSQL toNativeSQL = new ToNativeSQL();
-
-            public ValuesHandler(InsertHandler insertHandler) {
-                this.insertHandler = insertHandler;
+            @Override
+            protected Handler[] handlerBound() {
+                return new Handler[]{new BraceHandler()};
             }
 
             @Override
             protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
-                if (insertHandler.columnList != null) {
-                    InsertStatement.ValuesStatement valuesStatement = (InsertStatement.ValuesStatement) statement;
-                    Statement[] columnList = ((ListColumnStatement) ((BraceStatement) ((ListColumnStatement) valuesStatement.getStatement()).getColumnList()[0]).getStatement()).getColumnList();
-                    for (int i = 0; i < columnList.length; i++) {
-                        if (InvokerUtil.is$(columnList[i])) {
-                            String field = toNativeSQL.toStr(((InvokerStatement) columnList[i]).getParamStatement(), null, null);
-                            scanInfo.add(new ScanInvoker.ParamScanInfo(null, table, insertHandler.columnList.get(i), field));
-                        }
-                    }
-                }
                 return statement;
             }
 
             @Override
             protected boolean interest(Statement statement, Assist sqlAssist) {
                 return statement instanceof InsertStatement.ValuesStatement;
+            }
+
+            class BraceHandler extends AbstractHandler {
+                @Override
+                protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+                    BraceStatement braceStatement = (BraceStatement) statement;
+                    if (braceStatement.getStatement() instanceof ListColumnStatement) {
+                        ListColumnStatement listColumnStatement = (ListColumnStatement) braceStatement.getStatement();
+                        Statement[] columnList = listColumnStatement.getColumnList();
+                        if (columnList.length == InsertHandler.this.columnList.size()) {
+                            ToNativeSQL toNativeSQL = new ToNativeSQL();
+                            for (int i = 0; i < columnList.length; i++) {
+                                if (InvokerUtil.is$(columnList[i])) {
+                                    String field = toNativeSQL.toStr(((InvokerStatement) columnList[i]).getParamStatement(), null, null);
+                                    scanInfo.add(new ScanInvoker.ParamScanInfo(null, table, insertHandler.columnList.get(i), field));
+                                }
+                            }
+                        }
+                    }
+                    return statement;
+                }
+
+                @Override
+                protected boolean interest(Statement statement, Assist sqlAssist) {
+                    return statement instanceof BraceStatement;
+                }
             }
         }
     }
