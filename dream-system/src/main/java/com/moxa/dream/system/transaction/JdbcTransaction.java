@@ -11,8 +11,7 @@ public class JdbcTransaction implements Transaction {
     protected boolean autoCommit;
     private DataSource dataSource;
 
-    @Override
-    public void setDataSource(DataSource dataSource) {
+    public JdbcTransaction(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

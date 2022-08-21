@@ -1,12 +1,9 @@
 package com.moxa.dream.system.transaction;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public interface Transaction {
-
-    void setDataSource(DataSource dataSource);
 
     Connection getConnection() throws SQLException;
 

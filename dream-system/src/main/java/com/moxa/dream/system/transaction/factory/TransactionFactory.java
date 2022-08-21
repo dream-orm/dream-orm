@@ -2,6 +2,7 @@ package com.moxa.dream.system.transaction.factory;
 
 import com.moxa.dream.system.transaction.Transaction;
 
+import javax.sql.DataSource;
 import java.util.Properties;
 
 public interface TransactionFactory {
@@ -9,6 +10,6 @@ public interface TransactionFactory {
 
     }
 
-    Transaction getTransaction();
+    Transaction getTransaction(DataSource dataSource);
 
 }

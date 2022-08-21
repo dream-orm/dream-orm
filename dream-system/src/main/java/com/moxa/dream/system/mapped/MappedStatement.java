@@ -23,6 +23,8 @@ public class MappedStatement {
     private Object arg;
     private Class<? extends Collection> rowType;
     private Class<?> colType;
+    private Command command;
+    private boolean cache;
     private Map<String, Object> envMap;
 
     private MappedStatement() {
@@ -33,8 +35,15 @@ public class MappedStatement {
         return methodInfo.getConfiguration();
     }
 
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
     public Command getCommand() {
-        return mappedSql.getCommand();
+        if (command == Command.NONE) {
+            command = mappedSql.getCommand();
+        }
+        return command;
     }
 
     public MethodInfo getMethodInfo() {
@@ -76,9 +85,19 @@ public class MappedStatement {
     public void setRowType(Class<? extends Collection> rowType) {
         this.rowType = rowType;
     }
+
     public String[] getColumnNames() {
         return methodInfo.getColumnNames();
     }
+
+    public void setCache(boolean cache) {
+        this.cache = cache;
+    }
+
+    public boolean isCache() {
+        return cache;
+    }
+
     public Method getMethod() {
         return methodInfo.getMethod();
     }
@@ -146,6 +165,8 @@ public class MappedStatement {
             mappedStatement.methodInfo = methodInfo;
             mappedStatement.rowType = methodInfo.getRowType();
             mappedStatement.colType = methodInfo.getColType();
+            mappedStatement.command = methodInfo.getCommand();
+            mappedStatement.cache=methodInfo.isCache();
             return this;
         }
 

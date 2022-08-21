@@ -40,7 +40,6 @@ import java.util.stream.Collectors;
 public abstract class AbstractDialectFactory implements DialectFactory {
     private int split;
     private ToSQL toSQL;
-
     public AbstractDialectFactory() {
         this(5);
     }
@@ -64,7 +63,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
 
     @Override
     public MappedStatement compile(MethodInfo methodInfo, Object arg) {
-        PackageStatement statement = methodInfo.getStatement();
+        PackageStatement statement = getStatement(methodInfo);
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
         List<MappedParam> mappedParamList = null;
         List<$Invoker.ParamInfo> paramInfoList = null;
@@ -137,6 +136,20 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                 .arg(arg)
                 .uniqueKey(uniqueKey)
                 .build();
+    }
+
+    protected PackageStatement getStatement(MethodInfo methodInfo) {
+        PackageStatement statement = methodInfo.getStatement();
+        if (statement == null) {
+            synchronized (this) {
+                statement = methodInfo.getStatement();
+                if (statement == null) {
+                    methodInfo.compile();
+                }
+                statement = methodInfo.getStatement();
+            }
+        }
+        return statement;
     }
 
     protected Assist getAssist(MethodInfo methodInfo, Object arg) {
@@ -262,7 +275,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
     }
 
     @Override
-    public void wrapper(MethodInfo methodInfo) {
+    public void compileAfter(MethodInfo methodInfo) {
         List<Wrapper> allWrapperList = new ArrayList<>();
         List<Wrapper> beforeWrapperList = Arrays.asList(new AnnotationWrapper());
         List<Wrapper> wrapperList = getWrapList();

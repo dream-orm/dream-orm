@@ -32,10 +32,10 @@ public class MemoryCache implements Cache {
 
     @Override
     public void put(MappedStatement mappedStatement, Object value) {
-        Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = mappedStatement.getTableScanInfoMap();
-        CacheKey sqlKey = mappedStatement.getSqlKey();
         CacheKey uniqueKey = mappedStatement.getUniqueKey();
-        if (!ObjectUtil.isNull(tableScanInfoMap)) {
+        Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = mappedStatement.getTableScanInfoMap();
+        if (uniqueKey != null&&!ObjectUtil.isNull(tableScanInfoMap)) {
+            CacheKey sqlKey = mappedStatement.getSqlKey();
             for (String table : tableScanInfoMap.keySet()) {
                 Set<CacheKey> cacheKeySet = tableMap.get(table);
                 if (cacheKeySet == null) {
@@ -49,41 +49,43 @@ public class MemoryCache implements Cache {
                 }
                 cacheKeySet.add(sqlKey);
             }
-        }
-        Map<CacheKey, Object> keyMap = indexMap.get(sqlKey);
-        if (keyMap == null) {
-            synchronized (this) {
-                keyMap = indexMap.get(sqlKey);
-                if (keyMap == null) {
-                    keyMap = new ConcurrentHashMap<>();
-                    indexMap.put(sqlKey, keyMap);
-                }
-            }
-        } else if (keyMap.size() > limit) {
-            if (canDelete.compareAndSet(true, false)) {
-                Map<CacheKey, Object> finalMap = keyMap;
-                Iterator<Map.Entry<CacheKey, Object>> iterator = finalMap.entrySet().iterator();
-                while (iterator.hasNext()) {
-                    double random = Math.random();
-                    if (random <= rate) {
-                        iterator.remove();
+            Map<CacheKey, Object> keyMap = indexMap.get(sqlKey);
+            if (keyMap == null) {
+                synchronized (this) {
+                    keyMap = indexMap.get(sqlKey);
+                    if (keyMap == null) {
+                        keyMap = new ConcurrentHashMap<>();
+                        indexMap.put(sqlKey, keyMap);
                     }
                 }
-                canDelete.set(true);
+            } else if (keyMap.size() > limit) {
+                if (canDelete.compareAndSet(true, false)) {
+                    Map<CacheKey, Object> finalMap = keyMap;
+                    Iterator<Map.Entry<CacheKey, Object>> iterator = finalMap.entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        double random = Math.random();
+                        if (random <= rate) {
+                            iterator.remove();
+                        }
+                    }
+                    canDelete.set(true);
+                }
             }
+            keyMap.put(uniqueKey, value);
         }
-        keyMap.put(uniqueKey, value);
     }
 
     @Override
     public Object get(MappedStatement mappedStatement) {
-        CacheKey sqlKey = mappedStatement.getSqlKey();
-        Map<CacheKey, Object> keyMap = indexMap.get(sqlKey);
         CacheKey uniqueKey = mappedStatement.getUniqueKey();
-        if (keyMap != null) {
-            return keyMap.get(uniqueKey);
-        } else
-            return null;
+        if (uniqueKey != null) {
+            CacheKey sqlKey = mappedStatement.getSqlKey();
+            Map<CacheKey, Object> keyMap = indexMap.get(sqlKey);
+            if (keyMap != null) {
+                return keyMap.get(uniqueKey);
+            }
+        }
+        return null;
     }
 
     @Override

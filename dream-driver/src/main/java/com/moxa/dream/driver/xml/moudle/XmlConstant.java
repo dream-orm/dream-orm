@@ -22,7 +22,5 @@ public class XmlConstant {
     public static final String INIT = "init";
     public static final String LOOP = "loop";
     public static final String DESTROY = "destroy";
-    public static final String SQLACTION = "sqlAction";
-    public static final String MAPPERACTION = "mapperAction";
-    public static final String SERVICERACTION = "serviceAction";
+    public static final String ACTION = "action";
 }

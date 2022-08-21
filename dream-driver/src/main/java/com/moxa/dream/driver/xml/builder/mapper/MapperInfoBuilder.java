@@ -1,6 +1,5 @@
 package com.moxa.dream.driver.xml.builder.mapper;
 
-import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.driver.action.MapperAction;
 import com.moxa.dream.driver.action.ServiceAction;
 import com.moxa.dream.driver.action.SqlAction;
@@ -11,10 +10,12 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapper.Action;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 import org.xml.sax.Attributes;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class MapperInfoBuilder extends XMLBuilder {
     private final Configuration configuration;
@@ -81,55 +82,45 @@ public class MapperInfoBuilder extends XMLBuilder {
         }
     }
 
-    public Action[] getActionList(List<Object> actionList) {
+    public Action[] getActionList(List<ActionBuilder.Action> actionList) {
         Action[] actions = null;
         if (!ObjectUtil.isNull(actionList)) {
             actions = new Action[actionList.size()];
             for (int i = 0; i < actionList.size(); i++) {
-                Object action = actionList.get(i);
-                if (action instanceof SqlActionBuilder.SqlAction) {
-                    SqlActionBuilder.SqlAction sqlAction = (SqlActionBuilder.SqlAction) action;
-                    Command command = getCommand(sqlAction.getCommand());
-                    boolean antlr = true;
-                    if (!ObjectUtil.isNull(sqlAction.getAntlr())) {
-                        antlr = Boolean.valueOf(sqlAction.getAntlr());
-                    }
-                    String sql = sqlAction.getValue();
-                    if (!antlr) {
-                        sql = "@(" + sql + ")";
-                    }
-                    actions[i] = new SqlAction(configuration, sql, sqlAction.getProperty(), command);
-                } else if (action instanceof MapperActionBuilder.MapperAction) {
-                    MapperActionBuilder.MapperAction mapperAction = (MapperActionBuilder.MapperAction) action;
-                    actions[i] = new MapperAction(configuration, mapperAction.getMethodRef(), mapperAction.getProperty());
-                } else {
-                    ServiceActionBuilder.ServiceAction serviceAction = (ServiceActionBuilder.ServiceAction) action;
-                    actions[i] = ServiceAction.of(serviceAction.getProperty(), serviceAction.getClassRef());
+                ActionBuilder.Action action = actionList.get(i);
+                String type = action.getType();
+                switch (type) {
+                    case "sql":
+                        actions[i] = new SqlAction(configuration, action.getProperty(), action.getRef());
+                        break;
+                    case "mapper":
+                        actions[i] = new MapperAction(configuration, action.getProperty(), action.getRef());
+                        break;
+                    case "service":
+                        actions[i] = new ServiceAction(action.getProperty(), action.getRef());
+                        break;
+                    default:
+                        throw new DreamRunTimeException("action类型限定为：['sql','mapper','service']");
+                }
+                Properties properties = getProperties(action.getPropertyList());
+                if(properties!=null) {
+                    actions[i].setProperties(properties);
                 }
             }
         }
         return actions;
     }
 
-    private Command getCommand(String cmd) {
-        Command command = Command.NONE;
-        if (!ObjectUtil.isNull(cmd)) {
-            switch (cmd.toLowerCase()) {
-                case "query":
-                    command = Command.QUERY;
-                    break;
-                case "update":
-                    command = Command.UPDATE;
-                    break;
-                case "insert":
-                    command = Command.INSERT;
-                    break;
-                case "delete":
-                    command = Command.DELETE;
-                    break;
+    Properties getProperties(List<PropertyBuilder.Property> propertyList) {
+        Properties properties = null;
+        if (propertyList != null && propertyList.size() > 0) {
+            properties = new Properties();
+            for (PropertyBuilder.Property property : propertyList) {
+                properties.put(property.getName(), property.getValue());
             }
         }
-        return command;
+        return properties;
     }
+
 
 }

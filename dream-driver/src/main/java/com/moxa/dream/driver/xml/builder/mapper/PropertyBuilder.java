@@ -6,21 +6,22 @@ import com.moxa.dream.driver.xml.moudle.XmlHandler;
 import com.moxa.dream.driver.xml.util.XmlUtil;
 import org.xml.sax.Attributes;
 
-public class MapperActionBuilder extends XMLBuilder {
-    private MapperAction mapperAction;
+public class PropertyBuilder extends XMLBuilder {
+    private Property property;
 
-    public MapperActionBuilder(XmlHandler workHandler) {
+    public PropertyBuilder(XmlHandler workHandler) {
         super(workHandler);
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         switch (qName) {
-            case XmlConstant.MAPPERACTION:
-                mapperAction = XmlUtil.applyAttributes(MapperAction.class, attributes);
+            case XmlConstant.PROPERTY:
+                property = XmlUtil.applyAttributes(Property.class, attributes);
                 break;
             default:
-                throwXmlException(uri, localName, qName, attributes, XmlConstant.MAPPERACTION);
+                throwXmlException(uri, localName, qName, attributes, XmlConstant.PROPERTY);
+                break;
         }
     }
 
@@ -30,23 +31,33 @@ public class MapperActionBuilder extends XMLBuilder {
 
     @Override
     public Object endElement(String uri, String localName, String qName) {
-        return mapperAction;
+        return property;
     }
 
     @Override
     public void builder(String uri, String localName, String qName, Object obj) {
+
     }
 
-    static class MapperAction {
-        private String property;
-        private String methodRef;
+    static class Property {
+        private String name;
+        private String value;
 
-        public String getProperty() {
-            return property;
+        public String getName() {
+            return name;
         }
 
-        public String getMethodRef() {
-            return methodRef;
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
         }
     }
+
 }

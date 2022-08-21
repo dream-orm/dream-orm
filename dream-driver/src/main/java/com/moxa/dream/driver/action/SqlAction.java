@@ -11,37 +11,57 @@ import com.moxa.dream.system.mapper.Action;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.reflection.util.NonCollection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.Properties;
 
 public class SqlAction implements Action {
     private Configuration configuration;
-
     private String sql;
     private String property;
-    private Command command;
     private MethodInfo methodInfo;
+    private boolean cache = true;
+    private Command command = Command.NONE;
 
-    public SqlAction(Configuration configuration, String sql, String property) {
-        this(configuration, sql, property, Command.NONE);
+    public SqlAction(Configuration configuration, String property, String sql) {
+        this.configuration = configuration;
+        this.property = property;
+        this.sql = sql;
     }
 
-    public SqlAction(Configuration configuration, String sql, String property, Command command) {
-        this.configuration = configuration;
-        this.sql = sql;
-        this.property = property;
-        this.command = command;
+    @Override
+    public void setProperties(Properties properties) {
+        String cache = properties.getProperty("cache");
+        this.cache = !String.valueOf(false).equalsIgnoreCase(cache);
+        String command = properties.getProperty("command");
+        if (!ObjectUtil.isNull(command)) {
+            command=command.toLowerCase();
+            switch (command) {
+                case "query":
+                    this.command = Command.QUERY;
+                    break;
+                case "insert":
+                    this.command = Command.INSERT;
+                    break;
+                case "update":
+                    this.command = Command.UPDATE;
+                    break;
+                case "delete":
+                    this.command = Command.DELETE;
+                    break;
+                default:throw new DreamRunTimeException("Command:'"+command+"'未注册");
+
+            }
+        }
     }
 
     @Override
     public Object doAction(Executor executor, Object arg) throws Exception {
         if (!ObjectUtil.isNull(property)) {
-            if (arg == null) {
-                throw new RuntimeException("Property 'arg' is required");
-            }
             if (methodInfo == null) {
                 synchronized (this) {
                     if (methodInfo == null) {
@@ -58,6 +78,7 @@ public class SqlAction implements Action {
                         methodInfo = new MethodInfo.Builder(configuration)
                                 .rowType(ReflectUtil.getRowType(type))
                                 .colType(ReflectUtil.getColType(type))
+                                .command(command)
                                 .sql(sql)
                                 .build();
                     }
@@ -79,11 +100,11 @@ public class SqlAction implements Action {
         SqlSession sqlSession = new DefaultSqlSession(configuration, executor) {
             @Override
             protected Command getCommand(MappedStatement mappedStatement) {
-                Command command = mappedStatement.getCommand();
-                if (command == Command.NONE && SqlAction.this.command != null) {
-                    command = SqlAction.this.command;
+                mappedStatement.setCache(cache);
+                if(SqlAction.this.command!=Command.NONE){
+                    mappedStatement.setCommand(SqlAction.this.command);
                 }
-                return command;
+                return super.getCommand(mappedStatement);
             }
         };
         Object result = sqlSession.execute(methodInfo, arg);

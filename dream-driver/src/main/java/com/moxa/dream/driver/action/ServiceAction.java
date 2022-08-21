@@ -10,17 +10,15 @@ public class ServiceAction implements Action {
     private Action action;
     private String property;
 
-
-    public ServiceAction(String property, Action action) {
+    public ServiceAction(String property, String type) {
+        Class<? extends Action> actionType = ReflectUtil.loadClass(type);
+        Action action = ReflectUtil.create(actionType);
         this.property = property;
         this.action = action;
     }
-
-    public static ServiceAction of(String property, String type) {
-        Class<? extends Action> actionType = ReflectUtil.loadClass(type);
-        Action action = ReflectUtil.create(actionType);
-        return new ServiceAction(property, action);
-
+    public ServiceAction(String property, Action action) {
+        this.property = property;
+        this.action = action;
     }
 
     @Override

@@ -22,17 +22,9 @@ public class DestroyBuilder extends XMLBuilder {
             case XmlConstant.DESTROY:
                 destroy = XmlUtil.applyAttributes(Destroy.class, attributes);
                 break;
-            case XmlConstant.SQLACTION:
-                SqlActionBuilder sqlActionBuilder = new SqlActionBuilder(workHandler);
-                sqlActionBuilder.startElement(uri, localName, qName, attributes);
-                break;
-            case XmlConstant.MAPPERACTION:
-                MapperActionBuilder mapperActionBuilder = new MapperActionBuilder(workHandler);
-                mapperActionBuilder.startElement(uri, localName, qName, attributes);
-                break;
-            case XmlConstant.SERVICERACTION:
-                ServiceActionBuilder serviceActionBuilder = new ServiceActionBuilder(workHandler);
-                serviceActionBuilder.startElement(uri, localName, qName, attributes);
+            case XmlConstant.ACTION:
+                ActionBuilder actionBuilder = new ActionBuilder(workHandler);
+                actionBuilder.startElement(uri, localName, qName, attributes);
                 break;
             default:
                 throwXmlException(uri, localName, qName, attributes, XmlConstant.DESTROY);
@@ -51,18 +43,16 @@ public class DestroyBuilder extends XMLBuilder {
     @Override
     public void builder(String uri, String localName, String qName, Object obj) {
         switch (qName) {
-            case XmlConstant.SQLACTION:
-            case XmlConstant.MAPPERACTION:
-            case XmlConstant.SERVICERACTION:
-                destroy.actionList.add(obj);
+            case XmlConstant.ACTION:
+                destroy.actionList.add((ActionBuilder.Action)obj);
                 break;
         }
     }
 
     static class Destroy {
-        private List<Object> actionList = new ArrayList<>();
+        private List<ActionBuilder.Action> actionList = new ArrayList<>();
 
-        public List<Object> getActionList() {
+        public List<ActionBuilder.Action> getActionList() {
             return actionList;
         }
     }

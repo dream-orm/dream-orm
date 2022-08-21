@@ -95,6 +95,10 @@ public class ConfigurationBuilder extends XMLBuilder {
         }
         if (dialectFactory != null) {
             configBuilder.dialectFactory(dialectFactory.getType());
+            Properties properties = getProperties(dialectFactory.getPropertyList());
+            if(properties!=null){
+                configBuilder.dialectProperties(properties);
+            }
         }
         if (tableFactory != null) {
             configBuilder.tableFactory(tableFactory.getType());

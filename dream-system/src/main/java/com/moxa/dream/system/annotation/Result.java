@@ -1,5 +1,6 @@
 package com.moxa.dream.system.annotation;
 
+import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.util.reflection.util.NullObject;
 
 import java.lang.annotation.ElementType;
@@ -15,6 +16,9 @@ public @interface Result {
 
     Class<?> colType() default NullObject.class;
 
-    String[]columnNames() default {};
+    String[] columnNames() default {};
 
+    boolean cache() default true;
+
+    Command command() default Command.NONE;
 }

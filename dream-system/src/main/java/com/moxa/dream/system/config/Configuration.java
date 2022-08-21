@@ -31,8 +31,7 @@ public class Configuration {
 
     public Transaction getTransaction(boolean autoCommit) {
         DataSource dataSource = dataSourceFactory.getDataSource();
-        Transaction transaction = transactionFactory.getTransaction();
-        transaction.setDataSource(dataSource);
+        Transaction transaction = transactionFactory.getTransaction(dataSource);
         transaction.setAutoCommit(autoCommit);
         return transaction;
     }

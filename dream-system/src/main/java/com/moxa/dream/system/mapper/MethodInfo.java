@@ -1,5 +1,6 @@
 package com.moxa.dream.system.mapper;
 
+import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
@@ -17,17 +18,18 @@ public class MethodInfo {
     private String name;
     private Class<? extends Collection> rowType;
     private Class colType;
-    private String[]columnNames;
+    private String[] columnNames;
+    private boolean cache;
+    private Command command = Command.NONE;
     private String sql;
     private Integer timeOut;
-
+    private PackageStatement statement;
+    private CacheKey sqlKey;
+    private Method method;
     private Action[] initActionList;
     private Action[] loopActionList;
     private Action[] destroyActionList;
     private String[] paramNameList;
-    private PackageStatement statement;
-    private CacheKey sqlKey;
-    private Method method;
 
     private MethodInfo() {
 
@@ -51,6 +53,14 @@ public class MethodInfo {
 
     public String[] getColumnNames() {
         return columnNames;
+    }
+
+    public boolean isCache() {
+        return cache;
+    }
+
+    public Command getCommand() {
+        return command;
     }
 
     public String getSql() {
@@ -104,6 +114,13 @@ public class MethodInfo {
         return (T) builtMap.get(type);
     }
 
+    public synchronized void compile() {
+        DialectFactory dialectFactory = configuration.getDialectFactory();
+        this.statement = dialectFactory.compile(this);
+        this.sqlKey = dialectFactory.getCacheKey(this);
+        dialectFactory.compileAfter(this);
+    }
+
     public static class Builder {
         private final MethodInfo methodInfo;
 
@@ -126,8 +143,19 @@ public class MethodInfo {
             methodInfo.colType = colType;
             return this;
         }
-        public Builder columnNames(String[]columnNames){
-            methodInfo.columnNames=columnNames;
+
+        public Builder columnNames(String[] columnNames) {
+            methodInfo.columnNames = columnNames;
+            return this;
+        }
+
+        public Builder cache(boolean cache) {
+            methodInfo.cache = cache;
+            return this;
+        }
+
+        public Builder command(Command command) {
+            methodInfo.command = command;
             return this;
         }
 
@@ -166,16 +194,16 @@ public class MethodInfo {
             return this;
         }
 
+        private boolean isValid() {
+            return !ObjectUtil.isNull(methodInfo.getSql());
+        }
+
         public MethodInfo build() {
-            if (!ObjectUtil.isNull(methodInfo.sql)) {
-                DialectFactory dialectFactory = methodInfo.configuration.getDialectFactory();
-                ObjectUtil.requireNonNull(dialectFactory, "DialectFactory未在Configuration注册");
-                methodInfo.statement = dialectFactory.compile(methodInfo);
-                CacheKey sqlKey = dialectFactory.getCacheKey(methodInfo);
-                methodInfo.sqlKey = sqlKey;
-                dialectFactory.wrapper(methodInfo);
+            if (isValid()) {
+                return methodInfo;
+            }else{
+                return null;
             }
-            return methodInfo;
         }
     }
 }

@@ -12,8 +12,8 @@ import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 
 public class PageWrapper implements Wrapper {
-    public static final String START_ROW = "startRow";
-    public static final String PAGE_SIZE = "pageSize";
+    private final String START_ROW = "startRow";
+    private final String PAGE_SIZE = "pageSize";
 
     @Override
     public void wrapper(MethodInfo methodInfo) {

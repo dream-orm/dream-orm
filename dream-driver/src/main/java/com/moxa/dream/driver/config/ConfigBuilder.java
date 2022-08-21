@@ -225,6 +225,12 @@ public class ConfigBuilder {
         }
         return this;
     }
+    public ConfigBuilder dialectProperties(Properties properties){
+        DialectFactory dialectFactory = configuration.getDialectFactory();
+        ObjectUtil.requireNonNull(dialectFactory, "DialectFactory未在Configuration注册");
+        dialectFactory.setProperties(getProperties(properties));
+        return this;
+    }
 
     public ConfigBuilder pluginFactory(String type) {
         if (!ObjectUtil.isNull(type)) {

@@ -17,12 +17,17 @@ public abstract class CacheExecutor implements Executor {
 
     @Override
     public Object query(MappedStatement mappedStatement) throws SQLException {
-        Object value = queryFromCache(mappedStatement);
-        if (value == null) {
-            value = executor.query(mappedStatement);
-            if (value != null) {
-                storeObject(mappedStatement, value);
+        Object value;
+        if (mappedStatement.isCache()) {
+            value = queryFromCache(mappedStatement);
+            if (value == null) {
+                value = executor.query(mappedStatement);
+                if (value != null) {
+                    storeObject(mappedStatement, value);
+                }
             }
+        }else{
+            value=executor.query(mappedStatement);
         }
         return value;
     }

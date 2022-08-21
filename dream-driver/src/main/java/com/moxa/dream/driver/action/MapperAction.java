@@ -20,7 +20,7 @@ public class MapperAction implements Action {
     private String property;
     private Configuration configuration;
 
-    public MapperAction(Configuration configuration, String classMethodName, String property) {
+    public MapperAction(Configuration configuration,String property, String classMethodName) {
         int index = classMethodName.lastIndexOf(".");
         if (index == -1) {
             throw new DreamRunTimeException("方法全类名'" + classMethodName + "'不能解析成类名+方法名");
@@ -29,7 +29,7 @@ public class MapperAction implements Action {
         String methodName = classMethodName.substring(index + 1);
         List<Method> methodList = ReflectUtil.findMethod(type)
                 .stream()
-                .filter(method -> method.getName().equals(methodName))
+                .filter(method -> method.getName().equals(methodName)&&!method.isDefault())
                 .collect(Collectors.toList());
         ObjectUtil.requireNonNull(methodList, "方法'" + methodName + "'未在类'" + type.getName() + "'注册");
         if (methodList.size() > 1) {
