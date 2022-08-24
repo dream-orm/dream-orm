@@ -3,7 +3,6 @@ package com.moxa.dream.antlr.util;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;
-import com.moxa.dream.antlr.smt.Statement;
 
 import java.util.Stack;
 
@@ -361,25 +360,6 @@ public class ExprUtil {
 
     public static boolean isEmpty(String val) {
         return val == null || "".equals(val);
-    }
-
-    public static String toString(Statement statement, String cut) {
-        if (statement != null) {
-            return statement + cut;
-        } else
-            return " ";
-    }
-
-    public static String toString(Statement[] statementList, String cut) {
-        if (statementList == null)
-            return "";
-        StringBuilder builder = new StringBuilder();
-        for (Statement statement : statementList) {
-            if (statement != null) {
-                builder.append(statement).append(cut);
-            }
-        }
-        return builder.toString();
     }
 
     public static boolean isBlank(int c) {

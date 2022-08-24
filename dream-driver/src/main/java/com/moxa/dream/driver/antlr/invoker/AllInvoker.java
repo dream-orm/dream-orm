@@ -14,6 +14,7 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapper.MethodInfo;
@@ -123,24 +124,49 @@ public class AllInvoker extends AbstractInvoker {
             ObjectUtil.requireNonNull(tableInfo, "表'" + table + "'未在TableFactory注册");
             alias = tableScanInfo.getAlias();
         }
-
         List<Field> fieldList = ReflectUtil.findField(colType);
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
-                String fieldName = field.getName();
-                Type genericType = field.getGenericType();
-                String fieldTable = getTableName(genericType);
-                if (ObjectUtil.isNull(fieldTable)) {
-                    if (ObjectUtil.isNull(table)) {
-                        for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {
-                            alias = tableScanInfo.getAlias();
-                            tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
-                            ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-                            if (columnInfo != null) {
+                if (!ignore(field)) {
+                    String fieldName = field.getName();
+                    Type genericType = field.getGenericType();
+                    String fieldTable = getTableName(genericType);
+                    if (ObjectUtil.isNull(fieldTable)) {
+                        Class<?> type = field.getType();
+                        if (ReflectUtil.isBaseClass(type) || type.isEnum()) {
+                            if (tableInfo == null) {
+                                boolean find = false;
+                                for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {
+                                    alias = tableScanInfo.getAlias();
+                                    tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
+                                    ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
+                                    if (columnInfo != null) {
+                                        find = true;
+                                        boolean add = true;
+                                        for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
+                                            if (columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
+                                                    || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias())) {
+                                                add = false;
+                                                break;
+                                            }
+                                        }
+                                        if (add) {
+                                            queryColumnList.add(alias + "." + columnInfo.getColumn());
+                                            break;
+                                        }
+                                    }
+                                }
+                                ObjectUtil.requireNonNull(find, "类字段'" + type.getName() + "." + fieldName + "'未能匹配数据库字段");
+                            } else {
+                                ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
+                                ObjectUtil.requireNonNull(columnInfo, "类字段'" + type.getName() + "." + fieldName + "'未能匹配数据库字段");
                                 boolean add = true;
                                 for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
-                                    if (columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
-                                            || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias())) {
+                                    String _table = queryColumnInfo.getTable();
+                                    if ((columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
+                                            || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias()))
+                                            && (ObjectUtil.isNull(_table)
+                                            || _table.equalsIgnoreCase(table))) {
                                         add = false;
                                         break;
                                     }
@@ -151,29 +177,15 @@ public class AllInvoker extends AbstractInvoker {
                             }
                         }
                     } else {
-                        ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-                        if (columnInfo != null) {
-                            boolean add = true;
-                            for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
-                                String _table = queryColumnInfo.getTable();
-                                if ((columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
-                                        || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias()))
-                                        && (ObjectUtil.isNull(_table)
-                                        || _table.equalsIgnoreCase(table))) {
-                                    add = false;
-                                    break;
-                                }
-                            }
-                            if (add) {
-                                queryColumnList.add(alias + "." + columnInfo.getColumn());
-                            }
-                        }
+                        getQueryFromBean(tableFactory, fieldTable, ReflectUtil.getColType(colType, field), tableScanInfoMap, queryColumnInfoList, queryColumnList);
                     }
-                } else {
-                    getQueryFromBean(tableFactory, fieldTable, ReflectUtil.getColType(colType, field), tableScanInfoMap, queryColumnInfoList, queryColumnList);
                 }
             }
         }
+    }
+
+    protected boolean ignore(Field field) {
+        return field.isAnnotationPresent(Ignore.class);
     }
 
     protected String getTableName(Type type) {

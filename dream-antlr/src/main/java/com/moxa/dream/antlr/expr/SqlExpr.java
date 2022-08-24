@@ -685,7 +685,7 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprAcc(ExprInfo exprInfo) {
-        return exprKeyWord(exprInfo);
+        return exprDefault(exprInfo);
     }
 
     protected Statement exprGeq(ExprInfo exprInfo) {

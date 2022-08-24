@@ -73,10 +73,10 @@ public class MapperInfoBuilder extends XMLBuilder {
                     methodBuilder.initActionList(getActionList(init.getActionList()));
                 }
                 if (loop != null) {
-                    methodBuilder.initActionList(getActionList(loop.getActionList()));
+                    methodBuilder.loopActionList(getActionList(loop.getActionList()));
                 }
                 if (destroy != null) {
-                    methodBuilder.initActionList(getActionList(destroy.getActionList()));
+                    methodBuilder.destroyActionList(getActionList(destroy.getActionList()));
                 }
                 break;
         }
