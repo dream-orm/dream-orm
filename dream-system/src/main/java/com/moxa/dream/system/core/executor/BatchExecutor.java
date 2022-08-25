@@ -4,11 +4,12 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.statementhandler.BatchStatementHandler;
 import com.moxa.dream.system.core.statementhandler.PrepareStatementHandler;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
+import com.moxa.dream.system.transaction.Transaction;
 
 public class BatchExecutor extends AbstractExecutor {
 
-    public BatchExecutor(Configuration configuration, boolean autoCommit) {
-        super(configuration, autoCommit);
+    public BatchExecutor(Configuration configuration, Transaction transaction) {
+        super(configuration, transaction);
     }
 
     @Override

@@ -8,49 +8,59 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.executor.BatchExecutor;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.executor.JdbcExecutor;
+import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
+import com.moxa.dream.system.transaction.Transaction;
+import com.moxa.dream.system.transaction.factory.TransactionFactory;
+
+import javax.sql.DataSource;
 
 
 public class DefaultSqlSessionFactory implements SqlSessionFactory {
     private final Configuration configuration;
+    private PluginFactory pluginFactory;
+    private Cache cache;
+    private DataSource dataSource;
+    private TransactionFactory transactionFactory;
+    private final Control control;
 
     public DefaultSqlSessionFactory(Configuration configuration) {
         this.configuration = configuration;
+        this.pluginFactory = configuration.getPluginFactory();
+        this.transactionFactory = configuration.getTransactionFactory();
+        DataSourceFactory dataSourceFactory = configuration.getDataSourceFactory();
+        this.dataSource = dataSourceFactory.getDataSource();
+        CacheFactory cacheFactory = configuration.getCacheFactory();
+        if (cacheFactory != null) {
+            this.cache = cacheFactory.getCache();
+        }
+        control=new Control
+                .Builder()
+                .autoCommit(false)
+                .batch(false)
+                .cache(true)
+                .build();
     }
 
     @Override
     public SqlSession openSession() {
-        return openSession(false);
+        return openSession(control);
     }
 
     @Override
-    public SqlSession openSession(boolean autoCommit) {
-        return openSession(autoCommit, false);
-    }
-
-    @Override
-    public SqlSession openSession(boolean autoCommit, boolean batch) {
-        return openSession(autoCommit, batch, true);
-    }
-
-    @Override
-    public SqlSession openSession(boolean autoCommit, boolean batch, boolean enable) {
-        CacheFactory cacheFactory = configuration.getCacheFactory();
-        PluginFactory pluginFactory = configuration.getPluginFactory();
-        Cache cache = null;
-        if (cacheFactory != null)
-            cache = cacheFactory.getCache();
+    public SqlSession openSession(Control control) {
+        Transaction transaction = transactionFactory.getTransaction(dataSource);
+        transaction.setAutoCommit(control.isAutoCommit());
         Executor executor;
-        if (batch) {
-            executor = new BatchExecutor(configuration, autoCommit);
+        if (control.isBatch()) {
+            executor = new BatchExecutor(configuration, transaction);
         } else {
-            executor = new JdbcExecutor(configuration, autoCommit);
+            executor = new JdbcExecutor(configuration, transaction);
         }
-
-        if (cache != null) {
-            executor = new CustomCacheExecutor(cache, executor);
+        if (this.cache != null) {
+            executor = new CustomCacheExecutor(this.cache, executor);
         }
-        if (enable) {
+        if (control.isCache()) {
             executor = new SessionCacheExecutor(executor);
         }
         if (pluginFactory != null)

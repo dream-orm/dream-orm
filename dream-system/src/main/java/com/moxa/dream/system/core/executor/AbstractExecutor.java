@@ -21,8 +21,8 @@ public abstract class AbstractExecutor implements Executor {
     protected StatementHandler statementHandler;
     protected ListenerFactory listenerFactory;
 
-    public AbstractExecutor(Configuration configuration, boolean autoCommit) {
-        this.transaction = configuration.getTransaction(autoCommit);
+    public AbstractExecutor(Configuration configuration, Transaction transaction) {
+        this.transaction =transaction;
         this.listenerFactory = configuration.getListenerFactory();
         this.statementHandler = getStatementHandler();
         this.executorHandler = getExecutorHandler(configuration);

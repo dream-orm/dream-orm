@@ -29,13 +29,6 @@ public class Configuration {
         mapperFactory.addMapper(this, type);
     }
 
-    public Transaction getTransaction(boolean autoCommit) {
-        DataSource dataSource = dataSourceFactory.getDataSource();
-        Transaction transaction = transactionFactory.getTransaction(dataSource);
-        transaction.setAutoCommit(autoCommit);
-        return transaction;
-    }
-
     public MapperFactory getMapperFactory() {
         return mapperFactory;
     }
