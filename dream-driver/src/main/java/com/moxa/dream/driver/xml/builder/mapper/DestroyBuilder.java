@@ -44,7 +44,7 @@ public class DestroyBuilder extends XMLBuilder {
     public void builder(String uri, String localName, String qName, Object obj) {
         switch (qName) {
             case XmlConstant.ACTION:
-                destroy.actionList.add((ActionBuilder.Action)obj);
+                destroy.actionList.add((ActionBuilder.Action) obj);
                 break;
         }
     }

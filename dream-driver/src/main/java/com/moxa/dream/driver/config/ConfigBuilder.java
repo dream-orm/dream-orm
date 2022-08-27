@@ -1,42 +1,80 @@
 package com.moxa.dream.driver.config;
 
 import com.moxa.dream.driver.alias.AliasFactory;
+import com.moxa.dream.driver.alias.DefaultAliasFactory;
+import com.moxa.dream.driver.dialect.MySQLDialectFactory;
+import com.moxa.dream.driver.factory.DefaultListenerFactory;
+import com.moxa.dream.driver.factory.DefaultMapperFactory;
 import com.moxa.dream.driver.resource.ResourceUtil;
+import com.moxa.dream.driver.xml.builder.XMLBuilder;
+import com.moxa.dream.driver.xml.builder.config.ConfigurationBuilder;
+import com.moxa.dream.driver.xml.moudle.XmlCallback;
+import com.moxa.dream.driver.xml.moudle.XmlHandler;
+import com.moxa.dream.driver.xml.moudle.XmlParser;
 import com.moxa.dream.system.cache.factory.CacheFactory;
+import com.moxa.dream.system.cache.factory.MemoryCacheFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
+import com.moxa.dream.system.plugin.factory.JavaPluginFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.plugin.interceptor.Interceptor;
+import com.moxa.dream.system.table.factory.DefaultTableFactory;
 import com.moxa.dream.system.table.factory.TableFactory;
+import com.moxa.dream.system.transaction.factory.JdbcTransactionFactory;
 import com.moxa.dream.system.transaction.factory.TransactionFactory;
+import com.moxa.dream.system.typehandler.factory.DefaultTypeHandlerFactory;
 import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.wrapper.TypeHandlerWrapper;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
+import org.xml.sax.InputSource;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class ConfigBuilder {
-    private final Configuration configuration;
+    private Configuration configuration;
     private AliasFactory aliasFactory;
     private DefaultConfig defaultConfig;
 
+    public ConfigBuilder() {
+        this(null);
+    }
+
     public ConfigBuilder(DefaultConfig defaultConfig) {
+        if (defaultConfig == null) {
+            defaultConfig = initDefaultConfig();
+        }
         this.configuration = new Configuration();
         this.defaultConfig = defaultConfig;
-        initConfiguration();
+    }
+
+    protected DefaultConfig initDefaultConfig() {
+        DefaultConfig defaultConfig = new DefaultConfig();
+        defaultConfig
+                .setAliasFactory(new DefaultAliasFactory())
+                .setCacheFactory(new MemoryCacheFactory())
+                .setMapperFactory(new DefaultMapperFactory())
+                .setTableFactory(new DefaultTableFactory())
+                .setDialectFactory(new MySQLDialectFactory())
+                .setTransactionFactory(new JdbcTransactionFactory())
+                .setPluginFactory(new JavaPluginFactory())
+                .setListenerFactory(new DefaultListenerFactory())
+                .setTypeHandlerFactory(new DefaultTypeHandlerFactory());
+        return defaultConfig;
+    }
+
+    public DefaultConfig getDefaultConfig() {
+        return defaultConfig;
     }
 
     private void initConfiguration() {
-        if (defaultConfig == null) {
-            defaultConfig = ConfigUtil.getDefaultConfig(null, null);
-        }
         CacheFactory cacheFactory = defaultConfig.getCacheFactory();
         MapperFactory mapperFactory = defaultConfig.getMapperFactory();
         TableFactory tableFactory = defaultConfig.getTableFactory();
@@ -151,6 +189,7 @@ public class ConfigBuilder {
     }
 
     public Configuration build() {
+        this.initConfiguration();
         List<String> mapperPackages = defaultConfig.getMapperPackages();
         if (!ObjectUtil.isNull(mapperPackages)) {
             for (String mapperPackage : mapperPackages) {
@@ -164,6 +203,27 @@ public class ConfigBuilder {
             }
         }
         return configuration;
+    }
+
+    public Configuration build(InputStream inputStream) {
+        if (inputStream != null) {
+            this.initConfiguration();
+            XmlParser xmlParser = new XmlParser();
+            xmlParser.parse(new InputSource(inputStream), new XmlCallback() {
+                @Override
+                public XMLBuilder startDocument(XmlHandler xmlHandler) {
+                    return new ConfigurationBuilder(xmlHandler, ConfigBuilder.this);
+                }
+
+                @Override
+                public void endDocument(Object value) {
+                    ConfigBuilder.this.configuration = (Configuration) value;
+                }
+            });
+            return configuration;
+        } else {
+            return build();
+        }
     }
 
     public ConfigBuilder cacheFactory(String type) {
@@ -225,7 +285,8 @@ public class ConfigBuilder {
         }
         return this;
     }
-    public ConfigBuilder dialectProperties(Properties properties){
+
+    public ConfigBuilder dialectProperties(Properties properties) {
         DialectFactory dialectFactory = configuration.getDialectFactory();
         ObjectUtil.requireNonNull(dialectFactory, "DialectFactory未在Configuration注册");
         dialectFactory.setProperties(getProperties(properties));

@@ -16,6 +16,7 @@ public class ServiceAction implements Action {
         this.property = property;
         this.action = action;
     }
+
     public ServiceAction(String property, Action action) {
         this.property = property;
         this.action = action;

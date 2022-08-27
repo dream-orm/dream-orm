@@ -85,7 +85,7 @@ public class PageHandler extends AbstractHandler {
         if (!ObjectUtil.isNull(value)) {
             property = value + "." + property;
         }
-        countInitActionList[countInitActionList.length - 1] = new SqlAction(methodInfo.getConfiguration(),property,countSql);
+        countInitActionList[countInitActionList.length - 1] = new SqlAction(methodInfo.getConfiguration(), property, countSql);
         ObjectWrapper.wrapper(methodInfo).set("initActionList", countInitActionList);
     }
 

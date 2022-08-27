@@ -5,7 +5,7 @@ import com.moxa.dream.system.mapper.MethodInfo;
 
 import java.io.Closeable;
 
-public interface SqlSession extends Closeable {
+public interface Session extends Closeable {
 
     <T> T getMapper(Class<T> type);
 

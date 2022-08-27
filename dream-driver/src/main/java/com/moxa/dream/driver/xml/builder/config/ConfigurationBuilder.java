@@ -13,7 +13,6 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class ConfigurationBuilder extends XMLBuilder {
-    private final DefaultConfig defaultConfig;
     private ConfigBuilder configBuilder;
     private AliasFactoryBuilder.AliasFactory aliasFactory;
     private TableFactoryBuilder.TableFactory tableFactory;
@@ -26,16 +25,15 @@ public class ConfigurationBuilder extends XMLBuilder {
     private TransactionFactoryBuilder.TransactionFactory transactionFactory;
     private DataSourceFactoryBuilder.DataSourceFactory dataSourceFactory;
 
-    public ConfigurationBuilder(XmlHandler xmlHandler, DefaultConfig defaultConfig) {
+    public ConfigurationBuilder(XmlHandler xmlHandler, ConfigBuilder configBuilder) {
         super(xmlHandler);
-        this.defaultConfig = defaultConfig;
+        this.configBuilder = configBuilder;
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         switch (qName) {
             case XmlConstant.CONFIGURATION:
-                configBuilder = new ConfigBuilder(defaultConfig);
                 break;
             case XmlConstant.ALIASFACTORY:
                 AliasFactoryBuilder aliasFactoryBuilder = new AliasFactoryBuilder(workHandler);
@@ -96,7 +94,7 @@ public class ConfigurationBuilder extends XMLBuilder {
         if (dialectFactory != null) {
             configBuilder.dialectFactory(dialectFactory.getType());
             Properties properties = getProperties(dialectFactory.getPropertyList());
-            if(properties!=null){
+            if (properties != null) {
                 configBuilder.dialectProperties(properties);
             }
         }

@@ -182,14 +182,16 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         }
         return cache;
     }
+
     protected Command getCommand(Class mapperClass, Method method) {
         Result resultAnnotation = method.getDeclaredAnnotation(Result.class);
-        Command command=Command.NONE;
+        Command command = Command.NONE;
         if (resultAnnotation != null) {
-            command=resultAnnotation.command();
+            command = resultAnnotation.command();
         }
         return command;
     }
+
     protected String[] getParamNameList(Method method) {
         Parameter[] parameters = method.getParameters();
         if (!ObjectUtil.isNull(parameters)) {

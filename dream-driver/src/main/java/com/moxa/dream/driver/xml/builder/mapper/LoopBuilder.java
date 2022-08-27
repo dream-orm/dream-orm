@@ -44,7 +44,7 @@ public class LoopBuilder extends XMLBuilder {
     public void builder(String uri, String localName, String qName, Object obj) {
         switch (qName) {
             case XmlConstant.ACTION:
-                loop.actionList.add((ActionBuilder.Action)obj);
+                loop.actionList.add((ActionBuilder.Action) obj);
                 break;
         }
     }

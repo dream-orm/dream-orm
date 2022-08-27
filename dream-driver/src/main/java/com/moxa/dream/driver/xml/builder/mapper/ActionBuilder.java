@@ -24,7 +24,7 @@ public class ActionBuilder extends XMLBuilder {
                 action = XmlUtil.applyAttributes(Action.class, attributes);
                 break;
             case XmlConstant.PROPERTY:
-                PropertyBuilder propertyBuilder=new PropertyBuilder(workHandler);
+                PropertyBuilder propertyBuilder = new PropertyBuilder(workHandler);
                 propertyBuilder.startElement(uri, localName, qName, attributes);
                 break;
             default:
@@ -48,9 +48,9 @@ public class ActionBuilder extends XMLBuilder {
 
     @Override
     public void builder(String uri, String localName, String qName, Object obj) {
-        switch (qName){
+        switch (qName) {
             case XmlConstant.PROPERTY:
-                PropertyBuilder.Property property=(PropertyBuilder.Property)obj;
+                PropertyBuilder.Property property = (PropertyBuilder.Property) obj;
                 action.propertyList.add(property);
                 break;
         }
@@ -60,7 +60,7 @@ public class ActionBuilder extends XMLBuilder {
         private String type;
         private String property;
         private String ref;
-        private List<PropertyBuilder.Property> propertyList=new ArrayList<>();
+        private List<PropertyBuilder.Property> propertyList = new ArrayList<>();
 
         public String getType() {
             return type;

@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractDialectFactory implements DialectFactory {
     private int split;
     private ToSQL toSQL;
+
     public AbstractDialectFactory() {
         this(5);
     }

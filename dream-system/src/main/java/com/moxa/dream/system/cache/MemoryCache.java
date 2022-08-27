@@ -34,7 +34,7 @@ public class MemoryCache implements Cache {
     public void put(MappedStatement mappedStatement, Object value) {
         CacheKey uniqueKey = mappedStatement.getUniqueKey();
         Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = mappedStatement.getTableScanInfoMap();
-        if (uniqueKey != null&&!ObjectUtil.isNull(tableScanInfoMap)) {
+        if (uniqueKey != null && !ObjectUtil.isNull(tableScanInfoMap)) {
             CacheKey sqlKey = mappedStatement.getSqlKey();
             for (String table : tableScanInfoMap.keySet()) {
                 Set<CacheKey> cacheKeySet = tableMap.get(table);

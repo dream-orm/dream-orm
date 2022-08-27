@@ -201,7 +201,7 @@ public class MethodInfo {
         public MethodInfo build() {
             if (isValid()) {
                 return methodInfo;
-            }else{
+            } else {
                 return null;
             }
         }

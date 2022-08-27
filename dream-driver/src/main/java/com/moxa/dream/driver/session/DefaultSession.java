@@ -8,13 +8,13 @@ import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
 
-public class DefaultSqlSession implements SqlSession {
+public class DefaultSession implements Session {
     private final Configuration configuration;
     private final Executor executor;
     private final MapperFactory mapperFactory;
     private final DialectFactory dialectFactory;
 
-    public DefaultSqlSession(Configuration configuration, Executor executor) {
+    public DefaultSession(Configuration configuration, Executor executor) {
         this.configuration = configuration;
         this.executor = executor;
         this.mapperFactory = configuration.getMapperFactory();

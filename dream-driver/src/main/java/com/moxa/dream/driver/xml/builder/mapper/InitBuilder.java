@@ -44,7 +44,7 @@ public class InitBuilder extends XMLBuilder {
     public void builder(String uri, String localName, String qName, Object obj) {
         switch (qName) {
             case XmlConstant.ACTION:
-                init.actionList.add((ActionBuilder.Action)obj);
+                init.actionList.add((ActionBuilder.Action) obj);
                 break;
         }
     }

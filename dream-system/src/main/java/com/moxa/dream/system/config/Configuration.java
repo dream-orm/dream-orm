@@ -7,11 +7,8 @@ import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.table.factory.TableFactory;
-import com.moxa.dream.system.transaction.Transaction;
 import com.moxa.dream.system.transaction.factory.TransactionFactory;
 import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
-
-import javax.sql.DataSource;
 
 public class Configuration {
     private MapperFactory mapperFactory;

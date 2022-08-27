@@ -9,7 +9,6 @@ import com.moxa.dream.system.mapped.MappedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class DefaultExecutorHandler implements ExecutorHandler {
     private final ResultSetHandler resultSetHandler;

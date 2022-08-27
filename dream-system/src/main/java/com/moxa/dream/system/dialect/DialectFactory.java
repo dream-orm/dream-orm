@@ -8,9 +8,10 @@ import com.moxa.dream.system.mapper.MethodInfo;
 import java.util.Properties;
 
 public interface DialectFactory {
-    default void setProperties(Properties properties){
+    default void setProperties(Properties properties) {
 
     }
+
     PackageStatement compile(MethodInfo methodInfo);
 
     MappedStatement compile(MethodInfo methodInfo, Object arg);
@@ -20,7 +21,6 @@ public interface DialectFactory {
     CacheKey getCacheKey(MethodInfo methodInfo);
 
     DbType getDbType();
-
 
 
     enum DbType {

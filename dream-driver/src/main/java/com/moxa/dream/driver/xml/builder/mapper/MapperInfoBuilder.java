@@ -103,7 +103,7 @@ public class MapperInfoBuilder extends XMLBuilder {
                         throw new DreamRunTimeException("action类型限定为：['sql','mapper','service']");
                 }
                 Properties properties = getProperties(action.getPropertyList());
-                if(properties!=null) {
+                if (properties != null) {
                     actions[i].setProperties(properties);
                 }
             }

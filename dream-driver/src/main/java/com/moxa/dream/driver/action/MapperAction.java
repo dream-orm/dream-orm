@@ -1,7 +1,7 @@
 package com.moxa.dream.driver.action;
 
-import com.moxa.dream.driver.session.DefaultSqlSession;
-import com.moxa.dream.driver.session.SqlSession;
+import com.moxa.dream.driver.session.DefaultSession;
+import com.moxa.dream.driver.session.Session;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.mapper.Action;
@@ -20,7 +20,7 @@ public class MapperAction implements Action {
     private String property;
     private Configuration configuration;
 
-    public MapperAction(Configuration configuration,String property, String classMethodName) {
+    public MapperAction(Configuration configuration, String property, String classMethodName) {
         int index = classMethodName.lastIndexOf(".");
         if (index == -1) {
             throw new DreamRunTimeException("方法全类名'" + classMethodName + "'不能解析成类名+方法名");
@@ -29,7 +29,7 @@ public class MapperAction implements Action {
         String methodName = classMethodName.substring(index + 1);
         List<Method> methodList = ReflectUtil.findMethod(type)
                 .stream()
-                .filter(method -> method.getName().equals(methodName)&&!method.isDefault())
+                .filter(method -> method.getName().equals(methodName) && !method.isDefault())
                 .collect(Collectors.toList());
         ObjectUtil.requireNonNull(methodList, "方法'" + methodName + "'未在类'" + type.getName() + "'注册");
         if (methodList.size() > 1) {
@@ -44,8 +44,8 @@ public class MapperAction implements Action {
 
     @Override
     public Object doAction(Executor executor, Object arg) throws Exception {
-        SqlSession sqlSession = new DefaultSqlSession(configuration, executor);
-        Object mapper = sqlSession.getMapper(type);
+        Session session = new DefaultSession(configuration, executor);
+        Object mapper = session.getMapper(type);
         Object result = method.invoke(mapper, arg);
         if (!ObjectUtil.isNull(property)) {
             ObjectWrapper.wrapper(arg).set(property, result);

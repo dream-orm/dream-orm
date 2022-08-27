@@ -16,25 +16,25 @@ import com.moxa.dream.system.transaction.factory.TransactionFactory;
 import javax.sql.DataSource;
 
 
-public class DefaultSqlSessionFactory implements SqlSessionFactory {
+public class DefaultSessionFactory implements SessionFactory {
     private final Configuration configuration;
-    private PluginFactory pluginFactory;
-    private Cache cache;
-    private DataSource dataSource;
-    private TransactionFactory transactionFactory;
     private final Control control;
+    private PluginFactory pluginFactory;
+    private TransactionFactory transactionFactory;
+    private DataSource dataSource;
+    private Cache cache;
 
-    public DefaultSqlSessionFactory(Configuration configuration) {
+    public DefaultSessionFactory(Configuration configuration) {
         this.configuration = configuration;
-        this.pluginFactory = configuration.getPluginFactory();
-        this.transactionFactory = configuration.getTransactionFactory();
         DataSourceFactory dataSourceFactory = configuration.getDataSourceFactory();
-        this.dataSource = dataSourceFactory.getDataSource();
+        transactionFactory = configuration.getTransactionFactory();
+        dataSource = dataSourceFactory.getDataSource();
+        pluginFactory = configuration.getPluginFactory();
         CacheFactory cacheFactory = configuration.getCacheFactory();
         if (cacheFactory != null) {
-            this.cache = cacheFactory.getCache();
+            cache = cacheFactory.getCache();
         }
-        control=new Control
+        control = new Control
                 .Builder()
                 .autoCommit(false)
                 .batch(false)
@@ -43,12 +43,12 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
     }
 
     @Override
-    public SqlSession openSession() {
+    public Session openSession() {
         return openSession(control);
     }
 
     @Override
-    public SqlSession openSession(Control control) {
+    public Session openSession(Control control) {
         Transaction transaction = transactionFactory.getTransaction(dataSource);
         transaction.setAutoCommit(control.isAutoCommit());
         Executor executor;
@@ -69,12 +69,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
     }
 
     @Override
-    public SqlSession openSession(Executor executor) {
-        return new DefaultSqlSession(configuration, executor);
-    }
-
-    @Override
-    public Configuration getConfiguration() {
-        return configuration;
+    public Session openSession(Executor executor) {
+        return new DefaultSession(configuration, executor);
     }
 }

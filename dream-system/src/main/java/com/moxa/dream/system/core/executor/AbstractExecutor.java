@@ -22,7 +22,7 @@ public abstract class AbstractExecutor implements Executor {
     protected ListenerFactory listenerFactory;
 
     public AbstractExecutor(Configuration configuration, Transaction transaction) {
-        this.transaction =transaction;
+        this.transaction = transaction;
         this.listenerFactory = configuration.getListenerFactory();
         this.statementHandler = getStatementHandler();
         this.executorHandler = getExecutorHandler(configuration);

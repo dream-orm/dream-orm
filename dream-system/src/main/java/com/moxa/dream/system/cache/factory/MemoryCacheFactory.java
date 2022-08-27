@@ -5,18 +5,18 @@ import com.moxa.dream.system.cache.MemoryCache;
 
 import java.util.Properties;
 
-public class MemoryCacheFactory extends AbstractCacheFactory {
-    public static final String ENABLED = "enabled";
-    public static final String LIMIT = "limit";
-    public static final String RATE = "rate";
-    private boolean disabled;
+public class MemoryCacheFactory implements CacheFactory {
+    private final String ENABLE = "enable";
+    private final String LIMIT = "limit";
+    private final String RATE = "rate";
     private int limit = 100;
     private double rate = 0.25;
+    private Cache cache;
 
     @Override
     public void setProperties(Properties properties) {
+        String enable = String.valueOf(true);
         if (properties != null) {
-            disabled = String.valueOf(false).equals(properties.get(ENABLED));
             Object limitObject = properties.get(LIMIT);
             Object rateObject = properties.get(RATE);
             if (limitObject != null) {
@@ -25,14 +25,15 @@ public class MemoryCacheFactory extends AbstractCacheFactory {
             if (rateObject != null) {
                 rate = Double.valueOf(rateObject.toString());
             }
+            enable = properties.getProperty(ENABLE);
+        }
+        if (!String.valueOf(false).equals(enable)) {
+            cache = new MemoryCache(limit, rate);
         }
     }
 
     @Override
-    public Cache createCache() {
-        if (disabled)
-            return null;
-        else
-            return new MemoryCache(limit, rate);
+    public Cache getCache() {
+        return cache;
     }
 }

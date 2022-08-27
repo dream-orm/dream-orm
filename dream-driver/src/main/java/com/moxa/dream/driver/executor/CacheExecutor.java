@@ -26,8 +26,8 @@ public abstract class CacheExecutor implements Executor {
                     storeObject(mappedStatement, value);
                 }
             }
-        }else{
-            value=executor.query(mappedStatement);
+        } else {
+            value = executor.query(mappedStatement);
         }
         return value;
     }

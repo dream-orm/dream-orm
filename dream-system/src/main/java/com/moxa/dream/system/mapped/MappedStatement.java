@@ -35,15 +35,15 @@ public class MappedStatement {
         return methodInfo.getConfiguration();
     }
 
-    public void setCommand(Command command) {
-        this.command = command;
-    }
-
     public Command getCommand() {
         if (command == Command.NONE) {
             command = mappedSql.getCommand();
         }
         return command;
+    }
+
+    public void setCommand(Command command) {
+        this.command = command;
     }
 
     public MethodInfo getMethodInfo() {
@@ -90,12 +90,12 @@ public class MappedStatement {
         return methodInfo.getColumnNames();
     }
 
-    public void setCache(boolean cache) {
-        this.cache = cache;
-    }
-
     public boolean isCache() {
         return cache;
+    }
+
+    public void setCache(boolean cache) {
+        this.cache = cache;
     }
 
     public Method getMethod() {
@@ -166,7 +166,7 @@ public class MappedStatement {
             mappedStatement.rowType = methodInfo.getRowType();
             mappedStatement.colType = methodInfo.getColType();
             mappedStatement.command = methodInfo.getCommand();
-            mappedStatement.cache=methodInfo.isCache();
+            mappedStatement.cache = methodInfo.isCache();
             return this;
         }
 

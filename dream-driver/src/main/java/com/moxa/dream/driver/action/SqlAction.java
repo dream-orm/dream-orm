@@ -2,8 +2,8 @@ package com.moxa.dream.driver.action;
 
 
 import com.moxa.dream.antlr.config.Command;
-import com.moxa.dream.driver.session.DefaultSqlSession;
-import com.moxa.dream.driver.session.SqlSession;
+import com.moxa.dream.driver.session.DefaultSession;
+import com.moxa.dream.driver.session.Session;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.mapped.MappedStatement;
@@ -39,7 +39,7 @@ public class SqlAction implements Action {
         this.cache = !String.valueOf(false).equalsIgnoreCase(cache);
         String command = properties.getProperty("command");
         if (!ObjectUtil.isNull(command)) {
-            command=command.toLowerCase();
+            command = command.toLowerCase();
             switch (command) {
                 case "query":
                     this.command = Command.QUERY;
@@ -53,7 +53,8 @@ public class SqlAction implements Action {
                 case "delete":
                     this.command = Command.DELETE;
                     break;
-                default:throw new DreamRunTimeException("Command:'"+command+"'未注册");
+                default:
+                    throw new DreamRunTimeException("Command:'" + command + "'未注册");
 
             }
         }
@@ -97,17 +98,17 @@ public class SqlAction implements Action {
                 }
             }
         }
-        SqlSession sqlSession = new DefaultSqlSession(configuration, executor) {
+        Session session = new DefaultSession(configuration, executor) {
             @Override
             protected Command getCommand(MappedStatement mappedStatement) {
                 mappedStatement.setCache(cache);
-                if(SqlAction.this.command!=Command.NONE){
+                if (SqlAction.this.command != Command.NONE) {
                     mappedStatement.setCommand(SqlAction.this.command);
                 }
                 return super.getCommand(mappedStatement);
             }
         };
-        Object result = sqlSession.execute(methodInfo, arg);
+        Object result = session.execute(methodInfo, arg);
         if (!ObjectUtil.isNull(property)) {
             ObjectWrapper.wrapper(arg).set(property, result);
         }
