@@ -342,7 +342,7 @@ public class ExprUtil {
     public static String wrapper(ExprReader exprReader) {
         Stack<ExprInfo> exprInfoStack = exprReader.getExprInfoStack();
         StringBuilder builder = new StringBuilder();
-        builder.append("SQL:'" + exprReader.getSql() + "'parsing failed,accepted type:\n");
+        builder.append("编译SQL：'" + exprReader.getSql() + "'失败，已解析类型:\n");
         int size = exprInfoStack.size();
         while (!exprInfoStack.isEmpty()) {
             builder.append((size--) + ":\t" + exprInfoStack.pop() + "\n");

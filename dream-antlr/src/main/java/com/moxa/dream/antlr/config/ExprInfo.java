@@ -41,14 +41,4 @@ public class ExprInfo {
     public Object getObjInfo() {
         return objInfo;
     }
-
-    @Override
-    public String toString() {
-        return "ExprInfo{" +
-                "exprType=" + exprType +
-                ", info='" + objInfo + '\'' +
-                ", start=" + start +
-                ", end=" + end +
-                '}';
-    }
 }
