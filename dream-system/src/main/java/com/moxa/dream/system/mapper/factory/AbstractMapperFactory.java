@@ -6,9 +6,9 @@ import com.moxa.dream.system.annotation.Param;
 import com.moxa.dream.system.annotation.Result;
 import com.moxa.dream.system.annotation.Sql;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.mapper.Action;
 import com.moxa.dream.system.mapper.MethodInfo;
-import com.moxa.dream.system.mapper.handler.MapperHandler;
+import com.moxa.dream.system.mapper.action.Action;
+import com.moxa.dream.system.mapper.invoke.MapperInvoke;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.BaseReflectHandler;
@@ -225,7 +225,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     }
 
     @Override
-    public <T> T getMapper(Class<T> type, MapperHandler mapperHandler) {
+    public <T> T getMapper(Class<T> type, MapperInvoke mapperInvoke) {
         Class[] typeList = mapperTypeMap.get(type);
         ObjectUtil.requireNonNull(typeList, "类 '" + type.getName() + "'未在Mapper注册");
         return (T) Proxy.newProxyInstance(type.getClassLoader(), typeList, (proxy, method, args) -> {
@@ -251,7 +251,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                         arg = paramMap;
                     }
                 }
-                return mapperHandler.handler(methodInfo, arg);
+                return mapperInvoke.invoke(methodInfo, arg);
             } else {
                 return handler(type, proxy, method, args);
             }

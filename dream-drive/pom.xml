@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dream-driver</artifactId>
+    <artifactId>dream-drive</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.moxa</groupId>

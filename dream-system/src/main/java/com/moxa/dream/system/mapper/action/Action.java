@@ -1,4 +1,4 @@
-package com.moxa.dream.system.mapper;
+package com.moxa.dream.system.mapper.action;
 
 import com.moxa.dream.system.core.executor.Executor;
 

@@ -7,7 +7,7 @@ import com.moxa.dream.system.core.listener.*;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.mapped.MappedStatement;
-import com.moxa.dream.system.mapper.Action;
+import com.moxa.dream.system.mapper.action.Action;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.transaction.Transaction;
 import com.moxa.dream.util.common.ObjectUtil;
