@@ -12,7 +12,7 @@
         <module>dream-antlr</module>
         <module>dream-util</module>
         <module>dream-system</module>
-        <module>dream-driver</module>
+        <module>dream-drive</module>
     </modules>
 
     <properties>
