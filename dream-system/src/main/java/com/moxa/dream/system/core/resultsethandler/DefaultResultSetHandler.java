@@ -9,7 +9,7 @@ import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.mapped.MappedColumn;
 import com.moxa.dream.system.mapped.MappedResult;
 import com.moxa.dream.system.mapped.MappedStatement;
-import com.moxa.dream.system.mapper.action.Action;
+import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;

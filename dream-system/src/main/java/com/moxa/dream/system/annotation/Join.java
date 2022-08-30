@@ -1,5 +1,7 @@
 package com.moxa.dream.system.annotation;
 
+import com.moxa.dream.system.table.JoinType;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -13,17 +15,4 @@ public @interface Join {
     String joinColumn();
 
     JoinType joinType() default JoinType.LEFT_JOIN;
-
-    enum JoinType {
-        LEFT_JOIN("left join"), RIGHT_JOIN("right join"), INNER_JOIN("inner join");
-        private final String join;
-
-        JoinType(String join) {
-            this.join = join;
-        }
-
-        public String getJoin() {
-            return join;
-        }
-    }
 }

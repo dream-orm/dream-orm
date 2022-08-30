@@ -5,7 +5,7 @@ import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapper.MethodInfo;
-import com.moxa.dream.system.mapper.action.Action;
+import com.moxa.dream.system.core.action.Action;
 
 import java.lang.reflect.Method;
 import java.util.*;

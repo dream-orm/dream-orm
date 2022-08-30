@@ -1,13 +1,11 @@
-package com.moxa.dream.system.mapper.factory;
+package com.moxa.dream.drive.mapper;
 
 import com.moxa.dream.antlr.config.Command;
-import com.moxa.dream.system.annotation.Mapper;
-import com.moxa.dream.system.annotation.Param;
-import com.moxa.dream.system.annotation.Result;
-import com.moxa.dream.system.annotation.Sql;
+import com.moxa.dream.drive.annotation.*;
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.mapper.MethodInfo;
-import com.moxa.dream.system.mapper.action.Action;
+import com.moxa.dream.system.mapper.factory.MapperFactory;
 import com.moxa.dream.system.mapper.invoke.MapperInvoke;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -38,14 +36,12 @@ public abstract class AbstractMapperFactory implements MapperFactory {
             List<Method> methodList = ReflectUtil.findMethod(mapperClass);
             if (!ObjectUtil.isNull(methodList)) {
                 for (Method method : methodList) {
-                    if (!method.isDefault()) {
-                        String name = method.getName();
-                        if (builderMap.containsKey(name)) {
-                            throw new DreamRunTimeException("方法名'" + name + "'重复定义");
-                        }
-                        MethodInfo.Builder builder = createMethodInfoBuilder(configuration, mapperClass, method);
-                        builderMap.put(name, builder);
+                    String name = method.getName();
+                    if (builderMap.containsKey(name)) {
+                        throw new DreamRunTimeException("方法名'" + name + "'重复定义");
                     }
+                    MethodInfo.Builder builder = createMethodInfoBuilder(configuration, mapperClass, method);
+                    builderMap.put(name, builder);
                 }
             }
             fillMethodInfoFromResource(configuration, mapperClass, builderMap);
@@ -92,15 +88,30 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     }
 
     protected Action[] getInitActionList(Method method) {
-        return null;
+        ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
+        Action[] actionList = null;
+        if (actionProviderAnnotation != null) {
+            actionList = ReflectUtil.create(actionProviderAnnotation.value()).init(method);
+        }
+        return actionList;
     }
 
     protected Action[] getLoopActionList(Method method) {
-        return null;
+        ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
+        Action[] actionList = null;
+        if (actionProviderAnnotation != null) {
+            actionList = ReflectUtil.create(actionProviderAnnotation.value()).loop(method);
+        }
+        return actionList;
     }
 
     protected Action[] getDestroyActionList(Method method) {
-        return null;
+        ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
+        Action[] actionList = null;
+        if (actionProviderAnnotation != null) {
+            actionList = ReflectUtil.create(actionProviderAnnotation.value()).destroy(method);
+        }
+        return actionList;
     }
 
     protected boolean isMapper(Class mapperClass) {
@@ -108,21 +119,36 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     }
 
     protected String getSql(Method method) {
+        String sql = null;
         Sql sqlAnnotation = method.getDeclaredAnnotation(Sql.class);
-        if (sqlAnnotation == null)
-            return null;
-        else
-            return sqlAnnotation.value();
+        if (sqlAnnotation == null) {
+            ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
+            if (actionProviderAnnotation != null) {
+                sql = ReflectUtil.create(actionProviderAnnotation.value()).value(method);
+            }
+        } else {
+            sql = sqlAnnotation.value();
+        }
+        return sql;
     }
 
     protected Integer getTimeOut(Method method) {
         Sql sqlAnnotation = method.getDeclaredAnnotation(Sql.class);
-        if (sqlAnnotation == null)
-            return null;
-        String timeOut = sqlAnnotation.timeOut();
-        if (ObjectUtil.isNull(timeOut))
-            return null;
-        return Integer.valueOf(timeOut);
+        if (sqlAnnotation == null) {
+            ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
+            if (actionProviderAnnotation != null) {
+                return ReflectUtil.create(actionProviderAnnotation.value()).timeOut(method);
+            } else {
+                return null;
+            }
+        } else {
+            String timeOut = sqlAnnotation.timeOut();
+            if (ObjectUtil.isNull(timeOut)) {
+                return null;
+            } else {
+                return Integer.valueOf(timeOut);
+            }
+        }
     }
 
     protected String getParamName(Parameter parameter) {

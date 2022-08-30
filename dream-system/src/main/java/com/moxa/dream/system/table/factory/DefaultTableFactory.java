@@ -104,4 +104,5 @@ public class DefaultTableFactory implements TableFactory {
     public TableInfo getTableInfo(String table) {
         return tableInfoMap.get(table);
     }
+
 }

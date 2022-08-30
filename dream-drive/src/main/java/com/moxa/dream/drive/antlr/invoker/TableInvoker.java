@@ -49,7 +49,7 @@ public class TableInvoker extends AbstractInvoker {
                 if (!table.equalsIgnoreCase(joinTable)) {
                     JoinInfo joinInfo = tableInfo.getJoinInfo(joinTable);
                     if (joinInfo != null) {
-                        String joinSQL = joinInfo.getJoinType().getJoin() + " " +
+                        String joinSQL = joinInfo.getJoinType().getJoinType() + " " +
                                 "`"+joinInfo.getJoinTable() +"`"+
                                 " ON `" + joinInfo.getTable() + "`.`" + joinInfo.getColumn() + "`=" +
                                 "`"+joinInfo.getJoinTable() + "`.`" + joinInfo.getJoinColumn()+"`";

@@ -1,4 +1,4 @@
-package com.moxa.dream.system.annotation;
+package com.moxa.dream.drive.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-public @interface Param {
-    String value();
+@Target(ElementType.METHOD)
+public @interface ActionProvider {
+    Class<? extends com.moxa.dream.drive.provider.ActionProvider> value();
 }

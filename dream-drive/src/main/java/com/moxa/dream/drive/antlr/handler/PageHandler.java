@@ -16,7 +16,7 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.drive.action.SqlAction;
 import com.moxa.dream.drive.page.annotation.PageQuery;
 import com.moxa.dream.system.mapper.MethodInfo;
-import com.moxa.dream.system.mapper.action.Action;
+import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;

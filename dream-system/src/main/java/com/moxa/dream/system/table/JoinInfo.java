@@ -1,15 +1,13 @@
 package com.moxa.dream.system.table;
 
-import com.moxa.dream.system.annotation.Join;
-
 public class JoinInfo {
     private final String table;
     private final String column;
     private final String joinTable;
     private final String joinColumn;
-    private final Join.JoinType joinType;
+    private final JoinType joinType;
 
-    public JoinInfo(String table, String column, String joinTable, String joinColumn, Join.JoinType joinType) {
+    public JoinInfo(String table, String column, String joinTable, String joinColumn, JoinType joinType) {
         this.table = table;
         this.column = column;
         this.joinTable = joinTable;
@@ -33,7 +31,7 @@ public class JoinInfo {
         return joinColumn;
     }
 
-    public Join.JoinType getJoinType() {
+    public JoinType getJoinType() {
         return joinType;
     }
 }
