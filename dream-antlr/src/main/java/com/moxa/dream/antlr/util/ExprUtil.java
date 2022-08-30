@@ -345,7 +345,8 @@ public class ExprUtil {
         builder.append("编译SQL：'" + exprReader.getSql() + "'失败，已解析类型:\n");
         int size = exprInfoStack.size();
         while (!exprInfoStack.isEmpty()) {
-            builder.append((size--) + ":\t" + exprInfoStack.pop() + "\n");
+            ExprInfo exprInfo = exprInfoStack.pop();
+            builder.append((size--) + "\t" + "类型:"+exprInfo.getExprType()+",字符:"+exprInfo.getInfo() +",位置:("+exprInfo.getStart()+"-"+exprInfo.getEnd()+")\n");
         }
         return builder.toString();
     }

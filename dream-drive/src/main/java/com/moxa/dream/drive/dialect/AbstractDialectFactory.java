@@ -132,7 +132,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         return new MappedStatement
                 .Builder()
                 .methodInfo(methodInfo)
-                .mappedSql(new MappedSql(scanInfo.getCommand(), sql, scanInfo.getTableScanInfoMap()))
+                .mappedSql(new MappedSql(scanInfo.getCommand(), sql, scanInfo.getTableScanInfoMap().keySet()))
                 .mappedParamList(mappedParamList)
                 .arg(arg)
                 .uniqueKey(uniqueKey)

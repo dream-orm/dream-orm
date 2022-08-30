@@ -50,9 +50,9 @@ public class TableInvoker extends AbstractInvoker {
                     JoinInfo joinInfo = tableInfo.getJoinInfo(joinTable);
                     if (joinInfo != null) {
                         String joinSQL = joinInfo.getJoinType().getJoin() + " " +
-                                joinInfo.getJoinTable() +
-                                " ON " + joinInfo.getTable() + "." + joinInfo.getColumn() + "=" +
-                                joinInfo.getJoinTable() + "." + joinInfo.getJoinColumn();
+                                "`"+joinInfo.getJoinTable() +"`"+
+                                " ON `" + joinInfo.getTable() + "`.`" + joinInfo.getColumn() + "`=" +
+                                "`"+joinInfo.getJoinTable() + "`.`" + joinInfo.getJoinColumn()+"`";
                         List<String> tableSQLList = tableSQLMap.get(table);
                         if (tableSQLList == null) {
                             tableSQLList = new ArrayList<>();
@@ -76,14 +76,14 @@ public class TableInvoker extends AbstractInvoker {
             }
             FromStatement fromStatement = (FromStatement) parentStatement;
             String mainTable = tableSQLMap.keySet().toArray(new String[0])[0];
-            SymbolStatement.LetterStatement letterStatement = new SymbolStatement.LetterStatement(mainTable);
-            invokerStatement.setStatement(letterStatement);
+            SymbolStatement.SingleMarkStatement singleMarkStatement = new SymbolStatement.SingleMarkStatement(mainTable);
+            invokerStatement.setStatement(singleMarkStatement);
             List<String> list = tableSQLMap.get(mainTable);
             String joinSQL = "";
             if (!ObjectUtil.isNull(list)) {
                 joinSQL = String.join(" ", tableSQLMap.get(mainTable));
             }
-            QueryExpr.FromExpr fromExpr = new QueryExpr.FromExpr(new ExprReader("from " + mainTable + " " + joinSQL));
+            QueryExpr.FromExpr fromExpr = new QueryExpr.FromExpr(new ExprReader("from `" + mainTable + "` " + joinSQL));
             FromStatement statement = (FromStatement) fromExpr.expr();
             fromStatement.setMainTable(statement.getMainTable());
             fromStatement.setJoinList(statement.getJoinList());

@@ -1,7 +1,6 @@
 package com.moxa.dream.system.mapped;
 
 import com.moxa.dream.antlr.config.Command;
-import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
@@ -9,10 +8,7 @@ import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.mapper.action.Action;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MappedStatement {
 
@@ -106,8 +102,8 @@ public class MappedStatement {
         return methodInfo.getSqlKey();
     }
 
-    public Map<String, ScanInvoker.TableScanInfo> getTableScanInfoMap() {
-        return mappedSql.getTableScanInfoMap();
+    public Set<String> getTableSet() {
+        return mappedSql.getTableSet();
     }
 
     public Integer getTimeOut() {

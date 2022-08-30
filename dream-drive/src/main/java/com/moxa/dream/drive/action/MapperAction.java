@@ -29,9 +29,11 @@ public class MapperAction implements Action {
         String methodName = classMethodName.substring(index + 1);
         List<Method> methodList = ReflectUtil.findMethod(type)
                 .stream()
-                .filter(method -> method.getName().equals(methodName) && !method.isDefault())
+                .filter(method -> method.getName().equals(methodName))
                 .collect(Collectors.toList());
-        ObjectUtil.requireNonNull(methodList, "方法'" + methodName + "'未在类'" + type.getName() + "'注册");
+        if(ObjectUtil.isNull(methodList)){
+            throw new DreamRunTimeException("方法'" + methodName + "'未在类'" + type.getName() + "'注册");
+        }
         if (methodList.size() > 1) {
             throw new DreamRunTimeException("方法'" + methodName + "'在类'" + type.getName() + "'存在多个");
         }

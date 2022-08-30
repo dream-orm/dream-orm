@@ -156,10 +156,10 @@ public class AllInvoker extends AbstractInvoker {
                                         }
                                     }
                                 }
-                                ObjectUtil.requireNonNull(find, "类字段'" + type.getName() + "." + fieldName + "'未能匹配数据库字段");
+                                ObjectUtil.requireNonNull(find, "类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
                             } else {
                                 ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-                                ObjectUtil.requireNonNull(columnInfo, "类字段'" + type.getName() + "." + fieldName + "'未能匹配数据库字段");
+                                ObjectUtil.requireNonNull(columnInfo, "类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
                                 boolean add = true;
                                 for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
                                     String _table = queryColumnInfo.getTable();

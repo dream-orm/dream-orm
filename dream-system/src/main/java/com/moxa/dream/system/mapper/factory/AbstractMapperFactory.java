@@ -266,7 +266,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 .in(type)
                 .unreflectSpecial(method, type)
                 .bindTo(proxy)
-                .invokeWithArguments();
+                .invokeWithArguments(args);
     }
 
     @Override

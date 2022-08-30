@@ -33,10 +33,10 @@ public class MemoryCache implements Cache {
     @Override
     public void put(MappedStatement mappedStatement, Object value) {
         CacheKey uniqueKey = mappedStatement.getUniqueKey();
-        Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = mappedStatement.getTableScanInfoMap();
-        if (uniqueKey != null && !ObjectUtil.isNull(tableScanInfoMap)) {
+        Set<String> tableSet = mappedStatement.getTableSet();
+        if (uniqueKey != null && !ObjectUtil.isNull(tableSet)) {
             CacheKey sqlKey = mappedStatement.getSqlKey();
-            for (String table : tableScanInfoMap.keySet()) {
+            for (String table : tableSet) {
                 Set<CacheKey> cacheKeySet = tableMap.get(table);
                 if (cacheKeySet == null) {
                     synchronized (this) {
@@ -90,9 +90,9 @@ public class MemoryCache implements Cache {
 
     @Override
     public void remove(MappedStatement mappedStatement) {
-        Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = mappedStatement.getTableScanInfoMap();
-        if (!ObjectUtil.isNull(tableScanInfoMap)) {
-            for (String table : tableScanInfoMap.keySet()) {
+        Set<String> tableSet = mappedStatement.getTableSet();
+        if (!ObjectUtil.isNull(tableSet)) {
+            for (String table : tableSet) {
                 Set<CacheKey> cacheKeySet = tableMap.get(table);
                 if (!ObjectUtil.isNull(cacheKeySet)) {
                     for (CacheKey cacheKey : cacheKeySet) {

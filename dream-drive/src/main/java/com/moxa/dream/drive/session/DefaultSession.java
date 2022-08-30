@@ -7,6 +7,7 @@ import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 public class DefaultSession implements Session {
     private final Configuration configuration;
@@ -49,7 +50,7 @@ public class DefaultSession implements Session {
                     break;
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DreamRunTimeException("执行方法'"+methodInfo.getId()+"'失败",e);
         }
         return value;
     }

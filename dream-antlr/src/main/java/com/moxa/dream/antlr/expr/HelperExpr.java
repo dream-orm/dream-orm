@@ -13,8 +13,6 @@ public abstract class HelperExpr extends SqlExpr {
 
     public HelperExpr(ExprReader exprReader, Helper helper) {
         super(exprReader);
-        if (helper == null)
-            throw new NullPointerException("Property 'helper' is required");
         this.helper = helper;
         this.helpExpr = helper.helper();
         setExprTypes(ExprType.HELP, ExprType.NIL);

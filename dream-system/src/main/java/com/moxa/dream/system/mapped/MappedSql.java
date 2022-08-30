@@ -4,16 +4,17 @@ import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 
 import java.util.Map;
+import java.util.Set;
 
 public class MappedSql {
     private final Command command;
     private final String sql;
-    private final Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap;
+    private final Set<String> tableSet;
 
-    public MappedSql(Command command, String sql, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap) {
+    public MappedSql(Command command, String sql,  Set<String> tableSet) {
         this.command = command;
         this.sql = sql;
-        this.tableScanInfoMap = tableScanInfoMap;
+        this.tableSet = tableSet;
     }
 
     public Command getCommand() {
@@ -24,7 +25,7 @@ public class MappedSql {
         return sql;
     }
 
-    public Map<String, ScanInvoker.TableScanInfo> getTableScanInfoMap() {
-        return tableScanInfoMap;
+    public Set<String> getTableSet() {
+        return tableSet;
     }
 }

@@ -1,6 +1,5 @@
 package com.moxa.dream.system.core.resultsethandler;
 
-import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.annotation.Table;
 import com.moxa.dream.system.annotation.View;
@@ -139,14 +138,14 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         if (colType == Object.class && columnCount > 1)
             colType = HashMap.class;
         MappedResult mappedResult = new MappedResult(mappedStatement.getRowType(), colType, null);
-        Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = mappedStatement.getTableScanInfoMap();
+        Set<String> tableSet = mappedStatement.getTableSet();
         for (int i = 1; i <= columnCount; i++) {
             int jdbcType = metaData.getColumnType(i);
             String columnLabel = metaData.getColumnLabel(i);
             String tableName = metaData.getTableName(i);
             ColumnInfo columnInfo = getColumnInfo(mappedStatement, tableName, columnLabel);
             MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName, columnLabel, columnInfo);
-            boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, new LowHashSet(tableScanInfoMap.keySet()));
+            boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, new LowHashSet(tableSet));
             if (!success) {
                 throw new DreamRunTimeException("映射失败，映射字段:" + columnLabel + "，归属表名：" + tableName);
             }
