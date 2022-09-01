@@ -6,28 +6,25 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.UpdateStatement;
 
-public class UpdateExpr extends SqlExpr {
+public class UpdateExpr extends HelperExpr {
     private final UpdateStatement updateStatement = new UpdateStatement();
 
     public UpdateExpr(ExprReader exprReader) {
-        super(exprReader);
+        this(exprReader, () -> new AliasColumnExpr(exprReader));
+    }
+
+    public UpdateExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
         setExprTypes(ExprType.UPDATE);
     }
 
     @Override
     protected Statement exprUpdate(ExprInfo exprInfo) {
         push();
-        setExprTypes(ExprType.LETTER);
+        setExprTypes(ExprType.HELP);
         return expr();
     }
 
-    @Override
-    protected Statement exprLetter(ExprInfo exprInfo) {
-        AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader);
-        updateStatement.setTable(aliasColumnExpr.expr());
-        setExprTypes(ExprType.SET);
-        return expr();
-    }
 
     @Override
     protected Statement exprSet(ExprInfo exprInfo) {
@@ -41,8 +38,8 @@ public class UpdateExpr extends SqlExpr {
     @Override
     protected Statement exprWhere(ExprInfo exprInfo) {
         push();
-        CompareExpr operTreeExpr = new CompareExpr(exprReader);
-        Statement statement = operTreeExpr.expr();
+        CompareExpr compareExpr = new CompareExpr(exprReader);
+        Statement statement = compareExpr.expr();
         updateStatement.setWhere(statement);
         setExprTypes(ExprType.NIL);
         return expr();
@@ -51,5 +48,12 @@ public class UpdateExpr extends SqlExpr {
     @Override
     public Statement nil() {
         return updateStatement;
+    }
+
+    @Override
+    public Statement exprHelp(Statement statement) {
+        updateStatement.setTable(statement);
+        setExprTypes(ExprType.SET);
+        return expr();
     }
 }

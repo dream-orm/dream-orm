@@ -66,7 +66,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         Command command = getCommand(mapperClass, method);
         String[] paramNameList = getParamNameList(method);
         String sql = getSql(configuration,method);
-        Integer timeOut = getTimeOut(configuration,method);
+        int timeOut = getTimeOut(method);
         Action[] initActionList = getInitActionList(configuration,method);
         Action[] loopActionList = getLoopActionList(configuration,method);
         Action[] destroyActionList = getDestroyActionList(configuration,method);
@@ -132,23 +132,13 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         return sql;
     }
 
-    protected Integer getTimeOut(Configuration configuration,Method method) {
-        Sql sqlAnnotation = method.getDeclaredAnnotation(Sql.class);
-        if (sqlAnnotation == null) {
-            ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
-            if (actionProviderAnnotation != null) {
-                return ReflectUtil.create(actionProviderAnnotation.value()).timeOut(configuration,method);
-            } else {
-                return null;
-            }
-        } else {
-            String timeOut = sqlAnnotation.timeOut();
-            if (ObjectUtil.isNull(timeOut)) {
-                return null;
-            } else {
-                return Integer.valueOf(timeOut);
-            }
+    protected int getTimeOut(Method method) {
+        int timeOut=0;
+        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
+        if(setupAnnotation !=null){
+            timeOut= setupAnnotation.timeOut();
         }
+        return timeOut;
     }
 
     protected String getParamName(Parameter parameter) {
@@ -160,12 +150,12 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     }
 
     protected Class<? extends Collection> getRowType(Class mapperClass, Method method) {
-        Result resultAnnotation = method.getDeclaredAnnotation(Result.class);
+        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
         Class<? extends Collection> rowType;
-        if (resultAnnotation == null) {
+        if (setupAnnotation == null) {
             rowType = ReflectUtil.getRowType(mapperClass, method);
         } else {
-            rowType = resultAnnotation.rowType();
+            rowType = setupAnnotation.rowType();
             if (rowType == NullObject.class) {
                 rowType = ReflectUtil.getRowType(mapperClass, method);
             }
@@ -176,12 +166,12 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     }
 
     protected Class getColType(Class mapperClass, Method method) {
-        Result resultAnnotation = method.getDeclaredAnnotation(Result.class);
+        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
         Class<?> colType;
-        if (resultAnnotation == null) {
+        if (setupAnnotation == null) {
             colType = ReflectUtil.getColType(mapperClass, method);
         } else {
-            colType = resultAnnotation.colType();
+            colType = setupAnnotation.colType();
             if (colType == NullObject.class) {
                 colType = ReflectUtil.getColType(mapperClass, method);
             }
@@ -190,9 +180,9 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     }
 
     protected String[] getColumnNames(Class mapperClass, Method method) {
-        Result resultAnnotation = method.getDeclaredAnnotation(Result.class);
-        if (resultAnnotation != null) {
-            String[] columnNames = resultAnnotation.columnNames();
+        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
+        if (setupAnnotation != null) {
+            String[] columnNames = setupAnnotation.columnNames();
             if (!ObjectUtil.isNull(columnNames)) {
                 return columnNames;
             }
@@ -201,19 +191,19 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     }
 
     protected boolean isCache(Class mapperClass, Method method) {
-        Result resultAnnotation = method.getDeclaredAnnotation(Result.class);
+        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
         boolean cache = true;
-        if (resultAnnotation != null) {
-            cache = resultAnnotation.cache();
+        if (setupAnnotation != null) {
+            cache = setupAnnotation.cache();
         }
         return cache;
     }
 
     protected Command getCommand(Class mapperClass, Method method) {
-        Result resultAnnotation = method.getDeclaredAnnotation(Result.class);
+        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
         Command command = Command.NONE;
-        if (resultAnnotation != null) {
-            command = resultAnnotation.command();
+        if (setupAnnotation != null) {
+            command = setupAnnotation.command();
         }
         return command;
     }

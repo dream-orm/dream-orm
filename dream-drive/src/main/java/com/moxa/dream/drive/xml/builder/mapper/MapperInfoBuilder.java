@@ -58,10 +58,12 @@ public class MapperInfoBuilder extends XMLBuilder {
                 String name = methodInfo.getName();
                 MethodInfo.Builder methodBuilder = builderMap.get(name);
                 ObjectUtil.requireNonNull(methodBuilder, "方法 '" + name + "'未在类注册");
-                String timeOut = methodInfo.getTimeOut();
                 methodBuilder
-                        .name(methodInfo.getName())
-                        .timeOut(timeOut == null ? null : Integer.valueOf(timeOut));
+                        .name(methodInfo.getName());
+                String timeOut = methodInfo.getTimeOut();
+                if(!ObjectUtil.isNull(timeOut)){
+                    methodBuilder.timeOut(Integer.valueOf(timeOut));
+                }
                 String sql = methodInfo.getValue();
                 if (!ObjectUtil.isNull(sql)) {
                     methodBuilder.sql(sql);

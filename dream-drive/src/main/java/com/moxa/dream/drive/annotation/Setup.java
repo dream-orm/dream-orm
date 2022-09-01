@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Result {
+public @interface Setup {
     Class<? extends Collection> rowType() default NullObject.class;
 
     Class<?> colType() default NullObject.class;
@@ -21,4 +21,6 @@ public @interface Result {
     boolean cache() default true;
 
     Command command() default Command.NONE;
+
+    int timeOut()default 0;
 }

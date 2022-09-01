@@ -5,13 +5,16 @@ import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.InsertStatement;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.antlr.smt.SymbolStatement;
 
-public class InsertExpr extends SqlExpr {
+public class InsertExpr extends HelperExpr {
     private final InsertStatement insertStatement = new InsertStatement();
 
     public InsertExpr(ExprReader exprReader) {
-        super(exprReader);
+        this(exprReader, () -> new SymbolExpr(exprReader));
+    }
+
+    public InsertExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
         setExprTypes(ExprType.INSERT);
     }
 
@@ -25,17 +28,10 @@ public class InsertExpr extends SqlExpr {
     @Override
     protected Statement exprInto(ExprInfo exprInfo) {
         push();
-        setExprTypes(ExprType.LETTER);
+        setExprTypes(ExprType.HELP);
         return expr();
     }
 
-    @Override
-    protected Statement exprLetter(ExprInfo exprInfo) {
-        push();
-        insertStatement.setTable(new SymbolStatement.LetterStatement(exprInfo.getInfo()));
-        setExprTypes(ExprType.LBRACE, ExprType.VALUES, ExprType.SELECT);
-        return expr();
-    }
 
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) {
@@ -66,6 +62,13 @@ public class InsertExpr extends SqlExpr {
     @Override
     public Statement nil() {
         return insertStatement;
+    }
+
+    @Override
+    public Statement exprHelp(Statement statement) {
+        insertStatement.setTable(statement);
+        setExprTypes(ExprType.LBRACE, ExprType.VALUES, ExprType.SELECT);
+        return expr();
     }
 
     public static class ValuesExpr extends SqlExpr {

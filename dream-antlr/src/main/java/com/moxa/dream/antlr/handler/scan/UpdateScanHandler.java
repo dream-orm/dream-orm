@@ -31,10 +31,10 @@ public class UpdateScanHandler extends AbstractHandler {
         String alias = null;
         if (tableStatement instanceof AliasStatement) {
             tableStatement = ((AliasStatement) tableStatement).getColumn();
-            alias = ((SymbolStatement) ((AliasStatement) tableStatement).getAlias()).getSymbol();
+            alias = ((SymbolStatement) ((AliasStatement) tableStatement).getAlias()).getValue();
         }
         if (tableStatement instanceof SymbolStatement) {
-            table = ((SymbolStatement) tableStatement).getSymbol();
+            table = ((SymbolStatement) tableStatement).getValue();
         }
         if (table != null) {
             scanInfo.add(new ScanInvoker.TableScanInfo(null, table, alias, true));

@@ -5,13 +5,16 @@ import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.DeleteStatement;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.antlr.smt.SymbolStatement;
 
-public class DeleteExpr extends SqlExpr {
+public class DeleteExpr extends HelperExpr {
     private final DeleteStatement deleteStatement = new DeleteStatement();
 
     public DeleteExpr(ExprReader exprReader) {
-        super(exprReader);
+        this(exprReader, () -> new AliasColumnExpr(exprReader));
+    }
+
+    public DeleteExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
         setExprTypes(ExprType.DELETE);
     }
 
@@ -25,23 +28,15 @@ public class DeleteExpr extends SqlExpr {
     @Override
     protected Statement exprFrom(ExprInfo exprInfo) {
         push();
-        setExprTypes(ExprType.LETTER);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprLetter(ExprInfo exprInfo) {
-        push();
-        deleteStatement.setTable(new SymbolStatement.LetterStatement(exprInfo.getInfo()));
-        setExprTypes(ExprType.NIL, ExprType.WHERE);
+        setExprTypes(ExprType.HELP);
         return expr();
     }
 
     @Override
     protected Statement exprWhere(ExprInfo exprInfo) {
         push();
-        CompareExpr operTreeExpr = new CompareExpr(exprReader);
-        Statement statement = operTreeExpr.expr();
+        CompareExpr compareExpr = new CompareExpr(exprReader);
+        Statement statement = compareExpr.expr();
         deleteStatement.setCondition(statement);
         setExprTypes(ExprType.NIL);
         return expr();
@@ -50,5 +45,12 @@ public class DeleteExpr extends SqlExpr {
     @Override
     public Statement nil() {
         return deleteStatement;
+    }
+
+    @Override
+    public Statement exprHelp(Statement statement) {
+        deleteStatement.setTable(statement);
+        setExprTypes(ExprType.NIL, ExprType.WHERE);
+        return expr();
     }
 }

@@ -346,7 +346,7 @@ public class ExprUtil {
         int size = exprInfoStack.size();
         while (!exprInfoStack.isEmpty()) {
             ExprInfo exprInfo = exprInfoStack.pop();
-            builder.append((size--) + "\t" + "类型:"+exprInfo.getExprType()+",字符:"+exprInfo.getInfo() +",位置:("+exprInfo.getStart()+"-"+exprInfo.getEnd()+")\n");
+            builder.append((size--) + "\t" + "类型:" + exprInfo.getExprType() + ",字符:" + exprInfo.getInfo() + ",位置:(" + exprInfo.getStart() + "-" + exprInfo.getEnd() + ")\n");
         }
         return builder.toString();
     }

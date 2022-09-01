@@ -106,7 +106,7 @@ public class MappedStatement {
         return mappedSql.getTableSet();
     }
 
-    public Integer getTimeOut() {
+    public int getTimeOut() {
         return methodInfo.getTimeOut();
     }
 

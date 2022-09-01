@@ -45,7 +45,7 @@ public class AllInvoker extends AbstractInvoker {
             tableList = new String[columnList.length];
             for (int i = 0; i < columnList.length; i++) {
                 if (columnList[i] instanceof SymbolStatement.LetterStatement) {
-                    String symbol = ((SymbolStatement.LetterStatement) columnList[i]).getSymbol();
+                    String symbol = ((SymbolStatement.LetterStatement) columnList[i]).getValue();
                     tableList[i] = symbol;
                 } else {
                     throw new InvokerException("@all参数类型不合法，不合法参数：'" + new ToNativeSQL().toStr(columnList[i], null, null) + "'");
@@ -211,23 +211,19 @@ public class AllInvoker extends AbstractInvoker {
                 statement = aliasStatement.getColumn();
                 alias = toSQL.toStr(aliasStatement.getAlias(), assist, invokerList);
             }
-            if (statement instanceof SymbolStatement.LetterStatement) {
-                SymbolStatement.LetterStatement letterStatement = (SymbolStatement.LetterStatement) statement;
-                String symbol = letterStatement.getSymbol();
-                String[] symbols = symbol.split("\\.");
-                switch (symbols.length) {
-                    case 1:
-                        column = symbols[0];
-                        break;
-                    case 2:
-                        table = symbols[0];
-                        column = symbols[1];
-                        break;
-                    case 3:
-                        database = symbols[0];
-                        table = symbols[1];
-                        column = symbols[2];
-                        break;
+            if (statement instanceof SymbolStatement) {
+                SymbolStatement symbolStatement = (SymbolStatement) statement;
+                column = symbolStatement.getValue();
+            }else if(statement instanceof ListColumnStatement){
+                ListColumnStatement columnStatements=(ListColumnStatement) statement;
+                Statement[] columnLists = columnStatements.getColumnList();
+                if(columnLists.length==3){
+                    database = ((SymbolStatement)columnLists[0]).getValue();
+                    table = ((SymbolStatement)columnLists[1]).getValue();
+                    column = ((SymbolStatement)columnLists[2]).getValue();
+                }else if(columnLists.length==2){
+                    table = ((SymbolStatement)columnLists[0]).getValue();
+                    column = ((SymbolStatement)columnLists[1]).getValue();
                 }
             }
             if (!ObjectUtil.isNull(alias) || !ObjectUtil.isNull(column))

@@ -52,7 +52,7 @@ public class ParamScanHandler extends AbstractHandler {
             Statement paramStatement = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList()[0];
             if (paramStatement instanceof SymbolStatement.LetterStatement) {
                 SymbolStatement.LetterStatement letterStatement = (SymbolStatement.LetterStatement) paramStatement;
-                String field = letterStatement.getSymbol();
+                String field = letterStatement.getValue();
                 Statement parentStatement = invokerStatement.getParentStatement();
                 if (parentStatement instanceof ConditionStatement) {
                     ConditionStatement conditionStatement = (ConditionStatement) parentStatement;
@@ -115,10 +115,10 @@ public class ParamScanHandler extends AbstractHandler {
         @Override
         protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
             InsertStatement insertStatement = (InsertStatement) statement;
-            table = insertStatement.getTable().getSymbol();
+            table = ((SymbolStatement) insertStatement.getTable()).getValue();
             if (insertStatement.getParams() != null) {
                 columnList = Arrays.stream(((ListColumnStatement) ((BraceStatement) insertStatement.getParams()).getStatement()).getColumnList())
-                        .map(column -> ((SymbolStatement.LetterStatement) column).getSymbol())
+                        .map(column -> ((SymbolStatement) column).getValue())
                         .collect(Collectors.toList());
             }
             return statement;

@@ -23,7 +23,7 @@ public class MethodInfo {
     private boolean cache;
     private Command command = Command.NONE;
     private String sql;
-    private Integer timeOut;
+    private int timeOut;
     private PackageStatement statement;
     private CacheKey sqlKey;
     private Method method;
@@ -68,7 +68,7 @@ public class MethodInfo {
         return sql;
     }
 
-    public Integer getTimeOut() {
+    public int getTimeOut() {
         return timeOut;
     }
 
@@ -170,7 +170,7 @@ public class MethodInfo {
             return this;
         }
 
-        public Builder timeOut(Integer timeOut) {
+        public Builder timeOut(int timeOut) {
             methodInfo.timeOut = timeOut;
             return this;
         }

@@ -8,6 +8,7 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.InsertStatement;
 import com.moxa.dream.antlr.smt.Statement;
+import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class InsertScanHandler extends AbstractHandler {
         if (Command.NONE == scanInfo.getCommand())
             scanInfo.setCommand(Command.INSERT);
         InsertStatement insertStatement = (InsertStatement) statement;
-        scanInfo.add(new ScanInvoker.TableScanInfo(null, insertStatement.getTable().getSymbol(), null, true));
+        scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement) insertStatement.getTable()).getValue(), null, true));
         return statement;
     }
 

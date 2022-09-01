@@ -18,10 +18,6 @@ public interface ActionProvider {
         return null;
     }
 
-    default Integer timeOut(Configuration configuration,Method method){
-        return null;
-    }
-
     String value(Configuration configuration,Method method);
 
 }

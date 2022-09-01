@@ -26,8 +26,8 @@ public class PrepareStatementHandler implements StatementHandler {
     }
 
     protected void doTimeOut(MappedStatement mappedStatement) throws SQLException {
-        Integer timeOut = mappedStatement.getTimeOut();
-        if (timeOut != null) {
+        int timeOut = mappedStatement.getTimeOut();
+        if (timeOut != 0) {
             statement.setQueryTimeout(timeOut);
         }
     }

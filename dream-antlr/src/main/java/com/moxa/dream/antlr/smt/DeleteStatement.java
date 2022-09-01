@@ -1,14 +1,14 @@
 package com.moxa.dream.antlr.smt;
 
 public class DeleteStatement extends Statement {
-    private SymbolStatement.LetterStatement table;
+    private Statement table;
     private Statement condition;
 
-    public SymbolStatement.LetterStatement getTable() {
+    public Statement getTable() {
         return table;
     }
 
-    public void setTable(SymbolStatement.LetterStatement table) {
+    public void setTable(Statement table) {
         this.table = table;
         if (table != null)
             table.parentStatement = this;

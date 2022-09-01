@@ -32,7 +32,7 @@ public class TableInvoker extends AbstractInvoker {
         String[] tableList = new String[columnList.length];
         for (int i = 0; i < columnList.length; i++) {
             if (columnList[i] instanceof SymbolStatement.LetterStatement) {
-                String table = ((SymbolStatement.LetterStatement) columnList[i]).getSymbol();
+                String table = ((SymbolStatement.LetterStatement) columnList[i]).getValue();
                 tableList[i] = table;
                 tableSQLMap.put(table, null);
             } else {
