@@ -63,48 +63,34 @@ public class SymbolExpr extends SqlExpr {
 
     @Override
     protected Statement exprLetter(ExprInfo exprInfo) {
-        push();
-        statement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
-        setExprTypes(ExprType.DOT, ExprType.NIL);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprDot(ExprInfo exprInfo) {
-        push();
         ListColumnStatement listColumnStatement = (ListColumnStatement) new ListColumnExpr(exprReader, () -> {
-            SymbolExpr symbolExpr = new SymbolExpr(exprReader);
-            symbolExpr.setExprTypes(ExprType.LETTER, ExprType.STR, ExprType.JAVA_STR, ExprType.STAR, ExprType.SINGLE_MARK);
-            return symbolExpr;
+            LetterExpr letterExpr = new LetterExpr(exprReader);
+            letterExpr.setExprTypes(ExprType.LETTER, ExprType.STR, ExprType.JAVA_STR, ExprType.STAR, ExprType.SINGLE_MARK);
+            return letterExpr;
         }, new ExprInfo(ExprType.DOT, ".")).expr();
-        listColumnStatement.addFirst(statement);
-        statement = listColumnStatement;
+        Statement[] columnList = listColumnStatement.getColumnList();
+        if (columnList.length > 1) {
+            statement = listColumnStatement;
+        } else {
+            statement = columnList[0];
+        }
         setExprTypes(ExprType.NIL);
         return expr();
     }
 
     @Override
     protected Statement exprStr(ExprInfo exprInfo) {
-        push();
-        statement = new SymbolStatement.StrStatement(exprInfo.getInfo());
-        setExprTypes(ExprType.NIL);
-        return expr();
+        return exprLetter(exprInfo);
     }
 
     @Override
     protected Statement exprJavaStr(ExprInfo exprInfo) {
-        push();
-        statement = new SymbolStatement.JavaStrStatement(exprInfo.getInfo());
-        setExprTypes(ExprType.NIL);
-        return expr();
+        return exprLetter(exprInfo);
     }
 
     @Override
     protected Statement exprSingleMark(ExprInfo exprInfo) {
-        push();
-        statement = new SymbolStatement.SingleMarkStatement(exprInfo.getInfo());
-        setExprTypes(ExprType.DOT, ExprType.NIL);
-        return expr();
+        return exprLetter(exprInfo);
     }
 
     @Override
@@ -121,5 +107,59 @@ public class SymbolExpr extends SqlExpr {
         statement = new SymbolStatement.MarkStatement();
         setExprTypes(ExprType.NIL);
         return expr();
+    }
+
+    class LetterExpr extends SqlExpr {
+        Statement statement = null;
+
+        public LetterExpr(ExprReader exprReader) {
+            super(exprReader);
+            setExprTypes(ExprType.STR, ExprType.JAVA_STR, ExprType.STAR, ExprType.SINGLE_MARK, ExprType.LETTER);
+        }
+
+        @Override
+        public Statement nil() {
+            return statement;
+        }
+
+        @Override
+        protected Statement exprStar(ExprInfo exprInfo) {
+            push();
+            statement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprLetter(ExprInfo exprInfo) {
+            push();
+            statement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprStr(ExprInfo exprInfo) {
+            push();
+            statement = new SymbolStatement.StrStatement(exprInfo.getInfo());
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprJavaStr(ExprInfo exprInfo) {
+            push();
+            statement = new SymbolStatement.JavaStrStatement(exprInfo.getInfo());
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprSingleMark(ExprInfo exprInfo) {
+            push();
+            statement = new SymbolStatement.SingleMarkStatement(exprInfo.getInfo());
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
     }
 }

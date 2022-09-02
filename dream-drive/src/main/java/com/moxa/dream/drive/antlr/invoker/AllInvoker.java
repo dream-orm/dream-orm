@@ -15,6 +15,7 @@ import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.annotation.Ignore;
+import com.moxa.dream.system.annotation.Table;
 import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapper.MethodInfo;
@@ -24,6 +25,7 @@ import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.util.common.LowHashMap;
 import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
@@ -82,11 +84,7 @@ public class AllInvoker extends AbstractInvoker {
         if (Map.class.isAssignableFrom(colType)) {
             getQueryFromMap(tableFactory, tableScanInfoMap, queryColumnInfoList, queryColumnList);
         } else {
-            View viewAnnotation = (View) colType.getDeclaredAnnotation(View.class);
-            String table = null;
-            if (viewAnnotation != null) {
-                table = viewAnnotation.value();
-            }
+            String table = getTableName(colType);
             getQueryFromBean(tableFactory, table, colType, tableScanInfoMap, queryColumnInfoList, queryColumnList);
         }
 
@@ -107,21 +105,21 @@ public class AllInvoker extends AbstractInvoker {
             List<String> columnList = columnInfoList.stream()
                     .filter(columnInfo -> !columnSet.contains(columnInfo.getColumn())
                             && !fieldSet.contains(columnInfo.getName()))
-                    .map(columnInfo -> alias + "." + columnInfo.getColumn())
+                    .map(columnInfo -> "`"+alias + "`.`" + columnInfo.getColumn()+"`")
                     .collect(Collectors.toList());
             queryColumnList.addAll(columnList);
         }
     }
 
     protected void getQueryFromBean(TableFactory tableFactory, String table, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {
-        TableInfo tableInfo = null;
+        TableInfo rootTableInfo = null;
         String alias = null;
         if (!ObjectUtil.isNull(table)) {
             ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.remove(table);
             if (tableScanInfo == null)
                 return;
-            tableInfo = tableFactory.getTableInfo(table);
-            ObjectUtil.requireNonNull(tableInfo, "表'" + table + "'未在TableFactory注册");
+            rootTableInfo = tableFactory.getTableInfo(table);
+            ObjectUtil.requireNonNull(rootTableInfo, "表'" + table + "'未在TableFactory注册");
             alias = tableScanInfo.getAlias();
         }
         List<Field> fieldList = ReflectUtil.findField(colType);
@@ -130,15 +128,15 @@ public class AllInvoker extends AbstractInvoker {
                 if (!ignore(field)) {
                     String fieldName = field.getName();
                     Type genericType = field.getGenericType();
-                    String fieldTable = getTableName(genericType);
+                    String fieldTable = getTableName(ReflectUtil.getColType(genericType));
                     if (ObjectUtil.isNull(fieldTable)) {
                         Class<?> type = field.getType();
                         if (ReflectUtil.isBaseClass(type) || type.isEnum()) {
-                            if (tableInfo == null) {
+                            if (rootTableInfo == null) {
                                 boolean find = false;
                                 for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {
                                     alias = tableScanInfo.getAlias();
-                                    tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
+                                    TableInfo tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
                                     ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
                                     if (columnInfo != null) {
                                         find = true;
@@ -151,14 +149,16 @@ public class AllInvoker extends AbstractInvoker {
                                             }
                                         }
                                         if (add) {
-                                            queryColumnList.add(alias + "." + columnInfo.getColumn());
+                                            queryColumnList.add("`"+alias + "`.`" + columnInfo.getColumn()+"`");
                                             break;
                                         }
                                     }
                                 }
-                                ObjectUtil.requireNonNull(find, "类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
+                                if (!find) {
+                                    throw new DreamRunTimeException("类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
+                                }
                             } else {
-                                ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
+                                ColumnInfo columnInfo = rootTableInfo.getColumnInfo(fieldName);
                                 ObjectUtil.requireNonNull(columnInfo, "类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
                                 boolean add = true;
                                 for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
@@ -172,7 +172,7 @@ public class AllInvoker extends AbstractInvoker {
                                     }
                                 }
                                 if (add) {
-                                    queryColumnList.add(alias + "." + columnInfo.getColumn());
+                                    queryColumnList.add("`"+alias + "`.`" + columnInfo.getColumn()+"`");
                                 }
                             }
                         }
@@ -188,12 +188,14 @@ public class AllInvoker extends AbstractInvoker {
         return field.isAnnotationPresent(Ignore.class);
     }
 
-    protected String getTableName(Type type) {
-        Class colType = ReflectUtil.getColType(type);
-        View view = (View) colType.getDeclaredAnnotation(View.class);
-        if (view == null)
-            return null;
-        return view.value();
+    protected String getTableName(Class<?> type) {
+        if (type.isAnnotationPresent(View.class)) {
+            return type.getDeclaredAnnotation(View.class).value();
+        }
+        if (type.isAnnotationPresent(Table.class)) {
+            return type.getDeclaredAnnotation(Table.class).value();
+        }
+        return null;
     }
 
     protected List<QueryColumnInfo> getQueryColumnInfoList(Assist assist, ToSQL toSQL, List<Invoker> invokerList, InvokerStatement invokerStatement) throws InvokerException {
@@ -214,16 +216,16 @@ public class AllInvoker extends AbstractInvoker {
             if (statement instanceof SymbolStatement) {
                 SymbolStatement symbolStatement = (SymbolStatement) statement;
                 column = symbolStatement.getValue();
-            }else if(statement instanceof ListColumnStatement){
-                ListColumnStatement columnStatements=(ListColumnStatement) statement;
+            } else if (statement instanceof ListColumnStatement) {
+                ListColumnStatement columnStatements = (ListColumnStatement) statement;
                 Statement[] columnLists = columnStatements.getColumnList();
-                if(columnLists.length==3){
-                    database = ((SymbolStatement)columnLists[0]).getValue();
-                    table = ((SymbolStatement)columnLists[1]).getValue();
-                    column = ((SymbolStatement)columnLists[2]).getValue();
-                }else if(columnLists.length==2){
-                    table = ((SymbolStatement)columnLists[0]).getValue();
-                    column = ((SymbolStatement)columnLists[1]).getValue();
+                if (columnLists.length == 3) {
+                    database = ((SymbolStatement) columnLists[0]).getValue();
+                    table = ((SymbolStatement) columnLists[1]).getValue();
+                    column = ((SymbolStatement) columnLists[2]).getValue();
+                } else if (columnLists.length == 2) {
+                    table = ((SymbolStatement) columnLists[0]).getValue();
+                    column = ((SymbolStatement) columnLists[1]).getValue();
                 }
             }
             if (!ObjectUtil.isNull(alias) || !ObjectUtil.isNull(column))

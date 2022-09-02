@@ -141,16 +141,4 @@ public class PageHandler extends AbstractHandler {
         this.second = second;
         this.offset = offset;
     }
-
-    public static class PageCount {
-        private final MethodInfo methodInfo;
-
-        public PageCount(MethodInfo methodInfo) {
-            this.methodInfo = methodInfo;
-        }
-
-        public MethodInfo getMethodInfo() {
-            return methodInfo;
-        }
-    }
 }

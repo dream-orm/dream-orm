@@ -222,7 +222,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                         }
                     }
                     Type genericType = field.getGenericType();
-                    String table = getTableName(genericType);
+                    String table = getTableName(ReflectUtil.getColType(genericType));
                     if (!ObjectUtil.isNull(table) && tableSet.contains(table) && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || !curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
                         tableSet.remove(table);
                         Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
@@ -255,17 +255,6 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
     protected boolean ignore(Field field) {
         return field.isAnnotationPresent(Ignore.class);
-    }
-
-    protected String getTableName(Type type) {
-        Class<?> colType = ReflectUtil.getColType(type);
-        if (colType.isAnnotationPresent(View.class)) {
-            return colType.getDeclaredAnnotation(View.class).value();
-        }
-        if (colType.isAnnotationPresent(Table.class)) {
-            return colType.getDeclaredAnnotation(Table.class).value();
-        }
-        return null;
     }
 
     protected String getTableName(Class<?> type) {
