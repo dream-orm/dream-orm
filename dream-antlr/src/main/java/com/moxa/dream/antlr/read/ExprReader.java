@@ -278,7 +278,7 @@ public class ExprReader extends StringReader {
         reset();
         char[] chars = new char[count];
         int len = read(chars, 0, count);
-        String info = new String(chars, 1, len-2);
+        String info = new String(chars, 1, len - 2);
         return new ExprInfo(ExprType.STR, info, getStart(), getEnd());
     }
 
@@ -294,7 +294,7 @@ public class ExprReader extends StringReader {
         reset();
         char[] chars = new char[count];
         int len = read(chars, 0, count);
-        String info = new String(chars, 1, len-2);
+        String info = new String(chars, 1, len - 2);
         return new ExprInfo(ExprType.JAVA_STR, info, getStart(), getEnd());
     }
 
@@ -310,7 +310,7 @@ public class ExprReader extends StringReader {
         reset();
         char[] chars = new char[count];
         int len = read(chars, 0, count);
-        String info = new String(chars, 1, len-2);
+        String info = new String(chars, 1, len - 2);
         return new ExprInfo(ExprType.SINGLE_MARK, info, getStart(), getEnd());
     }
 

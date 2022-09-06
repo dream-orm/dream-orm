@@ -7,8 +7,8 @@ import com.moxa.dream.drive.xml.builder.XMLBuilder;
 import com.moxa.dream.drive.xml.moudle.XmlConstant;
 import com.moxa.dream.drive.xml.moudle.XmlHandler;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.core.action.Action;
+import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import org.xml.sax.Attributes;
@@ -61,7 +61,7 @@ public class MapperInfoBuilder extends XMLBuilder {
                 methodBuilder
                         .name(methodInfo.getName());
                 String timeOut = methodInfo.getTimeOut();
-                if(!ObjectUtil.isNull(timeOut)){
+                if (!ObjectUtil.isNull(timeOut)) {
                     methodBuilder.timeOut(Integer.valueOf(timeOut));
                 }
                 String sql = methodInfo.getValue();

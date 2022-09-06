@@ -13,11 +13,9 @@ public interface StatementHandler {
 
     int executeUpdate(MappedStatement mappedStatement) throws SQLException;
 
-    void addBatch(MappedStatement mappedStatement) throws SQLException;
+    int[] executeBatch(MappedStatement[] mappedStatements) throws SQLException;
 
     void prepare(Connection connection, MappedStatement mappedStatement) throws SQLException;
-
-    void flushStatement(boolean rollback);
 
     Statement getStatement();
 

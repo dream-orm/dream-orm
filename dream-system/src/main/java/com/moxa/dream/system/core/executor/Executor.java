@@ -15,6 +15,8 @@ public interface Executor {
 
     Object delete(MappedStatement mappedStatement) throws SQLException;
 
+    int[] batch(MappedStatement[] mappedStatements) throws SQLException;
+
     void commit();
 
     void rollback();

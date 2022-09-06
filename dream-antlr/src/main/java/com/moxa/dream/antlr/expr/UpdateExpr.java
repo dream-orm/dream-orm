@@ -51,7 +51,7 @@ public class UpdateExpr extends HelperExpr {
     }
 
     @Override
-    public Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) {
         updateStatement.setTable(statement);
         setExprTypes(ExprType.SET);
         return expr();

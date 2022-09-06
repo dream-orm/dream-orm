@@ -54,6 +54,13 @@ public abstract class CacheExecutor implements Executor {
     }
 
     @Override
+    public int[] batch(MappedStatement[] mappedStatements) throws SQLException {
+        int[] values = executor.batch(mappedStatements);
+        clearObject(mappedStatements[0]);
+        return values;
+    }
+
+    @Override
     public void commit() {
         executor.commit();
     }

@@ -48,7 +48,7 @@ public class DeleteExpr extends HelperExpr {
     }
 
     @Override
-    public Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) {
         deleteStatement.setTable(statement);
         setExprTypes(ExprType.NIL, ExprType.WHERE);
         return expr();

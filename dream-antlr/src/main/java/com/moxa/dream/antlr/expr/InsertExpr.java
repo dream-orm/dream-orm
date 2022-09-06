@@ -65,7 +65,7 @@ public class InsertExpr extends HelperExpr {
     }
 
     @Override
-    public Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) {
         insertStatement.setTable(statement);
         setExprTypes(ExprType.LBRACE, ExprType.VALUES, ExprType.SELECT);
         return expr();

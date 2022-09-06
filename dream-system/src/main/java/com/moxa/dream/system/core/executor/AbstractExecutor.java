@@ -26,7 +26,7 @@ public abstract class AbstractExecutor implements Executor {
         this.transaction = transaction;
         this.listenerFactory = configuration.getListenerFactory();
         this.statementHandler = getStatementHandler();
-        this.resultSetHandler=getResultSetHandler();
+        this.resultSetHandler = getResultSetHandler();
     }
 
     @Override
@@ -76,6 +76,13 @@ public abstract class AbstractExecutor implements Executor {
             statementHandler.prepare(connection, mappedStatement);
             return statementHandler.executeUpdate(mappedStatement);
         });
+    }
+
+    @Override
+    public int[] batch(MappedStatement[] mappedStatements) throws SQLException {
+        statementHandler.prepare(transaction.getConnection(), mappedStatements[0]);
+        int[] values = statementHandler.executeBatch(mappedStatements);
+        return values;
     }
 
     protected Object execute(MappedStatement mappedStatement, Listener[] listeners, ExecutorHandler executorHandler) throws SQLException {

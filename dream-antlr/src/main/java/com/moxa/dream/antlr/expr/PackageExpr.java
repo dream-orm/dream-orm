@@ -50,7 +50,7 @@ public class PackageExpr extends HelperExpr {
     }
 
     @Override
-    public Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) {
         this.statement.setStatement(statement);
         setExprTypes(ExprType.ACC);
         return expr();

@@ -22,5 +22,5 @@ public @interface Setup {
 
     Command command() default Command.NONE;
 
-    int timeOut()default 0;
+    int timeOut() default 0;
 }

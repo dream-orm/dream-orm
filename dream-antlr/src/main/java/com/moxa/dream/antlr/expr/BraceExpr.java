@@ -49,7 +49,7 @@ public class BraceExpr extends HelperExpr {
     }
 
     @Override
-    public Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) {
         brace.setStatement(statement);
         setExprTypes(ExprType.RBRACE);
         return expr();

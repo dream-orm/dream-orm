@@ -32,7 +32,7 @@ public class ListColumnExpr extends HelperExpr {
     }
 
     @Override
-    public Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) {
         listColumnStatement.add(statement);
         if (cut == ExprType.BLANK)
             setExprTypes(ExprType.HELP, ExprType.NIL);

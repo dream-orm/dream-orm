@@ -770,7 +770,7 @@ public class FunctionExpr extends SqlExpr {
         }
 
         @Override
-        public Statement exprHelp(Statement statement) {
+        protected Statement exprHelp(Statement statement) {
             func.setParamsStatement(statement);
             setExprTypes(ExprType.RBRACE);
             return expr();
@@ -810,7 +810,7 @@ public class FunctionExpr extends SqlExpr {
             }
 
             @Override
-            public Statement exprHelp(Statement statement) {
+            protected Statement exprHelp(Statement statement) {
                 listColumnStatement.add(statement);
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -847,7 +847,7 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             protected Statement exprOrder(ExprInfo exprInfo) {
-                QueryExpr.OrderExpr orderExpr = new QueryExpr.OrderExpr(exprReader);
+                OrderExpr orderExpr = new OrderExpr(exprReader);
                 listColumnStatement.add(orderExpr.expr());
                 setExprTypes(ExprType.SEPARATOR, ExprType.NIL);
                 return expr();
@@ -869,7 +869,7 @@ public class FunctionExpr extends SqlExpr {
             }
 
             @Override
-            public Statement exprHelp(Statement statement) {
+            protected Statement exprHelp(Statement statement) {
                 listColumnStatement.add(statement);
                 setExprTypes(ExprType.ORDER, ExprType.NIL);
                 return expr();
@@ -964,7 +964,7 @@ public class FunctionExpr extends SqlExpr {
             }
 
             @Override
-            public Statement exprHelp(Statement statement) {
+            protected Statement exprHelp(Statement statement) {
                 if (date == null) {
                     date = statement;
                     setExprTypes(ExprType.COMMA);
@@ -1093,7 +1093,7 @@ public class FunctionExpr extends SqlExpr {
             }
 
             @Override
-            public Statement exprHelp(Statement statement) {
+            protected Statement exprHelp(Statement statement) {
                 this.statement = statement;
                 setExprTypes(ExprType.COMMA);
                 return expr();
@@ -1202,7 +1202,7 @@ public class FunctionExpr extends SqlExpr {
             }
 
             @Override
-            public Statement exprHelp(Statement statement) {
+            protected Statement exprHelp(Statement statement) {
                 this.statement = statement;
                 setExprTypes(ExprType.AS);
                 return expr();
@@ -1291,7 +1291,7 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             protected Statement exprOrder(ExprInfo exprInfo) {
-                overStatement.setOrderStatement(new QueryExpr.OrderExpr(exprReader).expr());
+                overStatement.setOrderStatement(new OrderExpr(exprReader).expr());
                 setExprTypes(ExprType.RBRACE);
                 return expr();
             }
@@ -1330,7 +1330,7 @@ public class FunctionExpr extends SqlExpr {
                 }
 
                 @Override
-                public Statement exprHelp(Statement statement) {
+                protected Statement exprHelp(Statement statement) {
                     partitionStatement.setStatement(statement);
                     setExprTypes(ExprType.NIL);
                     return expr();
@@ -1368,7 +1368,7 @@ public class FunctionExpr extends SqlExpr {
         }
 
         @Override
-        public Statement exprHelp(Statement statement) {
+        protected Statement exprHelp(Statement statement) {
             myFunctionStatement.setParamsStatement(statement);
             setExprTypes(ExprType.RBRACE);
             return expr();

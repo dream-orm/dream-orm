@@ -3,8 +3,8 @@ package com.moxa.dream.drive.action;
 import com.moxa.dream.drive.session.DefaultSession;
 import com.moxa.dream.drive.session.Session;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.action.Action;
+import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -31,7 +31,7 @@ public class MapperAction implements Action {
                 .stream()
                 .filter(method -> method.getName().equals(methodName))
                 .collect(Collectors.toList());
-        if(ObjectUtil.isNull(methodList)){
+        if (ObjectUtil.isNull(methodList)) {
             throw new DreamRunTimeException("方法'" + methodName + "'未在类'" + type.getName() + "'注册");
         }
         if (methodList.size() > 1) {

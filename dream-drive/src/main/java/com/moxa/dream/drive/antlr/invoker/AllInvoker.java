@@ -105,7 +105,7 @@ public class AllInvoker extends AbstractInvoker {
             List<String> columnList = columnInfoList.stream()
                     .filter(columnInfo -> !columnSet.contains(columnInfo.getColumn())
                             && !fieldSet.contains(columnInfo.getName()))
-                    .map(columnInfo -> "`"+alias + "`.`" + columnInfo.getColumn()+"`")
+                    .map(columnInfo -> "`" + alias + "`.`" + columnInfo.getColumn() + "`")
                     .collect(Collectors.toList());
             queryColumnList.addAll(columnList);
         }
@@ -149,7 +149,7 @@ public class AllInvoker extends AbstractInvoker {
                                             }
                                         }
                                         if (add) {
-                                            queryColumnList.add("`"+alias + "`.`" + columnInfo.getColumn()+"`");
+                                            queryColumnList.add("`" + alias + "`.`" + columnInfo.getColumn() + "`");
                                             break;
                                         }
                                     }
@@ -172,7 +172,7 @@ public class AllInvoker extends AbstractInvoker {
                                     }
                                 }
                                 if (add) {
-                                    queryColumnList.add("`"+alias + "`.`" + columnInfo.getColumn()+"`");
+                                    queryColumnList.add("`" + alias + "`.`" + columnInfo.getColumn() + "`");
                                 }
                             }
                         }

@@ -1,6 +1,5 @@
 package com.moxa.dream.system.cache;
 
-import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;

@@ -34,19 +34,11 @@ public class SimpleStatementHandler implements StatementHandler {
     }
 
     @Override
-    public void addBatch(MappedStatement mappedStatement) throws SQLException {
-        statement.addBatch(mappedStatement.getSql());
-    }
-
-    @Override
-    public void flushStatement(boolean rollback) {
-        if (!rollback) {
-            try {
-                statement.executeBatch();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    public int[] executeBatch(MappedStatement[] mappedStatements) throws SQLException {
+        for (MappedStatement mappedStatement : mappedStatements) {
+            statement.addBatch(mappedStatement.getSql());
         }
+        return statement.executeBatch();
     }
 
     @Override

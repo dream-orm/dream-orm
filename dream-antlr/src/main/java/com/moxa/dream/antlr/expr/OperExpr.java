@@ -196,7 +196,7 @@ public class OperExpr extends TreeExpr {
     }
 
     @Override
-    public Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) {
         exprTree(statement);
         setExprTypes(OPER).addExprTypes(ExprType.NIL);
         return expr();

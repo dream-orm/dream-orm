@@ -9,6 +9,9 @@ import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
+import java.sql.SQLException;
+import java.util.List;
+
 public class DefaultSession implements Session {
     private final Configuration configuration;
     private final Executor executor;
@@ -48,11 +51,24 @@ public class DefaultSession implements Session {
                 case DELETE:
                     value = executor.delete(mappedStatement);
                     break;
+                default:
+                    throw new DreamRunTimeException("SQL类型:" + command + "不支持");
             }
-        } catch (Exception e) {
-            throw new DreamRunTimeException("执行方法'"+methodInfo.getId()+"'失败",e);
+        } catch (SQLException e) {
+            throw new DreamRunTimeException("执行方法'" + methodInfo.getId() + "'失败", e);
         }
         return value;
+    }
+
+    @Override
+    public int[] batch(MethodInfo methodInfo, List<?> args) throws SQLException {
+        MappedStatement[] mappedStatements = new MappedStatement[args.size()];
+        for (int i = 0; i < args.size(); i++) {
+            Object arg = args.get(i);
+            MappedStatement mappedStatement = dialectFactory.compile(methodInfo, arg);
+            mappedStatements[i] = mappedStatement;
+        }
+        return executor.batch(mappedStatements);
     }
 
     @Override

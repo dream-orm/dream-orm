@@ -52,7 +52,7 @@ public abstract class SymbolStatement extends Statement {
 
         @Override
         public String getSymbol() {
-            return "'"+getValue()+"'";
+            return "'" + getValue() + "'";
         }
     }
 
@@ -64,7 +64,7 @@ public abstract class SymbolStatement extends Statement {
 
         @Override
         public String getSymbol() {
-            return "\""+getValue()+"\"";
+            return "\"" + getValue() + "\"";
         }
     }
 
@@ -80,7 +80,7 @@ public abstract class SymbolStatement extends Statement {
 
         @Override
         public String getSymbol() {
-            return "`"+getValue()+"`";
+            return "`" + getValue() + "`";
         }
     }
 

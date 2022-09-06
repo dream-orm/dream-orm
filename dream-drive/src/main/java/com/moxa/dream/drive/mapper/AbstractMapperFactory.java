@@ -65,11 +65,11 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         boolean cache = isCache(mapperClass, method);
         Command command = getCommand(mapperClass, method);
         String[] paramNameList = getParamNameList(method);
-        String sql = getSql(configuration,method);
+        String sql = getSql(configuration, method);
         int timeOut = getTimeOut(method);
-        Action[] initActionList = getInitActionList(configuration,method);
-        Action[] loopActionList = getLoopActionList(configuration,method);
-        Action[] destroyActionList = getDestroyActionList(configuration,method);
+        Action[] initActionList = getInitActionList(configuration, method);
+        Action[] loopActionList = getLoopActionList(configuration, method);
+        Action[] destroyActionList = getDestroyActionList(configuration, method);
         MethodInfo.Builder builder = new MethodInfo.Builder(configuration)
                 .name(method.getName())
                 .rowType(rowType)
@@ -87,29 +87,29 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         return builder;
     }
 
-    protected Action[] getInitActionList(Configuration configuration,Method method) {
+    protected Action[] getInitActionList(Configuration configuration, Method method) {
         ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
         Action[] actionList = null;
         if (actionProviderAnnotation != null) {
-            actionList = ReflectUtil.create(actionProviderAnnotation.value()).init(configuration,method);
+            actionList = ReflectUtil.create(actionProviderAnnotation.value()).init(configuration, method);
         }
         return actionList;
     }
 
-    protected Action[] getLoopActionList(Configuration configuration,Method method) {
+    protected Action[] getLoopActionList(Configuration configuration, Method method) {
         ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
         Action[] actionList = null;
         if (actionProviderAnnotation != null) {
-            actionList = ReflectUtil.create(actionProviderAnnotation.value()).loop(configuration,method);
+            actionList = ReflectUtil.create(actionProviderAnnotation.value()).loop(configuration, method);
         }
         return actionList;
     }
 
-    protected Action[] getDestroyActionList(Configuration configuration,Method method) {
+    protected Action[] getDestroyActionList(Configuration configuration, Method method) {
         ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
         Action[] actionList = null;
         if (actionProviderAnnotation != null) {
-            actionList = ReflectUtil.create(actionProviderAnnotation.value()).destroy(configuration,method);
+            actionList = ReflectUtil.create(actionProviderAnnotation.value()).destroy(configuration, method);
         }
         return actionList;
     }
@@ -118,13 +118,13 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         return mapperClass.isAnnotationPresent(Mapper.class);
     }
 
-    protected String getSql(Configuration configuration,Method method) {
+    protected String getSql(Configuration configuration, Method method) {
         String sql = null;
         Sql sqlAnnotation = method.getDeclaredAnnotation(Sql.class);
         if (sqlAnnotation == null) {
             ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
             if (actionProviderAnnotation != null) {
-                sql = ReflectUtil.create(actionProviderAnnotation.value()).value(configuration,method);
+                sql = ReflectUtil.create(actionProviderAnnotation.value()).value(configuration, method);
             }
         } else {
             sql = sqlAnnotation.value();
@@ -133,10 +133,10 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     }
 
     protected int getTimeOut(Method method) {
-        int timeOut=0;
+        int timeOut = 0;
         Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
-        if(setupAnnotation !=null){
-            timeOut= setupAnnotation.timeOut();
+        if (setupAnnotation != null) {
+            timeOut = setupAnnotation.timeOut();
         }
         return timeOut;
     }

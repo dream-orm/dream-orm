@@ -2,7 +2,6 @@ package com.moxa.dream.drive.session;
 
 public class Control {
     private boolean cache;
-    private boolean batch;
     private boolean autoCommit;
 
     private Control() {
@@ -10,10 +9,6 @@ public class Control {
 
     public boolean isCache() {
         return cache;
-    }
-
-    public boolean isBatch() {
-        return batch;
     }
 
     public boolean isAutoCommit() {
@@ -25,11 +20,6 @@ public class Control {
 
         public Builder cache(boolean cache) {
             control.cache = cache;
-            return this;
-        }
-
-        public Builder batch(boolean batch) {
-            control.batch = batch;
             return this;
         }
 

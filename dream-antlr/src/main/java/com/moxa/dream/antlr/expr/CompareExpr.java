@@ -163,7 +163,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    public Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) {
         exprTree(statement);
         setExprTypes(compare).addExprTypes(condition).addExprTypes(ExprType.NIL);
         return expr();
@@ -181,7 +181,7 @@ public class CompareExpr extends TreeExpr {
         }
 
         @Override
-        public Statement exprHelp(Statement statement) {
+        protected Statement exprHelp(Statement statement) {
             if (bet.getLeft() == null) {
                 bet.setLeft(statement);
                 setExprTypes(ExprType.AND);

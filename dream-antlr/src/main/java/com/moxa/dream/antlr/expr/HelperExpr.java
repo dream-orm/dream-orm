@@ -46,7 +46,7 @@ public abstract class HelperExpr extends SqlExpr {
             return super.exprDefault(exprInfo);
     }
 
-    public abstract Statement exprHelp(Statement statement);
+    protected abstract Statement exprHelp(Statement statement);
 
     public interface Helper {
         SqlExpr helper();

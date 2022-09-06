@@ -5,7 +5,6 @@ import com.moxa.dream.drive.executor.SessionCacheExecutor;
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.factory.CacheFactory;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.core.executor.BatchExecutor;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.executor.JdbcExecutor;
 import com.moxa.dream.system.datasource.DataSourceFactory;
@@ -37,7 +36,6 @@ public class DefaultSessionFactory implements SessionFactory {
         control = new Control
                 .Builder()
                 .autoCommit(false)
-                .batch(false)
                 .cache(true)
                 .build();
     }
@@ -51,12 +49,8 @@ public class DefaultSessionFactory implements SessionFactory {
     public Session openSession(Control control) {
         Transaction transaction = transactionFactory.getTransaction(dataSource);
         transaction.setAutoCommit(control.isAutoCommit());
-        Executor executor;
-        if (control.isBatch()) {
-            executor = new BatchExecutor(configuration, transaction);
-        } else {
-            executor = new JdbcExecutor(configuration, transaction);
-        }
+        Executor executor = new JdbcExecutor(configuration, transaction);
+
         if (this.cache != null) {
             executor = new CustomCacheExecutor(this.cache, executor);
         }

@@ -10,6 +10,6 @@ public class DreamRunTimeException extends RuntimeException {
     }
 
     public DreamRunTimeException(String msg, Exception e) {
-        super(msg,e);
+        super(msg, e);
     }
 }

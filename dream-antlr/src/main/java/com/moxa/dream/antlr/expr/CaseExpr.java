@@ -65,7 +65,7 @@ public class CaseExpr extends SqlExpr {
         }
 
         @Override
-        public Statement exprHelp(Statement statement) {
+        protected Statement exprHelp(Statement statement) {
             this.statement = statement;
             setExprTypes(ExprType.NIL);
             return expr();
@@ -124,7 +124,7 @@ public class CaseExpr extends SqlExpr {
             }
 
             @Override
-            public Statement exprHelp(Statement statement) {
+            protected Statement exprHelp(Statement statement) {
                 this.statement = statement;
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -148,7 +148,7 @@ public class CaseExpr extends SqlExpr {
             }
 
             @Override
-            public Statement exprHelp(Statement statement) {
+            protected Statement exprHelp(Statement statement) {
                 this.statement = statement;
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -172,7 +172,7 @@ public class CaseExpr extends SqlExpr {
             }
 
             @Override
-            public Statement exprHelp(Statement statement) {
+            protected Statement exprHelp(Statement statement) {
                 this.statement = statement;
                 setExprTypes(ExprType.NIL);
                 return expr();

@@ -46,20 +46,12 @@ public class PrepareStatementHandler implements StatementHandler {
     }
 
     @Override
-    public void addBatch(MappedStatement mappedStatement) throws SQLException {
-        doParameter(mappedStatement);
-        statement.addBatch();
-    }
-
-    @Override
-    public void flushStatement(boolean rollback) {
-        if (!rollback) {
-            try {
-                statement.executeBatch();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    public int[] executeBatch(MappedStatement[] mappedStatements) throws SQLException {
+        for (MappedStatement mappedStatement : mappedStatements) {
+            doParameter(mappedStatement);
+            statement.addBatch();
         }
+        return statement.executeBatch();
     }
 
     @Override
