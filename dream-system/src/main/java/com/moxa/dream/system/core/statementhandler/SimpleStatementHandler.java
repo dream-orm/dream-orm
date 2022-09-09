@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class SimpleStatementHandler implements StatementHandler {
     private Statement statement;
@@ -34,7 +35,7 @@ public class SimpleStatementHandler implements StatementHandler {
     }
 
     @Override
-    public int[] executeBatch(MappedStatement[] mappedStatements) throws SQLException {
+    public int[] executeBatch(List<MappedStatement> mappedStatements) throws SQLException {
         for (MappedStatement mappedStatement : mappedStatements) {
             statement.addBatch(mappedStatement.getSql());
         }

@@ -46,7 +46,7 @@ public class PrepareStatementHandler implements StatementHandler {
     }
 
     @Override
-    public int[] executeBatch(MappedStatement[] mappedStatements) throws SQLException {
+    public int[] executeBatch(List<MappedStatement> mappedStatements) throws SQLException {
         for (MappedStatement mappedStatement : mappedStatements) {
             doParameter(mappedStatement);
             statement.addBatch();

@@ -4,6 +4,7 @@ import com.moxa.dream.system.mapped.MappedStatement;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public interface Executor {
 
@@ -15,7 +16,7 @@ public interface Executor {
 
     Object delete(MappedStatement mappedStatement) throws SQLException;
 
-    int[] batch(MappedStatement[] mappedStatements) throws SQLException;
+    Object batch(List<MappedStatement> mappedStatements) throws SQLException;
 
     void commit();
 

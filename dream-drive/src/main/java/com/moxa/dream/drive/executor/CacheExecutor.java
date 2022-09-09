@@ -6,6 +6,7 @@ import com.moxa.dream.system.mapped.MappedStatement;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public abstract class CacheExecutor implements Executor {
     private final Executor executor;
@@ -54,10 +55,10 @@ public abstract class CacheExecutor implements Executor {
     }
 
     @Override
-    public int[] batch(MappedStatement[] mappedStatements) throws SQLException {
-        int[] values = executor.batch(mappedStatements);
-        clearObject(mappedStatements[0]);
-        return values;
+    public Object batch(List<MappedStatement> mappedStatements) throws SQLException {
+        Object value = executor.batch(mappedStatements);
+        clearObject(mappedStatements.get(0));
+        return value;
     }
 
     @Override

@@ -17,7 +17,6 @@ import javax.sql.DataSource;
 
 public class DefaultSessionFactory implements SessionFactory {
     private final Configuration configuration;
-    private final Control control;
     private PluginFactory pluginFactory;
     private TransactionFactory transactionFactory;
     private DataSource dataSource;
@@ -33,28 +32,18 @@ public class DefaultSessionFactory implements SessionFactory {
         if (cacheFactory != null) {
             cache = cacheFactory.getCache();
         }
-        control = new Control
-                .Builder()
-                .autoCommit(false)
-                .cache(true)
-                .build();
     }
 
     @Override
-    public Session openSession() {
-        return openSession(control);
-    }
-
-    @Override
-    public Session openSession(Control control) {
+    public Session openSession(boolean autoCommit, boolean cache) {
         Transaction transaction = transactionFactory.getTransaction(dataSource);
-        transaction.setAutoCommit(control.isAutoCommit());
+        transaction.setAutoCommit(autoCommit);
         Executor executor = new JdbcExecutor(configuration, transaction);
 
         if (this.cache != null) {
             executor = new CustomCacheExecutor(this.cache, executor);
         }
-        if (control.isCache()) {
+        if (cache) {
             executor = new SessionCacheExecutor(executor);
         }
         if (pluginFactory != null)

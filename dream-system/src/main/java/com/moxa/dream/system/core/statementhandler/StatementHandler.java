@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public interface StatementHandler {
 
@@ -13,7 +14,7 @@ public interface StatementHandler {
 
     int executeUpdate(MappedStatement mappedStatement) throws SQLException;
 
-    int[] executeBatch(MappedStatement[] mappedStatements) throws SQLException;
+    int[] executeBatch(List<MappedStatement> mappedStatements) throws SQLException;
 
     void prepare(Connection connection, MappedStatement mappedStatement) throws SQLException;
 

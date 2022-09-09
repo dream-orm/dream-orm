@@ -9,12 +9,16 @@ import com.moxa.dream.system.core.resultsethandler.DefaultResultSetHandler;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.mapped.MappedStatement;
+import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.system.transaction.Transaction;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractExecutor implements Executor {
     protected Transaction transaction;
@@ -78,39 +82,86 @@ public abstract class AbstractExecutor implements Executor {
         });
     }
 
-    @Override
-    public int[] batch(MappedStatement[] mappedStatements) throws SQLException {
-        statementHandler.prepare(transaction.getConnection(), mappedStatements[0]);
-        int[] values = statementHandler.executeBatch(mappedStatements);
-        return values;
-    }
-
     protected Object execute(MappedStatement mappedStatement, Listener[] listeners, ExecutorHandler executorHandler) throws SQLException {
         if (!ObjectUtil.isNull(listeners)) {
             if (beforeListeners(listeners, mappedStatement)) {
+                Object result;
                 try {
-                    initActions(mappedStatement);
-                    Object result = executorHandler.execute(transaction.getConnection());
-                    destroyActions(mappedStatement);
-                    return afterReturnListeners(listeners, result, mappedStatement);
+                    result = executeAction(mappedStatement, executorHandler);
                 } catch (Exception e) {
                     exceptionListeners(listeners, e, mappedStatement);
                     throw e;
-                } finally {
-                    statementHandler.close();
                 }
+                return afterReturnListeners(listeners, result, mappedStatement);
             } else {
                 return null;
             }
         } else {
-            try {
-                initActions(mappedStatement);
-                Object result = executorHandler.execute(transaction.getConnection());
-                destroyActions(mappedStatement);
-                return result;
-            } finally {
-                statementHandler.close();
+            return executeAction(mappedStatement, executorHandler);
+        }
+    }
+
+    protected Object executeAction(MappedStatement mappedStatement, ExecutorHandler executorHandler) throws SQLException {
+        Action[] initActionList = mappedStatement.getInitActionList();
+        Action[] destroyActionList = mappedStatement.getDestroyActionList();
+        try {
+            if (!ObjectUtil.isNull(initActionList)) {
+                doActions(initActionList, mappedStatement.getArg());
             }
+            Object result = executorHandler.execute(transaction.getConnection());
+            if (!ObjectUtil.isNull(destroyActionList)) {
+                doActions(destroyActionList, mappedStatement.getArg());
+            }
+            return result;
+        } finally {
+            statementHandler.close();
+        }
+    }
+
+    @Override
+    public Object batch(List<MappedStatement> mappedStatements) throws SQLException {
+        BatchListener[] batchListener = listenerFactory.getBatchListener();
+        if (!ObjectUtil.isNull(batchListener)) {
+            if (beforeListeners(batchListener, mappedStatements)) {
+                Object result;
+                try {
+                    result = executeAction(mappedStatements, connection -> {
+                        statementHandler.prepare(connection, mappedStatements.get(0));
+                        return statementHandler.executeBatch(mappedStatements);
+                    });
+                } catch (Exception e) {
+                    exceptionListeners(batchListener, e, mappedStatements);
+                    throw e;
+                }
+                return afterReturnListeners(batchListener, result, mappedStatements);
+            } else {
+                return null;
+            }
+
+        } else {
+            return executeAction(mappedStatements, connection -> {
+                statementHandler.prepare(connection, mappedStatements.get(0));
+                return statementHandler.executeBatch(mappedStatements);
+            });
+        }
+    }
+
+    protected Object executeAction(List<MappedStatement> mappedStatements, ExecutorHandler executorHandler) throws SQLException {
+        MethodInfo methodInfo = mappedStatements.get(0).getMethodInfo();
+        Action[] initActionList = methodInfo.getInitActionList();
+        Action[] destroyActionList = methodInfo.getDestroyActionList();
+        Object arg = null;
+        try {
+            if (!ObjectUtil.isNull(initActionList)) {
+                doActions(initActionList, arg = mappedStatements.stream().map(mappedStatement -> mappedStatement.getArg()).collect(Collectors.toList()));
+            }
+            Object result = executorHandler.execute(transaction.getConnection());
+            if (!ObjectUtil.isNull(destroyActionList)) {
+                doActions(destroyActionList, arg == null ? mappedStatements.stream().map(mappedStatement -> mappedStatement.getArg()).collect(Collectors.toList()) : arg);
+            }
+            return result;
+        } finally {
+            statementHandler.close();
         }
     }
 
@@ -162,31 +213,34 @@ public abstract class AbstractExecutor implements Executor {
         }
     }
 
-    protected void initActions(MappedStatement mappedStatement) {
-        Action[] initActionList = mappedStatement.getInitActionList();
-        if (!ObjectUtil.isNull(initActionList)) {
-            Object arg = mappedStatement.getArg();
-            try {
-                for (Action action : initActionList) {
-                    action.doAction(this, arg);
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+    protected boolean beforeListeners(BatchListener[] listeners, List<MappedStatement> mappedStatements) {
+        boolean success = true;
+        for (BatchListener listener : listeners) {
+            success = success & listener.before(mappedStatements);
+        }
+        return success;
+    }
+
+    protected Object afterReturnListeners(BatchListener[] listeners, Object result, List<MappedStatement> mappedStatements) {
+        for (BatchListener listener : listeners) {
+            result = listener.afterReturn(result, mappedStatements);
+        }
+        return result;
+    }
+
+    protected void exceptionListeners(BatchListener[] listeners, Exception e, List<MappedStatement> mappedStatements) {
+        for (BatchListener listener : listeners) {
+            listener.exception(e, mappedStatements);
         }
     }
 
-    protected void destroyActions(MappedStatement mappedStatement) {
-        Action[] destroyActionList = mappedStatement.getDestroyActionList();
-        if (!ObjectUtil.isNull(destroyActionList)) {
-            Object arg = mappedStatement.getArg();
-            try {
-                for (Action action : destroyActionList) {
-                    action.doAction(this, arg);
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+    protected void doActions(Action[] actions, Object arg) {
+        try {
+            for (Action action : actions) {
+                action.doAction(this, arg);
             }
+        } catch (Exception e) {
+            throw new DreamRunTimeException(e);
         }
     }
 

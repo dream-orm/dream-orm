@@ -12,4 +12,6 @@ public interface ListenerFactory {
     InsertListener[] getInsertListener();
 
     DeleteListener[] getDeleteListener();
+
+    BatchListener[] getBatchListener();
 }
