@@ -3,7 +3,6 @@ package com.moxa.dream.system.plugin.factory;
 import com.moxa.dream.system.plugin.interceptor.Interceptor;
 import com.moxa.dream.system.plugin.invocation.JavaInvocation;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.reflect.BaseReflectHandler;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -64,13 +63,11 @@ public class JavaPluginFactory extends AbstractPluginFactory {
     }
 
     protected List<Class> getAllInterface(Object origin) {
-        return ReflectUtil.find(origin.getClass(), new BaseReflectHandler<Class>() {
-            @Override
-            public List<Class> doHandler(Class type) {
-                if (type.isInterface())
-                    return Arrays.asList(type);
-                else
-                    return null;
+        return ReflectUtil.find(origin.getClass(), type -> {
+            if (type.isInterface()) {
+                return Arrays.asList(type);
+            } else {
+                return null;
             }
         });
     }

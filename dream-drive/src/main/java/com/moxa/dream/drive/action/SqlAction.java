@@ -3,10 +3,10 @@ package com.moxa.dream.drive.action;
 
 import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.drive.session.DefaultSession;
-import com.moxa.dream.drive.session.Session;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.executor.Executor;
+import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.system.mapper.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -61,7 +61,7 @@ public class SqlAction implements Action {
     }
 
     @Override
-    public Object doAction(Executor executor, Object arg) throws Exception {
+    public void doAction(Executor executor, Object arg) throws Exception {
         if (!ObjectUtil.isNull(property)) {
             if (methodInfo == null) {
                 synchronized (this) {
@@ -112,6 +112,5 @@ public class SqlAction implements Action {
         if (!ObjectUtil.isNull(property)) {
             ObjectWrapper.wrapper(arg).set(property, result);
         }
-        return null;
     }
 }

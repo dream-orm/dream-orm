@@ -5,7 +5,7 @@ import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.util.InvokerUtil;
-import com.moxa.dream.drive.antlr.factory.DriverInvokerFactory;
+import com.moxa.dream.drive.antlr.factory.DriveInvokerFactory;
 import com.moxa.dream.drive.antlr.wrapper.Wrapper;
 import com.moxa.dream.drive.page.annotation.PageQuery;
 import com.moxa.dream.system.mapper.MethodInfo;
@@ -21,11 +21,11 @@ public class PageWrapper implements Wrapper {
         if (pageQuery != null) {
             String pageNamespace;
             String pageFunction;
-            pageNamespace = DriverInvokerFactory.NAMESPACE;
+            pageNamespace = DriveInvokerFactory.NAMESPACE;
             if (pageQuery.offset()) {
-                pageFunction = DriverInvokerFactory.$OFFSET;
+                pageFunction = DriveInvokerFactory.$OFFSET;
             } else {
-                pageFunction = DriverInvokerFactory.$LIMIT;
+                pageFunction = DriveInvokerFactory.$LIMIT;
             }
             String value = pageQuery.value();
             String prefix = ObjectUtil.isNull(value) ? "" : (value + ".");

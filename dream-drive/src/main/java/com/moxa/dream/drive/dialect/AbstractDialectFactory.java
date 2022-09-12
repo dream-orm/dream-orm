@@ -12,11 +12,12 @@ import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.*;
-import com.moxa.dream.drive.antlr.factory.DriverInvokerFactory;
+import com.moxa.dream.drive.antlr.factory.DriveInvokerFactory;
 import com.moxa.dream.drive.antlr.wrapper.AnnotationWrapper;
 import com.moxa.dream.drive.antlr.wrapper.ScanWrapper;
 import com.moxa.dream.drive.antlr.wrapper.Wrapper;
 import com.moxa.dream.drive.page.wrapper.PageWrapper;
+import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.dialect.DialectFactory;
@@ -166,7 +167,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
 
     protected List<InvokerFactory> getDefaultInvokerFactoryList() {
         List<InvokerFactory> invokerFactoryList = new ArrayList<>();
-        invokerFactoryList.addAll(Arrays.asList(new AntlrInvokerFactory(), new DriverInvokerFactory()));
+        invokerFactoryList.addAll(Arrays.asList(new AntlrInvokerFactory(), new SystemInvokerFactory(), new DriveInvokerFactory()));
         return invokerFactoryList;
     }
 

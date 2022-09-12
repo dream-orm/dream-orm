@@ -13,6 +13,7 @@
         <module>dream-util</module>
         <module>dream-system</module>
         <module>dream-drive</module>
+        <module>dream-template</module>
     </modules>
 
     <properties>
@@ -36,7 +37,6 @@
             </plugin>
         </plugins>
     </build>
-
     <repositories>
         <repository>
             <id>inner-nexus</id>

@@ -9,13 +9,10 @@ import com.moxa.dream.system.mapper.factory.MapperFactory;
 import com.moxa.dream.system.mapper.invoke.MapperInvoke;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
-import com.moxa.dream.util.reflect.BaseReflectHandler;
 import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.reflection.util.NonCollection;
 import com.moxa.dream.util.reflection.util.NullObject;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
@@ -63,7 +60,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         Class colType = getColType(mapperClass, method);
         String[] columnNames = getColumnNames(mapperClass, method);
         boolean cache = isCache(mapperClass, method);
-        boolean batch=isBatch(mapperClass,method);
+        boolean batch = isBatch(mapperClass, method);
         Command command = getCommand(mapperClass, method);
         String[] paramNameList = getParamNameList(method);
         String sql = getSql(configuration, method);
@@ -201,6 +198,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         }
         return cache;
     }
+
     protected boolean isBatch(Class mapperClass, Method method) {
         Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
         boolean batch = false;
@@ -209,6 +207,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         }
         return batch;
     }
+
     protected Command getCommand(Class mapperClass, Method method) {
         Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
         Command command = Command.NONE;
@@ -239,13 +238,11 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     }
 
     protected Class[] getAllInterface(Class type) {
-        return ReflectUtil.find(type, new BaseReflectHandler<Class>() {
-            @Override
-            public List<Class> doHandler(Class type) {
-                if (type.isInterface()) {
-                    return Arrays.asList(type);
-                } else
-                    return null;
+        return ReflectUtil.find(type, _type -> {
+            if (_type.isInterface()) {
+                return Arrays.asList(_type);
+            } else {
+                return null;
             }
         }).toArray(new Class[0]);
     }
@@ -257,42 +254,36 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         return (T) Proxy.newProxyInstance(type.getClassLoader(), typeList, (proxy, method, args) -> {
             MethodInfo methodInfo = methodInfoMap.get(method);
             if (methodInfo != null) {
-                Object arg = null;
-                if (!ObjectUtil.isNull(args)) {
-                    if (args.length == 1) {
-                        String paramName = methodInfo.getParamNameList()[0];
-                        if (ObjectUtil.isNull(paramName)) {
-                            arg = args[0];
-                        } else {
-                            Map<String, Object> paramMap = new HashMap<>();
-                            paramMap.put(paramName, args[0]);
-                            arg = paramMap;
-                        }
-                    } else {
-                        String[] paramNameList = methodInfo.getParamNameList();
-                        Map<String, Object> paramMap = new HashMap<>();
-                        for (int i = 0; i < paramNameList.length; i++) {
-                            paramMap.put(paramNameList[i], args[i]);
-                        }
-                        arg = paramMap;
-                    }
-                }
+                Object arg = getArg(methodInfo, args);
                 return mapperInvoke.invoke(methodInfo, arg);
             } else {
-                return handler(type, proxy, method, args);
+                return mapperInvoke.invoke(type, proxy, method, args);
             }
         });
     }
 
-    protected Object handler(Class type, Object proxy, Method method, Object[] args) throws Throwable {
-        Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class
-                .getDeclaredConstructor(Class.class);
-        constructor.setAccessible(true);
-        return constructor.newInstance(type)
-                .in(type)
-                .unreflectSpecial(method, type)
-                .bindTo(proxy)
-                .invokeWithArguments(args);
+    protected Object getArg(MethodInfo methodInfo, Object[] args) {
+        Object arg = null;
+        if (!ObjectUtil.isNull(args)) {
+            if (args.length == 1) {
+                String paramName = methodInfo.getParamNameList()[0];
+                if (ObjectUtil.isNull(paramName)) {
+                    arg = args[0];
+                } else {
+                    Map<String, Object> paramMap = new HashMap<>();
+                    paramMap.put(paramName, args[0]);
+                    arg = paramMap;
+                }
+            } else {
+                String[] paramNameList = methodInfo.getParamNameList();
+                Map<String, Object> paramMap = new HashMap<>();
+                for (int i = 0; i < paramNameList.length; i++) {
+                    paramMap.put(paramNameList[i], args[i]);
+                }
+                arg = paramMap;
+            }
+        }
+        return arg;
     }
 
     @Override

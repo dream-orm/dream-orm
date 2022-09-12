@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DebugListener implements QueryListener, UpdateListener, InsertListener, DeleteListener, BatchListener {
-     final String START_DATE = "startDate";
+    final String START_DATE = "startDate";
 
     @Override
     public boolean before(MappedStatement mappedStatement) {
@@ -48,7 +48,7 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
     public boolean before(List<MappedStatement> mappedStatements) {
         MappedStatement mappedStatement = mappedStatements.get(0);
         mappedStatement.put(START_DATE, System.currentTimeMillis());
-        List<List<Object>> paramList = mappedStatements.stream().map(ms -> ms.getMappedParamList().stream().filter(mappedParam -> mappedParam!=null).map(mappedParam -> mappedParam.getParamValue()).collect(Collectors.toList())).collect(Collectors.toList());
+        List<List<Object>> paramList = mappedStatements.stream().map(ms -> ms.getMappedParamList().stream().filter(mappedParam -> mappedParam != null).map(mappedParam -> mappedParam.getParamValue()).collect(Collectors.toList())).collect(Collectors.toList());
         String sql = mappedStatement.getSql();
         System.out.println("执行SQL:" + sql);
         System.out.println("执行参数:" + paramList);

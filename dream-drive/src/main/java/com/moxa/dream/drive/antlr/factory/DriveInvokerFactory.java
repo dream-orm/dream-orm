@@ -4,10 +4,11 @@ import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.drive.antlr.invoker.$LimitInvoker;
 import com.moxa.dream.drive.antlr.invoker.$OffSetInvoker;
-import com.moxa.dream.drive.antlr.invoker.AllInvoker;
-import com.moxa.dream.drive.antlr.invoker.TableInvoker;
+import com.moxa.dream.system.antlr.invoker.AllInvoker;
+import com.moxa.dream.system.antlr.invoker.TableInvoker;
 
-public class DriverInvokerFactory implements InvokerFactory {
+
+public class DriveInvokerFactory implements InvokerFactory {
     public static final String NAMESPACE = "driver";
     public static final String ALL = "all";
     public static final String $LIMIT = "$limit";

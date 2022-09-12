@@ -9,5 +9,5 @@ public interface Action {
 
     }
 
-    Object doAction(Executor executor, Object arg) throws Exception;
+    void doAction(Executor executor, Object arg) throws Exception;
 }

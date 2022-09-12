@@ -3,6 +3,7 @@ package com.moxa.dream.drive.session;
 import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.executor.Executor;
+import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.system.mapper.MethodInfo;
@@ -13,7 +14,6 @@ import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 public class DefaultSession implements Session {
@@ -39,7 +39,7 @@ public class DefaultSession implements Session {
     @Override
     public Object execute(MethodInfo methodInfo, Object arg) {
         if (methodInfo.isBatch()) {
-            if(arg==null){
+            if (arg == null) {
                 throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，且不能为空");
             }
             List<MappedStatement> mappedStatements = new ArrayList<>();
@@ -58,10 +58,10 @@ public class DefaultSession implements Session {
             }
             try {
                 return executor.batch(mappedStatements);
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 throw new DreamRunTimeException("批量执行方法'" + methodInfo.getId() + "'失败", e);
             }
-        }else {
+        } else {
             MappedStatement mappedStatement = dialectFactory.compile(methodInfo, arg);
             Object value = null;
             try {

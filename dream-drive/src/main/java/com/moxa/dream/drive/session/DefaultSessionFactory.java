@@ -7,6 +7,8 @@ import com.moxa.dream.system.cache.factory.CacheFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.executor.JdbcExecutor;
+import com.moxa.dream.system.core.session.Session;
+import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.transaction.Transaction;
@@ -54,5 +56,10 @@ public class DefaultSessionFactory implements SessionFactory {
     @Override
     public Session openSession(Executor executor) {
         return new DefaultSession(configuration, executor);
+    }
+
+    @Override
+    public Configuration getConfiguration() {
+        return configuration;
     }
 }
