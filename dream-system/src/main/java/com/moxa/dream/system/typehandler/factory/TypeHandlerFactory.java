@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public interface TypeHandlerFactory {
-    void wrapper(List<? extends TypeHandlerWrapper> typeHandlerWrapperList);
+    void wrapper(TypeHandlerWrapper[]typeHandlerWrapperList);
 
     TypeHandler getTypeHandler(Class javaType, int jdbcType);
 

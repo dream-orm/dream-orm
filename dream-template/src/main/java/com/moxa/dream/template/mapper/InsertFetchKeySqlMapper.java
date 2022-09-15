@@ -2,6 +2,7 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.session.Session;
+import com.moxa.dream.system.dialect.DbType;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.template.mapper.fetch.*;
@@ -12,7 +13,7 @@ public class InsertFetchKeySqlMapper extends InsertSqlMapper {
 
     public InsertFetchKeySqlMapper(Session session) {
         super(session);
-        DialectFactory.DbType dbType = session.getConfiguration().getDialectFactory().getDbType();
+        DbType dbType = session.getConfiguration().getDialectFactory().getDbType();
         switch (dbType) {
             case MYSQL:
                 fetchKey = new MySQLFetchKey(session.getConfiguration());

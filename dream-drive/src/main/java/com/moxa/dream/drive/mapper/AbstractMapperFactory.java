@@ -13,6 +13,8 @@ import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.reflection.util.NonCollection;
 import com.moxa.dream.util.reflection.util.NullObject;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
@@ -257,9 +259,24 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 Object arg = getArg(methodInfo, args);
                 return mapperInvoke.invoke(methodInfo, arg);
             } else {
-                return mapperInvoke.invoke(type, proxy, method, args);
+                return invoke(type, proxy, method, args);
             }
         });
+    }
+
+    protected Object invoke(Class type, Object proxy, Method method, Object[] args) throws Throwable {
+        if (method.isDefault()) {
+            Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class
+                    .getDeclaredConstructor(Class.class);
+            constructor.setAccessible(true);
+            return constructor.newInstance(type)
+                    .in(type)
+                    .unreflectSpecial(method, type)
+                    .bindTo(proxy)
+                    .invokeWithArguments(args);
+        } else {
+            throw new DreamRunTimeException("接口方法不支持调用，方法名：" + type.getName() + "." + method.getName());
+        }
     }
 
     protected Object getArg(MethodInfo methodInfo, Object[] args) {

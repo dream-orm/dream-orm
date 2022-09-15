@@ -36,7 +36,6 @@ import org.xml.sax.InputSource;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 public class ConfigBuilder {
     private Configuration configuration;
@@ -159,7 +158,6 @@ public class ConfigBuilder {
                     tableFactory.addTableInfo(classType);
                 }
             }
-            defaultConfig.setTablePackages(null);
         }
         return this;
     }
@@ -183,7 +181,6 @@ public class ConfigBuilder {
                 for (Class classType : resourceAsClass) {
                     configuration.addMapper(classType);
                 }
-                defaultConfig.setMapperPackages(null);
             }
         }
         return this;
@@ -254,10 +251,11 @@ public class ConfigBuilder {
 
     public ConfigBuilder typeHandlerWrapperList(List<String> typeHandlerWrappers) {
         if (!ObjectUtil.isNull(typeHandlerWrappers)) {
-            List<? extends TypeHandlerWrapper> typeHandlerWrapperList = typeHandlerWrappers.stream().map(typeHandlerWrapper -> {
-                Class<? extends TypeHandlerWrapper> typeHandlerWrapperClass = ReflectUtil.loadClass(typeHandlerWrapper);
-                return ReflectUtil.create(typeHandlerWrapperClass);
-            }).collect(Collectors.toList());
+            TypeHandlerWrapper[] typeHandlerWrapperList = new TypeHandlerWrapper[typeHandlerWrappers.size()];
+            for (int i = 0; i < typeHandlerWrappers.size(); i++) {
+                Class<? extends TypeHandlerWrapper> typeHandlerWrapperClass = ReflectUtil.loadClass(typeHandlerWrappers.get(i));
+                typeHandlerWrapperList[i] = ReflectUtil.create(typeHandlerWrapperClass);
+            }
             TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
             ObjectUtil.requireNonNull(typeHandlerFactory, "TypeHandlerFactory未在Configuration注册");
             typeHandlerFactory.wrapper(typeHandlerWrapperList);

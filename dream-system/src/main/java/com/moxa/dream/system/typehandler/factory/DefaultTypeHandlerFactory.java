@@ -19,7 +19,7 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
     }
 
     @Override
-    public void wrapper(List<? extends TypeHandlerWrapper> typeHandlerWrapperList) {
+    public void wrapper(TypeHandlerWrapper[]typeHandlerWrapperList) {
         if (!ObjectUtil.isNull(typeHandlerWrapperList)) {
             for (TypeHandlerWrapper typeHandlerWrapper : typeHandlerWrapperList) {
                 TypeHandler typeHandler = typeHandlerWrapper.getTypeHandler();
@@ -50,26 +50,25 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
         return typeHandler;
     }
 
-    protected List<TypeHandlerWrapper> getTypeHandlerWrapperList() {
-        List<TypeHandlerWrapper> defaultTypeHandlerWrapperList = Arrays.asList(
-                new BigDecimalTypeHandlerWrapper(),
-                new BlobInputStreamTypeHandlerWrapper(),
-                new BlobTypeHandlerWrapper(),
-                new BooleanTypeHandlerWrapper(),
-                new ByteTypeHandlerWrapper(),
-                new SqlDateTypeHandlerWrapper(),
-                new UtilDateTypeHandlerWrapper(),
-                new DoubleTypeHandlerWrapper(),
-                new FloatTypeHandlerWrapper(),
-                new IntegerTypeHandlerWrapper(),
-                new LongTypeHandlerWrapper(),
-                new ShortTypeHandlerWrapper(),
-                new StringTypeHandlerWrapper(),
-                new TimeStampTypeHandlerWrapper(),
-                new TimeTypeHandlerWrapper(),
-                new ObjectTypeHandlerWrapper()
-        );
-        return defaultTypeHandlerWrapperList;
+    protected TypeHandlerWrapper[] getTypeHandlerWrapperList() {
+                return new TypeHandlerWrapper[]{
+                        new BigDecimalTypeHandlerWrapper(),
+                        new BlobInputStreamTypeHandlerWrapper(),
+                        new BlobTypeHandlerWrapper(),
+                        new BooleanTypeHandlerWrapper(),
+                        new ByteTypeHandlerWrapper(),
+                        new SqlDateTypeHandlerWrapper(),
+                        new UtilDateTypeHandlerWrapper(),
+                        new DoubleTypeHandlerWrapper(),
+                        new FloatTypeHandlerWrapper(),
+                        new IntegerTypeHandlerWrapper(),
+                        new LongTypeHandlerWrapper(),
+                        new ShortTypeHandlerWrapper(),
+                        new StringTypeHandlerWrapper(),
+                        new TimeStampTypeHandlerWrapper(),
+                        new TimeTypeHandlerWrapper(),
+                        new ObjectTypeHandlerWrapper()
+                };
     }
 
     protected TypeHandler wrapper(TypeHandler typeHandler) {

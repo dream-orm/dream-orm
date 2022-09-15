@@ -88,19 +88,27 @@ public class ConfigurationBuilder extends XMLBuilder {
     public Object endElement(String uri, String localName, String qName) {
         if (aliasFactory != null) {
             configBuilder.aliasFactory(aliasFactory.getType());
-            configBuilder.aliasProperties(getProperties(aliasFactory.getPropertyList()));
+            List<PropertyBuilder.Property> propertyList = aliasFactory.getPropertyList();
+            if(!ObjectUtil.isNull(propertyList)) {
+                Properties properties = getProperties(propertyList);
+                configBuilder.aliasProperties(properties);
+            }
         }
         if (dialectFactory != null) {
             configBuilder.dialectFactory(dialectFactory.getType());
-            Properties properties = getProperties(dialectFactory.getPropertyList());
-            if (properties != null) {
+            List<PropertyBuilder.Property> propertyList = dialectFactory.getPropertyList();
+            if(!ObjectUtil.isNull(propertyList)) {
+                Properties properties = getProperties(propertyList);
                 configBuilder.dialectProperties(properties);
             }
         }
         if (tableFactory != null) {
             configBuilder.tableFactory(tableFactory.getType());
-            for (MappingBuilder.Mapping mapping : tableFactory.getMappingList()) {
-                configBuilder.tableMapping(mapping.getType());
+            List<MappingBuilder.Mapping> mappingList = tableFactory.getMappingList();
+            if(!ObjectUtil.isNull(mappingList)) {
+                for (MappingBuilder.Mapping mapping : tableFactory.getMappingList()) {
+                    configBuilder.tableMapping(mapping.getType());
+                }
             }
         }
         if (mapperFactory != null) {
@@ -114,27 +122,50 @@ public class ConfigurationBuilder extends XMLBuilder {
         }
         if (cacheFactory != null) {
             configBuilder.cacheFactory(cacheFactory.getType());
-            configBuilder.cacheProperties(getProperties(cacheFactory.getPropertyList()));
+            List<PropertyBuilder.Property> propertyList = cacheFactory.getPropertyList();
+            if (!ObjectUtil.isNull(propertyList)) {
+                Properties properties = getProperties(propertyList);
+                configBuilder.cacheProperties(properties);
+            }
         }
         if (typeHandlerFactory != null) {
             configBuilder.typeHandlerFactory(typeHandlerFactory.getType());
-            configBuilder.typeHandlerWrapperList(typeHandlerFactory.getTypeHandlerWrapperList().stream().map(typeHandlerWrapper -> typeHandlerWrapper.getType()).collect(Collectors.toList()));
+            List<TypeHandlerWrapperBuilder.TypeHandlerWrapper> typeHandlerWrapperList = typeHandlerFactory.getTypeHandlerWrapperList();
+            if (!ObjectUtil.isNull(typeHandlerWrapperList)) {
+                configBuilder.typeHandlerWrapperList(typeHandlerWrapperList.stream()
+                        .map(typeHandlerWrapper -> typeHandlerWrapper.getType())
+                        .collect(Collectors.toList()));
+            }
         }
         if (pluginFactory != null) {
             configBuilder.pluginFactory(pluginFactory.getType());
-            configBuilder.interceptor(pluginFactory.getInterceptorList().stream().map(interceptor -> interceptor.getType()).collect(Collectors.toList()));
+            List<InterceptorBuilder.Interceptor> interceptorList = pluginFactory.getInterceptorList();
+            if (!ObjectUtil.isNull(interceptorList)) {
+                configBuilder.interceptor(interceptorList.stream().map(interceptor -> interceptor.getType())
+                        .collect(Collectors.toList()));
+            }
         }
         if (listenerFactory != null) {
             configBuilder.listenerFactory(listenerFactory.getType());
-            configBuilder.listener(listenerFactory.getListenerList().stream().map(listener -> listener.getType()).collect(Collectors.toList()));
+            List<ListenerBuilder.Listener> listenerList = listenerFactory.getListenerList();
+            if (!ObjectUtil.isNull(listenerList)) {
+                configBuilder.listener(listenerList.stream().map(listener -> listener.getType())
+                        .collect(Collectors.toList()));
+            }
         }
         if (transactionFactory != null) {
             configBuilder.transactionFactory(transactionFactory.getType());
-            configBuilder.transactionProperties(getProperties(transactionFactory.getPropertyList()));
+            List<PropertyBuilder.Property> propertyList = transactionFactory.getPropertyList();
+            if (!ObjectUtil.isNull(propertyList)) {
+                configBuilder.transactionProperties(getProperties(propertyList));
+            }
         }
         if (dataSourceFactory != null) {
             configBuilder.dataSourceFactory(dataSourceFactory.getType());
-            configBuilder.dataSourceProperties(getProperties(dataSourceFactory.getPropertyList()));
+            List<PropertyBuilder.Property> propertyList = dataSourceFactory.getPropertyList();
+            if (!ObjectUtil.isNull(propertyList)) {
+                configBuilder.dataSourceProperties(getProperties(propertyList));
+            }
         }
         return configBuilder.build();
     }
