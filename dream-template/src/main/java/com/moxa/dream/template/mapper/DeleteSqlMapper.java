@@ -2,7 +2,7 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.util.reflection.util.NonCollection;
 

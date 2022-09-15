@@ -6,7 +6,7 @@ import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapped.MappedStatement;
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 

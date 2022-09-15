@@ -5,9 +5,7 @@ import com.moxa.dream.system.typehandler.util.TypeUtil;
 import com.moxa.dream.system.typehandler.wrapper.*;
 import com.moxa.dream.util.common.ObjectUtil;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -19,7 +17,7 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
     }
 
     @Override
-    public void wrapper(TypeHandlerWrapper[]typeHandlerWrapperList) {
+    public void wrapper(TypeHandlerWrapper[] typeHandlerWrapperList) {
         if (!ObjectUtil.isNull(typeHandlerWrapperList)) {
             for (TypeHandlerWrapper typeHandlerWrapper : typeHandlerWrapperList) {
                 TypeHandler typeHandler = typeHandlerWrapper.getTypeHandler();
@@ -51,24 +49,24 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
     }
 
     protected TypeHandlerWrapper[] getTypeHandlerWrapperList() {
-                return new TypeHandlerWrapper[]{
-                        new BigDecimalTypeHandlerWrapper(),
-                        new BlobInputStreamTypeHandlerWrapper(),
-                        new BlobTypeHandlerWrapper(),
-                        new BooleanTypeHandlerWrapper(),
-                        new ByteTypeHandlerWrapper(),
-                        new SqlDateTypeHandlerWrapper(),
-                        new UtilDateTypeHandlerWrapper(),
-                        new DoubleTypeHandlerWrapper(),
-                        new FloatTypeHandlerWrapper(),
-                        new IntegerTypeHandlerWrapper(),
-                        new LongTypeHandlerWrapper(),
-                        new ShortTypeHandlerWrapper(),
-                        new StringTypeHandlerWrapper(),
-                        new TimeStampTypeHandlerWrapper(),
-                        new TimeTypeHandlerWrapper(),
-                        new ObjectTypeHandlerWrapper()
-                };
+        return new TypeHandlerWrapper[]{
+                new BigDecimalTypeHandlerWrapper(),
+                new BlobInputStreamTypeHandlerWrapper(),
+                new BlobTypeHandlerWrapper(),
+                new BooleanTypeHandlerWrapper(),
+                new ByteTypeHandlerWrapper(),
+                new SqlDateTypeHandlerWrapper(),
+                new UtilDateTypeHandlerWrapper(),
+                new DoubleTypeHandlerWrapper(),
+                new FloatTypeHandlerWrapper(),
+                new IntegerTypeHandlerWrapper(),
+                new LongTypeHandlerWrapper(),
+                new ShortTypeHandlerWrapper(),
+                new StringTypeHandlerWrapper(),
+                new TimeStampTypeHandlerWrapper(),
+                new TimeTypeHandlerWrapper(),
+                new ObjectTypeHandlerWrapper()
+        };
     }
 
     protected TypeHandler wrapper(TypeHandler typeHandler) {

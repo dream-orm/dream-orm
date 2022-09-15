@@ -2,21 +2,13 @@ package com.moxa.dream.drive.dialect;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
-import com.moxa.dream.antlr.expr.PackageExpr;
-import com.moxa.dream.antlr.expr.SqlExpr;
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.factory.InvokerFactory;
-import com.moxa.dream.antlr.factory.MyFunctionFactory;
 import com.moxa.dream.antlr.invoker.$Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
-import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.*;
 import com.moxa.dream.drive.antlr.factory.DriveInvokerFactory;
-import com.moxa.dream.drive.antlr.wrapper.AnnotationWrapper;
-import com.moxa.dream.drive.antlr.wrapper.ScanWrapper;
-import com.moxa.dream.drive.antlr.wrapper.Wrapper;
-import com.moxa.dream.drive.page.wrapper.PageWrapper;
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
@@ -24,7 +16,7 @@ import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapped.MappedParam;
 import com.moxa.dream.system.mapped.MappedSql;
 import com.moxa.dream.system.mapped.MappedStatement;
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
@@ -39,28 +31,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractDialectFactory implements DialectFactory {
-    private int split;
-    private ToSQL toSQL;
+    private final ToSQL toSQL;
 
     public AbstractDialectFactory() {
-        this(5);
-    }
-
-    public AbstractDialectFactory(int split) {
-        this.split = split;
-        if (split <= 0) {
-            throw new DreamRunTimeException("SQL分割次数必须大于0");
-        }
         toSQL = getToSQL();
-    }
-
-    @Override
-    public PackageStatement compile(MethodInfo methodInfo) {
-        String sql = methodInfo.getSql();
-        ExprReader exprReader = new ExprReader(sql, getMyFunctionFactory());
-        SqlExpr sqlExpr = new PackageExpr(exprReader);
-        PackageStatement statement = (PackageStatement) sqlExpr.expr();
-        return statement;
     }
 
     @Override
@@ -123,7 +97,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                 mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler()));
             }
         }
-        CacheKey uniqueKey = methodInfo.getSqlKey();
+        CacheKey uniqueKey = methodInfo.getMethodKey();
         if (!ObjectUtil.isNull(mappedParamList)) {
             uniqueKey.update(mappedParamList.stream()
                     .map(mappedParam -> mappedParam.getParamValue())
@@ -228,39 +202,6 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         return new MappedParam(jdbcType, paramValue, typeHandler);
     }
 
-    @Override
-    public CacheKey getCacheKey(MethodInfo methodInfo) {
-        String sql = methodInfo.getSql();
-        char[] charList = sql.toCharArray();
-        int index = 0;
-        for (int i = 0; i < charList.length; i++) {
-            char c;
-            if (!Character.isWhitespace(c = charList[i])) {
-                charList[index++] = Character.toLowerCase(c);
-            }
-        }
-        if (split > index)
-            split = index;
-        Object[] hashObj = new Object[split + 2];
-        int len = (int) Math.ceil(index / (double) split);
-        for (int i = 0; i < split; i++) {
-            int sPoint = i * len;
-            int size = Math.min((i + 1) * len, index) - sPoint;
-            char[] tempChars = new char[size];
-            System.arraycopy(charList, sPoint, tempChars, 0, size);
-            hashObj[i] = new String(tempChars);
-        }
-        hashObj[split] = methodInfo.getColType();
-        hashObj[split + 1] = methodInfo.getRowType();
-        CacheKey cacheKey = new CacheKey();
-        cacheKey.update(hashObj);
-        return cacheKey;
-    }
-
-    protected MyFunctionFactory getMyFunctionFactory() {
-        return null;
-    }
-
     protected ToSQL getToSQL() {
         switch (getDbType()) {
             case MYSQL:
@@ -275,27 +216,6 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                 throw new DreamRunTimeException(getDbType() + "类型尚未不支持");
         }
     }
-
-    @Override
-    public void compileAfter(MethodInfo methodInfo) {
-        List<Wrapper> allWrapperList = new ArrayList<>();
-        List<Wrapper> beforeWrapperList = Arrays.asList(new AnnotationWrapper());
-        List<Wrapper> wrapperList = getWrapList();
-        List<Wrapper> afterWrapperList = Arrays.asList(new ScanWrapper());
-        allWrapperList.addAll(beforeWrapperList);
-        if (!ObjectUtil.isNull(wrapperList)) {
-            allWrapperList.addAll(wrapperList);
-        }
-        allWrapperList.addAll(afterWrapperList);
-        for (Wrapper wrapper : allWrapperList) {
-            wrapper.wrapper(methodInfo);
-        }
-    }
-
-    protected List<Wrapper> getWrapList() {
-        return Arrays.asList(new PageWrapper());
-    }
-
 
     static class ParamTypeMap {
         private final Map<String, ParamType> paramTypeMap = new HashMap<>();

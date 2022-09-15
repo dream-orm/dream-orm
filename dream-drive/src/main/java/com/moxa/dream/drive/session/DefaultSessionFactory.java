@@ -19,9 +19,9 @@ import javax.sql.DataSource;
 
 public class DefaultSessionFactory implements SessionFactory {
     private final Configuration configuration;
-    private PluginFactory pluginFactory;
-    private TransactionFactory transactionFactory;
-    private DataSource dataSource;
+    private final PluginFactory pluginFactory;
+    private final TransactionFactory transactionFactory;
+    private final DataSource dataSource;
     private Cache cache;
 
     public DefaultSessionFactory(Configuration configuration) {

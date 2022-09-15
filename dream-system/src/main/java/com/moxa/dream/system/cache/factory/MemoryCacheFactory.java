@@ -11,7 +11,7 @@ public class MemoryCacheFactory implements CacheFactory {
     private final String RATE = "rate";
     private int limit = 100;
     private double rate = 0.25;
-    private Cache cache=new MemoryCache(limit,rate);
+    private Cache cache = new MemoryCache(limit, rate);
 
     @Override
     public void setProperties(Properties properties) {
@@ -29,8 +29,8 @@ public class MemoryCacheFactory implements CacheFactory {
         }
         if (!String.valueOf(false).equals(enable)) {
             cache = new MemoryCache(limit, rate);
-        }else{
-            cache=null;
+        } else {
+            cache = null;
         }
     }
 

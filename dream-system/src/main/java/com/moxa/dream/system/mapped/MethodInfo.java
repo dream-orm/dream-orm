@@ -1,11 +1,12 @@
-package com.moxa.dream.system.mapper;
+package com.moxa.dream.system.mapped;
 
 import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
+import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.action.Action;
-import com.moxa.dream.system.dialect.DialectFactory;
+import com.moxa.dream.system.inject.factory.InjectFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.reflect.Method;
@@ -26,7 +27,7 @@ public class MethodInfo {
     private int timeOut;
     private boolean batch;
     private PackageStatement statement;
-    private CacheKey sqlKey;
+    private CacheKey methodKey;
     private Method method;
     private Action[] initActionList;
     private Action[] loopActionList;
@@ -97,8 +98,8 @@ public class MethodInfo {
         return statement;
     }
 
-    public CacheKey getSqlKey() {
-        return sqlKey.clone();
+    public CacheKey getMethodKey() {
+        return methodKey.clone();
     }
 
     public Method getMethod() {
@@ -106,10 +107,11 @@ public class MethodInfo {
     }
 
     public String getId() {
-        if (method == null)
-            return "";
-        else
+        if (method == null) {
+            return null;
+        } else {
             return method.getDeclaringClass().getName() + "." + method.getName();
+        }
     }
 
     public <T> void set(Class<T> type, T value) {
@@ -121,10 +123,15 @@ public class MethodInfo {
     }
 
     public synchronized void compile() {
-        DialectFactory dialectFactory = configuration.getDialectFactory();
-        this.statement = dialectFactory.compile(this);
-        this.sqlKey = dialectFactory.getCacheKey(this);
-        dialectFactory.compileAfter(this);
+        CompileFactory compileFactory = configuration.getCompileFactory();
+        this.statement = compileFactory.compile(sql);
+        CacheKey uniqueKey = compileFactory.uniqueKey(sql);
+        if (uniqueKey != null) {
+            uniqueKey.update(new Object[]{colType, rowType});
+        }
+        this.methodKey = uniqueKey;
+        InjectFactory injectFactory = configuration.getInjectFactory();
+        injectFactory.inject(this);
     }
 
     public static class Builder {

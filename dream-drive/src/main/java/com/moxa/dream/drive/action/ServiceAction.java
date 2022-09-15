@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ServiceAction implements Action {
-    private String property;
-    private Object target;
-    private Method method;
+    private final String property;
+    private final Object target;
+    private final Method method;
 
     public ServiceAction(String property, String type) {
         int index = type.lastIndexOf(".");

@@ -12,10 +12,12 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class ConfigurationBuilder extends XMLBuilder {
-    private ConfigBuilder configBuilder;
+    private final ConfigBuilder configBuilder;
     private AliasFactoryBuilder.AliasFactory aliasFactory;
     private TableFactoryBuilder.TableFactory tableFactory;
     private MapperFactoryBuilder.MapperFactory mapperFactory;
+    private CompileFactoryBuilder.CompileFactory compileFactory;
+    private InjectFactoryBuilder.InjectFactory injectFactory;
     private DialectFactoryBuilder.DialectFactory dialectFactory;
     private CacheFactoryBuilder.CacheFactory cacheFactory;
     private TypeHandlerFactoryBuilder.TypeHandlerFactory typeHandlerFactory;
@@ -89,15 +91,31 @@ public class ConfigurationBuilder extends XMLBuilder {
         if (aliasFactory != null) {
             configBuilder.aliasFactory(aliasFactory.getType());
             List<PropertyBuilder.Property> propertyList = aliasFactory.getPropertyList();
-            if(!ObjectUtil.isNull(propertyList)) {
+            if (!ObjectUtil.isNull(propertyList)) {
                 Properties properties = getProperties(propertyList);
                 configBuilder.aliasProperties(properties);
+            }
+        }
+        if (compileFactory != null) {
+            configBuilder.compileFactory(compileFactory.getType());
+            List<PropertyBuilder.Property> propertyList = compileFactory.getPropertyList();
+            if (!ObjectUtil.isNull(propertyList)) {
+                Properties properties = getProperties(propertyList);
+                configBuilder.compileProperties(properties);
+            }
+        }
+        if (injectFactory != null) {
+            configBuilder.injectFactory(injectFactory.getType());
+            List<InjectBuilder.Inject> injectList = injectFactory.getInjectList();
+            if (!ObjectUtil.isNull(injectList)) {
+                configBuilder.injects(injectList.stream().map(inject -> inject.getType())
+                        .collect(Collectors.toList()));
             }
         }
         if (dialectFactory != null) {
             configBuilder.dialectFactory(dialectFactory.getType());
             List<PropertyBuilder.Property> propertyList = dialectFactory.getPropertyList();
-            if(!ObjectUtil.isNull(propertyList)) {
+            if (!ObjectUtil.isNull(propertyList)) {
                 Properties properties = getProperties(propertyList);
                 configBuilder.dialectProperties(properties);
             }
@@ -105,7 +123,7 @@ public class ConfigurationBuilder extends XMLBuilder {
         if (tableFactory != null) {
             configBuilder.tableFactory(tableFactory.getType());
             List<MappingBuilder.Mapping> mappingList = tableFactory.getMappingList();
-            if(!ObjectUtil.isNull(mappingList)) {
+            if (!ObjectUtil.isNull(mappingList)) {
                 for (MappingBuilder.Mapping mapping : tableFactory.getMappingList()) {
                     configBuilder.tableMapping(mapping.getType());
                 }
@@ -187,6 +205,12 @@ public class ConfigurationBuilder extends XMLBuilder {
                 break;
             case XmlConstant.TYPEHANDLERFACTORY:
                 typeHandlerFactory = (TypeHandlerFactoryBuilder.TypeHandlerFactory) obj;
+                break;
+            case XmlConstant.COMPILEFACTORY:
+                compileFactory = (CompileFactoryBuilder.CompileFactory) obj;
+                break;
+            case XmlConstant.INJECTFACTORY:
+                injectFactory = (InjectFactoryBuilder.InjectFactory) obj;
                 break;
             case XmlConstant.DIALECTFACTORY:
                 dialectFactory = (DialectFactoryBuilder.DialectFactory) obj;

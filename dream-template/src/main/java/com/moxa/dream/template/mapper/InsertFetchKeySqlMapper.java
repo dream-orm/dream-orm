@@ -3,7 +3,6 @@ package com.moxa.dream.template.mapper;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.dialect.DbType;
-import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.template.mapper.fetch.*;
 import com.moxa.dream.util.exception.DreamRunTimeException;

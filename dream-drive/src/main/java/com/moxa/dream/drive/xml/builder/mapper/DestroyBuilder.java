@@ -50,7 +50,7 @@ public class DestroyBuilder extends XMLBuilder {
     }
 
     static class Destroy {
-        private List<ActionBuilder.Action> actionList = new ArrayList<>();
+        private final List<ActionBuilder.Action> actionList = new ArrayList<>();
 
         public List<ActionBuilder.Action> getActionList() {
             return actionList;

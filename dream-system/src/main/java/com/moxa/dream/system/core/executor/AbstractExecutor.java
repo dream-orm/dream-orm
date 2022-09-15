@@ -9,7 +9,7 @@ import com.moxa.dream.system.core.resultsethandler.DefaultResultSetHandler;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.mapped.MappedStatement;
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.transaction.Transaction;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;

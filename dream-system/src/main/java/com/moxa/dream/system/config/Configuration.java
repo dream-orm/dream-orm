@@ -1,9 +1,11 @@
 package com.moxa.dream.system.config;
 
 import com.moxa.dream.system.cache.factory.CacheFactory;
+import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
+import com.moxa.dream.system.inject.factory.InjectFactory;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.table.factory.TableFactory;
@@ -15,6 +17,9 @@ public class Configuration {
     private TableFactory tableFactory;
     private CacheFactory cacheFactory;
     private TypeHandlerFactory typeHandlerFactory;
+
+    private CompileFactory compileFactory;
+    private InjectFactory injectFactory;
     private DialectFactory dialectFactory;
     private PluginFactory pluginFactory;
     private ListenerFactory listenerFactory;
@@ -56,6 +61,22 @@ public class Configuration {
 
     public void setTypeHandlerFactory(TypeHandlerFactory typeHandlerFactory) {
         this.typeHandlerFactory = typeHandlerFactory;
+    }
+
+    public CompileFactory getCompileFactory() {
+        return compileFactory;
+    }
+
+    public void setCompileFactory(CompileFactory compileFactory) {
+        this.compileFactory = compileFactory;
+    }
+
+    public InjectFactory getInjectFactory() {
+        return injectFactory;
+    }
+
+    public void setInjectFactory(InjectFactory injectFactory) {
+        this.injectFactory = injectFactory;
     }
 
     public DialectFactory getDialectFactory() {
