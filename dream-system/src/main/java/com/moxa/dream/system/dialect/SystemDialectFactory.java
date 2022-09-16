@@ -221,7 +221,7 @@ public class SystemDialectFactory implements DialectFactory {
     }
 
     protected ToSQL getToSQL(Configuration configuration) {
-        DbType dbType = getDbType();
+        dbType = getDbType();
         if (dbType == DbType.AUTO) {
             DataSourceFactory dataSourceFactory = configuration.getDataSourceFactory();
             DataSource dataSource = dataSourceFactory.getDataSource();
