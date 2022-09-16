@@ -216,6 +216,10 @@ public class SystemDialectFactory implements DialectFactory {
         this.dbType = dbType;
     }
 
+    public void setToSQL(ToSQL toSQL) {
+        this.toSQL = toSQL;
+    }
+
     protected ToSQL getToSQL(Configuration configuration) {
         DbType dbType = getDbType();
         if (dbType == DbType.AUTO) {
