@@ -56,6 +56,14 @@ public class ConfigurationBuilder extends XMLBuilder {
                 TypeHandlerFactoryBuilder typeHandlerFactoryBuilder = new TypeHandlerFactoryBuilder(workHandler);
                 typeHandlerFactoryBuilder.startElement(uri, localName, qName, attributes);
                 break;
+            case XmlConstant.COMPILEFACTORY:
+                CompileFactoryBuilder compileFactoryBuilder = new CompileFactoryBuilder(workHandler);
+                compileFactoryBuilder.startElement(uri, localName, qName, attributes);
+                break;
+            case XmlConstant.INJECTFACTORY:
+                InjectFactoryBuilder injectFactoryBuilder = new InjectFactoryBuilder(workHandler);
+                injectFactoryBuilder.startElement(uri, localName, qName, attributes);
+                break;
             case XmlConstant.DIALECTFACTORY:
                 DialectFactoryBuilder dialectFactoryBuilder = new DialectFactoryBuilder(workHandler);
                 dialectFactoryBuilder.startElement(uri, localName, qName, attributes);

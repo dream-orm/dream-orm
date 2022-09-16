@@ -9,7 +9,7 @@ import com.moxa.dream.system.antlr.invoker.TableInvoker;
 
 
 public class DriveInvokerFactory implements InvokerFactory {
-    public static final String NAMESPACE = "driver";
+    public static final String NAMESPACE = "drive";
     public static final String ALL = "all";
     public static final String $LIMIT = "$limit";
     public static final String $OFFSET = "$offset";

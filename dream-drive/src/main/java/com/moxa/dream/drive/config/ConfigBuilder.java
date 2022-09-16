@@ -2,7 +2,7 @@ package com.moxa.dream.drive.config;
 
 import com.moxa.dream.drive.alias.AliasFactory;
 import com.moxa.dream.drive.alias.DefaultAliasFactory;
-import com.moxa.dream.drive.dialect.MySQLDialectFactory;
+import com.moxa.dream.drive.dialect.DefaultDialectFactory;
 import com.moxa.dream.drive.inject.PageInjectFactory;
 import com.moxa.dream.drive.listener.DefaultListenerFactory;
 import com.moxa.dream.drive.mapper.DefaultMapperFactory;
@@ -43,9 +43,9 @@ import java.util.List;
 import java.util.Properties;
 
 public class ConfigBuilder {
+    private final DefaultConfig defaultConfig;
     private Configuration configuration;
     private AliasFactory aliasFactory;
-    private final DefaultConfig defaultConfig;
 
     public ConfigBuilder() {
         this(null);
@@ -69,7 +69,7 @@ public class ConfigBuilder {
                 .setTableFactory(new DefaultTableFactory())
                 .setCompileFactory(new DefaultCompileFactory())
                 .setInjectFactory(new PageInjectFactory())
-                .setDialectFactory(new MySQLDialectFactory())
+                .setDialectFactory(new DefaultDialectFactory())
                 .setTransactionFactory(new JdbcTransactionFactory())
                 .setPluginFactory(new JavaPluginFactory())
                 .setListenerFactory(new DefaultListenerFactory())

@@ -17,7 +17,7 @@ public abstract class AbstractInjectFactory implements InjectFactory {
 
     @Override
     public final void inject(MethodInfo methodInfo) {
-        AnnotationInject annotationInject=new AnnotationInject();
+        AnnotationInject annotationInject = new AnnotationInject();
         annotationInject.inject(methodInfo);
         beforeInject(methodInfo);
         if (!ObjectUtil.isNull(injectClasses)) {

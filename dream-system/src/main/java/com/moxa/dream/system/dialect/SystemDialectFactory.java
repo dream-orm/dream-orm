@@ -1,4 +1,4 @@
-package com.moxa.dream.drive.dialect;
+package com.moxa.dream.system.dialect;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
@@ -8,11 +8,10 @@ import com.moxa.dream.antlr.invoker.$Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.*;
-import com.moxa.dream.drive.antlr.factory.DriveInvokerFactory;
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.dialect.DialectFactory;
+import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.mapped.MappedParam;
 import com.moxa.dream.system.mapped.MappedSql;
 import com.moxa.dream.system.mapped.MappedStatement;
@@ -25,16 +24,22 @@ import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.exception.DreamRunTimeException;
+import com.moxa.dream.util.reflect.ReflectUtil;
 
+import javax.sql.DataSource;
+import java.lang.reflect.Method;
 import java.sql.Types;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class AbstractDialectFactory implements DialectFactory {
-    private final ToSQL toSQL;
+public class SystemDialectFactory implements DialectFactory {
+    protected DbType dbType = DbType.AUTO;
+    protected ToSQL toSQL;
+    protected List<InvokerFactory> invokerFactoryList = new ArrayList<>();
 
-    public AbstractDialectFactory() {
-        toSQL = getToSQL();
+    public SystemDialectFactory() {
+        invokerFactoryList.add(new AntlrInvokerFactory());
+        invokerFactoryList.add(new SystemInvokerFactory());
     }
 
     @Override
@@ -58,10 +63,17 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         }
         if (ObjectUtil.isNull(sql)) {
             Assist assist = getAssist(methodInfo, arg);
+            if (toSQL == null) {
+                synchronized (this) {
+                    if (toSQL == null) {
+                        toSQL = getToSQL(methodInfo.getConfiguration());
+                    }
+                }
+            }
             try {
                 sql = toSQL.toStr(statement, assist, null);
             } catch (InvokerException e) {
-                throw new RuntimeException(e);
+                throw new DreamRunTimeException(e);
             }
             if (scanInfo == null) {
                 scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
@@ -135,14 +147,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
             arg = new HashMap<>();
         }
         customMap.put(ObjectWrapper.class, ObjectWrapper.wrapper(arg));
-        List<InvokerFactory> invokerFactoryList = getDefaultInvokerFactoryList();
         return new Assist(invokerFactoryList, customMap);
-    }
-
-    protected List<InvokerFactory> getDefaultInvokerFactoryList() {
-        List<InvokerFactory> invokerFactoryList = new ArrayList<>();
-        invokerFactoryList.addAll(Arrays.asList(new AntlrInvokerFactory(), new SystemInvokerFactory(), new DriveInvokerFactory()));
-        return invokerFactoryList;
     }
 
     protected ParamType getParamType(Configuration configuration, ScanInvoker.ScanInfo scanInfo, Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap, $Invoker.ParamInfo paramInfo) {
@@ -202,8 +207,23 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         return new MappedParam(jdbcType, paramValue, typeHandler);
     }
 
-    protected ToSQL getToSQL() {
-        switch (getDbType()) {
+    @Override
+    public DbType getDbType() {
+        return dbType;
+    }
+
+    public void setDbType(DbType dbType) {
+        this.dbType = dbType;
+    }
+
+    protected ToSQL getToSQL(Configuration configuration) {
+        DbType dbType = getDbType();
+        if (dbType == DbType.AUTO) {
+            DataSourceFactory dataSourceFactory = configuration.getDataSourceFactory();
+            DataSource dataSource = dataSourceFactory.getDataSource();
+            dbType = getDbType(dataSource);
+        }
+        switch (dbType) {
             case MYSQL:
                 return new ToMYSQL();
             case MSSQL:
@@ -213,8 +233,44 @@ public abstract class AbstractDialectFactory implements DialectFactory {
             case ORACLE:
                 return new ToORACLE();
             default:
-                throw new DreamRunTimeException(getDbType() + "类型尚未不支持");
+                throw new DreamRunTimeException(getDbType() + "类型尚未支持");
         }
+    }
+
+    protected DbType getDbType(DataSource dataSource) {
+        DbType dbType = null;
+        List<Method> methodList = ReflectUtil.findMethod(dataSource.getClass()).stream().filter(method -> "getDriverClassName".equals(method.getName()) && method.getParameterCount() == 0 && method.getReturnType() == String.class).collect(Collectors.toList());
+        if (ObjectUtil.isNull(methodList)) {
+            throw new DreamRunTimeException("当前数据库" + dataSource.getClass().getName() + "不支持自动获取数据类型");
+        }
+        Method method = methodList.get(0);
+        String driverClassName;
+        try {
+            driverClassName = (String) method.invoke(dataSource);
+        } catch (Exception e) {
+            throw new DreamRunTimeException("当前数据库" + dataSource.getClass().getName() + "调用方法" + method.getName() + "失败", e);
+        }
+        if (driverClassName == null) {
+            throw new DreamRunTimeException("当前数据库" + dataSource.getClass().getName() + "调用方法" + method.getName() + "返回值为null，不支持自动获取数据库类型");
+        }
+        switch (driverClassName) {
+            case "com.mysql.jdbc.Driver":
+            case "com.mysql.cj.jdbc.Driver":
+                dbType = DbType.MYSQL;
+                break;
+            case "org.postgresql.Driver":
+                dbType = DbType.PGSQL;
+                break;
+            case "com.microsoft.sqlserver.jdbc.SQLServerDriver":
+                dbType = DbType.MSSQL;
+                break;
+            case "oracle.jdbc.driver.OracleDriver":
+                dbType = DbType.ORACLE;
+                break;
+            default:
+                throw new DreamRunTimeException("驱动" + driverClassName + "尚未支持自动获取数据库类型");
+        }
+        return dbType;
     }
 
     static class ParamTypeMap {

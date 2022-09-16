@@ -17,7 +17,6 @@ public class Configuration {
     private TableFactory tableFactory;
     private CacheFactory cacheFactory;
     private TypeHandlerFactory typeHandlerFactory;
-
     private CompileFactory compileFactory;
     private InjectFactory injectFactory;
     private DialectFactory dialectFactory;

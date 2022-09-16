@@ -44,7 +44,7 @@ public class InjectFactoryBuilder extends XMLBuilder {
     @Override
     public void builder(String uri, String localName, String qName, Object obj) {
         switch (qName) {
-            case XmlConstant.INTERCEPTOR:
+            case XmlConstant.INJECT:
                 InjectBuilder.Inject inject = (InjectBuilder.Inject) obj;
                 injectFactory.injectList.add(inject);
                 break;

@@ -57,10 +57,10 @@ public class ActionBuilder extends XMLBuilder {
     }
 
     static class Action {
+        private final List<PropertyBuilder.Property> propertyList = new ArrayList<>();
         private String type;
         private String property;
         private String ref;
-        private final List<PropertyBuilder.Property> propertyList = new ArrayList<>();
 
         public String getType() {
             return type;
