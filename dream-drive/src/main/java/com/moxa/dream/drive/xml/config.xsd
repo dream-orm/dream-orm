@@ -12,6 +12,8 @@
                 <xs:element ref="typeHandlerFactory" minOccurs="0"/>
                 <xs:element ref="mapperFactory" minOccurs="0"/>
                 <xs:element ref="tableFactory" minOccurs="0"/>
+                <xs:element ref="compileFactory" minOccurs="0"/>
+                <xs:element ref="injectFactory" minOccurs="0"/>
                 <xs:element ref="dialectFactory" minOccurs="0"/>
                 <xs:element ref="pluginFactory" minOccurs="0"/>
                 <xs:element ref="listenerFactory" minOccurs="0"/>
@@ -56,6 +58,22 @@
         <xs:complexType>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="mapping"/>
+            </xs:choice>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="compileFactory">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="property"/>
+            </xs:choice>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="injectFactory">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="inject"/>
             </xs:choice>
             <xs:attribute name="type"/>
         </xs:complexType>
@@ -119,6 +137,11 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="transaction">
+        <xs:complexType>
+            <xs:attribute name="type" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="inject">
         <xs:complexType>
             <xs:attribute name="type" use="required"/>
         </xs:complexType>

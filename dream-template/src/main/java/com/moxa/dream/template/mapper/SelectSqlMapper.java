@@ -5,7 +5,7 @@ import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;

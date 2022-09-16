@@ -1,4 +1,4 @@
-package com.moxa.dream.drive.page.annotation;
+package com.moxa.dream.drive.page;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

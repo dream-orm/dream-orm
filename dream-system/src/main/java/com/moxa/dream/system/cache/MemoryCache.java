@@ -34,7 +34,7 @@ public class MemoryCache implements Cache {
         CacheKey uniqueKey = mappedStatement.getUniqueKey();
         Set<String> tableSet = mappedStatement.getTableSet();
         if (uniqueKey != null && !ObjectUtil.isNull(tableSet)) {
-            CacheKey sqlKey = mappedStatement.getSqlKey();
+            CacheKey methodKey = mappedStatement.getMethodKey();
             for (String table : tableSet) {
                 Set<CacheKey> cacheKeySet = tableMap.get(table);
                 if (cacheKeySet == null) {
@@ -46,15 +46,15 @@ public class MemoryCache implements Cache {
                         }
                     }
                 }
-                cacheKeySet.add(sqlKey);
+                cacheKeySet.add(methodKey);
             }
-            Map<CacheKey, Object> keyMap = indexMap.get(sqlKey);
+            Map<CacheKey, Object> keyMap = indexMap.get(methodKey);
             if (keyMap == null) {
                 synchronized (this) {
-                    keyMap = indexMap.get(sqlKey);
+                    keyMap = indexMap.get(methodKey);
                     if (keyMap == null) {
                         keyMap = new ConcurrentHashMap<>();
-                        indexMap.put(sqlKey, keyMap);
+                        indexMap.put(methodKey, keyMap);
                     }
                 }
             } else if (keyMap.size() > limit) {
@@ -78,8 +78,8 @@ public class MemoryCache implements Cache {
     public Object get(MappedStatement mappedStatement) {
         CacheKey uniqueKey = mappedStatement.getUniqueKey();
         if (uniqueKey != null) {
-            CacheKey sqlKey = mappedStatement.getSqlKey();
-            Map<CacheKey, Object> keyMap = indexMap.get(sqlKey);
+            CacheKey methodKey = mappedStatement.getMethodKey();
+            Map<CacheKey, Object> keyMap = indexMap.get(methodKey);
             if (keyMap != null) {
                 return keyMap.get(uniqueKey);
             }

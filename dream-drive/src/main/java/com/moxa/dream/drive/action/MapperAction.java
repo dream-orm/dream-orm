@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MapperAction implements Action {
-    private Class type;
-    private Method method;
-    private String property;
-    private Configuration configuration;
+    private final Class type;
+    private final Method method;
+    private final String property;
+    private final Configuration configuration;
 
     public MapperAction(Configuration configuration, String property, String classMethodName) {
         int index = classMethodName.lastIndexOf(".");

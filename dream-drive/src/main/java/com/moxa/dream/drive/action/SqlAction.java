@@ -8,7 +8,7 @@ import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.mapped.MappedStatement;
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -20,9 +20,9 @@ import java.lang.reflect.Type;
 import java.util.Properties;
 
 public class SqlAction implements Action {
-    private Configuration configuration;
-    private String sql;
-    private String property;
+    private final Configuration configuration;
+    private final String sql;
+    private final String property;
     private MethodInfo methodInfo;
     private boolean cache = true;
     private Command command = Command.NONE;

@@ -2,9 +2,11 @@ package com.moxa.dream.drive.config;
 
 import com.moxa.dream.drive.alias.AliasFactory;
 import com.moxa.dream.system.cache.factory.CacheFactory;
+import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
+import com.moxa.dream.system.inject.factory.InjectFactory;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.table.factory.TableFactory;
@@ -20,6 +22,8 @@ public class DefaultConfig {
     private MapperFactory mapperFactory;
     private CacheFactory cacheFactory;
     private TypeHandlerFactory typeHandlerFactory;
+    private CompileFactory compileFactory;
+    private InjectFactory injectFactory;
     private DialectFactory dialectFactory;
     private TransactionFactory transactionFactory;
     private DataSourceFactory dataSourceFactory;
@@ -71,6 +75,24 @@ public class DefaultConfig {
 
     public DefaultConfig setTypeHandlerFactory(TypeHandlerFactory typeHandlerFactory) {
         this.typeHandlerFactory = typeHandlerFactory;
+        return this;
+    }
+
+    public CompileFactory getCompileFactory() {
+        return compileFactory;
+    }
+
+    public DefaultConfig setCompileFactory(CompileFactory compileFactory) {
+        this.compileFactory = compileFactory;
+        return this;
+    }
+
+    public InjectFactory getInjectFactory() {
+        return injectFactory;
+    }
+
+    public DefaultConfig setInjectFactory(InjectFactory injectFactory) {
+        this.injectFactory = injectFactory;
         return this;
     }
 

@@ -5,6 +5,8 @@ public class XmlConstant {
     public static final String ALIASFACTORY = "aliasFactory";
     public static final String TABLEFACTORY = "tableFactory";
     public static final String MAPPERFACTORY = "mapperFactory";
+    public static final String COMPILEFACTORY = "compileFactory";
+    public static final String INJECTFACTORY = "injectFactory";
     public static final String DIALECTFACTORY = "dialectFactory";
     public static final String CACHEFACTORY = "cacheFactory";
     public static final String TYPEHANDLERFACTORY = "typeHandlerFactory";
@@ -13,6 +15,7 @@ public class XmlConstant {
     public static final String TRANSACTIONFACTORY = "transactionFactory";
     public static final String DATASOURCEFACTORY = "dataSourceFactory";
     public static final String TYPEHANDLERWRAPPER = "typeHandlerWrapper";
+    public static final String INJECT = "inject";
     public static final String INTERCEPTOR = "interceptor";
     public static final String LISTENER = "listener";
     public static final String MAPPING = "mapping";

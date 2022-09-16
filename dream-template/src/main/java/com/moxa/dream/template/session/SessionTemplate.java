@@ -3,7 +3,7 @@ package com.moxa.dream.template.session;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.core.session.SessionFactory;
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
 
 import java.lang.reflect.InvocationHandler;

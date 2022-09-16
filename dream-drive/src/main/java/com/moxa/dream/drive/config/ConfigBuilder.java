@@ -2,7 +2,8 @@ package com.moxa.dream.drive.config;
 
 import com.moxa.dream.drive.alias.AliasFactory;
 import com.moxa.dream.drive.alias.DefaultAliasFactory;
-import com.moxa.dream.drive.dialect.MySQLDialectFactory;
+import com.moxa.dream.drive.dialect.DefaultDialectFactory;
+import com.moxa.dream.drive.inject.PageInjectFactory;
 import com.moxa.dream.drive.listener.DefaultListenerFactory;
 import com.moxa.dream.drive.mapper.DefaultMapperFactory;
 import com.moxa.dream.drive.resource.ResourceUtil;
@@ -13,11 +14,15 @@ import com.moxa.dream.drive.xml.moudle.XmlHandler;
 import com.moxa.dream.drive.xml.moudle.XmlParser;
 import com.moxa.dream.system.cache.factory.CacheFactory;
 import com.moxa.dream.system.cache.factory.MemoryCacheFactory;
+import com.moxa.dream.system.compile.CompileFactory;
+import com.moxa.dream.system.compile.DefaultCompileFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
+import com.moxa.dream.system.inject.Inject;
+import com.moxa.dream.system.inject.factory.InjectFactory;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
 import com.moxa.dream.system.plugin.factory.JavaPluginFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
@@ -38,9 +43,9 @@ import java.util.List;
 import java.util.Properties;
 
 public class ConfigBuilder {
+    private final DefaultConfig defaultConfig;
     private Configuration configuration;
     private AliasFactory aliasFactory;
-    private DefaultConfig defaultConfig;
 
     public ConfigBuilder() {
         this(null);
@@ -62,7 +67,9 @@ public class ConfigBuilder {
                 .setCacheFactory(new MemoryCacheFactory())
                 .setMapperFactory(new DefaultMapperFactory())
                 .setTableFactory(new DefaultTableFactory())
-                .setDialectFactory(new MySQLDialectFactory())
+                .setCompileFactory(new DefaultCompileFactory())
+                .setInjectFactory(new PageInjectFactory())
+                .setDialectFactory(new DefaultDialectFactory())
                 .setTransactionFactory(new JdbcTransactionFactory())
                 .setPluginFactory(new JavaPluginFactory())
                 .setListenerFactory(new DefaultListenerFactory())
@@ -79,6 +86,8 @@ public class ConfigBuilder {
         MapperFactory mapperFactory = defaultConfig.getMapperFactory();
         TableFactory tableFactory = defaultConfig.getTableFactory();
         TypeHandlerFactory typeHandlerFactory = defaultConfig.getTypeHandlerFactory();
+        CompileFactory compileFactory = defaultConfig.getCompileFactory();
+        InjectFactory injectFactory = defaultConfig.getInjectFactory();
         DialectFactory dialectFactory = defaultConfig.getDialectFactory();
         PluginFactory pluginFactory = defaultConfig.getPluginFactory();
         ListenerFactory listenerFactory = defaultConfig.getListenerFactory();
@@ -95,6 +104,12 @@ public class ConfigBuilder {
         }
         if (typeHandlerFactory != null) {
             configuration.setTypeHandlerFactory(typeHandlerFactory);
+        }
+        if (compileFactory != null) {
+            configuration.setCompileFactory(compileFactory);
+        }
+        if (injectFactory != null) {
+            configuration.setInjectFactory(injectFactory);
         }
         if (dialectFactory != null) {
             configuration.setDialectFactory(dialectFactory);
@@ -271,6 +286,48 @@ public class ConfigBuilder {
             });
         }
         return properties;
+    }
+
+    public ConfigBuilder compileFactory(String type) {
+        if (!ObjectUtil.isNull(type)) {
+            type = getValue(type);
+            Class<? extends CompileFactory> compileFactoryClass = ReflectUtil.loadClass(type);
+            CompileFactory compileFactory = ReflectUtil.create(compileFactoryClass);
+            configuration.setCompileFactory(compileFactory);
+        }
+        return this;
+    }
+
+    public ConfigBuilder compileProperties(Properties properties) {
+        CompileFactory compileFactory = configuration.getCompileFactory();
+        ObjectUtil.requireNonNull(compileFactory, "CompileFactory未在Configuration注册");
+        compileFactory.setProperties(getProperties(properties));
+        return this;
+    }
+
+    public ConfigBuilder injectFactory(String type) {
+        if (!ObjectUtil.isNull(type)) {
+            type = getValue(type);
+            Class<? extends InjectFactory> injectFactoryClass = ReflectUtil.loadClass(type);
+            InjectFactory injectFactory = ReflectUtil.create(injectFactoryClass);
+            configuration.setInjectFactory(injectFactory);
+        }
+        return this;
+    }
+
+    public ConfigBuilder injects(List<String> injectList) {
+        if (!ObjectUtil.isNull(injectList)) {
+            Class<? extends Inject>[] injects = new Class[injectList.size()];
+            InjectFactory injectFactory = configuration.getInjectFactory();
+            ObjectUtil.requireNonNull(injectFactory, "InjectFactory未在Configuration注册");
+            for (int i = 0; i < injectList.size(); i++) {
+                String value = injectList.get(i);
+                Class<? extends Inject> injectClass = ReflectUtil.loadClass(value);
+                injects[i] = injectClass;
+            }
+            injectFactory.injects(injects);
+        }
+        return this;
     }
 
     public ConfigBuilder dialectFactory(String type) {

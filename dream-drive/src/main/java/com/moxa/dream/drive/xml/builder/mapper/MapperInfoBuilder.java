@@ -8,7 +8,7 @@ import com.moxa.dream.drive.xml.moudle.XmlConstant;
 import com.moxa.dream.drive.xml.moudle.XmlHandler;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.action.Action;
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import org.xml.sax.Attributes;

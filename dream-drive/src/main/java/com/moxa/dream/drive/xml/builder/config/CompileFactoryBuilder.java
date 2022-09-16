@@ -1,49 +1,45 @@
-package com.moxa.dream.drive.xml.builder.mapper;
+package com.moxa.dream.drive.xml.builder.config;
 
 import com.moxa.dream.drive.xml.builder.XMLBuilder;
 import com.moxa.dream.drive.xml.moudle.XmlConstant;
 import com.moxa.dream.drive.xml.moudle.XmlHandler;
 import com.moxa.dream.drive.xml.util.XmlUtil;
-import com.moxa.dream.util.common.ObjectUtil;
 import org.xml.sax.Attributes;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActionBuilder extends XMLBuilder {
-    private Action action;
+public class CompileFactoryBuilder extends XMLBuilder {
+    private CompileFactory compileFactory;
 
-    public ActionBuilder(XmlHandler workHandler) {
+    public CompileFactoryBuilder(XmlHandler workHandler) {
         super(workHandler);
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         switch (qName) {
-            case XmlConstant.ACTION:
-                action = XmlUtil.applyAttributes(Action.class, attributes);
+            case XmlConstant.COMPILEFACTORY:
+                compileFactory = XmlUtil.applyAttributes(CompileFactory.class, attributes);
                 break;
             case XmlConstant.PROPERTY:
                 PropertyBuilder propertyBuilder = new PropertyBuilder(workHandler);
                 propertyBuilder.startElement(uri, localName, qName, attributes);
                 break;
             default:
-                throwXmlException(uri, localName, qName, attributes, XmlConstant.ACTION);
+                throwXmlException(uri, localName, qName, attributes, XmlConstant.COMPILEFACTORY);
+                break;
         }
     }
 
     @Override
     public void characters(String s) {
-        if (ObjectUtil.isNull(action.ref)) {
-            action.ref = s;
-        } else {
-            action.ref = action.ref + s;
-        }
+
     }
 
     @Override
     public Object endElement(String uri, String localName, String qName) {
-        return action;
+        return compileFactory;
     }
 
     @Override
@@ -51,31 +47,22 @@ public class ActionBuilder extends XMLBuilder {
         switch (qName) {
             case XmlConstant.PROPERTY:
                 PropertyBuilder.Property property = (PropertyBuilder.Property) obj;
-                action.propertyList.add(property);
+                compileFactory.propertyList.add(property);
                 break;
         }
     }
 
-    static class Action {
+    static class CompileFactory {
         private final List<PropertyBuilder.Property> propertyList = new ArrayList<>();
         private String type;
-        private String property;
-        private String ref;
 
         public String getType() {
             return type;
-        }
-
-        public String getProperty() {
-            return property;
-        }
-
-        public String getRef() {
-            return ref;
         }
 
         public List<PropertyBuilder.Property> getPropertyList() {
             return propertyList;
         }
     }
+
 }

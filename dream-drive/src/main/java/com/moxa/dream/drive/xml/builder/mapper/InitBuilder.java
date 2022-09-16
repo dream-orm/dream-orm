@@ -50,7 +50,7 @@ public class InitBuilder extends XMLBuilder {
     }
 
     static class Init {
-        private List<ActionBuilder.Action> actionList = new ArrayList<>();
+        private final List<ActionBuilder.Action> actionList = new ArrayList<>();
 
         public List<ActionBuilder.Action> getActionList() {
             return actionList;

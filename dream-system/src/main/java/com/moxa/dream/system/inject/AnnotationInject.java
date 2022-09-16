@@ -1,14 +1,14 @@
-package com.moxa.dream.drive.antlr.wrapper;
+package com.moxa.dream.system.inject;
 
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-public class AnnotationWrapper implements Wrapper {
+public class AnnotationInject implements Inject {
     @Override
-    public void wrapper(MethodInfo methodInfo) {
+    public void inject(MethodInfo methodInfo) {
         Method method = methodInfo.getMethod();
         if (method != null) {
             Annotation[] annotations = method.getDeclaredAnnotations();

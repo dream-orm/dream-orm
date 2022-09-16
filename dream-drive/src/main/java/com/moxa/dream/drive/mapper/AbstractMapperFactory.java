@@ -4,7 +4,7 @@ import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.drive.annotation.*;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.action.Action;
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.mapper.factory.MapperFactory;
 import com.moxa.dream.system.mapper.invoke.MapperInvoke;
 import com.moxa.dream.util.common.ObjectUtil;

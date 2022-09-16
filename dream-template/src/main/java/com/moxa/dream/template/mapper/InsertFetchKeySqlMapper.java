@@ -3,7 +3,6 @@ package com.moxa.dream.template.mapper;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.dialect.DbType;
-import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.template.mapper.fetch.*;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -13,7 +12,11 @@ public class InsertFetchKeySqlMapper extends InsertSqlMapper {
 
     public InsertFetchKeySqlMapper(Session session) {
         super(session);
+    }
+
+    protected FetchKey fetchKey() {
         DbType dbType = session.getConfiguration().getDialectFactory().getDbType();
+        FetchKey fetchKey;
         switch (dbType) {
             case MYSQL:
                 fetchKey = new MySQLFetchKey(session.getConfiguration());
@@ -30,21 +33,30 @@ public class InsertFetchKeySqlMapper extends InsertSqlMapper {
             default:
                 throw new DreamRunTimeException(dbType + "类型尚未支持获取自增主键");
         }
-
+        return fetchKey;
     }
 
     @Override
     protected Action[] initActionList(TableInfo tableInfo) {
+        if (fetchKey == null) {
+            fetchKey = fetchKey();
+        }
         return fetchKey.initActionList(tableInfo);
     }
 
     @Override
     protected Action[] destroyActionList(TableInfo tableInfo) {
+        if (fetchKey == null) {
+            fetchKey = fetchKey();
+        }
         return fetchKey.destroyActionList(tableInfo);
     }
 
     @Override
     protected String[] getColumnNames(TableInfo tableInfo) {
+        if (fetchKey == null) {
+            fetchKey = fetchKey();
+        }
         return fetchKey.getColumnNames(tableInfo);
     }
 }

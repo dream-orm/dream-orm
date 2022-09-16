@@ -5,7 +5,7 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.mapped.MappedStatement;
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.template.annotation.Sequence;

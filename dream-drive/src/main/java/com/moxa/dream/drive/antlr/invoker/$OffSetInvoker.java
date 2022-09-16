@@ -10,7 +10,7 @@ import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.drive.antlr.handler.PageHandler;
-import com.moxa.dream.system.mapper.MethodInfo;
+import com.moxa.dream.system.mapped.MethodInfo;
 
 import java.util.List;
 
