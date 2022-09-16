@@ -5,8 +5,8 @@ import com.moxa.dream.drive.annotation.*;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.mapped.MethodInfo;
-import com.moxa.dream.system.mapper.factory.MapperFactory;
-import com.moxa.dream.system.mapper.invoke.MapperInvoke;
+import com.moxa.dream.system.mapper.MapperFactory;
+import com.moxa.dream.system.mapper.MapperInvoke;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
@@ -256,6 +256,9 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         return (T) Proxy.newProxyInstance(type.getClassLoader(), typeList, (proxy, method, args) -> {
             MethodInfo methodInfo = methodInfoMap.get(method);
             if (methodInfo != null) {
+                if (!methodInfo.isCompile()) {
+                    methodInfo.compile();
+                }
                 Object arg = getArg(methodInfo, args);
                 return mapperInvoke.invoke(methodInfo, arg);
             } else {

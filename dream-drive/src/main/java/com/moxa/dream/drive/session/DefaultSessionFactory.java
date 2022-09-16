@@ -7,6 +7,7 @@ import com.moxa.dream.system.cache.factory.CacheFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.executor.JdbcExecutor;
+import com.moxa.dream.system.core.session.DefaultSession;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.datasource.DataSourceFactory;
@@ -18,11 +19,11 @@ import javax.sql.DataSource;
 
 
 public class DefaultSessionFactory implements SessionFactory {
-    private final Configuration configuration;
-    private final PluginFactory pluginFactory;
-    private final TransactionFactory transactionFactory;
-    private final DataSource dataSource;
-    private Cache cache;
+    protected final Configuration configuration;
+    protected final PluginFactory pluginFactory;
+    protected final TransactionFactory transactionFactory;
+    protected final DataSource dataSource;
+    protected Cache cache;
 
     public DefaultSessionFactory(Configuration configuration) {
         this.configuration = configuration;

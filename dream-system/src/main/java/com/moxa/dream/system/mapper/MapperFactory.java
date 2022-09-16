@@ -1,7 +1,6 @@
-package com.moxa.dream.system.mapper.factory;
+package com.moxa.dream.system.mapper;
 
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.mapper.invoke.MapperInvoke;
 
 import java.util.Collection;
 

@@ -4,7 +4,9 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.mapped.MethodInfo;
-import com.moxa.dream.system.mapper.factory.MapperFactory;
+import com.moxa.dream.system.mapper.DefaultMapperInvokeFactory;
+import com.moxa.dream.system.mapper.MapperFactory;
+import com.moxa.dream.system.mapper.MapperInvokeFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -16,22 +18,28 @@ public class SessionTemplate implements Session {
     private Configuration configuration;
     private MapperFactory mapperFactory;
     private SessionFactory sessionFactory;
-
     private SessionHolder sessionHolder;
+    private MapperInvokeFactory mapperInvokeFactory;
 
     public SessionTemplate(SessionHolder sessionHolder, SessionFactory sessionFactory) {
+        this(sessionHolder, sessionFactory, new DefaultMapperInvokeFactory());
+    }
+
+    public SessionTemplate(SessionHolder sessionHolder,
+                           SessionFactory sessionFactory,
+                           MapperInvokeFactory mapperInvokeFactory) {
         this.sessionFactory = sessionFactory;
         this.configuration = sessionFactory.getConfiguration();
         this.mapperFactory = configuration.getMapperFactory();
         this.sessionHolder = sessionHolder;
         this.sessionProxy = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(),
                 new Class[]{Session.class}, new SessionInterceptor());
+        this.mapperInvokeFactory = mapperInvokeFactory;
     }
 
     @Override
     public <T> T getMapper(Class<T> type) {
-        return mapperFactory.getMapper(type, (methodInfo, arg) ->
-                sessionProxy.execute(methodInfo, arg));
+        return mapperFactory.getMapper(type, mapperInvokeFactory.getMapperInvoke(this));
     }
 
     @Override

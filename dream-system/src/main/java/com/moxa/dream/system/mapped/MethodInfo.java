@@ -33,6 +33,7 @@ public class MethodInfo {
     private Action[] loopActionList;
     private Action[] destroyActionList;
     private String[] paramNameList;
+    private boolean compile = false;
 
     private MethodInfo() {
 
@@ -106,6 +107,10 @@ public class MethodInfo {
         return method;
     }
 
+    public boolean isCompile() {
+        return compile;
+    }
+
     public String getId() {
         if (method == null) {
             return null;
@@ -123,15 +128,18 @@ public class MethodInfo {
     }
 
     public synchronized void compile() {
-        CompileFactory compileFactory = configuration.getCompileFactory();
-        this.statement = compileFactory.compile(sql);
-        CacheKey uniqueKey = compileFactory.uniqueKey(sql);
-        if (uniqueKey != null) {
-            uniqueKey.update(new Object[]{colType, rowType});
+        if (!compile) {
+            CompileFactory compileFactory = configuration.getCompileFactory();
+            this.statement = compileFactory.compile(sql);
+            CacheKey uniqueKey = compileFactory.uniqueKey(sql);
+            if (uniqueKey != null) {
+                uniqueKey.update(new Object[]{colType, rowType});
+            }
+            this.methodKey = uniqueKey;
+            InjectFactory injectFactory = configuration.getInjectFactory();
+            injectFactory.inject(this);
+            compile = true;
         }
-        this.methodKey = uniqueKey;
-        InjectFactory injectFactory = configuration.getInjectFactory();
-        injectFactory.inject(this);
     }
 
     public static class Builder {

@@ -23,7 +23,7 @@ import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.inject.Inject;
 import com.moxa.dream.system.inject.factory.InjectFactory;
-import com.moxa.dream.system.mapper.factory.MapperFactory;
+import com.moxa.dream.system.mapper.MapperFactory;
 import com.moxa.dream.system.plugin.factory.JavaPluginFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.plugin.interceptor.Interceptor;

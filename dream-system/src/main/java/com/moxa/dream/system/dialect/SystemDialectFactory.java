@@ -44,7 +44,7 @@ public class SystemDialectFactory implements DialectFactory {
 
     @Override
     public MappedStatement compile(MethodInfo methodInfo, Object arg) {
-        PackageStatement statement = getStatement(methodInfo);
+        PackageStatement statement = methodInfo.getStatement();
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
         List<MappedParam> mappedParamList = null;
         List<$Invoker.ParamInfo> paramInfoList = null;
@@ -124,20 +124,6 @@ public class SystemDialectFactory implements DialectFactory {
                 .arg(arg)
                 .uniqueKey(uniqueKey)
                 .build();
-    }
-
-    protected PackageStatement getStatement(MethodInfo methodInfo) {
-        PackageStatement statement = methodInfo.getStatement();
-        if (statement == null) {
-            synchronized (this) {
-                statement = methodInfo.getStatement();
-                if (statement == null) {
-                    methodInfo.compile();
-                }
-                statement = methodInfo.getStatement();
-            }
-        }
-        return statement;
     }
 
     protected Assist getAssist(MethodInfo methodInfo, Object arg) {

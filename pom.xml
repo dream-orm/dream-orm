@@ -14,6 +14,7 @@
         <module>dream-system</module>
         <module>dream-drive</module>
         <module>dream-template</module>
+        <module>dream-share</module>
     </modules>
 
     <properties>

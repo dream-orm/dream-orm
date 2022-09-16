@@ -35,6 +35,7 @@ public abstract class AbstractSqlMapper implements SqlMapper {
                     TableInfo tableInfo = tableFactory.getTableInfo(table);
                     ObjectUtil.requireNonNull(tableInfo, "表'" + table + "'未在TableFactory注册");
                     methodInfo = getMethodInfo(configuration, tableInfo, type);
+                    methodInfo.compile();
                     methodInfoMap.put(type, methodInfo);
                 }
             }

@@ -2,10 +2,10 @@ package com.moxa.dream.drive.action;
 
 
 import com.moxa.dream.antlr.config.Command;
-import com.moxa.dream.drive.session.DefaultSession;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.executor.Executor;
+import com.moxa.dream.system.core.session.DefaultSession;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.system.mapped.MethodInfo;
@@ -82,6 +82,7 @@ public class SqlAction implements Action {
                                 .command(command)
                                 .sql(sql)
                                 .build();
+                        methodInfo.compile();
                     }
                 }
             }
@@ -94,6 +95,7 @@ public class SqlAction implements Action {
                                 .colType(Object.class)
                                 .sql(sql)
                                 .build();
+                        methodInfo.compile();
                     }
                 }
             }
