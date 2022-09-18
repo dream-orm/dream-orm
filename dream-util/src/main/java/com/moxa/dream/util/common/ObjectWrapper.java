@@ -3,11 +3,11 @@ package com.moxa.dream.util.common;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
 import com.moxa.dream.util.reflection.wrapper.ObjectFactoryWrapper;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ObjectWrapper {
-    static Map<Class, ObjectFactoryWrapper> factoryWrapperMap = new ConcurrentHashMap<>();
+    static Map<Class, ObjectFactoryWrapper> factoryWrapperMap = new HashMap<>();
     private final ObjectFactory objectFactory;
 
     ObjectWrapper(ObjectFactory objectFactory) {
@@ -27,6 +27,14 @@ public class ObjectWrapper {
             }
         }
         return new ObjectWrapper(factoryWrapper.newObjectFactory(target));
+    }
+
+    public static ObjectFactoryWrapper remove(Class<?> type) {
+        return factoryWrapperMap.remove(type);
+    }
+
+    public static void clear() {
+        factoryWrapperMap.clear();
     }
 
     public void set(String property, Object value) {
