@@ -1,4 +1,4 @@
-package com.moxa.dream.drive.resource;
+package com.moxa.dream.util.resource;
 
 import com.moxa.dream.util.common.ObjectUtil;
 

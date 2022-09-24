@@ -21,7 +21,7 @@ public class LimitInvoker extends AbstractInvoker {
             Statement firstStatement = columnList[1];
             limitHandler = new LimitHandler(this, firstStatement, secondStatement);
             String sql = toSQL.toStr(columnList[0], assist, invokerList);
-            invokerStatement.setStatement(columnList[0]);
+            invokerStatement.replaceWith(columnList[0]);
             return sql;
         } else
             throw new InvokerException("参数个数错误，不满足@" + AntlrInvokerFactory.NAMESPACE + ":" + AntlrInvokerFactory.LIMIT + "(query,first,second?)");

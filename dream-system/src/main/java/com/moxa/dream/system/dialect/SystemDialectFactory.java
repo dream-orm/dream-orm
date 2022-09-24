@@ -8,6 +8,7 @@ import com.moxa.dream.antlr.invoker.$Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.*;
+import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
@@ -40,6 +41,7 @@ public class SystemDialectFactory implements DialectFactory {
     public SystemDialectFactory() {
         addInvokerFactory(new AntlrInvokerFactory());
         addInvokerFactory(new SystemInvokerFactory());
+        addInvokerFactory(new DefaultInvokerFactory());
     }
 
     @Override

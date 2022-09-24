@@ -50,8 +50,8 @@ public class MySQLFetchKey implements FetchKey {
 
         @Override
         public void doAction(Executor executor, Object arg) throws Exception {
-            if(arg instanceof ObjectMap){
-                arg=((ObjectMap) arg).getDefaultValue();
+            if (arg instanceof ObjectMap) {
+                arg = ((ObjectMap) arg).getDefaultValue();
             }
             ResultSet generatedKeys = executor.getStatement().getGeneratedKeys();
             if (generatedKeys.next()) {

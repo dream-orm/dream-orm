@@ -1,4 +1,4 @@
-package com.moxa.dream.util.reflection.util;
+package com.moxa.dream.util.common;
 
 import java.util.Collection;
 import java.util.Iterator;

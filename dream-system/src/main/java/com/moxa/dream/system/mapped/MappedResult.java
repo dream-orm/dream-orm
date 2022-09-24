@@ -1,7 +1,7 @@
 package com.moxa.dream.system.mapped;
 
+import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
-import com.moxa.dream.util.reflection.util.NonCollection;
 import com.moxa.dream.util.reflection.wrapper.ObjectFactoryWrapper;
 
 import java.util.Arrays;

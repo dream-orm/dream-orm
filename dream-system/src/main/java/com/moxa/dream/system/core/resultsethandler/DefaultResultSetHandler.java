@@ -15,11 +15,11 @@ import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.LowHashSet;
+import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
-import com.moxa.dream.util.reflection.util.NonCollection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;

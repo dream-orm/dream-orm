@@ -27,7 +27,7 @@ public class TenantUpdateHandler extends AbstractHandler {
         SymbolStatement symbolStatement = (SymbolStatement) tableStatement;
         String table = symbolStatement.getValue();
         if (tenantInvoker.isTenant(table)) {
-            removeTenantColumn(updateStatement);
+            removeTenantColumnIfExist(updateStatement);
             String tenantColumn = tenantInvoker.getTenantColumn();
             ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.LetterStatement(tenantColumn));
@@ -46,7 +46,7 @@ public class TenantUpdateHandler extends AbstractHandler {
         return statement;
     }
 
-    private void removeTenantColumn(UpdateStatement updateStatement) {
+    private void removeTenantColumnIfExist(UpdateStatement updateStatement) {
         ListColumnStatement conditionList = (ListColumnStatement) updateStatement.getConditionList();
         Statement[] columnList = conditionList.getColumnList();
         List<Statement> statementList = new ArrayList<>();
@@ -58,13 +58,11 @@ public class TenantUpdateHandler extends AbstractHandler {
                 statementList.add(conditionStatement);
             }
         }
-        if (!statementList.isEmpty()) {
-            ListColumnStatement listColumnStatement = new ListColumnStatement(conditionList.getCut().getSymbol());
-            for (Statement statement : statementList) {
-                listColumnStatement.add(statement);
-            }
-            updateStatement.setConditionList(listColumnStatement);
+        ListColumnStatement listColumnStatement = new ListColumnStatement(conditionList.getCut().getSymbol());
+        for (Statement statement : statementList) {
+            listColumnStatement.add(statement);
         }
+        updateStatement.setConditionList(listColumnStatement);
     }
 
     @Override

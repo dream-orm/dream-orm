@@ -4,7 +4,7 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.table.TableInfo;
-import com.moxa.dream.util.reflection.util.NonCollection;
+import com.moxa.dream.util.common.NonCollection;
 
 public abstract class ExistSqlMapper extends AbstractSqlMapper {
     public ExistSqlMapper(Session session) {

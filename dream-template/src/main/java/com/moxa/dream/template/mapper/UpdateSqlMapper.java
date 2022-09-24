@@ -8,16 +8,17 @@ import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
+import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
-import com.moxa.dream.util.reflection.util.NonCollection;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class UpdateSqlMapper extends AbstractSqlMapper {
-    protected String param="param";
+    protected String param = "param";
+
     public UpdateSqlMapper(Session session) {
         super(session);
     }
@@ -36,7 +37,7 @@ public abstract class UpdateSqlMapper extends AbstractSqlMapper {
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
                         setList.add(columnInfo.getColumn() + "=" +
-                                InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param+"."+columnInfo.getName()));
+                                InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param + "." + columnInfo.getName()));
                     }
                 }
             }

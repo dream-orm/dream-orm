@@ -1,4 +1,4 @@
-package com.moxa.dream.drive.resource;
+package com.moxa.dream.util.resource;
 
 import java.io.InputStream;
 import java.util.List;

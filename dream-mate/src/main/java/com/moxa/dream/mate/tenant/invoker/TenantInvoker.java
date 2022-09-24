@@ -40,7 +40,7 @@ public class TenantInvoker extends AbstractInvoker {
     @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         String sql = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
-        invokerStatement.setStatement(invokerStatement.getParamStatement());
+        invokerStatement.replaceWith(invokerStatement.getParamStatement());
         return sql;
     }
 

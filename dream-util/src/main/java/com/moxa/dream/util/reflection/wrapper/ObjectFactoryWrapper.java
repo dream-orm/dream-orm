@@ -1,8 +1,8 @@
 package com.moxa.dream.util.reflection.wrapper;
 
+import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
-import com.moxa.dream.util.reflection.util.NonCollection;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

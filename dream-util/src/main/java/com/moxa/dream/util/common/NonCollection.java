@@ -1,8 +1,12 @@
-package com.moxa.dream.util.reflection.util;
+package com.moxa.dream.util.common;
 
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public final class NonCollection<T> implements Collection<T> {
     private final Object[] value = new Object[1];
@@ -76,5 +80,30 @@ public final class NonCollection<T> implements Collection<T> {
 
     public Object getObject() {
         return value[0];
+    }
+
+    @Override
+    public boolean removeIf(Predicate<? super T> filter) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Spliterator<T> spliterator() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Stream<T> stream() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Stream<T> parallelStream() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void forEach(Consumer<? super T> action) {
+        throw new UnsupportedOperationException();
     }
 }

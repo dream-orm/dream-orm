@@ -19,7 +19,7 @@ public class WhereInvoker extends AbstractInvoker {
         if (columnList.length == 2) {
             whereHandler = new WhereHandler(this, columnList[1]);
             String sql = toSQL.toStr(columnList[0], assist, invokerList);
-            invokerStatement.setStatement(columnList[0]);
+            invokerStatement.replaceWith(columnList[0]);
             return sql;
         } else
             throw new InvokerException("参数错误，不满足@" + AntlrInvokerFactory.WHERE + ":" + AntlrInvokerFactory.NAMESPACE + "(crud,condition)");

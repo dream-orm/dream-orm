@@ -8,12 +8,12 @@ import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.mapped.MethodParam;
 import com.moxa.dream.system.mapper.MapperFactory;
 import com.moxa.dream.system.mapper.MapperInvoke;
+import com.moxa.dream.util.common.NonCollection;
+import com.moxa.dream.util.common.NullObject;
 import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
-import com.moxa.dream.util.reflection.util.NonCollection;
-import com.moxa.dream.util.reflection.util.NullObject;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;

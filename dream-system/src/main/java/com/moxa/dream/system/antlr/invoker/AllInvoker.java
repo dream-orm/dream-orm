@@ -76,7 +76,7 @@ public class AllInvoker extends AbstractInvoker {
         ExprReader exprReader = new ExprReader(selectColumn);
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new AliasColumnExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
         Statement statement = listColumnExpr.expr();
-        invokerStatement.setStatement(statement);
+        invokerStatement.replaceWith(statement);
         return toSQL.toStr(statement, assist, invokerList);
     }
 

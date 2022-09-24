@@ -1,7 +1,6 @@
 package com.moxa.dream.drive.mapper;
 
 import com.moxa.dream.drive.annotation.Mapper;
-import com.moxa.dream.drive.resource.ResourceUtil;
 import com.moxa.dream.drive.xml.builder.XMLBuilder;
 import com.moxa.dream.drive.xml.builder.mapper.MapperInfoBuilder;
 import com.moxa.dream.drive.xml.moudle.XmlCallback;
@@ -10,6 +9,7 @@ import com.moxa.dream.drive.xml.moudle.XmlParser;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.resource.ResourceUtil;
 import org.xml.sax.InputSource;
 
 import java.util.Map;

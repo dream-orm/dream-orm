@@ -78,7 +78,7 @@ public class TableInvoker extends AbstractInvoker {
             FromStatement fromStatement = (FromStatement) parentStatement;
             String mainTable = tableSQLMap.keySet().toArray(new String[0])[0];
             SymbolStatement symbolStatement = new SymbolStatement.LetterStatement(mainTable);
-            invokerStatement.setStatement(symbolStatement);
+            invokerStatement.replaceWith(symbolStatement);
             List<String> list = tableSQLMap.get(mainTable);
             String joinSQL = "";
             if (!ObjectUtil.isNull(list)) {

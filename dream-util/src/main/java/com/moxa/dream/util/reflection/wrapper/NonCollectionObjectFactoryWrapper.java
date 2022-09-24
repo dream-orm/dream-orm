@@ -1,9 +1,9 @@
 package com.moxa.dream.util.reflection.wrapper;
 
 
+import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.reflection.factory.NonCollectionObjectFactory;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
-import com.moxa.dream.util.reflection.util.NonCollection;
 
 public class NonCollectionObjectFactoryWrapper implements ObjectFactoryWrapper {
 

@@ -8,12 +8,12 @@ import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
-import com.moxa.dream.util.reflection.util.NonCollection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;

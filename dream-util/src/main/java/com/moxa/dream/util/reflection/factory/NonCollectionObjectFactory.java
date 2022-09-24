@@ -1,7 +1,7 @@
 package com.moxa.dream.util.reflection.factory;
 
 
-import com.moxa.dream.util.reflection.util.NonCollection;
+import com.moxa.dream.util.common.NonCollection;
 
 
 public class NonCollectionObjectFactory implements ObjectFactory {

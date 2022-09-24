@@ -6,7 +6,6 @@ import com.moxa.dream.drive.dialect.DefaultDialectFactory;
 import com.moxa.dream.drive.inject.PageInjectFactory;
 import com.moxa.dream.drive.listener.DefaultListenerFactory;
 import com.moxa.dream.drive.mapper.DefaultMapperFactory;
-import com.moxa.dream.drive.resource.ResourceUtil;
 import com.moxa.dream.drive.xml.builder.XMLBuilder;
 import com.moxa.dream.drive.xml.builder.config.ConfigurationBuilder;
 import com.moxa.dream.drive.xml.moudle.XmlCallback;
@@ -36,6 +35,7 @@ import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.wrapper.TypeHandlerWrapper;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
+import com.moxa.dream.util.resource.ResourceUtil;
 import org.xml.sax.InputSource;
 
 import java.io.InputStream;

@@ -56,7 +56,7 @@ public class ScanInvoker extends AbstractInvoker {
         }
         PackageStatement packageStatement = (PackageStatement) parentStatement;
         packageStatement.setValue(ScanInfo.class, scanInfo);
-        invokerStatement.setStatement(columnList[0]);
+        invokerStatement.replaceWith(columnList[0]);
         List<InvokerStatement> invokerStatementList = scanInfo.getInvokerStatementList()
                 .stream()
                 .filter(invoker -> invoker.getParentStatement() != null)
@@ -71,7 +71,7 @@ public class ScanInvoker extends AbstractInvoker {
             }
             if (i == invokerStatementList.size()) {
                 for (InvokerStatement invoker : invokerStatementList) {
-                    invoker.setStatement(new SymbolStatement.MarkStatement());
+                    invoker.replaceWith(new SymbolStatement.MarkStatement());
                 }
                 $Invoker $invoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
                 scanInfo.setParamInfoList($invoker.getParamInfoList());

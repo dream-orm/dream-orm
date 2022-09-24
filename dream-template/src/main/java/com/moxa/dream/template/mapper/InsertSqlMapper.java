@@ -8,20 +8,18 @@ import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
-import com.moxa.dream.util.common.ObjectMap;
+import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
-import com.moxa.dream.util.reflection.util.NonCollection;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class InsertSqlMapper extends AbstractSqlMapper {
-    private String param="param";
+    private String param = "param";
+
     public InsertSqlMapper(Session session) {
         super(session);
     }
@@ -39,7 +37,7 @@ public class InsertSqlMapper extends AbstractSqlMapper {
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
                         columnList.add(columnInfo.getColumn());
-                        valueList.add(InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param+"."+columnInfo.getName()));
+                        valueList.add(InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param + "." + columnInfo.getName()));
                     }
                 }
             }

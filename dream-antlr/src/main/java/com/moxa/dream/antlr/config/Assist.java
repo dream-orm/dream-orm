@@ -33,7 +33,6 @@ public class Assist {
     }
 
     public Invoker getInvoker(String namespace, String function) {
-        function = function.toLowerCase();
         String invokerKey;
         Invoker invoker;
         if (namespace == null) {
@@ -43,7 +42,7 @@ public class Assist {
                 for (InvokerFactory invokerFactory : invokerFactoryMap.values()) {
                     invoker = invokerFactory.create(function);
                     if (invoker != null) {
-                        invokerKey = function + ":" + invokerFactory.namespace().toLowerCase();
+                        invokerKey = function + ":" + invokerFactory.namespace();
                         sqlInvokerMap.put(function, invoker);
                         break;
                     }
