@@ -2,6 +2,7 @@ package com.moxa.dream.drive.executor;
 
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.core.executor.Executor;
+import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.mapped.MappedStatement;
 
 import java.util.HashMap;
@@ -10,8 +11,8 @@ import java.util.Map;
 public class SessionCacheExecutor extends CacheExecutor {
     private final Map<CacheKey, Object> cacheMap = new HashMap<>();
 
-    public SessionCacheExecutor(Executor executor) {
-        super(executor);
+    public SessionCacheExecutor(Executor executor, SessionFactory sessionFactory) {
+        super(executor, sessionFactory);
     }
 
     @Override

@@ -138,7 +138,7 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(UpdateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "UPDATE " + toStr(statement.getTable(), assist, invokerList) + " SET " + toStr(statement.getConditionList(), assist, invokerList) + (statement.getWhere() != null ? " WHERE " + toStr(statement.getWhere(), assist, invokerList) : "");
+        return "UPDATE " + toStr(statement.getTable(), assist, invokerList) + " SET " + toStr(statement.getConditionList(), assist, invokerList) + (statement.getWhere() != null ? " " + toStr(statement.getWhere(), assist, invokerList) : "");
     }
 
     @Override
@@ -153,7 +153,7 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(DeleteStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "DELETE FROM " + toStr(statement.getTable(), assist, invokerList) + (statement.getCondition() != null ? " WHERE " + toStr(statement.getCondition(), assist, invokerList) : "");
+        return "DELETE FROM " + toStr(statement.getTable(), assist, invokerList) + (statement.getWhere() != null ? " " + toStr(statement.getWhere(), assist, invokerList) : "");
     }
 
     @Override
@@ -883,11 +883,6 @@ public class ToNativeSQL extends ToSQL {
         String table = toStr(statement.getMainTable(), assist, invokerList);
         String joins = toStr(statement.getJoinList(), assist, invokerList);
         return " FROM " + table + (joins.equals("") ? "" : " " + joins);
-    }
-
-    @Override
-    protected String toString(JoinStatement.CommaJoinStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return "," + toStr(statement.getJoinTable(), assist, invokerList) + (statement.getOn() != null ? (" ON " + toStr(statement.getOn(), assist, invokerList)) : "");
     }
 
     @Override

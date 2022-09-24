@@ -5,9 +5,8 @@ import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.executor.Executor;
-import com.moxa.dream.system.core.session.DefaultSession;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.system.mapped.MappedStatement;
+import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
@@ -79,6 +78,7 @@ public class SqlAction implements Action {
                         methodInfo = new MethodInfo.Builder(configuration)
                                 .rowType(ReflectUtil.getRowType(type))
                                 .colType(ReflectUtil.getColType(type))
+                                .cache(cache)
                                 .command(command)
                                 .sql(sql)
                                 .build();
@@ -93,6 +93,8 @@ public class SqlAction implements Action {
                         methodInfo = new MethodInfo.Builder(configuration)
                                 .rowType(NonCollection.class)
                                 .colType(Object.class)
+                                .cache(cache)
+                                .command(command)
                                 .sql(sql)
                                 .build();
                         methodInfo.compile();
@@ -100,16 +102,8 @@ public class SqlAction implements Action {
                 }
             }
         }
-        Session session = new DefaultSession(configuration, executor) {
-            @Override
-            protected Command getCommand(MappedStatement mappedStatement) {
-                mappedStatement.setCache(cache);
-                if (SqlAction.this.command != Command.NONE) {
-                    mappedStatement.setCommand(SqlAction.this.command);
-                }
-                return super.getCommand(mappedStatement);
-            }
-        };
+        SessionFactory sessionFactory = executor.getSessionFactory();
+        Session session = sessionFactory.openSession(executor);
         Object result = session.execute(methodInfo, arg);
         if (!ObjectUtil.isNull(property)) {
             ObjectWrapper.wrapper(arg).set(property, result);

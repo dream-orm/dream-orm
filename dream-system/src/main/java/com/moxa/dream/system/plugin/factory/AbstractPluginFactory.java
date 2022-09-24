@@ -3,19 +3,26 @@ package com.moxa.dream.system.plugin.factory;
 import com.moxa.dream.system.plugin.interceptor.Interceptor;
 import com.moxa.dream.util.common.ObjectUtil;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class AbstractPluginFactory implements PluginFactory {
-    protected Interceptor[] interceptors;
+    private Map<Class, Interceptor> interceptorMap = new HashMap<>();
 
     public void interceptor(Interceptor[] interceptors) {
-        this.interceptors = interceptors;
+        interceptorMap.clear();
+        for (Interceptor interceptor : interceptors) {
+            interceptorMap.put(interceptor.getClass(), interceptor);
+        }
     }
 
     public Object plugin(Object target) {
         Object origin = target;
-        return plugin(interceptors, origin, plugin(getDefaultInterceptors(), origin, target));
+        return plugin(interceptorMap.values(), origin, target);
     }
 
-    private Object plugin(Interceptor[] interceptors, Object origin, Object target) {
+    private Object plugin(Collection<Interceptor> interceptors, Object origin, Object target) {
         if (!ObjectUtil.isNull(interceptors)) {
             for (Interceptor interceptor : interceptors) {
                 target = plugin(origin, target, interceptor);
@@ -24,7 +31,11 @@ public abstract class AbstractPluginFactory implements PluginFactory {
         return target;
     }
 
-    protected abstract Interceptor[] getDefaultInterceptors();
 
     protected abstract Object plugin(Object origin, Object target, Interceptor interceptor);
+
+    @Override
+    public <T extends Interceptor> T getInterceptor(Class<T> interceptor) {
+        return (T) interceptorMap.get(interceptor);
+    }
 }

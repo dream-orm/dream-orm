@@ -41,22 +41,25 @@ public class DefaultSessionFactory implements SessionFactory {
     public Session openSession(boolean autoCommit, boolean cache) {
         Transaction transaction = transactionFactory.getTransaction(dataSource);
         transaction.setAutoCommit(autoCommit);
-        Executor executor = new JdbcExecutor(configuration, transaction);
-
-        if (this.cache != null) {
-            executor = new CustomCacheExecutor(this.cache, executor);
-        }
-        if (cache) {
-            executor = new SessionCacheExecutor(executor);
-        }
+        Executor executor = new JdbcExecutor(configuration, transaction, this);
         if (pluginFactory != null)
             executor = (Executor) pluginFactory.plugin(executor);
+        if (this.cache != null) {
+            executor = new CustomCacheExecutor(this.cache, executor, this);
+        }
+        if (cache) {
+            executor = new SessionCacheExecutor(executor, this);
+        }
         return openSession(executor);
     }
 
     @Override
     public Session openSession(Executor executor) {
-        return new DefaultSession(configuration, executor);
+        Session session = new DefaultSession(configuration, executor);
+        if (pluginFactory != null) {
+            session = (Session) pluginFactory.plugin(session);
+        }
+        return session;
     }
 
     @Override

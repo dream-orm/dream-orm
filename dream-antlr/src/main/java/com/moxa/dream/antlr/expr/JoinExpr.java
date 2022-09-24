@@ -12,19 +12,7 @@ public class JoinExpr extends SqlExpr {
 
     public JoinExpr(ExprReader exprReader) {
         super(exprReader);
-        setExprTypes(ExprType.COMMA, ExprType.LEFT, ExprType.RIGHT, ExprType.CROSS, ExprType.INNER, ExprType.JOIN, ExprType.NIL);
-    }
-
-    @Override
-    protected Statement exprComma(ExprInfo exprInfo) {
-        push();
-        joinStatement = new JoinStatement.CommaJoinStatement();
-        AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader);
-        aliasColumnExpr.setExprTypes(ExprType.HELP);
-        joinStatement.setJoinTable(aliasColumnExpr.expr());
-        ON = new ExprType[]{ExprType.NIL};
-        setExprTypes(ON);
-        return expr();
+        setExprTypes(ExprType.LEFT, ExprType.RIGHT, ExprType.CROSS, ExprType.INNER, ExprType.JOIN, ExprType.NIL);
     }
 
     @Override

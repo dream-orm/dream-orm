@@ -34,7 +34,7 @@ public abstract class UpdateSqlMapper extends AbstractSqlMapper {
                     String name = field.getName();
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
-                        setList.add("`" + columnInfo.getColumn() + "`=" +
+                        setList.add(columnInfo.getColumn() + "=" +
                                 InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", columnInfo.getName()));
                     }
                 }
@@ -42,7 +42,7 @@ public abstract class UpdateSqlMapper extends AbstractSqlMapper {
         }
         String updateParam = getUpdateParam(setList);
         String suffix = getSuffix(tableInfo);
-        String sql = "update `" + table + "` set " + updateParam + " " + suffix;
+        String sql = "update " + table + " set " + updateParam + " " + suffix;
         return new MethodInfo.Builder(configuration)
                 .rowType(NonCollection.class)
                 .colType(Integer.class)

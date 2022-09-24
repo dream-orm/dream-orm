@@ -36,6 +36,15 @@ public class ListColumnStatement extends Statement {
         return columnList;
     }
 
+    public void setColumnList(Statement[] columnList) {
+        if (columnList != null) {
+            this.columnList = columnList;
+            for (Statement statement : columnList) {
+                statement.parentStatement = this;
+            }
+        }
+    }
+
     @Override
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(columnList);

@@ -31,9 +31,21 @@ public class WhereInvoker extends AbstractInvoker {
     }
 
     public void addWhere(QueryStatement queryStatement, Statement statement) {
-        WhereStatement whereStatement = new WhereStatement();
-        whereStatement.setCondition(statement);
-        queryStatement.setWhereStatement(whereStatement);
+        WhereStatement whereStatement = queryStatement.getWhereStatement();
+        if (whereStatement == null) {
+            whereStatement = new WhereStatement();
+            queryStatement.setWhereStatement(whereStatement);
+        }
+        Statement condition = whereStatement.getCondition();
+        if (condition == null) {
+            whereStatement.setCondition(statement);
+        } else {
+            ConditionStatement conditionStatement = new ConditionStatement();
+            conditionStatement.setOper(new OperStatement.ANDStatement());
+            conditionStatement.setLeft(condition);
+            conditionStatement.setRight(statement);
+            whereStatement.setCondition(conditionStatement);
+        }
         this.setAccessible(false);
     }
 }

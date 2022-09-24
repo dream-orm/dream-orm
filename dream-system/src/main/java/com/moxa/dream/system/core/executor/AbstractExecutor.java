@@ -7,6 +7,7 @@ import com.moxa.dream.system.core.listener.*;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.core.resultsethandler.DefaultResultSetHandler;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
+import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.system.mapped.MethodInfo;
@@ -25,12 +26,14 @@ public abstract class AbstractExecutor implements Executor {
     protected StatementHandler statementHandler;
     protected ListenerFactory listenerFactory;
     protected ResultSetHandler resultSetHandler;
+    protected SessionFactory sessionFactory;
 
-    public AbstractExecutor(Configuration configuration, Transaction transaction) {
+    public AbstractExecutor(Configuration configuration, Transaction transaction, SessionFactory sessionFactory) {
         this.transaction = transaction;
         this.listenerFactory = configuration.getListenerFactory();
         this.statementHandler = getStatementHandler();
         this.resultSetHandler = getResultSetHandler();
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -190,6 +193,11 @@ public abstract class AbstractExecutor implements Executor {
     @Override
     public Statement getStatement() {
         return statementHandler.getStatement();
+    }
+
+    @Override
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 
     protected boolean beforeListeners(Listener[] listeners, MappedStatement mappedStatement) {

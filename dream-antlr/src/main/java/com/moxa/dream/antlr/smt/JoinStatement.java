@@ -29,10 +29,6 @@ public abstract class JoinStatement extends Statement {
         return isNeedInnerCache(joinTable, on);
     }
 
-    public static class CommaJoinStatement extends JoinStatement {
-
-    }
-
     public static class LeftJoinStatement extends JoinStatement {
 
     }

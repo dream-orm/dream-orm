@@ -42,7 +42,7 @@ public class QueryScanHandler extends AbstractHandler {
         return new Handler[]{fromScanHandler, joinScanHandler};
     }
 
-    public void scanStatement(Assist assist, ToSQL toSQL, List<Invoker> invokerList, Statement statement, boolean master) throws InvokerException {
+    public ScanInvoker.TableScanInfo getTableScanInfo(Assist assist, ToSQL toSQL, List<Invoker> invokerList, Statement statement, boolean master) throws InvokerException {
         String database = null;
         String table = null;
         String alias = null;
@@ -59,7 +59,15 @@ public class QueryScanHandler extends AbstractHandler {
             table = ((SymbolStatement) statement).getValue();
         }
         if (table != null) {
-            scanInfo.add(new ScanInvoker.TableScanInfo(database, table, alias, master));
+            return new ScanInvoker.TableScanInfo(database, table, alias, master);
+        }
+        return null;
+    }
+
+    public void scanStatement(Assist assist, ToSQL toSQL, List<Invoker> invokerList, Statement statement, boolean master) throws InvokerException {
+        ScanInvoker.TableScanInfo tableScanInfo = getTableScanInfo(assist, toSQL, invokerList, statement, master);
+        if (tableScanInfo != null) {
+            scanInfo.add(tableScanInfo);
         }
     }
 

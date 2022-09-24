@@ -9,6 +9,7 @@ import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.mapper.DefaultMapperInvokeFactory;
 import com.moxa.dream.system.mapper.MapperFactory;
 import com.moxa.dream.system.mapper.MapperInvokeFactory;
+import com.moxa.dream.util.common.DefaultMap;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.lang.reflect.Array;
@@ -16,6 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class DefaultSession implements Session {
     protected Configuration configuration;
@@ -65,6 +67,26 @@ public class DefaultSession implements Session {
             for (int i = 0; i < length; i++) {
                 mappedStatements.add(dialectFactory.compile(methodInfo, Array.get(arg, i)));
             }
+        } else if (arg instanceof DefaultMap) {
+            DefaultMap defaultMap = (DefaultMap) arg;
+            Object defaultValue = defaultMap.getDefaultValue();
+            Map<String, Object> builtMap = defaultMap.getBuiltMap();
+            if (defaultValue == null) {
+                throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，且不能为空");
+            }
+            if (defaultValue instanceof Collection) {
+                Collection args = (Collection) defaultValue;
+                for (Object o : args) {
+                    mappedStatements.add(dialectFactory.compile(methodInfo, new DefaultMap(o, builtMap)));
+                }
+            } else if (defaultValue.getClass().isArray()) {
+                int length = Array.getLength(defaultValue);
+                for (int i = 0; i < length; i++) {
+                    mappedStatements.add(dialectFactory.compile(methodInfo, new DefaultMap(Array.get(defaultValue, i), builtMap)));
+                }
+            } else {
+                throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，而实际类型为" + arg.getClass().getName());
+            }
         } else {
             throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，而实际类型为" + arg.getClass().getName());
         }
@@ -73,7 +95,6 @@ public class DefaultSession implements Session {
         } catch (SQLException e) {
             throw new DreamRunTimeException("批量执行方法'" + methodInfo.getId() + "'失败", e);
         }
-
     }
 
     protected Object executeInner(MethodInfo methodInfo, Object arg) {

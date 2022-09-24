@@ -37,10 +37,10 @@ public class UpdateExpr extends HelperExpr {
 
     @Override
     protected Statement exprWhere(ExprInfo exprInfo) {
-        push();
-        CompareExpr compareExpr = new CompareExpr(exprReader);
-        Statement statement = compareExpr.expr();
+        WhereExpr whereExpr = new WhereExpr(exprReader);
+        Statement statement = whereExpr.expr();
         updateStatement.setWhere(statement);
+        setExprTypes(ExprType.NIL);
         setExprTypes(ExprType.NIL);
         return expr();
     }

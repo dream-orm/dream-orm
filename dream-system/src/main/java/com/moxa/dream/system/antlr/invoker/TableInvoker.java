@@ -50,9 +50,9 @@ public class TableInvoker extends AbstractInvoker {
                     JoinInfo joinInfo = tableInfo.getJoinInfo(joinTable);
                     if (joinInfo != null) {
                         String joinSQL = joinInfo.getJoinType().getJoinType() +
-                                "`" + joinInfo.getJoinTable() + "`" +
-                                " ON `" + joinInfo.getTable() + "`.`" + joinInfo.getColumn() + "`=" +
-                                "`" + joinInfo.getJoinTable() + "`.`" + joinInfo.getJoinColumn() + "`";
+                                joinInfo.getJoinTable() +
+                                " ON " + joinInfo.getTable() + "." + joinInfo.getColumn() + "=" +
+                                joinInfo.getJoinTable() + "." + joinInfo.getJoinColumn();
                         List<String> tableSQLList = tableSQLMap.get(table);
                         if (tableSQLList == null) {
                             tableSQLList = new ArrayList<>();
@@ -83,12 +83,11 @@ public class TableInvoker extends AbstractInvoker {
             if (!ObjectUtil.isNull(list)) {
                 joinSQL = String.join(" ", tableSQLMap.get(mainTable));
             }
+            QueryStatement queryStatement = (QueryStatement) fromStatement.getParentStatement();
             FromExpr fromExpr = new FromExpr(new ExprReader("from " + mainTable + " " + joinSQL));
             FromStatement statement = (FromStatement) fromExpr.expr();
-            fromStatement.setMainTable(statement.getMainTable());
-            fromStatement.setJoinList(statement.getJoinList());
-            toSQL.toStr(fromStatement, assist, invokerList);
-            return toSQL.toStr(singleMarkStatement, assist, invokerList);
+            queryStatement.setFromStatement(statement);
+            return toSQL.toStr(statement, assist, invokerList).substring(5);
         }
     }
 }

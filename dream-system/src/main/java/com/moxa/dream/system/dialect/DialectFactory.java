@@ -1,5 +1,6 @@
 package com.moxa.dream.system.dialect;
 
+import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.system.mapped.MethodInfo;
 
@@ -9,6 +10,8 @@ public interface DialectFactory {
     default void setProperties(Properties properties) {
 
     }
+
+    void addInvokerFactory(InvokerFactory invokerFactory);
 
     MappedStatement compile(MethodInfo methodInfo, Object arg);
 

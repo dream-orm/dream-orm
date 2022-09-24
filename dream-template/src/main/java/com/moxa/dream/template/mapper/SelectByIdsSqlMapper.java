@@ -23,7 +23,7 @@ public class SelectByIdsSqlMapper extends SelectSqlMapper {
     protected String getSuffix(TableInfo tableInfo) {
         ColumnInfo columnInfo = tableInfo.getPrimColumnInfo();
         ObjectUtil.requireNonNull(columnInfo, "表'" + tableInfo.getTable() + "'未注册主键");
-        return "where `" + tableInfo.getTable() + "`.`" + columnInfo.getColumn() + "` in(" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.FOREACH, ",", param) + ")";
+        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + " in(" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.FOREACH, ",", param) + ")";
     }
 
     @Override

@@ -82,16 +82,7 @@ public class InsertExpr extends HelperExpr {
         @Override
         protected Statement exprValues(ExprInfo exprInfo) {
             push();
-            setExprTypes(ExprType.INVOKER, ExprType.LBRACE);
-            return expr();
-        }
-
-        @Override
-        protected Statement exprInvoker(ExprInfo exprInfo) {
-            ColumnExpr columnExpr = new ColumnExpr(exprReader);
-            Statement statement = columnExpr.expr();
-            valuesStatement.setStatement(statement);
-            setExprTypes(ExprType.NIL);
+            setExprTypes(ExprType.LBRACE);
             return expr();
         }
 

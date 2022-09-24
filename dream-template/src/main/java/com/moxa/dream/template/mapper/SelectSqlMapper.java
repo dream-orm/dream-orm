@@ -50,7 +50,7 @@ public abstract class SelectSqlMapper extends AbstractSqlMapper {
                             if (!ignore(field)) {
                                 ColumnInfo columnInfo = tableInfo.getColumnInfo(field.getName());
                                 if (columnInfo != null) {
-                                    columnList.add("`" + table + "`.`" + columnInfo.getColumn() + "`");
+                                    columnList.add(table + "." + columnInfo.getColumn());
                                 } else {
                                     deepField(tableFactory, ReflectUtil.getColType(field.getType(), field), columnList, tableList);
                                 }

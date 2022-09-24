@@ -34,13 +34,13 @@ public class InsertSqlMapper extends AbstractSqlMapper {
                     String name = field.getName();
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
-                        columnList.add("`" + columnInfo.getColumn() + "`");
+                        columnList.add(columnInfo.getColumn());
                         valueList.add(InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", columnInfo.getName()));
                     }
                 }
             }
         }
-        String sql = "insert into `" + table + "`(" + String.join(",", columnList) + ")values(" + String.join(",", valueList) + ")";
+        String sql = "insert into " + table + "(" + String.join(",", columnList) + ")values(" + String.join(",", valueList) + ")";
         return new MethodInfo.Builder(configuration)
                 .rowType(NonCollection.class)
                 .colType(Integer.class)
