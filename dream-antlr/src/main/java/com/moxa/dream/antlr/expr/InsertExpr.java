@@ -88,8 +88,8 @@ public class InsertExpr extends HelperExpr {
 
         @Override
         protected Statement exprLBrace(ExprInfo exprInfo) {
-            ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ","));
-            valuesStatement.setStatement(listColumnExpr.expr());
+            BraceExpr braceExpr = new BraceExpr(exprReader);
+            valuesStatement.setStatement(braceExpr.expr());
             setExprTypes(ExprType.NIL);
             return expr();
         }

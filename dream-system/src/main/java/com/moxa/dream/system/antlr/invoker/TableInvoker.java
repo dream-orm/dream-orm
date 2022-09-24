@@ -50,6 +50,7 @@ public class TableInvoker extends AbstractInvoker {
                     JoinInfo joinInfo = tableInfo.getJoinInfo(joinTable);
                     if (joinInfo != null) {
                         String joinSQL = joinInfo.getJoinType().getJoinType() +
+                                " " +
                                 joinInfo.getJoinTable() +
                                 " ON " + joinInfo.getTable() + "." + joinInfo.getColumn() + "=" +
                                 joinInfo.getJoinTable() + "." + joinInfo.getJoinColumn();
@@ -76,8 +77,8 @@ public class TableInvoker extends AbstractInvoker {
             }
             FromStatement fromStatement = (FromStatement) parentStatement;
             String mainTable = tableSQLMap.keySet().toArray(new String[0])[0];
-            SymbolStatement.SingleMarkStatement singleMarkStatement = new SymbolStatement.SingleMarkStatement(mainTable);
-            invokerStatement.setStatement(singleMarkStatement);
+            SymbolStatement symbolStatement = new SymbolStatement.LetterStatement(mainTable);
+            invokerStatement.setStatement(symbolStatement);
             List<String> list = tableSQLMap.get(mainTable);
             String joinSQL = "";
             if (!ObjectUtil.isNull(list)) {

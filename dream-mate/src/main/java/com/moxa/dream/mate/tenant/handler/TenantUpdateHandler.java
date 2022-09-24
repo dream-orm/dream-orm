@@ -28,7 +28,7 @@ public class TenantUpdateHandler extends AbstractHandler {
         if (tenantInvoker.isTenant(table)) {
             String tenantColumn = tenantInvoker.getTenantColumn();
             ConditionStatement conditionStatement = new ConditionStatement();
-            conditionStatement.setLeft(new SymbolStatement.SingleMarkStatement(tenantColumn));
+            conditionStatement.setLeft(new SymbolStatement.LetterStatement(tenantColumn));
             conditionStatement.setOper(new OperStatement.EQStatement());
             conditionStatement.setRight(InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn)));
             WhereStatement whereStatement = (WhereStatement) updateStatement.getWhere();

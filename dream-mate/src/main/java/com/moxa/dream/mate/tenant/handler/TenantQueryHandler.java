@@ -63,7 +63,7 @@ public class TenantQueryHandler extends AbstractHandler {
                     ConditionStatement conditionStatement = new ConditionStatement();
                     conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                     conditionStatement.setOper(new OperStatement.EQStatement());
-                    conditionStatement.setRight(InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", new SymbolStatement.SingleMarkStatement(tenantColumn)));
+                    conditionStatement.setRight(InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn)));
                     QueryStatement queryStatement = queryDeque.peek();
                     WhereStatement whereStatement = queryStatement.getWhereStatement();
                     if (whereStatement == null) {
