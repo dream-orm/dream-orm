@@ -8,6 +8,7 @@ import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -16,6 +17,7 @@ import com.moxa.dream.util.reflection.util.NonCollection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.Properties;
 
 public class SqlAction implements Action {
@@ -104,7 +106,15 @@ public class SqlAction implements Action {
         }
         SessionFactory sessionFactory = executor.getSessionFactory();
         Session session = sessionFactory.openSession(executor);
-        Object result = session.execute(methodInfo, arg);
+        Map<String, Object> argMap = null;
+        if (arg != null) {
+            if (arg instanceof Map) {
+                argMap = (Map<String, Object>) arg;
+            } else {
+                argMap = new ObjectMap(arg);
+            }
+        }
+        Object result = session.execute(methodInfo, argMap);
         if (!ObjectUtil.isNull(property)) {
             ObjectWrapper.wrapper(arg).set(property, result);
         }

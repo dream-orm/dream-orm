@@ -9,7 +9,7 @@ import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.mapper.DefaultMapperInvokeFactory;
 import com.moxa.dream.system.mapper.MapperFactory;
 import com.moxa.dream.system.mapper.MapperInvokeFactory;
-import com.moxa.dream.util.common.DefaultMap;
+import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.lang.reflect.Array;
@@ -44,51 +44,41 @@ public class DefaultSession implements Session {
     }
 
     @Override
-    public Object execute(MethodInfo methodInfo, Object arg) {
+    public Object execute(MethodInfo methodInfo, Map<String, Object> argMap) {
         if (methodInfo.isBatch()) {
-            return executeBatch(methodInfo, arg);
+            return executeBatch(methodInfo, argMap);
         } else {
-            return executeInner(methodInfo, arg);
+            return executeInner(methodInfo, argMap);
         }
     }
 
-    protected Object executeBatch(MethodInfo methodInfo, Object arg) {
-        if (arg == null) {
-            throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，且不能为空");
+    protected Object executeBatch(MethodInfo methodInfo, Map<String, Object> argMap) {
+        if (argMap == null) {
+            throw new DreamRunTimeException("批量模式，参数不能为空");
         }
         List<MappedStatement> mappedStatements = new ArrayList<>();
-        if (arg instanceof Collection) {
-            Collection args = (Collection) arg;
-            for (Object o : args) {
-                mappedStatements.add(dialectFactory.compile(methodInfo, o));
-            }
-        } else if (arg.getClass().isArray()) {
-            int length = Array.getLength(arg);
-            for (int i = 0; i < length; i++) {
-                mappedStatements.add(dialectFactory.compile(methodInfo, Array.get(arg, i)));
-            }
-        } else if (arg instanceof DefaultMap) {
-            DefaultMap defaultMap = (DefaultMap) arg;
-            Object defaultValue = defaultMap.getDefaultValue();
-            Map<String, Object> builtMap = defaultMap.getBuiltMap();
+        if (argMap instanceof ObjectMap) {
+            ObjectMap objectMap = (ObjectMap) argMap;
+            Object defaultValue = objectMap.getDefaultValue();
+            Map<String, Object> builtMap = objectMap.getBuiltMap();
             if (defaultValue == null) {
                 throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，且不能为空");
             }
             if (defaultValue instanceof Collection) {
                 Collection args = (Collection) defaultValue;
                 for (Object o : args) {
-                    mappedStatements.add(dialectFactory.compile(methodInfo, new DefaultMap(o, builtMap)));
+                    mappedStatements.add(dialectFactory.compile(methodInfo, new ObjectMap(o, builtMap)));
                 }
             } else if (defaultValue.getClass().isArray()) {
                 int length = Array.getLength(defaultValue);
                 for (int i = 0; i < length; i++) {
-                    mappedStatements.add(dialectFactory.compile(methodInfo, new DefaultMap(Array.get(defaultValue, i), builtMap)));
+                    mappedStatements.add(dialectFactory.compile(methodInfo, new ObjectMap(Array.get(defaultValue, i), builtMap)));
                 }
             } else {
-                throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，而实际类型为" + arg.getClass().getName());
+                throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，而实际类型为" + defaultValue.getClass().getName());
             }
         } else {
-            throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，而实际类型为" + arg.getClass().getName());
+            throw new DreamRunTimeException("批量模式，参数类型必须是" + ObjectMap.class.getName() + "，而实际类型为" + argMap.getClass().getName());
         }
         try {
             return executor.batch(mappedStatements);
@@ -97,8 +87,8 @@ public class DefaultSession implements Session {
         }
     }
 
-    protected Object executeInner(MethodInfo methodInfo, Object arg) {
-        MappedStatement mappedStatement = dialectFactory.compile(methodInfo, arg);
+    protected Object executeInner(MethodInfo methodInfo, Map<String, Object> argMap) {
+        MappedStatement mappedStatement = dialectFactory.compile(methodInfo, argMap);
         Object value = null;
         try {
             Command command = getCommand(mappedStatement);

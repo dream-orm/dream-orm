@@ -8,15 +8,15 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class DefaultMap implements Map<String, Object> {
+public class ObjectMap implements Map<String, Object> {
     private Object defaultValue;
     private Map<String, Object> builtMap;
 
-    public DefaultMap(Object defaultValue) {
+    public ObjectMap(Object defaultValue) {
         this(defaultValue, new HashMap<>());
     }
 
-    public DefaultMap(Object defaultValue, Map<String, Object> builtMap) {
+    public ObjectMap(Object defaultValue, Map<String, Object> builtMap) {
         this.defaultValue = defaultValue;
         this.builtMap = builtMap;
     }

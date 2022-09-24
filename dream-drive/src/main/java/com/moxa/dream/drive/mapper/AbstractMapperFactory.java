@@ -8,7 +8,7 @@ import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.mapped.MethodParam;
 import com.moxa.dream.system.mapper.MapperFactory;
 import com.moxa.dream.system.mapper.MapperInvoke;
-import com.moxa.dream.util.common.DefaultMap;
+import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
@@ -263,8 +263,8 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 if (!methodInfo.isCompile()) {
                     methodInfo.compile();
                 }
-                Object arg = getArg(methodInfo, args);
-                return mapperInvoke.invoke(methodInfo, arg);
+                Map<String, Object> argMap = getArg(methodInfo, args);
+                return mapperInvoke.invoke(methodInfo, argMap);
             } else {
                 return invoke(type, proxy, method, args);
             }
@@ -293,7 +293,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 MethodParam methodParam = methodInfo.getMethodParamList()[0];
                 String paramName = methodParam.getParamName();
                 if (ObjectUtil.isNull(paramName)) {
-                    arg = new DefaultMap(args[0]);
+                    arg = new ObjectMap(args[0]);
                 } else {
                     Map<String, Object> paramMap = new HashMap<>();
                     paramMap.put(paramName, args[0]);

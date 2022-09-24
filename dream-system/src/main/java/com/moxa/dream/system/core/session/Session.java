@@ -4,12 +4,13 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapped.MethodInfo;
 
 import java.io.Closeable;
+import java.util.Map;
 
 public interface Session extends Closeable {
 
     <T> T getMapper(Class<T> type);
 
-    Object execute(MethodInfo methodInfo, Object arg);
+    Object execute(MethodInfo methodInfo, Map<String, Object> argMap);
 
     boolean isAutoCommit();
 

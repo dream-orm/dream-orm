@@ -37,7 +37,7 @@ public class TenantInterceptor implements Interceptor {
     @Override
     public Set<Method> methods() throws Exception {
         Set<Method> methods = new HashSet<>();
-        Method method = Session.class.getMethod("execute", MethodInfo.class, Object.class);
+        Method method = Session.class.getMethod("execute", MethodInfo.class, Map.class);
         methods.add(method);
         return methods;
     }

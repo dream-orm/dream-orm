@@ -10,6 +10,7 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TenantUpdateHandler extends AbstractHandler {
@@ -26,6 +27,7 @@ public class TenantUpdateHandler extends AbstractHandler {
         SymbolStatement symbolStatement = (SymbolStatement) tableStatement;
         String table = symbolStatement.getValue();
         if (tenantInvoker.isTenant(table)) {
+            removeTenantColumn(updateStatement);
             String tenantColumn = tenantInvoker.getTenantColumn();
             ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.LetterStatement(tenantColumn));
@@ -42,6 +44,27 @@ public class TenantUpdateHandler extends AbstractHandler {
             }
         }
         return statement;
+    }
+
+    private void removeTenantColumn(UpdateStatement updateStatement) {
+        ListColumnStatement conditionList = (ListColumnStatement) updateStatement.getConditionList();
+        Statement[] columnList = conditionList.getColumnList();
+        List<Statement> statementList = new ArrayList<>();
+        for (Statement statement : columnList) {
+            ConditionStatement conditionStatement = (ConditionStatement) statement;
+            SymbolStatement leftStatement = (SymbolStatement) conditionStatement.getLeft();
+            String column = leftStatement.getValue();
+            if (!tenantInvoker.getTenantColumn().equalsIgnoreCase(column)) {
+                statementList.add(conditionStatement);
+            }
+        }
+        if (!statementList.isEmpty()) {
+            ListColumnStatement listColumnStatement = new ListColumnStatement(conditionList.getCut().getSymbol());
+            for (Statement statement : statementList) {
+                listColumnStatement.add(statement);
+            }
+            updateStatement.setConditionList(listColumnStatement);
+        }
     }
 
     @Override

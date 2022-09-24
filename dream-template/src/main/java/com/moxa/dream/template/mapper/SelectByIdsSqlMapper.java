@@ -32,9 +32,9 @@ public class SelectByIdsSqlMapper extends SelectSqlMapper {
     }
 
     @Override
-    protected Object wrapArg(Object arg) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put(param, arg);
-        return paramMap;
+    protected Map<String, Object> wrapArg(Object arg) {
+        Map<String, Object> argMap = new HashMap<>();
+        argMap.put(param, arg);
+        return argMap;
     }
 }
