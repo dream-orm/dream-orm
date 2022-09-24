@@ -38,8 +38,13 @@ public class SystemDialectFactory implements DialectFactory {
     protected List<InvokerFactory> invokerFactoryList = new ArrayList<>();
 
     public SystemDialectFactory() {
-        invokerFactoryList.add(new AntlrInvokerFactory());
-        invokerFactoryList.add(new SystemInvokerFactory());
+        addInvokerFactory(new AntlrInvokerFactory());
+        addInvokerFactory(new SystemInvokerFactory());
+    }
+
+    @Override
+    public void addInvokerFactory(InvokerFactory invokerFactory) {
+        invokerFactoryList.add(invokerFactory);
     }
 
     @Override
@@ -110,12 +115,20 @@ public class SystemDialectFactory implements DialectFactory {
             }
         }
         CacheKey uniqueKey = methodInfo.getMethodKey();
+        Object[] updateList;
         if (!ObjectUtil.isNull(mappedParamList)) {
-            uniqueKey.update(mappedParamList.stream()
-                    .map(mappedParam -> mappedParam.getParamValue())
-                    .collect(Collectors.toList())
-                    .toArray());
+            updateList = new Object[mappedParamList.size() + 2];
+            updateList[0] = sql;
+            updateList[1] = sql.length();
+            for (int i = 0; i < mappedParamList.size(); i++) {
+                updateList[i + 2] = mappedParamList.get(i);
+            }
+        } else {
+            updateList = new Object[2];
+            updateList[0] = sql;
+            updateList[1] = sql.length();
         }
+        uniqueKey.update(updateList);
         return new MappedStatement
                 .Builder()
                 .methodInfo(methodInfo)

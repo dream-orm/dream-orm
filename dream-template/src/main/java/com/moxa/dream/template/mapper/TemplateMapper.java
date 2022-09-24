@@ -18,8 +18,6 @@ public interface TemplateMapper {
 
     int[] insertBatch(List<?> viewList);
 
-    int insertMany(List<?> viewList);
-
     int deleteById(Class<?> type, Object id);
 
     int deleteByIds(Class<?> type, List<?> idList);

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class UpdateSqlMapper extends AbstractSqlMapper {
+    protected String param="param";
     public UpdateSqlMapper(Session session) {
         super(session);
     }
@@ -34,15 +35,15 @@ public abstract class UpdateSqlMapper extends AbstractSqlMapper {
                     String name = field.getName();
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
-                        setList.add("`" + columnInfo.getColumn() + "`=" +
-                                InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", columnInfo.getName()));
+                        setList.add(columnInfo.getColumn() + "=" +
+                                InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param+"."+columnInfo.getName()));
                     }
                 }
             }
         }
         String updateParam = getUpdateParam(setList);
         String suffix = getSuffix(tableInfo);
-        String sql = "update `" + table + "` set " + updateParam + " " + suffix;
+        String sql = "update " + table + " set " + updateParam + " " + suffix;
         return new MethodInfo.Builder(configuration)
                 .rowType(NonCollection.class)
                 .colType(Integer.class)

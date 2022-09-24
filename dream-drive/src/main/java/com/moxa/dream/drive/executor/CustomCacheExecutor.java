@@ -2,13 +2,14 @@ package com.moxa.dream.drive.executor;
 
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.core.executor.Executor;
+import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.mapped.MappedStatement;
 
 public class CustomCacheExecutor extends CacheExecutor {
     private final Cache cache;
 
-    public CustomCacheExecutor(Cache cache, Executor executor) {
-        super(executor);
+    public CustomCacheExecutor(Cache cache, Executor executor, SessionFactory sessionFactory) {
+        super(executor, sessionFactory);
         this.cache = cache;
     }
 

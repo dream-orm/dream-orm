@@ -2,7 +2,7 @@ package com.moxa.dream.antlr.smt;
 
 public class DeleteStatement extends Statement {
     private Statement table;
-    private Statement condition;
+    private Statement where;
 
     public Statement getTable() {
         return table;
@@ -14,18 +14,18 @@ public class DeleteStatement extends Statement {
             table.parentStatement = this;
     }
 
-    public Statement getCondition() {
-        return condition;
+    public Statement getWhere() {
+        return where;
     }
 
-    public void setCondition(Statement condition) {
-        this.condition = condition;
-        if (condition != null)
-            condition.parentStatement = this;
+    public void setWhere(Statement where) {
+        this.where = where;
+        if (where != null)
+            where.parentStatement = this;
     }
 
     @Override
     protected Boolean isNeedInnerCache() {
-        return isNeedInnerCache(table, condition);
+        return isNeedInnerCache(table, where);
     }
 }

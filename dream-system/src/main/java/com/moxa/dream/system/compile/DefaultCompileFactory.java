@@ -38,17 +38,19 @@ public class DefaultCompileFactory implements CompileFactory {
         }
         if (split > index)
             split = index;
-        Object[] hashObj = new Object[split];
+        Object[] updateList = new Object[split + 2];
+        updateList[0] = new String(charList, 0, index);
+        updateList[1] = index;
         int len = (int) Math.ceil(index / (double) split);
         for (int i = 0; i < split; i++) {
             int sPoint = i * len;
             int size = Math.min((i + 1) * len, index) - sPoint;
             char[] tempChars = new char[size];
             System.arraycopy(charList, sPoint, tempChars, 0, size);
-            hashObj[i] = new String(tempChars);
+            updateList[i + 2] = new String(tempChars);
         }
         CacheKey cacheKey = new CacheKey();
-        cacheKey.update(hashObj);
+        cacheKey.update(updateList);
         return cacheKey;
     }
 }

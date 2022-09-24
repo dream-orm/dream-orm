@@ -508,9 +508,6 @@ public abstract class ToSQL {
             case 847732933://FromStatement
                 sql = toString((FromStatement) statement, assist, invokerList);
                 break;
-            case -1697491280://CommaJoinStatement
-                sql = toString((JoinStatement.CommaJoinStatement) statement, assist, invokerList);
-                break;
             case 1666313854://LeftJoinStatement
                 sql = toString((JoinStatement.LeftJoinStatement) statement, assist, invokerList);
                 break;
@@ -858,8 +855,6 @@ public abstract class ToSQL {
     protected abstract String toString(OperStatement.ORStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(FromStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
-
-    protected abstract String toString(JoinStatement.CommaJoinStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
 
     protected abstract String toString(JoinStatement.LeftJoinStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
 

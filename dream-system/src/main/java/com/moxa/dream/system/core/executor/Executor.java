@@ -1,5 +1,6 @@
 package com.moxa.dream.system.core.executor;
 
+import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.mapped.MappedStatement;
 
 import java.sql.SQLException;
@@ -27,4 +28,6 @@ public interface Executor {
     boolean isAutoCommit();
 
     Statement getStatement();
+
+    SessionFactory getSessionFactory();
 }

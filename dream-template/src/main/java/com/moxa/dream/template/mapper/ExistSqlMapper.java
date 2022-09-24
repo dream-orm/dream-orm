@@ -15,7 +15,7 @@ public abstract class ExistSqlMapper extends AbstractSqlMapper {
     protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
         String table = tableInfo.getTable();
         String suffix = getSuffix(tableInfo);
-        String sql = "select 1 from `" + table + "` " + suffix;
+        String sql = "select 1 from " + table + " " + suffix;
         return new MethodInfo.Builder(configuration)
                 .rowType(NonCollection.class)
                 .colType(Integer.class)

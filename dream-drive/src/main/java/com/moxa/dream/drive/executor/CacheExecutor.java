@@ -2,6 +2,7 @@ package com.moxa.dream.drive.executor;
 
 
 import com.moxa.dream.system.core.executor.Executor;
+import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.mapped.MappedStatement;
 
 import java.sql.SQLException;
@@ -10,9 +11,11 @@ import java.util.List;
 
 public abstract class CacheExecutor implements Executor {
     private final Executor executor;
+    private SessionFactory sessionFactory;
 
-    public CacheExecutor(Executor executor) {
+    public CacheExecutor(Executor executor, SessionFactory sessionFactory) {
         this.executor = executor;
+        this.sessionFactory = sessionFactory;
     }
 
 
@@ -80,6 +83,11 @@ public abstract class CacheExecutor implements Executor {
     @Override
     public Statement getStatement() {
         return executor.getStatement();
+    }
+
+    @Override
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 
     protected abstract void clear();

@@ -1,10 +1,12 @@
 package com.moxa.dream.share.session;
 
-import com.moxa.dream.share.annotation.DataSource;
+import com.moxa.dream.share.annotation.Share;
 import com.moxa.dream.share.holder.DataSourceHolder;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.mapper.MapperInvoke;
+
+import java.util.Map;
 
 public class ShareMapperInvoke implements MapperInvoke {
     private Session session;
@@ -14,15 +16,15 @@ public class ShareMapperInvoke implements MapperInvoke {
     }
 
     @Override
-    public Object invoke(MethodInfo methodInfo, Object arg) {
+    public Object invoke(MethodInfo methodInfo, Map<String,Object> argMap) {
         String dataSourceName = null;
-        DataSource dataSource = methodInfo.get(DataSource.class);
-        if (dataSource != null) {
-            dataSourceName = dataSource.value();
+        Share share = methodInfo.get(Share.class);
+        if (share != null) {
+            dataSourceName = share.value();
         }
         DataSourceHolder.set(dataSourceName);
         try {
-            return session.execute(methodInfo, arg);
+            return session.execute(methodInfo, argMap);
         } finally {
             DataSourceHolder.remove();
         }

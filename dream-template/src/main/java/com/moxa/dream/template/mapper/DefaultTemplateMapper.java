@@ -13,7 +13,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private SqlMapper updateByIdSqlMapper;
     private SqlMapper updateNonByIdSqlMapper;
     private SqlMapper insertSqlMapper;
-    private SqlMapper insertManySqlMapper;
     private SqlMapper insertBatchSqlMapper;
     private SqlMapper insertFetchKeySqlMapper;
 
@@ -26,7 +25,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
         updateByIdSqlMapper = new UpdateByIdSqlMapper(session);
         updateNonByIdSqlMapper = new UpdateNonByIdSqlMapper(session);
         insertSqlMapper = new InsertSqlMapper(session);
-        insertManySqlMapper = new InsertManySqlMapper(session);
         insertBatchSqlMapper = new InsertBatchSqlMapper(session);
         insertFetchKeySqlMapper = new InsertFetchKeySqlMapper(session);
     }
@@ -66,11 +64,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
     @Override
     public int[] insertBatch(List<?> viewList) {
         return (int[]) insertBatchSqlMapper.execute(viewList.get(0).getClass(), viewList);
-    }
-
-    @Override
-    public int insertMany(List<?> viewList) {
-        return (int) insertManySqlMapper.execute(viewList.get(0).getClass(), viewList);
     }
 
     @Override

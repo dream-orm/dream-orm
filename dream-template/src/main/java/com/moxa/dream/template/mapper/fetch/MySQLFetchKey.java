@@ -7,6 +7,7 @@ import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
+import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 
@@ -49,6 +50,9 @@ public class MySQLFetchKey implements FetchKey {
 
         @Override
         public void doAction(Executor executor, Object arg) throws Exception {
+            if(arg instanceof ObjectMap){
+                arg=((ObjectMap) arg).getDefaultValue();
+            }
             ResultSet generatedKeys = executor.getStatement().getGeneratedKeys();
             if (generatedKeys.next()) {
                 if (typeHandler == null) {

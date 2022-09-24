@@ -32,7 +32,7 @@ public class MethodInfo {
     private Action[] initActionList;
     private Action[] loopActionList;
     private Action[] destroyActionList;
-    private String[] paramNameList;
+    private MethodParam[] methodParamList;
     private boolean compile = false;
 
     private MethodInfo() {
@@ -91,8 +91,8 @@ public class MethodInfo {
         return destroyActionList;
     }
 
-    public String[] getParamNameList() {
-        return paramNameList;
+    public MethodParam[] getMethodParamList() {
+        return methodParamList;
     }
 
     public PackageStatement getStatement() {
@@ -185,8 +185,8 @@ public class MethodInfo {
             return this;
         }
 
-        public Builder paramNameList(String[] paramNameList) {
-            methodInfo.paramNameList = paramNameList;
+        public Builder methodParamList(MethodParam[] methodParamList) {
+            methodInfo.methodParamList = methodParamList;
             return this;
         }
 

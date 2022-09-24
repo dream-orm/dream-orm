@@ -1,4 +1,4 @@
-package com.moxa.dream.share.annotation;
+package com.moxa.dream.mate.share.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface DataSource {
+public @interface Share {
     String value();
 }

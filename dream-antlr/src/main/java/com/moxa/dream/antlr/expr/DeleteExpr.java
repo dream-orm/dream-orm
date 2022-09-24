@@ -34,10 +34,9 @@ public class DeleteExpr extends HelperExpr {
 
     @Override
     protected Statement exprWhere(ExprInfo exprInfo) {
-        push();
-        CompareExpr compareExpr = new CompareExpr(exprReader);
-        Statement statement = compareExpr.expr();
-        deleteStatement.setCondition(statement);
+        WhereExpr whereExpr = new WhereExpr(exprReader);
+        Statement statement = whereExpr.expr();
+        deleteStatement.setWhere(statement);
         setExprTypes(ExprType.NIL);
         return expr();
     }

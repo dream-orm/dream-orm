@@ -5,8 +5,10 @@ import com.moxa.dream.drive.annotation.*;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.system.mapped.MethodParam;
 import com.moxa.dream.system.mapper.MapperFactory;
 import com.moxa.dream.system.mapper.MapperInvoke;
+import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
@@ -64,7 +66,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         boolean cache = isCache(mapperClass, method);
         boolean batch = isBatch(mapperClass, method);
         Command command = getCommand(mapperClass, method);
-        String[] paramNameList = getParamNameList(method);
+        MethodParam[] methodParamList = getMethodParamList(method);
         String sql = getSql(configuration, method);
         int timeOut = getTimeOut(method);
         Action[] initActionList = getInitActionList(configuration, method);
@@ -78,7 +80,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 .cache(cache)
                 .batch(batch)
                 .command(command)
-                .paramNameList(paramNameList)
+                .methodParamList(methodParamList)
                 .sql(sql)
                 .timeOut(timeOut)
                 .initActionList(initActionList)
@@ -219,24 +221,26 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         return command;
     }
 
-    protected String[] getParamNameList(Method method) {
+    protected MethodParam[] getMethodParamList(Method method) {
         Parameter[] parameters = method.getParameters();
+        MethodParam[] methodParamList = null;
         if (!ObjectUtil.isNull(parameters)) {
-            String[] paramList = new String[parameters.length];
+            methodParamList = new MethodParam[parameters.length];
             if (parameters.length > 1) {
                 for (int i = 0; i < parameters.length; i++) {
                     Parameter parameter = parameters[i];
                     String paramName = getParamName(parameter);
                     if (paramName == null)
                         paramName = parameter.getName();
-                    paramList[i] = paramName;
+                    methodParamList[i] = new MethodParam(paramName, parameter.getType());
                 }
             } else {
-                paramList[0] = getParamName(parameters[0]);
+                String name = getParamName(parameters[0]);
+                Class<?> type = parameters[0].getType();
+                methodParamList[0] = new MethodParam(name, type);
             }
-            return paramList;
         }
-        return null;
+        return methodParamList;
     }
 
     protected Class[] getAllInterface(Class type) {
@@ -259,8 +263,8 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 if (!methodInfo.isCompile()) {
                     methodInfo.compile();
                 }
-                Object arg = getArg(methodInfo, args);
-                return mapperInvoke.invoke(methodInfo, arg);
+                Map<String, Object> argMap = getArg(methodInfo, args);
+                return mapperInvoke.invoke(methodInfo, argMap);
             } else {
                 return invoke(type, proxy, method, args);
             }
@@ -282,23 +286,24 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         }
     }
 
-    protected Object getArg(MethodInfo methodInfo, Object[] args) {
-        Object arg = null;
+    protected Map<String, Object> getArg(MethodInfo methodInfo, Object[] args) {
+        Map<String, Object> arg = null;
         if (!ObjectUtil.isNull(args)) {
             if (args.length == 1) {
-                String paramName = methodInfo.getParamNameList()[0];
+                MethodParam methodParam = methodInfo.getMethodParamList()[0];
+                String paramName = methodParam.getParamName();
                 if (ObjectUtil.isNull(paramName)) {
-                    arg = args[0];
+                    arg = new ObjectMap(args[0]);
                 } else {
                     Map<String, Object> paramMap = new HashMap<>();
                     paramMap.put(paramName, args[0]);
                     arg = paramMap;
                 }
             } else {
-                String[] paramNameList = methodInfo.getParamNameList();
+                MethodParam[] methodParamList = methodInfo.getMethodParamList();
                 Map<String, Object> paramMap = new HashMap<>();
-                for (int i = 0; i < paramNameList.length; i++) {
-                    paramMap.put(paramNameList[i], args[i]);
+                for (int i = 0; i < methodParamList.length; i++) {
+                    paramMap.put(methodParamList[i].getParamName(), args[i]);
                 }
                 arg = paramMap;
             }

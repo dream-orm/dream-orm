@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Map;
 
 public class SessionTemplate implements Session {
     private final Session sessionProxy;
@@ -43,8 +44,8 @@ public class SessionTemplate implements Session {
     }
 
     @Override
-    public Object execute(MethodInfo methodInfo, Object o) {
-        return sessionProxy.execute(methodInfo, o);
+    public Object execute(MethodInfo methodInfo, Map<String, Object> argMap) {
+        return sessionProxy.execute(methodInfo, argMap);
     }
 
     @Override

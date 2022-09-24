@@ -7,6 +7,7 @@ import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
+import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.HashMap;
@@ -43,8 +44,16 @@ public abstract class AbstractSqlMapper implements SqlMapper {
         return session.execute(methodInfo, wrapArg(arg));
     }
 
-    protected Object wrapArg(Object arg) {
-        return arg;
+    protected Map<String, Object> wrapArg(Object arg) {
+        if (arg != null) {
+            if (arg instanceof Map) {
+                return (Map<String, Object>) arg;
+            } else {
+                return new ObjectMap(arg);
+            }
+        } else {
+            return null;
+        }
     }
 
     protected abstract MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type);

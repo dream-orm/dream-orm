@@ -190,28 +190,6 @@ public class ToORACLE extends ToPubSQL {
     }
 
     @Override
-    protected String toString(InsertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        Statement values = statement.getValues();
-        if (values instanceof InsertStatement.ValuesStatement) {
-            ListColumnStatement listColumnStatement = (ListColumnStatement) (((InsertStatement.ValuesStatement) values).getStatement());
-            if (listColumnStatement.getColumnList().length > 1) {
-                String table = toStr(statement.getTable(), assist, invokerList);
-                String param = " ";
-                if (statement.getParams() != null) {
-                    param = toStr(statement.getParams(), assist, invokerList);
-                }
-                StringBuilder builder = new StringBuilder();
-                builder.append("INSERT ALL");
-                for (Statement columnStatement : listColumnStatement.getColumnList()) {
-                    builder.append(" INTO " + table + param + "VALUES" + toStr(columnStatement, assist, invokerList));
-                }
-                return builder.toString();
-            }
-        }
-        return super.toString(statement, assist, invokerList);
-    }
-
-    @Override
     protected String toString(LimitStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
         StringBuilder builder = new StringBuilder();
         builder.append(" OFFSET " + toStr(statement.getFirst(), assist, invokerList));
