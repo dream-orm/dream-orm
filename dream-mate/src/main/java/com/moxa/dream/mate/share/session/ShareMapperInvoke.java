@@ -16,9 +16,12 @@ public class ShareMapperInvoke implements MapperInvoke {
     }
 
     @Override
-    public Object invoke(MethodInfo methodInfo, Map<String, Object> argMap) {
+    public Object invoke(MethodInfo methodInfo, Map<String, Object> argMap, Class<?> type) {
         String dataSourceName = null;
         Share share = methodInfo.get(Share.class);
+        if (share == null) {
+            share = type.getAnnotation(Share.class);
+        }
         if (share != null) {
             dataSourceName = share.value();
         }

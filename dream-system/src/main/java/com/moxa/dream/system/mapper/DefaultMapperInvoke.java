@@ -13,7 +13,7 @@ public class DefaultMapperInvoke implements MapperInvoke {
     }
 
     @Override
-    public Object invoke(MethodInfo methodInfo, Map<String, Object> argMap) {
+    public Object invoke(MethodInfo methodInfo, Map<String, Object> argMap, Class<?> type) {
         return session.execute(methodInfo, argMap);
     }
 }

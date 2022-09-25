@@ -24,7 +24,7 @@ public class RepInvoker extends AbstractInvoker {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         if (columnList.length != 1)
             throw new InvokerException("参数个数错误,不满足@" + AntlrInvokerFactory.REP + ":" + AntlrInvokerFactory.NAMESPACE + "(value)");
-        String paramName = toSQL.toStr(columnList[0], assist, invokerList);
+        String paramName = toSQL.toStr(columnList[0], assist, null);
         Object value = paramWrapper.get(paramName);
         if (value == null) {
             return "";

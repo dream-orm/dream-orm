@@ -264,7 +264,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                     methodInfo.compile();
                 }
                 Map<String, Object> argMap = getArg(methodInfo, args);
-                return mapperInvoke.invoke(methodInfo, argMap);
+                return mapperInvoke.invoke(methodInfo, argMap, type);
             } else {
                 return invoke(type, proxy, method, args);
             }

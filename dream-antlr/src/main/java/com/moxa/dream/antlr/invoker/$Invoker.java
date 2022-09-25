@@ -21,7 +21,7 @@ public class $Invoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
-        String paramName = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
+        String paramName = toSQL.toStr(invokerStatement.getParamStatement(), assist, null);
         ParamInfo paramInfo = new ParamInfo(paramName, paramWrapper.get(paramName));
         paramInfoList.add(paramInfo);
         return "?";
