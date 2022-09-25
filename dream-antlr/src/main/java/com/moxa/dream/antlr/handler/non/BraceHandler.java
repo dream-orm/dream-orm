@@ -12,17 +12,12 @@ import com.moxa.dream.antlr.util.ExprUtil;
 
 import java.util.List;
 
-//之所以要解析括号，比如sql:select 1 from dual where (a=null)。空去除后sql为：select 1 from dual where ()。明显报错
 public class BraceHandler extends AbstractHandler {
 
     @Override
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
-        //获取括号抽象树
         BraceStatement braceStatement = (BraceStatement) statement;
-        Statement bstatement = braceStatement.getStatement();
-        //正常翻译
-        String val = toSQL.toStr(bstatement, assist, invokerList);
-        //如果为空，则返回空，否则返回括号
+        String val = toSQL.toStr(braceStatement.getStatement(), assist, invokerList);
         if (ExprUtil.isEmpty(val))
             return null;
         return new SymbolStatement.LetterStatement("(" + val + ")");

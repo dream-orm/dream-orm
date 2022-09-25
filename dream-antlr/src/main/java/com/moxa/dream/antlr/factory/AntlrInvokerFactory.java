@@ -19,12 +19,6 @@ public class AntlrInvokerFactory implements InvokerFactory {
         switch (function) {
             case SCAN:
                 return new ScanInvoker();
-            case WHERE:
-                return new WhereInvoker();
-            case LIMIT:
-                return new LimitInvoker();
-            case OFFSET:
-                return new OffSetInvoker();
             case REP:
                 return new RepInvoker();
             case $:

@@ -16,17 +16,12 @@ import java.util.List;
 public class ConditionHandler extends AbstractHandler {
     @Override
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
-        //获取条件抽象树
         ConditionStatement conditionStatement = (ConditionStatement) statement;
-        //获取条件抽象树左边孩子
         Statement leftStatement = conditionStatement.getLeft();
-        //获取运算抽象树
         String vl, vr;
         OperStatement operStatement = conditionStatement.getOper();
-        //获取右边抽象树
         Statement rightStatement = conditionStatement.getRight();
 
-        //switch选择运算nameId
         switch (operStatement.getNameId()) {
             case 812960120://"ANDStatement"
                 vl = toSQL.toStr(leftStatement, assist, invokerList);
