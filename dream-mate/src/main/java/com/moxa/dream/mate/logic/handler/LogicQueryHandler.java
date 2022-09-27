@@ -1,9 +1,8 @@
-package com.moxa.dream.mate.tenant.handler;
+package com.moxa.dream.mate.logic.handler;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.expr.SymbolExpr;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.handler.AbstractHandler;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.handler.scan.QueryScanHandler;
@@ -12,20 +11,19 @@ import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.antlr.util.InvokerUtil;
-import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
+import com.moxa.dream.mate.logic.invoker.LogicInvoker;
 import com.moxa.dream.mate.util.MateUtil;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
-public class TenantQueryHandler extends AbstractHandler {
-    private TenantInvoker tenantInvoker;
+public class LogicQueryHandler extends AbstractHandler {
+    private LogicInvoker logicInvoker;
     private Deque<QueryStatement> queryDeque = new ArrayDeque<>();
 
-    public TenantQueryHandler(TenantInvoker tenantInvoker) {
-        this.tenantInvoker = tenantInvoker;
+    public LogicQueryHandler(LogicInvoker logicInvoker) {
+        this.logicInvoker = logicInvoker;
 
     }
 
@@ -59,12 +57,12 @@ public class TenantQueryHandler extends AbstractHandler {
             ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(assist, toSQL, invokerList, fromStatement.getMainTable(), true);
             if (tableScanInfo != null) {
                 String table = tableScanInfo.getTable();
-                if (tenantInvoker.isTenant(table)) {
-                    String tenantColumn = tenantInvoker.getTenantColumn();
+                if (logicInvoker.isLogicDelete(table)) {
+                    String logicColumn = logicInvoker.getLogicColumn();
                     ConditionStatement conditionStatement = new ConditionStatement();
-                    conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
+                    conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + logicColumn)).expr());
                     conditionStatement.setOper(new OperStatement.EQStatement());
-                    conditionStatement.setRight(InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn)));
+                    conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNegativeValue()));
                     QueryStatement queryStatement = queryDeque.peek();
                     WhereStatement whereStatement = queryStatement.getWhereStatement();
                     if (whereStatement == null) {
@@ -96,12 +94,12 @@ public class TenantQueryHandler extends AbstractHandler {
                 ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(assist, toSQL, invokerList, joinStatement.getJoinTable(), false);
                 if (tableScanInfo != null) {
                     String table = tableScanInfo.getTable();
-                    if (tenantInvoker.isTenant(table)) {
-                        String tenantColumn = tenantInvoker.getTenantColumn();
+                    if (logicInvoker.isLogicDelete(table)) {
+                        String logicColumn = logicInvoker.getLogicColumn();
                         ConditionStatement conditionStatement = new ConditionStatement();
-                        conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
+                        conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + logicColumn)).expr());
                         conditionStatement.setOper(new OperStatement.EQStatement());
-                        conditionStatement.setRight(InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn)));
+                        conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNegativeValue()));
                         Statement joinOnStatement = joinStatement.getOn();
                         BraceStatement braceStatement = new BraceStatement(joinOnStatement);
                         ConditionStatement joinConditionStatement = new ConditionStatement();

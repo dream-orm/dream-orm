@@ -1,4 +1,4 @@
-package com.moxa.dream.mate.filter.invoker;
+package com.moxa.dream.mate.block.invoker;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
@@ -9,7 +9,7 @@ import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.mate.filter.handler.ColumnFilterHandler;
+import com.moxa.dream.mate.block.handler.ColumnBlockHandler;
 import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.resource.ResourceUtil;
@@ -20,14 +20,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-public class ColumnFilterInvoker extends AbstractInvoker {
+public class ColumnBlockInvoker extends AbstractInvoker {
     private Set<String> filterSet;
 
-    public ColumnFilterInvoker() {
+    public ColumnBlockInvoker() {
         this("META-INF/keyword.txt");
     }
 
-    public ColumnFilterInvoker(String txt) {
+    public ColumnBlockInvoker(String txt) {
         InputStream inputStream = ResourceUtil.getResourceAsStream(txt);
         Set<String> filterSet = new LowHashSet();
         if (inputStream != null) {
@@ -52,7 +52,7 @@ public class ColumnFilterInvoker extends AbstractInvoker {
         this.filterSet = filterSet;
     }
 
-    public ColumnFilterInvoker(Set<String> filterSet) {
+    public ColumnBlockInvoker(Set<String> filterSet) {
         this.filterSet = filterSet;
     }
 
@@ -66,7 +66,7 @@ public class ColumnFilterInvoker extends AbstractInvoker {
 
     @Override
     protected Handler[] handler() {
-        return new Handler[]{new ColumnFilterHandler(this)};
+        return new Handler[]{new ColumnBlockHandler(this)};
     }
 
     public boolean filter(String column) {

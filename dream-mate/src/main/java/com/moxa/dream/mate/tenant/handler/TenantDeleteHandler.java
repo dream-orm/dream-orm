@@ -9,6 +9,7 @@ import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
+import com.moxa.dream.mate.util.MateUtil;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class TenantDeleteHandler extends AbstractHandler {
                 whereStatement.setCondition(conditionStatement);
                 deleteStatement.setWhere(whereStatement);
             } else {
-                tenantInvoker.appendWhere(whereStatement, conditionStatement);
+                MateUtil.appendWhere(whereStatement, conditionStatement);
             }
         }
         return statement;

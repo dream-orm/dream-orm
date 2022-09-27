@@ -4,7 +4,7 @@ import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.table.TableInfo;
 
 public interface PermissionHandler {
-    boolean isPermission(MethodInfo methodInfo, TableInfo tableInfo, int life);
+    boolean isPermissionInject(MethodInfo methodInfo, TableInfo tableInfo, int life);
 
     String getPermission(MethodInfo methodInfo, TableInfo tableInfo, String alias);
 
