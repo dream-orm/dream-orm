@@ -40,7 +40,7 @@ public class LogicQueryHandler extends AbstractHandler {
 
     @Override
     protected Handler[] handlerBound() {
-        return new Handler[]{new TenantFromHandler()};
+        return new Handler[]{new LogicFromHandler()};
     }
 
     @Override
@@ -49,8 +49,7 @@ public class LogicQueryHandler extends AbstractHandler {
         return sql;
     }
 
-    class TenantFromHandler extends AbstractHandler {
-
+    class LogicFromHandler extends AbstractHandler {
         @Override
         protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
             FromStatement fromStatement = (FromStatement) statement;

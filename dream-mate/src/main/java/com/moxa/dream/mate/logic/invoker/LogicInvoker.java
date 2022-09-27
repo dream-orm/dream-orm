@@ -5,7 +5,7 @@ import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
-import com.moxa.dream.antlr.smt.*;
+import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.mate.logic.handler.LogicDeleteHandler;
 import com.moxa.dream.mate.logic.handler.LogicQueryHandler;
@@ -68,15 +68,5 @@ public class LogicInvoker extends AbstractInvoker {
 
     public String getPositiveValue() {
         return logicHandler.getPositiveValue();
-    }
-
-    public void appendWhere(WhereStatement whereStatement, Statement tenantStatement) {
-        Statement condition = whereStatement.getCondition();
-        BraceStatement braceStatement = new BraceStatement(condition);
-        ConditionStatement conditionStatement = new ConditionStatement();
-        conditionStatement.setLeft(braceStatement);
-        conditionStatement.setOper(new OperStatement.ANDStatement());
-        conditionStatement.setRight(tenantStatement);
-        whereStatement.setCondition(conditionStatement);
     }
 }

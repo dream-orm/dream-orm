@@ -3,6 +3,7 @@ package com.moxa.dream.mate.logic.handler;
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.handler.AbstractHandler;
+import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
@@ -35,7 +36,7 @@ public class LogicUpdateHandler extends AbstractHandler {
                 whereStatement.setCondition(whereConditionStatement);
                 updateStatement.setWhere(whereStatement);
             } else {
-                MateUtil.appendWhere(whereStatement, whereStatement);
+                MateUtil.appendWhere(whereStatement, whereConditionStatement);
             }
             return updateStatement;
         }
@@ -46,5 +47,4 @@ public class LogicUpdateHandler extends AbstractHandler {
     protected boolean interest(Statement statement, Assist sqlAssist) {
         return statement instanceof UpdateStatement;
     }
-
 }

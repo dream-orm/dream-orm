@@ -4,6 +4,7 @@ import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.handler.AbstractHandler;
+import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
@@ -28,7 +29,6 @@ public class TenantUpdateHandler extends AbstractHandler {
         SymbolStatement symbolStatement = (SymbolStatement) tableStatement;
         String table = symbolStatement.getValue();
         if (tenantInvoker.isTenant(table)) {
-            removeTenantColumnIfExist(updateStatement);
             String tenantColumn = tenantInvoker.getTenantColumn();
             ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.LetterStatement(tenantColumn));
@@ -47,27 +47,45 @@ public class TenantUpdateHandler extends AbstractHandler {
         return statement;
     }
 
-    private void removeTenantColumnIfExist(UpdateStatement updateStatement) {
-        ListColumnStatement conditionList = (ListColumnStatement) updateStatement.getConditionList();
-        Statement[] columnList = conditionList.getColumnList();
-        List<Statement> statementList = new ArrayList<>();
-        for (Statement statement : columnList) {
-            ConditionStatement conditionStatement = (ConditionStatement) statement;
-            SymbolStatement leftStatement = (SymbolStatement) conditionStatement.getLeft();
-            String column = leftStatement.getValue();
-            if (!tenantInvoker.getTenantColumn().equalsIgnoreCase(column)) {
-                statementList.add(conditionStatement);
-            }
-        }
-        ListColumnStatement listColumnStatement = new ListColumnStatement(conditionList.getCut().getSymbol());
-        for (Statement statement : statementList) {
-            listColumnStatement.add(statement);
-        }
-        updateStatement.setConditionList(listColumnStatement);
+    @Override
+    protected Handler[] handlerBound() {
+        return new Handler[]{new ConditionHandler()};
     }
+
 
     @Override
     protected boolean interest(Statement statement, Assist sqlAssist) {
         return statement instanceof UpdateStatement;
+    }
+
+    class ConditionHandler extends AbstractHandler {
+        private boolean access = true;
+
+        @Override
+        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+            ConditionStatement conditionStatement = (ConditionStatement) statement;
+            Statement columnStatement = conditionStatement.getLeft();
+            if (columnStatement instanceof SymbolStatement) {
+                String column = ((SymbolStatement) columnStatement).getValue();
+                if (tenantInvoker.getTenantColumn().equalsIgnoreCase(column)) {
+                    return null;
+                }
+            }
+            return statement;
+        }
+
+        @Override
+        protected String handlerAfter(Assist assist, String sql, int life) throws InvokerException {
+            access=true;
+            return super.handlerAfter(assist, sql, life);
+        }
+
+        @Override
+        protected boolean interest(Statement statement, Assist sqlAssist) {
+            if (statement instanceof WhereStatement) {
+                access = false;
+            }
+            return access && statement instanceof ConditionStatement;
+        }
     }
 }
