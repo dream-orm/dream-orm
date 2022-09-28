@@ -24,6 +24,10 @@ public class PermissionGetInvoker extends AbstractInvoker {
     private MethodInfo methodInfo;
     private PermissionHandler permissionHandler;
 
+    public static String getName() {
+        return "dream-mate-permission-get";
+    }
+
     @Override
     public void init(Assist assist) {
         methodInfo = assist.getCustom(MethodInfo.class);

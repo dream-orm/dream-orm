@@ -25,6 +25,10 @@ public class LogicInvoker extends AbstractInvoker {
     private MethodInfo methodInfo;
     private LogicHandler logicHandler;
 
+    public static String getName() {
+        return "dream-mate-logic-delete";
+    }
+
     @Override
     public void init(Assist assist) {
         methodInfo = assist.getCustom(MethodInfo.class);
@@ -47,7 +51,6 @@ public class LogicInvoker extends AbstractInvoker {
     protected Handler[] handler() {
         return new Handler[]{new LogicQueryHandler(this), new LogicDeleteHandler(this), new LogicUpdateHandler(this)};
     }
-
 
     public boolean isLogicDelete(String table) {
         TableInfo tableInfo = tableFactory.getTableInfo(table);

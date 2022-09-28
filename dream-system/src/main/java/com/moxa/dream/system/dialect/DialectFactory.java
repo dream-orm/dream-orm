@@ -11,8 +11,6 @@ public interface DialectFactory {
 
     }
 
-    void addInvokerFactory(InvokerFactory invokerFactory);
-
     MappedStatement compile(MethodInfo methodInfo, Object arg);
 
     DbType getDbType();

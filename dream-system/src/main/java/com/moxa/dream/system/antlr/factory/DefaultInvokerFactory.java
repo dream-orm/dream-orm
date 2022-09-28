@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DefaultInvokerFactory implements InvokerFactory {
-    public static final String NAMESPACE = "default";
     private Map<String, Invoker> invokerMap = new HashMap<>();
 
     public void addInvoker(String function, Invoker invoker) {
@@ -21,6 +20,6 @@ public class DefaultInvokerFactory implements InvokerFactory {
 
     @Override
     public String namespace() {
-        return NAMESPACE;
+        return null;
     }
 }

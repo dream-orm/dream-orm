@@ -10,8 +10,8 @@ import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.InvokerUtil;
+import com.moxa.dream.mate.permission.invoker.PermissionGetInvoker;
 import com.moxa.dream.mate.permission.invoker.PermissionInjectInvoker;
-import com.moxa.dream.mate.permission.invoker.PermissionInvokerFactory;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -59,8 +59,8 @@ public class PermissionQueryHandler extends AbstractHandler {
                 if (permissionInjectInvoker.isPermissionInject(table, life)) {
                     QueryStatement queryStatement = queryDeque.peek();
                     WhereStatement whereStatement = queryStatement.getWhereStatement();
-                    InvokerStatement invokerStatement = InvokerUtil.wrapperInvoker(PermissionInvokerFactory.NAMESPACE,
-                            PermissionInvokerFactory.PERMISSION_GET,
+                    InvokerStatement invokerStatement = InvokerUtil.wrapperInvoker(null,
+                            PermissionGetInvoker.getName(),
                             ",",
                             new SymbolStatement.LetterStatement(tableScanInfo.getTable()),
                             new SymbolStatement.LetterStatement(tableScanInfo.getAlias()));

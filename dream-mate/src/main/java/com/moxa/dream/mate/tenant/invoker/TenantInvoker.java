@@ -26,6 +26,10 @@ public class TenantInvoker extends AbstractInvoker {
     private MethodInfo methodInfo;
     private TenantHandler tenantHandler;
 
+    public static String getName() {
+        return "dream-mate-tenant";
+    }
+
     @Override
     public void init(Assist assist) {
         methodInfo = assist.getCustom(MethodInfo.class);
@@ -48,7 +52,6 @@ public class TenantInvoker extends AbstractInvoker {
     protected Handler[] handler() {
         return new Handler[]{new TenantQueryHandler(this), new TenantInsertHandler(this), new TenantUpdateHandler(this), new TenantDeleteHandler(this)};
     }
-
 
     public boolean isTenant(String table) {
         TableInfo tableInfo = tableFactory.getTableInfo(table);
