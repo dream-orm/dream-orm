@@ -5,6 +5,7 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,20 +15,21 @@ public class Assist {
     private Map<String, InvokerFactory> invokerFactoryMap;
     private Map<String, Invoker> sqlInvokerMap;
 
-    public Assist(List<InvokerFactory> invokerFactoryList, Map<Class, Object> customObjMap) {
+    public Assist(Collection<InvokerFactory> invokerFactoryList, Map<Class, Object> customObjMap) {
         setInvokerFactoryList(invokerFactoryList);
         this.customObjMap = customObjMap;
     }
 
-    public void setInvokerFactoryList(List<InvokerFactory> invokerFactoryList) {
+    public void setInvokerFactoryList(Collection<InvokerFactory> invokerFactoryList) {
         if (!ObjectUtil.isNull(invokerFactoryList)) {
             invokerFactoryMap = new HashMap<>();
             sqlInvokerMap = new HashMap<>();
             for (InvokerFactory invokerFactory : invokerFactoryList) {
-                if (invokerFactoryMap.containsKey(invokerFactory.namespace())) {
+                String namespace = invokerFactory.namespace();
+                if (invokerFactoryMap.containsKey(namespace)) {
                     throw new DreamRunTimeException("命名空间'" + invokerFactory.namespace() + "已经存在");
                 }
-                invokerFactoryMap.put(invokerFactory.namespace(), invokerFactory);
+                invokerFactoryMap.put(namespace, invokerFactory);
             }
         }
     }
@@ -42,7 +44,12 @@ public class Assist {
                 for (InvokerFactory invokerFactory : invokerFactoryMap.values()) {
                     invoker = invokerFactory.create(function);
                     if (invoker != null) {
-                        invokerKey = function + ":" + invokerFactory.namespace();
+                        namespace = invokerFactory.namespace();
+                        if (namespace == null) {
+                            invokerKey = function;
+                        } else {
+                            invokerKey = function + ":" + namespace;
+                        }
                         sqlInvokerMap.put(function, invoker);
                         break;
                     }
@@ -50,7 +57,7 @@ public class Assist {
             } else
                 return invoker;
         } else {
-            invokerKey = function + ":" + namespace.toLowerCase();
+            invokerKey = function + ":" + namespace;
             invoker = sqlInvokerMap.get(invokerKey);
             if (invoker == null) {
                 InvokerFactory invokerFactory = invokerFactoryMap.get(namespace);

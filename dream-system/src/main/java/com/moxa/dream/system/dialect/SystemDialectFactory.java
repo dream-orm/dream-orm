@@ -36,17 +36,20 @@ import java.util.stream.Collectors;
 public class SystemDialectFactory implements DialectFactory {
     protected DbType dbType = DbType.AUTO;
     protected ToSQL toSQL;
-    protected List<InvokerFactory> invokerFactoryList = new ArrayList<>();
+    protected Map<Class<? extends InvokerFactory>, InvokerFactory> invokerFactoryMap = new HashMap();
 
     public SystemDialectFactory() {
-        addInvokerFactory(new AntlrInvokerFactory());
-        addInvokerFactory(new SystemInvokerFactory());
-        addInvokerFactory(new DefaultInvokerFactory());
+        invokerFactoryMap.put(AntlrInvokerFactory.class, new AntlrInvokerFactory());
+        invokerFactoryMap.put(SystemInvokerFactory.class, new SystemInvokerFactory());
+        invokerFactoryMap.put(DefaultInvokerFactory.class, new DefaultInvokerFactory());
     }
 
-    @Override
     public void addInvokerFactory(InvokerFactory invokerFactory) {
-        invokerFactoryList.add(invokerFactory);
+        invokerFactoryMap.put(invokerFactory.getClass(), invokerFactory);
+    }
+
+    public <T extends InvokerFactory> T getInvokerFactory(Class<T> invokerFactoryType) {
+        return (T) invokerFactoryMap.get(invokerFactoryType);
     }
 
     @Override
@@ -148,7 +151,7 @@ public class SystemDialectFactory implements DialectFactory {
             arg = new HashMap<>();
         }
         customMap.put(ObjectWrapper.class, ObjectWrapper.wrapper(arg));
-        return new Assist(invokerFactoryList, customMap);
+        return new Assist(invokerFactoryMap.values(), customMap);
     }
 
     protected ParamType getParamType(Configuration configuration, ScanInvoker.ScanInfo scanInfo, Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap, $Invoker.ParamInfo paramInfo) {

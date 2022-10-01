@@ -56,6 +56,10 @@ public class ColumnBlockInvoker extends AbstractInvoker {
         this.filterSet = filterSet;
     }
 
+    public static String getName() {
+        return "dream-mate-column-block";
+    }
+
     @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
         Statement statement = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList()[0];

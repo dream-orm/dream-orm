@@ -12,7 +12,6 @@ import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
 import com.moxa.dream.mate.util.MateUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TenantUpdateHandler extends AbstractHandler {
@@ -76,7 +75,7 @@ public class TenantUpdateHandler extends AbstractHandler {
 
         @Override
         protected String handlerAfter(Assist assist, String sql, int life) throws InvokerException {
-            access=true;
+            access = true;
             return super.handlerAfter(assist, sql, life);
         }
 

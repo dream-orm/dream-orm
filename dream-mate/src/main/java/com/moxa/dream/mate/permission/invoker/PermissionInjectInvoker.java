@@ -23,6 +23,10 @@ public class PermissionInjectInvoker extends AbstractInvoker {
     private MethodInfo methodInfo;
     private PermissionHandler permissionHandler;
 
+    public static String getName() {
+        return "dream-mate-permission-inject";
+    }
+
     @Override
     public void init(Assist assist) {
         methodInfo = assist.getCustom(MethodInfo.class);
@@ -45,7 +49,6 @@ public class PermissionInjectInvoker extends AbstractInvoker {
     protected Handler[] handler() {
         return new Handler[]{new PermissionQueryHandler(this)};
     }
-
 
     public boolean isPermissionInject(String table, int life) {
         TableInfo tableInfo = tableFactory.getTableInfo(table);
