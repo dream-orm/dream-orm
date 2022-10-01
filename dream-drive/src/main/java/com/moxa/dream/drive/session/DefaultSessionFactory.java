@@ -3,7 +3,7 @@ package com.moxa.dream.drive.session;
 import com.moxa.dream.drive.executor.CustomCacheExecutor;
 import com.moxa.dream.drive.executor.SessionCacheExecutor;
 import com.moxa.dream.system.cache.Cache;
-import com.moxa.dream.system.cache.factory.CacheFactory;
+import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.executor.JdbcExecutor;

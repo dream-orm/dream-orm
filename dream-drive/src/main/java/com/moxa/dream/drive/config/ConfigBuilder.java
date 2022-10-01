@@ -11,8 +11,8 @@ import com.moxa.dream.drive.xml.builder.config.ConfigurationBuilder;
 import com.moxa.dream.drive.xml.moudle.XmlCallback;
 import com.moxa.dream.drive.xml.moudle.XmlHandler;
 import com.moxa.dream.drive.xml.moudle.XmlParser;
-import com.moxa.dream.system.cache.factory.CacheFactory;
-import com.moxa.dream.system.cache.factory.MemoryCacheFactory;
+import com.moxa.dream.system.cache.CacheFactory;
+import com.moxa.dream.system.cache.DefaultCacheFactory;
 import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.compile.DefaultCompileFactory;
 import com.moxa.dream.system.config.Configuration;
@@ -64,7 +64,7 @@ public class ConfigBuilder {
         DefaultConfig defaultConfig = new DefaultConfig();
         defaultConfig
                 .setAliasFactory(new DefaultAliasFactory())
-                .setCacheFactory(new MemoryCacheFactory())
+                .setCacheFactory(new DefaultCacheFactory())
                 .setMapperFactory(new DefaultMapperFactory())
                 .setTableFactory(new DefaultTableFactory())
                 .setCompileFactory(new DefaultCompileFactory())

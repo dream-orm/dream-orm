@@ -1,6 +1,6 @@
 package com.moxa.dream.system.config;
 
-import com.moxa.dream.system.cache.factory.CacheFactory;
+import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.datasource.DataSourceFactory;
