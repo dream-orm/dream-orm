@@ -1,7 +1,7 @@
 package com.moxa.dream.mate.tenant.interceptor;
 
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.plugin.interceptor.Interceptor;
 import com.moxa.dream.system.plugin.invocation.Invocation;
 import com.moxa.dream.util.exception.DreamRunTimeException;

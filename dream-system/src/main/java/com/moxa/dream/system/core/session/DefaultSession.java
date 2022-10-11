@@ -2,10 +2,10 @@ package com.moxa.dream.system.core.session;
 
 import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MappedStatement;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.dialect.DialectFactory;
-import com.moxa.dream.system.mapped.MappedStatement;
-import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.mapper.DefaultMapperInvokeFactory;
 import com.moxa.dream.system.mapper.MapperFactory;
 import com.moxa.dream.system.mapper.MapperInvokeFactory;

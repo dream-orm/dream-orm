@@ -1,7 +1,7 @@
 package com.moxa.dream.system.mapper;
 
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.system.mapped.MethodInfo;
 
 import java.util.Map;
 

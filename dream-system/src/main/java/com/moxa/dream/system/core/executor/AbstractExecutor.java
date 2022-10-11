@@ -1,6 +1,8 @@
 package com.moxa.dream.system.core.executor;
 
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MappedStatement;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.executorhandler.ExecutorHandler;
 import com.moxa.dream.system.core.listener.*;
@@ -9,8 +11,6 @@ import com.moxa.dream.system.core.resultsethandler.DefaultResultSetHandler;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
-import com.moxa.dream.system.mapped.MappedStatement;
-import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.transaction.Transaction;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;

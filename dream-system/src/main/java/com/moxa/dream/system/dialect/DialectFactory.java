@@ -1,8 +1,7 @@
 package com.moxa.dream.system.dialect;
 
-import com.moxa.dream.antlr.factory.InvokerFactory;
-import com.moxa.dream.system.mapped.MappedStatement;
-import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.system.config.MappedStatement;
+import com.moxa.dream.system.config.MethodInfo;
 
 import java.util.Properties;
 

@@ -5,7 +5,7 @@ import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.util.InvokerUtil;
-import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.system.config.MethodInfo;
 
 public class ScanInject implements Inject {
     @Override

@@ -1,5 +1,7 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.system.config.Page;
+
 import java.util.List;
 
 public interface TemplateMapper {
@@ -7,6 +9,10 @@ public interface TemplateMapper {
     <T> T selectById(Class<T> type, Object id);
 
     <T> List<T> selectByIds(Class<T> type, List<Object> idList);
+
+    <T> List<T> selectList(Class<T> type, Object conditionObject);
+
+    <T> List<T> selectPage(Class<T> type, Object conditionObject, Page page);
 
     int updateById(Object view);
 

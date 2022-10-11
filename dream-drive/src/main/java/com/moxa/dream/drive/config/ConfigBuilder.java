@@ -2,8 +2,6 @@ package com.moxa.dream.drive.config;
 
 import com.moxa.dream.drive.alias.AliasFactory;
 import com.moxa.dream.drive.alias.DefaultAliasFactory;
-import com.moxa.dream.drive.dialect.DefaultDialectFactory;
-import com.moxa.dream.drive.inject.PageInjectFactory;
 import com.moxa.dream.drive.listener.DefaultListenerFactory;
 import com.moxa.dream.drive.mapper.DefaultMapperFactory;
 import com.moxa.dream.drive.xml.builder.XMLBuilder;
@@ -19,8 +17,10 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.datasource.DataSourceFactory;
+import com.moxa.dream.system.dialect.DefaultDialectFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.inject.Inject;
+import com.moxa.dream.system.inject.factory.DefaultInjectFactory;
 import com.moxa.dream.system.inject.factory.InjectFactory;
 import com.moxa.dream.system.mapper.MapperFactory;
 import com.moxa.dream.system.plugin.factory.JavaPluginFactory;
@@ -68,7 +68,7 @@ public class ConfigBuilder {
                 .setMapperFactory(new DefaultMapperFactory())
                 .setTableFactory(new DefaultTableFactory())
                 .setCompileFactory(new DefaultCompileFactory())
-                .setInjectFactory(new PageInjectFactory())
+                .setInjectFactory(new DefaultInjectFactory())
                 .setDialectFactory(new DefaultDialectFactory())
                 .setTransactionFactory(new JdbcTransactionFactory())
                 .setPluginFactory(new JavaPluginFactory())

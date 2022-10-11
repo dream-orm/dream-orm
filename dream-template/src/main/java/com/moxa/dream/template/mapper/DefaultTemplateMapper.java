@@ -1,5 +1,6 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.system.config.Page;
 import com.moxa.dream.system.core.session.Session;
 
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.List;
 public class DefaultTemplateMapper implements TemplateMapper {
     private SqlMapper selectByIdSqlMapper;
     private SqlMapper selectByIdsSqlMapper;
+    private SqlMapper selectListSqlMapper;
+    private SqlMapper selectPageSqlMapper;
     private SqlMapper deleteByIdSqlMapper;
     private SqlMapper deleteByIdsSqlMapper;
     private SqlMapper existByIdSqlMapper;
@@ -19,6 +22,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     public DefaultTemplateMapper(Session session) {
         selectByIdSqlMapper = new SelectByIdSqlMapper(session);
         selectByIdsSqlMapper = new SelectByIdsSqlMapper(session);
+        selectListSqlMapper = new SelectListSqlMapper(session);
         deleteByIdSqlMapper = new DeleteByIdSqlMapper(session);
         deleteByIdsSqlMapper = new DeleteByIdsSqlMapper(session);
         existByIdSqlMapper = new ExistByIdSqlMapper(session);
@@ -37,6 +41,16 @@ public class DefaultTemplateMapper implements TemplateMapper {
     @Override
     public <T> List<T> selectByIds(Class<T> type, List<Object> idList) {
         return (List<T>) selectByIdsSqlMapper.execute(type, idList);
+    }
+
+    @Override
+    public <T> List<T> selectList(Class<T> type, Object conditionObject) {
+        return (List<T>) selectListSqlMapper.execute(type, conditionObject);
+    }
+
+    @Override
+    public <T> List<T> selectPage(Class<T> type, Object conditionObject, Page page) {
+        return (List<T>) selectPageSqlMapper.execute(type, conditionObject, page);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.moxa.dream.system.core.statementhandler;
 
-import com.moxa.dream.system.mapped.MappedParam;
-import com.moxa.dream.system.mapped.MappedStatement;
+import com.moxa.dream.system.config.MappedParam;
+import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.sql.*;

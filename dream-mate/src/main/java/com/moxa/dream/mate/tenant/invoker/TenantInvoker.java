@@ -14,7 +14,7 @@ import com.moxa.dream.mate.tenant.handler.TenantUpdateHandler;
 import com.moxa.dream.mate.tenant.interceptor.TenantHandler;
 import com.moxa.dream.mate.tenant.interceptor.TenantInterceptor;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;

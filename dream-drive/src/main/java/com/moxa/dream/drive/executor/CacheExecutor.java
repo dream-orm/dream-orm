@@ -1,9 +1,9 @@
 package com.moxa.dream.drive.executor;
 
 
+import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.session.SessionFactory;
-import com.moxa.dream.system.mapped.MappedStatement;
 
 import java.sql.SQLException;
 import java.sql.Statement;

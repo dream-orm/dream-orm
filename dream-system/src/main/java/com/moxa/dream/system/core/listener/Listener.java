@@ -1,6 +1,6 @@
 package com.moxa.dream.system.core.listener;
 
-import com.moxa.dream.system.mapped.MappedStatement;
+import com.moxa.dream.system.config.MappedStatement;
 
 public interface Listener {
     boolean before(MappedStatement mappedStatement);

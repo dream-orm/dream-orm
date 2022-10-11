@@ -14,9 +14,7 @@ import java.util.List;
 
 
 public class QueryScanHandler extends AbstractHandler {
-    //From监控处理器
     private final FromScanHandler fromScanHandler = new FromScanHandler(this);
-    //Join监控处理器
     private final JoinScanHandler joinScanHandler = new JoinScanHandler(this);
     private final ScanInvoker.ScanInfo scanInfo;
 
@@ -24,11 +22,11 @@ public class QueryScanHandler extends AbstractHandler {
         this.scanInfo = scanInfo;
     }
 
-    //处理之前操作
     @Override
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
-        if (Command.NONE == scanInfo.getCommand())
+        if (Command.NONE == scanInfo.getCommand()) {
             scanInfo.setCommand(Command.QUERY);
+        }
         return statement;
     }
 

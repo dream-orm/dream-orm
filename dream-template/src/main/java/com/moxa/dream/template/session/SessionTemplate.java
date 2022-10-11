@@ -1,9 +1,9 @@
 package com.moxa.dream.template.session;
 
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.core.session.SessionFactory;
-import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.mapper.DefaultMapperInvokeFactory;
 import com.moxa.dream.system.mapper.MapperFactory;
 import com.moxa.dream.system.mapper.MapperInvokeFactory;

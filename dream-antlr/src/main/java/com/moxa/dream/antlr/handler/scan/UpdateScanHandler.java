@@ -23,8 +23,7 @@ public class UpdateScanHandler extends AbstractHandler {
 
     @Override
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
-        if (Command.NONE == scanInfo.getCommand())
-            scanInfo.setCommand(Command.UPDATE);
+        scanInfo.setCommand(Command.UPDATE);
         UpdateStatement updateStatement = (UpdateStatement) statement;
         Statement tableStatement = updateStatement.getTable();
         String table = null;

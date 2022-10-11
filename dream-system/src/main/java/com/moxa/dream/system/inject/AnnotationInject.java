@@ -1,6 +1,6 @@
 package com.moxa.dream.system.inject;
 
-import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.annotation.Annotation;

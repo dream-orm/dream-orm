@@ -13,7 +13,7 @@ import com.moxa.dream.mate.logic.handler.LogicUpdateHandler;
 import com.moxa.dream.mate.logic.interceptor.LogicHandler;
 import com.moxa.dream.mate.logic.interceptor.LogicInterceptor;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;

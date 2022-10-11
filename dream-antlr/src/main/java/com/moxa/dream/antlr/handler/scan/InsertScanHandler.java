@@ -22,8 +22,7 @@ public class InsertScanHandler extends AbstractHandler {
 
     @Override
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
-        if (Command.NONE == scanInfo.getCommand())
-            scanInfo.setCommand(Command.INSERT);
+        scanInfo.setCommand(Command.INSERT);
         InsertStatement insertStatement = (InsertStatement) statement;
         scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement) insertStatement.getTable()).getValue(), null, true));
         return statement;

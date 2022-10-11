@@ -1,8 +1,8 @@
 package com.moxa.dream.drive.listener;
 
+import com.moxa.dream.system.config.MappedParam;
+import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.listener.*;
-import com.moxa.dream.system.mapped.MappedParam;
-import com.moxa.dream.system.mapped.MappedStatement;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.ArrayList;

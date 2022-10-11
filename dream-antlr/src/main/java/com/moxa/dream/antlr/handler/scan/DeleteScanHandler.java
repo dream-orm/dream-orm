@@ -22,8 +22,7 @@ public class DeleteScanHandler extends AbstractHandler {
 
     @Override
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
-        if (Command.NONE == scanInfo.getCommand())
-            scanInfo.setCommand(Command.UPDATE);
+        scanInfo.setCommand(Command.UPDATE);
         DeleteStatement deleteStatement = (DeleteStatement) statement;
         scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement) deleteStatement.getTable()).getValue(), null, true));
         return statement;

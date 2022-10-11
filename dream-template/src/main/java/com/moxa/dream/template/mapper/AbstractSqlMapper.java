@@ -1,12 +1,11 @@
 package com.moxa.dream.template.mapper;
 
-import com.moxa.dream.system.annotation.Table;
-import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.system.mapped.MethodInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
+import com.moxa.dream.template.util.TemplateUtil;
 import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.common.ObjectUtil;
 
@@ -23,7 +22,11 @@ public abstract class AbstractSqlMapper implements SqlMapper {
     }
 
     @Override
-    public Object execute(Class<?> type, Object arg) {
+    public Object execute(Class<?> type, Object... args) {
+        return execute(type, args[0]);
+    }
+
+    protected Object execute(Class<?> type, Object arg) {
         MethodInfo methodInfo = methodInfoMap.get(type);
         if (methodInfo == null) {
             synchronized (this) {
@@ -59,12 +62,6 @@ public abstract class AbstractSqlMapper implements SqlMapper {
     protected abstract MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type);
 
     protected String getTable(Class<?> type) {
-        if (type.isAnnotationPresent(View.class)) {
-            return type.getDeclaredAnnotation(View.class).value();
-        }
-        if (type.isAnnotationPresent(Table.class)) {
-            return type.getDeclaredAnnotation(Table.class).value();
-        }
-        return null;
+        return TemplateUtil.getTable(type);
     }
 }

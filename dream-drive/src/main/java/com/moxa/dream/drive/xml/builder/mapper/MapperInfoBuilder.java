@@ -1,14 +1,14 @@
 package com.moxa.dream.drive.xml.builder.mapper;
 
-import com.moxa.dream.drive.action.MapperAction;
-import com.moxa.dream.drive.action.ServiceAction;
-import com.moxa.dream.drive.action.SqlAction;
 import com.moxa.dream.drive.xml.builder.XMLBuilder;
 import com.moxa.dream.drive.xml.moudle.XmlConstant;
 import com.moxa.dream.drive.xml.moudle.XmlHandler;
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.action.Action;
-import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.system.core.action.MapperAction;
+import com.moxa.dream.system.core.action.ServiceAction;
+import com.moxa.dream.system.core.action.SqlAction;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import org.xml.sax.Attributes;

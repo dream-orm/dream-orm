@@ -7,7 +7,7 @@ import com.moxa.dream.drive.xml.moudle.XmlCallback;
 import com.moxa.dream.drive.xml.moudle.XmlHandler;
 import com.moxa.dream.drive.xml.moudle.XmlParser;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.resource.ResourceUtil;
 import org.xml.sax.InputSource;

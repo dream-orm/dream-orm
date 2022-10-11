@@ -1,6 +1,6 @@
 package com.moxa.dream.mate.logic.interceptor;
 
-import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.table.TableInfo;
 
 public interface LogicHandler {

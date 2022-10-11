@@ -1,7 +1,7 @@
 package com.moxa.dream.system.core.session;
 
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.system.config.MethodInfo;
 
 import java.io.Closeable;
 import java.util.Map;

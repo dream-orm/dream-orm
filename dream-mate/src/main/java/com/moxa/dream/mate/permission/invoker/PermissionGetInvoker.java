@@ -12,7 +12,7 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.mate.permission.interceptor.PermissionHandler;
 import com.moxa.dream.mate.permission.interceptor.PermissionInterceptor;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.mapped.MethodInfo;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
