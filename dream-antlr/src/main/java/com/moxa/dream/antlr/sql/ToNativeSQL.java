@@ -200,7 +200,12 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(WhereStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
-        return " WHERE " + toStr(statement.getCondition(), assist, invokerList);
+        String condition = toStr(statement.getCondition(), assist, invokerList);
+        if (ObjectUtil.isNull(condition)) {
+            return "";
+        } else {
+            return " WHERE " + condition;
+        }
     }
 
     @Override

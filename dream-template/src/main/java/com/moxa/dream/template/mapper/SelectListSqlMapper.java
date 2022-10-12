@@ -44,7 +44,6 @@ public class SelectListSqlMapper implements SqlMapper {
             synchronized (this) {
                 methodInfo = methodInfoMap.get(keyName);
                 if (methodInfo == null) {
-                    String table = getTable(type);
                     Configuration configuration = this.session.getConfiguration();
                     TableFactory tableFactory = configuration.getTableFactory();
                     methodInfo = getMethodInfo(configuration, tableFactory, type, arg);
@@ -137,7 +136,7 @@ public class SelectListSqlMapper implements SqlMapper {
                     TableInfo tableInfo = tableFactory.getTableInfo(table);
                     String fieldName = tableInfo.getFieldName(property);
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-                    String conditionSql = condition.getCondition(table, columnInfo.getColumn(), property);
+                    String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), property);
                     conditionList.add(conditionSql);
                 } else {
                     List<TableInfo> tableInfoList = tableSet.stream().map(tab -> {
@@ -160,7 +159,7 @@ public class SelectListSqlMapper implements SqlMapper {
                     TableInfo tableInfo = tableInfoList.get(0);
                     String fieldName = tableInfo.getFieldName(property);
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-                    String conditionSql = condition.getCondition(table, columnInfo.getColumn(), property);
+                    String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), property);
                     conditionList.add(conditionSql);
                 }
             }
