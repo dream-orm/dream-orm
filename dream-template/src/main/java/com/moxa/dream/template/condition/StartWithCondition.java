@@ -7,6 +7,6 @@ public class StartWithCondition implements Condition {
     private final String param="param";
     @Override
     public String getCondition(String table, String column, String field) {
-        return table + "." + field + " like concat('%',"+ InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE,AntlrInvokerFactory.$,",",param+"."+field)+")";
+        return table + "." + column + " like concat('%',"+ InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE,AntlrInvokerFactory.$,",",param+"."+field)+")";
     }
 }

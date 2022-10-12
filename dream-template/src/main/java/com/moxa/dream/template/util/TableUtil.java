@@ -1,5 +1,6 @@
 package com.moxa.dream.template.util;
 
+import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.annotation.Table;
 import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.util.common.LowHashSet;
@@ -36,7 +37,9 @@ class TableUtil {
                 List<Field> fieldList = ReflectUtil.findField(type);
                 if (!ObjectUtil.isNull(fieldList)) {
                     for (Field field : fieldList) {
-                        getTableSet(ReflectUtil.getColType(field.getGenericType()), tableSet);
+                        if(!field.isAnnotationPresent(Ignore.class)) {
+                            getTableSet(ReflectUtil.getColType(field.getGenericType()), tableSet);
+                        }
                     }
                 }
             } else {

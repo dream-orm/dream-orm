@@ -23,6 +23,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
         selectByIdSqlMapper = new SelectByIdSqlMapper(session);
         selectByIdsSqlMapper = new SelectByIdsSqlMapper(session);
         selectListSqlMapper = new SelectListSqlMapper(session);
+        selectPageSqlMapper = new SelectPageSqlMapper(session);
         deleteByIdSqlMapper = new DeleteByIdSqlMapper(session);
         deleteByIdsSqlMapper = new DeleteByIdsSqlMapper(session);
         existByIdSqlMapper = new ExistByIdSqlMapper(session);
