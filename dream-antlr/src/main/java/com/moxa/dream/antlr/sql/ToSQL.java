@@ -540,7 +540,7 @@ public abstract class ToSQL {
         }
         if (!ObjectUtil.isNull(handlerQueue)) {
             while (!handlerQueue.isEmpty()) {
-                sql = handlerQueue.poll().handlerAfter(assist, sql);
+                sql = handlerQueue.poll().handlerAfter(statement, assist, sql);
             }
             return sql;
         }

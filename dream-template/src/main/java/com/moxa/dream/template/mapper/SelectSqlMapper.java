@@ -1,22 +1,14 @@
 package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.antlr.util.InvokerUtil;
-import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
-import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.template.util.TemplateUtil;
-import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.reflect.ReflectUtil;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 public abstract class SelectSqlMapper extends AbstractSqlMapper {

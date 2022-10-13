@@ -57,7 +57,7 @@ public class ColumnBlockInvoker extends AbstractInvoker {
     }
 
     public static String getName() {
-        return "dream-mate-column-block";
+        return "dream_mate_column_block";
     }
 
     @Override

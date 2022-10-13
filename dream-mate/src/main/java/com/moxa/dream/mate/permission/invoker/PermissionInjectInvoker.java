@@ -24,7 +24,7 @@ public class PermissionInjectInvoker extends AbstractInvoker {
     private PermissionHandler permissionHandler;
 
     public static String getName() {
-        return "dream-mate-permission-inject";
+        return "dream_mate_permission_inject";
     }
 
     @Override

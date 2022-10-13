@@ -37,7 +37,7 @@ class TableUtil {
                 List<Field> fieldList = ReflectUtil.findField(type);
                 if (!ObjectUtil.isNull(fieldList)) {
                     for (Field field : fieldList) {
-                        if(!field.isAnnotationPresent(Ignore.class)) {
+                        if (!field.isAnnotationPresent(Ignore.class)) {
                             getTableSet(ReflectUtil.getColType(field.getGenericType()), tableSet);
                         }
                     }

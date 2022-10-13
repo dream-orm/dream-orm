@@ -25,7 +25,7 @@ public class PermissionGetInvoker extends AbstractInvoker {
     private PermissionHandler permissionHandler;
 
     public static String getName() {
-        return "dream-mate-permission-get";
+        return "dream_mate_permission_get";
     }
 
     @Override

@@ -74,9 +74,9 @@ public class TenantUpdateHandler extends AbstractHandler {
         }
 
         @Override
-        protected String handlerAfter(Assist assist, String sql, int life) throws InvokerException {
+        protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
             access = true;
-            return super.handlerAfter(assist, sql, life);
+            return super.handlerAfter(statement, assist, sql, life);
         }
 
         @Override

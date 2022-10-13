@@ -3,13 +3,9 @@ package com.moxa.dream.antlr.handler.scan;
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.handler.AbstractHandler;
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.antlr.sql.ToSQL;
-
-import java.util.List;
 
 public class InvokerScanHandler extends AbstractHandler {
     private final ScanInvoker.ScanInfo scanInfo;
@@ -19,9 +15,11 @@ public class InvokerScanHandler extends AbstractHandler {
     }
 
     @Override
-    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
-        scanInfo.add((InvokerStatement) statement);
-        return statement;
+    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
+        if (statement.getParentStatement() != null) {
+            scanInfo.add((InvokerStatement) statement);
+        }
+        return super.handlerAfter(statement, assist, sql, life);
     }
 
     @Override

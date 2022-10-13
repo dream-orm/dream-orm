@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SelectPageSqlMapper extends SelectListSqlMapper {
-    private final String PARAM="param";
-    private final String PAGE="page";
+    private final String PARAM = "param";
+    private final String PAGE = "page";
     private Map<String, MethodInfo> methodInfoMap = new HashMap<>();
 
     public SelectPageSqlMapper(Session session) {
@@ -39,7 +39,7 @@ public class SelectPageSqlMapper extends SelectListSqlMapper {
                     Configuration configuration = this.session.getConfiguration();
                     TableFactory tableFactory = configuration.getTableFactory();
                     methodInfo = getMethodInfo(configuration, tableFactory, type, arg);
-                    methodInfo.set(PageQuery.class,new PageQuery(){
+                    methodInfo.set(PageQuery.class, new PageQuery() {
                         @Override
                         public Class<? extends Annotation> annotationType() {
                             return PageQuery.class;
@@ -60,13 +60,13 @@ public class SelectPageSqlMapper extends SelectListSqlMapper {
                 }
             }
         }
-        return session.execute(methodInfo, wrapArg(arg,page));
+        return session.execute(methodInfo, wrapArg(arg, page));
     }
 
-    protected Map<String, Object> wrapArg(Object arg,Page page) {
-        Map<String,Object>paramMap=new HashMap<>();
-        paramMap.put(PARAM,arg);
-        paramMap.put(PAGE,page);
+    protected Map<String, Object> wrapArg(Object arg, Page page) {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put(PARAM, arg);
+        paramMap.put(PAGE, page);
         return paramMap;
     }
 }

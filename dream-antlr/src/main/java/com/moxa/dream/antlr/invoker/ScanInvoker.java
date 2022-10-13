@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 public class ScanInvoker extends AbstractInvoker {
@@ -57,10 +56,7 @@ public class ScanInvoker extends AbstractInvoker {
         PackageStatement packageStatement = (PackageStatement) parentStatement;
         packageStatement.setValue(ScanInfo.class, scanInfo);
         invokerStatement.replaceWith(columnList[0]);
-        List<InvokerStatement> invokerStatementList = scanInfo.getInvokerStatementList()
-                .stream()
-                .filter(invoker -> invoker.getParentStatement() != null)
-                .collect(Collectors.toList());
+        List<InvokerStatement> invokerStatementList = scanInfo.getInvokerStatementList();
         if (!ObjectUtil.isNull(invokerStatementList)) {
             int i = 0;
             for (; i < invokerStatementList.size(); i++) {

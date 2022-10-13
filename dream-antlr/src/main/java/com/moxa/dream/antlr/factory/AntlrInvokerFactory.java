@@ -5,9 +5,6 @@ import com.moxa.dream.antlr.invoker.*;
 public class AntlrInvokerFactory implements InvokerFactory {
     public static final String NAMESPACE = "antlr";
     public static final String SCAN = "scan";
-    public static final String WHERE = "where";
-    public static final String LIMIT = "limit";
-    public static final String OFFSET = "offset";
     public static final String $ = "$";
     public static final String REP = "rep";
     public static final String NON = "non";

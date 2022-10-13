@@ -26,7 +26,7 @@ public class LogicInvoker extends AbstractInvoker {
     private LogicHandler logicHandler;
 
     public static String getName() {
-        return "dream-mate-logic-delete";
+        return "dream_mate_logic_delete";
     }
 
     @Override

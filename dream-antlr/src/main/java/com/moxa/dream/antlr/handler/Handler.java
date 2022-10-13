@@ -13,6 +13,6 @@ public interface Handler {
 
     Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, Queue<Handler> handlerQueue, List<Invoker> invokerList) throws InvokerException;
 
-    String handlerAfter(Assist assist, String sql) throws InvokerException;
+    String handlerAfter(Statement statement, Assist assist, String sql) throws InvokerException;
 
 }

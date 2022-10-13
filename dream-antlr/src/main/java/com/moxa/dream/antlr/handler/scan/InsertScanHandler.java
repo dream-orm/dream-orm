@@ -4,14 +4,10 @@ import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.handler.AbstractHandler;
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.InsertStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
-import com.moxa.dream.antlr.sql.ToSQL;
-
-import java.util.List;
 
 public class InsertScanHandler extends AbstractHandler {
     private final ScanInvoker.ScanInfo scanInfo;
@@ -21,13 +17,12 @@ public class InsertScanHandler extends AbstractHandler {
     }
 
     @Override
-    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
         scanInfo.setCommand(Command.INSERT);
         InsertStatement insertStatement = (InsertStatement) statement;
         scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement) insertStatement.getTable()).getValue(), null, true));
-        return statement;
+        return super.handlerAfter(statement, assist, sql, life);
     }
-
 
     @Override
     protected boolean interest(Statement statement, Assist sqlAssist) {

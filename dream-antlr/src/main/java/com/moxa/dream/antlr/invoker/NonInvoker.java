@@ -9,7 +9,6 @@ import com.moxa.dream.antlr.handler.non.ConditionHandler;
 import com.moxa.dream.antlr.handler.non.FunctionHandler;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.antlr.util.ExprUtil;
 
 import java.util.List;
 

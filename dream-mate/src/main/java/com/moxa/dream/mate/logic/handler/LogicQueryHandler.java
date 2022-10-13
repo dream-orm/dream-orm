@@ -44,7 +44,7 @@ public class LogicQueryHandler extends AbstractHandler {
     }
 
     @Override
-    protected String handlerAfter(Assist assist, String sql, int life) throws InvokerException {
+    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
         queryDeque.poll();
         return sql;
     }
@@ -53,7 +53,7 @@ public class LogicQueryHandler extends AbstractHandler {
         @Override
         protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
             FromStatement fromStatement = (FromStatement) statement;
-            ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(assist, toSQL, invokerList, fromStatement.getMainTable(), true);
+            ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(fromStatement.getMainTable(), true);
             if (tableScanInfo != null) {
                 String table = tableScanInfo.getTable();
                 if (logicInvoker.isLogicDelete(table)) {
@@ -90,7 +90,7 @@ public class LogicQueryHandler extends AbstractHandler {
             @Override
             protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
                 JoinStatement joinStatement = (JoinStatement) statement;
-                ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(assist, toSQL, invokerList, joinStatement.getJoinTable(), false);
+                ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(joinStatement.getJoinTable(), false);
                 if (tableScanInfo != null) {
                     String table = tableScanInfo.getTable();
                     if (logicInvoker.isLogicDelete(table)) {

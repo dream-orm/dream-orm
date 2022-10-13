@@ -5,29 +5,26 @@ import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.handler.AbstractHandler;
 import com.moxa.dream.antlr.handler.Handler;
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.smt.*;
+import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
-
-import java.util.List;
 
 
 public class QueryScanHandler extends AbstractHandler {
     private final FromScanHandler fromScanHandler = new FromScanHandler(this);
     private final JoinScanHandler joinScanHandler = new JoinScanHandler(this);
     private final ScanInvoker.ScanInfo scanInfo;
+    private final ToSQL toSQL = new ToNativeSQL();
 
     public QueryScanHandler(ScanInvoker.ScanInfo scanInfo) {
         this.scanInfo = scanInfo;
     }
 
     @Override
-    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
-        if (Command.NONE == scanInfo.getCommand()) {
-            scanInfo.setCommand(Command.QUERY);
-        }
-        return statement;
+    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
+        scanInfo.setCommand(Command.QUERY);
+        return super.handlerAfter(statement, assist, sql, life);
     }
 
     @Override
@@ -40,14 +37,14 @@ public class QueryScanHandler extends AbstractHandler {
         return new Handler[]{fromScanHandler, joinScanHandler};
     }
 
-    public ScanInvoker.TableScanInfo getTableScanInfo(Assist assist, ToSQL toSQL, List<Invoker> invokerList, Statement statement, boolean master) throws InvokerException {
+    public ScanInvoker.TableScanInfo getTableScanInfo(Statement statement, boolean master) throws InvokerException {
         String database = null;
         String table = null;
         String alias = null;
         if (statement instanceof AliasStatement) {
             AliasStatement aliasStatement = (AliasStatement) statement;
             statement = aliasStatement.getColumn();
-            alias = toSQL.toStr(aliasStatement.getAlias(), assist, invokerList);
+            alias = toSQL.toStr(aliasStatement.getAlias(), null, null);
         }
         if (statement instanceof ListColumnStatement) {
             Statement[] columnList = ((ListColumnStatement) statement).getColumnList();
@@ -62,8 +59,8 @@ public class QueryScanHandler extends AbstractHandler {
         return null;
     }
 
-    public void scanStatement(Assist assist, ToSQL toSQL, List<Invoker> invokerList, Statement statement, boolean master) throws InvokerException {
-        ScanInvoker.TableScanInfo tableScanInfo = getTableScanInfo(assist, toSQL, invokerList, statement, master);
+    public void scanStatement(Statement statement, boolean master) throws InvokerException {
+        ScanInvoker.TableScanInfo tableScanInfo = getTableScanInfo(statement, master);
         if (tableScanInfo != null) {
             scanInfo.add(tableScanInfo);
         }
@@ -77,10 +74,10 @@ public class QueryScanHandler extends AbstractHandler {
         }
 
         @Override
-        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+        protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
             FromStatement fromStatement = (FromStatement) statement;
-            queryScanHandler.scanStatement(assist, toSQL, invokerList, fromStatement.getMainTable(), true);
-            return statement;
+            queryScanHandler.scanStatement(fromStatement.getMainTable(), true);
+            return super.handlerAfter(statement, assist, sql, life);
         }
 
         @Override
@@ -97,10 +94,10 @@ public class QueryScanHandler extends AbstractHandler {
         }
 
         @Override
-        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+        protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
             JoinStatement joinStatement = (JoinStatement) statement;
-            queryScanHandler.scanStatement(assist, toSQL, invokerList, joinStatement.getJoinTable(), false);
-            return statement;
+            queryScanHandler.scanStatement(joinStatement.getJoinTable(), false);
+            return super.handlerAfter(statement, assist, sql, life);
         }
 
         @Override

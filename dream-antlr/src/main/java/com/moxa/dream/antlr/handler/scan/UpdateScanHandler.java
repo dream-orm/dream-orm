@@ -4,15 +4,10 @@ import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.exception.InvokerException;
 import com.moxa.dream.antlr.handler.AbstractHandler;
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.invoker.ScanInvoker;
-import com.moxa.dream.antlr.smt.AliasStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.smt.UpdateStatement;
-import com.moxa.dream.antlr.sql.ToSQL;
-
-import java.util.List;
 
 public class UpdateScanHandler extends AbstractHandler {
     private final ScanInvoker.ScanInfo scanInfo;
@@ -22,23 +17,11 @@ public class UpdateScanHandler extends AbstractHandler {
     }
 
     @Override
-    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
         scanInfo.setCommand(Command.UPDATE);
         UpdateStatement updateStatement = (UpdateStatement) statement;
-        Statement tableStatement = updateStatement.getTable();
-        String table = null;
-        String alias = null;
-        if (tableStatement instanceof AliasStatement) {
-            tableStatement = ((AliasStatement) tableStatement).getColumn();
-            alias = ((SymbolStatement) ((AliasStatement) tableStatement).getAlias()).getValue();
-        }
-        if (tableStatement instanceof SymbolStatement) {
-            table = ((SymbolStatement) tableStatement).getValue();
-        }
-        if (table != null) {
-            scanInfo.add(new ScanInvoker.TableScanInfo(null, table, alias, true));
-        }
-        return statement;
+        scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement) updateStatement.getTable()).getValue(), null, true));
+        return super.handlerAfter(statement, assist, sql, life);
     }
 
     @Override

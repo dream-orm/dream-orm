@@ -27,7 +27,7 @@ public class TenantInvoker extends AbstractInvoker {
     private TenantHandler tenantHandler;
 
     public static String getName() {
-        return "dream-mate-tenant";
+        return "dream_mate_tenant";
     }
 
     @Override

@@ -22,15 +22,11 @@ public abstract class AbstractHandler implements Handler {
     public final Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, Queue<Handler> handlerQueue, List<Invoker> invokerList) throws InvokerException {
 
         if ((parentHandler == null || (!(parentHandler instanceof AbstractHandler)) || ((AbstractHandler) parentHandler).isLife())) {
-
             if (interest(statement, assist)) {
                 life++;
-
                 handlerQueue.add(this);
-
                 statement = handlerBefore(statement, assist, toSQL, invokerList, life);
             }
-
             if (boundHandlerList == null) {
                 boundHandlerList = handlerBound();
                 if (!ObjectUtil.isNull(boundHandlerList)) {
@@ -52,18 +48,19 @@ public abstract class AbstractHandler implements Handler {
 
 
     @Override
-    public final String handlerAfter(Assist assist, String sql) throws InvokerException {
-
+    public final String handlerAfter(Statement statement, Assist assist, String sql) throws InvokerException {
         life--;
-        return handlerAfter(assist, sql, life);
+        return handlerAfter(statement, assist, sql, life);
     }
 
-    protected String handlerAfter(Assist assist, String sql, int life) throws InvokerException {
+    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
         return sql;
     }
 
 
-    protected abstract Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException;
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+        return statement;
+    }
 
     protected Handler[] handlerBound() {
         return new Handler[0];
@@ -72,7 +69,6 @@ public abstract class AbstractHandler implements Handler {
     protected final boolean isLife() {
         return life > 0;
     }
-
 
     protected abstract boolean interest(Statement statement, Assist sqlAssist);
 
