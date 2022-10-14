@@ -2,13 +2,10 @@ package com.moxa.dream.system.antlr.handler;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.InvokerException;
-import com.moxa.dream.antlr.expr.CompareExpr;
 import com.moxa.dream.antlr.expr.FunctionExpr;
 import com.moxa.dream.antlr.expr.QueryExpr;
 import com.moxa.dream.antlr.handler.AbstractHandler;
-import com.moxa.dream.antlr.handler.scan.QueryScanHandler;
 import com.moxa.dream.antlr.invoker.Invoker;
-import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToNativeSQL;
@@ -17,18 +14,18 @@ import com.moxa.dream.system.annotation.PageQuery;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.action.SqlAction;
-import com.moxa.dream.system.table.ColumnInfo;
-import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
+import java.util.List;
+
 public class PageHandler extends AbstractHandler {
     private final TableFactory tableFactory;
     private final MethodInfo methodInfo;
     private final Invoker invoker;
-    private final ToSQL toSQL = new ToNativeSQL();
+    private final ToNativeSQL toNativeSQL = new ToNativeSQL();
     private boolean offset;
     private Statement first;
     private Statement second;
@@ -40,12 +37,11 @@ public class PageHandler extends AbstractHandler {
     }
 
     @Override
-    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
-        QueryStatement queryStatement = (QueryStatement) statement.getParentStatement();
-        handlerCount(queryStatement);
-        handlerPage(queryStatement);
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
         invoker.setAccessible(false);
-        return super.handlerAfter(statement, assist, sql, life);
+        handlerCount((QueryStatement) statement);
+        handlerPage((QueryStatement) statement);
+        return statement;
     }
 
     void handlerCount(QueryStatement statement) throws InvokerException {
@@ -64,11 +60,11 @@ public class PageHandler extends AbstractHandler {
                 listColumnStatement.add(new FunctionExpr(new ExprReader("count(1)")).expr());
                 countSelectStatement.setSelectList(listColumnStatement);
                 queryStatement.setSelectStatement(countSelectStatement);
-                countSql = toSQL.toStr(queryStatement, null, null);
+                countSql = toNativeSQL.toStr(queryStatement, null, null);
             }
         }
         if (ObjectUtil.isNull(countSql)) {
-            countSql = "select count(1) from (" + toSQL.toStr(queryStatement, null, null) + ")t_tmp";
+            countSql = "select count(1) from (" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp";
         }
         Action[] initActionList = this.methodInfo.getInitActionList();
         Action[] countInitActionList;
@@ -93,46 +89,14 @@ public class PageHandler extends AbstractHandler {
         limitStatement.setOffset(offset);
         limitStatement.setFirst(first);
         limitStatement.setSecond(second);
-        if (tableFactory != null) {
-            FromStatement fromStatement = queryStatement.getFromStatement();
-            Statement joinList = fromStatement.getJoinList();
-            if (joinList == null) {
-                Statement mainTable = fromStatement.getMainTable();
-                ScanInvoker.ScanInfo scanInfo = new ScanInvoker.ScanInfo();
-                QueryScanHandler queryScanHandler = new QueryScanHandler(scanInfo);
-                queryScanHandler.scanStatement(mainTable, true);
-                ScanInvoker.TableScanInfo[] tableScanInfoList = scanInfo.getTableScanInfoMap().values().toArray(new ScanInvoker.TableScanInfo[0]);
-                if (tableScanInfoList.length == 1) {
-                    ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoList[0];
-                    String table = tableScanInfo.getTable();
-                    String alias = tableScanInfo.getAlias();
-                    TableInfo tableInfo = tableFactory.getTableInfo(table);
-                    if (tableInfo != null) {
-                        ColumnInfo primColumnInfo = tableInfo.getPrimColumnInfo();
-                        if (primColumnInfo != null) {
-                            String column = primColumnInfo.getColumn();
-                            String where = new ToNativeSQL().toStr(queryStatement.getWhereStatement(), null, null);
-                            String sql = alias + "." + column + " in(select " + column + " from (select " + column + " from " + table + " " + alias + " " + where + " " + toSQL.toStr(limitStatement, null, null) + ")t_tmp)";
-                            Statement inStatement = new CompareExpr(new ExprReader(sql)).expr();
-                            WhereStatement whereStatement = new WhereStatement();
-                            whereStatement.setCondition(inStatement);
-                            queryStatement.setWhereStatement(whereStatement);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        String sql = "select t_tmp.* from(" + toSQL.toStr(queryStatement, null, null) + ")t_tmp " + toSQL.toStr(limitStatement, null, null);
+        String sql = "select t_tmp.* from(" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp " + toNativeSQL.toStr(limitStatement, null, null);
         QueryStatement pageQueryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-        Statement parentStatement = queryStatement.getParentStatement();
         ReflectUtil.copy(queryStatement, pageQueryStatement);
-        queryStatement.setParentStatement(parentStatement);
     }
 
     @Override
     protected boolean interest(Statement statement, Assist sqlAssist) {
-        return statement instanceof FromStatement;
+        return statement instanceof QueryStatement;
     }
 
     public void setParamList(Statement first, Statement second, boolean offset) {
