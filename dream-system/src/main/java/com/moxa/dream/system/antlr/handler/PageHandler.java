@@ -14,7 +14,6 @@ import com.moxa.dream.system.annotation.PageQuery;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.action.SqlAction;
-import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.reflect.ReflectUtil;
@@ -22,7 +21,6 @@ import com.moxa.dream.util.reflect.ReflectUtil;
 import java.util.List;
 
 public class PageHandler extends AbstractHandler {
-    private final TableFactory tableFactory;
     private final MethodInfo methodInfo;
     private final Invoker invoker;
     private final ToNativeSQL toNativeSQL = new ToNativeSQL();
@@ -33,7 +31,6 @@ public class PageHandler extends AbstractHandler {
     public PageHandler(Invoker invoker, MethodInfo methodInfo) {
         this.invoker = invoker;
         this.methodInfo = methodInfo;
-        this.tableFactory = methodInfo.getConfiguration().getTableFactory();
     }
 
     @Override
@@ -47,7 +44,9 @@ public class PageHandler extends AbstractHandler {
     void handlerCount(QueryStatement statement) throws InvokerException {
         QueryStatement queryStatement = new QueryStatement();
         ReflectUtil.copy(queryStatement, statement);
-        queryStatement.setOrderStatement(null);
+        if (queryStatement.getOrderStatement() != null) {
+            queryStatement.setOrderStatement(null);
+        }
         SelectStatement selectStatement = queryStatement.getSelectStatement();
         PreSelectStatement preSelect = selectStatement.getPreSelect();
         String countSql = null;
@@ -89,9 +88,13 @@ public class PageHandler extends AbstractHandler {
         limitStatement.setOffset(offset);
         limitStatement.setFirst(first);
         limitStatement.setSecond(second);
-        String sql = "select t_tmp.* from(" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp " + toNativeSQL.toStr(limitStatement, null, null);
-        QueryStatement pageQueryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-        ReflectUtil.copy(queryStatement, pageQueryStatement);
+        if (queryStatement.getUnionStatement() == null && queryStatement.getLimitStatement() == null) {
+            queryStatement.setLimitStatement(limitStatement);
+        } else {
+            String sql = "select t_tmp.* from(" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp " + toNativeSQL.toStr(limitStatement, null, null);
+            QueryStatement pageQueryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
+            ReflectUtil.copy(queryStatement, pageQueryStatement);
+        }
     }
 
     @Override

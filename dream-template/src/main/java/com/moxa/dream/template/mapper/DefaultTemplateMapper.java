@@ -50,8 +50,8 @@ public class DefaultTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public <T> List<T> selectPage(Class<T> type, Object conditionObject, Page page) {
-        return (List<T>) selectPageSqlMapper.execute(type, conditionObject, page);
+    public <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page) {
+        return (Page<T>) selectPageSqlMapper.execute(type, conditionObject, page);
     }
 
     @Override

@@ -12,7 +12,7 @@ public interface TemplateMapper {
 
     <T> List<T> selectList(Class<T> type, Object conditionObject);
 
-    <T> List<T> selectPage(Class<T> type, Object conditionObject, Page page);
+    <T>Page<T> selectPage(Class<T> type, Object conditionObject, Page page);
 
     int updateById(Object view);
 

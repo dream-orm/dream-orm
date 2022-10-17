@@ -9,6 +9,7 @@ import com.moxa.dream.system.table.factory.TableFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SelectPageSqlMapper extends SelectListSqlMapper {
@@ -60,7 +61,9 @@ public class SelectPageSqlMapper extends SelectListSqlMapper {
                 }
             }
         }
-        return session.execute(methodInfo, wrapArg(arg, page));
+        List<?> result = (List<?>) session.execute(methodInfo, wrapArg(arg, page));
+        page.setRows(result);
+        return page;
     }
 
     protected Map<String, Object> wrapArg(Object arg, Page page) {
