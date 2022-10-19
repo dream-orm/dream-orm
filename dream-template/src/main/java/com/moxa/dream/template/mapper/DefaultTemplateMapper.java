@@ -8,6 +8,7 @@ import java.util.List;
 public class DefaultTemplateMapper implements TemplateMapper {
     private SqlMapper selectByIdSqlMapper;
     private SqlMapper selectByIdsSqlMapper;
+    private SqlMapper selectOneSqlMapper;
     private SqlMapper selectListSqlMapper;
     private SqlMapper selectPageSqlMapper;
     private SqlMapper deleteByIdSqlMapper;
@@ -22,6 +23,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     public DefaultTemplateMapper(Session session) {
         selectByIdSqlMapper = new SelectByIdSqlMapper(session);
         selectByIdsSqlMapper = new SelectByIdsSqlMapper(session);
+        selectOneSqlMapper = new SelectOneSqlMapper(session);
         selectListSqlMapper = new SelectListSqlMapper(session);
         selectPageSqlMapper = new SelectPageSqlMapper(session);
         deleteByIdSqlMapper = new DeleteByIdSqlMapper(session);
@@ -42,6 +44,11 @@ public class DefaultTemplateMapper implements TemplateMapper {
     @Override
     public <T> List<T> selectByIds(Class<T> type, List<Object> idList) {
         return (List<T>) selectByIdsSqlMapper.execute(type, idList);
+    }
+
+    @Override
+    public <T> T selectOne(Class<T> type, Object conditionObject) {
+        return (T) selectOneSqlMapper.execute(type, conditionObject);
     }
 
     @Override

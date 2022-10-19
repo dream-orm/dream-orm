@@ -10,9 +10,11 @@ public interface TemplateMapper {
 
     <T> List<T> selectByIds(Class<T> type, List<Object> idList);
 
+    <T> T selectOne(Class<T> type, Object conditionObject);
+
     <T> List<T> selectList(Class<T> type, Object conditionObject);
 
-    <T>Page<T> selectPage(Class<T> type, Object conditionObject, Page page);
+    <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page);
 
     int updateById(Object view);
 

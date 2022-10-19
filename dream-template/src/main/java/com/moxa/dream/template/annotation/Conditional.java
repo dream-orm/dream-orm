@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 public @interface Conditional {
     String table() default "";
 
-    boolean filterNull() default true;
+    boolean filterNull() default false;
 
     Class<? extends Condition> value();
 

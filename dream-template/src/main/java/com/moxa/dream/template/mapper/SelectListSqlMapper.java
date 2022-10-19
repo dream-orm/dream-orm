@@ -87,10 +87,14 @@ public class SelectListSqlMapper implements SqlMapper {
                 ",",
                 tableSet.toArray(new String[0])) + where + orderBy;
         return new MethodInfo.Builder(configuration)
-                .rowType(List.class)
+                .rowType(getRowType())
                 .colType(type)
                 .sql(sql)
                 .build();
+    }
+
+    protected Class<? extends Collection> getRowType() {
+        return List.class;
     }
 
     protected String getTable(Class<?> type) {
