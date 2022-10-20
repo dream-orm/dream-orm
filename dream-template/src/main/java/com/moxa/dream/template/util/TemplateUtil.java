@@ -7,12 +7,8 @@ public class TemplateUtil {
     private static TableUtil tableUtil = new TableUtil();
     private static ConditionUtil conditionUtil = new ConditionUtil();
 
-    public static String getTable(Class<?> type) {
-        return tableUtil.getTable(type);
-    }
-
-    public static Set<String> getTableSet(Class<?> type) {
-        return tableUtil.getTableSet(type);
+    public static Set<String> getTableNameSet(Class<?> type) {
+        return tableUtil.getTableNameSet(type);
     }
 
     public static List<ConditionObject> getCondition(Class<?> type) {

@@ -14,14 +14,12 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.system.annotation.Ignore;
-import com.moxa.dream.system.annotation.Table;
-import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
+import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.common.LowHashMap;
 import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -185,17 +183,11 @@ public class AllInvoker extends AbstractInvoker {
     }
 
     protected boolean ignore(Field field) {
-        return field.isAnnotationPresent(Ignore.class);
+        return SystemUtil.ignoreField(field);
     }
 
     protected String getTableName(Class<?> type) {
-        if (type.isAnnotationPresent(View.class)) {
-            return type.getDeclaredAnnotation(View.class).value();
-        }
-        if (type.isAnnotationPresent(Table.class)) {
-            return type.getDeclaredAnnotation(Table.class).value();
-        }
-        return null;
+        return SystemUtil.getTableName(type);
     }
 
     protected List<QueryColumnInfo> getQueryColumnInfoList(Assist assist, ToSQL toSQL, List<Invoker> invokerList, InvokerStatement invokerStatement) throws InvokerException {

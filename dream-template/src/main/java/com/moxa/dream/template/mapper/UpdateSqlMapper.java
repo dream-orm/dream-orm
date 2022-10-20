@@ -2,12 +2,12 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.util.InvokerUtil;
-import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
+import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
@@ -53,7 +53,7 @@ public abstract class UpdateSqlMapper extends AbstractSqlMapper {
     }
 
     protected boolean ignore(Field field) {
-        return field.isAnnotationPresent(Ignore.class);
+        return SystemUtil.ignoreField(field);
     }
 
     protected abstract String getSuffix(TableInfo tableInfo);

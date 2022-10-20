@@ -18,7 +18,7 @@ public abstract class SelectSqlMapper extends AbstractSqlMapper {
 
     @Override
     protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
-        Set<String> tableSet = TemplateUtil.getTableSet(type);
+        Set<String> tableNameSet = TemplateUtil.getTableNameSet(type);
         String suffix = getSuffix(tableInfo);
         String sql = "select " + InvokerUtil.wrapperInvokerSQL(
                 SystemInvokerFactory.NAMESPACE,
@@ -28,7 +28,7 @@ public abstract class SelectSqlMapper extends AbstractSqlMapper {
                         SystemInvokerFactory.NAMESPACE,
                         SystemInvokerFactory.TABLE,
                         ",",
-                        tableSet.toArray(new String[0])
+                        tableNameSet.toArray(new String[0])
                 ) + " " + suffix;
         return new MethodInfo.Builder(configuration)
                 .rowType(getRowType())

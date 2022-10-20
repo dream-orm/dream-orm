@@ -68,13 +68,13 @@ public class SelectListSqlMapper implements SqlMapper {
     }
 
     protected MethodInfo getMethodInfo(Configuration configuration, TableFactory tableFactory, Class type, Object arg) {
-        Set<String> tableSet = TemplateUtil.getTableSet(type);
+        Set<String> tableNameSet = TemplateUtil.getTableNameSet(type);
         String where = "";
         String orderBy = "";
         if (arg != null) {
             Class<?> argType = arg.getClass();
-            where = getWhereSql(argType, tableSet, tableFactory);
-            orderBy = getOrderSql(argType, tableSet, tableFactory);
+            where = getWhereSql(argType, tableNameSet, tableFactory);
+            orderBy = getOrderSql(argType, tableNameSet, tableFactory);
 
         }
         String sql = "select " + InvokerUtil.wrapperInvokerSQL(
@@ -85,7 +85,7 @@ public class SelectListSqlMapper implements SqlMapper {
                 SystemInvokerFactory.NAMESPACE,
                 SystemInvokerFactory.TABLE,
                 ",",
-                tableSet.toArray(new String[0])) + where + orderBy;
+                tableNameSet.toArray(new String[0])) + where + orderBy;
         return new MethodInfo.Builder(configuration)
                 .rowType(getRowType())
                 .colType(type)
@@ -95,10 +95,6 @@ public class SelectListSqlMapper implements SqlMapper {
 
     protected Class<? extends Collection> getRowType() {
         return List.class;
-    }
-
-    protected String getTable(Class<?> type) {
-        return TemplateUtil.getTable(type);
     }
 
     protected String getWhereSql(Class type, Set<String> tableSet, TableFactory tableFactory) {

@@ -5,7 +5,7 @@ import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
-import com.moxa.dream.template.util.TemplateUtil;
+import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.common.ObjectUtil;
 
@@ -32,7 +32,7 @@ public abstract class AbstractSqlMapper implements SqlMapper {
             synchronized (this) {
                 methodInfo = methodInfoMap.get(type);
                 if (methodInfo == null) {
-                    String table = getTable(type);
+                    String table = getTableName(type);
                     ObjectUtil.requireNonNull(table, "类'" + type.getClass().getName() + "'未注册数据表");
                     Configuration configuration = this.session.getConfiguration();
                     TableFactory tableFactory = configuration.getTableFactory();
@@ -61,7 +61,7 @@ public abstract class AbstractSqlMapper implements SqlMapper {
 
     protected abstract MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type);
 
-    protected String getTable(Class<?> type) {
-        return TemplateUtil.getTable(type);
+    protected String getTableName(Class<?> type) {
+        return SystemUtil.getTableName(type);
     }
 }
