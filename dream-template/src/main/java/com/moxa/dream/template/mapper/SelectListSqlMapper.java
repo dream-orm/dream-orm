@@ -29,11 +29,7 @@ public class SelectListSqlMapper implements SqlMapper {
     }
 
     @Override
-    public Object execute(Class<?> type, Object... args) {
-        return execute(type, args[0]);
-    }
-
-    protected Object execute(Class<?> type, Object arg) {
+    public Object execute(Class<?> type, Object arg) {
         String paramTypeName = null;
         if (arg != null) {
             paramTypeName = arg.getClass().getName();

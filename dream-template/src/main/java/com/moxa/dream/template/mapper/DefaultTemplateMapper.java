@@ -10,7 +10,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private SqlMapper selectByIdsSqlMapper;
     private SqlMapper selectOneSqlMapper;
     private SqlMapper selectListSqlMapper;
-    private SqlMapper selectPageSqlMapper;
+    private SelectPageSqlMapper selectPageSqlMapper;
     private SqlMapper deleteByIdSqlMapper;
     private SqlMapper deleteByIdsSqlMapper;
     private SqlMapper existByIdSqlMapper;

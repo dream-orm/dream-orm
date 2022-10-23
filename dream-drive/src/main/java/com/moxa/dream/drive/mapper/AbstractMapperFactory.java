@@ -39,7 +39,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 for (Method method : methodList) {
                     String name = method.getName();
                     if (builderMap.containsKey(name)) {
-                        throw new DreamRunTimeException("方法名'" + name + "'重复定义");
+                        throw new DreamRunTimeException("方法名'" + name + "'重复定义，请检查" + mapperClass.getName());
                     }
                     MethodInfo.Builder builder = createMethodInfoBuilder(configuration, mapperClass, method);
                     builderMap.put(name, builder);

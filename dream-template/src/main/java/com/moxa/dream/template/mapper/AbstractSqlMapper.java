@@ -22,11 +22,7 @@ public abstract class AbstractSqlMapper implements SqlMapper {
     }
 
     @Override
-    public Object execute(Class<?> type, Object... args) {
-        return execute(type, args[0]);
-    }
-
-    protected Object execute(Class<?> type, Object arg) {
+    public Object execute(Class<?> type, Object arg) {
         MethodInfo methodInfo = methodInfoMap.get(type);
         if (methodInfo == null) {
             synchronized (this) {
@@ -44,7 +40,11 @@ public abstract class AbstractSqlMapper implements SqlMapper {
                 }
             }
         }
-        return session.execute(methodInfo, wrapArg(arg));
+        return execute(methodInfo, wrapArg(arg));
+    }
+
+    protected Object execute(MethodInfo methodInfo, Map<String, Object> argMap) {
+        return session.execute(methodInfo, argMap);
     }
 
     protected Map<String, Object> wrapArg(Object arg) {
@@ -64,4 +64,6 @@ public abstract class AbstractSqlMapper implements SqlMapper {
     protected String getTableName(Class<?> type) {
         return SystemUtil.getTableName(type);
     }
+
+
 }

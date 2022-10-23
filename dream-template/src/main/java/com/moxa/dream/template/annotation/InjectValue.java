@@ -1,6 +1,6 @@
 package com.moxa.dream.template.annotation;
 
-import com.moxa.dream.template.condition.Condition;
+import com.moxa.dream.template.value.Value;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,11 +9,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Conditional {
-    String table() default "";
+public @interface InjectValue {
+    Class<? extends Value> value();
 
-    boolean filterNull() default true;
-
-    Class<? extends Condition> value();
-
+    InjectType type() default InjectType.INSERT_UPDATE;
 }

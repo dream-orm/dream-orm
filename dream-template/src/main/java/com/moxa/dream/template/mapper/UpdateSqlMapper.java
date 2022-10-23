@@ -8,6 +8,7 @@ import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.util.SystemUtil;
+import com.moxa.dream.template.annotation.InjectType;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
@@ -16,15 +17,16 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UpdateSqlMapper extends AbstractSqlMapper {
+public abstract class UpdateSqlMapper extends InjectSqlMapper {
     protected String param = "param";
+    private int CODE = 2;
 
     public UpdateSqlMapper(Session session) {
         super(session);
     }
 
     @Override
-    protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
+    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
         String table = tableInfo.getTable();
         List<Field> fieldList = ReflectUtil.findField(type);
         ColumnInfo primColumnInfo = tableInfo.getPrimColumnInfo();
@@ -54,6 +56,11 @@ public abstract class UpdateSqlMapper extends AbstractSqlMapper {
 
     protected boolean ignore(Field field) {
         return SystemUtil.ignoreField(field);
+    }
+
+    @Override
+    protected boolean accept(InjectType injectType) {
+        return (CODE & injectType.getCode()) > 0;
     }
 
     protected abstract String getSuffix(TableInfo tableInfo);

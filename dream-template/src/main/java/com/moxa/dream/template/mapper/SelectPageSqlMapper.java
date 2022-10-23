@@ -22,11 +22,11 @@ public class SelectPageSqlMapper extends SelectListSqlMapper {
     }
 
     @Override
-    public Object execute(Class<?> type, Object... args) {
-        return execute(type, args[0], (Page) args[1]);
+    public Object execute(Class<?> type, Object arg) {
+        return execute(type, arg, null);
     }
 
-    protected Object execute(Class<?> type, Object arg, Page page) {
+    public Object execute(Class<?> type, Object arg, Page page) {
         String paramTypeName = null;
         if (arg != null) {
             paramTypeName = arg.getClass().getName();
