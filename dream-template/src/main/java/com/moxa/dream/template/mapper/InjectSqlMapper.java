@@ -6,7 +6,8 @@ import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.template.annotation.InjectType;
-import com.moxa.dream.template.value.Value;
+import com.moxa.dream.template.annotation.Wrap;
+import com.moxa.dream.template.wrap.Wrapper;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.reflect.ReflectUtil;
@@ -26,17 +27,17 @@ public abstract class InjectSqlMapper extends AbstractSqlMapper {
 
     @Override
     protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
-        Map<String, Value> injectObjectMap = new HashMap<>();
+        Map<String, Wrapper> injectObjectMap = new HashMap<>();
         List<Field> fieldList = ReflectUtil.findField(type);
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
                 if (!ignore(field)) {
-                    if (field.isAnnotationPresent(com.moxa.dream.template.annotation.InjectValue.class)) {
-                        com.moxa.dream.template.annotation.InjectValue injectValueAnnotation = field.getDeclaredAnnotation(com.moxa.dream.template.annotation.InjectValue.class);
-                        InjectType injectType = injectValueAnnotation.type();
+                    if (field.isAnnotationPresent(Wrap.class)) {
+                        Wrap wrapAnnotation = field.getDeclaredAnnotation(Wrap.class);
+                        InjectType injectType = wrapAnnotation.type();
                         if (accept(injectType)) {
-                            Value value = ReflectUtil.create(injectValueAnnotation.value());
-                            injectObjectMap.put(param + "." + field.getName(), value);
+                            Wrapper wrapper = ReflectUtil.create(wrapAnnotation.value());
+                            injectObjectMap.put(param + "." + field.getName(), wrapper);
                         }
                     }
                 }
@@ -55,13 +56,14 @@ public abstract class InjectSqlMapper extends AbstractSqlMapper {
     protected Object execute(MethodInfo methodInfo, Map<String, Object> argMap) {
         InjectObjectMap injectObjectMap = methodInfo.get(InjectObjectMap.class);
         if (injectObjectMap != null) {
-            Iterator<Map.Entry<String, Value>> iterator = injectObjectMap.injectObjectMap.entrySet().iterator();
-            ObjectWrapper wrapper = ObjectWrapper.wrapper(argMap);
+            Iterator<Map.Entry<String, Wrapper>> iterator = injectObjectMap.injectObjectMap.entrySet().iterator();
+            ObjectWrapper objectWrapper = ObjectWrapper.wrapper(argMap);
             while (iterator.hasNext()) {
-                Map.Entry<String, Value> entry = iterator.next();
+                Map.Entry<String, Wrapper> entry = iterator.next();
                 String key = entry.getKey();
-                Value value = entry.getValue();
-                wrapper.set(key, value.getValue());
+                Object value = objectWrapper.get(key);
+                Wrapper wrapper = entry.getValue();
+                objectWrapper.set(key, wrapper.wrap(value));
             }
         }
         return super.execute(methodInfo, argMap);
@@ -74,13 +76,13 @@ public abstract class InjectSqlMapper extends AbstractSqlMapper {
     protected abstract boolean accept(InjectType injectType);
 
     class InjectObjectMap {
-        private Map<String, Value> injectObjectMap;
+        private Map<String, Wrapper> injectObjectMap;
 
-        public InjectObjectMap(Map<String, Value> injectObjectMap) {
+        public InjectObjectMap(Map<String, Wrapper> injectObjectMap) {
             this.injectObjectMap = injectObjectMap;
         }
 
-        public Map<String, Value> getInjectObjectMap() {
+        public Map<String, Wrapper> getInjectObjectMap() {
             return injectObjectMap;
         }
     }

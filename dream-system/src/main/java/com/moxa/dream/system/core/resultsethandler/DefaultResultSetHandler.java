@@ -1,5 +1,6 @@
 package com.moxa.dream.system.core.resultsethandler;
 
+import com.moxa.dream.system.annotation.Extract;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedColumn;
@@ -7,6 +8,7 @@ import com.moxa.dream.system.config.MappedResult;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.executor.Executor;
+import com.moxa.dream.system.extractor.Extractor;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
@@ -211,6 +213,12 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                             mappedColumn.setProperty(fieldName);
                             TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), mappedColumn.getJdbcType());
                             mappedColumn.setTypeHandler(typeHandler);
+                            if (field.isAnnotationPresent(Extract.class)) {
+                                Extract extractAnnotation = field.getDeclaredAnnotation(Extract.class);
+                                Class<? extends Extractor> extractorType = extractAnnotation.value();
+                                Extractor extractor = ReflectUtil.create(extractorType);
+                                mappedColumn.setExtractor(extractor);
+                            }
                             if (!ObjectUtil.isNull(curTableName)) {
                                 mappedResult.add(mappedColumn);
                                 return true;

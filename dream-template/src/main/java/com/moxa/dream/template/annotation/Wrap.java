@@ -1,6 +1,6 @@
 package com.moxa.dream.template.annotation;
 
-import com.moxa.dream.template.value.Value;
+import com.moxa.dream.template.wrap.Wrapper;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface InjectValue {
-    Class<? extends Value> value();
+public @interface Wrap {
+    Class<? extends Wrapper> value();
 
     InjectType type() default InjectType.INSERT_UPDATE;
 }

@@ -1,5 +1,6 @@
 package com.moxa.dream.system.config;
 
+import com.moxa.dream.system.extractor.Extractor;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 
@@ -7,13 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MappedColumn {
-    private final int index;
-    private final int jdbcType;
-    private final String table;
-    private TypeHandler typeHandler;
+    private int index;
+    private int jdbcType;
+    private String table;
     private String property;
     private String columnLabel;
     private ColumnInfo columnInfo;
+    private TypeHandler typeHandler;
+    private Extractor extractor;
 
     public MappedColumn(int index, int jdbcType, String table, String columnLabel, ColumnInfo columnInfo) {
         this.index = index;
@@ -25,7 +27,11 @@ public class MappedColumn {
     }
 
     public Object getValue(ResultSet resultSet) throws SQLException {
-        return typeHandler.getResult(resultSet, index, jdbcType);
+        Object result = typeHandler.getResult(resultSet, index, jdbcType);
+        if (extractor != null) {
+            result = extractor.extract(result);
+        }
+        return result;
     }
 
     public String getTable() {
@@ -58,6 +64,14 @@ public class MappedColumn {
 
     public void setTypeHandler(TypeHandler typeHandler) {
         this.typeHandler = typeHandler;
+    }
+
+    public Extractor getExtractor() {
+        return extractor;
+    }
+
+    public void setExtractor(Extractor extractor) {
+        this.extractor = extractor;
     }
 
     public boolean isPrimary() {
