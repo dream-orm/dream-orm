@@ -24,7 +24,6 @@ public class MethodInfo {
     private Command command = Command.NONE;
     private String sql;
     private int timeOut;
-    private boolean batch;
     private PackageStatement statement;
     private CacheKey methodKey;
     private Method method;
@@ -72,10 +71,6 @@ public class MethodInfo {
 
     public int getTimeOut() {
         return timeOut;
-    }
-
-    public boolean isBatch() {
-        return batch;
     }
 
     public Action[] getInitActionList() {
@@ -171,11 +166,6 @@ public class MethodInfo {
 
         public Builder cache(boolean cache) {
             methodInfo.cache = cache;
-            return this;
-        }
-
-        public Builder batch(boolean batch) {
-            methodInfo.batch = batch;
             return this;
         }
 

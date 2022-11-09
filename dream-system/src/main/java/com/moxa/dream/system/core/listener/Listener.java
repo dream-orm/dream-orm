@@ -5,7 +5,7 @@ import com.moxa.dream.system.config.MappedStatement;
 public interface Listener {
     boolean before(MappedStatement mappedStatement);
 
-    Object afterReturn(Object result, MappedStatement mappedStatement);
+    void afterReturn(Object result, MappedStatement mappedStatement);
 
     void exception(Exception e, MappedStatement mappedStatement);
 }

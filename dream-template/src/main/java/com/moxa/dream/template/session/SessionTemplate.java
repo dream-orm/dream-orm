@@ -1,6 +1,7 @@
 package com.moxa.dream.template.session;
 
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.core.session.SessionFactory;
@@ -47,6 +48,12 @@ public class SessionTemplate implements Session {
     public Object execute(MethodInfo methodInfo, Map<String, Object> argMap) {
         return sessionProxy.execute(methodInfo, argMap);
     }
+
+    @Override
+    public Object execute(MappedStatement mappedStatement) {
+        return sessionProxy.execute(mappedStatement);
+    }
+
 
     @Override
     public boolean isAutoCommit() {

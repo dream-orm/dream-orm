@@ -64,7 +64,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         Class colType = getColType(mapperClass, method);
         String[] columnNames = getColumnNames(mapperClass, method);
         boolean cache = isCache(mapperClass, method);
-        boolean batch = isBatch(mapperClass, method);
         Command command = getCommand(mapperClass, method);
         MethodParam[] methodParamList = getMethodParamList(method);
         String sql = getSql(configuration, method);
@@ -78,7 +77,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 .colType(colType)
                 .columnNames(columnNames)
                 .cache(cache)
-                .batch(batch)
                 .command(command)
                 .methodParamList(methodParamList)
                 .sql(sql)
@@ -201,15 +199,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
             cache = setupAnnotation.cache();
         }
         return cache;
-    }
-
-    protected boolean isBatch(Class mapperClass, Method method) {
-        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
-        boolean batch = false;
-        if (setupAnnotation != null) {
-            batch = setupAnnotation.batch();
-        }
-        return batch;
     }
 
     protected Command getCommand(Class mapperClass, Method method) {

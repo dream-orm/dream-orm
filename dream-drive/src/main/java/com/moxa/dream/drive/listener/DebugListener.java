@@ -2,14 +2,17 @@ package com.moxa.dream.drive.listener;
 
 import com.moxa.dream.system.config.MappedParam;
 import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.core.listener.*;
+import com.moxa.dream.system.core.listener.DeleteListener;
+import com.moxa.dream.system.core.listener.InsertListener;
+import com.moxa.dream.system.core.listener.QueryListener;
+import com.moxa.dream.system.core.listener.UpdateListener;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DebugListener implements QueryListener, UpdateListener, InsertListener, DeleteListener, BatchListener {
+public class DebugListener implements QueryListener, UpdateListener, InsertListener, DeleteListener {
     final String START_DATE = "startDate";
 
     @Override
@@ -29,9 +32,8 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
     }
 
     @Override
-    public Object afterReturn(Object result, MappedStatement mappedStatement) {
+    public void afterReturn(Object result, MappedStatement mappedStatement) {
         after(mappedStatement);
-        return result;
     }
 
     @Override
@@ -42,26 +44,5 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
 
     public void after(MappedStatement mappedStatement) {
         System.out.println("执行用时：" + (System.currentTimeMillis() - (long) mappedStatement.get(START_DATE)) + "ms");
-    }
-
-    @Override
-    public boolean before(List<MappedStatement> mappedStatements) {
-        MappedStatement mappedStatement = mappedStatements.get(0);
-        mappedStatement.put(START_DATE, System.currentTimeMillis());
-        List<List<Object>> paramList = mappedStatements.stream().map(ms -> ms.getMappedParamList().stream().filter(mappedParam -> mappedParam != null).map(mappedParam -> mappedParam.getParamValue()).collect(Collectors.toList())).collect(Collectors.toList());
-        String sql = mappedStatement.getSql();
-        System.out.println("执行SQL:" + sql);
-        System.out.println("执行参数:" + paramList);
-        return true;
-    }
-
-    @Override
-    public Object afterReturn(Object result, List<MappedStatement> mappedStatements) {
-        return afterReturn(result, mappedStatements.get(0));
-    }
-
-    @Override
-    public void exception(Exception e, List<MappedStatement> mappedStatements) {
-        exception(e, mappedStatements.get(0));
     }
 }

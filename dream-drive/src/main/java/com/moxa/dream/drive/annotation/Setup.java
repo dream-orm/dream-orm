@@ -20,8 +20,6 @@ public @interface Setup {
 
     boolean cache() default true;
 
-    boolean batch() default false;
-
     Command command() default Command.NONE;
 
     int timeOut() default 0;

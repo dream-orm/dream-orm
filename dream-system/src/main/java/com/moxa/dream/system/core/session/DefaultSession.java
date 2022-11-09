@@ -1,6 +1,7 @@
 package com.moxa.dream.system.core.session;
 
 import com.moxa.dream.antlr.config.Command;
+import com.moxa.dream.system.annotation.Batch;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
@@ -45,51 +46,22 @@ public class DefaultSession implements Session {
 
     @Override
     public Object execute(MethodInfo methodInfo, Map<String, Object> argMap) {
-        if (methodInfo.isBatch()) {
-            return executeBatch(methodInfo, argMap);
+        Batch batch = methodInfo.get(Batch.class);
+        if (batch == null) {
+            MappedStatement mappedStatement = dialectFactory.compile(methodInfo, argMap);
+            return execute(mappedStatement);
         } else {
-            return executeInner(methodInfo, argMap);
+            try {
+                return executeBatch(methodInfo, argMap, batch.value());
+            } catch (SQLException e) {
+                throw new DreamRunTimeException("批量执行方法'" + methodInfo.getId() + "'失败", e);
+            }
         }
     }
 
-    protected Object executeBatch(MethodInfo methodInfo, Map<String, Object> argMap) {
-        if (argMap == null) {
-            throw new DreamRunTimeException("批量模式，参数不能为空");
-        }
-        List<MappedStatement> mappedStatements = new ArrayList<>();
-        if (argMap instanceof ObjectMap) {
-            ObjectMap objectMap = (ObjectMap) argMap;
-            Object defaultValue = objectMap.getDefaultValue();
-            Map<String, Object> builtMap = objectMap.getBuiltMap();
-            if (defaultValue == null) {
-                throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，且不能为空");
-            }
-            if (defaultValue instanceof Collection) {
-                Collection args = (Collection) defaultValue;
-                for (Object o : args) {
-                    mappedStatements.add(dialectFactory.compile(methodInfo, new ObjectMap(o, builtMap)));
-                }
-            } else if (defaultValue.getClass().isArray()) {
-                int length = Array.getLength(defaultValue);
-                for (int i = 0; i < length; i++) {
-                    mappedStatements.add(dialectFactory.compile(methodInfo, new ObjectMap(Array.get(defaultValue, i), builtMap)));
-                }
-            } else {
-                throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，而实际类型为" + defaultValue.getClass().getName());
-            }
-        } else {
-            throw new DreamRunTimeException("批量模式，参数类型必须是" + ObjectMap.class.getName() + "，而实际类型为" + argMap.getClass().getName());
-        }
-        try {
-            return executor.batch(mappedStatements);
-        } catch (SQLException e) {
-            throw new DreamRunTimeException("批量执行方法'" + methodInfo.getId() + "'失败", e);
-        }
-    }
-
-    protected Object executeInner(MethodInfo methodInfo, Map<String, Object> argMap) {
-        MappedStatement mappedStatement = dialectFactory.compile(methodInfo, argMap);
-        Object value = null;
+    @Override
+    public Object execute(MappedStatement mappedStatement) {
+        Object value;
         try {
             Command command = getCommand(mappedStatement);
             switch (command) {
@@ -110,9 +82,54 @@ public class DefaultSession implements Session {
                     break;
             }
         } catch (SQLException e) {
-            throw new DreamRunTimeException("执行方法'" + methodInfo.getId() + "'失败", e);
+            throw new DreamRunTimeException("执行方法'" + mappedStatement.getId() + "'失败", e);
         }
         return value;
+    }
+
+    protected Object executeBatch(MethodInfo methodInfo, Map<String, Object> argMap, int size) throws SQLException {
+        if (argMap == null) {
+            throw new DreamRunTimeException("批量模式，参数不能为空");
+        }
+        if (!(argMap instanceof ObjectMap)) {
+            throw new DreamRunTimeException("批量模式，参数类型必须是" + ObjectMap.class.getName());
+        }
+        ObjectMap objectMap = (ObjectMap) argMap;
+        List<MappedStatement> mappedStatements = new ArrayList<>();
+        Object defaultValue = objectMap.getDefaultValue();
+        Map<String, Object> builtMap = objectMap.getBuiltMap();
+        if (defaultValue == null) {
+            throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，且不能为空");
+        }
+        if (defaultValue instanceof Collection) {
+            Collection args = (Collection) defaultValue;
+            int i = 0;
+            for (Object o : args) {
+                mappedStatements.add(dialectFactory.compile(methodInfo, new ObjectMap(o, builtMap)));
+                i++;
+                if (size > 0 && (i & size) == 0) {
+                    executor.batch(mappedStatements);
+                    mappedStatements.clear();
+                }
+            }
+        } else if (defaultValue.getClass().isArray()) {
+            int length = Array.getLength(defaultValue);
+            for (int i = 0; i < length; i++) {
+                mappedStatements.add(dialectFactory.compile(methodInfo, new ObjectMap(Array.get(defaultValue, i), builtMap)));
+                i++;
+                if (size > 0 && (i & size) == 0) {
+                    executor.batch(mappedStatements);
+                    mappedStatements.clear();
+                }
+            }
+        } else {
+            throw new DreamRunTimeException("批量模式，参数类型必须是集合或数组类型，而实际类型为" + defaultValue.getClass().getName());
+        }
+        if (!mappedStatements.isEmpty()) {
+            executor.batch(mappedStatements);
+            mappedStatements.clear();
+        }
+        return null;
     }
 
     @Override

@@ -107,65 +107,47 @@ public abstract class AbstractExecutor implements Executor {
     protected Object executeAction(MappedStatement mappedStatement, ExecutorHandler executorHandler) throws SQLException {
         Action[] initActionList = mappedStatement.getInitActionList();
         Action[] destroyActionList = mappedStatement.getDestroyActionList();
+        if (!ObjectUtil.isNull(initActionList)) {
+            doActions(initActionList, mappedStatement.getArg());
+        }
+        Object result;
         try {
-            if (!ObjectUtil.isNull(initActionList)) {
-                doActions(initActionList, mappedStatement.getArg());
-            }
-            Object result = executorHandler.execute(transaction.getConnection());
-            if (!ObjectUtil.isNull(destroyActionList)) {
-                doActions(destroyActionList, mappedStatement.getArg());
-            }
-            return result;
+            result = executorHandler.execute(transaction.getConnection());
         } finally {
             statementHandler.close();
         }
+        if (!ObjectUtil.isNull(destroyActionList)) {
+            doActions(destroyActionList, mappedStatement.getArg());
+        }
+        return result;
     }
 
     @Override
     public Object batch(List<MappedStatement> mappedStatements) throws SQLException {
-        BatchListener[] batchListener = listenerFactory.getBatchListener();
-        if (!ObjectUtil.isNull(batchListener)) {
-            if (beforeListeners(batchListener, mappedStatements)) {
-                Object result;
-                try {
-                    result = executeAction(mappedStatements, connection -> {
-                        statementHandler.prepare(connection, mappedStatements.get(0));
-                        return statementHandler.executeBatch(mappedStatements);
-                    });
-                } catch (Exception e) {
-                    exceptionListeners(batchListener, e, mappedStatements);
-                    throw e;
-                }
-                return afterReturnListeners(batchListener, result, mappedStatements);
-            } else {
-                return null;
-            }
-
-        } else {
-            return executeAction(mappedStatements, connection -> {
-                statementHandler.prepare(connection, mappedStatements.get(0));
-                return statementHandler.executeBatch(mappedStatements);
-            });
-        }
+        return executeAction(mappedStatements, connection -> {
+            statementHandler.prepare(connection, mappedStatements.get(0));
+            return statementHandler.executeBatch(mappedStatements);
+        });
     }
 
     protected Object executeAction(List<MappedStatement> mappedStatements, ExecutorHandler executorHandler) throws SQLException {
         MethodInfo methodInfo = mappedStatements.get(0).getMethodInfo();
         Action[] initActionList = methodInfo.getInitActionList();
         Action[] destroyActionList = methodInfo.getDestroyActionList();
+        Object result;
         Object arg = null;
+        if (!ObjectUtil.isNull(initActionList)) {
+            doActions(initActionList, arg = mappedStatements.stream().map(mappedStatement -> mappedStatement.getArg()).collect(Collectors.toList()));
+        }
         try {
-            if (!ObjectUtil.isNull(initActionList)) {
-                doActions(initActionList, arg = mappedStatements.stream().map(mappedStatement -> mappedStatement.getArg()).collect(Collectors.toList()));
-            }
-            Object result = executorHandler.execute(transaction.getConnection());
-            if (!ObjectUtil.isNull(destroyActionList)) {
-                doActions(destroyActionList, arg == null ? mappedStatements.stream().map(mappedStatement -> mappedStatement.getArg()).collect(Collectors.toList()) : arg);
-            }
-            return result;
+            result = executorHandler.execute(transaction.getConnection());
         } finally {
             statementHandler.close();
         }
+        if (!ObjectUtil.isNull(destroyActionList)) {
+            doActions(destroyActionList, arg == null ? mappedStatements.stream().map(mappedStatement -> mappedStatement.getArg()).collect(Collectors.toList()) : arg);
+        }
+        return result;
     }
 
     protected abstract StatementHandler getStatementHandler();
@@ -210,7 +192,7 @@ public abstract class AbstractExecutor implements Executor {
 
     protected Object afterReturnListeners(Listener[] listeners, Object result, MappedStatement mappedStatement) {
         for (Listener listener : listeners) {
-            result = listener.afterReturn(result, mappedStatement);
+            listener.afterReturn(result, mappedStatement);
         }
         return result;
     }
@@ -218,27 +200,6 @@ public abstract class AbstractExecutor implements Executor {
     protected void exceptionListeners(Listener[] listeners, Exception e, MappedStatement mappedStatement) {
         for (Listener listener : listeners) {
             listener.exception(e, mappedStatement);
-        }
-    }
-
-    protected boolean beforeListeners(BatchListener[] listeners, List<MappedStatement> mappedStatements) {
-        boolean success = true;
-        for (BatchListener listener : listeners) {
-            success = success & listener.before(mappedStatements);
-        }
-        return success;
-    }
-
-    protected Object afterReturnListeners(BatchListener[] listeners, Object result, List<MappedStatement> mappedStatements) {
-        for (BatchListener listener : listeners) {
-            result = listener.afterReturn(result, mappedStatements);
-        }
-        return result;
-    }
-
-    protected void exceptionListeners(BatchListener[] listeners, Exception e, List<MappedStatement> mappedStatements) {
-        for (BatchListener listener : listeners) {
-            listener.exception(e, mappedStatements);
         }
     }
 

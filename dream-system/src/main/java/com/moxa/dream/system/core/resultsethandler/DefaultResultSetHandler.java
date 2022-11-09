@@ -120,7 +120,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     protected MappedResult getMappedResult(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException {
         MappedResult mappedResult = mappedStatement.get(MappedResult.class);
         if (mappedResult == null) {
-            synchronized (this.getClass().getName()) {
+            synchronized (DefaultResultSetHandler.class) {
                 mappedResult = mappedStatement.get(MappedResult.class);
                 if (mappedResult == null) {
                     mappedResult = createMappedResult(resultSet, mappedStatement);

@@ -51,7 +51,6 @@ public class InsertSqlMapper extends InjectSqlMapper {
                 .columnNames(getColumnNames(tableInfo))
                 .initActionList(initActionList(tableInfo))
                 .destroyActionList(destroyActionList(tableInfo))
-                .batch(isBatch())
                 .sql(sql)
                 .build();
     }
@@ -75,9 +74,5 @@ public class InsertSqlMapper extends InjectSqlMapper {
 
     protected String[] getColumnNames(TableInfo tableInfo) {
         return new String[0];
-    }
-
-    protected boolean isBatch() {
-        return false;
     }
 }

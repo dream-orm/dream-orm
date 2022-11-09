@@ -40,11 +40,11 @@ public abstract class AbstractSqlMapper implements SqlMapper {
                 }
             }
         }
-        return execute(methodInfo, wrapArg(arg));
+        return execute(methodInfo, arg);
     }
 
-    protected Object execute(MethodInfo methodInfo, Map<String, Object> argMap) {
-        return session.execute(methodInfo, argMap);
+    protected Object execute(MethodInfo methodInfo, Object arg) {
+        return session.execute(methodInfo, wrapArg(arg));
     }
 
     protected Map<String, Object> wrapArg(Object arg) {

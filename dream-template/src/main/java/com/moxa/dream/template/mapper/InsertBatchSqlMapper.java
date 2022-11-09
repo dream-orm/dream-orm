@@ -1,9 +1,12 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.system.annotation.Batch;
+import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.util.common.ObjectMap;
+import com.moxa.dream.system.table.TableInfo;
 
-import java.util.Map;
+import java.lang.annotation.Annotation;
 
 public class InsertBatchSqlMapper extends InsertSqlMapper {
     public InsertBatchSqlMapper(Session session) {
@@ -11,12 +14,20 @@ public class InsertBatchSqlMapper extends InsertSqlMapper {
     }
 
     @Override
-    protected boolean isBatch() {
-        return true;
-    }
+    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
+        MethodInfo methodInfo = super.doGetMethodInfo(configuration, tableInfo, type);
+        methodInfo.set(Batch.class,new Batch(){
 
-    @Override
-    protected Map<String, Object> wrapArg(Object arg) {
-        return new ObjectMap(arg);
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return Batch.class;
+            }
+
+            @Override
+            public int value() {
+                return 1000;
+            }
+        });
+        return methodInfo;
     }
 }

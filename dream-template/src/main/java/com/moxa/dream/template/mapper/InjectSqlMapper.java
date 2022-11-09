@@ -27,7 +27,7 @@ public abstract class InjectSqlMapper extends AbstractSqlMapper {
 
     @Override
     protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
-        Map<String, Wrapper> injectObjectMap = new HashMap<>();
+        Map<String, Wrapper> wrapObjectMap = new HashMap<>();
         List<Field> fieldList = ReflectUtil.findField(type);
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
@@ -37,15 +37,15 @@ public abstract class InjectSqlMapper extends AbstractSqlMapper {
                         InjectType injectType = wrapAnnotation.type();
                         if (accept(injectType)) {
                             Wrapper wrapper = ReflectUtil.create(wrapAnnotation.value());
-                            injectObjectMap.put(param + "." + field.getName(), wrapper);
+                            wrapObjectMap.put(param + "." + field.getName(), wrapper);
                         }
                     }
                 }
             }
         }
         MethodInfo methodInfo = doGetMethodInfo(configuration, tableInfo, type);
-        if (!injectObjectMap.isEmpty()) {
-            methodInfo.set(InjectObjectMap.class, new InjectObjectMap(injectObjectMap));
+        if (!wrapObjectMap.isEmpty()) {
+            methodInfo.set(WrapObjectMap.class, new WrapObjectMap(wrapObjectMap));
         }
         return methodInfo;
     }
@@ -53,10 +53,11 @@ public abstract class InjectSqlMapper extends AbstractSqlMapper {
     protected abstract MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, Class type);
 
     @Override
-    protected Object execute(MethodInfo methodInfo, Map<String, Object> argMap) {
-        InjectObjectMap injectObjectMap = methodInfo.get(InjectObjectMap.class);
-        if (injectObjectMap != null) {
-            Iterator<Map.Entry<String, Wrapper>> iterator = injectObjectMap.injectObjectMap.entrySet().iterator();
+    protected Object execute(MethodInfo methodInfo, Object arg) {
+        Map<String, Object> argMap = wrapArg(arg);
+        WrapObjectMap wrapObjectMap = methodInfo.get(WrapObjectMap.class);
+        if (wrapObjectMap != null) {
+            Iterator<Map.Entry<String, Wrapper>> iterator = wrapObjectMap.wrapObjectMap.entrySet().iterator();
             ObjectWrapper objectWrapper = ObjectWrapper.wrapper(argMap);
             while (iterator.hasNext()) {
                 Map.Entry<String, Wrapper> entry = iterator.next();
@@ -75,15 +76,15 @@ public abstract class InjectSqlMapper extends AbstractSqlMapper {
 
     protected abstract boolean accept(InjectType injectType);
 
-    class InjectObjectMap {
-        private Map<String, Wrapper> injectObjectMap;
+    class WrapObjectMap {
+        private Map<String, Wrapper> wrapObjectMap;
 
-        public InjectObjectMap(Map<String, Wrapper> injectObjectMap) {
-            this.injectObjectMap = injectObjectMap;
+        public WrapObjectMap(Map<String, Wrapper> wrapObjectMap) {
+            this.wrapObjectMap = wrapObjectMap;
         }
 
         public Map<String, Wrapper> getInjectObjectMap() {
-            return injectObjectMap;
+            return wrapObjectMap;
         }
     }
 }

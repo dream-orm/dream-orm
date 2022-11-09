@@ -39,7 +39,9 @@ public class SimpleStatementHandler implements StatementHandler {
         for (MappedStatement mappedStatement : mappedStatements) {
             statement.addBatch(mappedStatement.getSql());
         }
-        return statement.executeBatch();
+        int[] result = statement.executeBatch();
+        statement.clearBatch();
+        return result;
     }
 
     @Override

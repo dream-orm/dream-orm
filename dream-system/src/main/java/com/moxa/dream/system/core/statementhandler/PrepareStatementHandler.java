@@ -51,7 +51,9 @@ public class PrepareStatementHandler implements StatementHandler {
             doParameter(mappedStatement);
             statement.addBatch();
         }
-        return statement.executeBatch();
+        int[] result = statement.executeBatch();
+        statement.clearBatch();
+        return result;
     }
 
     @Override
