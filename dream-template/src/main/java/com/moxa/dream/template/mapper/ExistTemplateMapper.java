@@ -6,8 +6,8 @@ import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.util.common.NonCollection;
 
-public abstract class ExistSqlMapper extends AbstractSqlMapper {
-    public ExistSqlMapper(Session session) {
+public abstract class ExistTemplateMapper extends AbstractTemplateMapper {
+    public ExistTemplateMapper(Session session) {
         super(session);
     }
 

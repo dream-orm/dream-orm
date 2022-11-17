@@ -7,7 +7,6 @@ import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.executorhandler.ExecutorHandler;
 import com.moxa.dream.system.core.listener.*;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
-import com.moxa.dream.system.core.resultsethandler.DefaultResultSetHandler;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
@@ -28,11 +27,12 @@ public abstract class AbstractExecutor implements Executor {
     protected ResultSetHandler resultSetHandler;
     protected SessionFactory sessionFactory;
 
-    public AbstractExecutor(Configuration configuration, Transaction transaction, SessionFactory sessionFactory) {
-        this.transaction = transaction;
+
+    public AbstractExecutor(Configuration configuration, Transaction transaction, StatementHandler statementHandler, ResultSetHandler resultSetHandler, SessionFactory sessionFactory) {
         this.listenerFactory = configuration.getListenerFactory();
-        this.statementHandler = getStatementHandler();
-        this.resultSetHandler = getResultSetHandler();
+        this.transaction = transaction;
+        this.statementHandler = statementHandler;
+        this.resultSetHandler = resultSetHandler;
         this.sessionFactory = sessionFactory;
     }
 
@@ -113,11 +113,11 @@ public abstract class AbstractExecutor implements Executor {
         Object result;
         try {
             result = executorHandler.execute(transaction.getConnection());
+            if (!ObjectUtil.isNull(destroyActionList)) {
+                doActions(destroyActionList, mappedStatement.getArg());
+            }
         } finally {
             statementHandler.close();
-        }
-        if (!ObjectUtil.isNull(destroyActionList)) {
-            doActions(destroyActionList, mappedStatement.getArg());
         }
         return result;
     }
@@ -149,8 +149,6 @@ public abstract class AbstractExecutor implements Executor {
         }
         return result;
     }
-
-    protected abstract StatementHandler getStatementHandler();
 
     @Override
     public boolean isAutoCommit() {
@@ -213,7 +211,4 @@ public abstract class AbstractExecutor implements Executor {
         }
     }
 
-    protected ResultSetHandler getResultSetHandler() {
-        return new DefaultResultSetHandler();
-    }
 }

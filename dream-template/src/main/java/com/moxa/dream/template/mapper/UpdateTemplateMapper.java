@@ -17,11 +17,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UpdateSqlMapper extends InjectSqlMapper {
+public abstract class UpdateTemplateMapper extends InjectTemplateMapper {
     protected String param = "param";
     private int CODE = 2;
 
-    public UpdateSqlMapper(Session session) {
+    public UpdateTemplateMapper(Session session) {
         super(session);
     }
 

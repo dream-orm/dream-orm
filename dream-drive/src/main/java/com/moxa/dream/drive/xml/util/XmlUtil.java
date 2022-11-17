@@ -16,7 +16,7 @@ public class XmlUtil {
 
     public static <T> T applyAttributes(Class<T> typeClass, Attributes attributes) {
         T target = ReflectUtil.create(typeClass);
-        ObjectWrapper wrapper = ObjectWrapper.wrapper(target);
+        ObjectWrapper wrapper = ObjectWrapper.wrapper(target,false);
         for (int i = 0; i < attributes.getLength(); i++) {
             String qName = attributes.getQName(i);
             String name = map.getOrDefault(qName, qName);

@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SelectByIdsSqlMapper extends SelectSqlMapper {
+public class SelectByIdsTemplateMapper extends SelectTemplateMapper {
     private String param = "param";
 
-    public SelectByIdsSqlMapper(Session session) {
+    public SelectByIdsTemplateMapper(Session session) {
         super(session);
     }
 

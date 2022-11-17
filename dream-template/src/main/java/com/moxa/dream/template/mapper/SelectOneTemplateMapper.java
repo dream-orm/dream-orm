@@ -5,8 +5,8 @@ import com.moxa.dream.util.common.NonCollection;
 
 import java.util.Collection;
 
-public class SelectOneSqlMapper extends SelectListSqlMapper {
-    public SelectOneSqlMapper(Session session) {
+public class SelectOneTemplateMapper extends SelectListTemplateMapper {
+    public SelectOneTemplateMapper(Session session) {
         super(session);
     }
 

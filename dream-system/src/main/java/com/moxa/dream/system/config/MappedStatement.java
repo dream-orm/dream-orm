@@ -10,18 +10,18 @@ import java.util.*;
 
 public class MappedStatement {
 
-    private MappedSql mappedSql;
-    private List<MappedParam> mappedParamList;
-    private MethodInfo methodInfo;
-    private CacheKey uniqueKey;
-    private Object arg;
-    private Class<? extends Collection> rowType;
-    private Class<?> colType;
-    private Command command;
-    private boolean cache;
-    private Map<String, Object> envMap;
+    protected MappedSql mappedSql;
+    protected List<MappedParam> mappedParamList;
+    protected MethodInfo methodInfo;
+    protected CacheKey uniqueKey;
+    protected Object arg;
+    protected Class<? extends Collection> rowType;
+    protected Class<?> colType;
+    protected Command command;
+    protected boolean cache;
+    protected Map<String, Object> envMap;
 
-    private MappedStatement() {
+    protected MappedStatement() {
 
     }
 
@@ -149,7 +149,7 @@ public class MappedStatement {
     }
 
     public static class Builder {
-        private final MappedStatement mappedStatement;
+        protected final MappedStatement mappedStatement;
 
         public Builder() {
             mappedStatement = new MappedStatement();

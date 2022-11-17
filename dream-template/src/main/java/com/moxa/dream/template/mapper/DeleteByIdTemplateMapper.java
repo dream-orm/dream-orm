@@ -7,8 +7,8 @@ import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 
-public class ExistByIdSqlMapper extends ExistSqlMapper {
-    public ExistByIdSqlMapper(Session session) {
+public class DeleteByIdTemplateMapper extends DeleteTemplateMapper {
+    public DeleteByIdTemplateMapper(Session session) {
         super(session);
     }
 
@@ -16,7 +16,6 @@ public class ExistByIdSqlMapper extends ExistSqlMapper {
     protected String getSuffix(TableInfo tableInfo) {
         ColumnInfo columnInfo = tableInfo.getPrimColumnInfo();
         ObjectUtil.requireNonNull(columnInfo, "表'" + tableInfo.getTable() + "'未注册主键");
-        return "where " + columnInfo.getColumn() + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", columnInfo.getName()) + " limit 1";
+        return "where " + columnInfo.getColumn() + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", columnInfo.getName());
     }
-
 }

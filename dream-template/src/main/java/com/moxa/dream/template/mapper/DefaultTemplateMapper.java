@@ -6,34 +6,34 @@ import com.moxa.dream.system.core.session.Session;
 import java.util.List;
 
 public class DefaultTemplateMapper implements TemplateMapper {
-    private SqlMapper selectByIdSqlMapper;
-    private SqlMapper selectByIdsSqlMapper;
-    private SqlMapper selectOneSqlMapper;
-    private SqlMapper selectListSqlMapper;
-    private SelectPageSqlMapper selectPageSqlMapper;
-    private SqlMapper deleteByIdSqlMapper;
-    private SqlMapper deleteByIdsSqlMapper;
-    private SqlMapper existByIdSqlMapper;
-    private SqlMapper updateByIdSqlMapper;
-    private SqlMapper updateNonByIdSqlMapper;
-    private SqlMapper insertSqlMapper;
-    private SqlMapper insertBatchSqlMapper;
-    private SqlMapper insertFetchKeySqlMapper;
+    private SelectByIdTemplateMapper selectByIdSqlMapper;
+    private SelectByIdsTemplateMapper selectByIdsSqlMapper;
+    private SelectOneTemplateMapper selectOneSqlMapper;
+    private SelectListTemplateMapper selectListTemplateMapper;
+    private SelectPageTemplateMapper selectPageSqlMapper;
+    private DeleteByIdTemplateMapper deleteByIdSqlMapper;
+    private DeleteByIdsTemplateMapper deleteByIdsSqlMapper;
+    private ExistByIdTemplateMapper existByIdSqlMapper;
+    private UpdateByIdTemplateMapper updateByIdSqlMapper;
+    private UpdateNonByIdTemplateMapper updateNonByIdSqlMapper;
+    private InsertTemplateMapper insertSqlMapper;
+    private InsertBatchTemplateMapper insertBatchSqlMapper;
+    private InsertFetchKeyTemplateMapper insertFetchKeySqlMapper;
 
     public DefaultTemplateMapper(Session session) {
-        selectByIdSqlMapper = new SelectByIdSqlMapper(session);
-        selectByIdsSqlMapper = new SelectByIdsSqlMapper(session);
-        selectOneSqlMapper = new SelectOneSqlMapper(session);
-        selectListSqlMapper = new SelectListSqlMapper(session);
-        selectPageSqlMapper = new SelectPageSqlMapper(session);
-        deleteByIdSqlMapper = new DeleteByIdSqlMapper(session);
-        deleteByIdsSqlMapper = new DeleteByIdsSqlMapper(session);
-        existByIdSqlMapper = new ExistByIdSqlMapper(session);
-        updateByIdSqlMapper = new UpdateByIdSqlMapper(session);
-        updateNonByIdSqlMapper = new UpdateNonByIdSqlMapper(session);
-        insertSqlMapper = new InsertSqlMapper(session);
-        insertBatchSqlMapper = new InsertBatchSqlMapper(session);
-        insertFetchKeySqlMapper = new InsertFetchKeySqlMapper(session);
+        selectByIdSqlMapper = new SelectByIdTemplateMapper(session);
+        selectByIdsSqlMapper = new SelectByIdsTemplateMapper(session);
+        selectOneSqlMapper = new SelectOneTemplateMapper(session);
+        selectListTemplateMapper = new SelectListTemplateMapper(session);
+        selectPageSqlMapper = new SelectPageTemplateMapper(session);
+        deleteByIdSqlMapper = new DeleteByIdTemplateMapper(session);
+        deleteByIdsSqlMapper = new DeleteByIdsTemplateMapper(session);
+        existByIdSqlMapper = new ExistByIdTemplateMapper(session);
+        updateByIdSqlMapper = new UpdateByIdTemplateMapper(session);
+        updateNonByIdSqlMapper = new UpdateNonByIdTemplateMapper(session);
+        insertSqlMapper = new InsertTemplateMapper(session);
+        insertBatchSqlMapper = new InsertBatchTemplateMapper(session);
+        insertFetchKeySqlMapper = new InsertFetchKeyTemplateMapper(session);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
 
     @Override
     public <T> List<T> selectList(Class<T> type, Object conditionObject) {
-        return (List<T>) selectListSqlMapper.execute(type, conditionObject);
+        return (List<T>) selectListTemplateMapper.execute(type, conditionObject);
     }
 
     @Override

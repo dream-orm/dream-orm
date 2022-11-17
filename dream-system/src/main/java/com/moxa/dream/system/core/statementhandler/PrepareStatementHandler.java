@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.List;
 
 public class PrepareStatementHandler implements StatementHandler {
-    private PreparedStatement statement;
+    protected PreparedStatement statement;
 
     @Override
     public void prepare(Connection connection, MappedStatement mappedStatement) throws SQLException {

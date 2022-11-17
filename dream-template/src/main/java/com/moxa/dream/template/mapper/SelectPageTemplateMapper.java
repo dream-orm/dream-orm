@@ -12,12 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SelectPageSqlMapper extends SelectListSqlMapper {
+public class SelectPageTemplateMapper extends SelectListTemplateMapper {
     private final String PARAM = "param";
     private final String PAGE = "page";
     private Map<String, MethodInfo> methodInfoMap = new HashMap<>();
 
-    public SelectPageSqlMapper(Session session) {
+    public SelectPageTemplateMapper(Session session) {
         super(session);
     }
 

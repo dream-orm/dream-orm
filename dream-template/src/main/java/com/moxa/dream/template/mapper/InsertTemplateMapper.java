@@ -18,11 +18,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InsertSqlMapper extends InjectSqlMapper {
+public class InsertTemplateMapper extends InjectTemplateMapper {
     private final int CODE = 1;
     private String param = "param";
 
-    public InsertSqlMapper(Session session) {
+    public InsertTemplateMapper(Session session) {
         super(session);
     }
 

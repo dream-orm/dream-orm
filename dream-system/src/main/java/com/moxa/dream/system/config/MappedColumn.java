@@ -4,6 +4,7 @@ import com.moxa.dream.system.extractor.Extractor;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 
+import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -16,22 +17,14 @@ public class MappedColumn {
     private ColumnInfo columnInfo;
     private TypeHandler typeHandler;
     private Extractor extractor;
+    private Field field;
 
-    public MappedColumn(int index, int jdbcType, String table, String columnLabel, ColumnInfo columnInfo) {
-        this.index = index;
-        this.jdbcType = jdbcType;
-        this.table = table;
-        this.columnLabel = columnLabel;
-        this.columnInfo = columnInfo;
-        this.property = columnInfo == null ? columnLabel : columnInfo.getName();
+    private MappedColumn() {
+
     }
 
     public Object getValue(ResultSet resultSet) throws SQLException {
-        Object result = typeHandler.getResult(resultSet, index, jdbcType);
-        if (extractor != null) {
-            result = extractor.extract(result);
-        }
-        return result;
+        return typeHandler.getResult(resultSet, index, jdbcType);
     }
 
     public String getTable() {
@@ -43,12 +36,12 @@ public class MappedColumn {
     }
 
     public String getProperty() {
+        if (property == null) {
+            property = columnInfo == null ? columnLabel : columnInfo.getName();
+        }
         return property;
     }
 
-    public void setProperty(String property) {
-        this.property = property;
-    }
 
     public ColumnInfo getColumnInfo() {
         return columnInfo;
@@ -62,19 +55,80 @@ public class MappedColumn {
         return typeHandler;
     }
 
-    public void setTypeHandler(TypeHandler typeHandler) {
-        this.typeHandler = typeHandler;
-    }
-
     public Extractor getExtractor() {
         return extractor;
     }
 
-    public void setExtractor(Extractor extractor) {
-        this.extractor = extractor;
-    }
-
     public boolean isPrimary() {
         return columnInfo == null ? false : columnInfo.isPrimary();
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    public static class Builder {
+        private MappedColumn mappedColumn = new MappedColumn();
+
+        public Builder index(int index) {
+            mappedColumn.index = index;
+            return this;
+        }
+
+        public Builder jdbcType(int jdbcType) {
+            mappedColumn.jdbcType = jdbcType;
+            return this;
+        }
+
+        public Builder table(String table) {
+            mappedColumn.table = table;
+            return this;
+        }
+
+        public Builder columnLabel(String columnLabel) {
+            mappedColumn.columnLabel = columnLabel;
+            return this;
+        }
+
+        public Builder columnInfo(ColumnInfo columnInfo) {
+            mappedColumn.columnInfo = columnInfo;
+            return this;
+        }
+
+        public Builder typeHandler(TypeHandler typeHandler) {
+            mappedColumn.typeHandler = typeHandler;
+            return this;
+        }
+
+        public Builder field(Field field) {
+            mappedColumn.field = field;
+            return this;
+        }
+
+        public Builder property(String property) {
+            mappedColumn.property = property;
+            return this;
+        }
+
+        public Builder extractor(Extractor extractor) {
+            mappedColumn.extractor = extractor;
+            return this;
+        }
+
+        public MappedColumn build() {
+            return mappedColumn;
+        }
+
+        public int getJdbcType() {
+            return mappedColumn.getJdbcType();
+        }
+
+        public String getProperty() {
+            return mappedColumn.getProperty();
+        }
+
+        public String getTable() {
+            return mappedColumn.getTable();
+        }
     }
 }

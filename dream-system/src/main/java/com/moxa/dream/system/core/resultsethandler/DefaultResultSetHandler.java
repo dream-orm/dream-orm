@@ -112,7 +112,13 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         MappedColumn[] mappedColumnList = mappedResult.getColumnMappingList();
         ObjectFactory objectFactory = mappedResult.newColObjectFactory();
         for (MappedColumn mappedColumn : mappedColumnList) {
-            objectFactory.set(mappedColumn.getProperty(), mappedColumn.getValue(resultSet));
+            Object value = mappedColumn.getValue(resultSet);
+            Extractor extractor = mappedColumn.getExtractor();
+            if (extractor == null) {
+                objectFactory.set(mappedColumn.getProperty(), value);
+            } else {
+                extractor.extract(mappedColumn, value, objectFactory);
+            }
         }
         return objectFactory;
     }
@@ -144,8 +150,14 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             String columnLabel = metaData.getColumnLabel(i);
             String tableName = metaData.getTableName(i);
             ColumnInfo columnInfo = getColumnInfo(mappedStatement, tableName, columnLabel);
-            MappedColumn mappedColumn = new MappedColumn(i, jdbcType, tableName, columnLabel, columnInfo);
-            boolean success = linkHandler(mappedColumn, mappedStatement, mappedResult, new LowHashSet(tableSet));
+            MappedColumn.Builder builder = new MappedColumn
+                    .Builder()
+                    .index(i)
+                    .jdbcType(jdbcType)
+                    .table(tableName)
+                    .columnLabel(columnLabel)
+                    .columnInfo(columnInfo);
+            boolean success = linkHandler(builder, mappedStatement, mappedResult, new LowHashSet(tableSet));
             if (!success) {
                 throw new DreamRunTimeException("映射失败，映射字段:" + columnLabel + "，归属表名：" + tableName);
             }
@@ -159,68 +171,74 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         TableInfo tableInfo;
         if (tableFactory != null) {
             tableInfo = tableFactory.getTableInfo(tableName);
+            String link=null;
             if (tableInfo != null) {
-                String link = null;
-                if (tableInfo != null) {
-                    link = tableInfo.getFieldName(columnLabel);
-                }
-                if (ObjectUtil.isNull(link)) {
-                    link = columnLabel;
-                }
-                return tableInfo.getColumnInfo(link);
+                link = tableInfo.getFieldName(columnLabel);
             }
+            if (ObjectUtil.isNull(link)) {
+                link = columnLabel;
+            }
+            return tableInfo.getColumnInfo(link);
         }
         return null;
 
     }
 
 
-    protected boolean linkHandler(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+    protected boolean linkHandler(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
         Class colType = mappedResult.getColType();
         if (ReflectUtil.isBaseClass(colType))
-            return linkHandlerForBase(mappedColumn, mappedStatement, mappedResult, tableSet);
+            return linkHandlerForBase(builder, mappedStatement, mappedResult, tableSet);
         else if (Map.class.isAssignableFrom(colType)) {
-            return linkHandlerForMap(mappedColumn, mappedStatement, mappedResult, tableSet);
+            return linkHandlerForMap(builder, mappedStatement, mappedResult, tableSet);
         } else {
-            return linkHandlerForClass(mappedColumn, mappedStatement, mappedResult, tableSet);
+            return linkHandlerForClass(builder, mappedStatement, mappedResult, tableSet);
         }
     }
 
-    protected boolean linkHandlerForBase(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
-        mappedColumn.setTypeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(mappedResult.getColType(), mappedColumn.getJdbcType()));
-        mappedResult.add(mappedColumn);
+    protected boolean linkHandlerForBase(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+        builder.typeHandler(mappedStatement
+                .getConfiguration()
+                .getTypeHandlerFactory()
+                .getTypeHandler(mappedResult.getColType()
+                        , builder.getJdbcType()));
+        mappedResult.add(builder.build());
         return true;
     }
 
-    protected boolean linkHandlerForMap(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
-        mappedColumn.setTypeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(Object.class, mappedColumn.getJdbcType()));
-        mappedResult.add(mappedColumn);
+    protected boolean linkHandlerForMap(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+        builder.typeHandler(mappedStatement
+                .getConfiguration()
+                .getTypeHandlerFactory()
+                .getTypeHandler(Object.class
+                        , builder.getJdbcType()));
+        mappedResult.add(builder.build());
         return true;
     }
 
-    protected boolean linkHandlerForClass(MappedColumn mappedColumn, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+    protected boolean linkHandlerForClass(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
         Class colType = mappedResult.getColType();
         String curTableName = getTableName(colType);
         List<Field> fieldList = ReflectUtil.findField(colType);
         if (!ObjectUtil.isNull(fieldList)) {
-            String property = mappedColumn.getProperty();
+            String property = builder.getProperty();
             boolean lazyLoad = false;
             for (Field field : fieldList) {
                 if (!ignore(field)) {
                     String fieldName = field.getName();
-                    if (!lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
+                    if (!lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(builder.getTable()) || curTableName.equalsIgnoreCase(builder.getTable()))) {
                         if (fieldName.equalsIgnoreCase(property)) {
-                            mappedColumn.setProperty(fieldName);
-                            TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), mappedColumn.getJdbcType());
-                            mappedColumn.setTypeHandler(typeHandler);
+                            builder.property(fieldName);
+                            TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), builder.getJdbcType());
+                            builder.typeHandler(typeHandler);
                             if (field.isAnnotationPresent(Extract.class)) {
                                 Extract extractAnnotation = field.getDeclaredAnnotation(Extract.class);
                                 Class<? extends Extractor> extractorType = extractAnnotation.value();
                                 Extractor extractor = ReflectUtil.create(extractorType);
-                                mappedColumn.setExtractor(extractor);
+                                builder.extractor(extractor).field(field);
                             }
                             if (!ObjectUtil.isNull(curTableName)) {
-                                mappedResult.add(mappedColumn);
+                                mappedResult.add(builder.build());
                                 return true;
                             } else {
                                 lazyLoad = true;
@@ -229,7 +247,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     }
                     Type genericType = field.getGenericType();
                     String table = getTableName(ReflectUtil.getColType(genericType));
-                    if (!ObjectUtil.isNull(table) && tableSet.contains(table) && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(mappedColumn.getTable()) || !curTableName.equalsIgnoreCase(mappedColumn.getTable()))) {
+                    if (!ObjectUtil.isNull(table) && tableSet.contains(table) && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(builder.getTable()) || !curTableName.equalsIgnoreCase(builder.getTable()))) {
                         tableSet.remove(table);
                         Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
                         MappedResult childMappedResult = childMappedResultMap.get(fieldName);
@@ -239,12 +257,12 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                                 rowType = NonCollection.class;
                             }
                             childMappedResult = new MappedResult(rowType, ReflectUtil.getColType(colType, field), fieldName);
-                            if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
+                            if (linkHandler(builder, mappedStatement, childMappedResult, tableSet)) {
                                 childMappedResultMap.put(fieldName, childMappedResult);
                                 return true;
                             }
                         } else {
-                            if (linkHandler(mappedColumn, mappedStatement, childMappedResult, tableSet)) {
+                            if (linkHandler(builder, mappedStatement, childMappedResult, tableSet)) {
                                 return true;
                             }
                         }
@@ -252,7 +270,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 }
             }
             if (lazyLoad) {
-                mappedResult.add(mappedColumn);
+                mappedResult.add(builder.build());
                 return true;
             }
         }
@@ -275,7 +293,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     action.doAction(executor, arg);
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new DreamRunTimeException(e);
             }
         }
     }

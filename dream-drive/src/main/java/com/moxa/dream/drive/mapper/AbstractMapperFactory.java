@@ -28,11 +28,8 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     protected Map<Class, Class[]> mapperTypeMap = new HashMap<>();
 
     @Override
-    public void addMapper(Configuration configuration, Class mapperClass) {
+    public boolean addMapper(Configuration configuration, Class mapperClass) {
         if (isMapper(mapperClass)) {
-            if (mapperTypeMap.containsKey(mapperClass)) {
-                return;
-            }
             Map<String, MethodInfo.Builder> builderMap = new HashMap<>();
             List<Method> methodList = ReflectUtil.findMethod(mapperClass);
             if (!ObjectUtil.isNull(methodList)) {
@@ -54,6 +51,9 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 }
             }
             this.mapperTypeMap.put(mapperClass, getAllInterface(mapperClass));
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -245,7 +245,9 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     @Override
     public <T> T getMapper(Class<T> type, MapperInvoke mapperInvoke) {
         Class[] typeList = mapperTypeMap.get(type);
-        ObjectUtil.requireNonNull(typeList, "类 '" + type.getName() + "'未在Mapper注册");
+        if (typeList == null) {
+            return null;
+        }
         return (T) Proxy.newProxyInstance(type.getClassLoader(), typeList, (proxy, method, args) -> {
             MethodInfo methodInfo = methodInfoMap.get(method);
             if (methodInfo != null) {

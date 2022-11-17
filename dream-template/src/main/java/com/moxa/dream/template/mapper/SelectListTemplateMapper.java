@@ -20,15 +20,14 @@ import com.moxa.dream.util.exception.DreamRunTimeException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SelectListSqlMapper implements SqlMapper {
+public class SelectListTemplateMapper {
     protected Session session;
     private Map<String, MethodInfo> methodInfoMap = new HashMap<>();
 
-    public SelectListSqlMapper(Session session) {
+    public SelectListTemplateMapper(Session session) {
         this.session = session;
     }
 
-    @Override
     public Object execute(Class<?> type, Object arg) {
         String paramTypeName = null;
         if (arg != null) {

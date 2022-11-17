@@ -6,8 +6,8 @@ import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.util.common.NonCollection;
 
-public abstract class DeleteSqlMapper extends AbstractSqlMapper {
-    public DeleteSqlMapper(Session session) {
+public abstract class DeleteTemplateMapper extends AbstractTemplateMapper {
+    public DeleteTemplateMapper(Session session) {
         super(session);
     }
 

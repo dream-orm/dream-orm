@@ -8,15 +8,15 @@ import com.moxa.dream.system.table.TableInfo;
 
 import java.lang.annotation.Annotation;
 
-public class InsertBatchSqlMapper extends InsertSqlMapper {
-    public InsertBatchSqlMapper(Session session) {
+public class InsertBatchTemplateMapper extends InsertTemplateMapper {
+    public InsertBatchTemplateMapper(Session session) {
         super(session);
     }
 
     @Override
     protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
         MethodInfo methodInfo = super.doGetMethodInfo(configuration, tableInfo, type);
-        methodInfo.set(Batch.class,new Batch(){
+        methodInfo.set(Batch.class, new Batch() {
 
             @Override
             public Class<? extends Annotation> annotationType() {

@@ -13,15 +13,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public abstract class AbstractSqlMapper implements SqlMapper {
+public abstract class AbstractTemplateMapper {
     protected Session session;
     private Map<Class, MethodInfo> methodInfoMap = new HashMap<>();
 
-    public AbstractSqlMapper(Session session) {
+    public AbstractTemplateMapper(Session session) {
         this.session = session;
     }
 
-    @Override
     public Object execute(Class<?> type, Object arg) {
         MethodInfo methodInfo = methodInfoMap.get(type);
         if (methodInfo == null) {

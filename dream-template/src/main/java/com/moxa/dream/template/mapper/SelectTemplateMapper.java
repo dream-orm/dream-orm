@@ -11,8 +11,8 @@ import com.moxa.dream.template.util.TemplateUtil;
 import java.util.Collection;
 import java.util.Set;
 
-public abstract class SelectSqlMapper extends AbstractSqlMapper {
-    public SelectSqlMapper(Session session) {
+public abstract class SelectTemplateMapper extends AbstractTemplateMapper {
+    public SelectTemplateMapper(Session session) {
         super(session);
     }
 

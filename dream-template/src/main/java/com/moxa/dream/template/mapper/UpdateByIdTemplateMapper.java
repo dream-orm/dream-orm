@@ -7,8 +7,10 @@ import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.util.common.ObjectUtil;
 
-public class DeleteByIdSqlMapper extends DeleteSqlMapper {
-    public DeleteByIdSqlMapper(Session session) {
+import java.util.List;
+
+public class UpdateByIdTemplateMapper extends UpdateTemplateMapper {
+    public UpdateByIdTemplateMapper(Session session) {
         super(session);
     }
 
@@ -16,6 +18,12 @@ public class DeleteByIdSqlMapper extends DeleteSqlMapper {
     protected String getSuffix(TableInfo tableInfo) {
         ColumnInfo columnInfo = tableInfo.getPrimColumnInfo();
         ObjectUtil.requireNonNull(columnInfo, "表'" + tableInfo.getTable() + "'未注册主键");
-        return "where " + columnInfo.getColumn() + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", columnInfo.getName());
+        return "where " + columnInfo.getColumn() + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param + "." + columnInfo.getName());
     }
+
+    @Override
+    protected String getUpdateParam(List<String> setList) {
+        return String.join(",", setList);
+    }
+
 }

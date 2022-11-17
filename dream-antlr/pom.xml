@@ -3,17 +3,17 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>dream</artifactId>
-        <groupId>com.moxa</groupId>
+        <artifactId>dream-parent</artifactId>
+        <groupId>com.moxa.dream</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.moxa</groupId>
+    <groupId>com.moxa.dream</groupId>
     <artifactId>dream-antlr</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.moxa</groupId>
+            <groupId>com.moxa.dream</groupId>
             <artifactId>dream-util</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>

@@ -14,26 +14,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MethodInfo {
-    private final Map<Class, Object> builtMap = new HashMap<>();
-    private Configuration configuration;
-    private String name;
-    private Class<? extends Collection> rowType;
-    private Class colType;
-    private String[] columnNames;
-    private boolean cache;
-    private Command command = Command.NONE;
-    private String sql;
-    private int timeOut;
-    private PackageStatement statement;
-    private CacheKey methodKey;
-    private Method method;
-    private Action[] initActionList;
-    private Action[] loopActionList;
-    private Action[] destroyActionList;
-    private MethodParam[] methodParamList;
-    private boolean compile = false;
+    protected final Map<Class, Object> builtMap = new HashMap<>();
+    protected Configuration configuration;
+    protected String name;
+    protected Class<? extends Collection> rowType;
+    protected Class colType;
+    protected String[] columnNames;
+    protected boolean cache = true;
+    protected Command command = Command.NONE;
+    protected String sql;
+    protected int timeOut;
+    protected PackageStatement statement;
+    protected CacheKey methodKey;
+    protected Method method;
+    protected Action[] initActionList;
+    protected Action[] loopActionList;
+    protected Action[] destroyActionList;
+    protected MethodParam[] methodParamList;
+    protected boolean compile = false;
 
-    private MethodInfo() {
+    protected MethodInfo() {
 
     }
 
@@ -137,7 +137,7 @@ public class MethodInfo {
     }
 
     public static class Builder {
-        private final MethodInfo methodInfo;
+        protected final MethodInfo methodInfo;
 
         public Builder(Configuration configuration) {
             methodInfo = new MethodInfo();
@@ -209,7 +209,7 @@ public class MethodInfo {
             return this;
         }
 
-        private boolean isValid() {
+        protected boolean isValid() {
             return !ObjectUtil.isNull(methodInfo.getSql());
         }
 

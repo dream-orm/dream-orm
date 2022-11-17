@@ -85,7 +85,6 @@ public class AllInvoker extends AbstractInvoker {
             String table = getTableName(colType);
             getQueryFromBean(tableFactory, table, colType, tableScanInfoMap, queryColumnInfoList, queryColumnList);
         }
-
     }
 
     protected void getQueryFromMap(TableFactory tableFactory, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {

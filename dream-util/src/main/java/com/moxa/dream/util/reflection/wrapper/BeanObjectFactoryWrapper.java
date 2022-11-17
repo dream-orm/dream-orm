@@ -28,18 +28,10 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
 
     }
 
-    protected Object newInstance(Class<?> type) {
-        try {
-            return type.getConstructor().newInstance();
-        } catch (Exception e) {
-            throw new ReflectException(e);
-        }
-    }
-
     @Override
     public ObjectFactory newObjectFactory(Object target) {
         if (target == null) {
-            return new BeanObjectFactory(newInstance(type), this);
+            return new BeanObjectFactory(ReflectUtil.create(type), this);
         } else {
             return new BeanObjectFactory(target, this);
         }

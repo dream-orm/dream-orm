@@ -2,10 +2,7 @@ package com.moxa.dream.util.reflect;
 
 import com.moxa.dream.util.common.ObjectUtil;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,19 +10,17 @@ public class ReflectUtil {
     private static final ReflectLoader reflectLoader = new ReflectLoader();
 
     public static <T> T create(Class<T> type) {
-        return create(type, false);
-    }
-
-    public static <T> T create(Class<T> type, boolean force) {
-        return create(type, null, force);
-    }
-
-    public static <T> T create(Class<T> type, Object[] paramList) {
-        return create(type, paramList, false);
-    }
-
-    public static <T> T create(Class<T> type, Object[] paramList, boolean force) {
-        return reflectLoader.create(type, paramList, force);
+        try {
+            return type.getConstructor().newInstance();
+        } catch (Exception e) {
+            try {
+                Constructor<T> constructor = type.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                return constructor.newInstance();
+            } catch (Exception exception) {
+                throw new ReflectException(exception);
+            }
+        }
     }
 
     public static List<Method> findMethod(Class type) {

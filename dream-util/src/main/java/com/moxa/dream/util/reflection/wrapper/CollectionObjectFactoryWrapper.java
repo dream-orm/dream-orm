@@ -1,6 +1,7 @@
 package com.moxa.dream.util.reflection.wrapper;
 
 
+import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.reflection.factory.CollectionObjectFactory;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
 
@@ -14,7 +15,7 @@ public class CollectionObjectFactoryWrapper extends BeanObjectFactoryWrapper {
     @Override
     public ObjectFactory newObjectFactory(Object target) {
         if (target == null) {
-            return new CollectionObjectFactory((Collection) newInstance(type), this);
+            return new CollectionObjectFactory((Collection) ReflectUtil.create(type), this);
         } else {
             return new CollectionObjectFactory((Collection) target, this);
         }

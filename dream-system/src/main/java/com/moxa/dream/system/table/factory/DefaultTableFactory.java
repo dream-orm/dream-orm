@@ -55,7 +55,7 @@ public class DefaultTableFactory implements TableFactory {
 
     protected String getTable(Class<?> tableClass) {
         Table tableAnnotation = tableClass.getDeclaredAnnotation(Table.class);
-        if (tableAnnotation == null)
+        if (tableAnnotation == null || !tableAnnotation.mapping())
             return null;
         String table = tableAnnotation.value();
         return table;
@@ -70,6 +70,7 @@ public class DefaultTableFactory implements TableFactory {
             }
         }
         return annotationMap;
+
     }
 
     protected ColumnInfo getColumnInfo(String table, Field field) {
@@ -97,7 +98,6 @@ public class DefaultTableFactory implements TableFactory {
         if (tableInfo != null) {
             tableInfoMap.put(tableInfo.getTable(), tableInfo);
         }
-
     }
 
     @Override

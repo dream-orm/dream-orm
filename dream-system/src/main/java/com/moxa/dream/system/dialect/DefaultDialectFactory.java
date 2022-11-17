@@ -122,7 +122,8 @@ public class DefaultDialectFactory implements DialectFactory {
             updateList[0] = sql;
             updateList[1] = sql.length();
             for (int i = 0; i < mappedParamList.size(); i++) {
-                updateList[i + 2] = mappedParamList.get(i);
+                MappedParam mappedParam = mappedParamList.get(i);
+                updateList[i + 2] = mappedParam.getParamValue();
             }
         } else {
             updateList = new Object[2];

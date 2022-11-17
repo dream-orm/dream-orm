@@ -6,8 +6,8 @@ import com.moxa.dream.system.core.session.Session;
 
 import java.util.List;
 
-public class UpdateNonByIdSqlMapper extends UpdateByIdSqlMapper {
-    public UpdateNonByIdSqlMapper(Session session) {
+public class UpdateNonByIdTemplateMapper extends UpdateByIdTemplateMapper {
+    public UpdateNonByIdTemplateMapper(Session session) {
         super(session);
     }
 

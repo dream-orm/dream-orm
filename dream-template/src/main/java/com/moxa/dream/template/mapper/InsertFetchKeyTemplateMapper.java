@@ -7,10 +7,10 @@ import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.template.mapper.fetch.*;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
-public class InsertFetchKeySqlMapper extends InsertSqlMapper {
+public class InsertFetchKeyTemplateMapper extends InsertTemplateMapper {
     private FetchKey fetchKey;
 
-    public InsertFetchKeySqlMapper(Session session) {
+    public InsertFetchKeyTemplateMapper(Session session) {
         super(session);
     }
 

@@ -5,13 +5,10 @@ import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
-import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 
-import java.util.Collection;
-
-public class SelectByIdSqlMapper extends SelectSqlMapper {
-    public SelectByIdSqlMapper(Session session) {
+public class DeleteByIdsTemplateMapper extends DeleteTemplateMapper {
+    public DeleteByIdsTemplateMapper(Session session) {
         super(session);
     }
 
@@ -19,12 +16,6 @@ public class SelectByIdSqlMapper extends SelectSqlMapper {
     protected String getSuffix(TableInfo tableInfo) {
         ColumnInfo columnInfo = tableInfo.getPrimColumnInfo();
         ObjectUtil.requireNonNull(columnInfo, "表'" + tableInfo.getTable() + "'未注册主键");
-        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", columnInfo.getName());
+        return "where " + columnInfo.getColumn() + " in(" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.FOREACH, ",", "list") + ")";
     }
-
-    @Override
-    protected Class<? extends Collection> getRowType() {
-        return NonCollection.class;
-    }
-
 }

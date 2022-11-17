@@ -5,12 +5,13 @@ import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
+import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 
-import java.util.List;
+import java.util.Collection;
 
-public class UpdateByIdSqlMapper extends UpdateSqlMapper {
-    public UpdateByIdSqlMapper(Session session) {
+public class SelectByIdTemplateMapper extends SelectTemplateMapper {
+    public SelectByIdTemplateMapper(Session session) {
         super(session);
     }
 
@@ -18,12 +19,12 @@ public class UpdateByIdSqlMapper extends UpdateSqlMapper {
     protected String getSuffix(TableInfo tableInfo) {
         ColumnInfo columnInfo = tableInfo.getPrimColumnInfo();
         ObjectUtil.requireNonNull(columnInfo, "表'" + tableInfo.getTable() + "'未注册主键");
-        return "where " + columnInfo.getColumn() + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param + "." + columnInfo.getName());
+        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", columnInfo.getName());
     }
 
     @Override
-    protected String getUpdateParam(List<String> setList) {
-        return String.join(",", setList);
+    protected Class<? extends Collection> getRowType() {
+        return NonCollection.class;
     }
 
 }

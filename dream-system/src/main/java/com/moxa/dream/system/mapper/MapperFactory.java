@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface MapperFactory {
 
-    void addMapper(Configuration configuration, Class type);
+    boolean addMapper(Configuration configuration, Class type);
 
     <T> T getMapper(Class<T> type, MapperInvoke mapperInvoke);
 

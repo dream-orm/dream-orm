@@ -18,10 +18,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public abstract class InjectSqlMapper extends AbstractSqlMapper {
+public abstract class InjectTemplateMapper extends AbstractTemplateMapper {
     private String param = "param";
 
-    public InjectSqlMapper(Session session) {
+    public InjectTemplateMapper(Session session) {
         super(session);
     }
 
