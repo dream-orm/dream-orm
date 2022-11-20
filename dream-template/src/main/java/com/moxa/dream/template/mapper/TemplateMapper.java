@@ -29,7 +29,4 @@ public interface TemplateMapper {
     int deleteById(Class<?> type, Object id);
 
     int deleteByIds(Class<?> type, List<?> idList);
-
-    boolean existById(Class<?> type, Object id);
-
 }

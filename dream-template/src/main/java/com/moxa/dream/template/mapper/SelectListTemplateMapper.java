@@ -145,7 +145,7 @@ public class SelectListTemplateMapper {
                             return true;
                         }
                     }).collect(Collectors.toList());
-                    if (tableInfoList == null) {
+                    if (ObjectUtil.isNull(tableInfoList)) {
                         throw new DreamRunTimeException("条件字段" + conditionObject.getProperty() + "在" + tableSet + "对应的类未注册");
                     }
                     if (tableInfoList.size() > 1) {

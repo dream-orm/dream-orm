@@ -1,12 +1,9 @@
 package com.moxa.dream.drive.session;
 
-import com.moxa.dream.drive.executor.CustomCacheExecutor;
-import com.moxa.dream.drive.executor.SessionCacheExecutor;
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.core.executor.Executor;
-import com.moxa.dream.system.core.executor.JdbcExecutor;
+import com.moxa.dream.system.core.executor.*;
 import com.moxa.dream.system.core.resultsethandler.DefaultResultSetHandler;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.session.DefaultSession;
@@ -53,15 +50,17 @@ public class DefaultSessionFactory implements SessionFactory {
     public Session openSession(boolean autoCommit, boolean cache) {
         Transaction transaction = transactionFactory.getTransaction(dataSource);
         transaction.setAutoCommit(autoCommit);
-        Executor executor = new JdbcExecutor(configuration, transaction, statementHandler, resultSetHandler, this);
-        if (pluginFactory != null) {
-            executor = (Executor) pluginFactory.plugin(executor);
-        }
+        Executor executor = new JdbcExecutor(transaction, statementHandler, resultSetHandler, this);
         if (this.cache != null) {
-            executor = new CustomCacheExecutor(this.cache, executor, this);
+            executor = new CacheExecutor(executor, this.cache);
         }
         if (cache) {
-            executor = new SessionCacheExecutor(executor, this);
+            executor = new SessionCacheExecutor(executor);
+        }
+        executor = new ActionExecutor(executor);
+        executor = new ListenerExecutor(executor, configuration.getListenerFactory());
+        if (pluginFactory != null) {
+            executor = (Executor) pluginFactory.plugin(executor);
         }
         return openSession(executor);
     }

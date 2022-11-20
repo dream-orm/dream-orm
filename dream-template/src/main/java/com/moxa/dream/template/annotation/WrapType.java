@@ -1,10 +1,10 @@
 package com.moxa.dream.template.annotation;
 
-public enum InjectType {
+public enum WrapType {
     NONE(0), INSERT(1), UPDATE(2), INSERT_UPDATE(3);
     private int code;
 
-    InjectType(int code) {
+    WrapType(int code) {
         this.code = code;
     }
 

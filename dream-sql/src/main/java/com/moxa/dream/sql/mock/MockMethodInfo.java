@@ -9,8 +9,8 @@ import java.util.Collection;
 
 public class MockMethodInfo extends MethodInfo {
 
-    public MockMethodInfo(Configuration configuration,String sql, Command command, boolean cache, int timeOut, Class<? extends Collection> rowType, Class<?> colType) {
-        this.configuration=configuration;
+    public MockMethodInfo(Configuration configuration, String sql, Command command, boolean cache, int timeOut, Class<? extends Collection> rowType, Class<?> colType) {
+        this.configuration = configuration;
         this.sql = sql;
         this.methodKey = new MockCacheKey(sql);
         this.command = command;

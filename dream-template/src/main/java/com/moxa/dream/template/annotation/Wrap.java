@@ -12,5 +12,5 @@ import java.lang.annotation.Target;
 public @interface Wrap {
     Class<? extends Wrapper> value();
 
-    InjectType type() default InjectType.INSERT_UPDATE;
+    WrapType type() default WrapType.INSERT_UPDATE;
 }

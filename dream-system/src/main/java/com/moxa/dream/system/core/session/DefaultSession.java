@@ -54,7 +54,7 @@ public class DefaultSession implements Session {
             try {
                 return executeBatch(methodInfo, argMap, batch.value());
             } catch (SQLException e) {
-                throw new DreamRunTimeException("批量执行方法'" + methodInfo.getId() + "'失败", e);
+                throw new DreamRunTimeException("批量执行方法'" + methodInfo.getId() + "'失败:"+e.getMessage(), e);
             }
         }
     }

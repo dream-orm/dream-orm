@@ -15,9 +15,10 @@ public class ObjectWrapper {
     }
 
     public static ObjectWrapper wrapper(Object target) {
-        return wrapper(target,true);
+        return wrapper(target, true);
     }
-    public static ObjectWrapper wrapper(Object target,boolean cache) {
+
+    public static ObjectWrapper wrapper(Object target, boolean cache) {
         Class<?> type = target.getClass();
         ObjectFactoryWrapper factoryWrapper = factoryWrapperMap.get(type);
         if (factoryWrapper == null) {
@@ -33,6 +34,7 @@ public class ObjectWrapper {
         }
         return new ObjectWrapper(factoryWrapper.newObjectFactory(target));
     }
+
     public static ObjectFactoryWrapper remove(Class<?> type) {
         return factoryWrapperMap.remove(type);
     }

@@ -11,7 +11,7 @@ import com.moxa.dream.util.common.ObjectMap;
 import java.util.List;
 import java.util.Map;
 
-public  class DefaultSqlMapper implements SqlMapper {
+public class DefaultSqlMapper implements SqlMapper {
     private MockCompileFactory mockCompileFactory;
     private Session session;
 
@@ -25,17 +25,17 @@ public  class DefaultSqlMapper implements SqlMapper {
     }
 
     @Override
-    public <T> List<T> selectList(String sql,Object param, Class<T> type, boolean cache, int timeOut) {
-        if(param!=null&&!(param instanceof Map)){
-            param=new ObjectMap(param);
+    public <T> List<T> selectList(String sql, Object param, Class<T> type, boolean cache, int timeOut) {
+        if (param != null && !(param instanceof Map)) {
+            param = new ObjectMap(param);
         }
-        MappedStatement mappedStatement = mockCompileFactory.compile(sql,param, List.class, type , cache, timeOut);
+        MappedStatement mappedStatement = mockCompileFactory.compile(sql, param, List.class, type, cache, timeOut);
         return (List<T>) session.execute(mappedStatement);
     }
 
     @Override
     public Integer execute(String sql, Object param) {
-        MappedStatement mappedStatement = mockCompileFactory.compile(sql,param, NonCollection.class, Integer.class, false, 0);
+        MappedStatement mappedStatement = mockCompileFactory.compile(sql, param, NonCollection.class, Integer.class, false, 0);
         return (Integer) session.execute(mappedStatement);
     }
 }

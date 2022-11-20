@@ -8,17 +8,15 @@ import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
-import com.moxa.dream.template.annotation.InjectType;
+import com.moxa.dream.template.annotation.WrapType;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.reflect.ReflectUtil;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InsertTemplateMapper extends InjectTemplateMapper {
+public class InsertTemplateMapper extends WrapTemplateMapper {
     private final int CODE = 1;
     private String param = "param";
 
@@ -27,20 +25,17 @@ public class InsertTemplateMapper extends InjectTemplateMapper {
     }
 
     @Override
-    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
+    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList) {
         String table = tableInfo.getTable();
-        List<Field> fieldList = ReflectUtil.findField(type);
         List<String> columnList = new ArrayList<>();
         List<String> valueList = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
-                if (!ignore(field)) {
-                    String name = field.getName();
-                    ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
-                    if (columnInfo != null) {
-                        columnList.add(columnInfo.getColumn());
-                        valueList.add(InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param + "." + columnInfo.getName()));
-                    }
+                String name = field.getName();
+                ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
+                if (columnInfo != null) {
+                    columnList.add(columnInfo.getColumn());
+                    valueList.add(InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param + "." + columnInfo.getName()));
                 }
             }
         }
@@ -56,12 +51,8 @@ public class InsertTemplateMapper extends InjectTemplateMapper {
     }
 
     @Override
-    protected boolean accept(InjectType injectType) {
-        return (CODE & injectType.getCode()) > 0;
-    }
-
-    protected boolean ignore(Field field) {
-        return field.isAnnotationPresent(Ignore.class);
+    protected boolean accept(WrapType wrapType) {
+        return (CODE & wrapType.getCode()) > 0;
     }
 
     protected Action[] initActionList(TableInfo tableInfo) {

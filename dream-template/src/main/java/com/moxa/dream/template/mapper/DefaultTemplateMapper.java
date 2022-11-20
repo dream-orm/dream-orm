@@ -13,7 +13,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private SelectPageTemplateMapper selectPageSqlMapper;
     private DeleteByIdTemplateMapper deleteByIdSqlMapper;
     private DeleteByIdsTemplateMapper deleteByIdsSqlMapper;
-    private ExistByIdTemplateMapper existByIdSqlMapper;
     private UpdateByIdTemplateMapper updateByIdSqlMapper;
     private UpdateNonByIdTemplateMapper updateNonByIdSqlMapper;
     private InsertTemplateMapper insertSqlMapper;
@@ -28,7 +27,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
         selectPageSqlMapper = new SelectPageTemplateMapper(session);
         deleteByIdSqlMapper = new DeleteByIdTemplateMapper(session);
         deleteByIdsSqlMapper = new DeleteByIdsTemplateMapper(session);
-        existByIdSqlMapper = new ExistByIdTemplateMapper(session);
         updateByIdSqlMapper = new UpdateByIdTemplateMapper(session);
         updateNonByIdSqlMapper = new UpdateNonByIdTemplateMapper(session);
         insertSqlMapper = new InsertTemplateMapper(session);
@@ -96,11 +94,5 @@ public class DefaultTemplateMapper implements TemplateMapper {
     @Override
     public int deleteByIds(Class<?> type, List<?> idList) {
         return (int) deleteByIdsSqlMapper.execute(type, idList);
-    }
-
-    @Override
-    public boolean existById(Class<?> type, Object id) {
-        Integer result = (Integer) existByIdSqlMapper.execute(type, id);
-        return result != null;
     }
 }

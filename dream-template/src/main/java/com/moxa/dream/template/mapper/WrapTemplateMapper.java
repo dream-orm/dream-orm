@@ -5,23 +5,20 @@ import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.util.SystemUtil;
-import com.moxa.dream.template.annotation.InjectType;
 import com.moxa.dream.template.annotation.Wrap;
+import com.moxa.dream.template.annotation.WrapType;
 import com.moxa.dream.template.wrap.Wrapper;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public abstract class InjectTemplateMapper extends AbstractTemplateMapper {
+public abstract class WrapTemplateMapper extends AbstractTemplateMapper {
     private String param = "param";
 
-    public InjectTemplateMapper(Session session) {
+    public WrapTemplateMapper(Session session) {
         super(session);
     }
 
@@ -29,28 +26,32 @@ public abstract class InjectTemplateMapper extends AbstractTemplateMapper {
     protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
         Map<String, Wrapper> wrapObjectMap = new HashMap<>();
         List<Field> fieldList = ReflectUtil.findField(type);
+        List<Field> acceptList = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
                 if (!ignore(field)) {
                     if (field.isAnnotationPresent(Wrap.class)) {
                         Wrap wrapAnnotation = field.getDeclaredAnnotation(Wrap.class);
-                        InjectType injectType = wrapAnnotation.type();
-                        if (accept(injectType)) {
+                        WrapType wrapType = wrapAnnotation.type();
+                        if (accept(wrapType)) {
+                            acceptList.add(field);
                             Wrapper wrapper = ReflectUtil.create(wrapAnnotation.value());
                             wrapObjectMap.put(param + "." + field.getName(), wrapper);
                         }
+                    } else {
+                        acceptList.add(field);
                     }
                 }
             }
         }
-        MethodInfo methodInfo = doGetMethodInfo(configuration, tableInfo, type);
+        MethodInfo methodInfo = doGetMethodInfo(configuration, tableInfo, acceptList);
         if (!wrapObjectMap.isEmpty()) {
             methodInfo.set(WrapObjectMap.class, new WrapObjectMap(wrapObjectMap));
         }
         return methodInfo;
     }
 
-    protected abstract MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, Class type);
+    protected abstract MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList);
 
     @Override
     protected Object execute(MethodInfo methodInfo, Object arg) {
@@ -74,7 +75,7 @@ public abstract class InjectTemplateMapper extends AbstractTemplateMapper {
         return SystemUtil.ignoreField(field);
     }
 
-    protected abstract boolean accept(InjectType injectType);
+    protected abstract boolean accept(WrapType wrapType);
 
     class WrapObjectMap {
         private Map<String, Wrapper> wrapObjectMap;

@@ -36,6 +36,7 @@ public class DefaultTableFactory implements TableFactory {
                 ColumnInfo columnInfo = getColumnInfo(table, field);
                 if (columnInfo != null) {
                     fieldMap.put(columnInfo.getColumn(), name);
+                    fieldMap.put(name, name);
                     columnInfoMap.put(name, columnInfo);
                     if (columnInfo.isPrimary()) {
                         if (primColumnInfo != null) {

@@ -184,12 +184,11 @@ public class DefaultDialectFactory implements DialectFactory {
             ColumnInfo columnInfo = null;
             if (tableInfo != null) {
                 String fieldName = tableInfo.getFieldName(column);
-                if (ObjectUtil.isNull(fieldName)) {
-                    fieldName = column;
-                }
-                columnInfo = tableInfo.getColumnInfo(fieldName);
-                if (columnInfo != null) {
-                    jdbcType = columnInfo.getJdbcType();
+                if (!ObjectUtil.isNull(fieldName)) {
+                    columnInfo = tableInfo.getColumnInfo(fieldName);
+                    if (columnInfo != null) {
+                        jdbcType = columnInfo.getJdbcType();
+                    }
                 }
             }
             return new ParamType(columnInfo, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), jdbcType));

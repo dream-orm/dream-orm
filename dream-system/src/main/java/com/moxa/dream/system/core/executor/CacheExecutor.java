@@ -1,20 +1,19 @@
-package com.moxa.dream.drive.executor;
+package com.moxa.dream.system.core.executor;
 
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.core.executor.Executor;
-import com.moxa.dream.system.core.session.SessionFactory;
 
-public class CustomCacheExecutor extends CacheExecutor {
-    private final Cache cache;
+public class CacheExecutor extends AbstractCacheExecutor {
+    protected Cache cache;
 
-    public CustomCacheExecutor(Cache cache, Executor executor, SessionFactory sessionFactory) {
-        super(executor, sessionFactory);
+    public CacheExecutor(Executor executor, Cache cache) {
+        super(executor);
         this.cache = cache;
     }
 
     @Override
-    protected void clear() {
+    public void clear() {
+        cache.clear();
     }
 
     @Override

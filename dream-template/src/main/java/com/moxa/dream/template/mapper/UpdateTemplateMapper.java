@@ -7,17 +7,15 @@ import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
-import com.moxa.dream.system.util.SystemUtil;
-import com.moxa.dream.template.annotation.InjectType;
+import com.moxa.dream.template.annotation.WrapType;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UpdateTemplateMapper extends InjectTemplateMapper {
+public abstract class UpdateTemplateMapper extends WrapTemplateMapper {
     protected String param = "param";
     private int CODE = 2;
 
@@ -26,15 +24,14 @@ public abstract class UpdateTemplateMapper extends InjectTemplateMapper {
     }
 
     @Override
-    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
+    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList) {
         String table = tableInfo.getTable();
-        List<Field> fieldList = ReflectUtil.findField(type);
         ColumnInfo primColumnInfo = tableInfo.getPrimColumnInfo();
         ObjectUtil.requireNonNull(primColumnInfo, "表'" + table + "'未注册主键");
         List<String> setList = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
-                if (!ignore(field)) {
+                if (!tableInfo.getPrimColumnInfo().getName().equals(field.getName())) {
                     String name = field.getName();
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
@@ -54,13 +51,9 @@ public abstract class UpdateTemplateMapper extends InjectTemplateMapper {
                 .build();
     }
 
-    protected boolean ignore(Field field) {
-        return SystemUtil.ignoreField(field);
-    }
-
     @Override
-    protected boolean accept(InjectType injectType) {
-        return (CODE & injectType.getCode()) > 0;
+    protected boolean accept(WrapType wrapType) {
+        return (CODE & wrapType.getCode()) > 0;
     }
 
     protected abstract String getSuffix(TableInfo tableInfo);

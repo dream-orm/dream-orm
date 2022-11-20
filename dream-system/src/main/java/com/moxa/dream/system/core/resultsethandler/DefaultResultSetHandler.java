@@ -171,14 +171,12 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         TableInfo tableInfo;
         if (tableFactory != null) {
             tableInfo = tableFactory.getTableInfo(tableName);
-            String link=null;
             if (tableInfo != null) {
-                link = tableInfo.getFieldName(columnLabel);
+                String link = tableInfo.getFieldName(columnLabel);
+                if (!ObjectUtil.isNull(link)) {
+                    return tableInfo.getColumnInfo(link);
+                }
             }
-            if (ObjectUtil.isNull(link)) {
-                link = columnLabel;
-            }
-            return tableInfo.getColumnInfo(link);
         }
         return null;
 

@@ -1,22 +1,20 @@
-package com.moxa.dream.drive.executor;
+package com.moxa.dream.system.core.executor;
 
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.core.executor.Executor;
-import com.moxa.dream.system.core.session.SessionFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SessionCacheExecutor extends CacheExecutor {
+public class SessionCacheExecutor extends AbstractCacheExecutor {
     private final Map<CacheKey, Object> cacheMap = new HashMap<>();
 
-    public SessionCacheExecutor(Executor executor, SessionFactory sessionFactory) {
-        super(executor, sessionFactory);
+    public SessionCacheExecutor(Executor executor) {
+        super(executor);
     }
 
     @Override
-    protected void clear() {
+    public void clear() {
         cacheMap.clear();
     }
 
@@ -33,5 +31,11 @@ public class SessionCacheExecutor extends CacheExecutor {
     @Override
     protected void clearObject(MappedStatement mappedStatement) {
         cacheMap.clear();
+    }
+
+    @Override
+    public void close() {
+        super.close();
+        clear();
     }
 }

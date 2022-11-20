@@ -1,7 +1,6 @@
 package com.moxa.dream.util.reflection.wrapper;
 
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.reflect.ReflectException;
 import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.reflection.factory.BeanObjectFactory;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
