@@ -19,7 +19,7 @@ public abstract class SelectMapper extends AbstractMapper {
     @Override
     protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
         String sql = "select " + getSelectColumn(type) + " from " +
-                getFromTable(type) + " " + getOther(configuration, tableInfo, arg);
+                getFromTable(type) + " " + getOther(configuration, tableInfo, type, arg);
         return new MethodInfo.Builder(configuration)
                 .rowType(getRowType())
                 .colType(getColType(type))
@@ -34,7 +34,7 @@ public abstract class SelectMapper extends AbstractMapper {
                 ",");
     }
 
-    protected abstract String getOther(Configuration configuration, TableInfo tableInfo, Object arg);
+    protected abstract String getOther(Configuration configuration, TableInfo tableInfo, Class<?> type, Object arg);
 
     protected abstract Class<? extends Collection> getRowType();
 

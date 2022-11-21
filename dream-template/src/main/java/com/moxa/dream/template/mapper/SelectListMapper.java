@@ -26,10 +26,10 @@ public class SelectListMapper extends SelectMapper {
     }
 
     @Override
-    protected String getOther(Configuration configuration, TableInfo tableInfo, Object arg) {
+    protected String getOther(Configuration configuration, TableInfo tableInfo, Class<?> type, Object arg) {
         if (arg != null) {
             Class<?> argType = arg.getClass();
-            Set<String> tableNameSet = TemplateUtil.getTableNameSet(argType);
+            Set<String> tableNameSet = TemplateUtil.getTableNameSet(type);
             TableFactory tableFactory = configuration.getTableFactory();
             String where = getWhereSql(argType, tableNameSet, tableFactory);
             String order = getOrderSql(argType, tableNameSet, tableFactory);

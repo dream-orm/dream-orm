@@ -16,7 +16,6 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public abstract class WrapMapper extends AbstractMapper {
-    private String param = "param";
 
     public WrapMapper(Session session) {
         super(session);
@@ -36,7 +35,7 @@ public abstract class WrapMapper extends AbstractMapper {
                         if (accept(wrapType)) {
                             acceptList.add(field);
                             Wrapper wrapper = ReflectUtil.create(wrapAnnotation.value());
-                            wrapObjectMap.put(param + "." + field.getName(), wrapper);
+                            wrapObjectMap.put(DREAM_TEMPLATE_PARAM + "." + field.getName(), wrapper);
                         }
                     } else {
                         acceptList.add(field);

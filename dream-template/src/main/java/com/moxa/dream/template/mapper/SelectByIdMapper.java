@@ -13,7 +13,7 @@ public class SelectByIdMapper extends SelectMapper {
     }
 
     @Override
-    protected String getOther(Configuration configuration, TableInfo tableInfo, Object arg) {
+    protected String getOther(Configuration configuration, TableInfo tableInfo, Class<?> type, Object arg) {
         return super.getIdWhere(tableInfo);
     }
 

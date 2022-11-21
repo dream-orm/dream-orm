@@ -56,9 +56,13 @@ public abstract class AbstractMapper {
 
     protected Map<String, Object> wrapArg(Object arg) {
         if (arg != null) {
-            Map<String, Object> paramMap = new HashMap<>();
-            paramMap.put(DREAM_TEMPLATE_PARAM, arg);
-            return paramMap;
+            if (arg instanceof Map) {
+                return (Map<String, Object>) arg;
+            } else {
+                Map<String, Object> paramMap = new HashMap<>();
+                paramMap.put(DREAM_TEMPLATE_PARAM, arg);
+                return paramMap;
+            }
         } else {
             return new HashMap<>();
         }
@@ -71,11 +75,19 @@ public abstract class AbstractMapper {
     }
 
     protected String getIdWhere(TableInfo tableInfo) {
+        return getIdWhere(tableInfo, false);
+    }
+
+    protected String getIdWhere(TableInfo tableInfo, boolean appendField) {
         ColumnInfo columnInfo = tableInfo.getPrimColumnInfo();
         if (columnInfo == null) {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'未注册主键");
         }
-        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", DREAM_TEMPLATE_PARAM);
+        String param = DREAM_TEMPLATE_PARAM;
+        if (appendField) {
+            param = param + "." + columnInfo.getName();
+        }
+        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + "=" + InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param);
     }
 
     protected String getIdsWhere(TableInfo tableInfo) {

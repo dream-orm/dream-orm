@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class UpdateMapper extends WrapMapper {
-    protected String param = "param";
     private int CODE = 2;
 
     public UpdateMapper(Session session) {
@@ -34,7 +33,7 @@ public abstract class UpdateMapper extends WrapMapper {
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
                         setList.add(columnInfo.getColumn() + "=" +
-                                InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param + "." + columnInfo.getName()));
+                                InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", DREAM_TEMPLATE_PARAM + "." + columnInfo.getName()));
                     }
                 }
             }

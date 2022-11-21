@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SelectPageMapper extends SelectListMapper {
-    private final String PARAM = "param";
     private final String PAGE = "page";
 
     public SelectPageMapper(Session session) {
@@ -71,7 +70,7 @@ public class SelectPageMapper extends SelectListMapper {
 
     protected Map<String, Object> wrapArg(Object arg, Page page) {
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put(PARAM, arg);
+        paramMap.put(DREAM_TEMPLATE_PARAM, arg);
         paramMap.put(PAGE, page);
         return paramMap;
     }
