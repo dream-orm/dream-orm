@@ -107,7 +107,7 @@ public class MethodInfo {
 
     public String getId() {
         if (method == null) {
-            return null;
+            return "";
         } else {
             return method.getDeclaringClass().getName() + "." + method.getName();
         }

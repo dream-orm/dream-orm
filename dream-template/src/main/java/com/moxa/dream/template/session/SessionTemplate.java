@@ -13,6 +13,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.List;
 import java.util.Map;
 
 public class SessionTemplate implements Session {
@@ -52,6 +53,16 @@ public class SessionTemplate implements Session {
     @Override
     public Object execute(MappedStatement mappedStatement) {
         return sessionProxy.execute(mappedStatement);
+    }
+
+    @Override
+    public Object batchExecute(MethodInfo methodInfo, List<?> argList, int batchSize) {
+        return sessionProxy.batchExecute(methodInfo, argList, batchSize);
+    }
+
+    @Override
+    public Object batchExecute(List<MappedStatement> mappedStatementList,int batchSize) {
+        return sessionProxy.batchExecute(mappedStatementList,batchSize);
     }
 
 

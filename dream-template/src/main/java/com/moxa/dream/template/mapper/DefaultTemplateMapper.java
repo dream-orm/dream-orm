@@ -6,6 +6,7 @@ import com.moxa.dream.system.core.session.Session;
 import java.util.List;
 
 public class DefaultTemplateMapper implements TemplateMapper {
+    private Session session;
     private SelectByIdMapper selectByIdSqlMapper;
     private SelectByIdsMapper selectByIdsSqlMapper;
     private SelectOneMapper selectOneSqlMapper;
@@ -16,11 +17,11 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private UpdateByIdMapper updateByIdSqlMapper;
     private UpdateNonByIdMapper updateNonByIdSqlMapper;
     private InsertMapper insertSqlMapper;
-    private InsertBatchMapper insertBatchSqlMapper;
     private ExistByIdMapper existByIdMapper;
     private ExistMapper existMapper;
 
     public DefaultTemplateMapper(Session session) {
+        this.session = session;
         selectByIdSqlMapper = new SelectByIdMapper(session);
         selectByIdsSqlMapper = new SelectByIdsMapper(session);
         selectOneSqlMapper = new SelectOneMapper(session);
@@ -31,7 +32,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
         updateByIdSqlMapper = new UpdateByIdMapper(session);
         updateNonByIdSqlMapper = new UpdateNonByIdMapper(session);
         insertSqlMapper = new InsertMapper(session);
-        insertBatchSqlMapper = new InsertBatchMapper(session);
         existByIdMapper = new ExistByIdMapper(session);
         existMapper = new ExistMapper(session);
     }
@@ -78,11 +78,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public int[] insertBatch(List<?> viewList) {
-        return (int[]) insertBatchSqlMapper.execute(viewList.get(0).getClass(), viewList);
-    }
-
-    @Override
     public int deleteById(Class<?> type, Object id) {
         return (int) deleteByIdSqlMapper.execute(type, id);
     }
@@ -102,5 +97,23 @@ public class DefaultTemplateMapper implements TemplateMapper {
     public boolean exist(Class<?> type, Object conditionObject) {
         Integer result = (Integer) existMapper.execute(type, conditionObject);
         return result != null;
+    }
+
+    @Override
+    public void batchInsert(List<?> viewList, int batchSize) {
+        if (viewList == null || viewList.isEmpty()) {
+            return;
+        }
+        new BatchInsertMapper(session).execute(viewList.get(0).getClass(), viewList, batchSize);
+    }
+
+    @Override
+    public void batchUpdateById(List<?> viewList, int batchSize) {
+        new BatchUpdateByIdMapper(session).execute(viewList.get(0).getClass(), viewList, batchSize);
+    }
+
+    @Override
+    public void batchUpdateNonById(List<?> viewList, int batchSize) {
+        new BatchUpdateNonByIdMapper(session).execute(viewList.get(0).getClass(), viewList, batchSize);
     }
 }
