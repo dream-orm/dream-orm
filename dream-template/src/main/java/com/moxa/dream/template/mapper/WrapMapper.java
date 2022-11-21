@@ -15,15 +15,15 @@ import com.moxa.dream.util.reflect.ReflectUtil;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public abstract class WrapTemplateMapper extends AbstractTemplateMapper {
+public abstract class WrapMapper extends AbstractMapper {
     private String param = "param";
 
-    public WrapTemplateMapper(Session session) {
+    public WrapMapper(Session session) {
         super(session);
     }
 
     @Override
-    protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
+    protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
         Map<String, Wrapper> wrapObjectMap = new HashMap<>();
         List<Field> fieldList = ReflectUtil.findField(type);
         List<Field> acceptList = new ArrayList<>();
@@ -44,14 +44,14 @@ public abstract class WrapTemplateMapper extends AbstractTemplateMapper {
                 }
             }
         }
-        MethodInfo methodInfo = doGetMethodInfo(configuration, tableInfo, acceptList);
+        MethodInfo methodInfo = doGetMethodInfo(configuration, tableInfo, acceptList, arg);
         if (!wrapObjectMap.isEmpty()) {
             methodInfo.set(WrapObjectMap.class, new WrapObjectMap(wrapObjectMap));
         }
         return methodInfo;
     }
 
-    protected abstract MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList);
+    protected abstract MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg);
 
     @Override
     protected Object execute(MethodInfo methodInfo, Object arg) {

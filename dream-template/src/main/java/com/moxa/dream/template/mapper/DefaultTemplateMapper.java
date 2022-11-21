@@ -6,32 +6,36 @@ import com.moxa.dream.system.core.session.Session;
 import java.util.List;
 
 public class DefaultTemplateMapper implements TemplateMapper {
-    private SelectByIdTemplateMapper selectByIdSqlMapper;
-    private SelectByIdsTemplateMapper selectByIdsSqlMapper;
-    private SelectOneTemplateMapper selectOneSqlMapper;
-    private SelectListTemplateMapper selectListTemplateMapper;
-    private SelectPageTemplateMapper selectPageSqlMapper;
-    private DeleteByIdTemplateMapper deleteByIdSqlMapper;
-    private DeleteByIdsTemplateMapper deleteByIdsSqlMapper;
-    private UpdateByIdTemplateMapper updateByIdSqlMapper;
-    private UpdateNonByIdTemplateMapper updateNonByIdSqlMapper;
-    private InsertTemplateMapper insertSqlMapper;
-    private InsertBatchTemplateMapper insertBatchSqlMapper;
-    private InsertFetchKeyTemplateMapper insertFetchKeySqlMapper;
+    private SelectByIdMapper selectByIdSqlMapper;
+    private SelectByIdsMapper selectByIdsSqlMapper;
+    private SelectOneMapper selectOneSqlMapper;
+    private SelectListMapper selectListMapper;
+    private SelectPageMapper selectPageSqlMapper;
+    private DeleteByIdMapper deleteByIdSqlMapper;
+    private DeleteByIdsMapper deleteByIdsSqlMapper;
+    private UpdateByIdMapper updateByIdSqlMapper;
+    private UpdateNonByIdMapper updateNonByIdSqlMapper;
+    private InsertMapper insertSqlMapper;
+    private InsertBatchMapper insertBatchSqlMapper;
+    private InsertFetchKeyMapper insertFetchKeySqlMapper;
+    private ExistByIdMapper existByIdMapper;
+    private ExistMapper existMapper;
 
     public DefaultTemplateMapper(Session session) {
-        selectByIdSqlMapper = new SelectByIdTemplateMapper(session);
-        selectByIdsSqlMapper = new SelectByIdsTemplateMapper(session);
-        selectOneSqlMapper = new SelectOneTemplateMapper(session);
-        selectListTemplateMapper = new SelectListTemplateMapper(session);
-        selectPageSqlMapper = new SelectPageTemplateMapper(session);
-        deleteByIdSqlMapper = new DeleteByIdTemplateMapper(session);
-        deleteByIdsSqlMapper = new DeleteByIdsTemplateMapper(session);
-        updateByIdSqlMapper = new UpdateByIdTemplateMapper(session);
-        updateNonByIdSqlMapper = new UpdateNonByIdTemplateMapper(session);
-        insertSqlMapper = new InsertTemplateMapper(session);
-        insertBatchSqlMapper = new InsertBatchTemplateMapper(session);
-        insertFetchKeySqlMapper = new InsertFetchKeyTemplateMapper(session);
+        selectByIdSqlMapper = new SelectByIdMapper(session);
+        selectByIdsSqlMapper = new SelectByIdsMapper(session);
+        selectOneSqlMapper = new SelectOneMapper(session);
+        selectListMapper = new SelectListMapper(session);
+        selectPageSqlMapper = new SelectPageMapper(session);
+        deleteByIdSqlMapper = new DeleteByIdMapper(session);
+        deleteByIdsSqlMapper = new DeleteByIdsMapper(session);
+        updateByIdSqlMapper = new UpdateByIdMapper(session);
+        updateNonByIdSqlMapper = new UpdateNonByIdMapper(session);
+        insertSqlMapper = new InsertMapper(session);
+        insertBatchSqlMapper = new InsertBatchMapper(session);
+        insertFetchKeySqlMapper = new InsertFetchKeyMapper(session);
+        existByIdMapper = new ExistByIdMapper(session);
+        existMapper = new ExistMapper(session);
     }
 
     @Override
@@ -51,7 +55,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
 
     @Override
     public <T> List<T> selectList(Class<T> type, Object conditionObject) {
-        return (List<T>) selectListTemplateMapper.execute(type, conditionObject);
+        return (List<T>) selectListMapper.execute(type, conditionObject);
     }
 
     @Override
@@ -94,5 +98,17 @@ public class DefaultTemplateMapper implements TemplateMapper {
     @Override
     public int deleteByIds(Class<?> type, List<?> idList) {
         return (int) deleteByIdsSqlMapper.execute(type, idList);
+    }
+
+    @Override
+    public boolean existById(Class<?> type, Object id) {
+        Integer result = (Integer) existByIdMapper.execute(type, id);
+        return result != null;
+    }
+
+    @Override
+    public boolean exist(Class<?> type, Object conditionObject) {
+        Integer result = (Integer) existMapper.execute(type, conditionObject);
+        return result != null;
     }
 }

@@ -6,13 +6,13 @@ import com.moxa.dream.system.core.session.Session;
 
 import java.util.List;
 
-public class UpdateNonByIdTemplateMapper extends UpdateByIdTemplateMapper {
-    public UpdateNonByIdTemplateMapper(Session session) {
+public class UpdateNonByIdMapper extends UpdateByIdMapper {
+    public UpdateNonByIdMapper(Session session) {
         super(session);
     }
 
     @Override
     protected String getUpdateParam(List<String> setList) {
-        return InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.NON, ",", String.join(",", setList));
+        return InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.NON, ",", super.getUpdateParam(setList));
     }
 }

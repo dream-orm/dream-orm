@@ -12,12 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SelectPageTemplateMapper extends SelectListTemplateMapper {
+public class SelectPageMapper extends SelectListMapper {
     private final String PARAM = "param";
     private final String PAGE = "page";
-    private Map<String, MethodInfo> methodInfoMap = new HashMap<>();
 
-    public SelectPageTemplateMapper(Session session) {
+    public SelectPageMapper(Session session) {
         super(session);
     }
 
@@ -27,6 +26,9 @@ public class SelectPageTemplateMapper extends SelectListTemplateMapper {
     }
 
     public Object execute(Class<?> type, Object arg, Page page) {
+        if (page == null) {
+            page = new Page();
+        }
         String paramTypeName = null;
         if (arg != null) {
             paramTypeName = arg.getClass().getName();
@@ -39,7 +41,8 @@ public class SelectPageTemplateMapper extends SelectListTemplateMapper {
                 if (methodInfo == null) {
                     Configuration configuration = this.session.getConfiguration();
                     TableFactory tableFactory = configuration.getTableFactory();
-                    methodInfo = getMethodInfo(configuration, tableFactory, type, arg);
+                    String tableName = getTableName(type);
+                    methodInfo = getMethodInfo(configuration, tableFactory.getTableInfo(tableName), type, arg);
                     methodInfo.set(PageQuery.class, new PageQuery() {
                         @Override
                         public Class<? extends Annotation> annotationType() {
@@ -53,7 +56,7 @@ public class SelectPageTemplateMapper extends SelectListTemplateMapper {
 
                         @Override
                         public String value() {
-                            return "page";
+                            return PAGE;
                         }
                     });
                     methodInfo.compile();

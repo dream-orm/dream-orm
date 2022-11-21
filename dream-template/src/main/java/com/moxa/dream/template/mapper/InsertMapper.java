@@ -16,16 +16,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InsertTemplateMapper extends WrapTemplateMapper {
+public class InsertMapper extends WrapMapper {
     private final int CODE = 1;
-    private String param = "param";
 
-    public InsertTemplateMapper(Session session) {
+    public InsertMapper(Session session) {
         super(session);
     }
 
     @Override
-    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList) {
+    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg) {
         String table = tableInfo.getTable();
         List<String> columnList = new ArrayList<>();
         List<String> valueList = new ArrayList<>();
@@ -35,7 +34,7 @@ public class InsertTemplateMapper extends WrapTemplateMapper {
                 ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                 if (columnInfo != null) {
                     columnList.add(columnInfo.getColumn());
-                    valueList.add(InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", param + "." + columnInfo.getName()));
+                    valueList.add(InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", DREAM_TEMPLATE_PARAM + "." + columnInfo.getName()));
                 }
             }
         }

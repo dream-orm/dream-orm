@@ -6,16 +6,16 @@ import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.util.common.NonCollection;
 
-public abstract class DeleteTemplateMapper extends AbstractTemplateMapper {
-    public DeleteTemplateMapper(Session session) {
+public abstract class DeleteMapper extends AbstractMapper {
+    public DeleteMapper(Session session) {
         super(session);
     }
 
     @Override
-    protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type) {
+    protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
         String table = tableInfo.getTable();
-        String suffix = getSuffix(tableInfo);
-        String sql = "delete from " + table + " " + suffix;
+        String other = getOther(configuration, tableInfo, arg);
+        String sql = "delete from " + table + " " + other;
         return new MethodInfo.Builder(configuration)
                 .rowType(NonCollection.class)
                 .colType(Integer.class)
@@ -23,5 +23,5 @@ public abstract class DeleteTemplateMapper extends AbstractTemplateMapper {
                 .build();
     }
 
-    protected abstract String getSuffix(TableInfo tableInfo);
+    protected abstract String getOther(Configuration configuration, TableInfo tableInfo, Object arg);
 }

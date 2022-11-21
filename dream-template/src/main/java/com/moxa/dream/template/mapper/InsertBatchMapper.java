@@ -10,14 +10,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class InsertBatchTemplateMapper extends InsertTemplateMapper {
-    public InsertBatchTemplateMapper(Session session) {
+public class InsertBatchMapper extends InsertMapper {
+    public InsertBatchMapper(Session session) {
         super(session);
     }
 
     @Override
-    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList) {
-        MethodInfo methodInfo = super.doGetMethodInfo(configuration, tableInfo, fieldList);
+    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg) {
+        MethodInfo methodInfo = super.doGetMethodInfo(configuration, tableInfo, fieldList, arg);
         methodInfo.set(Batch.class, new Batch() {
 
             @Override

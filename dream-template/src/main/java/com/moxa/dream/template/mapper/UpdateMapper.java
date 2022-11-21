@@ -15,19 +15,17 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UpdateTemplateMapper extends WrapTemplateMapper {
+public abstract class UpdateMapper extends WrapMapper {
     protected String param = "param";
     private int CODE = 2;
 
-    public UpdateTemplateMapper(Session session) {
+    public UpdateMapper(Session session) {
         super(session);
     }
 
     @Override
-    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList) {
+    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg) {
         String table = tableInfo.getTable();
-        ColumnInfo primColumnInfo = tableInfo.getPrimColumnInfo();
-        ObjectUtil.requireNonNull(primColumnInfo, "表'" + table + "'未注册主键");
         List<String> setList = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
@@ -42,8 +40,8 @@ public abstract class UpdateTemplateMapper extends WrapTemplateMapper {
             }
         }
         String updateParam = getUpdateParam(setList);
-        String suffix = getSuffix(tableInfo);
-        String sql = "update " + table + " set " + updateParam + " " + suffix;
+        String other = getOther(configuration, tableInfo, arg);
+        String sql = "update " + table + " set " + updateParam + " " + other;
         return new MethodInfo.Builder(configuration)
                 .rowType(NonCollection.class)
                 .colType(Integer.class)
@@ -56,7 +54,9 @@ public abstract class UpdateTemplateMapper extends WrapTemplateMapper {
         return (CODE & wrapType.getCode()) > 0;
     }
 
-    protected abstract String getSuffix(TableInfo tableInfo);
+    protected abstract String getOther(Configuration configuration, TableInfo tableInfo, Object arg);
 
-    protected abstract String getUpdateParam(List<String> setList);
+    protected String getUpdateParam(List<String> setList) {
+        return String.join(",", setList);
+    }
 }

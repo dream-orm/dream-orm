@@ -2,9 +2,7 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.util.InvokerUtil;
-import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
@@ -13,79 +11,31 @@ import com.moxa.dream.template.condition.Condition;
 import com.moxa.dream.template.util.ConditionObject;
 import com.moxa.dream.template.util.SortObject;
 import com.moxa.dream.template.util.TemplateUtil;
-import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SelectListTemplateMapper {
+public class SelectListMapper extends SelectMapper {
     protected Session session;
-    private Map<String, MethodInfo> methodInfoMap = new HashMap<>();
 
-    public SelectListTemplateMapper(Session session) {
+    public SelectListMapper(Session session) {
+        super(session);
         this.session = session;
     }
 
-    public Object execute(Class<?> type, Object arg) {
-        String paramTypeName = null;
-        if (arg != null) {
-            paramTypeName = arg.getClass().getName();
-        }
-        String keyName = type.getName() + ":" + paramTypeName;
-        MethodInfo methodInfo = methodInfoMap.get(keyName);
-        if (methodInfo == null) {
-            synchronized (this) {
-                methodInfo = methodInfoMap.get(keyName);
-                if (methodInfo == null) {
-                    Configuration configuration = this.session.getConfiguration();
-                    TableFactory tableFactory = configuration.getTableFactory();
-                    methodInfo = getMethodInfo(configuration, tableFactory, type, arg);
-                    methodInfo.compile();
-                    methodInfoMap.put(keyName, methodInfo);
-                }
-            }
-        }
-        return session.execute(methodInfo, wrapArg(arg));
-    }
-
-    protected Map<String, Object> wrapArg(Object arg) {
-        if (arg != null) {
-            if (arg instanceof Map) {
-                return (Map<String, Object>) arg;
-            } else {
-                return new ObjectMap(arg);
-            }
-        } else {
-            return null;
-        }
-    }
-
-    protected MethodInfo getMethodInfo(Configuration configuration, TableFactory tableFactory, Class type, Object arg) {
-        Set<String> tableNameSet = TemplateUtil.getTableNameSet(type);
-        String where = "";
-        String orderBy = "";
+    @Override
+    protected String getOther(Configuration configuration, TableInfo tableInfo, Object arg) {
         if (arg != null) {
             Class<?> argType = arg.getClass();
-            where = getWhereSql(argType, tableNameSet, tableFactory);
-            orderBy = getOrderSql(argType, tableNameSet, tableFactory);
-
+            Set<String> tableNameSet = TemplateUtil.getTableNameSet(argType);
+            TableFactory tableFactory = configuration.getTableFactory();
+            String where = getWhereSql(argType, tableNameSet, tableFactory);
+            String order = getOrderSql(argType, tableNameSet, tableFactory);
+            return where + order;
         }
-        String sql = "select " + InvokerUtil.wrapperInvokerSQL(
-                SystemInvokerFactory.NAMESPACE,
-                SystemInvokerFactory.ALL,
-                ",")
-                + "from " + InvokerUtil.wrapperInvokerSQL(
-                SystemInvokerFactory.NAMESPACE,
-                SystemInvokerFactory.TABLE,
-                ",",
-                tableNameSet.toArray(new String[0])) + where + orderBy;
-        return new MethodInfo.Builder(configuration)
-                .rowType(getRowType())
-                .colType(type)
-                .sql(sql)
-                .build();
+        return "";
     }
 
     protected Class<? extends Collection> getRowType() {
