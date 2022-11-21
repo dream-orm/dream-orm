@@ -27,7 +27,5 @@ public interface Executor {
 
     boolean isAutoCommit();
 
-    Statement getStatement();
-
     SessionFactory getSessionFactory();
 }

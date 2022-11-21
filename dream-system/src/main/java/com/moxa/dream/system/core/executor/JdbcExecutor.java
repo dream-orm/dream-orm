@@ -84,11 +84,6 @@ public class JdbcExecutor implements Executor {
     }
 
     @Override
-    public Statement getStatement() {
-        return statementHandler.getStatement();
-    }
-
-    @Override
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }

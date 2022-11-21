@@ -77,11 +77,6 @@ public class ActionExecutor implements Executor {
     }
 
     @Override
-    public Statement getStatement() {
-        return nextExecutor.getStatement();
-    }
-
-    @Override
     public SessionFactory getSessionFactory() {
         return nextExecutor.getSessionFactory();
     }
