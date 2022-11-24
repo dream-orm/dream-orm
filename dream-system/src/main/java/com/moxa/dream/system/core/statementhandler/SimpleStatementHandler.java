@@ -8,15 +8,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public class SimpleStatementHandler implements StatementHandler {
-    private Statement statement;
-
+public class SimpleStatementHandler implements StatementHandler<Statement> {
     @Override
-    public void prepare(Connection connection, MappedStatement mappedStatement) throws SQLException {
-        statement = connection.createStatement();
+    public Statement prepare(Connection connection, MappedStatement mappedStatement) throws SQLException {
+        return connection.createStatement();
     }
 
-    protected void doTimeOut(MappedStatement mappedStatement) throws SQLException {
+    protected void doTimeOut(Statement statement,MappedStatement mappedStatement) throws SQLException {
         int timeOut = mappedStatement.getTimeOut();
         if (timeOut != 0) {
             statement.setQueryTimeout(timeOut);
@@ -24,40 +22,23 @@ public class SimpleStatementHandler implements StatementHandler {
     }
 
     @Override
-    public ResultSet executeQuery(MappedStatement mappedStatement) throws SQLException {
-        doTimeOut(mappedStatement);
+    public ResultSet executeQuery(Statement statement,MappedStatement mappedStatement) throws SQLException {
+        doTimeOut(statement,mappedStatement);
         return statement.executeQuery(mappedStatement.getSql());
     }
 
     @Override
-    public int executeUpdate(MappedStatement mappedStatement) throws SQLException {
+    public Object executeUpdate(Statement statement,MappedStatement mappedStatement) throws SQLException {
         return statement.executeUpdate(mappedStatement.getSql());
     }
 
     @Override
-    public int[] executeBatch(List<MappedStatement> mappedStatements) throws SQLException {
+    public Object executeBatch(Statement statement,List<MappedStatement> mappedStatements) throws SQLException {
         for (MappedStatement mappedStatement : mappedStatements) {
             statement.addBatch(mappedStatement.getSql());
         }
         int[] result = statement.executeBatch();
         statement.clearBatch();
         return result;
-    }
-
-    @Override
-    public Statement getStatement() {
-        return statement;
-    }
-
-    @Override
-    public void close() {
-        try {
-            if (statement != null && !statement.isClosed()) {
-                statement.close();
-                statement = null;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -8,19 +8,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public interface StatementHandler {
+public interface StatementHandler<T extends Statement> {
 
-    ResultSet executeQuery(MappedStatement mappedStatement) throws SQLException;
+    ResultSet executeQuery(T statement,MappedStatement mappedStatement) throws SQLException;
 
-    int executeUpdate(MappedStatement mappedStatement) throws SQLException;
+    Object executeUpdate(T statement,MappedStatement mappedStatement) throws SQLException;
 
-    int[] executeBatch(List<MappedStatement> mappedStatements) throws SQLException;
+    Object executeBatch(T statement,List<MappedStatement> mappedStatements) throws SQLException;
 
-    void prepare(Connection connection, MappedStatement mappedStatement) throws SQLException;
-
-    Statement getStatement();
-
-    void close();
-
-
+    T prepare(Connection connection, MappedStatement mappedStatement) throws SQLException;
 }

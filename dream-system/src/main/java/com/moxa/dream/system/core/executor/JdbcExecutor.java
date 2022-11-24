@@ -8,6 +8,7 @@ import com.moxa.dream.system.transaction.Transaction;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class JdbcExecutor implements Executor {
@@ -24,39 +25,47 @@ public class JdbcExecutor implements Executor {
 
     @Override
     public Object query(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, (ms) -> {
-            ResultSet resultSet = statementHandler.executeQuery(mappedStatement);
-            return resultSetHandler.result(resultSet, mappedStatement, session);
+        return execute(mappedStatement, statement -> {
+            ResultSet resultSet = statementHandler.executeQuery(statement, mappedStatement);
+            try {
+                return resultSetHandler.result(resultSet, mappedStatement, session);
+            } finally {
+                if(resultSet!=null&&!resultSet.isClosed()) {
+                    resultSet.close();
+                }
+            }
         });
     }
 
     @Override
     public Object update(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, (ms) -> statementHandler.executeUpdate(mappedStatement));
+        return execute(mappedStatement, statement -> statementHandler.executeUpdate(statement, mappedStatement));
     }
 
     @Override
     public Object insert(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, (ms) -> statementHandler.executeUpdate(mappedStatement));
+        return execute(mappedStatement, statement -> statementHandler.executeUpdate(statement, mappedStatement));
     }
 
     @Override
     public Object delete(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, (ms) -> statementHandler.executeUpdate(mappedStatement));
+        return execute(mappedStatement, statement -> statementHandler.executeUpdate(statement, mappedStatement));
     }
 
     @Override
     public Object batch(List<MappedStatement> mappedStatements, Session session) throws SQLException {
-        return execute(mappedStatements.get(0), (ms) -> statementHandler.executeBatch(mappedStatements));
+        return execute(mappedStatements.get(0), statement -> statementHandler.executeBatch(statement, mappedStatements));
     }
 
-
-    protected Object execute(MappedStatement mappedStatement, Function<MappedStatement, Object> function) throws SQLException {
+    protected Object execute(MappedStatement mappedStatement, Function<Statement, Object> function) throws SQLException {
+        Statement statement = null;
         try {
-            statementHandler.prepare(transaction.getConnection(), mappedStatement);
-            return function.apply(mappedStatement);
+            statement = statementHandler.prepare(transaction.getConnection(), mappedStatement);
+            return function.apply(statement);
         } finally {
-            statementHandler.close();
+            if (statement != null && !statement.isClosed()) {
+                statement.close();
+            }
         }
     }
 

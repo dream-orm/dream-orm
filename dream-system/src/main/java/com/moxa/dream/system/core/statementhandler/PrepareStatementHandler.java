@@ -7,15 +7,14 @@ import com.moxa.dream.util.common.ObjectUtil;
 import java.sql.*;
 import java.util.List;
 
-public class PrepareStatementHandler implements StatementHandler {
-    protected PreparedStatement statement;
+public class PrepareStatementHandler implements StatementHandler<PreparedStatement> {
 
     @Override
-    public void prepare(Connection connection, MappedStatement mappedStatement) throws SQLException {
-        statement = connection.prepareStatement(mappedStatement.getSql(), mappedStatement.getColumnNames());
+    public PreparedStatement prepare(Connection connection, MappedStatement mappedStatement) throws SQLException {
+        return connection.prepareStatement(mappedStatement.getSql(), mappedStatement.getColumnNames());
     }
 
-    protected void doParameter(MappedStatement mappedStatement) throws SQLException {
+    protected void doParameter(PreparedStatement statement,MappedStatement mappedStatement) throws SQLException {
         List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
         if (!ObjectUtil.isNull(mappedParamList)) {
             for (int i = 0; i < mappedParamList.size(); i++) {
@@ -25,7 +24,7 @@ public class PrepareStatementHandler implements StatementHandler {
         }
     }
 
-    protected void doTimeOut(MappedStatement mappedStatement) throws SQLException {
+    protected void doTimeOut(PreparedStatement statement,MappedStatement mappedStatement) throws SQLException {
         int timeOut = mappedStatement.getTimeOut();
         if (timeOut != 0) {
             statement.setQueryTimeout(timeOut);
@@ -33,44 +32,26 @@ public class PrepareStatementHandler implements StatementHandler {
     }
 
     @Override
-    public ResultSet executeQuery(MappedStatement mappedStatement) throws SQLException {
-        doParameter(mappedStatement);
-        doTimeOut(mappedStatement);
+    public ResultSet executeQuery(PreparedStatement statement,MappedStatement mappedStatement) throws SQLException {
+        doParameter(statement,mappedStatement);
+        doTimeOut(statement,mappedStatement);
         return statement.executeQuery();
     }
 
     @Override
-    public int executeUpdate(MappedStatement mappedStatement) throws SQLException {
-        doParameter(mappedStatement);
+    public Object executeUpdate(PreparedStatement statement,MappedStatement mappedStatement) throws SQLException {
+        doParameter(statement,mappedStatement);
         return statement.executeUpdate();
     }
 
     @Override
-    public int[] executeBatch(List<MappedStatement> mappedStatements) throws SQLException {
+    public Object executeBatch(PreparedStatement statement,List<MappedStatement> mappedStatements) throws SQLException {
         for (MappedStatement mappedStatement : mappedStatements) {
-            doParameter(mappedStatement);
+            doParameter(statement,mappedStatement);
             statement.addBatch();
         }
         int[] result = statement.executeBatch();
         statement.clearBatch();
         return result;
     }
-
-    @Override
-    public Statement getStatement() {
-        return statement;
-    }
-
-    @Override
-    public void close() {
-        try {
-            if (statement != null && !statement.isClosed()) {
-                statement.close();
-                statement = null;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
