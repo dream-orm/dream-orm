@@ -2,10 +2,9 @@ package com.moxa.dream.system.core.executor;
 
 
 import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.core.session.SessionFactory;
+import com.moxa.dream.system.core.session.Session;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public abstract class AbstractCacheExecutor implements Executor {
@@ -17,46 +16,46 @@ public abstract class AbstractCacheExecutor implements Executor {
 
 
     @Override
-    public Object query(MappedStatement mappedStatement) throws SQLException {
+    public Object query(MappedStatement mappedStatement, Session session) throws SQLException {
         Object value;
         if (mappedStatement.isCache()) {
             value = queryFromCache(mappedStatement);
             if (value == null) {
-                value = nextExecutor.query(mappedStatement);
+                value = nextExecutor.query(mappedStatement, session);
                 if (value != null) {
                     storeObject(mappedStatement, value);
                 }
             }
         } else {
-            value = nextExecutor.query(mappedStatement);
+            value = nextExecutor.query(mappedStatement, session);
         }
         return value;
     }
 
     @Override
-    public Object update(MappedStatement mappedStatement) throws SQLException {
-        Object result = nextExecutor.update(mappedStatement);
+    public Object update(MappedStatement mappedStatement, Session session) throws SQLException {
+        Object result = nextExecutor.update(mappedStatement, session);
         clearObject(mappedStatement);
         return result;
     }
 
     @Override
-    public Object insert(MappedStatement mappedStatement) throws SQLException {
-        Object result = nextExecutor.insert(mappedStatement);
+    public Object insert(MappedStatement mappedStatement, Session session) throws SQLException {
+        Object result = nextExecutor.insert(mappedStatement, session);
         clearObject(mappedStatement);
         return result;
     }
 
     @Override
-    public Object delete(MappedStatement mappedStatement) throws SQLException {
-        Object result = nextExecutor.delete(mappedStatement);
+    public Object delete(MappedStatement mappedStatement, Session session) throws SQLException {
+        Object result = nextExecutor.delete(mappedStatement, session);
         clearObject(mappedStatement);
         return result;
     }
 
     @Override
-    public Object batch(List<MappedStatement> mappedStatements) throws SQLException {
-        Object result = nextExecutor.batch(mappedStatements);
+    public Object batch(List<MappedStatement> mappedStatements, Session session) throws SQLException {
+        Object result = nextExecutor.batch(mappedStatements, session);
         clearObject(mappedStatements.get(0));
         return result;
     }
@@ -74,11 +73,6 @@ public abstract class AbstractCacheExecutor implements Executor {
     @Override
     public void close() {
         nextExecutor.close();
-    }
-
-    @Override
-    public SessionFactory getSessionFactory() {
-        return nextExecutor.getSessionFactory();
     }
 
     public abstract void clear();

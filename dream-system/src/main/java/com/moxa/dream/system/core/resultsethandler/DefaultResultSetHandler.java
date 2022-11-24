@@ -7,7 +7,7 @@ import com.moxa.dream.system.config.MappedColumn;
 import com.moxa.dream.system.config.MappedResult;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.action.Action;
-import com.moxa.dream.system.core.executor.Executor;
+import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.extractor.Extractor;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
@@ -31,7 +31,7 @@ import java.util.*;
 public class DefaultResultSetHandler implements ResultSetHandler {
 
     @Override
-    public Object result(ResultSet resultSet, MappedStatement mappedStatement, Executor executor) throws SQLException {
+    public Object result(ResultSet resultSet, MappedStatement mappedStatement, Session session) throws SQLException {
         MappedResult mappedResult = getMappedResult(resultSet, mappedStatement);
         ObjectFactory resultObjectFactory = mappedResult.newRowObjectFactory();
         if (mappedResult.isSimple()) {
@@ -39,7 +39,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 ObjectFactory objectFactory = doSimpleResult(resultSet, mappedStatement, mappedResult);
                 Object result = objectFactory.getObject();
                 resultObjectFactory.set(null, result);
-                loopActions(executor, mappedStatement, result);
+                loopActions(session, mappedStatement, result);
             }
         } else {
             Map<CacheKey, Object> cacheMap = new HashMap<>();
@@ -48,7 +48,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 if (objectFactory != null) {
                     Object result = objectFactory.getObject();
                     resultObjectFactory.set(null, result);
-                    loopActions(executor, mappedStatement, result);
+                    loopActions(session, mappedStatement, result);
                 }
             }
             cacheMap.clear();
@@ -283,12 +283,12 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         return SystemUtil.getTableName(type);
     }
 
-    protected void loopActions(Executor executor, MappedStatement mappedStatement, Object arg) {
+    protected void loopActions(Session session, MappedStatement mappedStatement, Object arg) {
         Action[] loopActionList = mappedStatement.getLoopActionList();
         if (!ObjectUtil.isNull(loopActionList)) {
             try {
                 for (Action action : loopActionList) {
-                    action.doAction(executor, arg);
+                    action.doAction(session, arg);
                 }
             } catch (Exception e) {
                 throw new DreamRunTimeException(e);

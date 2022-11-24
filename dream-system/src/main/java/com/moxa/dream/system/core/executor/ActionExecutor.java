@@ -2,12 +2,11 @@ package com.moxa.dream.system.core.executor;
 
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.action.Action;
-import com.moxa.dream.system.core.session.SessionFactory;
+import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public class ActionExecutor implements Executor {
@@ -18,42 +17,38 @@ public class ActionExecutor implements Executor {
     }
 
     @Override
-    public Object query(MappedStatement mappedStatement) throws SQLException {
-        return execute(mappedStatement, (ms) -> nextExecutor.query(mappedStatement));
+    public Object query(MappedStatement mappedStatement, Session session) throws SQLException {
+        return execute(mappedStatement, (ms) -> nextExecutor.query(mappedStatement, session), session);
     }
 
     @Override
-    public Object update(MappedStatement mappedStatement) throws SQLException {
-        return execute(mappedStatement, (ms) -> nextExecutor.update(mappedStatement));
+    public Object update(MappedStatement mappedStatement, Session session) throws SQLException {
+        return execute(mappedStatement, (ms) -> nextExecutor.update(mappedStatement, session), session);
     }
 
     @Override
-    public Object insert(MappedStatement mappedStatement) throws SQLException {
-        return execute(mappedStatement, (ms) -> nextExecutor.insert(mappedStatement));
+    public Object insert(MappedStatement mappedStatement, Session session) throws SQLException {
+        return execute(mappedStatement, (ms) -> nextExecutor.insert(mappedStatement, session), session);
     }
 
     @Override
-    public Object delete(MappedStatement mappedStatement) throws SQLException {
-        return execute(mappedStatement, (ms) -> nextExecutor.delete(mappedStatement));
+    public Object delete(MappedStatement mappedStatement, Session session) throws SQLException {
+        return execute(mappedStatement, (ms) -> nextExecutor.delete(mappedStatement, session), session);
     }
 
-    protected Object execute(MappedStatement mappedStatement, Function<MappedStatement, Object> function) throws SQLException {
+    protected Object execute(MappedStatement mappedStatement, Function<MappedStatement, Object> function, Session session) throws SQLException {
         Action[] initActionList = mappedStatement.getInitActionList();
         Action[] destroyActionList = mappedStatement.getDestroyActionList();
-        if (!ObjectUtil.isNull(initActionList)) {
-            doActions(initActionList, mappedStatement.getArg());
-        }
+        doActions(initActionList, mappedStatement.getArg(), session);
         Object result;
         result = function.apply(mappedStatement);
-        if (!ObjectUtil.isNull(destroyActionList)) {
-            doActions(destroyActionList, mappedStatement.getArg());
-        }
+        doActions(destroyActionList, mappedStatement.getArg(), session);
         return result;
     }
 
     @Override
-    public Object batch(List<MappedStatement> mappedStatements) throws SQLException {
-        return nextExecutor.batch(mappedStatements);
+    public Object batch(List<MappedStatement> mappedStatements, Session session) throws SQLException {
+        return nextExecutor.batch(mappedStatements, session);
     }
 
     @Override
@@ -76,20 +71,15 @@ public class ActionExecutor implements Executor {
         nextExecutor.close();
     }
 
-    @Override
-    public SessionFactory getSessionFactory() {
-        return nextExecutor.getSessionFactory();
-    }
-
-
-    protected void doActions(Action[] actions, Object arg) {
-        try {
-            for (Action action : actions) {
-                action.doAction(this, arg);
+    protected void doActions(Action[] actions, Object arg, Session session) {
+        if (!ObjectUtil.isNull(actions)) {
+            try {
+                for (Action action : actions) {
+                    action.doAction(session, arg);
+                }
+            } catch (Exception e) {
+                throw new DreamRunTimeException(e);
             }
-        } catch (Exception e) {
-            throw new DreamRunTimeException(e);
         }
     }
-
 }

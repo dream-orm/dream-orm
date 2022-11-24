@@ -50,7 +50,7 @@ public class DefaultSessionFactory implements SessionFactory {
     public Session openSession(boolean autoCommit, boolean cache) {
         Transaction transaction = transactionFactory.getTransaction(dataSource);
         transaction.setAutoCommit(autoCommit);
-        Executor executor = new JdbcExecutor(transaction, statementHandler, resultSetHandler, this);
+        Executor executor = new JdbcExecutor(transaction, statementHandler, resultSetHandler);
         if (this.cache != null) {
             executor = new CacheExecutor(executor, this.cache);
         }

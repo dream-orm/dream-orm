@@ -1,8 +1,6 @@
 package com.moxa.dream.system.core.action;
 
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.core.executor.Executor;
-import com.moxa.dream.system.core.session.DefaultSession;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
@@ -44,8 +42,7 @@ public class MapperAction implements Action {
     }
 
     @Override
-    public void doAction(Executor executor, Object arg) throws Exception {
-        Session session = new DefaultSession(configuration, executor);
+    public void doAction(Session session, Object arg) throws Exception {
         Object mapper = session.getMapper(type);
         Object result = method.invoke(mapper, arg);
         if (!ObjectUtil.isNull(property)) {

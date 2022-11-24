@@ -3,8 +3,8 @@ package com.moxa.dream.sql.mock;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedColumn;
 import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
+import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -19,7 +19,7 @@ import java.util.*;
 
 public class MockResultSetHandler implements ResultSetHandler {
     @Override
-    public Object result(ResultSet resultSet, MappedStatement mappedStatement, Executor executor) throws SQLException {
+    public Object result(ResultSet resultSet, MappedStatement mappedStatement, Session session) throws SQLException {
         Class<?> colType = mappedStatement.getColType();
         List<Object> resultList = new ArrayList<>();
         MappedColumnWrapper[] mappedColumnList = createMappedColumnWrapper(resultSet, mappedStatement);

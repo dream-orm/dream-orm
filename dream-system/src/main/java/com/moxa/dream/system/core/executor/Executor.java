@@ -1,23 +1,22 @@
 package com.moxa.dream.system.core.executor;
 
 import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.core.session.SessionFactory;
+import com.moxa.dream.system.core.session.Session;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public interface Executor {
 
-    Object query(MappedStatement mappedStatement) throws SQLException;
+    Object query(MappedStatement mappedStatement, Session session) throws SQLException;
 
-    Object update(MappedStatement mappedStatement) throws SQLException;
+    Object update(MappedStatement mappedStatement, Session session) throws SQLException;
 
-    Object insert(MappedStatement mappedStatement) throws SQLException;
+    Object insert(MappedStatement mappedStatement, Session session) throws SQLException;
 
-    Object delete(MappedStatement mappedStatement) throws SQLException;
+    Object delete(MappedStatement mappedStatement, Session session) throws SQLException;
 
-    Object batch(List<MappedStatement> mappedStatements) throws SQLException;
+    Object batch(List<MappedStatement> mappedStatements, Session session) throws SQLException;
 
     void commit();
 
@@ -26,6 +25,4 @@ public interface Executor {
     void close();
 
     boolean isAutoCommit();
-
-    SessionFactory getSessionFactory();
 }

@@ -15,8 +15,11 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private DeleteByIdMapper deleteByIdSqlMapper;
     private DeleteByIdsMapper deleteByIdsSqlMapper;
     private UpdateByIdMapper updateByIdSqlMapper;
+    private BatchUpdateByIdMapper batchUpdateByIdMapper;
     private UpdateNonByIdMapper updateNonByIdSqlMapper;
+    private BatchUpdateNonByIdMapper batchUpdateNonByIdMapper;
     private InsertMapper insertSqlMapper;
+    private BatchInsertMapper batchInsertMapper;
     private ExistByIdMapper existByIdMapper;
     private ExistMapper existMapper;
 
@@ -30,8 +33,11 @@ public class DefaultTemplateMapper implements TemplateMapper {
         deleteByIdSqlMapper = new DeleteByIdMapper(session);
         deleteByIdsSqlMapper = new DeleteByIdsMapper(session);
         updateByIdSqlMapper = new UpdateByIdMapper(session);
+        batchUpdateByIdMapper = new BatchUpdateByIdMapper(session);
         updateNonByIdSqlMapper = new UpdateNonByIdMapper(session);
+        batchUpdateNonByIdMapper = new BatchUpdateNonByIdMapper(session);
         insertSqlMapper = new InsertMapper(session);
+        batchInsertMapper = new BatchInsertMapper(session);
         existByIdMapper = new ExistByIdMapper(session);
         existMapper = new ExistMapper(session);
     }
@@ -104,16 +110,16 @@ public class DefaultTemplateMapper implements TemplateMapper {
         if (viewList == null || viewList.isEmpty()) {
             return;
         }
-        new BatchInsertMapper(session).execute(viewList.get(0).getClass(), viewList, batchSize);
+        batchInsertMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
     }
 
     @Override
     public void batchUpdateById(List<?> viewList, int batchSize) {
-        new BatchUpdateByIdMapper(session).execute(viewList.get(0).getClass(), viewList, batchSize);
+        batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
     }
 
     @Override
     public void batchUpdateNonById(List<?> viewList, int batchSize) {
-        new BatchUpdateNonByIdMapper(session).execute(viewList.get(0).getClass(), viewList, batchSize);
+        batchUpdateNonByIdMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
     }
 }

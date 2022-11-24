@@ -61,8 +61,8 @@ public class SessionTemplate implements Session {
     }
 
     @Override
-    public Object batchExecute(List<MappedStatement> mappedStatementList,int batchSize) {
-        return sessionProxy.batchExecute(mappedStatementList,batchSize);
+    public Object batchExecute(List<MappedStatement> mappedStatementList, int batchSize) {
+        return sessionProxy.batchExecute(mappedStatementList, batchSize);
     }
 
 

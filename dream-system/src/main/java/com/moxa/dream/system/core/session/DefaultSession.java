@@ -54,16 +54,16 @@ public class DefaultSession implements Session {
             Command command = getCommand(mappedStatement);
             switch (command) {
                 case QUERY:
-                    value = executor.query(mappedStatement);
+                    value = executor.query(mappedStatement, this);
                     break;
                 case UPDATE:
-                    value = executor.update(mappedStatement);
+                    value = executor.update(mappedStatement, this);
                     break;
                 case INSERT:
-                    value = executor.insert(mappedStatement);
+                    value = executor.insert(mappedStatement, this);
                     break;
                 case DELETE:
-                    value = executor.delete(mappedStatement);
+                    value = executor.delete(mappedStatement, this);
                     break;
                 default:
                     value = executeNone(mappedStatement);
@@ -108,15 +108,15 @@ public class DefaultSession implements Session {
                 while (true) {
                     int newSize = oldSize + batchSize;
                     if (newSize >= size) {
-                        executor.batch(mappedStatementList.subList(oldSize, size));
+                        executor.batch(mappedStatementList.subList(oldSize, size), this);
                         break;
                     } else {
-                        executor.batch(mappedStatementList.subList(oldSize, newSize));
+                        executor.batch(mappedStatementList.subList(oldSize, newSize), this);
                         oldSize = newSize;
                     }
                 }
             } else {
-                executor.batch(mappedStatementList);
+                executor.batch(mappedStatementList, this);
             }
             return null;
         } catch (SQLException e) {

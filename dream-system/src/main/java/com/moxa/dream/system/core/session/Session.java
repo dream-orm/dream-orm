@@ -16,9 +16,9 @@ public interface Session extends Closeable {
 
     Object execute(MappedStatement mappedStatement);
 
-    Object batchExecute(MethodInfo methodInfo,List<?>argList,int batchSize);
+    Object batchExecute(MethodInfo methodInfo, List<?> argList, int batchSize);
 
-    Object batchExecute(List<MappedStatement> mappedStatementList,int batchSize);
+    Object batchExecute(List<MappedStatement> mappedStatementList, int batchSize);
 
     boolean isAutoCommit();
 

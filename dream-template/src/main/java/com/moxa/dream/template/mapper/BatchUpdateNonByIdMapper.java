@@ -6,7 +6,7 @@ import com.moxa.dream.system.core.session.Session;
 import java.util.List;
 
 public class BatchUpdateNonByIdMapper extends UpdateNonByIdMapper {
-    private int batchSize;
+    ThreadLocal<Integer> threadLocal = new ThreadLocal();
 
     public BatchUpdateNonByIdMapper(Session session) {
         super(session);
@@ -14,11 +14,16 @@ public class BatchUpdateNonByIdMapper extends UpdateNonByIdMapper {
 
     @Override
     protected Object execute(MethodInfo methodInfo, Object arg) {
+        Integer batchSize = threadLocal.get();
         return session.batchExecute(methodInfo, (List<?>) arg, batchSize);
     }
 
     public void execute(Class<?> type, List<?> viewList, int batchSize) {
-        this.batchSize = batchSize;
-        super.execute(type, viewList);
+        threadLocal.set(batchSize);
+        try {
+            super.execute(type, viewList);
+        }finally {
+            threadLocal.remove();
+        }
     }
 }

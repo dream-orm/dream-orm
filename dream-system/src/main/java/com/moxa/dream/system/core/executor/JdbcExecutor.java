@@ -2,54 +2,51 @@ package com.moxa.dream.system.core.executor;
 
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
-import com.moxa.dream.system.core.session.SessionFactory;
+import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.transaction.Transaction;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public class JdbcExecutor implements Executor {
     protected Transaction transaction;
     protected StatementHandler statementHandler;
     protected ResultSetHandler resultSetHandler;
-    protected SessionFactory sessionFactory;
 
 
-    public JdbcExecutor(Transaction transaction, StatementHandler statementHandler, ResultSetHandler resultSetHandler, SessionFactory sessionFactory) {
+    public JdbcExecutor(Transaction transaction, StatementHandler statementHandler, ResultSetHandler resultSetHandler) {
         this.transaction = transaction;
         this.statementHandler = statementHandler;
         this.resultSetHandler = resultSetHandler;
-        this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public Object query(MappedStatement mappedStatement) throws SQLException {
+    public Object query(MappedStatement mappedStatement, Session session) throws SQLException {
         return execute(mappedStatement, (ms) -> {
             ResultSet resultSet = statementHandler.executeQuery(mappedStatement);
-            return resultSetHandler.result(resultSet, mappedStatement, this);
+            return resultSetHandler.result(resultSet, mappedStatement, session);
         });
     }
 
     @Override
-    public Object update(MappedStatement mappedStatement) throws SQLException {
+    public Object update(MappedStatement mappedStatement, Session session) throws SQLException {
         return execute(mappedStatement, (ms) -> statementHandler.executeUpdate(mappedStatement));
     }
 
     @Override
-    public Object insert(MappedStatement mappedStatement) throws SQLException {
+    public Object insert(MappedStatement mappedStatement, Session session) throws SQLException {
         return execute(mappedStatement, (ms) -> statementHandler.executeUpdate(mappedStatement));
     }
 
     @Override
-    public Object delete(MappedStatement mappedStatement) throws SQLException {
+    public Object delete(MappedStatement mappedStatement, Session session) throws SQLException {
         return execute(mappedStatement, (ms) -> statementHandler.executeUpdate(mappedStatement));
     }
 
     @Override
-    public Object batch(List<MappedStatement> mappedStatements) throws SQLException {
+    public Object batch(List<MappedStatement> mappedStatements, Session session) throws SQLException {
         return execute(mappedStatements.get(0), (ms) -> statementHandler.executeBatch(mappedStatements));
     }
 
@@ -81,10 +78,5 @@ public class JdbcExecutor implements Executor {
     @Override
     public void close() {
         transaction.close();
-    }
-
-    @Override
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
     }
 }

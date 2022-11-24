@@ -6,18 +6,24 @@ import com.moxa.dream.system.core.session.Session;
 import java.util.List;
 
 public class BatchInsertMapper extends InsertMapper {
-    private int batchSize;
+    ThreadLocal<Integer> threadLocal = new ThreadLocal();
+
     public BatchInsertMapper(Session session) {
         super(session);
     }
 
     @Override
     protected Object execute(MethodInfo methodInfo, Object arg) {
-        return session.batchExecute(methodInfo, (List<?>) arg,batchSize);
+        Integer batchSize = threadLocal.get();
+        return session.batchExecute(methodInfo, (List<?>) arg, batchSize);
     }
 
     public void execute(Class<?> type, List<?> viewList, int batchSize) {
-        this.batchSize=batchSize;
-        super.execute(type, viewList);
+        threadLocal.set(batchSize);
+        try {
+            super.execute(type, viewList);
+        }finally {
+            threadLocal.remove();
+        }
     }
 }
