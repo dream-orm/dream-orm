@@ -39,10 +39,10 @@ public class ActionExecutor implements Executor {
     protected Object execute(MappedStatement mappedStatement, Function<MappedStatement, Object> function, Session session) throws SQLException {
         Action[] initActionList = mappedStatement.getInitActionList();
         Action[] destroyActionList = mappedStatement.getDestroyActionList();
-        doActions(initActionList, mappedStatement.getArg(), session);
+        doActions(initActionList, mappedStatement, mappedStatement.getArg(), session);
         Object result;
         result = function.apply(mappedStatement);
-        doActions(destroyActionList, mappedStatement.getArg(), session);
+        doActions(destroyActionList, mappedStatement, result, session);
         return result;
     }
 
@@ -71,11 +71,11 @@ public class ActionExecutor implements Executor {
         nextExecutor.close();
     }
 
-    protected void doActions(Action[] actions, Object arg, Session session) {
+    protected void doActions(Action[] actions, MappedStatement mappedStatement, Object arg, Session session) {
         if (!ObjectUtil.isNull(actions)) {
             try {
                 for (Action action : actions) {
-                    action.doAction(session, arg);
+                    action.doAction(session, mappedStatement, arg);
                 }
             } catch (Exception e) {
                 throw new DreamRunTimeException(e);

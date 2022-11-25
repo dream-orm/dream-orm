@@ -3,6 +3,7 @@ package com.moxa.dream.system.core.action;
 
 import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.util.common.NonCollection;
@@ -59,7 +60,7 @@ public class SqlAction implements Action {
     }
 
     @Override
-    public void doAction(Session session, Object arg) throws Exception {
+    public void doAction(Session session, MappedStatement mappedStatement, Object arg) throws Exception {
         if (!ObjectUtil.isNull(property)) {
             if (methodInfo == null) {
                 synchronized (this) {

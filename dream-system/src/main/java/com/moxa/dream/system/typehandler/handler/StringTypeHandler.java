@@ -7,13 +7,18 @@ import java.sql.Types;
 
 public class StringTypeHandler extends BaseTypeHandler<String> {
     @Override
-    public void setParameter(PreparedStatement ps, int i, String parameter, int jdbcType) throws SQLException {
-        ps.setString(i, parameter);
+    public void setParameter(PreparedStatement ps, int index, String parameter, int jdbcType) throws SQLException {
+        ps.setString(index, parameter);
     }
 
     @Override
-    public String getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
-        return rs.getString(i);
+    public String getResult(ResultSet rs, int index, int jdbcType) throws SQLException {
+        return rs.getString(index);
+    }
+
+    @Override
+    public String getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
+        return rs.getString(column);
     }
 
     @Override

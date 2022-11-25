@@ -6,7 +6,9 @@ import java.sql.SQLException;
 
 public interface TypeHandler<T> {
 
-    void setParam(PreparedStatement ps, int i, T parameter, int jdbcType) throws SQLException;
+    void setParam(PreparedStatement ps, int index, T parameter, int jdbcType) throws SQLException;
 
-    T getResult(ResultSet rs, int i, int jdbcType) throws SQLException;
+    T getResult(ResultSet rs, int index, int jdbcType) throws SQLException;
+
+    T getResult(ResultSet rs, String column, int jdbcType) throws SQLException;
 }

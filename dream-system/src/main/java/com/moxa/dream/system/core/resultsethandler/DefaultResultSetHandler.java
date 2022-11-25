@@ -288,7 +288,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         if (!ObjectUtil.isNull(loopActionList)) {
             try {
                 for (Action action : loopActionList) {
-                    action.doAction(session, arg);
+                    action.doAction(session, mappedStatement, arg);
                 }
             } catch (Exception e) {
                 throw new DreamRunTimeException(e);

@@ -7,13 +7,19 @@ import java.sql.Types;
 
 public class FloatTypeHandler extends BaseTypeHandler<Float> {
     @Override
-    public void setParameter(PreparedStatement ps, int i, Float parameter, int jdbcType) throws SQLException {
-        ps.setFloat(i, parameter);
+    public void setParameter(PreparedStatement ps, int index, Float parameter, int jdbcType) throws SQLException {
+        ps.setFloat(index, parameter);
     }
 
     @Override
-    public Float getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
-        Float result = rs.getFloat(i);
+    public Float getResult(ResultSet rs, int index, int jdbcType) throws SQLException {
+        Float result = rs.getFloat(index);
+        return result == 0 && rs.wasNull() ? null : result;
+    }
+
+    @Override
+    public Float getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
+        Float result = rs.getFloat(column);
         return result == 0 && rs.wasNull() ? null : result;
     }
 

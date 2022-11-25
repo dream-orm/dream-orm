@@ -4,6 +4,7 @@ import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.core.action.Action;
+import com.moxa.dream.system.typehandler.handler.TypeHandler;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -82,6 +83,10 @@ public class MappedStatement {
 
     public String[] getColumnNames() {
         return methodInfo.getColumnNames();
+    }
+
+    public TypeHandler[] getColumnTypeHandlers() {
+        return methodInfo.getColumnTypeHandlers();
     }
 
     public boolean isCache() {

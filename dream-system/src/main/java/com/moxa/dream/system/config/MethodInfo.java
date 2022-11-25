@@ -6,6 +6,7 @@ import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.inject.factory.InjectFactory;
+import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.reflect.Method;
@@ -20,6 +21,7 @@ public class MethodInfo {
     protected Class<? extends Collection> rowType;
     protected Class colType;
     protected String[] columnNames;
+    protected TypeHandler[] columnTypeHandlers;
     protected boolean cache = true;
     protected Command command = Command.NONE;
     protected String sql;
@@ -55,6 +57,10 @@ public class MethodInfo {
 
     public String[] getColumnNames() {
         return columnNames;
+    }
+
+    public TypeHandler[] getColumnTypeHandlers() {
+        return columnTypeHandlers;
     }
 
     public boolean isCache() {
@@ -159,10 +165,12 @@ public class MethodInfo {
             return this;
         }
 
-        public Builder columnNames(String[] columnNames) {
+        public Builder columnNames(String[] columnNames, TypeHandler[] typeHandlers) {
             methodInfo.columnNames = columnNames;
+            methodInfo.columnTypeHandlers = typeHandlers;
             return this;
         }
+
 
         public Builder cache(boolean cache) {
             methodInfo.cache = cache;

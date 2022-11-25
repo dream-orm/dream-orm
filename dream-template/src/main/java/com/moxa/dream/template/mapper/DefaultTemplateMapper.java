@@ -19,6 +19,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private UpdateNonByIdMapper updateNonByIdSqlMapper;
     private BatchUpdateNonByIdMapper batchUpdateNonByIdMapper;
     private InsertMapper insertSqlMapper;
+    private InsertFetchKeyMapper insertFetchKeyMapper;
     private BatchInsertMapper batchInsertMapper;
     private ExistByIdMapper existByIdMapper;
     private ExistMapper existMapper;
@@ -37,6 +38,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
         updateNonByIdSqlMapper = new UpdateNonByIdMapper(session);
         batchUpdateNonByIdMapper = new BatchUpdateNonByIdMapper(session);
         insertSqlMapper = new InsertMapper(session);
+        insertFetchKeyMapper = new InsertFetchKeyMapper(session);
         batchInsertMapper = new BatchInsertMapper(session);
         existByIdMapper = new ExistByIdMapper(session);
         existMapper = new ExistMapper(session);
@@ -81,6 +83,12 @@ public class DefaultTemplateMapper implements TemplateMapper {
     public int insert(Object view) {
         Class<?> type = view.getClass();
         return (int) insertSqlMapper.execute(type, view);
+    }
+
+    @Override
+    public Object insertFetchKey(Object view) {
+        Class<?> type = view.getClass();
+        return insertFetchKeyMapper.execute(type, view);
     }
 
     @Override

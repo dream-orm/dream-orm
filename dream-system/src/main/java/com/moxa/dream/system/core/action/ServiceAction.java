@@ -1,5 +1,6 @@
 package com.moxa.dream.system.core.action;
 
+import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
@@ -35,7 +36,7 @@ public class ServiceAction implements Action {
     }
 
     @Override
-    public void doAction(Session session, Object arg) throws Exception {
+    public void doAction(Session session, MappedStatement mappedStatement, Object arg) throws Exception {
         Object result = method.invoke(target, arg);
         if (!ObjectUtil.isNull(property)) {
             ObjectWrapper.wrapper(arg).set(property, result);

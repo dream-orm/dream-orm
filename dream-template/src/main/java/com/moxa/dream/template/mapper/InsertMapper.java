@@ -4,7 +4,6 @@ import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
-import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
@@ -39,12 +38,13 @@ public class InsertMapper extends WrapMapper {
             }
         }
         String sql = "insert into " + table + "(" + String.join(",", columnList) + ")values(" + String.join(",", valueList) + ")";
+        return getMethodInfo(configuration, tableInfo, sql);
+    }
+
+    protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, String sql) {
         return new MethodInfo.Builder(configuration)
                 .rowType(NonCollection.class)
                 .colType(Integer.class)
-                .columnNames(getColumnNames(tableInfo))
-                .initActionList(initActionList(tableInfo))
-                .destroyActionList(destroyActionList(tableInfo))
                 .sql(sql)
                 .build();
     }
@@ -54,15 +54,4 @@ public class InsertMapper extends WrapMapper {
         return (CODE & wrapType.getCode()) > 0;
     }
 
-    protected Action[] initActionList(TableInfo tableInfo) {
-        return new Action[0];
-    }
-
-    protected Action[] destroyActionList(TableInfo tableInfo) {
-        return new Action[0];
-    }
-
-    protected String[] getColumnNames(TableInfo tableInfo) {
-        return new String[0];
-    }
 }

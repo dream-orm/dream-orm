@@ -62,7 +62,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     protected MethodInfo.Builder createMethodInfoBuilder(Configuration configuration, Class mapperClass, Method method) {
         Class<? extends Collection> rowType = getRowType(mapperClass, method);
         Class colType = getColType(mapperClass, method);
-        String[] columnNames = getColumnNames(mapperClass, method);
         boolean cache = isCache(mapperClass, method);
         Command command = getCommand(mapperClass, method);
         MethodParam[] methodParamList = getMethodParamList(method);
@@ -75,7 +74,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 .name(method.getName())
                 .rowType(rowType)
                 .colType(colType)
-                .columnNames(columnNames)
                 .cache(cache)
                 .command(command)
                 .methodParamList(methodParamList)
@@ -179,17 +177,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
             }
         }
         return colType;
-    }
-
-    protected String[] getColumnNames(Class mapperClass, Method method) {
-        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
-        if (setupAnnotation != null) {
-            String[] columnNames = setupAnnotation.columnNames();
-            if (!ObjectUtil.isNull(columnNames)) {
-                return columnNames;
-            }
-        }
-        return new String[0];
     }
 
     protected boolean isCache(Class mapperClass, Method method) {

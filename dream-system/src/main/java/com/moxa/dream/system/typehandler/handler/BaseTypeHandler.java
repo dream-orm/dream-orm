@@ -6,16 +6,16 @@ import java.sql.Types;
 
 public abstract class BaseTypeHandler<T> implements TypeHandler<T> {
     @Override
-    public void setParam(PreparedStatement ps, int i, T parameter, int jdbcType) throws SQLException {
+    public void setParam(PreparedStatement ps, int index, T parameter, int jdbcType) throws SQLException {
         if (parameter == null) {
             if (jdbcType == Types.NULL)
                 jdbcType = getNullType();
-            ps.setNull(i, jdbcType);
+            ps.setNull(index, jdbcType);
         } else
-            setParameter(ps, i, parameter, jdbcType);
+            setParameter(ps, index, parameter, jdbcType);
     }
 
-    public abstract void setParameter(PreparedStatement ps, int i, T parameter, int jdbcType) throws SQLException;
+    public abstract void setParameter(PreparedStatement ps, int index, T parameter, int jdbcType) throws SQLException;
 
     protected abstract int getNullType();
 }

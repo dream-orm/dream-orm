@@ -7,13 +7,19 @@ import java.sql.Types;
 
 public class LongTypeHandler extends BaseTypeHandler<Long> {
     @Override
-    public void setParameter(PreparedStatement ps, int i, Long parameter, int jdbcType) throws SQLException {
-        ps.setLong(i, parameter);
+    public void setParameter(PreparedStatement ps, int index, Long parameter, int jdbcType) throws SQLException {
+        ps.setLong(index, parameter);
     }
 
     @Override
-    public Long getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
-        Long result = rs.getLong(i);
+    public Long getResult(ResultSet rs, int index, int jdbcType) throws SQLException {
+        Long result = rs.getLong(index);
+        return result == 0 && rs.wasNull() ? null : result;
+    }
+
+    @Override
+    public Long getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
+        Long result = rs.getLong(column);
         return result == 0 && rs.wasNull() ? null : result;
     }
 

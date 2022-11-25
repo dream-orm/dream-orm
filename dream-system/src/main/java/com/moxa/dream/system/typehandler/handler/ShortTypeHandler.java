@@ -7,13 +7,19 @@ import java.sql.Types;
 
 public class ShortTypeHandler extends BaseTypeHandler<Short> {
     @Override
-    public void setParameter(PreparedStatement ps, int i, Short parameter, int jdbcType) throws SQLException {
-        ps.setShort(i, parameter);
+    public void setParameter(PreparedStatement ps, int index, Short parameter, int jdbcType) throws SQLException {
+        ps.setShort(index, parameter);
     }
 
     @Override
-    public Short getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
-        Short result = rs.getShort(i);
+    public Short getResult(ResultSet rs, int index, int jdbcType) throws SQLException {
+        Short result = rs.getShort(index);
+        return result == 0 && rs.wasNull() ? null : result;
+    }
+
+    @Override
+    public Short getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
+        Short result = rs.getShort(column);
         return result == 0 && rs.wasNull() ? null : result;
     }
 

@@ -16,8 +16,6 @@ public @interface Setup {
 
     Class<?> colType() default NullObject.class;
 
-    String[] columnNames() default {};
-
     boolean cache() default true;
 
     Command command() default Command.NONE;

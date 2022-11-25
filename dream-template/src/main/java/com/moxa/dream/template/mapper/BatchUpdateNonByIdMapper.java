@@ -22,7 +22,7 @@ public class BatchUpdateNonByIdMapper extends UpdateNonByIdMapper {
         threadLocal.set(batchSize);
         try {
             super.execute(type, viewList);
-        }finally {
+        } finally {
             threadLocal.remove();
         }
     }

@@ -4,20 +4,30 @@ import java.sql.*;
 
 public class SqlDateTypeHandler extends BaseTypeHandler<Date> {
     @Override
-    public void setParameter(PreparedStatement ps, int i, Date parameter, int jdbcType) throws SQLException {
+    public void setParameter(PreparedStatement ps, int index, Date parameter, int jdbcType) throws SQLException {
         if (Types.DATE == jdbcType) {
-            ps.setDate(i, parameter);
+            ps.setDate(index, parameter);
         } else {
-            ps.setTimestamp(i, new Timestamp(parameter.getTime()));
+            ps.setTimestamp(index, new Timestamp(parameter.getTime()));
         }
     }
 
     @Override
-    public Date getResult(ResultSet rs, int i, int jdbcType) throws SQLException {
+    public Date getResult(ResultSet rs, int index, int jdbcType) throws SQLException {
         if (Types.DATE == jdbcType) {
-            return rs.getDate(i);
+            return rs.getDate(index);
         } else {
-            return new Date(rs.getTimestamp(i).getTime());
+            return new Date(rs.getTimestamp(index).getTime());
+
+        }
+    }
+
+    @Override
+    public Date getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
+        if (Types.DATE == jdbcType) {
+            return rs.getDate(column);
+        } else {
+            return new Date(rs.getTimestamp(column).getTime());
 
         }
     }

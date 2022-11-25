@@ -2,6 +2,7 @@ package com.moxa.dream.system.core.statementhandler;
 
 import com.moxa.dream.system.config.MappedParam;
 import com.moxa.dream.system.config.MappedStatement;
+import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.sql.*;
@@ -14,7 +15,7 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
         return connection.prepareStatement(mappedStatement.getSql(), mappedStatement.getColumnNames());
     }
 
-    protected void doParameter(PreparedStatement statement,MappedStatement mappedStatement) throws SQLException {
+    protected void doParameter(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
         List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
         if (!ObjectUtil.isNull(mappedParamList)) {
             for (int i = 0; i < mappedParamList.size(); i++) {
@@ -24,7 +25,7 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
         }
     }
 
-    protected void doTimeOut(PreparedStatement statement,MappedStatement mappedStatement) throws SQLException {
+    protected void doTimeOut(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
         int timeOut = mappedStatement.getTimeOut();
         if (timeOut != 0) {
             statement.setQueryTimeout(timeOut);
@@ -32,22 +33,47 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
     }
 
     @Override
-    public ResultSet executeQuery(PreparedStatement statement,MappedStatement mappedStatement) throws SQLException {
-        doParameter(statement,mappedStatement);
-        doTimeOut(statement,mappedStatement);
+    public ResultSet executeQuery(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
+        doParameter(statement, mappedStatement);
+        doTimeOut(statement, mappedStatement);
         return statement.executeQuery();
     }
 
     @Override
-    public Object executeUpdate(PreparedStatement statement,MappedStatement mappedStatement) throws SQLException {
-        doParameter(statement,mappedStatement);
+    public Object executeUpdate(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
+        doParameter(statement, mappedStatement);
         return statement.executeUpdate();
     }
 
     @Override
-    public Object executeBatch(PreparedStatement statement,List<MappedStatement> mappedStatements) throws SQLException {
+    public Object executeInsert(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
+        doParameter(statement, mappedStatement);
+        Object result = statement.executeUpdate();
+        String[] columnNames = mappedStatement.getColumnNames();
+        if (columnNames != null && columnNames.length > 0) {
+            Object[] results = new Object[columnNames.length];
+            TypeHandler[] columnTypeHandlers = mappedStatement.getColumnTypeHandlers();
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                for (int i = 0; i < columnNames.length; i++) {
+                    results[i] = columnTypeHandlers[i].getResult(generatedKeys, columnNames[i], Types.NULL);
+                }
+                result = results;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Object executeDelete(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
+        doParameter(statement, mappedStatement);
+        return statement.executeUpdate();
+    }
+
+    @Override
+    public Object executeBatch(PreparedStatement statement, List<MappedStatement> mappedStatements) throws SQLException {
         for (MappedStatement mappedStatement : mappedStatements) {
-            doParameter(statement,mappedStatement);
+            doParameter(statement, mappedStatement);
             statement.addBatch();
         }
         int[] result = statement.executeBatch();

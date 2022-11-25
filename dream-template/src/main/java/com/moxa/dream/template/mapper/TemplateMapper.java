@@ -22,6 +22,8 @@ public interface TemplateMapper {
 
     int insert(Object view);
 
+    Object insertFetchKey(Object view);
+
     int deleteById(Class<?> type, Object id);
 
     int deleteByIds(Class<?> type, List<?> idList);

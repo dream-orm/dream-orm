@@ -22,7 +22,7 @@ public class BatchInsertMapper extends InsertMapper {
         threadLocal.set(batchSize);
         try {
             super.execute(type, viewList);
-        }finally {
+        } finally {
             threadLocal.remove();
         }
     }

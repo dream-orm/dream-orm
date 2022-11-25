@@ -30,7 +30,7 @@ public class JdbcExecutor implements Executor {
             try {
                 return resultSetHandler.result(resultSet, mappedStatement, session);
             } finally {
-                if(resultSet!=null&&!resultSet.isClosed()) {
+                if (resultSet != null && !resultSet.isClosed()) {
                     resultSet.close();
                 }
             }
@@ -44,12 +44,12 @@ public class JdbcExecutor implements Executor {
 
     @Override
     public Object insert(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> statementHandler.executeUpdate(statement, mappedStatement));
+        return execute(mappedStatement, statement -> statementHandler.executeInsert(statement, mappedStatement));
     }
 
     @Override
     public Object delete(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> statementHandler.executeUpdate(statement, mappedStatement));
+        return execute(mappedStatement, statement -> statementHandler.executeDelete(statement, mappedStatement));
     }
 
     @Override
