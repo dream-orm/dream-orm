@@ -17,7 +17,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private UpdateByIdMapper updateByIdSqlMapper;
     private BatchUpdateByIdMapper batchUpdateByIdMapper;
     private UpdateNonByIdMapper updateNonByIdSqlMapper;
-    private BatchUpdateNonByIdMapper batchUpdateNonByIdMapper;
     private InsertMapper insertSqlMapper;
     private InsertFetchKeyMapper insertFetchKeyMapper;
     private BatchInsertMapper batchInsertMapper;
@@ -35,7 +34,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
         updateByIdSqlMapper = new UpdateByIdMapper(session);
         batchUpdateByIdMapper = new BatchUpdateByIdMapper(session);
         updateNonByIdSqlMapper = new UpdateNonByIdMapper(session);
-        batchUpdateNonByIdMapper = new BatchUpdateNonByIdMapper(session);
         insertSqlMapper = new InsertMapper(session);
         insertFetchKeyMapper = new InsertFetchKeyMapper(session, sequence);
         batchInsertMapper = new BatchInsertMapper(session);
@@ -113,20 +111,16 @@ public class DefaultTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public void batchInsert(List<?> viewList, int batchSize) {
+    public List<Object> batchInsert(List<?> viewList, int batchSize) {
         if (viewList == null || viewList.isEmpty()) {
-            return;
+            return null;
         }
-        batchInsertMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
+        return (List<Object>) batchInsertMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
     }
 
     @Override
-    public void batchUpdateById(List<?> viewList, int batchSize) {
-        batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
+    public List<Object> batchUpdateById(List<?> viewList, int batchSize) {
+        return (List<Object>) batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
     }
 
-    @Override
-    public void batchUpdateNonById(List<?> viewList, int batchSize) {
-        batchUpdateNonByIdMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
-    }
 }

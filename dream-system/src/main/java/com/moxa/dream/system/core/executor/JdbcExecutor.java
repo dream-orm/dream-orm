@@ -1,5 +1,6 @@
 package com.moxa.dream.system.core.executor;
 
+import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.session.Session;
@@ -9,7 +10,6 @@ import com.moxa.dream.system.transaction.Transaction;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 
 public class JdbcExecutor implements Executor {
     protected Transaction transaction;
@@ -53,8 +53,8 @@ public class JdbcExecutor implements Executor {
     }
 
     @Override
-    public Object batch(List<MappedStatement> mappedStatements, Session session) throws SQLException {
-        return execute(mappedStatements.get(0), statement -> statementHandler.batch(statement, mappedStatements));
+    public Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
+        return execute(batchMappedStatement.getMappedStatementList().get(0), statement -> statementHandler.batch(statement, batchMappedStatement));
     }
 
     protected Object execute(MappedStatement mappedStatement, Function<Statement, Object> function) throws SQLException {

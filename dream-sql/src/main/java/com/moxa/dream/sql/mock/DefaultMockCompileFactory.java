@@ -1,15 +1,11 @@
 package com.moxa.dream.sql.mock;
 
-import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.system.cache.CacheKey;
-import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.config.MappedParam;
-import com.moxa.dream.system.config.MappedSql;
-import com.moxa.dream.system.config.MappedStatement;
+import com.moxa.dream.system.config.*;
 import com.moxa.dream.system.typehandler.handler.ObjectTypeHandler;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.ObjectWrapper;
@@ -142,7 +138,7 @@ public class DefaultMockCompileFactory implements MockCompileFactory {
                 .methodInfo(mockMethodInfo)
                 .uniqueKey(methodKey)
                 .arg(param)
-                .mappedSql(new MappedSql(command, sqlBuilder.toString(), tableList))
+                .mappedSql(new MappedSql(command.name(), sqlBuilder.toString(), tableList))
                 .mappedParamList(paramList.stream().map(par -> {
                     TypeHandler typeHandler;
                     if (par == null) {

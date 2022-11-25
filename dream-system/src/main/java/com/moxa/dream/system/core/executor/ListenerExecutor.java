@@ -1,5 +1,6 @@
 package com.moxa.dream.system.core.executor;
 
+import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.listener.*;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
@@ -7,7 +8,6 @@ import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public class ListenerExecutor implements Executor {
     protected ListenerFactory listenerFactory;
@@ -54,6 +54,15 @@ public class ListenerExecutor implements Executor {
         return execute(mappedStatement, deleteListeners, (ms) -> nextExecutor.delete(mappedStatement, session));
     }
 
+    @Override
+    public Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
+        BatchListener[] batchListeners = null;
+        if (listenerFactory != null) {
+            batchListeners = listenerFactory.getBatchListener();
+        }
+        return execute(batchMappedStatement, batchListeners, (ms) -> nextExecutor.batch(batchMappedStatement, session));
+    }
+
     protected Object execute(MappedStatement mappedStatement, Listener[] listeners, Function<MappedStatement, Object> function) throws SQLException {
         if (!ObjectUtil.isNull(listeners)) {
             if (beforeListeners(listeners, mappedStatement)) {
@@ -72,11 +81,6 @@ public class ListenerExecutor implements Executor {
         } else {
             return function.apply(mappedStatement);
         }
-    }
-
-    @Override
-    public Object batch(List<MappedStatement> mappedStatements, Session session) throws SQLException {
-        return nextExecutor.batch(mappedStatements, session);
     }
 
     @Override

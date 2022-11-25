@@ -1,7 +1,7 @@
 package com.moxa.dream.drive.mapper;
 
-import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.drive.annotation.*;
+import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.MethodParam;

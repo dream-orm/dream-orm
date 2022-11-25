@@ -1,5 +1,6 @@
 package com.moxa.dream.system.core.statementhandler;
 
+import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MappedParam;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
@@ -71,8 +72,8 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
     }
 
     @Override
-    public Object batch(PreparedStatement statement, List<MappedStatement> mappedStatements) throws SQLException {
-        for (MappedStatement mappedStatement : mappedStatements) {
+    public Object batch(PreparedStatement statement, BatchMappedStatement batchMappedStatement) throws SQLException {
+        for (MappedStatement mappedStatement : batchMappedStatement.getMappedStatementList()) {
             doParameter(statement, mappedStatement);
             statement.addBatch();
         }

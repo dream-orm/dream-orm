@@ -32,22 +32,17 @@ public interface TemplateMapper {
 
     boolean exist(Class<?> type, Object conditionObject);
 
-    default void batchInsert(List<?> viewList) {
-        batchInsert(viewList, 1000);
+    default List<Object> batchInsert(List<?> viewList) {
+        return batchInsert(viewList, 1000);
     }
 
-    default void batchUpdateById(List<?> viewList) {
-        batchUpdateById(viewList, 1000);
+    default List<Object> batchUpdateById(List<?> viewList) {
+        return batchUpdateById(viewList, 1000);
     }
 
-    default void batchUpdateNonById(List<?> viewList) {
-        batchUpdateNonById(viewList, 1000);
-    }
+    List<Object> batchInsert(List<?> viewList, int batchSize);
 
-    void batchInsert(List<?> viewList, int batchSize);
+    List<Object> batchUpdateById(List<?> viewList, int batchSize);
 
-    void batchUpdateById(List<?> viewList, int batchSize);
-
-    void batchUpdateNonById(List<?> viewList, int batchSize);
 
 }

@@ -1,11 +1,11 @@
 package com.moxa.dream.system.core.executor;
 
 
+import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.session.Session;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public abstract class AbstractCacheExecutor implements Executor {
     protected Executor nextExecutor;
@@ -54,9 +54,9 @@ public abstract class AbstractCacheExecutor implements Executor {
     }
 
     @Override
-    public Object batch(List<MappedStatement> mappedStatements, Session session) throws SQLException {
-        Object result = nextExecutor.batch(mappedStatements, session);
-        clearObject(mappedStatements.get(0));
+    public Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
+        Object result = nextExecutor.batch(batchMappedStatement, session);
+        clearObject(batchMappedStatement);
         return result;
     }
 

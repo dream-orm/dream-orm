@@ -12,11 +12,7 @@ public abstract class AbstractListenerFactory implements ListenerFactory {
     private InsertListener[] insertListeners = new InsertListener[0];
     private UpdateListener[] updateListeners = new UpdateListener[0];
     private DeleteListener[] deleteListeners = new DeleteListener[0];
-
-
-    public AbstractListenerFactory() {
-        listener(getDefaultListener());
-    }
+    private BatchListener[] batchListeners = new BatchListener[0];
 
     @Override
     public void listener(Listener[] listeners) {
@@ -24,6 +20,7 @@ public abstract class AbstractListenerFactory implements ListenerFactory {
         List<InsertListener> insertListenerList = new ArrayList<>();
         List<UpdateListener> updateListenerList = new ArrayList<>();
         List<DeleteListener> deleteListenerList = new ArrayList<>();
+        List<BatchListener> batchListenerList = new ArrayList<>();
         if (!ObjectUtil.isNull(listeners)) {
             for (Listener listener : listeners) {
                 if (listener instanceof QueryListener) {
@@ -38,11 +35,15 @@ public abstract class AbstractListenerFactory implements ListenerFactory {
                 if (listener instanceof DeleteListener) {
                     deleteListenerList.add((DeleteListener) listener);
                 }
+                if (listener instanceof BatchListener) {
+                    batchListenerList.add((BatchListener) listener);
+                }
             }
             queryListeners = copyTo(queryListeners, queryListenerList.toArray(new QueryListener[0]));
             insertListeners = copyTo(insertListeners, insertListenerList.toArray(new InsertListener[0]));
             updateListeners = copyTo(updateListeners, updateListenerList.toArray(new UpdateListener[0]));
             deleteListeners = copyTo(deleteListeners, deleteListenerList.toArray(new DeleteListener[0]));
+            batchListeners = copyTo(batchListeners, batchListenerList.toArray(new BatchListener[0]));
         }
     }
 
@@ -75,5 +76,8 @@ public abstract class AbstractListenerFactory implements ListenerFactory {
         return deleteListeners;
     }
 
-    protected abstract Listener[] getDefaultListener();
+    @Override
+    public BatchListener[] getBatchListener() {
+        return batchListeners;
+    }
 }

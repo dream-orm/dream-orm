@@ -1,6 +1,5 @@
 package com.moxa.dream.system.config;
 
-import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.compile.CompileFactory;

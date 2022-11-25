@@ -1,9 +1,10 @@
-package com.moxa.dream.antlr.config;
+package com.moxa.dream.system.config;
 
 public enum Command {
     QUERY,
     UPDATE,
     INSERT,
     DELETE,
-    NONE,
+    BATCH,
+    NONE;
 }

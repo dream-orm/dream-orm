@@ -1,7 +1,7 @@
 package com.moxa.dream.sql.mock;
 
 
-import com.moxa.dream.antlr.config.Command;
+import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 

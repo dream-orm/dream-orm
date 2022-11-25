@@ -134,7 +134,7 @@ public class DefaultDialectFactory implements DialectFactory {
         return new MappedStatement
                 .Builder()
                 .methodInfo(methodInfo)
-                .mappedSql(new MappedSql(scanInfo.getCommand(), sql, scanInfo.getTableScanInfoMap().keySet()))
+                .mappedSql(new MappedSql(scanInfo.getCommand().name(), sql, scanInfo.getTableScanInfoMap().keySet()))
                 .mappedParamList(mappedParamList)
                 .arg(arg)
                 .uniqueKey(uniqueKey)

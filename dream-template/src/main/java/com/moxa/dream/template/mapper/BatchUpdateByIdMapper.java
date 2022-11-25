@@ -1,5 +1,6 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 
@@ -15,13 +16,13 @@ public class BatchUpdateByIdMapper extends UpdateByIdMapper {
     @Override
     protected Object execute(MethodInfo methodInfo, Object arg) {
         Integer batchSize = threadLocal.get();
-        return session.batchExecute(methodInfo, (List<?>) arg, batchSize);
+        return session.execute(new BatchMappedStatement(methodInfo, (List<?>) arg, batchSize));
     }
 
-    public void execute(Class<?> type, List<?> viewList, int batchSize) {
+    public Object execute(Class<?> type, List<?> viewList, int batchSize) {
         threadLocal.set(batchSize);
         try {
-            super.execute(type, viewList);
+            return super.execute(type, viewList);
         } finally {
             threadLocal.remove();
         }

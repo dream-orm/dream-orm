@@ -1,6 +1,5 @@
 package com.moxa.dream.system.config;
 
-import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.core.action.Action;
@@ -139,7 +138,7 @@ public class MappedStatement {
 
     public void put(String key, Object value) {
         if (envMap == null) {
-            envMap = new HashMap<String, Object>();
+            envMap = new HashMap<>();
         }
         envMap.put(key, value);
     }
@@ -150,7 +149,6 @@ public class MappedStatement {
         } else {
             return envMap.get(key);
         }
-
     }
 
     public static class Builder {

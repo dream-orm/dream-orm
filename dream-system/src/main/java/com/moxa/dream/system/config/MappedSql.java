@@ -1,7 +1,5 @@
 package com.moxa.dream.system.config;
 
-import com.moxa.dream.antlr.config.Command;
-
 import java.util.Set;
 
 public class MappedSql {
@@ -9,8 +7,8 @@ public class MappedSql {
     private final String sql;
     private final Set<String> tableSet;
 
-    public MappedSql(Command command, String sql, Set<String> tableSet) {
-        this.command = command;
+    public MappedSql(String command, String sql, Set<String> tableSet) {
+        this.command = Enum.valueOf(Command.class, command);
         this.sql = sql;
         this.tableSet = tableSet;
     }

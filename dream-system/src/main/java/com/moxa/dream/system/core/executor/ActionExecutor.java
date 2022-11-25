@@ -1,5 +1,6 @@
 package com.moxa.dream.system.core.executor;
 
+import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.session.Session;
@@ -7,7 +8,6 @@ import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public class ActionExecutor implements Executor {
     protected Executor nextExecutor;
@@ -36,6 +36,11 @@ public class ActionExecutor implements Executor {
         return execute(mappedStatement, (ms) -> nextExecutor.delete(mappedStatement, session), session);
     }
 
+    @Override
+    public Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
+        return execute(batchMappedStatement, (ms) -> nextExecutor.batch(batchMappedStatement, session), session);
+    }
+
     protected Object execute(MappedStatement mappedStatement, Function<MappedStatement, Object> function, Session session) throws SQLException {
         Action[] initActionList = mappedStatement.getInitActionList();
         Action[] destroyActionList = mappedStatement.getDestroyActionList();
@@ -44,11 +49,6 @@ public class ActionExecutor implements Executor {
         result = function.apply(mappedStatement);
         doActions(destroyActionList, mappedStatement, result, session);
         return result;
-    }
-
-    @Override
-    public Object batch(List<MappedStatement> mappedStatements, Session session) throws SQLException {
-        return nextExecutor.batch(mappedStatements, session);
     }
 
     @Override

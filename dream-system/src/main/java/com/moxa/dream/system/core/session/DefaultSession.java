@@ -1,15 +1,11 @@
 package com.moxa.dream.system.core.session;
 
-import com.moxa.dream.antlr.config.Command;
-import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.config.MethodInfo;
+import com.moxa.dream.system.config.*;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapper.DefaultMapperInvokeFactory;
 import com.moxa.dream.system.mapper.MapperFactory;
 import com.moxa.dream.system.mapper.MapperInvokeFactory;
-import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.SQLException;
@@ -51,7 +47,7 @@ public class DefaultSession implements Session {
     public Object execute(MappedStatement mappedStatement) {
         Object value;
         try {
-            Command command = getCommand(mappedStatement);
+            Command command = mappedStatement.getCommand();
             switch (command) {
                 case QUERY:
                     value = executor.query(mappedStatement, this);
@@ -65,6 +61,15 @@ public class DefaultSession implements Session {
                 case DELETE:
                     value = executor.delete(mappedStatement, this);
                     break;
+                case BATCH:
+                    BatchMappedStatement batchMappedStatement = (BatchMappedStatement) mappedStatement;
+                    batchMappedStatement.compile(dialectFactory);
+                    List<Object> resultList = new ArrayList<>();
+                    while (batchMappedStatement.hasNext()) {
+                        resultList.add(executor.batch(batchMappedStatement.next(), this));
+                    }
+                    value = resultList;
+                    break;
                 default:
                     value = executeNone(mappedStatement);
                     break;
@@ -73,55 +78,6 @@ public class DefaultSession implements Session {
             throw new DreamRunTimeException("执行'" + mappedStatement.getId() + "'失败：" + e.getMessage(), e);
         }
         return value;
-    }
-
-    @Override
-    public Object batchExecute(MethodInfo methodInfo, List<?> argList, int batchSize) {
-        if (argList == null || argList.isEmpty()) {
-            return null;
-        }
-        List<MappedStatement> mappedStatementList = new ArrayList<>(argList.size());
-        for (Object arg : argList) {
-            if (arg == null) {
-                continue;
-            }
-            Map<String, Object> argMap;
-            if (arg instanceof Map) {
-                argMap = (Map<String, Object>) arg;
-            } else {
-                argMap = new ObjectMap(arg);
-            }
-            mappedStatementList.add(dialectFactory.compile(methodInfo, argMap));
-        }
-        return batchExecute(mappedStatementList, batchSize);
-    }
-
-    @Override
-    public Object batchExecute(List<MappedStatement> mappedStatementList, int batchSize) {
-        if (mappedStatementList == null || mappedStatementList.isEmpty()) {
-            return null;
-        }
-        try {
-            if (batchSize > 0) {
-                int size = mappedStatementList.size();
-                int oldSize = 0;
-                while (true) {
-                    int newSize = oldSize + batchSize;
-                    if (newSize >= size) {
-                        executor.batch(mappedStatementList.subList(oldSize, size), this);
-                        break;
-                    } else {
-                        executor.batch(mappedStatementList.subList(oldSize, newSize), this);
-                        oldSize = newSize;
-                    }
-                }
-            } else {
-                executor.batch(mappedStatementList, this);
-            }
-            return null;
-        } catch (SQLException e) {
-            throw new DreamRunTimeException("批量执行失败：" + e.getMessage(), e);
-        }
     }
 
     @Override
@@ -149,10 +105,6 @@ public class DefaultSession implements Session {
     @Override
     public Configuration getConfiguration() {
         return configuration;
-    }
-
-    protected Command getCommand(MappedStatement mappedStatement) {
-        return mappedStatement.getCommand();
     }
 
     protected Object executeNone(MappedStatement mappedStatement) {

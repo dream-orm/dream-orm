@@ -1,10 +1,10 @@
 package com.moxa.dream.system.core.executor;
 
+import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.session.Session;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public interface Executor {
 
@@ -16,7 +16,7 @@ public interface Executor {
 
     Object delete(MappedStatement mappedStatement, Session session) throws SQLException;
 
-    Object batch(List<MappedStatement> mappedStatements, Session session) throws SQLException;
+    Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException;
 
     void commit();
 

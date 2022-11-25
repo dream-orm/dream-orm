@@ -1,12 +1,12 @@
 package com.moxa.dream.system.core.statementhandler;
 
+import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MappedStatement;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 
 public class SimpleStatementHandler implements StatementHandler<Statement> {
     @Override
@@ -43,8 +43,8 @@ public class SimpleStatementHandler implements StatementHandler<Statement> {
     }
 
     @Override
-    public Object batch(Statement statement, List<MappedStatement> mappedStatements) throws SQLException {
-        for (MappedStatement mappedStatement : mappedStatements) {
+    public Object batch(Statement statement, BatchMappedStatement batchMappedStatement) throws SQLException {
+        for (MappedStatement mappedStatement : batchMappedStatement.getMappedStatementList()) {
             statement.addBatch(mappedStatement.getSql());
         }
         int[] result = statement.executeBatch();
