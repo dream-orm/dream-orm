@@ -9,11 +9,10 @@ import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
-import com.moxa.dream.template.annotation.Sequence;
+import com.moxa.dream.template.sequence.Sequence;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.exception.DreamRunTimeException;
-import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.sql.Types;
 import java.util.ArrayList;
@@ -21,8 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 public class InsertFetchKeyMapper extends InsertMapper {
-    public InsertFetchKeyMapper(Session session) {
+    private Sequence sequence;
+
+    public InsertFetchKeyMapper(Session session, Sequence sequence) {
         super(session);
+        this.sequence = sequence;
     }
 
     @Override
@@ -31,22 +33,16 @@ public class InsertFetchKeyMapper extends InsertMapper {
         if (primColumnInfo == null) {
             throw new DreamRunTimeException(tableInfo.getTable() + "不存在主键");
         }
-        Sequence sequenceAnnotation = primColumnInfo.getAnnotation(Sequence.class);
         List<Action> initActionList = new ArrayList<>();
         List<Action> destroyActionList = new ArrayList<>();
-        String[] columnNames = null;
+        sequence.init(tableInfo);
+        String[] columnNames = sequence.columnNames(tableInfo);
         TypeHandler[] typeHandlers = null;
-        if (sequenceAnnotation != null) {
-            Class<? extends com.moxa.dream.template.sequence.Sequence> sequenceClass = sequenceAnnotation.value();
-            com.moxa.dream.template.sequence.Sequence sequence = ReflectUtil.create(sequenceClass);
-            sequence.init(tableInfo);
-            columnNames = sequence.columnNames();
-            SequenceAction sequenceAction = new SequenceAction(sequence, primColumnInfo.getName());
-            if (sequence.before()) {
-                initActionList.add(sequenceAction);
-            } else {
-                destroyActionList.add(sequenceAction);
-            }
+        SequenceAction sequenceAction = new SequenceAction(tableInfo, sequence, primColumnInfo.getName());
+        if (sequence.before()) {
+            initActionList.add(sequenceAction);
+        } else {
+            destroyActionList.add(sequenceAction);
         }
         if (columnNames != null && columnNames.length > 0) {
             typeHandlers = new TypeHandler[columnNames.length];
@@ -73,10 +69,12 @@ public class InsertFetchKeyMapper extends InsertMapper {
     }
 
     class SequenceAction implements Action {
-        private com.moxa.dream.template.sequence.Sequence sequence;
+        private TableInfo tableInfo;
+        private Sequence sequence;
         private String fieldName;
 
-        public SequenceAction(com.moxa.dream.template.sequence.Sequence sequence, String fieldName) {
+        public SequenceAction(TableInfo tableInfo, Sequence sequence, String fieldName) {
+            this.tableInfo = tableInfo;
             this.sequence = sequence;
             this.fieldName = fieldName;
         }
@@ -84,7 +82,7 @@ public class InsertFetchKeyMapper extends InsertMapper {
         @Override
         public void doAction(Session session, MappedStatement mappedStatement, Object arg) throws Exception {
             Map<String, Object> argMap = (Map<String, Object>) mappedStatement.getArg();
-            sequence.sequence(ObjectWrapper.wrapper(argMap.get(DREAM_TEMPLATE_PARAM)), fieldName, arg);
+            sequence.sequence(tableInfo, ObjectWrapper.wrapper(argMap.get(DREAM_TEMPLATE_PARAM)), fieldName, arg);
         }
     }
 }

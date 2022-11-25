@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class UpdateMapper extends WrapMapper {
-    private int CODE = 2;
+    private final int CODE = 2;
 
     public UpdateMapper(Session session) {
         super(session);

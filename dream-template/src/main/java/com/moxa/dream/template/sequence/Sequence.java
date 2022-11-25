@@ -11,9 +11,9 @@ public interface Sequence {
         return true;
     }
 
-    default String[] columnNames() {
+    default String[] columnNames(TableInfo tableInfo) {
         return new String[0];
     }
 
-    void sequence(ObjectWrapper wrapper, String property, Object arg);
+    void sequence(TableInfo tableInfo, ObjectWrapper wrapper, String property, Object arg);
 }

@@ -19,13 +19,13 @@ public class MySQLSequence implements Sequence {
     }
 
     @Override
-    public String[] columnNames() {
+    public String[] columnNames(TableInfo tableInfo) {
         return new String[]{tableInfo.getPrimColumnInfo().getName()};
     }
 
 
     @Override
-    public void sequence(ObjectWrapper wrapper, String property, Object arg) {
+    public void sequence(TableInfo tableInfo, ObjectWrapper wrapper, String property, Object arg) {
         if (arg != null && arg.getClass().isArray() && Array.getLength(arg) == 1) {
             wrapper.set(property, Array.get(arg, 0));
         }
