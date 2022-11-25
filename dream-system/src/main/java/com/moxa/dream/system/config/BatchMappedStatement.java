@@ -107,6 +107,11 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
     }
 
     @Override
+    public String[] getColumnNames() {
+        return getMappedStatementList().get(0).getColumnNames();
+    }
+
+    @Override
     public String getSql() {
         return getMappedStatementList().get(0).getSql();
     }

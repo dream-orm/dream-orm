@@ -54,7 +54,7 @@ public class JdbcExecutor implements Executor {
 
     @Override
     public Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
-        return execute(batchMappedStatement.getMappedStatementList().get(0), statement -> statementHandler.batch(statement, batchMappedStatement));
+        return execute(batchMappedStatement, statement -> statementHandler.batch(statement, batchMappedStatement));
     }
 
     protected Object execute(MappedStatement mappedStatement, Function<Statement, Object> function) throws SQLException {
