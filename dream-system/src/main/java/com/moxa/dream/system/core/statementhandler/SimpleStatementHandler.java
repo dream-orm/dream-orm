@@ -22,28 +22,28 @@ public class SimpleStatementHandler implements StatementHandler<Statement> {
     }
 
     @Override
-    public ResultSet executeQuery(Statement statement, MappedStatement mappedStatement) throws SQLException {
+    public ResultSet query(Statement statement, MappedStatement mappedStatement) throws SQLException {
         doTimeOut(statement, mappedStatement);
         return statement.executeQuery(mappedStatement.getSql());
     }
 
     @Override
-    public Object executeUpdate(Statement statement, MappedStatement mappedStatement) throws SQLException {
+    public Object update(Statement statement, MappedStatement mappedStatement) throws SQLException {
         return statement.executeUpdate(mappedStatement.getSql());
     }
 
     @Override
-    public Object executeInsert(Statement statement, MappedStatement mappedStatement) throws SQLException {
+    public Object insert(Statement statement, MappedStatement mappedStatement) throws SQLException {
         return statement.executeUpdate(mappedStatement.getSql());
     }
 
     @Override
-    public Object executeDelete(Statement statement, MappedStatement mappedStatement) throws SQLException {
+    public Object delete(Statement statement, MappedStatement mappedStatement) throws SQLException {
         return statement.executeUpdate(mappedStatement.getSql());
     }
 
     @Override
-    public Object executeBatch(Statement statement, List<MappedStatement> mappedStatements) throws SQLException {
+    public Object batch(Statement statement, List<MappedStatement> mappedStatements) throws SQLException {
         for (MappedStatement mappedStatement : mappedStatements) {
             statement.addBatch(mappedStatement.getSql());
         }

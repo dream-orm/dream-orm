@@ -33,20 +33,20 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
     }
 
     @Override
-    public ResultSet executeQuery(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
+    public ResultSet query(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
         doParameter(statement, mappedStatement);
         doTimeOut(statement, mappedStatement);
         return statement.executeQuery();
     }
 
     @Override
-    public Object executeUpdate(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
+    public Object update(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
         doParameter(statement, mappedStatement);
         return statement.executeUpdate();
     }
 
     @Override
-    public Object executeInsert(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
+    public Object insert(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
         doParameter(statement, mappedStatement);
         Object result = statement.executeUpdate();
         String[] columnNames = mappedStatement.getColumnNames();
@@ -65,13 +65,13 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
     }
 
     @Override
-    public Object executeDelete(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
+    public Object delete(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
         doParameter(statement, mappedStatement);
         return statement.executeUpdate();
     }
 
     @Override
-    public Object executeBatch(PreparedStatement statement, List<MappedStatement> mappedStatements) throws SQLException {
+    public Object batch(PreparedStatement statement, List<MappedStatement> mappedStatements) throws SQLException {
         for (MappedStatement mappedStatement : mappedStatements) {
             doParameter(statement, mappedStatement);
             statement.addBatch();

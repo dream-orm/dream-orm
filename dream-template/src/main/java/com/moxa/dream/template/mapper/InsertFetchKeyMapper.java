@@ -11,13 +11,11 @@ import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.template.sequence.Sequence;
 import com.moxa.dream.util.common.NonCollection;
-import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class InsertFetchKeyMapper extends InsertMapper {
     private Sequence sequence;
@@ -79,7 +77,7 @@ public class InsertFetchKeyMapper extends InsertMapper {
 
         @Override
         public void doAction(Session session, MappedStatement mappedStatement, Object arg) throws Exception {
-            sequence.sequence(tableInfo,mappedStatement, arg);
+            sequence.sequence(tableInfo, mappedStatement, arg);
         }
     }
 }

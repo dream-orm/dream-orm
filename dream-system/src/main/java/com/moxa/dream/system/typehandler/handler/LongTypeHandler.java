@@ -13,13 +13,13 @@ public class LongTypeHandler extends BaseTypeHandler<Long> {
 
     @Override
     public Long getResult(ResultSet rs, int index, int jdbcType) throws SQLException {
-        Long result = rs.getLong(index);
+        long result = rs.getLong(index);
         return result == 0 && rs.wasNull() ? null : result;
     }
 
     @Override
     public Long getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
-        Long result = rs.getLong(column);
+        long result = rs.getLong(column);
         return result == 0 && rs.wasNull() ? null : result;
     }
 

@@ -13,13 +13,13 @@ public class IntegerTypeHandler extends BaseTypeHandler<Integer> {
 
     @Override
     public Integer getResult(ResultSet rs, int index, int jdbcType) throws SQLException {
-        Integer result = rs.getInt(index);
+        int result = rs.getInt(index);
         return result == 0 && rs.wasNull() ? null : result;
     }
 
     @Override
     public Integer getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
-        Integer result = rs.getInt(column);
+        int result = rs.getInt(column);
         return result == 0 && rs.wasNull() ? null : result;
     }
 

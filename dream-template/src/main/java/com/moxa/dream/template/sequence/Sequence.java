@@ -2,7 +2,6 @@ package com.moxa.dream.template.sequence;
 
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.table.TableInfo;
-import com.moxa.dream.util.common.ObjectWrapper;
 
 public interface Sequence {
     default void init(TableInfo tableInfo) {

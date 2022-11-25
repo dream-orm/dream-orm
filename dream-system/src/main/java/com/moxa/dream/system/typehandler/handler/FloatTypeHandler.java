@@ -13,13 +13,13 @@ public class FloatTypeHandler extends BaseTypeHandler<Float> {
 
     @Override
     public Float getResult(ResultSet rs, int index, int jdbcType) throws SQLException {
-        Float result = rs.getFloat(index);
+        float result = rs.getFloat(index);
         return result == 0 && rs.wasNull() ? null : result;
     }
 
     @Override
     public Float getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
-        Float result = rs.getFloat(column);
+        float result = rs.getFloat(column);
         return result == 0 && rs.wasNull() ? null : result;
     }
 

@@ -10,15 +10,15 @@ import java.util.List;
 
 public interface StatementHandler<T extends Statement> {
 
-    ResultSet executeQuery(T statement, MappedStatement mappedStatement) throws SQLException;
+    ResultSet query(T statement, MappedStatement mappedStatement) throws SQLException;
 
-    Object executeUpdate(T statement, MappedStatement mappedStatement) throws SQLException;
+    Object update(T statement, MappedStatement mappedStatement) throws SQLException;
 
-    Object executeInsert(T statement, MappedStatement mappedStatement) throws SQLException;
+    Object insert(T statement, MappedStatement mappedStatement) throws SQLException;
 
-    Object executeDelete(T statement, MappedStatement mappedStatement) throws SQLException;
+    Object delete(T statement, MappedStatement mappedStatement) throws SQLException;
 
-    Object executeBatch(T statement, List<MappedStatement> mappedStatements) throws SQLException;
+    Object batch(T statement, List<MappedStatement> mappedStatements) throws SQLException;
 
     T prepare(Connection connection, MappedStatement mappedStatement) throws SQLException;
 }

@@ -1,13 +1,8 @@
 package com.moxa.dream.template.sequence;
 
-import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.table.TableInfo;
-import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.lang.reflect.Array;
-import java.util.Map;
-
-import static com.moxa.dream.template.mapper.AbstractMapper.DREAM_TEMPLATE_PARAM;
 
 public class MySQLSequence extends AbstractSequence {
     @Override

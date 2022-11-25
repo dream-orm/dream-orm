@@ -26,7 +26,7 @@ public class JdbcExecutor implements Executor {
     @Override
     public Object query(MappedStatement mappedStatement, Session session) throws SQLException {
         return execute(mappedStatement, statement -> {
-            ResultSet resultSet = statementHandler.executeQuery(statement, mappedStatement);
+            ResultSet resultSet = statementHandler.query(statement, mappedStatement);
             try {
                 return resultSetHandler.result(resultSet, mappedStatement, session);
             } finally {
@@ -39,22 +39,22 @@ public class JdbcExecutor implements Executor {
 
     @Override
     public Object update(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> statementHandler.executeUpdate(statement, mappedStatement));
+        return execute(mappedStatement, statement -> statementHandler.update(statement, mappedStatement));
     }
 
     @Override
     public Object insert(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> statementHandler.executeInsert(statement, mappedStatement));
+        return execute(mappedStatement, statement -> statementHandler.insert(statement, mappedStatement));
     }
 
     @Override
     public Object delete(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> statementHandler.executeDelete(statement, mappedStatement));
+        return execute(mappedStatement, statement -> statementHandler.delete(statement, mappedStatement));
     }
 
     @Override
     public Object batch(List<MappedStatement> mappedStatements, Session session) throws SQLException {
-        return execute(mappedStatements.get(0), statement -> statementHandler.executeBatch(statement, mappedStatements));
+        return execute(mappedStatements.get(0), statement -> statementHandler.batch(statement, mappedStatements));
     }
 
     protected Object execute(MappedStatement mappedStatement, Function<Statement, Object> function) throws SQLException {

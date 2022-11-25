@@ -13,13 +13,13 @@ public class ShortTypeHandler extends BaseTypeHandler<Short> {
 
     @Override
     public Short getResult(ResultSet rs, int index, int jdbcType) throws SQLException {
-        Short result = rs.getShort(index);
+        short result = rs.getShort(index);
         return result == 0 && rs.wasNull() ? null : result;
     }
 
     @Override
     public Short getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
-        Short result = rs.getShort(column);
+        short result = rs.getShort(column);
         return result == 0 && rs.wasNull() ? null : result;
     }
 
