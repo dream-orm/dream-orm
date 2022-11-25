@@ -18,10 +18,6 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
     int total;
     boolean hasNext = true;
 
-    public BatchMappedStatement(MethodInfo methodInfo, List<?> argList) {
-        this(methodInfo, argList, 1000);
-    }
-
     public BatchMappedStatement(MethodInfo methodInfo, List<?> argList, int batchSize) {
         if (batchSize <= 0) {
             batchSize = Integer.MAX_VALUE;
