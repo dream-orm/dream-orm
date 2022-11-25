@@ -38,7 +38,7 @@ public class InsertFetchKeyMapper extends InsertMapper {
         sequence.init(tableInfo);
         String[] columnNames = sequence.columnNames(tableInfo);
         TypeHandler[] typeHandlers = null;
-        SequenceAction sequenceAction = new SequenceAction(tableInfo, sequence, primColumnInfo.getName());
+        SequenceAction sequenceAction = new SequenceAction(tableInfo, sequence);
         if (sequence.before()) {
             initActionList.add(sequenceAction);
         } else {
@@ -71,18 +71,15 @@ public class InsertFetchKeyMapper extends InsertMapper {
     class SequenceAction implements Action {
         private TableInfo tableInfo;
         private Sequence sequence;
-        private String fieldName;
 
-        public SequenceAction(TableInfo tableInfo, Sequence sequence, String fieldName) {
+        public SequenceAction(TableInfo tableInfo, Sequence sequence) {
             this.tableInfo = tableInfo;
             this.sequence = sequence;
-            this.fieldName = fieldName;
         }
 
         @Override
         public void doAction(Session session, MappedStatement mappedStatement, Object arg) throws Exception {
-            Map<String, Object> argMap = (Map<String, Object>) mappedStatement.getArg();
-            sequence.sequence(tableInfo, ObjectWrapper.wrapper(argMap.get(DREAM_TEMPLATE_PARAM)), fieldName, arg);
+            sequence.sequence(tableInfo,mappedStatement, arg);
         }
     }
 }

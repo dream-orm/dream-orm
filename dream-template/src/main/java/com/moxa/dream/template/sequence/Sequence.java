@@ -1,5 +1,6 @@
 package com.moxa.dream.template.sequence;
 
+import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.util.common.ObjectWrapper;
 
@@ -15,5 +16,5 @@ public interface Sequence {
         return new String[0];
     }
 
-    void sequence(TableInfo tableInfo, ObjectWrapper wrapper, String property, Object arg);
+    void sequence(TableInfo tableInfo, MappedStatement mappedStatement, Object arg);
 }
