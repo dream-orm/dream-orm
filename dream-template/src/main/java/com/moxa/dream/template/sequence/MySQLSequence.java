@@ -6,13 +6,6 @@ import com.moxa.dream.util.common.ObjectWrapper;
 import java.lang.reflect.Array;
 
 public class MySQLSequence implements Sequence {
-    private TableInfo tableInfo;
-
-    @Override
-    public void init(TableInfo tableInfo) {
-        this.tableInfo = tableInfo;
-    }
-
     @Override
     public boolean before() {
         return false;
