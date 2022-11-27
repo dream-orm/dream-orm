@@ -18,6 +18,7 @@ import java.util.List;
 public class InsertMapper extends WrapMapper {
     private final int CODE = 1;
 
+    /**/
     public InsertMapper(Session session) {
         super(session);
     }
@@ -32,8 +33,15 @@ public class InsertMapper extends WrapMapper {
                 String name = field.getName();
                 ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                 if (columnInfo != null) {
-                    columnList.add(columnInfo.getColumn());
-                    valueList.add(InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", DREAM_TEMPLATE_PARAM + "." + columnInfo.getName()));
+                    String column = columnInfo.getColumn();
+                    String invokerSQL = InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", DREAM_TEMPLATE_PARAM + "." + columnInfo.getName());
+                    if (columnInfo.isPrimary()) {
+                        columnList.add(0, column);
+                        valueList.add(0, invokerSQL);
+                    } else {
+                        columnList.add(column);
+                        valueList.add(invokerSQL);
+                    }
                 }
             }
         }

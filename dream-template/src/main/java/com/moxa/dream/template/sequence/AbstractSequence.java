@@ -14,9 +14,9 @@ public abstract class AbstractSequence implements Sequence {
         ObjectWrapper wrapper = ObjectWrapper.wrapper(argMap.get(AbstractMapper.DREAM_TEMPLATE_PARAM));
         String name = tableInfo.getPrimColumnInfo().getName();
         Object sequence = sequence(tableInfo, arg);
+        mappedStatement.getMappedParamList().get(0).setParamValue(sequence);
         wrapper.set(name, sequence);
     }
-
     protected abstract Object sequence(TableInfo tableInfo, Object arg);
 
 }

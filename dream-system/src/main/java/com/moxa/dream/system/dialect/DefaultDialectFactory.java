@@ -49,16 +49,26 @@ public class DefaultDialectFactory implements DialectFactory {
     }
 
     @Override
-    public MappedStatement compile(MethodInfo methodInfo, Object arg) {
+    public synchronized MappedStatement compile(MethodInfo methodInfo, Object arg) {
+        Configuration configuration = methodInfo.getConfiguration();
         PackageStatement statement = methodInfo.getStatement();
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
-        List<MappedParam> mappedParamList = null;
-        List<$Invoker.ParamInfo> paramInfoList = null;
-        String sql = null;
-        if (scanInfo != null) {
-            paramInfoList = scanInfo.getParamInfoList();
-            if (paramInfoList != null) {
-                sql = scanInfo.getSql();
+        String sql;
+        List<$Invoker.ParamInfo> paramInfoList;
+        Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap;
+        if (scanInfo == null) {
+            Assist assist = getAssist(methodInfo, arg);
+            sql = getSql(methodInfo, assist);
+            scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
+            paramInfoList = getParamInfoList(assist);
+        } else {
+            sql = scanInfo.getSql();
+            if (sql == null) {
+                Assist assist = getAssist(methodInfo, arg);
+                sql = getSql(methodInfo, assist);
+                paramInfoList = getParamInfoList(assist);
+            } else {
+                paramInfoList = scanInfo.getParamInfoList();
                 if (!ObjectUtil.isNull(paramInfoList)) {
                     ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
                     for ($Invoker.ParamInfo paramInfo : paramInfoList) {
@@ -67,54 +77,56 @@ public class DefaultDialectFactory implements DialectFactory {
                 }
             }
         }
-        if (ObjectUtil.isNull(sql)) {
-            Assist assist = getAssist(methodInfo, arg);
-            if (toSQL == null) {
-                synchronized (this) {
-                    if (toSQL == null) {
-                        toSQL = getToSQL(methodInfo.getConfiguration());
-                    }
-                }
-            }
-            try {
-                sql = toSQL.toStr(statement, assist, null);
-            } catch (InvokerException e) {
-                throw new DreamRunTimeException(e);
-            }
-            if (scanInfo == null) {
-                scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
-            }
-            $Invoker invoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
-            if (invoker != null) {
-                paramInfoList = invoker.getParamInfoList();
-            } else {
-                paramInfoList = new ArrayList<>();
-                scanInfo.setParamInfoList(paramInfoList);
-            }
-        }
+        paramScanInfoMap = scanInfo.getParamScanInfoMap();
+        List<MappedParam> mappedParamList = new ArrayList<>();
         if (!ObjectUtil.isNull(paramInfoList)) {
-            mappedParamList = new ArrayList<>();
-            ParamTypeMap paramTypeMap = methodInfo.get(ParamTypeMap.class);
-            if (paramTypeMap == null) {
-                synchronized (this) {
-                    paramTypeMap = methodInfo.get(ParamTypeMap.class);
-                    if (paramTypeMap == null) {
-                        paramTypeMap = new ParamTypeMap();
-                        methodInfo.set(ParamTypeMap.class, paramTypeMap);
-                    }
-                }
+            ParamTypeWrapper paramTypeWrapper = methodInfo.get(ParamTypeWrapper.class);
+            if (paramTypeWrapper == null) {
+                paramTypeWrapper = new ParamTypeWrapper();
+                methodInfo.set(ParamTypeWrapper.class, paramTypeWrapper);
             }
-            Configuration configuration = methodInfo.getConfiguration();
-            Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap = scanInfo.getParamScanInfoMap();
             for ($Invoker.ParamInfo paramInfo : paramInfoList) {
-                ParamType paramType = paramTypeMap.get(paramInfo.getParamName());
+                String paramName = paramInfo.getParamName();
+                ParamType paramType = paramTypeWrapper.get(paramName);
                 if (paramType == null) {
                     paramType = getParamType(configuration, scanInfo, paramScanInfoMap, paramInfo);
-                    paramTypeMap.put(paramInfo.getParamName(), paramType);
+                    paramTypeWrapper.put(paramName, paramType);
                 }
-                mappedParamList.add(getMappedParam(paramType.getColumnInfo(), paramInfo.getParamValue(), paramType.getTypeHandler()));
+                mappedParamList.add(new MappedParam().setParamValue(paramInfo.getParamValue()).setJdbcType(paramType.columnInfo == null ? Types.NULL : paramType.columnInfo.getJdbcType()).setTypeHandler(paramType.getTypeHandler()));
             }
         }
+        CacheKey uniqueKey = getUniqueKey(methodInfo, mappedParamList, sql);
+        return new MappedStatement
+                .Builder()
+                .methodInfo(methodInfo)
+                .mappedSql(new MappedSql(scanInfo.getCommand().name(), sql, scanInfo.getTableScanInfoMap().keySet()))
+                .mappedParamList(mappedParamList)
+                .arg(arg)
+                .uniqueKey(uniqueKey)
+                .build();
+    }
+
+    protected String getSql(MethodInfo methodInfo, Assist assist) {
+        if (toSQL == null) {
+            toSQL = getToSQL(methodInfo.getConfiguration());
+        }
+        try {
+            return toSQL.toStr(methodInfo.getStatement(), assist, null);
+        } catch (InvokerException e) {
+            throw new DreamRunTimeException(e);
+        }
+    }
+
+    protected List<$Invoker.ParamInfo> getParamInfoList(Assist assist) {
+        $Invoker invoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
+        if (invoker != null) {
+            return invoker.getParamInfoList();
+        } else {
+            return null;
+        }
+    }
+
+    protected CacheKey getUniqueKey(MethodInfo methodInfo, List<MappedParam> mappedParamList, String sql) {
         CacheKey uniqueKey = methodInfo.getMethodKey();
         Object[] updateList;
         if (!ObjectUtil.isNull(mappedParamList)) {
@@ -131,14 +143,7 @@ public class DefaultDialectFactory implements DialectFactory {
             updateList[1] = sql.length();
         }
         uniqueKey.update(updateList);
-        return new MappedStatement
-                .Builder()
-                .methodInfo(methodInfo)
-                .mappedSql(new MappedSql(scanInfo.getCommand().name(), sql, scanInfo.getTableScanInfoMap().keySet()))
-                .mappedParamList(mappedParamList)
-                .arg(arg)
-                .uniqueKey(uniqueKey)
-                .build();
+        return uniqueKey;
     }
 
     protected Assist getAssist(MethodInfo methodInfo, Object arg) {
@@ -195,16 +200,6 @@ public class DefaultDialectFactory implements DialectFactory {
         } else {
             return new ParamType(null, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), Types.NULL));
         }
-    }
-
-    protected MappedParam getMappedParam(ColumnInfo columnInfo, Object paramValue, TypeHandler typeHandler) {
-        int jdbcType;
-        if (columnInfo != null) {
-            jdbcType = columnInfo.getJdbcType();
-        } else {
-            jdbcType = Types.NULL;
-        }
-        return new MappedParam().setJdbcType(jdbcType).setParamValue(paramValue).setTypeHandler(typeHandler);
     }
 
     @Override
@@ -277,7 +272,7 @@ public class DefaultDialectFactory implements DialectFactory {
         return dbType;
     }
 
-    static class ParamTypeMap {
+    static class ParamTypeWrapper {
         private final Map<String, ParamType> paramTypeMap = new HashMap<>();
 
         public ParamType get(String param) {
