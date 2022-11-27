@@ -139,14 +139,14 @@ public class DefaultMockCompileFactory implements MockCompileFactory {
                 .uniqueKey(methodKey)
                 .arg(param)
                 .mappedSql(new MappedSql(command.name(), sqlBuilder.toString(), tableList))
-                .mappedParamList(paramList.stream().map(par -> {
+                .mappedParamList(paramList.stream().map(paramValue -> {
                     TypeHandler typeHandler;
-                    if (par == null) {
+                    if (paramValue == null) {
                         typeHandler = new ObjectTypeHandler();
                     } else {
-                        typeHandler = configuration.getTypeHandlerFactory().getTypeHandler(par.getClass(), Types.NULL);
+                        typeHandler = configuration.getTypeHandlerFactory().getTypeHandler(paramValue.getClass(), Types.NULL);
                     }
-                    return new MappedParam(Types.NULL, par, typeHandler);
+                    return new MappedParam().setParamValue(paramValue).setTypeHandler(typeHandler);
                 }).collect(Collectors.toList())).build();
     }
 }

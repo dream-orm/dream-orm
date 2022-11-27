@@ -64,7 +64,7 @@ public class SelectListMapper extends SelectMapper {
             }
             return whereSql;
         }
-        return null;
+        return "";
     }
 
     protected String getWhereSql(Set<String> tableSet, TableFactory tableFactory, List<ConditionObject> conditionObjectList) {
@@ -112,7 +112,7 @@ public class SelectListMapper extends SelectMapper {
         if (!ObjectUtil.isNull(conditionList)) {
             return String.join(" and ", conditionList);
         }
-        return null;
+        return "";
     }
 
     protected String getOrderSql(Class type, Set<String> tableSet, TableFactory tableFactory) {

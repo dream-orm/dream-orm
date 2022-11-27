@@ -4,6 +4,7 @@ import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.system.typehandler.util.TypeUtil;
 import com.moxa.dream.system.typehandler.wrapper.*;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,6 +75,6 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
     }
 
     protected TypeHandler getNoneTypeHandler(Class javaType, int jdbcType) {
-        throw new NullPointerException("typeHandler not found,javaType '" + javaType.getTypeName() + "',jdbcType '" + TypeUtil.getTypeName(jdbcType) + "'");
+        throw new DreamRunTimeException("类型选择器未找到,javaType '" + javaType.getTypeName() + "',jdbcType '" + TypeUtil.getTypeName(jdbcType) + "'");
     }
 }

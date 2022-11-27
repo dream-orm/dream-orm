@@ -21,6 +21,10 @@ public class BooleanTypeHandlerWrapper implements TypeHandlerWrapper {
                 TypeUtil.hash(Object.class, Types.BIT),
                 TypeUtil.hash(boolean.class, Types.BIT),
                 TypeUtil.hash(Boolean.class, Types.BIT),
+                TypeUtil.hash(boolean.class, Types.TINYINT),
+                TypeUtil.hash(Boolean.class, Types.TINYINT),
+                TypeUtil.hash(boolean.class, Types.SMALLINT),
+                TypeUtil.hash(Boolean.class, Types.SMALLINT),
                 TypeUtil.hash(boolean.class, Types.NULL),
                 TypeUtil.hash(Boolean.class, Types.NULL),
         };

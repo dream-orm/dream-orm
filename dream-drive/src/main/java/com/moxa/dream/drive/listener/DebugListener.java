@@ -13,7 +13,7 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
     final String START_DATE = "startDate";
 
     @Override
-    public boolean before(MappedStatement mappedStatement) {
+    public void before(MappedStatement mappedStatement) {
         mappedStatement.put(START_DATE, System.currentTimeMillis());
         List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
         List<Object> paramList;
@@ -25,7 +25,6 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
         String sql = mappedStatement.getSql();
         System.out.println("执行SQL:" + sql);
         System.out.println("执行参数:" + paramList);
-        return true;
     }
 
     @Override

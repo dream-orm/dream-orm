@@ -57,8 +57,8 @@ public class DefaultSessionFactory implements SessionFactory {
         if (cache) {
             executor = new SessionCacheExecutor(executor);
         }
-        executor = new ActionExecutor(executor);
         executor = new ListenerExecutor(executor, configuration.getListenerFactory());
+        executor = new ActionExecutor(executor);
         if (pluginFactory != null) {
             executor = (Executor) pluginFactory.plugin(executor);
         }

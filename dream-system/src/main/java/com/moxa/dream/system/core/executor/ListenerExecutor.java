@@ -65,19 +65,16 @@ public class ListenerExecutor implements Executor {
 
     protected Object execute(MappedStatement mappedStatement, Listener[] listeners, Function<MappedStatement, Object> function) throws SQLException {
         if (!ObjectUtil.isNull(listeners)) {
-            if (beforeListeners(listeners, mappedStatement)) {
-                Object result;
-                try {
-                    result = function.apply(mappedStatement);
-                } catch (Exception e) {
-                    exceptionListeners(listeners, e, mappedStatement);
-                    throw e;
-                }
-                afterReturnListeners(listeners, result, mappedStatement);
-                return result;
-            } else {
-                return null;
+            beforeListeners(listeners, mappedStatement);
+            Object result;
+            try {
+                result = function.apply(mappedStatement);
+            } catch (Exception e) {
+                exceptionListeners(listeners, e, mappedStatement);
+                throw e;
             }
+            afterReturnListeners(listeners, result, mappedStatement);
+            return result;
         } else {
             return function.apply(mappedStatement);
         }
@@ -103,12 +100,10 @@ public class ListenerExecutor implements Executor {
         nextExecutor.close();
     }
 
-    protected boolean beforeListeners(Listener[] listeners, MappedStatement mappedStatement) {
-        boolean success = true;
+    protected void beforeListeners(Listener[] listeners, MappedStatement mappedStatement) {
         for (Listener listener : listeners) {
-            success = success & listener.before(mappedStatement);
+            listener.before(mappedStatement);
         }
-        return success;
     }
 
     protected void afterReturnListeners(Listener[] listeners, Object result, MappedStatement mappedStatement) {

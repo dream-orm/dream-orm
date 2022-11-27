@@ -204,7 +204,7 @@ public class DefaultDialectFactory implements DialectFactory {
         } else {
             jdbcType = Types.NULL;
         }
-        return new MappedParam(jdbcType, paramValue, typeHandler);
+        return new MappedParam().setJdbcType(jdbcType).setParamValue(paramValue).setTypeHandler(typeHandler);
     }
 
     @Override
