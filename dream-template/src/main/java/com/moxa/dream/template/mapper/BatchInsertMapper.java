@@ -3,14 +3,15 @@ package com.moxa.dream.template.mapper;
 import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
+import com.moxa.dream.template.sequence.Sequence;
 
 import java.util.List;
 
 public class BatchInsertMapper extends InsertMapper {
     ThreadLocal<Integer> threadLocal = new ThreadLocal();
 
-    public BatchInsertMapper(Session session) {
-        super(session);
+    public BatchInsertMapper(Session session, Sequence sequence) {
+        super(session, sequence);
     }
 
     @Override

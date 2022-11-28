@@ -2,8 +2,6 @@ package com.moxa.dream.template.sequence;
 
 import com.moxa.dream.system.table.TableInfo;
 
-import java.lang.reflect.Array;
-
 public class MySQLSequence extends AbstractSequence {
     @Override
     public boolean before() {
@@ -12,11 +10,11 @@ public class MySQLSequence extends AbstractSequence {
 
     @Override
     public String[] columnNames(TableInfo tableInfo) {
-        return new String[]{tableInfo.getPrimColumnInfo().getName()};
+        return new String[0];
     }
 
     @Override
-    protected Object sequence(TableInfo tableInfo, Object arg) {
-        return Array.get(arg, 0);
+    protected Object sequence(TableInfo tableInfo) {
+        return null;
     }
 }

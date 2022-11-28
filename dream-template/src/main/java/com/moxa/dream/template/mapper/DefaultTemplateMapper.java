@@ -2,6 +2,8 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.system.core.session.Session;
+import com.moxa.dream.template.sequence.BatchSequence;
+import com.moxa.dream.template.sequence.FetchKeySequence;
 import com.moxa.dream.template.sequence.Sequence;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private BatchUpdateByIdMapper batchUpdateByIdMapper;
     private UpdateNonByIdMapper updateNonByIdSqlMapper;
     private InsertMapper insertSqlMapper;
-    private InsertFetchKeyMapper insertFetchKeyMapper;
+    private InsertMapper insertFetchKeyMapper;
     private BatchInsertMapper batchInsertMapper;
     private ExistByIdMapper existByIdMapper;
     private ExistMapper existMapper;
@@ -34,9 +36,9 @@ public class DefaultTemplateMapper implements TemplateMapper {
         updateByIdSqlMapper = new UpdateByIdMapper(session);
         batchUpdateByIdMapper = new BatchUpdateByIdMapper(session);
         updateNonByIdSqlMapper = new UpdateNonByIdMapper(session);
-        insertSqlMapper = new InsertMapper(session);
-        insertFetchKeyMapper = new InsertFetchKeyMapper(session, sequence);
-        batchInsertMapper = new BatchInsertMapper(session);
+        insertSqlMapper = new InsertMapper(session, sequence);
+        insertFetchKeyMapper = new InsertMapper(session, new FetchKeySequence(sequence));
+        batchInsertMapper = new BatchInsertMapper(session, new BatchSequence(sequence));
         existByIdMapper = new ExistByIdMapper(session);
         existMapper = new ExistMapper(session);
     }

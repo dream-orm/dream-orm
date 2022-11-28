@@ -15,7 +15,6 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
     List<MappedStatement> mappedStatementList;
     int fromIndex;
     int toIndex;
-    int total;
     boolean hasNext = true;
 
     public BatchMappedStatement(MethodInfo methodInfo, List<?> argList, int batchSize) {
@@ -25,7 +24,7 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
         this.methodInfo = methodInfo;
         this.argList = argList;
         this.batchSize = batchSize;
-        mappedStatementList = new ArrayList<>(total = argList.size());
+        mappedStatementList = new ArrayList<>(argList.size());
     }
 
     public void compile(DialectFactory dialectFactory) {
@@ -49,6 +48,7 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
     public BatchMappedStatement next() {
         fromIndex = toIndex;
         toIndex = fromIndex + batchSize;
+        int total = mappedStatementList.size();
         if (toIndex >= total) {
             toIndex = total;
             hasNext = false;

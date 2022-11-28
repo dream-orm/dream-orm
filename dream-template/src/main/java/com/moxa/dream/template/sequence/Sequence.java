@@ -11,6 +11,7 @@ public interface Sequence {
         return true;
     }
 
+    //不需要重写此方法
     default String[] columnNames(TableInfo tableInfo) {
         return new String[0];
     }
