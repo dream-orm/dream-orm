@@ -1,9 +1,8 @@
 package com.moxa.dream.antlr.config;
 
+import com.moxa.dream.antlr.exception.AntlrRunTimeException;
 import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.invoker.Invoker;
-import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,13 +19,13 @@ public class Assist {
     }
 
     public void setInvokerFactoryList(Collection<InvokerFactory> invokerFactoryList) {
-        if (!ObjectUtil.isNull(invokerFactoryList)) {
+        if (invokerFactoryList != null && !invokerFactoryList.isEmpty()) {
             invokerFactoryMap = new HashMap<>();
             sqlInvokerMap = new HashMap<>();
             for (InvokerFactory invokerFactory : invokerFactoryList) {
                 String namespace = invokerFactory.namespace();
                 if (invokerFactoryMap.containsKey(namespace)) {
-                    throw new DreamRunTimeException("命名空间'" + invokerFactory.namespace() + "已经存在");
+                    throw new AntlrRunTimeException("命名空间'" + invokerFactory.namespace() + "已经存在");
                 }
                 invokerFactoryMap.put(namespace, invokerFactory);
             }
@@ -60,7 +59,9 @@ public class Assist {
             invoker = sqlInvokerMap.get(invokerKey);
             if (invoker == null) {
                 InvokerFactory invokerFactory = invokerFactoryMap.get(namespace);
-                ObjectUtil.requireNonNull(invokerFactory, "命名空间'" + namespace + "'尚未注册");
+                if (invokerFactory == null) {
+                    throw new AntlrRunTimeException("命名空间'" + namespace + "'尚未注册");
+                }
                 invoker = invokerFactory.create(function);
                 if (!sqlInvokerMap.containsKey(function)) {
                     sqlInvokerMap.put(function, invoker);
@@ -68,7 +69,9 @@ public class Assist {
             } else
                 return invoker;
         }
-        ObjectUtil.requireNonNull(invoker, "函数@" + invokerKey + "尚未注册");
+        if (invoker == null) {
+            throw new AntlrRunTimeException("函数@" + invokerKey + "尚未注册");
+        }
         sqlInvokerMap.put(invokerKey, invoker);
         invoker.init(this);
         return invoker;

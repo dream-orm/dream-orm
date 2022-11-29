@@ -1,11 +1,10 @@
 package com.moxa.dream.antlr.handler;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.List;
 import java.util.Queue;
@@ -19,7 +18,7 @@ public abstract class AbstractHandler implements Handler {
     private Handler parentHandler;
 
     @Override
-    public final Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, Queue<Handler> handlerQueue, List<Invoker> invokerList) throws InvokerException {
+    public final Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, Queue<Handler> handlerQueue, List<Invoker> invokerList) throws AntlrException {
 
         if ((parentHandler == null || (!(parentHandler instanceof AbstractHandler)) || ((AbstractHandler) parentHandler).isLife())) {
             if (interest(statement, assist)) {
@@ -29,7 +28,7 @@ public abstract class AbstractHandler implements Handler {
             }
             if (boundHandlerList == null) {
                 boundHandlerList = handlerBound();
-                if (!ObjectUtil.isNull(boundHandlerList)) {
+                if (boundHandlerList != null && boundHandlerList.length > 0) {
                     for (Handler boundHandler : boundHandlerList) {
                         if (boundHandler instanceof AbstractHandler) {
                             ((AbstractHandler) boundHandler).setParentHandler(this);
@@ -37,7 +36,7 @@ public abstract class AbstractHandler implements Handler {
                     }
                 }
             }
-            if (!ObjectUtil.isNull(boundHandlerList) && this.isLife()) {
+            if (boundHandlerList != null && boundHandlerList.length > 0 && this.isLife()) {
                 for (Handler handler : boundHandlerList) {
                     statement = handler.handlerBefore(statement, assist, toSQL, handlerQueue, invokerList);
                 }
@@ -48,17 +47,17 @@ public abstract class AbstractHandler implements Handler {
 
 
     @Override
-    public final String handlerAfter(Statement statement, Assist assist, String sql) throws InvokerException {
+    public final String handlerAfter(Statement statement, Assist assist, String sql) throws AntlrException {
         life--;
         return handlerAfter(statement, assist, sql, life);
     }
 
-    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
+    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
         return sql;
     }
 
 
-    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
         return statement;
     }
 

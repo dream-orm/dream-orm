@@ -2,8 +2,8 @@ package com.moxa.dream.sql.mock;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.read.ExprReader;
+import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.*;
 import com.moxa.dream.system.typehandler.handler.ObjectTypeHandler;
@@ -71,9 +71,8 @@ public class DefaultMockCompileFactory implements MockCompileFactory {
                     exprInfo = exprReader.push();
                     String _info = exprInfo.getInfo();
                     switch (_info) {
-                        case AntlrInvokerFactory.$:
-                        case AntlrInvokerFactory.REP:
-                        case AntlrInvokerFactory.FOREACH:
+                        case SystemInvokerFactory.$:
+                        case SystemInvokerFactory.FOREACH:
                             ExprInfo tempExprInfo = exprReader.push();
                             if (tempExprInfo.getExprType() == ExprType.LBRACE) {
                                 sqlBuilder.append(sql, startIndex, exprInfo.getStart() - 1);
@@ -83,18 +82,16 @@ public class DefaultMockCompileFactory implements MockCompileFactory {
                                 }
                                 Object value = ObjectWrapper.wrapper(param, false).get(paramBuilder.toString());
                                 startIndex = tempExprInfo.getEnd();
-                                if (_info.equals(AntlrInvokerFactory.$)) {
+                                if (_info.equals(SystemInvokerFactory.$)) {
                                     paramList.add(value);
                                     sqlBuilder.append("?");
-                                } else if (_info.equals(AntlrInvokerFactory.REP)) {
-                                    sqlBuilder.append(value);
-                                } else if (_info.equals(AntlrInvokerFactory.FOREACH)) {
+                                } else if (_info.equals(SystemInvokerFactory.FOREACH)) {
                                     if (value == null) {
-                                        throw new DreamRunTimeException(AntlrInvokerFactory.FOREACH + "参数值不能为空");
+                                        throw new DreamRunTimeException(SystemInvokerFactory.FOREACH + "参数值不能为空");
                                     }
                                     if (value instanceof Collection) {
                                         if (((Collection<?>) value).isEmpty()) {
-                                            throw new DreamRunTimeException(AntlrInvokerFactory.FOREACH + "参数值不能为空");
+                                            throw new DreamRunTimeException(SystemInvokerFactory.FOREACH + "参数值不能为空");
                                         }
                                         for (int i = 0; i < ((Collection<?>) value).size() - 1; i++) {
                                             sqlBuilder.append("?,");
@@ -104,7 +101,7 @@ public class DefaultMockCompileFactory implements MockCompileFactory {
                                     } else if (value.getClass().isArray()) {
                                         int length = Array.getLength(value);
                                         if (length == 0) {
-                                            throw new DreamRunTimeException(AntlrInvokerFactory.FOREACH + "参数值不能为空");
+                                            throw new DreamRunTimeException(SystemInvokerFactory.FOREACH + "参数值不能为空");
                                         }
                                         int i = 0;
                                         for (; i < length - 1; i++) {

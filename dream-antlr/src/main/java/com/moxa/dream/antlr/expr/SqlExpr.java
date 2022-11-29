@@ -2,10 +2,10 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrRunTimeException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.util.ExprUtil;
-import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -29,7 +29,7 @@ public abstract class SqlExpr {
 
     public Statement expr() {
         if (exprReader.isClose()) {
-            throw new DreamRunTimeException("SQL读入流已关闭");
+            throw new AntlrRunTimeException("SQL读入流已关闭");
         }
         tryMark();
         ExprInfo exprInfo = exprReader.getLastInfo();
@@ -1193,11 +1193,11 @@ public abstract class SqlExpr {
             Statement statement = nil();
             exprReader.pop();
             return statement;
-        } else throw new DreamRunTimeException(ExprUtil.wrapper(exprReader));
+        } else throw new AntlrRunTimeException(ExprUtil.wrapper(exprReader));
     }
 
     protected Statement exprSelf(ExprInfo exprInfo) {
-        throw new DreamRunTimeException(this.getClass().getSimpleName() + "未实现'" + exprInfo.getExprType() + "'");
+        throw new AntlrRunTimeException(this.getClass().getSimpleName() + "未实现'" + exprInfo.getExprType() + "'");
     }
 
 

@@ -1,20 +1,20 @@
 package com.moxa.dream.mate.tenant.handler;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.expr.SymbolExpr;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.handler.AbstractHandler;
 import com.moxa.dream.antlr.handler.Handler;
-import com.moxa.dream.antlr.handler.scan.QueryScanHandler;
 import com.moxa.dream.antlr.invoker.Invoker;
-import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
 import com.moxa.dream.mate.util.MateUtil;
+import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.system.antlr.handler.scan.QueryScanHandler;
+import com.moxa.dream.system.antlr.invoker.ScanInvoker;
+import com.moxa.dream.system.util.InvokerUtil;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -30,7 +30,7 @@ public class TenantQueryHandler extends AbstractHandler {
     }
 
     @Override
-    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
         queryDeque.push((QueryStatement) statement);
         return super.handlerBefore(statement, assist, toSQL, invokerList, life);
     }
@@ -46,7 +46,7 @@ public class TenantQueryHandler extends AbstractHandler {
     }
 
     @Override
-    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
+    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
         queryDeque.poll();
         return super.handlerAfter(statement, assist, sql, life);
     }
@@ -54,7 +54,7 @@ public class TenantQueryHandler extends AbstractHandler {
     class TenantFromHandler extends AbstractHandler {
 
         @Override
-        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
             FromStatement fromStatement = (FromStatement) statement;
             ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(fromStatement.getMainTable(), true);
             if (tableScanInfo != null) {
@@ -64,7 +64,7 @@ public class TenantQueryHandler extends AbstractHandler {
                     ConditionStatement conditionStatement = new ConditionStatement();
                     conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                     conditionStatement.setOper(new OperStatement.EQStatement());
-                    conditionStatement.setRight(InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn)));
+                    conditionStatement.setRight(InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn)));
                     QueryStatement queryStatement = queryDeque.peek();
                     WhereStatement whereStatement = queryStatement.getWhereStatement();
                     if (whereStatement == null) {
@@ -91,7 +91,7 @@ public class TenantQueryHandler extends AbstractHandler {
 
         class JoinHandler extends AbstractHandler {
             @Override
-            protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+            protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
                 JoinStatement joinStatement = (JoinStatement) statement;
                 ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(joinStatement.getJoinTable(), false);
                 if (tableScanInfo != null) {
@@ -101,7 +101,7 @@ public class TenantQueryHandler extends AbstractHandler {
                         ConditionStatement conditionStatement = new ConditionStatement();
                         conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                         conditionStatement.setOper(new OperStatement.EQStatement());
-                        conditionStatement.setRight(InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn)));
+                        conditionStatement.setRight(InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn)));
                         Statement joinOnStatement = joinStatement.getOn();
                         BraceStatement braceStatement = new BraceStatement(joinOnStatement);
                         ConditionStatement joinConditionStatement = new ConditionStatement();

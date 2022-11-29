@@ -1,13 +1,12 @@
 package com.moxa.dream.system.inject;
 
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
-import com.moxa.dream.antlr.util.InvokerUtil;
 import com.moxa.dream.system.annotation.PageQuery;
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.config.MethodInfo;
+import com.moxa.dream.system.util.InvokerUtil;
 import com.moxa.dream.util.common.ObjectUtil;
 
 public class PageInject implements Inject {
@@ -21,11 +20,11 @@ public class PageInject implements Inject {
             PackageStatement statement = methodInfo.getStatement();
             String pageNamespace;
             String pageFunction;
-            pageNamespace = SystemInvokerFactory.NAMESPACE;
+            pageNamespace = com.moxa.dream.system.antlr.factory.SystemInvokerFactory.NAMESPACE;
             if (pageQuery.offset()) {
-                pageFunction = SystemInvokerFactory.OFFSET;
+                pageFunction = com.moxa.dream.system.antlr.factory.SystemInvokerFactory.OFFSET;
             } else {
-                pageFunction = SystemInvokerFactory.LIMIT;
+                pageFunction = com.moxa.dream.system.antlr.factory.SystemInvokerFactory.LIMIT;
             }
             String value = pageQuery.value();
             String prefix = ObjectUtil.isNull(value) ? "" : (value + ".");
@@ -34,11 +33,11 @@ public class PageInject implements Inject {
             InvokerStatement pageStatement = InvokerUtil.wrapperInvoker(pageNamespace,
                     pageFunction, ",",
                     statement.getStatement(),
-                    InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE,
-                            AntlrInvokerFactory.$, ",",
+                    InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
+                            SystemInvokerFactory.$, ",",
                             new SymbolStatement.LetterStatement(startRow)),
-                    InvokerUtil.wrapperInvoker(AntlrInvokerFactory.NAMESPACE,
-                            AntlrInvokerFactory.$, ",",
+                    InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
+                            SystemInvokerFactory.$, ",",
                             new SymbolStatement.LetterStatement(pageSize)));
             statement.setStatement(pageStatement);
         }

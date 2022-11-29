@@ -1,5 +1,7 @@
 package com.moxa.dream.util.resource;
 
+import com.moxa.dream.util.exception.DreamRunTimeException;
+
 import java.io.InputStream;
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class ResourceUtil {
         try {
             return resourceLoader.getResourceAsClass(name);
         } catch (Exception e) {
-            throw new ResourceException(e);
+            throw new DreamRunTimeException(e);
         }
     }
 }

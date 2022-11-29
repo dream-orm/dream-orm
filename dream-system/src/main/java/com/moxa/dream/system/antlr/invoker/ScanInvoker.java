@@ -1,13 +1,15 @@
-package com.moxa.dream.antlr.invoker;
+package com.moxa.dream.system.antlr.invoker;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.config.Command;
-import com.moxa.dream.antlr.exception.InvokerException;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.handler.Handler;
-import com.moxa.dream.antlr.handler.scan.*;
+import com.moxa.dream.antlr.invoker.AbstractInvoker;
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.system.antlr.handler.scan.*;
 import com.moxa.dream.util.common.LowHashMap;
 import com.moxa.dream.util.common.ObjectUtil;
 
@@ -43,10 +45,10 @@ public class ScanInvoker extends AbstractInvoker {
     }
 
     @Override
-    public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         if (columnList.length != 1)
-            throw new InvokerException("参数个数错误,不满足@" + AntlrInvokerFactory.SCAN + ":" + AntlrInvokerFactory.NAMESPACE + "(crud)");
+            throw new AntlrException("参数个数错误,不满足@" + SystemInvokerFactory.SCAN + ":" + SystemInvokerFactory.NAMESPACE + "(crud)");
         String sql = toSQL.toStr(columnList[0], assist, invokerList);
         Statement parentStatement = invokerStatement.getParentStatement();
         while (!(parentStatement instanceof PackageStatement)
@@ -61,7 +63,7 @@ public class ScanInvoker extends AbstractInvoker {
             int i = 0;
             for (; i < invokerStatementList.size(); i++) {
                 InvokerStatement invoker = invokerStatementList.get(i);
-                if (!invoker.getFunction().equals(AntlrInvokerFactory.$)) {
+                if (!invoker.getFunction().equals(SystemInvokerFactory.$)) {
                     break;
                 }
             }
@@ -69,11 +71,13 @@ public class ScanInvoker extends AbstractInvoker {
                 for (InvokerStatement invoker : invokerStatementList) {
                     invoker.replaceWith(new SymbolStatement.MarkStatement());
                 }
-                $Invoker $invoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
+                $Invoker $invoker = ($Invoker) assist.getInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$);
                 scanInfo.setParamInfoList($invoker.getParamInfoList());
+                scanInfo.sql = sql;
             }
+        } else {
+            scanInfo.sql = sql;
         }
-        scanInfo.sql = sql;
         return sql;
     }
 

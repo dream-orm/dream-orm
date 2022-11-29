@@ -1,13 +1,15 @@
-package com.moxa.dream.antlr.invoker;
+package com.moxa.dream.system.antlr.invoker;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
+import com.moxa.dream.antlr.exception.AntlrException;
+import com.moxa.dream.antlr.invoker.AbstractInvoker;
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.util.Arrays;
@@ -21,11 +23,11 @@ public class ForEachInvoker extends AbstractInvoker {
     private final String item = "item";
 
     @Override
-    public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         int len = columnList.length;
         if (len > 2 || len < 1)
-            throw new InvokerException("@foreach参数个数不合法");
+            throw new AntlrException("@foreach参数个数不合法");
         String list = toSQL.toStr(columnList[0], assist, invokerList);
         ObjectWrapper paramWrapper = assist.getCustom(ObjectWrapper.class);
         Object arrayList = paramWrapper.get(list);
@@ -52,7 +54,7 @@ public class ForEachInvoker extends AbstractInvoker {
                 paramMap.remove(this.index);
                 paramMap.remove(this.item);
             } else {
-                $Invoker sqlInvoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
+                $Invoker sqlInvoker = ($Invoker) assist.getInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$);
                 List<$Invoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
                 int index = 0;
                 for (Object item : collection) {
@@ -62,6 +64,6 @@ public class ForEachInvoker extends AbstractInvoker {
             }
             listColumnStatement.setParentStatement(invokerStatement.getParentStatement());
             return toSQL.toStr(listColumnStatement, assist, invokerList);
-        } else throw new InvokerException("类'" + arrayList.getClass().getName() + "'不是集合或数组类型");
+        } else throw new AntlrException("类'" + arrayList.getClass().getName() + "'不是集合或数组类型");
     }
 }

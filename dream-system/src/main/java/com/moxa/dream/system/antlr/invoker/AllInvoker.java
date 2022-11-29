@@ -3,17 +3,17 @@ package com.moxa.dream.system.antlr.invoker;
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
+import com.moxa.dream.antlr.exception.AntlrRunTimeException;
 import com.moxa.dream.antlr.expr.AliasColumnExpr;
 import com.moxa.dream.antlr.expr.ListColumnExpr;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
-import com.moxa.dream.antlr.invoker.ScanInvoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
@@ -23,7 +23,6 @@ import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.common.LowHashMap;
 import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
 public class AllInvoker extends AbstractInvoker {
 
     @Override
-    public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         Class colType = methodInfo.getColType();
         Configuration configuration = methodInfo.getConfiguration();
@@ -48,11 +47,11 @@ public class AllInvoker extends AbstractInvoker {
                     String symbol = ((SymbolStatement.LetterStatement) columnList[i]).getValue();
                     tableList[i] = symbol;
                 } else {
-                    throw new InvokerException("@all参数类型不合法，不合法参数：'" + new ToNativeSQL().toStr(columnList[i], null, null) + "'");
+                    throw new AntlrException("@all参数类型不合法，不合法参数：'" + new ToNativeSQL().toStr(columnList[i], null, null) + "'");
                 }
             }
         }
-        ScanInvoker scanInvoker = (ScanInvoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.SCAN);
+        ScanInvoker scanInvoker = (ScanInvoker) assist.getInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.SCAN);
         ScanInvoker.ScanInfo scanInfo = scanInvoker.getScanInfo();
         Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = scanInfo.getTableScanInfoMap();
         if (!ObjectUtil.isNull(tableList)) {
@@ -152,7 +151,7 @@ public class AllInvoker extends AbstractInvoker {
                                     }
                                 }
                                 if (!find) {
-                                    throw new DreamRunTimeException("类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
+                                    throw new AntlrRunTimeException("类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
                                 }
                             } else {
                                 ColumnInfo columnInfo = rootTableInfo.getColumnInfo(fieldName);
@@ -189,7 +188,7 @@ public class AllInvoker extends AbstractInvoker {
         return SystemUtil.getTableName(type);
     }
 
-    protected List<QueryColumnInfo> getQueryColumnInfoList(Assist assist, ToSQL toSQL, List<Invoker> invokerList, InvokerStatement invokerStatement) throws InvokerException {
+    protected List<QueryColumnInfo> getQueryColumnInfoList(Assist assist, ToSQL toSQL, List<Invoker> invokerList, InvokerStatement invokerStatement) throws AntlrException {
         Statement parentStatement = invokerStatement.getParentStatement();
         ListColumnStatement listColumnStatement = (ListColumnStatement) parentStatement;
         Statement[] columnList = listColumnStatement.getColumnList();

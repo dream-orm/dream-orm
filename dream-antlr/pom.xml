@@ -11,14 +11,6 @@
 
     <groupId>com.moxa.dream</groupId>
     <artifactId>dream-antlr</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>com.moxa.dream</groupId>
-            <artifactId>dream-util</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

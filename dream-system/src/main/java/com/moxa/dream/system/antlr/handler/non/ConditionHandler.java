@@ -1,7 +1,7 @@
-package com.moxa.dream.antlr.handler.non;
+package com.moxa.dream.system.antlr.handler.non;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.handler.AbstractHandler;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.ConditionStatement;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ConditionHandler extends AbstractHandler {
     @Override
-    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
         ConditionStatement conditionStatement = (ConditionStatement) statement;
         Statement leftStatement = conditionStatement.getLeft();
         String vl, vr;

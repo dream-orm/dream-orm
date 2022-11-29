@@ -1,8 +1,8 @@
 package com.moxa.dream.template.mapper;
 
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
-import com.moxa.dream.antlr.util.InvokerUtil;
+import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.core.session.Session;
+import com.moxa.dream.system.util.InvokerUtil;
 
 import java.util.List;
 
@@ -13,6 +13,6 @@ public class UpdateNonByIdMapper extends UpdateByIdMapper {
 
     @Override
     protected String getUpdateParam(List<String> setList) {
-        return InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.NON, ",", super.getUpdateParam(setList));
+        return InvokerUtil.wrapperInvokerSQL(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.NON, ",", super.getUpdateParam(setList));
     }
 }

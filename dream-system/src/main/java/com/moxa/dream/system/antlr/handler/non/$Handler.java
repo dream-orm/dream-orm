@@ -1,12 +1,12 @@
-package com.moxa.dream.antlr.handler.non;
+package com.moxa.dream.system.antlr.handler.non;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.handler.AbstractHandler;
-import com.moxa.dream.antlr.invoker.$Invoker;
-import com.moxa.dream.antlr.invoker.NonInvoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.Statement;
+import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.system.antlr.invoker.$Invoker;
+import com.moxa.dream.system.antlr.invoker.NonInvoker;
 
 import java.util.List;
 
@@ -19,12 +19,12 @@ public class $Handler extends AbstractHandler {
 
     @Override
     protected boolean interest(Statement statement, Assist assist) {
-        return statement instanceof InvokerStatement && AntlrInvokerFactory.$.equals(((InvokerStatement) statement).getFunction());
+        return statement instanceof InvokerStatement && SystemInvokerFactory.$.equals(((InvokerStatement) statement).getFunction());
     }
 
     @Override
     public String handlerAfter(Statement statement, Assist assist, String sql, int life) {
-        $Invoker sqlInvoker = ($Invoker) assist.getInvoker(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$);
+        $Invoker sqlInvoker = ($Invoker) assist.getInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$);
         List<$Invoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
         if (paramInfoList != null) {
             int size = paramInfoList.size();

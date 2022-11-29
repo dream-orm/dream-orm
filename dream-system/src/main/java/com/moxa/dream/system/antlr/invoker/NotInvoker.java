@@ -1,4 +1,4 @@
-package com.moxa.dream.antlr.invoker;
+package com.moxa.dream.system.antlr.invoker;
 
 
 public class NotInvoker extends NonInvoker {

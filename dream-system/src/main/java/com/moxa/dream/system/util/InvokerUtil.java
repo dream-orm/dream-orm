@@ -1,9 +1,9 @@
-package com.moxa.dream.antlr.util;
+package com.moxa.dream.system.util;
 
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
+import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.util.common.ObjectUtil;
 
 public class InvokerUtil {
@@ -12,8 +12,8 @@ public class InvokerUtil {
             InvokerStatement invokerStatement = (InvokerStatement) statement;
             String namespace = invokerStatement.getNamespace();
             String function = invokerStatement.getFunction();
-            return (namespace == null || AntlrInvokerFactory.NAMESPACE.equals(namespace))
-                    && AntlrInvokerFactory.$.equals(function);
+            return (namespace == null || SystemInvokerFactory.NAMESPACE.equals(namespace))
+                    && SystemInvokerFactory.$.equals(function);
         } else
             return false;
     }

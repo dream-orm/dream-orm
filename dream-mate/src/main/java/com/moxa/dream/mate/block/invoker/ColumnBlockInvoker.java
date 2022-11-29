@@ -1,7 +1,7 @@
 package com.moxa.dream.mate.block.invoker;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
@@ -61,7 +61,7 @@ public class ColumnBlockInvoker extends AbstractInvoker {
     }
 
     @Override
-    protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement statement = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList()[0];
         String sql = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
         invokerStatement.replaceWith(statement);

@@ -1,7 +1,7 @@
-package com.moxa.dream.antlr.handler.non;
+package com.moxa.dream.system.antlr.handler.non;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.handler.AbstractHandler;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.Invoker;
@@ -17,7 +17,7 @@ import java.util.List;
 public class FunctionHandler extends AbstractHandler {
 
     @Override
-    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
         return statement;
     }
 
@@ -32,7 +32,7 @@ public class FunctionHandler extends AbstractHandler {
     }
 
     @Override
-    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws InvokerException {
+    protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
         if (assist.getCustom(NullFlag.class) != null) {
             assist.setCustom(NullFlag.class, null);
             return "";
@@ -50,7 +50,7 @@ public class FunctionHandler extends AbstractHandler {
         }
 
         @Override
-        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
             ListColumnStatement listColumnStatement = (ListColumnStatement) statement;
             Statement[] columnList = listColumnStatement.getColumnList();
             if (!ObjectUtil.isNull(columnList)) {

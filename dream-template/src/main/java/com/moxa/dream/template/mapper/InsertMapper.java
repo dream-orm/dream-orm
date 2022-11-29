@@ -1,7 +1,6 @@
 package com.moxa.dream.template.mapper;
 
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
-import com.moxa.dream.antlr.util.InvokerUtil;
+import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
@@ -11,6 +10,7 @@ import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
+import com.moxa.dream.system.util.InvokerUtil;
 import com.moxa.dream.template.annotation.WrapType;
 import com.moxa.dream.template.sequence.Sequence;
 import com.moxa.dream.util.common.NonCollection;
@@ -43,7 +43,7 @@ public class InsertMapper extends WrapMapper {
                 ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                 if (columnInfo != null) {
                     String column = columnInfo.getColumn();
-                    String invokerSQL = InvokerUtil.wrapperInvokerSQL(AntlrInvokerFactory.NAMESPACE, AntlrInvokerFactory.$, ",", DREAM_TEMPLATE_PARAM + "." + columnInfo.getName());
+                    String invokerSQL = InvokerUtil.wrapperInvokerSQL(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$, ",", DREAM_TEMPLATE_PARAM + "." + columnInfo.getName());
                     if (columnInfo.isPrimary()) {
                         columnList.add(0, column);
                         valueList.add(0, invokerSQL);

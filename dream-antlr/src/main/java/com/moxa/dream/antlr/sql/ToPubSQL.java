@@ -1,7 +1,7 @@
 package com.moxa.dream.antlr.sql;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.MyFunctionStatement;
@@ -24,7 +24,7 @@ public abstract class ToPubSQL extends ToNativeSQL {
     }
 
     @Override
-    protected String toString(InvokerStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(InvokerStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Invoker invoker = assist.getInvoker(statement.getNamespace(), statement.getFunction());
         if (invokerList == null) {
             invokerList = new ArrayList<>();
@@ -33,7 +33,7 @@ public abstract class ToPubSQL extends ToNativeSQL {
     }
 
     @Override
-    protected String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return statement.toString(this, assist, invokerList);
     }
 }

@@ -1,7 +1,7 @@
 package com.moxa.dream.mate.block.handler;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.handler.AbstractHandler;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.Statement;
@@ -19,7 +19,7 @@ public class ColumnBlockHandler extends AbstractHandler {
     }
 
     @Override
-    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
         SymbolStatement.LetterStatement letterStatement = (SymbolStatement.LetterStatement) statement;
         String column = letterStatement.getValue();
         if (columnBlockInvoker.filter(column)) {

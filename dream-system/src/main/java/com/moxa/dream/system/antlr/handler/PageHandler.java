@@ -1,7 +1,7 @@
 package com.moxa.dream.system.antlr.handler;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.expr.FunctionExpr;
 import com.moxa.dream.antlr.expr.QueryExpr;
 import com.moxa.dream.antlr.handler.AbstractHandler;
@@ -34,14 +34,14 @@ public class PageHandler extends AbstractHandler {
     }
 
     @Override
-    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws InvokerException {
+    protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
         invoker.setAccessible(false);
         handlerCount((QueryStatement) statement);
         handlerPage((QueryStatement) statement);
         return statement;
     }
 
-    void handlerCount(QueryStatement statement) throws InvokerException {
+    void handlerCount(QueryStatement statement) throws AntlrException {
         QueryStatement queryStatement = new QueryStatement();
         ReflectUtil.copy(queryStatement, statement);
         if (queryStatement.getOrderStatement() != null) {
@@ -83,7 +83,7 @@ public class PageHandler extends AbstractHandler {
         ObjectWrapper.wrapper(methodInfo).set("initActionList", countInitActionList);
     }
 
-    void handlerPage(QueryStatement queryStatement) throws InvokerException {
+    void handlerPage(QueryStatement queryStatement) throws AntlrException {
         LimitStatement limitStatement = new LimitStatement();
         limitStatement.setOffset(offset);
         limitStatement.setFirst(first);

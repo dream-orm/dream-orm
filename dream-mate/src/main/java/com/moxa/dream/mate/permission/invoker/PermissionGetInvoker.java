@@ -1,7 +1,7 @@
 package com.moxa.dream.mate.permission.invoker;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
@@ -40,7 +40,7 @@ public class PermissionGetInvoker extends AbstractInvoker {
     }
 
     @Override
-    protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         String table = ((SymbolStatement.LetterStatement) columnList[0]).getValue();
         String alias = ((SymbolStatement.LetterStatement) columnList[1]).getValue();

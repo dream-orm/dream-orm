@@ -1,6 +1,7 @@
 package com.moxa.dream.util.reflect;
 
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.lang.reflect.*;
 import java.util.Collection;
@@ -18,7 +19,7 @@ public class ReflectUtil {
                 constructor.setAccessible(true);
                 return constructor.newInstance();
             } catch (Exception exception) {
-                throw new ReflectException(exception);
+                throw new DreamRunTimeException(exception);
             }
         }
     }
@@ -43,7 +44,7 @@ public class ReflectUtil {
         try {
             return classLoader.loadClass(type);
         } catch (ClassNotFoundException e) {
-            throw new ReflectException(e);
+            throw new DreamRunTimeException(e);
         }
     }
 
@@ -151,7 +152,7 @@ public class ReflectUtil {
                     Object value = field.get(source);
                     field.set(target, value);
                 } catch (Exception e) {
-                    throw new ReflectException(e);
+                    throw new DreamRunTimeException(e);
                 }
             }
         }

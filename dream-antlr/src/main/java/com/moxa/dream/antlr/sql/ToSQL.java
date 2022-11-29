@@ -1,11 +1,10 @@
 package com.moxa.dream.antlr.sql;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -20,21 +19,21 @@ public abstract class ToSQL {
 
     protected abstract void afterCache(Statement statement, String sql);
 
-    public String toStr(Statement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    public String toStr(Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         if (statement == null)
             return "";
         String sql = beforeCache(statement);
         if (sql != null)
             return sql;
         Queue<Handler> handlerQueue = null;
-        if (!ObjectUtil.isNull(invokerList)) {
+        if (invokerList != null && !invokerList.isEmpty()) {
             handlerQueue = new ArrayDeque<>();
             ArrayList<Invoker> invokerArrayList = new ArrayList<>(invokerList);
             for (int i = invokerArrayList.size() - 1; i >= 0; i--) {
                 Invoker invoker = invokerArrayList.get(i);
                 if (invoker.isAccessible()) {
                     Handler[] handlerList = invoker.handlers();
-                    if (!ObjectUtil.isNull(handlerList)) {
+                    if (handlerList != null && handlerList.length > 0) {
                         for (Handler handler : handlerList) {
                             statement = handler.handlerBefore(statement, assist, this, handlerQueue, invokerList);
                         }
@@ -536,9 +535,9 @@ public abstract class ToSQL {
                 sql = toString((MyFunctionStatement) statement, assist, invokerList);
                 break;
             default:
-                throw new InvokerException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
+                throw new AntlrException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
         }
-        if (!ObjectUtil.isNull(handlerQueue)) {
+        if (handlerQueue != null && !handlerQueue.isEmpty()) {
             while (!handlerQueue.isEmpty()) {
                 sql = handlerQueue.poll().handlerAfter(statement, assist, sql);
             }
@@ -548,329 +547,329 @@ public abstract class ToSQL {
         return sql;
     }
 
-    protected abstract String toString(PackageStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(PackageStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.RepeatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.RepeatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.InStrStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.InStrStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LocateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.LocateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.DateForMatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.DateForMatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.StrToDateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.StrToDateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(UnionStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(UnionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(AliasStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(AliasStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(DateOperStatement.YearDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(DateOperStatement.YearDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(DateOperStatement.QuarterDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(DateOperStatement.QuarterDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(DateOperStatement.MonthDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(DateOperStatement.MonthDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(DateOperStatement.WeekDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(DateOperStatement.WeekDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(DateOperStatement.DayDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(DateOperStatement.DayDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(DateOperStatement.HourDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(DateOperStatement.HourDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(DateOperStatement.MinuteDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(DateOperStatement.MinuteDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(DateOperStatement.SecondDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(DateOperStatement.SecondDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(UpdateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(UpdateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(InsertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(InsertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(InsertStatement.ValuesStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(InsertStatement.ValuesStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(DeleteStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(DeleteStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(LimitStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(LimitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OrderStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OrderStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OrderStatement.AscStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OrderStatement.AscStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OrderStatement.DescStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OrderStatement.DescStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(HavingStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(HavingStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(GroupStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(GroupStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(WhereStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(WhereStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.LTStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.LTStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.LEQStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.LEQStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.GTStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.GTStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.GEQStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.GEQStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.EQStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.EQStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.NEQStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.NEQStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.LIKEStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.LIKEStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.ISStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.ISStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.INStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.INStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.NOTStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.NOTStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.EXISTSStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.EXISTSStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.STARStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.STARStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.DIVIDEStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.DIVIDEStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.MODStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.MODStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(BraceStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(BraceStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(ListColumnStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(ListColumnStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(SymbolStatement statement, Assist assist, List<Invoker> invokerList);
 
-    protected abstract String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(SelectStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(SelectStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(PreSelectStatement statement, Assist assist, List<Invoker> invokerList);
 
-    protected abstract String toString(FunctionStatement.AsciiStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.AsciiStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LenStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.LenStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LengthStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.LengthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.ConcatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.ConcatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.GroupConcatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.GroupConcatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.ConcatWsStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.ConcatWsStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.FindInSetStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.FindInSetStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LcaseStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.LcaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LowerStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.LowerStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(ConditionStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(ConditionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LeftStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.LeftStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.RightStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.RightStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LtrimStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.LtrimStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.ReverseStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.ReverseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.ReplaceStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.ReplaceStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.RtrimStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.RtrimStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.SubStrStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.SubStrStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.TrimStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.TrimStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.SpaceStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.SpaceStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.UpperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.UpperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LpadStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.LpadStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.RpadStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.RpadStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.AbsStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.AbsStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.AvgStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.AvgStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.AcosStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.AcosStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.AsinStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.AsinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.SinStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.SinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.AtanStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.AtanStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.Atan2Statement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.Atan2Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.CeilStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.CeilStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.CeilingStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.CeilingStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.CosStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.CosStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.CotStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.CotStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.CountStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.CountStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.ExpStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.ExpStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.FloorStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.FloorStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LnStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.LnStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LogStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.LogStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.Log2Statement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.Log2Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.Log10Statement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.Log10Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.MaxStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.MaxStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.MinStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.MinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.ModStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.ModStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.PiStatement statement, Assist assist, List<Invoker> invokerList);
 
-    protected abstract String toString(FunctionStatement.PowStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.PowStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.PowerStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.PowerStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.RandStatement statement, Assist assist, List<Invoker> invokerList);
 
-    protected abstract String toString(FunctionStatement.RoundStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.RoundStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.SignStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.SignStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.SqrtStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.SqrtStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.SumStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.SumStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.TanStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.TanStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.TruncateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.TruncateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.CurDateStatement statement, Assist assist, List<Invoker> invokerList);
 
-    protected abstract String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.DayStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.DayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.DayOfWeekStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.DayOfWeekStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.DayOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.DayOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.HourStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.HourStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.MinuteStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.MinuteStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LastDayStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.LastDayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.MonthStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.MonthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.UnixTimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.UnixTimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.FromUnixTimeStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.FromUnixTimeStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.DateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.DateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.NowStatement statement, Assist assist, List<Invoker> invokerList);
 
     protected abstract String toString(FunctionStatement.SysDateStatement statement, Assist assist, List<Invoker> invokerList);
 
-    protected abstract String toString(FunctionStatement.QuarterStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.QuarterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.SecondStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.SecondStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.WeekOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.WeekOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.YearStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.YearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.IsNullStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.IsNullStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.IfNullStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.IfNullStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.CoalesceStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.CoalesceStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.NullIfStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.NullIfStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.IfStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.IfStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.CastStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.CastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(CastTypeStatement.SignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(CastTypeStatement.SignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(CastTypeStatement.FloatCastStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(CastTypeStatement.FloatCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(CastTypeStatement.CharCastStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(CastTypeStatement.CharCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(CastTypeStatement.DateCastStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(CastTypeStatement.DateCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(CastTypeStatement.TimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(CastTypeStatement.TimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(CastTypeStatement.DateTimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(CastTypeStatement.DateTimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(CastTypeStatement.DecimalCastStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(CastTypeStatement.DecimalCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.ConvertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FunctionStatement.ConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(ConvertTypeStatement.FloatConvertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(ConvertTypeStatement.FloatConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(ConvertTypeStatement.CharConvertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(ConvertTypeStatement.CharConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(ConvertTypeStatement.DateConvertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(ConvertTypeStatement.DateConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(ConvertTypeStatement.TimeConvertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(ConvertTypeStatement.TimeConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(ConvertTypeStatement.DateTimeConvertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(ConvertTypeStatement.DateTimeConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(ConvertTypeStatement.DecimalConvertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(ConvertTypeStatement.DecimalConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.ADDStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.ADDStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.LLMStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.LLMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.RRMStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.RRMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.SUBStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.SUBStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(CaseStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(CaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(CaseStatement.WhenThenStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(CaseStatement.WhenThenStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.BETWEENStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.BETWEENStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.ANDStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.ANDStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.BITANDStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.BITANDStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.BITORStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.BITORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.BITXORStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.BITXORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(OperStatement.ORStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(OperStatement.ORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FromStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(FromStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(JoinStatement.LeftJoinStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(JoinStatement.LeftJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(JoinStatement.RightJoinStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(JoinStatement.RightJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(JoinStatement.InnerJoinStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(JoinStatement.InnerJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(JoinStatement.CrossJoinStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(JoinStatement.CrossJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(RowNumberStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(RowNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(RowNumberStatement.OverStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(RowNumberStatement.OverStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(RowNumberStatement.OverStatement.PartitionStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(RowNumberStatement.OverStatement.PartitionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(InvokerStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(InvokerStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    protected abstract String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 }

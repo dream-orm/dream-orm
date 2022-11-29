@@ -1,12 +1,12 @@
 package com.moxa.dream.antlr.sql;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.expr.QueryExpr;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.util.reflect.ReflectUtil;
+import com.moxa.dream.antlr.util.AntlrUtil;
 
 import java.util.List;
 
@@ -62,7 +62,7 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         LimitStatement limitStatement = statement.getLimitStatement();
         if (limitStatement != null && !limitStatement.isOffset()) {
             Statement first = limitStatement.getFirst();
@@ -83,24 +83,24 @@ public class ToPGSQL extends ToPubSQL {
                 sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn>" + minValue + " and rn<=" + minValue + "+" + maxValue;
             }
             QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-            ReflectUtil.copy(statement, queryStatement);
+            AntlrUtil.copy(statement, queryStatement);
         }
         return super.toString(statement, assist, invokerList);
     }
 
     @Override
-    protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "\"" + statement.getValue() + "\"";
     }
 
     @Override
-    protected String toString(FunctionStatement.GroupConcatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.GroupConcatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "STRING_AGG(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",',')";
     }
 
 
     @Override
-    protected String toString(FunctionStatement.RepeatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.RepeatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String tar = toStr(columnList[0], assist, invokerList);
         String num = toStr(columnList[1], assist, invokerList);
@@ -108,12 +108,12 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.InStrStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.InStrStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "STRPOS(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.LocateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.LocateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         if (columnList.length == 2)
             return "STRPOS(" + toStr(columnList[1], assist, invokerList) + "," + toStr(columnList[0], assist, invokerList) + ")";
@@ -127,7 +127,7 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.DateForMatStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.DateForMatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String pattern = statement.getPattern();
         if (pattern == null) {
@@ -139,7 +139,7 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.StrToDateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.StrToDateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String pattern = statement.getPattern();
         if (pattern == null) {
@@ -150,7 +150,7 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.YearDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(DateOperStatement.YearDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String type = "+";
         if (!statement.isPositive())
             type = "-";
@@ -158,7 +158,7 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.QuarterDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(DateOperStatement.QuarterDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String type = "+";
         if (!statement.isPositive())
             type = "-";
@@ -170,7 +170,7 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.MonthDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(DateOperStatement.MonthDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String type = "+";
         if (!statement.isPositive())
             type = "-";
@@ -178,7 +178,7 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.WeekDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(DateOperStatement.WeekDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String type = "+";
         if (!statement.isPositive())
             type = "-";
@@ -186,7 +186,7 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.DayDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(DateOperStatement.DayDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String type = "+";
         if (!statement.isPositive())
             type = "-";
@@ -194,7 +194,7 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.HourDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(DateOperStatement.HourDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String type = "+";
         if (!statement.isPositive())
             type = "-";
@@ -202,7 +202,7 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.MinuteDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(DateOperStatement.MinuteDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String type = "+";
         if (!statement.isPositive())
             type = "-";
@@ -210,7 +210,7 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.SecondDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(DateOperStatement.SecondDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String type = "+";
         if (!statement.isPositive())
             type = "-";
@@ -218,78 +218,78 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(CastTypeStatement.SignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(CastTypeStatement.SignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS INT)";
     }
 
     @Override
-    protected String toString(CastTypeStatement.DateTimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(CastTypeStatement.DateTimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS TIMESTAMP)";
     }
 
     @Override
-    protected String toString(ConvertTypeStatement.DateConvertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(ConvertTypeStatement.DateConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS TIMESTAMP)";
     }
 
     @Override
-    protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS INT)";
     }
 
     @Override
-    protected String toString(ConvertTypeStatement.CharConvertStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(ConvertTypeStatement.CharConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS VARCHAR)";
     }
 
     @Override
-    protected String toString(CastTypeStatement.CharCastStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(CastTypeStatement.CharCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS VARCHAR)";
     }
 
     @Override
-    protected String toString(FunctionStatement.LenStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.LenStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LENGTH(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.LeftStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.LeftStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LEFT(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.RightStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.RightStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "RIGHT(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
 
     @Override
-    protected String toString(FunctionStatement.SpaceStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.SpaceStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LPAD(' '," + toStr(statement.getParamsStatement(), assist, invokerList) + ",' ')";
     }
 
     @Override
-    protected String toString(FunctionStatement.LpadStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.LpadStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LPAD(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.RpadStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.RpadStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "RTRIM(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.CeilStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.CeilStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CEIL(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.CeilingStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.CeilingStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CEILING(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.LogStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.LogStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1)
             return "LN(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
         else
@@ -297,12 +297,12 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.Log2Statement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.Log2Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LOG(2," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.Log10Statement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.Log10Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LOG(10," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
 
@@ -312,12 +312,12 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.PowStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.PowStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "POW(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.PowerStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.PowerStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "POWER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
@@ -327,12 +327,12 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.RoundStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.RoundStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "ROUND(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.TruncateStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.TruncateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String s1 = toStr(columnList[0], assist, invokerList);
         String s2 = toStr(columnList[1], assist, invokerList);
@@ -340,12 +340,12 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.UnixTimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.UnixTimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "EXTRACT(epoch FROM " + toStr(statement.getParamsStatement(), assist, invokerList) + ")::INTEGER";
     }
 
     @Override
-    protected String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return toStr(statement.getParamsStatement(), assist, invokerList);
     }
 
@@ -355,92 +355,92 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "DATE_PART('day'," + toStr(columnList[0], assist, invokerList) + "-" + toStr(columnList[1], assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.DayStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.DayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'dd')) AS INTEGER)";
     }
 
     @Override
-    protected String toString(FunctionStatement.DayOfWeekStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.DayOfWeekStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'d')) AS INTEGER)";
     }
 
     @Override
-    protected String toString(FunctionStatement.DayOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.DayOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ddd') AS INTEGER)";
     }
 
     @Override
-    protected String toString(FunctionStatement.HourStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.HourStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'hh24'))AS INTEGER)";
     }
 
     @Override
-    protected String toString(FunctionStatement.MinuteStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.MinuteStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'mi')) AS INTEGER)";
     }
 
     @Override
-    protected String toString(FunctionStatement.LastDayStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.LastDayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "(DATE_TRUNC('month', " + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ") + INTERVAL '1 month - 1 day')::date";
     }
 
     @Override
-    protected String toString(FunctionStatement.MonthStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.MonthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'mm')) AS INTEGER)";
     }
 
 
     @Override
-    protected String toString(FunctionStatement.QuarterStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.QuarterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'q')) AS INTEGER)";
     }
 
     @Override
-    protected String toString(FunctionStatement.SecondStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.SecondStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ss')) AS INTEGER)";
     }
 
     @Override
-    protected String toString(FunctionStatement.WeekOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.WeekOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ww'" + ")) AS INTEGER)";
     }
 
     @Override
-    protected String toString(FunctionStatement.YearStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.YearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'yyyy'" + ")) AS INTEGER)";
     }
 
     @Override
-    protected String toString(FunctionStatement.IfNullStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.IfNullStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "COALESCE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(FunctionStatement.IfStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(FunctionStatement.IfStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "CASE WHEN " + toStr(columnList[0], assist, invokerList) + " THEN " + toStr(columnList[1], assist, invokerList) + " ELSE " + toStr(columnList[2], assist, invokerList) + " END";
     }
 
     @Override
-    protected String toString(OperStatement.LLMStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(OperStatement.LLMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
         return toStr(conditionStatement.getLeft(), assist, invokerList) + "<<" + toStr(conditionStatement.getRight(), assist, invokerList);
     }
 
     @Override
-    protected String toString(OperStatement.RRMStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(OperStatement.RRMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
         return toStr(conditionStatement.getLeft(), assist, invokerList) + ">>" + toStr(conditionStatement.getRight(), assist, invokerList);
     }
 
     @Override
-    protected String toString(OperStatement.BITXORStatement statement, Assist assist, List<Invoker> invokerList) throws InvokerException {
+    protected String toString(OperStatement.BITXORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
         return toStr(conditionStatement.getLeft(), assist, invokerList) + "#" + toStr(conditionStatement.getRight(), assist, invokerList);
     }

@@ -1,8 +1,10 @@
-package com.moxa.dream.antlr.invoker;
+package com.moxa.dream.system.antlr.invoker;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.handler.Handler;
+import com.moxa.dream.antlr.invoker.AbstractInvoker;
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.util.common.ObjectWrapper;
@@ -20,7 +22,7 @@ public class $Invoker extends AbstractInvoker {
     }
 
     @Override
-    public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         String paramName = toSQL.toStr(invokerStatement.getParamStatement(), assist, null);
         ParamInfo paramInfo = new ParamInfo(paramName, paramWrapper.get(paramName));
         paramInfoList.add(paramInfo);

@@ -3,7 +3,7 @@ package com.moxa.dream.antlr.smt;
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.expr.CompareExpr;
 import com.moxa.dream.antlr.expr.HelperExpr;
 import com.moxa.dream.antlr.expr.ListColumnExpr;
@@ -20,7 +20,7 @@ public abstract class MyFunctionStatement extends FunctionStatement {
         return MyFunctionStatement.class.getSimpleName().hashCode();
     }
 
-    public abstract String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws InvokerException;
+    public abstract String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     public HelperExpr.Helper getHelper(ExprReader exprReader) {
         return () -> new ListColumnExpr(exprReader, () -> new CompareExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));

@@ -1,7 +1,7 @@
 package com.moxa.dream.mate.logic.invoker;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.InvokerException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
@@ -41,7 +41,7 @@ public class LogicInvoker extends AbstractInvoker {
     }
 
     @Override
-    protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws InvokerException {
+    protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         String sql = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
         invokerStatement.replaceWith(invokerStatement.getParamStatement());
         return sql;
