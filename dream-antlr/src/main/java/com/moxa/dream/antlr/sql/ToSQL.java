@@ -59,6 +59,9 @@ public abstract class ToSQL {
             case -719831402://InsertStatement
                 sql = toString((InsertStatement) statement, assist, invokerList);
                 break;
+            case -406744290://ValueStatement
+                sql = toString((InsertStatement.ValueStatement) statement, assist, invokerList);
+                break;
             case 1587022413://ValuesStatement
                 sql = toString((InsertStatement.ValuesStatement) statement, assist, invokerList);
                 break;
@@ -582,6 +585,8 @@ public abstract class ToSQL {
     protected abstract String toString(UpdateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(InsertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(InsertStatement.ValueStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(InsertStatement.ValuesStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

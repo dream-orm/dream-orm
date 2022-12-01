@@ -62,6 +62,11 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
+    protected String toString(InsertStatement.ValueStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "VALUES" + toStr(statement.getStatement(), assist, invokerList);
+    }
+
+    @Override
     protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         LimitStatement limitStatement = statement.getLimitStatement();
         if (limitStatement != null && !limitStatement.isOffset()) {

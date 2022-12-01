@@ -24,6 +24,7 @@ public enum ExprType {
     LIMIT,
     LIKE,
     INTO,
+    VALUE,
     VALUES,
     LEFT,
     RIGHT,

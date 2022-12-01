@@ -519,6 +519,9 @@ public abstract class SqlExpr {
             case INTO:
                 statement = exprInto(exprInfo);
                 break;
+            case VALUE:
+                statement = exprValue(exprInfo);
+                break;
             case VALUES:
                 statement = exprValues(exprInfo);
                 break;
@@ -634,6 +637,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprDelete(ExprInfo exprInfo) {
+        return exprKeyWord(exprInfo);
+    }
+
+    protected Statement exprValue(ExprInfo exprInfo) {
         return exprKeyWord(exprInfo);
     }
 

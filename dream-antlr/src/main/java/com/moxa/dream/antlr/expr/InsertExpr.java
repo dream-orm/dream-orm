@@ -38,7 +38,15 @@ public class InsertExpr extends HelperExpr {
         BraceExpr braceExpr = new BraceExpr(exprReader);
         Statement statement = braceExpr.expr();
         insertStatement.setParams(statement);
-        setExprTypes(ExprType.VALUES, ExprType.SELECT);
+        setExprTypes(ExprType.VALUE, ExprType.VALUES, ExprType.SELECT);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprValue(ExprInfo exprInfo) {
+        ValueExpr valuesExpr = new ValueExpr(exprReader);
+        insertStatement.setValues(valuesExpr.expr());
+        setExprTypes(ExprType.NIL);
         return expr();
     }
 
@@ -69,6 +77,35 @@ public class InsertExpr extends HelperExpr {
         insertStatement.setTable(statement);
         setExprTypes(ExprType.LBRACE, ExprType.VALUES, ExprType.SELECT);
         return expr();
+    }
+
+    public static class ValueExpr extends SqlExpr {
+        private final InsertStatement.ValueStatement valueStatement = new InsertStatement.ValueStatement();
+
+        public ValueExpr(ExprReader exprReader) {
+            super(exprReader);
+            setExprTypes(ExprType.VALUE);
+        }
+
+        @Override
+        protected Statement exprValue(ExprInfo exprInfo) {
+            push();
+            setExprTypes(ExprType.LBRACE);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprLBrace(ExprInfo exprInfo) {
+            BraceExpr braceExpr = new BraceExpr(exprReader);
+            valueStatement.setStatement(braceExpr.expr());
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        protected Statement nil() {
+            return valueStatement;
+        }
     }
 
     public static class ValuesExpr extends SqlExpr {
