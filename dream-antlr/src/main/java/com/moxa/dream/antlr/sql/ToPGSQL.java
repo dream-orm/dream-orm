@@ -134,7 +134,7 @@ public class ToPGSQL extends ToPubSQL {
     @Override
     protected String toString(OperStatement.DIVIDEStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "::FLOAT/" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return toStr(conditionStatement.getLeft(), assist, invokerList) + "::DECIMAL/" + toStr(conditionStatement.getRight(), assist, invokerList);
     }
 
     @Override
