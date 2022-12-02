@@ -3,7 +3,6 @@ package com.moxa.dream.antlr.smt;
 public abstract class DateOperStatement extends Statement {
     private Statement date;
     private Statement qty;
-    private boolean positive;
 
     public Statement getDate() {
         return date;
@@ -25,50 +24,72 @@ public abstract class DateOperStatement extends Statement {
             qty.parentStatement = this;
     }
 
-    public boolean isPositive() {
-        return positive;
-    }
-
-    public void setPositive(boolean positive) {
-        this.positive = positive;
-    }
-
     @Override
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(date, qty);
     }
 
-    public static class YearDateOperStatement extends DateOperStatement {
+    public static class YearDateAddStatement extends DateOperStatement {
 
     }
 
-    public static class QuarterDateOperStatement extends DateOperStatement {
+    public static class YearDateSubStatement extends DateOperStatement {
 
     }
 
-    public static class MonthDateOperStatement extends DateOperStatement {
+    public static class QuarterDateAddStatement extends DateOperStatement {
 
     }
 
-    public static class WeekDateOperStatement extends DateOperStatement {
+    public static class QuarterDateSubStatement extends DateOperStatement {
 
     }
 
-    public static class DayDateOperStatement extends DateOperStatement {
+    public static class MonthDateAddStatement extends DateOperStatement {
 
     }
 
-    public static class HourDateOperStatement extends DateOperStatement {
+    public static class MonthDateSubStatement extends DateOperStatement {
 
     }
 
-    public static class MinuteDateOperStatement extends DateOperStatement {
+    public static class WeekDateAddStatement extends DateOperStatement {
 
     }
 
-    public static class SecondDateOperStatement extends DateOperStatement {
+    public static class WeekDateSubStatement extends DateOperStatement {
 
     }
 
+    public static class DayDateAddStatement extends DateOperStatement {
 
+    }
+
+    public static class DayDateSubStatement extends DateOperStatement {
+
+    }
+
+    public static class HourDateAddStatement extends DateOperStatement {
+
+    }
+
+    public static class HourDateSubStatement extends DateOperStatement {
+
+    }
+
+    public static class MinuteDateAddStatement extends DateOperStatement {
+
+    }
+
+    public static class MinuteDateSubStatement extends DateOperStatement {
+
+    }
+
+    public static class SecondDateAddStatement extends DateOperStatement {
+
+    }
+
+    public static class SecondDateSubStatement extends DateOperStatement {
+
+    }
 }

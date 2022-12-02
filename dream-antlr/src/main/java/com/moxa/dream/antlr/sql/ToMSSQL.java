@@ -51,67 +51,83 @@ public class ToMSSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.YearDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "";
-        if (!statement.isPositive())
-            type = "-";
-        return "DATEADD(yy," + type + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    protected String toString(DateOperStatement.YearDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(yy," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.QuarterDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "";
-        if (!statement.isPositive())
-            type = "-";
-        return "DATEADD(qq," + type + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    protected String toString(DateOperStatement.YearDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(yy,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.MonthDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "";
-        if (!statement.isPositive())
-            type = "-";
-        return "DATEADD(mm," + type + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    protected String toString(DateOperStatement.QuarterDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(qq," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.WeekDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "";
-        if (!statement.isPositive())
-            type = "-";
-        return "DATEADD(wk," + type + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    protected String toString(DateOperStatement.QuarterDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(qq,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.DayDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "";
-        if (!statement.isPositive())
-            type = "-";
-        return "DATEADD(dd," + type + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    protected String toString(DateOperStatement.MonthDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(mm," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.HourDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "";
-        if (!statement.isPositive())
-            type = "-";
-        return "DATEADD(hh," + type + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    protected String toString(DateOperStatement.MonthDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(mm,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.MinuteDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "";
-        if (!statement.isPositive())
-            type = "-";
-        return "DATEADD(mi," + type + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    protected String toString(DateOperStatement.WeekDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(wk," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.SecondDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "";
-        if (!statement.isPositive())
-            type = "-";
-        return "DATEADD(ss," + type + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    protected String toString(DateOperStatement.WeekDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(wk,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.DayDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(dd," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.DayDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(dd,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.HourDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(hh," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.HourDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(hh,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.MinuteDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(mi," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.MinuteDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(mi,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.SecondDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(ss," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.SecondDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEADD(ss,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
     }
 
     @Override

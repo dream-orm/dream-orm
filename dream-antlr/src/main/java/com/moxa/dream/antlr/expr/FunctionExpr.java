@@ -505,7 +505,7 @@ public class FunctionExpr extends SqlExpr {
     protected Statement exprDateAdd(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.DateAddStatement();
         functionStatement = new FunctionParamerExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
-                new FunctionParamerExpr.DateOperExpr(exprReader, true)
+                new FunctionParamerExpr.DateAddExpr(exprReader)
                 , new ExprInfo(ExprType.COMMA, ","))).expr();
         setExprTypes(ExprType.NIL);
         return expr();
@@ -515,7 +515,7 @@ public class FunctionExpr extends SqlExpr {
     protected Statement exprDateSub(ExprInfo exprInfo) {
         FunctionStatement func = new FunctionStatement.DateAddStatement();
         functionStatement = new FunctionParamerExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
-                new FunctionParamerExpr.DateOperExpr(exprReader, false)
+                new FunctionParamerExpr.DateSubExpr(exprReader)
                 , new ExprInfo(ExprType.COMMA, ","))).expr();
         setExprTypes(ExprType.NIL);
         return expr();
@@ -876,25 +876,23 @@ public class FunctionExpr extends SqlExpr {
             }
         }
 
-        public static class DateOperExpr extends HelperExpr {
-            private final boolean positive;
+        public static class DateAddExpr extends HelperExpr {
             private DateOperStatement dateOperStatement;
             private Statement date;
             private Statement qty;
 
-            public DateOperExpr(ExprReader exprReader, boolean positive) {
-                this(exprReader, () -> new CompareExpr(exprReader), positive);
+            public DateAddExpr(ExprReader exprReader) {
+                this(exprReader, () -> new CompareExpr(exprReader));
 
             }
 
-            public DateOperExpr(ExprReader exprReader, Helper helper, boolean positive) {
+            public DateAddExpr(ExprReader exprReader, Helper helper) {
                 super(exprReader, helper);
-                this.positive = positive;
             }
 
             @Override
             protected Statement exprYear(ExprInfo exprInfo) {
-                dateOperStatement = new DateOperStatement.YearDateOperStatement();
+                dateOperStatement = new DateOperStatement.YearDateAddStatement();
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -902,7 +900,7 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             protected Statement exprQuarter(ExprInfo exprInfo) {
-                dateOperStatement = new DateOperStatement.QuarterDateOperStatement();
+                dateOperStatement = new DateOperStatement.QuarterDateAddStatement();
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -910,7 +908,7 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             protected Statement exprMonth(ExprInfo exprInfo) {
-                dateOperStatement = new DateOperStatement.MonthDateOperStatement();
+                dateOperStatement = new DateOperStatement.MonthDateAddStatement();
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -918,7 +916,7 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             protected Statement exprWeek(ExprInfo exprInfo) {
-                dateOperStatement = new DateOperStatement.WeekDateOperStatement();
+                dateOperStatement = new DateOperStatement.WeekDateAddStatement();
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -926,7 +924,7 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             protected Statement exprDay(ExprInfo exprInfo) {
-                dateOperStatement = new DateOperStatement.DayDateOperStatement();
+                dateOperStatement = new DateOperStatement.DayDateAddStatement();
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -934,7 +932,7 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             protected Statement exprHour(ExprInfo exprInfo) {
-                dateOperStatement = new DateOperStatement.HourDateOperStatement();
+                dateOperStatement = new DateOperStatement.HourDateAddStatement();
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -942,7 +940,7 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             protected Statement exprMinute(ExprInfo exprInfo) {
-                dateOperStatement = new DateOperStatement.MinuteDateOperStatement();
+                dateOperStatement = new DateOperStatement.MinuteDateAddStatement();
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -950,7 +948,7 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             protected Statement exprSecond(ExprInfo exprInfo) {
-                dateOperStatement = new DateOperStatement.SecondDateOperStatement();
+                dateOperStatement = new DateOperStatement.SecondDateAddStatement();
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -984,7 +982,118 @@ public class FunctionExpr extends SqlExpr {
 
             @Override
             public Statement nil() {
-                dateOperStatement.setPositive(positive);
+                dateOperStatement.setDate(date);
+                dateOperStatement.setQty(qty);
+                return dateOperStatement;
+            }
+        }
+
+        public static class DateSubExpr extends HelperExpr {
+            private DateOperStatement dateOperStatement;
+            private Statement date;
+            private Statement qty;
+
+            public DateSubExpr(ExprReader exprReader) {
+                this(exprReader, () -> new CompareExpr(exprReader));
+
+            }
+
+            public DateSubExpr(ExprReader exprReader, Helper helper) {
+                super(exprReader, helper);
+            }
+
+            @Override
+            protected Statement exprYear(ExprInfo exprInfo) {
+                dateOperStatement = new DateOperStatement.YearDateSubStatement();
+                push();
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprQuarter(ExprInfo exprInfo) {
+                dateOperStatement = new DateOperStatement.QuarterDateSubStatement();
+                push();
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprMonth(ExprInfo exprInfo) {
+                dateOperStatement = new DateOperStatement.MonthDateSubStatement();
+                push();
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprWeek(ExprInfo exprInfo) {
+                dateOperStatement = new DateOperStatement.WeekDateSubStatement();
+                push();
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprDay(ExprInfo exprInfo) {
+                dateOperStatement = new DateOperStatement.DayDateSubStatement();
+                push();
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprHour(ExprInfo exprInfo) {
+                dateOperStatement = new DateOperStatement.HourDateSubStatement();
+                push();
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprMinute(ExprInfo exprInfo) {
+                dateOperStatement = new DateOperStatement.MinuteDateSubStatement();
+                push();
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprSecond(ExprInfo exprInfo) {
+                dateOperStatement = new DateOperStatement.SecondDateSubStatement();
+                push();
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprInterval(ExprInfo exprInfo) {
+                push();
+                setExprTypes(ExprType.HELP);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprHelp(Statement statement) {
+                if (date == null) {
+                    date = statement;
+                    setExprTypes(ExprType.COMMA);
+                } else {
+                    qty = statement;
+                    setExprTypes(ExprType.YEAR, ExprType.QUARTER, ExprType.MONTH, ExprType.WEEK, ExprType.DAY, ExprType.HOUR, ExprType.MINUTE, ExprType.SECOND);
+                }
+                return expr();
+            }
+
+            @Override
+            protected Statement exprComma(ExprInfo exprInfo) {
+                push();
+                setExprTypes(ExprType.INTERVAL, ExprType.HELP);
+                return expr();
+            }
+
+            @Override
+            public Statement nil() {
                 dateOperStatement.setDate(date);
                 dateOperStatement.setQty(qty);
                 return dateOperStatement;

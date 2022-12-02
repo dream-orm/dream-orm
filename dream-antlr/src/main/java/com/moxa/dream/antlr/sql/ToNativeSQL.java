@@ -71,68 +71,83 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.YearDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "DATE_ADD";
-        if (!statement.isPositive())
-            type = "DATE_SUB";
-        return type + "(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " YEAR)";
-
+    protected String toString(DateOperStatement.YearDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_ADD(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " YEAR)";
     }
 
     @Override
-    protected String toString(DateOperStatement.QuarterDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "DATE_ADD";
-        if (!statement.isPositive())
-            type = "DATE_SUB";
-        return type + "(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " QUARTER)";
+    protected String toString(DateOperStatement.YearDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_SUB(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " YEAR)";
     }
 
     @Override
-    protected String toString(DateOperStatement.MonthDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "DATE_ADD";
-        if (!statement.isPositive())
-            type = "DATE_SUB";
-        return type + "(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " MONTH)";
+    protected String toString(DateOperStatement.QuarterDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_ADD(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " QUARTER)";
     }
 
     @Override
-    protected String toString(DateOperStatement.WeekDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "DATE_ADD";
-        if (!statement.isPositive())
-            type = "DATE_SUB";
-        return type + "(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " WEEK)";
+    protected String toString(DateOperStatement.QuarterDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_SUB(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " QUARTER)";
     }
 
     @Override
-    protected String toString(DateOperStatement.DayDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "DATE_ADD";
-        if (!statement.isPositive())
-            type = "DATE_SUB";
-        return type + "(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " DAY)";
+    protected String toString(DateOperStatement.MonthDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_ADD(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " MONTH)";
     }
 
     @Override
-    protected String toString(DateOperStatement.HourDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "DATE_ADD";
-        if (!statement.isPositive())
-            type = "DATE_SUB";
-        return type + "(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " HOUR)";
+    protected String toString(DateOperStatement.MonthDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_SUB(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " MONTH)";
     }
 
     @Override
-    protected String toString(DateOperStatement.MinuteDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "DATE_ADD";
-        if (!statement.isPositive())
-            type = "DATE_SUB";
-        return type + "(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " MINUTE)";
+    protected String toString(DateOperStatement.WeekDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_ADD(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " WEEK)";
     }
 
     @Override
-    protected String toString(DateOperStatement.SecondDateOperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String type = "DATE_ADD";
-        if (!statement.isPositive())
-            type = "DATE_SUB";
-        return type + "(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " SECOND)";
+    protected String toString(DateOperStatement.WeekDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_SUB(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " WEEK)";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.DayDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_ADD(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " DAY)";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.DayDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_SUB(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " DAY)";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.HourDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_ADD(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " HOUR)";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.HourDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_SUB(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " HOUR)";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.MinuteDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_ADD(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " MINUTE)";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.MinuteDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_SUB(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " MINUTE)";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.SecondDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_ADD(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " SECOND)";
+    }
+
+    @Override
+    protected String toString(DateOperStatement.SecondDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE_SUB(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " SECOND)";
     }
 
     @Override
