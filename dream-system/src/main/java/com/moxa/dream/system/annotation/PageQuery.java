@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface PageQuery {
-    boolean offset() default false;
+    boolean offset() default true;
 
     String value() default "page";
 }

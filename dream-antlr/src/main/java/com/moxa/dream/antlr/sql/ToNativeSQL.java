@@ -179,9 +179,9 @@ public class ToNativeSQL extends ToSQL {
     protected String toString(LimitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         StringBuilder builder = new StringBuilder();
         if (statement.isOffset()) {
-            builder.append(" OFFSET " + toStr(statement.getFirst(), assist, invokerList));
+            builder.append(" LIMIT " + toStr(statement.getFirst(), assist, invokerList));
             if (statement.getSecond() != null) {
-                builder.append(" LIMIT " + toStr(statement.getSecond(), assist, invokerList));
+                builder.append(" OFFSET " + toStr(statement.getSecond(), assist, invokerList));
             }
         } else {
             builder.append(" LIMIT " + toStr(statement.getFirst(), assist, invokerList));

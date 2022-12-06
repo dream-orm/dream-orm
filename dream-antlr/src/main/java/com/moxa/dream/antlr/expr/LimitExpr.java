@@ -15,7 +15,7 @@ public class LimitExpr extends HelperExpr {
 
     public LimitExpr(ExprReader exprReader, Helper helper) {
         super(exprReader, helper);
-        setExprTypes(ExprType.LIMIT, ExprType.OFFSET);
+        setExprTypes(ExprType.LIMIT);
     }
 
 
@@ -43,33 +43,18 @@ public class LimitExpr extends HelperExpr {
     protected Statement exprOffSet(ExprInfo exprInfo) {
         push();
         limitStatement.setOffset(true);
-        Statement first;
-        if ((first = limitStatement.getFirst()) != null) {
-            limitStatement.setSecond(first);
-            limitStatement.setFirst(null);
-        }
         setExprTypes(ExprType.HELP);
         return expr();
     }
 
     @Override
     protected Statement exprHelp(Statement statement) {
-        if (limitStatement.isOffset()) {
-            if (limitStatement.getFirst() == null) {
-                limitStatement.setFirst(statement);
-                setExprTypes(ExprType.LIMIT, ExprType.NIL);
-            } else {
-                limitStatement.setSecond(statement);
-                setExprTypes(ExprType.NIL);
-            }
+        if (limitStatement.getFirst() == null) {
+            limitStatement.setFirst(statement);
+            setExprTypes(ExprType.OFFSET, ExprType.COMMA, ExprType.NIL);
         } else {
-            if (limitStatement.getFirst() == null) {
-                limitStatement.setFirst(statement);
-                setExprTypes(ExprType.OFFSET, ExprType.COMMA, ExprType.NIL);
-            } else {
-                limitStatement.setSecond(statement);
-                setExprTypes(ExprType.NIL);
-            }
+            limitStatement.setSecond(statement);
+            setExprTypes(ExprType.NIL);
         }
         return expr();
     }

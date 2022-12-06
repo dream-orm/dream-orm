@@ -28,7 +28,7 @@ public class QueryExpr extends SqlExpr {
         FromExpr fromExpr = new FromExpr(exprReader);
         Statement statement = fromExpr.expr();
         queryStatement.setFromStatement((FromStatement) statement);
-        setExprTypes(ExprType.WHERE, ExprType.GROUP, ExprType.ORDER, ExprType.LIMIT, ExprType.OFFSET, ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.WHERE, ExprType.GROUP, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.NIL);
         return expr();
     }
 
@@ -36,7 +36,7 @@ public class QueryExpr extends SqlExpr {
     protected Statement exprWhere(ExprInfo exprInfo) {
         WhereExpr whereExpr = new WhereExpr(exprReader);
         queryStatement.setWhereStatement((WhereStatement) whereExpr.expr());
-        setExprTypes(ExprType.GROUP, ExprType.ORDER, ExprType.LIMIT, ExprType.OFFSET, ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.GROUP, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.NIL);
         return expr();
     }
 
@@ -44,7 +44,7 @@ public class QueryExpr extends SqlExpr {
     protected Statement exprGroup(ExprInfo exprInfo) {
         GroupExpr groupExpr = new GroupExpr(exprReader);
         queryStatement.setGroupStatement((GroupStatement) groupExpr.expr());
-        setExprTypes(ExprType.HAVING, ExprType.ORDER, ExprType.LIMIT, ExprType.OFFSET, ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.HAVING, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.NIL);
         return expr();
     }
 
@@ -52,7 +52,7 @@ public class QueryExpr extends SqlExpr {
     protected Statement exprHaving(ExprInfo exprInfo) {
         HavingExpr havingExpr = new HavingExpr(exprReader);
         queryStatement.setHavingStatement((HavingStatement) havingExpr.expr());
-        setExprTypes(ExprType.ORDER, ExprType.LIMIT, ExprType.OFFSET, ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.NIL);
         return expr();
     }
 
@@ -60,7 +60,7 @@ public class QueryExpr extends SqlExpr {
     protected Statement exprOrder(ExprInfo exprInfo) {
         OrderExpr orderExpr = new OrderExpr(exprReader);
         queryStatement.setOrderStatement((OrderStatement) orderExpr.expr());
-        setExprTypes(ExprType.LIMIT, ExprType.OFFSET, ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.LIMIT, ExprType.UNION, ExprType.NIL);
         return expr();
     }
 

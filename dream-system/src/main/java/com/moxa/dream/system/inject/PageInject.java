@@ -20,11 +20,11 @@ public class PageInject implements Inject {
             PackageStatement statement = methodInfo.getStatement();
             String pageNamespace;
             String pageFunction;
-            pageNamespace = com.moxa.dream.system.antlr.factory.SystemInvokerFactory.NAMESPACE;
+            pageNamespace = SystemInvokerFactory.NAMESPACE;
             if (pageQuery.offset()) {
-                pageFunction = com.moxa.dream.system.antlr.factory.SystemInvokerFactory.OFFSET;
+                pageFunction = SystemInvokerFactory.OFFSET;
             } else {
-                pageFunction = com.moxa.dream.system.antlr.factory.SystemInvokerFactory.LIMIT;
+                pageFunction = SystemInvokerFactory.LIMIT;
             }
             String value = pageQuery.value();
             String prefix = ObjectUtil.isNull(value) ? "" : (value + ".");

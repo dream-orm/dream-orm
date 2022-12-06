@@ -212,12 +212,16 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(LimitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        StringBuilder builder = new StringBuilder();
-        builder.append(" OFFSET " + toStr(statement.getFirst(), assist, invokerList));
-        if (statement.getSecond() != null) {
-            builder.append(" ROWS FETCH NEXT " + toStr(statement.getSecond(), assist, invokerList) + " ROWS ONLY");
+        if (statement.isOffset()) {
+            StringBuilder builder = new StringBuilder();
+            if (statement.getSecond() != null) {
+                builder.append(" OFFSET " + toStr(statement.getSecond(), assist, invokerList));
+            }
+            builder.append(" ROWS FETCH NEXT " + toStr(statement.getFirst(), assist, invokerList) + " ROWS ONLY");
+            return builder.toString();
+        } else {
+            throw new AntlrException("不支持非offset分页");
         }
-        return builder.toString();
     }
 
     @Override
