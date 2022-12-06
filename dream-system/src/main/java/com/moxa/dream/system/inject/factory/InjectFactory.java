@@ -4,7 +4,9 @@ import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.inject.Inject;
 
 public interface InjectFactory {
-    void injects(Class<? extends Inject>[] injects);
+    void injects(Inject... injects);
 
     void inject(MethodInfo methodInfo);
+
+    <T extends Inject> T getInject(Class<T> inject);
 }

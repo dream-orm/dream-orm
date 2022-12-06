@@ -1,4 +1,4 @@
-package com.moxa.dream.mate.logic.interceptor;
+package com.moxa.dream.mate.logic.inject;
 
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.table.TableInfo;

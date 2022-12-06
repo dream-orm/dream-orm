@@ -5,31 +5,35 @@ import com.moxa.dream.system.inject.AnnotationInject;
 import com.moxa.dream.system.inject.Inject;
 import com.moxa.dream.system.inject.PageInject;
 import com.moxa.dream.system.inject.ScanInject;
-import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.reflect.ReflectUtil;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class DefaultInjectFactory implements InjectFactory {
-    private Class<? extends Inject>[] injectClasses;
+    private Map<Class<? extends Inject>, Inject> injectMap = new LinkedHashMap<>();
+
+    public DefaultInjectFactory() {
+        injectMap.put(AnnotationInject.class, new AnnotationInject());
+    }
 
     @Override
-    public void injects(Class<? extends Inject>[] injects) {
-        this.injectClasses = injects;
+    public void injects(Inject... injects) {
+        for (Inject inject : injects) {
+            injectMap.put(inject.getClass(), inject);
+        }
+        injectMap.put(PageInject.class, new PageInject());
+        injectMap.put(ScanInject.class, new ScanInject());
     }
 
     @Override
     public final void inject(MethodInfo methodInfo) {
-        AnnotationInject annotationInject = new AnnotationInject();
-        annotationInject.inject(methodInfo);
-        PageInject pageInject = new PageInject();
-        pageInject.inject(methodInfo);
-        if (!ObjectUtil.isNull(injectClasses)) {
-            for (int i = 0; i < injectClasses.length; i++) {
-                Inject inject = ReflectUtil.create(injectClasses[i]);
-                inject.inject(methodInfo);
-            }
+        for (Inject inject : injectMap.values()) {
+            inject.inject(methodInfo);
         }
-        ScanInject scanInject = new ScanInject();
-        scanInject.inject(methodInfo);
     }
 
+    @Override
+    public <T extends Inject> T getInject(Class<T> inject) {
+        return (T) injectMap.get(inject);
+    }
 }

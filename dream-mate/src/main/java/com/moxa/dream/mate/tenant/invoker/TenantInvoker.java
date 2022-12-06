@@ -11,11 +11,11 @@ import com.moxa.dream.mate.tenant.handler.TenantDeleteHandler;
 import com.moxa.dream.mate.tenant.handler.TenantInsertHandler;
 import com.moxa.dream.mate.tenant.handler.TenantQueryHandler;
 import com.moxa.dream.mate.tenant.handler.TenantUpdateHandler;
-import com.moxa.dream.mate.tenant.interceptor.TenantHandler;
-import com.moxa.dream.mate.tenant.interceptor.TenantInterceptor;
+import com.moxa.dream.mate.tenant.inject.TenantHandler;
+import com.moxa.dream.mate.tenant.inject.TenantInject;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
-import com.moxa.dream.system.plugin.factory.PluginFactory;
+import com.moxa.dream.system.inject.factory.InjectFactory;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
 
@@ -35,9 +35,9 @@ public class TenantInvoker extends AbstractInvoker {
         methodInfo = assist.getCustom(MethodInfo.class);
         Configuration configuration = methodInfo.getConfiguration();
         tableFactory = configuration.getTableFactory();
-        PluginFactory pluginFactory = configuration.getPluginFactory();
-        TenantInterceptor tenantInterceptor = pluginFactory.getInterceptor(TenantInterceptor.class);
-        tenantHandler = tenantInterceptor.getTenantHandler();
+        InjectFactory injectFactory = configuration.getInjectFactory();
+        TenantInject tenantInject = injectFactory.getInject(TenantInject.class);
+        tenantHandler = tenantInject.getTenantHandler();
 
     }
 

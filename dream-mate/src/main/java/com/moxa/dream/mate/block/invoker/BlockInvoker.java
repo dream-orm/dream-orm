@@ -9,7 +9,7 @@ import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.mate.block.handler.ColumnBlockHandler;
+import com.moxa.dream.mate.block.handler.BlockHandler;
 import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.resource.ResourceUtil;
@@ -20,14 +20,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-public class ColumnBlockInvoker extends AbstractInvoker {
+public class BlockInvoker extends AbstractInvoker {
     private Set<String> filterSet;
 
-    public ColumnBlockInvoker() {
+    public BlockInvoker() {
         this("META-INF/keyword.txt");
     }
 
-    public ColumnBlockInvoker(String txt) {
+    public BlockInvoker(String txt) {
         InputStream inputStream = ResourceUtil.getResourceAsStream(txt);
         Set<String> filterSet = new LowHashSet();
         if (inputStream != null) {
@@ -52,7 +52,7 @@ public class ColumnBlockInvoker extends AbstractInvoker {
         this.filterSet = filterSet;
     }
 
-    public ColumnBlockInvoker(Set<String> filterSet) {
+    public BlockInvoker(Set<String> filterSet) {
         this.filterSet = filterSet;
     }
 
@@ -70,7 +70,7 @@ public class ColumnBlockInvoker extends AbstractInvoker {
 
     @Override
     protected Handler[] handler() {
-        return new Handler[]{new ColumnBlockHandler(this)};
+        return new Handler[]{new BlockHandler(this)};
     }
 
     public boolean filter(String column) {

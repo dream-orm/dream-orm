@@ -12,7 +12,7 @@ import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class JavaPluginFactory extends AbstractPluginFactory {
+public class ProxyPluginFactory extends AbstractPluginFactory {
     Map<Integer, Interface> interfaceMap = new HashMap<>();
 
     public Object plugin(Object origin, Object target, Interceptor interceptor) {
@@ -60,7 +60,6 @@ public class JavaPluginFactory extends AbstractPluginFactory {
                 }
             });
         } else return target;
-
     }
 
     protected int hash(Object origin, Interceptor interceptor) {

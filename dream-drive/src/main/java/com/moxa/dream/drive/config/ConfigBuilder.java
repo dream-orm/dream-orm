@@ -23,7 +23,7 @@ import com.moxa.dream.system.inject.Inject;
 import com.moxa.dream.system.inject.factory.DefaultInjectFactory;
 import com.moxa.dream.system.inject.factory.InjectFactory;
 import com.moxa.dream.system.mapper.MapperFactory;
-import com.moxa.dream.system.plugin.factory.JavaPluginFactory;
+import com.moxa.dream.system.plugin.factory.ProxyPluginFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.plugin.interceptor.Interceptor;
 import com.moxa.dream.system.table.factory.DefaultTableFactory;
@@ -71,7 +71,7 @@ public class ConfigBuilder {
                 .setInjectFactory(new DefaultInjectFactory())
                 .setDialectFactory(new DefaultDialectFactory())
                 .setTransactionFactory(new JdbcTransactionFactory())
-                .setPluginFactory(new JavaPluginFactory())
+                .setPluginFactory(new ProxyPluginFactory())
                 .setListenerFactory(new DefaultListenerFactory())
                 .setTypeHandlerFactory(new DefaultTypeHandlerFactory());
         return defaultConfig;
@@ -317,13 +317,13 @@ public class ConfigBuilder {
 
     public ConfigBuilder injects(List<String> injectList) {
         if (!ObjectUtil.isNull(injectList)) {
-            Class<? extends Inject>[] injects = new Class[injectList.size()];
+            Inject[] injects = new Inject[injectList.size()];
             InjectFactory injectFactory = configuration.getInjectFactory();
             ObjectUtil.requireNonNull(injectFactory, "InjectFactory未在Configuration注册");
             for (int i = 0; i < injectList.size(); i++) {
                 String value = injectList.get(i);
                 Class<? extends Inject> injectClass = ReflectUtil.loadClass(value);
-                injects[i] = injectClass;
+                injects[i] = ReflectUtil.create(injectClass);
             }
             injectFactory.injects(injects);
         }
