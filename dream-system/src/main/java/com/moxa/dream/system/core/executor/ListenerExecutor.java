@@ -69,7 +69,7 @@ public class ListenerExecutor implements Executor {
             Object result;
             try {
                 result = function.apply(mappedStatement);
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 exceptionListeners(listeners, e, mappedStatement);
                 throw e;
             }
@@ -112,7 +112,7 @@ public class ListenerExecutor implements Executor {
         }
     }
 
-    protected void exceptionListeners(Listener[] listeners, Exception e, MappedStatement mappedStatement) {
+    protected void exceptionListeners(Listener[] listeners, SQLException e, MappedStatement mappedStatement) {
         for (Listener listener : listeners) {
             listener.exception(e, mappedStatement);
         }

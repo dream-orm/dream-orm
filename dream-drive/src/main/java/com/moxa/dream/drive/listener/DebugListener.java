@@ -5,6 +5,7 @@ import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.listener.*;
 import com.moxa.dream.util.common.ObjectUtil;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
     }
 
     @Override
-    public void exception(Exception e, MappedStatement mappedStatement) {
+    public void exception(SQLException e, MappedStatement mappedStatement) {
         System.err.println("执行异常：" + e.getMessage());
         after(mappedStatement);
     }

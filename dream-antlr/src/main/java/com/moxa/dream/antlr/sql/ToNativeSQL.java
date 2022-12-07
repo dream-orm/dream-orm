@@ -20,13 +20,13 @@ public class ToNativeSQL extends ToSQL {
 
     }
 
-    protected String beforeCache(Statement statement) {
-        String sql = statement.getQuickValue();
-        return sql;
+    @Override
+    protected String before(Statement statement) {
+        return statement.getQuickValue();
     }
 
-
-    protected void afterCache(Statement statement, String sql) {
+    @Override
+    protected void after(Statement statement, String sql) {
 
     }
 

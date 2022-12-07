@@ -12,12 +12,14 @@ import java.util.List;
 
 public abstract class ToPubSQL extends ToNativeSQL {
 
-    protected String beforeCache(Statement statement) {
+    @Override
+    protected String before(Statement statement) {
         String sql = statement.getQuickValue();
         return sql;
     }
 
-    protected void afterCache(Statement statement, String sql) {
+    @Override
+    protected void after(Statement statement, String sql) {
         if (statement.isNeedCache()) {
             statement.setQuickValue(sql);
         }

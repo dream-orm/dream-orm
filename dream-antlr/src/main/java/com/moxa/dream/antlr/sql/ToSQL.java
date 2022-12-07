@@ -15,14 +15,14 @@ public abstract class ToSQL {
 
     public abstract String getName();
 
-    protected abstract String beforeCache(Statement statement);
+    protected abstract String before(Statement statement);
 
-    protected abstract void afterCache(Statement statement, String sql);
+    protected abstract void after(Statement statement, String sql);
 
     public String toStr(Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         if (statement == null)
             return "";
-        String sql = beforeCache(statement);
+        String sql = before(statement);
         if (sql != null)
             return sql;
         Queue<Handler> handlerQueue = null;
@@ -567,7 +567,7 @@ public abstract class ToSQL {
             }
             return sql;
         }
-        afterCache(statement, sql);
+        after(statement, sql);
         return sql;
     }
 

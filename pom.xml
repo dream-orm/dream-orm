@@ -38,17 +38,6 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
-        <repository>
-            <id>inner-nexus</id>
-            <name>InnerNexus</name>
-            <url>http://192.168.0.243:8081/nexus/content/groups/public</url>
-        </repository>
-        <repository>
-            <id>pentaho-nexus</id>
-            <url>https://nexus.pentaho.org/content/groups/omni/</url>
-        </repository>
-    </repositories>
 
     <distributionManagement>
         <repository>
