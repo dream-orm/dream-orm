@@ -2,8 +2,12 @@ package com.moxa.dream.drive.provider;
 
 import com.moxa.dream.system.core.action.Action;
 
-@FunctionalInterface
+import java.util.Collection;
+
 public interface ActionProvider {
+
+    String sql();
+
     default Action[] init() {
         return null;
     }
@@ -16,6 +20,19 @@ public interface ActionProvider {
         return null;
     }
 
-    String sql();
+    default Class<? extends Collection> rowType() {
+        return null;
+    }
 
+    default Class<?> colType() {
+        return null;
+    }
+
+    default Boolean cache() {
+        return null;
+    }
+
+    default Integer timeOut() {
+        return null;
+    }
 }

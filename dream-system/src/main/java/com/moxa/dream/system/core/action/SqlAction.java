@@ -1,7 +1,6 @@
 package com.moxa.dream.system.core.action;
 
 
-import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
@@ -11,108 +10,64 @@ import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.exception.DreamRunTimeException;
-import com.moxa.dream.util.reflect.ReflectUtil;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Properties;
 
 public class SqlAction implements Action {
-    private final Configuration configuration;
-    private final String sql;
-    private final String property;
-    private MethodInfo methodInfo;
-    private boolean cache = true;
-    private Command command = Command.NONE;
+    private String property;
 
-    public SqlAction(Configuration configuration, String property, String sql) {
-        this.configuration = configuration;
-        this.property = property;
-        this.sql = sql;
+    private MethodInfo methodInfo;
+
+    public SqlAction(Configuration configuration, String sql) {
+        this(configuration, null, sql);
     }
 
-    @Override
-    public void setProperties(Properties properties) {
-        String cache = properties.getProperty("cache");
-        this.cache = !String.valueOf(false).equalsIgnoreCase(cache);
-        String command = properties.getProperty("command");
-        if (!ObjectUtil.isNull(command)) {
-            command = command.toLowerCase();
-            switch (command) {
-                case "query":
-                    this.command = Command.QUERY;
-                    break;
-                case "insert":
-                    this.command = Command.INSERT;
-                    break;
-                case "update":
-                    this.command = Command.UPDATE;
-                    break;
-                case "delete":
-                    this.command = Command.DELETE;
-                    break;
-                default:
-                    throw new DreamRunTimeException("Command:'" + command + "'未注册");
+    public SqlAction(Configuration configuration, String property, String sql) {
+        this(configuration, property, sql, NonCollection.class, Object.class);
+    }
 
-            }
+    public SqlAction(Configuration configuration, String property, String sql, Class<? extends Collection> rowType, Class<?> colType) {
+        this(configuration, property, sql, rowType, colType, true);
+    }
+
+    public SqlAction(Configuration configuration, String property, String sql, Class<? extends Collection> rowType, Class<?> colType, boolean cache) {
+        if (configuration == null) {
+            throw new DreamRunTimeException("configuration不能为空");
         }
+        if (ObjectUtil.isNull(sql)) {
+            throw new DreamRunTimeException("sql不能为空");
+        }
+        if (rowType == null) {
+            throw new DreamRunTimeException("rowType不能为空");
+        }
+        if (colType == null) {
+            throw new DreamRunTimeException("colType不能为空");
+        }
+        this.property = property;
+        methodInfo = new MethodInfo.Builder(configuration)
+                .rowType(rowType)
+                .colType(colType)
+                .sql(sql)
+                .cache(cache)
+                .build();
     }
 
     @Override
     public void doAction(Session session, MappedStatement mappedStatement, Object arg) throws Exception {
-        if (!ObjectUtil.isNull(property)) {
-            if (methodInfo == null) {
-                synchronized (this) {
-                    if (methodInfo == null) {
-                        int len;
-                        Field field;
-                        if ((len = property.lastIndexOf(".")) >= 0) {
-                            Object target = ObjectWrapper.wrapper(arg).get(property.substring(0, len));
-                            ObjectUtil.requireNonNull(target, "对象地址'" + property.substring(0, len) + "'为空");
-                            field = target.getClass().getDeclaredField(property.substring(len + 1));
-                        } else {
-                            field = arg.getClass().getDeclaredField(property);
-                        }
-                        Type type = field.getGenericType();
-                        methodInfo = new MethodInfo.Builder(configuration)
-                                .rowType(ReflectUtil.getRowType(type))
-                                .colType(ReflectUtil.getColType(type))
-                                .cache(cache)
-                                .command(command)
-                                .sql(sql)
-                                .build();
-                        methodInfo.compile();
-                    }
-                }
-            }
+        if (!methodInfo.isCompile()) {
+            methodInfo.compile();
+        }
+        Map<String, Object> argMap;
+        if (arg instanceof Map) {
+            argMap = (Map<String, Object>) arg;
         } else {
-            if (methodInfo == null) {
-                synchronized (this) {
-                    if (methodInfo == null) {
-                        methodInfo = new MethodInfo.Builder(configuration)
-                                .rowType(NonCollection.class)
-                                .colType(Object.class)
-                                .cache(cache)
-                                .command(command)
-                                .sql(sql)
-                                .build();
-                        methodInfo.compile();
-                    }
-                }
-            }
+            argMap = new ObjectMap(arg);
         }
-        Map<String, Object> argMap = null;
-        if (arg != null) {
-            if (arg instanceof Map) {
-                argMap = (Map<String, Object>) arg;
-            } else {
-                argMap = new ObjectMap(arg);
-            }
-        }
+        ObjectWrapper wrapper = ObjectWrapper.wrapper(arg);
         Object result = session.execute(methodInfo, argMap);
         if (!ObjectUtil.isNull(property)) {
-            ObjectWrapper.wrapper(arg).set(property, result);
+            wrapper.set(property, result);
         }
     }
 }

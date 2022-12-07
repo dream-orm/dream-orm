@@ -14,6 +14,7 @@ import com.moxa.dream.system.annotation.PageQuery;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.action.SqlAction;
+import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.reflect.ReflectUtil;
@@ -79,7 +80,7 @@ public class PageHandler extends AbstractHandler {
         if (!ObjectUtil.isNull(value)) {
             property = value + "." + property;
         }
-        countInitActionList[countInitActionList.length - 1] = new SqlAction(methodInfo.getConfiguration(), property, countSql);
+        countInitActionList[countInitActionList.length - 1] = new SqlAction(methodInfo.getConfiguration(), property, countSql, NonCollection.class, Long.class, true);
         ObjectWrapper.wrapper(methodInfo).set("initActionList", countInitActionList);
     }
 

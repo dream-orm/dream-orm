@@ -1,6 +1,5 @@
 package com.moxa.dream.drive.annotation;
 
-import com.moxa.dream.system.config.Command;
 import com.moxa.dream.util.common.NullObject;
 
 import java.lang.annotation.ElementType;
@@ -17,8 +16,6 @@ public @interface Setup {
     Class<?> colType() default NullObject.class;
 
     boolean cache() default true;
-
-    Command command() default Command.NONE;
 
     int timeOut() default 0;
 }

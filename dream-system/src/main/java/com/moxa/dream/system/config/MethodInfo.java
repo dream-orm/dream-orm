@@ -176,11 +176,6 @@ public class MethodInfo {
             return this;
         }
 
-        public Builder command(Command command) {
-            methodInfo.command = command;
-            return this;
-        }
-
         public Builder methodParamList(MethodParam[] methodParamList) {
             methodInfo.methodParamList = methodParamList;
             return this;

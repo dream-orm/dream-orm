@@ -10,8 +10,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Mapper {
-
-    String resource() default "";
-
     Class<?> value() default NullObject.class;
 }

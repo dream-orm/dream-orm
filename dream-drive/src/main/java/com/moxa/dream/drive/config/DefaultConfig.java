@@ -1,8 +1,8 @@
 package com.moxa.dream.drive.config;
 
-import com.moxa.dream.drive.alias.AliasFactory;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.compile.CompileFactory;
+import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
@@ -12,132 +12,116 @@ import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.system.transaction.factory.TransactionFactory;
 import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
+import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
+import com.moxa.dream.util.resource.ResourceUtil;
 
 import java.util.List;
 
 
 public class DefaultConfig {
-    private AliasFactory aliasFactory;
-    private TableFactory tableFactory;
-    private MapperFactory mapperFactory;
-    private CacheFactory cacheFactory;
-    private TypeHandlerFactory typeHandlerFactory;
-    private CompileFactory compileFactory;
-    private InjectFactory injectFactory;
-    private DialectFactory dialectFactory;
-    private TransactionFactory transactionFactory;
-    private DataSourceFactory dataSourceFactory;
-    private PluginFactory pluginFactory;
-    private ListenerFactory listenerFactory;
+    private Configuration configuration = new Configuration();
     private List<String> mapperPackages;
     private List<String> tablePackages;
 
-    public AliasFactory getAliasFactory() {
-        return aliasFactory;
-    }
-
-    public DefaultConfig setAliasFactory(AliasFactory aliasFactory) {
-        this.aliasFactory = aliasFactory;
-        return this;
-    }
 
     public TableFactory getTableFactory() {
-        return tableFactory;
+        return configuration.getTableFactory();
     }
 
     public DefaultConfig setTableFactory(TableFactory tableFactory) {
-        this.tableFactory = tableFactory;
+        configuration.setTableFactory(tableFactory);
         return this;
     }
 
     public MapperFactory getMapperFactory() {
-        return mapperFactory;
+        return configuration.getMapperFactory();
     }
 
     public DefaultConfig setMapperFactory(MapperFactory mapperFactory) {
-        this.mapperFactory = mapperFactory;
+        configuration.setMapperFactory(mapperFactory);
         return this;
     }
 
     public CacheFactory getCacheFactory() {
-        return cacheFactory;
+        return configuration.getCacheFactory();
     }
 
     public DefaultConfig setCacheFactory(CacheFactory cacheFactory) {
-        this.cacheFactory = cacheFactory;
+        configuration.setCacheFactory(cacheFactory);
         return this;
     }
 
 
     public TypeHandlerFactory getTypeHandlerFactory() {
-        return typeHandlerFactory;
+        return configuration.getTypeHandlerFactory();
     }
 
     public DefaultConfig setTypeHandlerFactory(TypeHandlerFactory typeHandlerFactory) {
-        this.typeHandlerFactory = typeHandlerFactory;
+        configuration.setTypeHandlerFactory(typeHandlerFactory);
         return this;
     }
 
     public CompileFactory getCompileFactory() {
-        return compileFactory;
+        return configuration.getCompileFactory();
     }
 
     public DefaultConfig setCompileFactory(CompileFactory compileFactory) {
-        this.compileFactory = compileFactory;
+        configuration.setCompileFactory(compileFactory);
         return this;
     }
 
     public InjectFactory getInjectFactory() {
-        return injectFactory;
+        return configuration.getInjectFactory();
     }
 
     public DefaultConfig setInjectFactory(InjectFactory injectFactory) {
-        this.injectFactory = injectFactory;
+        configuration.setInjectFactory(injectFactory);
         return this;
     }
 
     public DialectFactory getDialectFactory() {
-        return dialectFactory;
+        return configuration.getDialectFactory();
     }
 
     public DefaultConfig setDialectFactory(DialectFactory dialectFactory) {
-        this.dialectFactory = dialectFactory;
+        configuration.setDialectFactory(dialectFactory);
         return this;
     }
 
     public TransactionFactory getTransactionFactory() {
-        return transactionFactory;
+        return configuration.getTransactionFactory();
     }
 
     public DefaultConfig setTransactionFactory(TransactionFactory transactionFactory) {
-        this.transactionFactory = transactionFactory;
+        configuration.setTransactionFactory(transactionFactory);
         return this;
     }
 
     public DataSourceFactory getDataSourceFactory() {
-        return dataSourceFactory;
+        return configuration.getDataSourceFactory();
     }
 
     public DefaultConfig setDataSourceFactory(DataSourceFactory dataSourceFactory) {
-        this.dataSourceFactory = dataSourceFactory;
+        configuration.setDataSourceFactory(dataSourceFactory);
         return this;
     }
 
     public PluginFactory getPluginFactory() {
-        return pluginFactory;
+        return configuration.getPluginFactory();
     }
 
     public DefaultConfig setPluginFactory(PluginFactory pluginFactory) {
-        this.pluginFactory = pluginFactory;
+        configuration.setPluginFactory(pluginFactory);
         return this;
     }
 
     public ListenerFactory getListenerFactory() {
-        return listenerFactory;
+        return configuration.getListenerFactory();
     }
 
     public DefaultConfig setListenerFactory(ListenerFactory listenerFactory) {
-        this.listenerFactory = listenerFactory;
+        configuration.setListenerFactory(listenerFactory);
         return this;
     }
 
@@ -157,5 +141,52 @@ public class DefaultConfig {
     public DefaultConfig setTablePackages(List<String> tablePackages) {
         this.tablePackages = tablePackages;
         return this;
+    }
+
+    public Configuration toConfiguration() {
+        return build();
+    }
+
+    private void tableMapping(String type) {
+        if (!ObjectUtil.isNull(type)) {
+            type = type.replace(".", "/");
+            List<Class> resourceAsClass = ResourceUtil.getResourceAsClass(type);
+            if (!ObjectUtil.isNull(resourceAsClass)) {
+                TableFactory tableFactory = configuration.getTableFactory();
+                if (tableFactory == null) {
+                    throw new DreamRunTimeException("TableFactory未在Configuration注册");
+                }
+                for (Class classType : resourceAsClass) {
+                    tableFactory.addTableInfo(classType);
+                }
+            }
+        }
+    }
+
+
+    private void mapperMapping(String type) {
+        if (!ObjectUtil.isNull(type)) {
+            String resourcePath = type.replace(".", "/");
+            List<Class> resourceAsClass = ResourceUtil.getResourceAsClass(resourcePath);
+            if (!ObjectUtil.isNull(resourceAsClass)) {
+                for (Class classType : resourceAsClass) {
+                    configuration.addMapper(classType);
+                }
+            }
+        }
+    }
+
+    private Configuration build() {
+        if (!ObjectUtil.isNull(mapperPackages)) {
+            for (String mapperPackage : mapperPackages) {
+                mapperMapping(mapperPackage);
+            }
+        }
+        if (!ObjectUtil.isNull(tablePackages)) {
+            for (String tablePackage : tablePackages) {
+                tableMapping(tablePackage);
+            }
+        }
+        return configuration;
     }
 }
