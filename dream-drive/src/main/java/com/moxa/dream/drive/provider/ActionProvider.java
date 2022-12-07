@@ -1,23 +1,21 @@
 package com.moxa.dream.drive.provider;
 
-import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.action.Action;
 
-import java.lang.reflect.Method;
-
+@FunctionalInterface
 public interface ActionProvider {
-    default Action[] init(Configuration configuration, Method method) {
+    default Action[] init() {
         return null;
     }
 
-    default Action[] loop(Configuration configuration, Method method) {
+    default Action[] loop() {
         return null;
     }
 
-    default Action[] destroy(Configuration configuration, Method method) {
+    default Action[] destroy() {
         return null;
     }
 
-    String value(Configuration configuration, Method method);
+    String sql();
 
 }

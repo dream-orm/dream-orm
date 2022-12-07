@@ -5,6 +5,7 @@ import com.moxa.dream.system.inject.AnnotationInject;
 import com.moxa.dream.system.inject.Inject;
 import com.moxa.dream.system.inject.PageInject;
 import com.moxa.dream.system.inject.ScanInject;
+import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,19 +15,25 @@ public class DefaultInjectFactory implements InjectFactory {
 
     public DefaultInjectFactory() {
         injectMap.put(AnnotationInject.class, new AnnotationInject());
-    }
-
-    @Override
-    public void injects(Inject... injects) {
-        for (Inject inject : injects) {
-            injectMap.put(inject.getClass(), inject);
-        }
         injectMap.put(PageInject.class, new PageInject());
         injectMap.put(ScanInject.class, new ScanInject());
     }
 
     @Override
-    public final void inject(MethodInfo methodInfo) {
+    public void injects(Inject... injects) {
+        if (!ObjectUtil.isNull(injects)) {
+            Inject pageInject = injectMap.remove(PageInject.class);
+            Inject scanInject = injectMap.remove(ScanInject.class);
+            for (Inject inject : injects) {
+                injectMap.put(inject.getClass(), inject);
+            }
+            injectMap.put(PageInject.class, pageInject);
+            injectMap.put(ScanInject.class, scanInject);
+        }
+    }
+
+    @Override
+    public void inject(MethodInfo methodInfo) {
         for (Inject inject : injectMap.values()) {
             inject.inject(methodInfo);
         }

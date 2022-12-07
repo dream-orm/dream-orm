@@ -1,11 +1,13 @@
 package com.moxa.dream.drive.mapper;
 
-import com.moxa.dream.drive.annotation.*;
+import com.moxa.dream.drive.annotation.Mapper;
+import com.moxa.dream.drive.annotation.Param;
+import com.moxa.dream.drive.annotation.Setup;
+import com.moxa.dream.drive.annotation.Sql;
 import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.MethodParam;
-import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.mapper.MapperFactory;
 import com.moxa.dream.system.mapper.MapperInvoke;
 import com.moxa.dream.util.common.NonCollection;
@@ -43,6 +45,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 }
             }
             fillMethodInfoFromResource(configuration, mapperClass, builderMap);
+            fillMethodInfoFromAction(configuration, mapperClass, builderMap);
             for (String name : builderMap.keySet()) {
                 MethodInfo.Builder builder = builderMap.get(name);
                 MethodInfo methodInfo = builder.build();
@@ -59,6 +62,8 @@ public abstract class AbstractMapperFactory implements MapperFactory {
 
     protected abstract void fillMethodInfoFromResource(Configuration configuration, Class type, Map<String, MethodInfo.Builder> builderMap);
 
+    protected abstract void fillMethodInfoFromAction(Configuration configuration, Class type, Map<String, MethodInfo.Builder> builderMap);
+
     protected MethodInfo.Builder createMethodInfoBuilder(Configuration configuration, Class mapperClass, Method method) {
         Class<? extends Collection> rowType = getRowType(mapperClass, method);
         Class colType = getColType(mapperClass, method);
@@ -67,9 +72,6 @@ public abstract class AbstractMapperFactory implements MapperFactory {
         MethodParam[] methodParamList = getMethodParamList(method);
         String sql = getSql(configuration, method);
         int timeOut = getTimeOut(method);
-        Action[] initActionList = getInitActionList(configuration, method);
-        Action[] loopActionList = getLoopActionList(configuration, method);
-        Action[] destroyActionList = getDestroyActionList(configuration, method);
         MethodInfo.Builder builder = new MethodInfo.Builder(configuration)
                 .name(method.getName())
                 .rowType(rowType)
@@ -79,39 +81,8 @@ public abstract class AbstractMapperFactory implements MapperFactory {
                 .methodParamList(methodParamList)
                 .sql(sql)
                 .timeOut(timeOut)
-                .initActionList(initActionList)
-                .loopActionList(loopActionList)
-                .destroyActionList(destroyActionList)
                 .method(method);
         return builder;
-    }
-
-
-    protected Action[] getInitActionList(Configuration configuration, Method method) {
-        ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
-        Action[] actionList = null;
-        if (actionProviderAnnotation != null) {
-            actionList = ReflectUtil.create(actionProviderAnnotation.value()).init(configuration, method);
-        }
-        return actionList;
-    }
-
-    protected Action[] getLoopActionList(Configuration configuration, Method method) {
-        ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
-        Action[] actionList = null;
-        if (actionProviderAnnotation != null) {
-            actionList = ReflectUtil.create(actionProviderAnnotation.value()).loop(configuration, method);
-        }
-        return actionList;
-    }
-
-    protected Action[] getDestroyActionList(Configuration configuration, Method method) {
-        ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
-        Action[] actionList = null;
-        if (actionProviderAnnotation != null) {
-            actionList = ReflectUtil.create(actionProviderAnnotation.value()).destroy(configuration, method);
-        }
-        return actionList;
     }
 
     protected boolean isMapper(Class mapperClass) {
@@ -121,12 +92,7 @@ public abstract class AbstractMapperFactory implements MapperFactory {
     protected String getSql(Configuration configuration, Method method) {
         String sql = null;
         Sql sqlAnnotation = method.getDeclaredAnnotation(Sql.class);
-        if (sqlAnnotation == null) {
-            ActionProvider actionProviderAnnotation = method.getDeclaredAnnotation(ActionProvider.class);
-            if (actionProviderAnnotation != null) {
-                sql = ReflectUtil.create(actionProviderAnnotation.value()).value(configuration, method);
-            }
-        } else {
+        if (sqlAnnotation != null) {
             sql = sqlAnnotation.value();
         }
         return sql;
