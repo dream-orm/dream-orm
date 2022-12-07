@@ -18,27 +18,33 @@ public class PageInject implements Inject {
         PageQuery pageQuery = methodInfo.get(PageQuery.class);
         if (pageQuery != null) {
             PackageStatement statement = methodInfo.getStatement();
-            String pageNamespace;
-            String pageFunction;
-            pageNamespace = SystemInvokerFactory.NAMESPACE;
-            if (pageQuery.offset()) {
-                pageFunction = SystemInvokerFactory.OFFSET;
-            } else {
-                pageFunction = SystemInvokerFactory.LIMIT;
-            }
             String value = pageQuery.value();
             String prefix = ObjectUtil.isNull(value) ? "" : (value + ".");
             String startRow = prefix + START_ROW;
             String pageSize = prefix + PAGE_SIZE;
-            InvokerStatement pageStatement = InvokerUtil.wrapperInvoker(pageNamespace,
-                    pageFunction, ",",
-                    statement.getStatement(),
-                    InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
-                            SystemInvokerFactory.$, ",",
-                            new SymbolStatement.LetterStatement(startRow)),
-                    InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
-                            SystemInvokerFactory.$, ",",
-                            new SymbolStatement.LetterStatement(pageSize)));
+            InvokerStatement pageStatement;
+            if (pageQuery.offset()) {
+                pageStatement = InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
+                        SystemInvokerFactory.OFFSET, ",",
+                        statement.getStatement(),
+                        InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
+                                SystemInvokerFactory.$, ",",
+                                new SymbolStatement.LetterStatement(pageSize)),
+                        InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
+                                SystemInvokerFactory.$, ",",
+                                new SymbolStatement.LetterStatement(startRow)));
+
+            } else {
+                pageStatement = InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
+                        SystemInvokerFactory.LIMIT, ",",
+                        statement.getStatement(),
+                        InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
+                                SystemInvokerFactory.$, ",",
+                                new SymbolStatement.LetterStatement(startRow)),
+                        InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
+                                SystemInvokerFactory.$, ",",
+                                new SymbolStatement.LetterStatement(pageSize)));
+            }
             statement.setStatement(pageStatement);
         }
     }
