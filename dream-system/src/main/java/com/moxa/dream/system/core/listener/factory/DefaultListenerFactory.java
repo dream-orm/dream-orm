@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractListenerFactory implements ListenerFactory {
+public class DefaultListenerFactory implements ListenerFactory {
     private QueryListener[] queryListeners = new QueryListener[0];
     private InsertListener[] insertListeners = new InsertListener[0];
     private UpdateListener[] updateListeners = new UpdateListener[0];

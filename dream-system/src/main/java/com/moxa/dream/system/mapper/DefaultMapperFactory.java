@@ -1,16 +1,14 @@
-package com.moxa.dream.drive.mapper;
+package com.moxa.dream.system.mapper;
 
-import com.moxa.dream.drive.annotation.Mapper;
-import com.moxa.dream.drive.annotation.Param;
-import com.moxa.dream.drive.annotation.Setup;
-import com.moxa.dream.drive.annotation.Sql;
-import com.moxa.dream.drive.provider.ActionProvider;
+import com.moxa.dream.system.annotation.Mapper;
+import com.moxa.dream.system.annotation.Param;
+import com.moxa.dream.system.annotation.Setup;
+import com.moxa.dream.system.annotation.Sql;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.MethodParam;
 import com.moxa.dream.system.core.action.Action;
-import com.moxa.dream.system.mapper.MapperFactory;
-import com.moxa.dream.system.mapper.MapperInvoke;
+import com.moxa.dream.system.provider.ActionProvider;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.NullObject;
 import com.moxa.dream.util.common.ObjectMap;
@@ -94,20 +92,20 @@ public class DefaultMapperFactory implements MapperFactory {
                     if (ActionProvider.class.isAssignableFrom(returnType)) {
                         actionProvider = (ActionProvider) value;
                     } else if (String.class == returnType) {
-                        actionProvider = () -> (String) value;
+                        actionProvider = (mapperType) -> (String) value;
                     }
                 } catch (Exception e) {
                     throw new DreamRunTimeException("调用方法" + actionType.getName() + "." + methodName + "失败，" + e.getMessage(), e);
                 }
                 if (actionProvider != null) {
-                    Action[] initActionList = actionProvider.init();
-                    String sql = actionProvider.sql();
-                    Action[] loopActionList = actionProvider.loop();
-                    Action[] destroyActionList = actionProvider.destroy();
-                    Class<? extends Collection> rowType = actionProvider.rowType();
-                    Class<?> colType = actionProvider.colType();
-                    Boolean cache = actionProvider.cache();
-                    Integer timeOut = actionProvider.timeOut();
+                    Action[] initActionList = actionProvider.init(type);
+                    String sql = actionProvider.sql(type);
+                    Action[] loopActionList = actionProvider.loop(type);
+                    Action[] destroyActionList = actionProvider.destroy(type);
+                    Class<? extends Collection> rowType = actionProvider.rowType(type);
+                    Class<?> colType = actionProvider.colType(type);
+                    Boolean cache = actionProvider.cache(type);
+                    Integer timeOut = actionProvider.timeOut(type);
                     if (initActionList != null) {
                         builder.initActionList(initActionList);
                     }

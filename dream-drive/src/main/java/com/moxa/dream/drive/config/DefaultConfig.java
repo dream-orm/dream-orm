@@ -163,7 +163,6 @@ public class DefaultConfig {
         }
     }
 
-
     private void mapperMapping(String type) {
         if (!ObjectUtil.isNull(type)) {
             String resourcePath = type.replace(".", "/");

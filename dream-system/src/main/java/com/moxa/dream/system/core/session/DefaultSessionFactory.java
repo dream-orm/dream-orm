@@ -1,4 +1,4 @@
-package com.moxa.dream.drive.session;
+package com.moxa.dream.system.core.session;
 
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.CacheFactory;
@@ -6,9 +6,6 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.executor.*;
 import com.moxa.dream.system.core.resultsethandler.DefaultResultSetHandler;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
-import com.moxa.dream.system.core.session.DefaultSession;
-import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.system.core.session.SessionFactory;
 import com.moxa.dream.system.core.statementhandler.PrepareStatementHandler;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.datasource.DataSourceFactory;
@@ -51,10 +48,10 @@ public class DefaultSessionFactory implements SessionFactory {
         Transaction transaction = transactionFactory.getTransaction(dataSource);
         transaction.setAutoCommit(autoCommit);
         Executor executor = new JdbcExecutor(transaction, statementHandler, resultSetHandler);
+        executor = new ListenerExecutor(executor, configuration.getListenerFactory());
         if (this.cache != null) {
             executor = new CacheExecutor(executor, this.cache);
         }
-        executor = new ListenerExecutor(executor, configuration.getListenerFactory());
         executor = new ActionExecutor(executor);
         return openSession(executor);
     }
