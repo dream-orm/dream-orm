@@ -1,25 +1,33 @@
 package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.util.InvokerUtil;
+import com.moxa.dream.template.attach.AttachMent;
 import com.moxa.dream.template.util.TemplateUtil;
 
 import java.util.Collection;
 import java.util.Set;
 
 public abstract class SelectMapper extends AbstractMapper {
-    public SelectMapper(Session session) {
+    private AttachMent attachMent;
+
+    public SelectMapper(Session session, AttachMent attachMent) {
         super(session);
+        this.attachMent = attachMent;
     }
 
     @Override
     protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
         String sql = "select " + getSelectColumn(type) + " from " +
                 getFromTable(type) + " " + getOther(configuration, tableInfo, type, arg);
+        if (attachMent != null) {
+            sql = sql + " " + attachMent.attach(configuration, tableInfo, type, Command.QUERY);
+        }
         return new MethodInfo.Builder(configuration)
                 .rowType(getRowType())
                 .colType(getColType(type))

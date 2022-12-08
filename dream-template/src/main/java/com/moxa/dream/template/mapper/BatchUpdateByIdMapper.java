@@ -3,14 +3,15 @@ package com.moxa.dream.template.mapper;
 import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
+import com.moxa.dream.template.attach.AttachMent;
 
 import java.util.List;
 
 public class BatchUpdateByIdMapper extends UpdateByIdMapper {
     ThreadLocal<Integer> threadLocal = new ThreadLocal();
 
-    public BatchUpdateByIdMapper(Session session) {
-        super(session);
+    public BatchUpdateByIdMapper(Session session, AttachMent attachMent) {
+        super(session, attachMent);
     }
 
     @Override

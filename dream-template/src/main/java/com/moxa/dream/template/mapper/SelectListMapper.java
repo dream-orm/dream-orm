@@ -7,6 +7,7 @@ import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.system.util.InvokerUtil;
+import com.moxa.dream.template.attach.AttachMent;
 import com.moxa.dream.template.condition.Condition;
 import com.moxa.dream.template.util.ConditionObject;
 import com.moxa.dream.template.util.SortObject;
@@ -18,11 +19,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SelectListMapper extends SelectMapper {
-    protected Session session;
 
-    public SelectListMapper(Session session) {
-        super(session);
-        this.session = session;
+    public SelectListMapper(Session session, AttachMent attachMent) {
+        super(session, attachMent);
     }
 
     @Override

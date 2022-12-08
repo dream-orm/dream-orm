@@ -31,12 +31,16 @@ public class DefaultSessionFactory implements SessionFactory {
 
     public DefaultSessionFactory(Configuration configuration, StatementHandler statementHandler, ResultSetHandler resultSetHandler) {
         this.configuration = configuration;
+        pluginFactory = configuration.getPluginFactory();
+        if (pluginFactory != null) {
+            statementHandler = (StatementHandler) pluginFactory.plugin(statementHandler);
+            resultSetHandler = (ResultSetHandler) pluginFactory.plugin(resultSetHandler);
+        }
         this.statementHandler = statementHandler;
         this.resultSetHandler = resultSetHandler;
         DataSourceFactory dataSourceFactory = configuration.getDataSourceFactory();
         transactionFactory = configuration.getTransactionFactory();
         dataSource = dataSourceFactory.getDataSource();
-        pluginFactory = configuration.getPluginFactory();
         CacheFactory cacheFactory = configuration.getCacheFactory();
         if (cacheFactory != null) {
             cache = cacheFactory.getCache();
@@ -48,11 +52,11 @@ public class DefaultSessionFactory implements SessionFactory {
         Transaction transaction = transactionFactory.getTransaction(dataSource);
         transaction.setAutoCommit(autoCommit);
         Executor executor = new JdbcExecutor(transaction, statementHandler, resultSetHandler);
-        executor = new ListenerExecutor(executor, configuration.getListenerFactory());
         if (this.cache != null) {
             executor = new CacheExecutor(executor, this.cache);
         }
         executor = new ActionExecutor(executor);
+        executor = new ListenerExecutor(executor, configuration.getListenerFactory());
         return openSession(executor);
     }
 

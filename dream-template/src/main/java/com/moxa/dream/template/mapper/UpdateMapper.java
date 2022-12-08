@@ -1,6 +1,7 @@
 package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
@@ -8,6 +9,7 @@ import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.util.InvokerUtil;
 import com.moxa.dream.template.annotation.WrapType;
+import com.moxa.dream.template.attach.AttachMent;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 
@@ -17,9 +19,11 @@ import java.util.List;
 
 public abstract class UpdateMapper extends WrapMapper {
     private final int CODE = 2;
+    private AttachMent attachMent;
 
-    public UpdateMapper(Session session) {
+    public UpdateMapper(Session session, AttachMent attachMent) {
         super(session);
+        this.attachMent = attachMent;
     }
 
     @Override
@@ -41,6 +45,9 @@ public abstract class UpdateMapper extends WrapMapper {
         String updateParam = getUpdateParam(setList);
         String other = getOther(configuration, tableInfo, arg);
         String sql = "update " + table + " set " + updateParam + " " + other;
+        if (attachMent != null) {
+            sql = sql + " " + attachMent.attach(configuration, tableInfo, arg.getClass(), Command.UPDATE);
+        }
         return new MethodInfo.Builder(configuration)
                 .rowType(NonCollection.class)
                 .colType(Integer.class)
