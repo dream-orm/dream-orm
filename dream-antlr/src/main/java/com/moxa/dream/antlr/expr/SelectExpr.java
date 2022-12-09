@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.PreSelectStatement;
@@ -17,7 +18,7 @@ public class SelectExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprSelect(ExprInfo exprInfo) {
+    protected Statement exprSelect(ExprInfo exprInfo) throws AntlrException {
 
         PreSelectExpr preSelectExpr = new PreSelectExpr(exprReader);
         preSelectExpr.setExprTypes(ExprType.SELECT);
@@ -47,14 +48,14 @@ public class SelectExpr extends SqlExpr {
         }
 
         @Override
-        protected Statement exprSelect(ExprInfo exprInfo) {
+        protected Statement exprSelect(ExprInfo exprInfo) throws AntlrException {
             push();
             setExprTypes(ExprType.DISTINCT, ExprType.NIL);
             return expr();
         }
 
         @Override
-        protected Statement exprDistinct(ExprInfo exprInfo) {
+        protected Statement exprDistinct(ExprInfo exprInfo) throws AntlrException {
             preSelectStatement.setDistinct(true);
             push();
             setExprTypes(ExprType.NIL);

@@ -42,7 +42,6 @@ public abstract class AbstractMapper {
                         throw new DreamRunTimeException("表'" + table + "'未在TableFactory注册");
                     }
                     methodInfo = getMethodInfo(configuration, tableInfo, type, arg);
-                    methodInfo.compile();
                     methodInfoMap.put(type, methodInfo);
                 }
             }

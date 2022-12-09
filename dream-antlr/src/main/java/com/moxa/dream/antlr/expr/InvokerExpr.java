@@ -3,6 +3,7 @@ package com.moxa.dream.antlr.expr;
 import com.moxa.dream.antlr.config.Constant;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.Statement;
@@ -17,28 +18,28 @@ public class InvokerExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprInvoker(ExprInfo exprInfo) {
+    protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(Constant.FUNCTION).addExprTypes(Constant.KEYWORD).addExprTypes(ExprType.LETTER);
         return expr();
     }
 
     @Override
-    protected Statement exprFunction(ExprInfo exprInfo) {
+    protected Statement exprFunction(ExprInfo exprInfo) throws AntlrException {
         return exprName(exprInfo);
     }
 
     @Override
-    protected Statement exprKeyWord(ExprInfo exprInfo) {
+    protected Statement exprKeyWord(ExprInfo exprInfo) throws AntlrException {
         return exprName(exprInfo);
     }
 
     @Override
-    protected Statement exprLetter(ExprInfo exprInfo) {
+    protected Statement exprLetter(ExprInfo exprInfo) throws AntlrException {
         return exprName(exprInfo);
     }
 
-    private Statement exprName(ExprInfo exprInfo) {
+    private Statement exprName(ExprInfo exprInfo) throws AntlrException {
         push();
         if (invokerStatement.getFunction() == null) {
             invokerStatement.setFunction(exprInfo.getInfo());
@@ -51,14 +52,14 @@ public class InvokerExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprColon(ExprInfo exprInfo) {
+    protected Statement exprColon(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(Constant.FUNCTION).addExprTypes(Constant.KEYWORD).addExprTypes(ExprType.LETTER);
         return expr();
     }
 
     @Override
-    protected Statement exprLBrace(ExprInfo exprInfo) {
+    protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
         push();
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ","));
         invokerStatement.setParamStatement(listColumnExpr.expr());
@@ -67,7 +68,7 @@ public class InvokerExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprRBrace(ExprInfo exprInfo) {
+    protected Statement exprRBrace(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.NIL);
         return expr();

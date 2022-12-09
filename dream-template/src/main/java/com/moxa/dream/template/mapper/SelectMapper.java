@@ -26,7 +26,7 @@ public abstract class SelectMapper extends AbstractMapper {
         String sql = "select " + getSelectColumn(type) + " from " +
                 getFromTable(type) + " " + getOther(configuration, tableInfo, type, arg);
         if (attachMent != null) {
-            sql = sql + " " + attachMent.attach(configuration, tableInfo, type, Command.QUERY);
+            sql = sql + " " + attachMent.attach(configuration, tableInfo, arg != null ? arg.getClass() : null, Command.QUERY);
         }
         return new MethodInfo.Builder(configuration)
                 .rowType(getRowType())

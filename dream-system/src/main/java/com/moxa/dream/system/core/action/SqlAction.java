@@ -55,9 +55,6 @@ public class SqlAction implements Action {
 
     @Override
     public void doAction(Session session, MappedStatement mappedStatement, Object arg) throws Exception {
-        if (!methodInfo.isCompile()) {
-            methodInfo.compile();
-        }
         Map<String, Object> argMap;
         if (arg instanceof Map) {
             argMap = (Map<String, Object>) arg;

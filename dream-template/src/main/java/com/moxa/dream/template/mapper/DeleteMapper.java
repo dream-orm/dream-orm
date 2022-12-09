@@ -22,7 +22,7 @@ public abstract class DeleteMapper extends AbstractMapper {
         String other = getOther(configuration, tableInfo, arg);
         String sql = "delete from " + table + " " + other;
         if (attachMent != null) {
-            sql = sql + " " + attachMent.attach(configuration, tableInfo, type, Command.DELETE);
+            sql = sql + " " + attachMent.attach(configuration, tableInfo, arg != null ? arg.getClass() : null, Command.DELETE);
         }
         return new MethodInfo.Builder(configuration)
                 .rowType(NonCollection.class)

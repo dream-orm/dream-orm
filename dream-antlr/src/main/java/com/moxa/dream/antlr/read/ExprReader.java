@@ -3,7 +3,7 @@ package com.moxa.dream.antlr.read;
 import com.moxa.dream.antlr.config.Constant;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
-import com.moxa.dream.antlr.exception.AntlrRunTimeException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.expr.SqlExpr;
 import com.moxa.dream.antlr.factory.MyFunctionFactory;
 import com.moxa.dream.antlr.smt.MyFunctionStatement;
@@ -34,7 +34,7 @@ public class ExprReader extends StringReader {
         return this.value;
     }
 
-    public ExprInfo push() {
+    public ExprInfo push() throws AntlrException {
         mark();
         int c = read();
         switch (c) {
@@ -314,7 +314,7 @@ public class ExprReader extends StringReader {
         return new ExprInfo(ExprType.SINGLE_MARK, info, getStart(), getEnd());
     }
 
-    public ExprInfo pushSkip() {
+    public ExprInfo pushSkip() throws AntlrException {
         mark();
         int c, count = 1;
         int balance = 0;
@@ -327,7 +327,7 @@ public class ExprReader extends StringReader {
         }
         reset();
         if (!ExprUtil.isRBrace(c)) {
-            throw new AntlrRunTimeException("右括号未找到");
+            throw new AntlrException("右括号未找到");
         }
         char[] chars = new char[count];
         int len = read(chars, 0, count);
@@ -335,7 +335,7 @@ public class ExprReader extends StringReader {
         return new ExprInfo(ExprType.SKIP, info, getStart(), getEnd());
     }
 
-    private ExprInfo pushNumber() {
+    private ExprInfo pushNumber() throws AntlrException {
         mark();
         int c;
         int count = 0;
@@ -345,7 +345,7 @@ public class ExprReader extends StringReader {
                 if (exprType == ExprType.INT)
                     exprType = ExprType.DOUBLE;
                 else
-                    throw new AntlrRunTimeException("数字格式不正确");
+                    throw new AntlrException("数字格式不正确");
             }
             count++;
         }
@@ -354,19 +354,19 @@ public class ExprReader extends StringReader {
             if (exprType == ExprType.INT || exprType == ExprType.DOUBLE) {
                 exprType = ExprType.FLOAT;
             }
-            throw new AntlrRunTimeException("数字格式不正确");
+            throw new AntlrException("数字格式不正确");
         } else if (ExprUtil.isL(c)) {
             skip(1);
             if (exprType == ExprType.INT) {
                 exprType = ExprType.LONG;
             }
-            throw new AntlrRunTimeException("数字格式不正确");
+            throw new AntlrException("数字格式不正确");
         } else if (ExprUtil.isD(c)) {
             skip(1);
             if (exprType == ExprType.INT) {
                 exprType = ExprType.DOUBLE;
             }
-            throw new AntlrRunTimeException("数字格式不正确");
+            throw new AntlrException("数字格式不正确");
         }
         reset();
         char[] chars = new char[count];

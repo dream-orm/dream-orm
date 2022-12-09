@@ -44,11 +44,12 @@ public class TenantInsertHandler extends AbstractHandler {
                         break;
                     }
                 }
+                InvokerStatement invokerStatement = InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn));
                 if (i < paramColumnList.length) {
-                    valuesColumnList[i] = InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn));
+                    valuesColumnList[i] = invokerStatement;
                 } else {
                     paramListStatement.add(new SymbolStatement.LetterStatement(tenantColumn));
-                    valuesListStatement.add(InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn)));
+                    valuesListStatement.add(invokerStatement);
                 }
             }
         }

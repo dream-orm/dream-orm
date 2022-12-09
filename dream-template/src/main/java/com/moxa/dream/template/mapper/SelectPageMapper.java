@@ -59,7 +59,6 @@ public class SelectPageMapper extends SelectListMapper {
                             return PAGE;
                         }
                     });
-                    methodInfo.compile();
                     methodInfoMap.put(keyName, methodInfo);
                 }
             }

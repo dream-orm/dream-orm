@@ -1,6 +1,6 @@
 package com.moxa.dream.antlr.smt;
 
-import com.moxa.dream.antlr.exception.AntlrRunTimeException;
+import com.moxa.dream.antlr.exception.AntlrException;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -52,7 +52,7 @@ public abstract class Statement {
         return needCache = true;
     }
 
-    public void replaceWith(Statement statement) {
+    public void replaceWith(Statement statement) throws AntlrException {
         Field[] fieldList = parentStatement.getClass().getDeclaredFields();
         int index;
         for (index = 0; index < fieldList.length; index++) {
@@ -95,7 +95,7 @@ public abstract class Statement {
                     }
                 }
             } catch (Exception e) {
-                throw new AntlrRunTimeException("替换" + this.getClass().getName() + "为" + statement.getClass().getName() + "失败", e);
+                throw new AntlrException("替换" + this.getClass().getName() + "为" + statement.getClass().getName() + "失败", e);
             }
         }
         if (index < fieldList.length) {
@@ -108,7 +108,7 @@ public abstract class Statement {
                 parentStatement = parentStatement.getParentStatement();
             }
         } else {
-            throw new AntlrRunTimeException("不能替换" + this.getClass().getName() + "为" + statement.getClass().getName());
+            throw new AntlrException("不能替换" + this.getClass().getName() + "为" + statement.getClass().getName());
         }
     }
 

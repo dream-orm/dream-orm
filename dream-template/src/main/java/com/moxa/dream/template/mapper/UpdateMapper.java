@@ -46,7 +46,7 @@ public abstract class UpdateMapper extends WrapMapper {
         String other = getOther(configuration, tableInfo, arg);
         String sql = "update " + table + " set " + updateParam + " " + other;
         if (attachMent != null) {
-            sql = sql + " " + attachMent.attach(configuration, tableInfo, arg.getClass(), Command.UPDATE);
+            sql = sql + " " + attachMent.attach(configuration, tableInfo, arg != null ? arg.getClass() : null, Command.UPDATE);
         }
         return new MethodInfo.Builder(configuration)
                 .rowType(NonCollection.class)

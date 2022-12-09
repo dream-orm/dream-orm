@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.CaseStatement;
 import com.moxa.dream.antlr.smt.Statement;
@@ -15,7 +16,7 @@ public class CaseExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprCase(ExprInfo exprInfo) {
+    protected Statement exprCase(ExprInfo exprInfo) throws AntlrException {
         push();
         CaseCaseExpr caseCaseExpr = new CaseCaseExpr(exprReader);
         caseStatement.setCaseColumn(caseCaseExpr.expr());
@@ -24,7 +25,7 @@ public class CaseExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprWhen(ExprInfo exprInfo) {
+    protected Statement exprWhen(ExprInfo exprInfo) throws AntlrException {
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new WhenThenExpr(exprReader, caseStatement.getCaseColumn() == null), new ExprInfo(ExprType.BLANK, " "));
         caseStatement.setWhenthenList(listColumnExpr.expr());
         setExprTypes(ExprType.ELSE, ExprType.END);
@@ -32,7 +33,7 @@ public class CaseExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprElse(ExprInfo exprInfo) {
+    protected Statement exprElse(ExprInfo exprInfo) throws AntlrException {
         push();
         WhenThenExpr.CaseElseExpr caseElseExpr = new WhenThenExpr.CaseElseExpr(exprReader);
         caseStatement.setElseColumn(caseElseExpr.expr());
@@ -41,7 +42,7 @@ public class CaseExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprEnd(ExprInfo exprInfo) {
+    protected Statement exprEnd(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.NIL);
         return expr();
@@ -65,7 +66,7 @@ public class CaseExpr extends SqlExpr {
         }
 
         @Override
-        protected Statement exprHelp(Statement statement) {
+        protected Statement exprHelp(Statement statement) throws AntlrException {
             this.statement = statement;
             setExprTypes(ExprType.NIL);
             return expr();
@@ -89,7 +90,7 @@ public class CaseExpr extends SqlExpr {
 
 
         @Override
-        protected Statement exprWhen(ExprInfo exprInfo) {
+        protected Statement exprWhen(ExprInfo exprInfo) throws AntlrException {
             push();
             CaseWhenExpr caseWhenExpr = new CaseWhenExpr(exprReader);
             Statement statement = caseWhenExpr.expr();
@@ -99,7 +100,7 @@ public class CaseExpr extends SqlExpr {
         }
 
         @Override
-        protected Statement exprThen(ExprInfo exprInfo) {
+        protected Statement exprThen(ExprInfo exprInfo) throws AntlrException {
             push();
             CaseThenExpr caseThenExpr = new CaseThenExpr(exprReader);
             whenThenStatement.setThen(caseThenExpr.expr());
@@ -124,7 +125,7 @@ public class CaseExpr extends SqlExpr {
             }
 
             @Override
-            protected Statement exprHelp(Statement statement) {
+            protected Statement exprHelp(Statement statement) throws AntlrException {
                 this.statement = statement;
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -148,7 +149,7 @@ public class CaseExpr extends SqlExpr {
             }
 
             @Override
-            protected Statement exprHelp(Statement statement) {
+            protected Statement exprHelp(Statement statement) throws AntlrException {
                 this.statement = statement;
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -172,7 +173,7 @@ public class CaseExpr extends SqlExpr {
             }
 
             @Override
-            protected Statement exprHelp(Statement statement) {
+            protected Statement exprHelp(Statement statement) throws AntlrException {
                 this.statement = statement;
                 setExprTypes(ExprType.NIL);
                 return expr();

@@ -26,7 +26,7 @@ public class DefaultAttachMent implements AttachMent {
 
     @Override
     public String attach(Configuration configuration, TableInfo tableInfo, Class<?> type, Command command) {
-        if (command == Command.UPDATE || command == Command.DELETE) {
+        if ((command == Command.UPDATE || command == Command.DELETE) && type != null && !ReflectUtil.isBaseClass(type)) {
             String fieldName = tableInfo.getFieldName(attachColumn);
             if (fieldName != null) {
                 List<Field> fieldList = ReflectUtil.findField(type);

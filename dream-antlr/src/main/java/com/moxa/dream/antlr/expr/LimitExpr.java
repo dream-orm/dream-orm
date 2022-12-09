@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.LimitStatement;
 import com.moxa.dream.antlr.smt.Statement;
@@ -20,14 +21,14 @@ public class LimitExpr extends HelperExpr {
 
 
     @Override
-    protected Statement exprLimit(ExprInfo exprInfo) {
+    protected Statement exprLimit(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.HELP);
         return expr();
     }
 
     @Override
-    protected Statement exprComma(ExprInfo exprInfo) {
+    protected Statement exprComma(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.HELP);
         return expr();
@@ -40,7 +41,7 @@ public class LimitExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprOffSet(ExprInfo exprInfo) {
+    protected Statement exprOffSet(ExprInfo exprInfo) throws AntlrException {
         push();
         limitStatement.setOffset(true);
         setExprTypes(ExprType.HELP);
@@ -48,7 +49,7 @@ public class LimitExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) throws AntlrException {
         if (limitStatement.getFirst() == null) {
             limitStatement.setFirst(statement);
             setExprTypes(ExprType.OFFSET, ExprType.COMMA, ExprType.NIL);

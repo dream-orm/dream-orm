@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.BraceStatement;
 import com.moxa.dream.antlr.smt.Statement;
@@ -21,7 +22,7 @@ public class BraceExpr extends HelperExpr {
 
 
     @Override
-    protected Statement exprLBrace(ExprInfo exprInfo) {
+    protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.HELP, ExprType.SELECT);
         return expr();
@@ -29,14 +30,14 @@ public class BraceExpr extends HelperExpr {
 
 
     @Override
-    protected Statement exprRBrace(ExprInfo exprInfo) {
+    protected Statement exprRBrace(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.NIL);
         return expr();
     }
 
     @Override
-    protected Statement exprSelect(ExprInfo exprInfo) {
+    protected Statement exprSelect(ExprInfo exprInfo) throws AntlrException {
         QueryExpr queryExpr = new QueryExpr(exprReader);
         brace.setStatement(queryExpr.expr());
         setExprTypes(ExprType.RBRACE);
@@ -49,7 +50,7 @@ public class BraceExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) throws AntlrException {
         brace.setStatement(statement);
         setExprTypes(ExprType.RBRACE);
         return expr();

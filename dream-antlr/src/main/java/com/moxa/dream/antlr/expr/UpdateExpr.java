@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.UpdateStatement;
@@ -19,7 +20,7 @@ public class UpdateExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprUpdate(ExprInfo exprInfo) {
+    protected Statement exprUpdate(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.HELP);
         return expr();
@@ -27,7 +28,7 @@ public class UpdateExpr extends HelperExpr {
 
 
     @Override
-    protected Statement exprSet(ExprInfo exprInfo) {
+    protected Statement exprSet(ExprInfo exprInfo) throws AntlrException {
         push();
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ","));
         updateStatement.setConditionList(listColumnExpr.expr());
@@ -36,7 +37,7 @@ public class UpdateExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprWhere(ExprInfo exprInfo) {
+    protected Statement exprWhere(ExprInfo exprInfo) throws AntlrException {
         WhereExpr whereExpr = new WhereExpr(exprReader);
         Statement statement = whereExpr.expr();
         updateStatement.setWhere(statement);
@@ -51,7 +52,7 @@ public class UpdateExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) throws AntlrException {
         updateStatement.setTable(statement);
         setExprTypes(ExprType.SET);
         return expr();

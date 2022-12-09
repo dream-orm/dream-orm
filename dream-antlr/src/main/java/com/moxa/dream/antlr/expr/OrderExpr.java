@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.OrderStatement;
 import com.moxa.dream.antlr.smt.Statement;
@@ -15,14 +16,14 @@ public class OrderExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprOrder(ExprInfo exprInfo) {
+    protected Statement exprOrder(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.BY);
         return expr();
     }
 
     @Override
-    protected Statement exprBy(ExprInfo exprInfo) {
+    protected Statement exprBy(ExprInfo exprInfo) throws AntlrException {
         push();
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new AscDescExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
         orderStatement.setOrder(listColumnExpr.expr());
@@ -49,7 +50,7 @@ public class OrderExpr extends SqlExpr {
         }
 
         @Override
-        protected Statement exprAsc(ExprInfo exprInfo) {
+        protected Statement exprAsc(ExprInfo exprInfo) throws AntlrException {
             push();
             statement = new OrderStatement.AscStatement(sortStatement);
             setExprTypes(ExprType.NIL);
@@ -57,7 +58,7 @@ public class OrderExpr extends SqlExpr {
         }
 
         @Override
-        protected Statement exprDesc(ExprInfo exprInfo) {
+        protected Statement exprDesc(ExprInfo exprInfo) throws AntlrException {
             push();
             statement = new OrderStatement.DescStatement(sortStatement);
             setExprTypes(ExprType.NIL);
@@ -72,7 +73,7 @@ public class OrderExpr extends SqlExpr {
         }
 
         @Override
-        protected Statement exprHelp(Statement statement) {
+        protected Statement exprHelp(Statement statement) throws AntlrException {
             this.sortStatement = statement;
             setExprTypes(ExprType.NIL, ExprType.ASC, ExprType.DESC);
             return expr();

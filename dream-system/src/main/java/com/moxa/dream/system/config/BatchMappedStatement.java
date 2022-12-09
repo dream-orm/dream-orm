@@ -4,6 +4,7 @@ import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.util.common.ObjectMap;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -28,6 +29,9 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
     }
 
     public void compile(DialectFactory dialectFactory) {
+        if (methodInfo.getCompileType() == MethodInfo.CompileType.UN_COMPILE) {
+            methodInfo.compile();
+        }
         for (Object arg : argList) {
             Map<String, Object> argMap;
             if (arg instanceof Map) {
@@ -35,7 +39,11 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
             } else {
                 argMap = new ObjectMap(arg);
             }
-            mappedStatementList.add(dialectFactory.compile(methodInfo, argMap));
+            try {
+                mappedStatementList.add(dialectFactory.compile(methodInfo, argMap));
+            } catch (Exception e) {
+                throw new DreamRunTimeException("抽象树方法" + methodInfo.getId() + "翻译失败" + e.getMessage(), e);
+            }
         }
     }
 

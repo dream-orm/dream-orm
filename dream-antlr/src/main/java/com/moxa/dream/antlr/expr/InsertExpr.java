@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.InsertStatement;
 import com.moxa.dream.antlr.smt.Statement;
@@ -19,14 +20,14 @@ public class InsertExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprInsert(ExprInfo exprInfo) {
+    protected Statement exprInsert(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.INTO);
         return expr();
     }
 
     @Override
-    protected Statement exprInto(ExprInfo exprInfo) {
+    protected Statement exprInto(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.HELP);
         return expr();
@@ -34,7 +35,7 @@ public class InsertExpr extends HelperExpr {
 
 
     @Override
-    protected Statement exprLBrace(ExprInfo exprInfo) {
+    protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
         BraceExpr braceExpr = new BraceExpr(exprReader);
         Statement statement = braceExpr.expr();
         insertStatement.setParams(statement);
@@ -43,7 +44,7 @@ public class InsertExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprValue(ExprInfo exprInfo) {
+    protected Statement exprValue(ExprInfo exprInfo) throws AntlrException {
         ValueExpr valuesExpr = new ValueExpr(exprReader);
         insertStatement.setValues(valuesExpr.expr());
         setExprTypes(ExprType.NIL);
@@ -51,7 +52,7 @@ public class InsertExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprValues(ExprInfo exprInfo) {
+    protected Statement exprValues(ExprInfo exprInfo) throws AntlrException {
         ValuesExpr valuesExpr = new ValuesExpr(exprReader);
         insertStatement.setValues(valuesExpr.expr());
         setExprTypes(ExprType.NIL);
@@ -59,7 +60,7 @@ public class InsertExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprSelect(ExprInfo exprInfo) {
+    protected Statement exprSelect(ExprInfo exprInfo) throws AntlrException {
         QueryExpr queryExpr = new QueryExpr(exprReader);
         Statement statement = queryExpr.expr();
         insertStatement.setValues(statement);
@@ -73,7 +74,7 @@ public class InsertExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) throws AntlrException {
         insertStatement.setTable(statement);
         setExprTypes(ExprType.LBRACE, ExprType.VALUES, ExprType.SELECT);
         return expr();
@@ -88,14 +89,14 @@ public class InsertExpr extends HelperExpr {
         }
 
         @Override
-        protected Statement exprValue(ExprInfo exprInfo) {
+        protected Statement exprValue(ExprInfo exprInfo) throws AntlrException {
             push();
             setExprTypes(ExprType.LBRACE);
             return expr();
         }
 
         @Override
-        protected Statement exprLBrace(ExprInfo exprInfo) {
+        protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
             BraceExpr braceExpr = new BraceExpr(exprReader);
             valueStatement.setStatement(braceExpr.expr());
             setExprTypes(ExprType.NIL);
@@ -117,14 +118,14 @@ public class InsertExpr extends HelperExpr {
         }
 
         @Override
-        protected Statement exprValues(ExprInfo exprInfo) {
+        protected Statement exprValues(ExprInfo exprInfo) throws AntlrException {
             push();
             setExprTypes(ExprType.LBRACE);
             return expr();
         }
 
         @Override
-        protected Statement exprLBrace(ExprInfo exprInfo) {
+        protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
             BraceExpr braceExpr = new BraceExpr(exprReader);
             valuesStatement.setStatement(braceExpr.expr());
             setExprTypes(ExprType.NIL);

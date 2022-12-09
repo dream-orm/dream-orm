@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.BraceStatement;
 import com.moxa.dream.antlr.smt.ConditionStatement;
@@ -30,7 +31,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprAnd(ExprInfo exprInfo) {
+    protected Statement exprAnd(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.ANDStatement());
         this.setExprTypes(ExprType.NOT, ExprType.EXISTS, ExprType.HELP, ExprType.LBRACE);
@@ -38,7 +39,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprOr(ExprInfo exprInfo) {
+    protected Statement exprOr(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.ORStatement());
         this.setExprTypes(ExprType.NOT, ExprType.EXISTS, ExprType.HELP, ExprType.LBRACE);
@@ -46,7 +47,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprLt(ExprInfo exprInfo) {
+    protected Statement exprLt(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.LTStatement());
         setExprTypes(ExprType.LBRACE, ExprType.HELP);
@@ -54,7 +55,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprLeq(ExprInfo exprInfo) {
+    protected Statement exprLeq(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.LEQStatement());
         setExprTypes(ExprType.LBRACE, ExprType.HELP);
@@ -63,7 +64,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprGt(ExprInfo exprInfo) {
+    protected Statement exprGt(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.GTStatement());
         setExprTypes(ExprType.LBRACE, ExprType.HELP);
@@ -71,7 +72,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprGeq(ExprInfo exprInfo) {
+    protected Statement exprGeq(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.GEQStatement());
         setExprTypes(ExprType.LBRACE, ExprType.HELP);
@@ -79,7 +80,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprEq(ExprInfo exprInfo) {
+    protected Statement exprEq(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.EQStatement());
         setExprTypes(ExprType.LBRACE, ExprType.HELP);
@@ -87,7 +88,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprNeq(ExprInfo exprInfo) {
+    protected Statement exprNeq(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.NEQStatement());
         setExprTypes(ExprType.LBRACE, ExprType.HELP);
@@ -95,7 +96,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprLike(ExprInfo exprInfo) {
+    protected Statement exprLike(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.LIKEStatement());
         setExprTypes(ExprType.LBRACE, ExprType.HELP);
@@ -103,7 +104,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprBetween(ExprInfo exprInfo) {
+    protected Statement exprBetween(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.BETWEENStatement());
         BetweenAndExpr betweenAndExpr = new BetweenAndExpr(exprReader);
@@ -113,7 +114,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprIs(ExprInfo exprInfo) {
+    protected Statement exprIs(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.ISStatement());
         setExprTypes(ExprType.NOT, ExprType.HELP);
@@ -121,7 +122,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprIn(ExprInfo exprInfo) {
+    protected Statement exprIn(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.INStatement());
         setExprTypes(ExprType.LBRACE);
@@ -129,7 +130,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprNot(ExprInfo exprInfo) {
+    protected Statement exprNot(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.NOTStatement());
         setExprTypes(ExprType.NOT, ExprType.IN, ExprType.LIKE, ExprType.IS, ExprType.EXISTS, ExprType.HELP);
@@ -137,7 +138,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprExists(ExprInfo exprInfo) {
+    protected Statement exprExists(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.EXISTSStatement());
         setExprTypes(ExprType.LBRACE);
@@ -145,7 +146,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprLBrace(ExprInfo exprInfo) {
+    protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
         BraceExpr braceExpr = new BraceExpr(exprReader);
         BraceStatement braceStatement = (BraceStatement) braceExpr.expr();
         exprTree(braceStatement);
@@ -154,7 +155,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprSelf(ExprInfo exprInfo) {
+    protected Statement exprSelf(ExprInfo exprInfo) throws AntlrException {
         OperExpr operExpr = new OperExpr(exprReader, this);
         operExpr.setExprTypes(OperExpr.OPER);
         operExpr.expr();
@@ -163,7 +164,7 @@ public class CompareExpr extends TreeExpr {
     }
 
     @Override
-    protected Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) throws AntlrException {
         exprTree(statement);
         setExprTypes(compare).addExprTypes(condition).addExprTypes(ExprType.NIL);
         return expr();
@@ -181,7 +182,7 @@ public class CompareExpr extends TreeExpr {
         }
 
         @Override
-        protected Statement exprHelp(Statement statement) {
+        protected Statement exprHelp(Statement statement) throws AntlrException {
             if (bet.getLeft() == null) {
                 bet.setLeft(statement);
                 setExprTypes(ExprType.AND);
@@ -193,7 +194,7 @@ public class CompareExpr extends TreeExpr {
         }
 
         @Override
-        protected Statement exprAnd(ExprInfo exprInfo) {
+        protected Statement exprAnd(ExprInfo exprInfo) throws AntlrException {
             push();
             bet.setOper(new OperStatement.ANDStatement());
             setExprTypes(ExprType.HELP);

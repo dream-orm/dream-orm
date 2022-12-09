@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.UnionStatement;
@@ -19,14 +20,14 @@ public class UnionExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprUnion(ExprInfo exprInfo) {
+    protected Statement exprUnion(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.LBRACE, ExprType.ALL, ExprType.HELP);
         return expr();
     }
 
     @Override
-    protected Statement exprAll(ExprInfo exprInfo) {
+    protected Statement exprAll(ExprInfo exprInfo) throws AntlrException {
         push();
         unionStatement.setAll(true);
         setExprTypes(ExprType.LBRACE, ExprType.HELP);
@@ -34,14 +35,14 @@ public class UnionExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprLBrace(ExprInfo exprInfo) {
+    protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.HELP);
         return expr();
     }
 
     @Override
-    protected Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) throws AntlrException {
         unionStatement.setStatement(statement);
         setExprTypes(ExprType.NIL);
         return expr();

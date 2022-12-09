@@ -3,6 +3,7 @@ package com.moxa.dream.system.dialect;
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.factory.InvokerFactory;
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.*;
 import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
@@ -47,7 +48,7 @@ public class DefaultDialectFactory implements DialectFactory {
     }
 
     @Override
-    public synchronized MappedStatement compile(MethodInfo methodInfo, Object arg) {
+    public synchronized MappedStatement compile(MethodInfo methodInfo, Object arg) throws Exception {
         Configuration configuration = methodInfo.getConfiguration();
         PackageStatement statement = methodInfo.getStatement();
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
@@ -104,18 +105,14 @@ public class DefaultDialectFactory implements DialectFactory {
                 .build();
     }
 
-    protected String getSql(MethodInfo methodInfo, Assist assist) {
+    protected String getSql(MethodInfo methodInfo, Assist assist) throws AntlrException {
         if (toSQL == null) {
             toSQL = getToSQL(methodInfo.getConfiguration());
         }
-        try {
-            return toSQL.toStr(methodInfo.getStatement(), assist, null);
-        } catch (AntlrException e) {
-            throw new DreamRunTimeException(e);
-        }
+        return toSQL.toStr(methodInfo.getStatement(), assist, null);
     }
 
-    protected List<$Invoker.ParamInfo> getParamInfoList(Assist assist) {
+    protected List<$Invoker.ParamInfo> getParamInfoList(Assist assist) throws AntlrException {
         $Invoker invoker = ($Invoker) assist.getInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$);
         if (invoker != null) {
             return invoker.getParamInfoList();
@@ -207,6 +204,11 @@ public class DefaultDialectFactory implements DialectFactory {
 
     public void setDbType(DbType dbType) {
         this.dbType = dbType;
+    }
+
+    @Override
+    public void addInvoker(String invokerName, Invoker invoker) {
+        getInvokerFactory(DefaultInvokerFactory.class).addInvoker(invokerName, invoker);
     }
 
     public void setToSQL(ToSQL toSQL) {

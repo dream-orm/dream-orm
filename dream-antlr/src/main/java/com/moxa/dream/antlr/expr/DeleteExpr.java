@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.DeleteStatement;
 import com.moxa.dream.antlr.smt.Statement;
@@ -19,21 +20,21 @@ public class DeleteExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprDelete(ExprInfo exprInfo) {
+    protected Statement exprDelete(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.FROM);
         return expr();
     }
 
     @Override
-    protected Statement exprFrom(ExprInfo exprInfo) {
+    protected Statement exprFrom(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.HELP);
         return expr();
     }
 
     @Override
-    protected Statement exprWhere(ExprInfo exprInfo) {
+    protected Statement exprWhere(ExprInfo exprInfo) throws AntlrException {
         WhereExpr whereExpr = new WhereExpr(exprReader);
         Statement statement = whereExpr.expr();
         deleteStatement.setWhere(statement);
@@ -47,7 +48,7 @@ public class DeleteExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) throws AntlrException {
         deleteStatement.setTable(statement);
         setExprTypes(ExprType.NIL, ExprType.WHERE);
         return expr();

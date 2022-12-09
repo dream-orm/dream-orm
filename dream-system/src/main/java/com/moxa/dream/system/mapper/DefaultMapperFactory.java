@@ -264,9 +264,6 @@ public class DefaultMapperFactory implements MapperFactory {
         return (T) Proxy.newProxyInstance(type.getClassLoader(), typeList, (proxy, method, args) -> {
             MethodInfo methodInfo = methodInfoMap.get(method);
             if (methodInfo != null) {
-                if (!methodInfo.isCompile()) {
-                    methodInfo.compile();
-                }
                 Map<String, Object> argMap = getArg(methodInfo, args);
                 return mapperInvoke.invoke(methodInfo, argMap, type);
             } else {

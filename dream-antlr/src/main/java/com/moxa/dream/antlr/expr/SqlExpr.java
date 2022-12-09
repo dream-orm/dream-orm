@@ -2,7 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
-import com.moxa.dream.antlr.exception.AntlrRunTimeException;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.util.ExprUtil;
@@ -21,15 +21,15 @@ public abstract class SqlExpr {
         this.exprReader = exprReader;
     }
 
-    public ExprInfo push() {
+    public ExprInfo push() throws AntlrException {
         ExprInfo exprInfo = exprReader.push();
         exprReader.push(exprInfo);
         return exprInfo;
     }
 
-    public Statement expr() {
+    public Statement expr() throws AntlrException {
         if (exprReader.isClose()) {
-            throw new AntlrRunTimeException("SQL读入流已关闭");
+            throw new AntlrException("SQL读入流已关闭");
         }
         tryMark();
         ExprInfo exprInfo = exprReader.getLastInfo();
@@ -560,711 +560,711 @@ public abstract class SqlExpr {
         return statement;
     }
 
-    protected Statement exprSingleMark(ExprInfo exprInfo) {
+    protected Statement exprSingleMark(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 
-    protected Statement exprMark(ExprInfo exprInfo) {
+    protected Statement exprMark(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 
-    protected Statement exprUnion(ExprInfo exprInfo) {
+    protected Statement exprUnion(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprOffSet(ExprInfo exprInfo) {
+    protected Statement exprOffSet(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprColon(ExprInfo exprInfo) {
+    protected Statement exprColon(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprInvoker(ExprInfo exprInfo) {
+    protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprRepeat(ExprInfo exprInfo) {
+    protected Statement exprRepeat(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprSin(ExprInfo exprInfo) {
+    protected Statement exprSin(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprSpace(ExprInfo exprInfo) {
+    protected Statement exprSpace(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLpad(ExprInfo exprInfo) {
+    protected Statement exprLpad(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprRpad(ExprInfo exprInfo) {
+    protected Statement exprRpad(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprInterval(ExprInfo exprInfo) {
+    protected Statement exprInterval(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprAll(ExprInfo exprInfo) {
+    protected Statement exprAll(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprBetween(ExprInfo exprInfo) {
+    protected Statement exprBetween(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprSet(ExprInfo exprInfo) {
+    protected Statement exprSet(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprRowNumber(ExprInfo exprInfo) {
+    protected Statement exprRowNumber(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprOver(ExprInfo exprInfo) {
+    protected Statement exprOver(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprPartition(ExprInfo exprInfo) {
+    protected Statement exprPartition(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprUpdate(ExprInfo exprInfo) {
+    protected Statement exprUpdate(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprDelete(ExprInfo exprInfo) {
+    protected Statement exprDelete(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprValue(ExprInfo exprInfo) {
+    protected Statement exprValue(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprValues(ExprInfo exprInfo) {
+    protected Statement exprValues(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprInto(ExprInfo exprInfo) {
+    protected Statement exprInto(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprInsert(ExprInfo exprInfo) {
+    protected Statement exprInsert(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprAsc(ExprInfo exprInfo) {
+    protected Statement exprAsc(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprDesc(ExprInfo exprInfo) {
+    protected Statement exprDesc(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprHaving(ExprInfo exprInfo) {
+    protected Statement exprHaving(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprLimit(ExprInfo exprInfo) {
+    protected Statement exprLimit(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprGroup(ExprInfo exprInfo) {
+    protected Statement exprGroup(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprBy(ExprInfo exprInfo) {
+    protected Statement exprBy(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprInner(ExprInfo exprInfo) {
+    protected Statement exprInner(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprOn(ExprInfo exprInfo) {
+    protected Statement exprOn(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprLike(ExprInfo exprInfo) {
+    protected Statement exprLike(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprAcc(ExprInfo exprInfo) {
+    protected Statement exprAcc(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprGeq(ExprInfo exprInfo) {
+    protected Statement exprGeq(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprLeq(ExprInfo exprInfo) {
+    protected Statement exprLeq(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprDivide(ExprInfo exprInfo) {
+    protected Statement exprDivide(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprStar(ExprInfo exprInfo) {
+    protected Statement exprStar(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprSub(ExprInfo exprInfo) {
+    protected Statement exprSub(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprAdd(ExprInfo exprInfo) {
+    protected Statement exprAdd(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprOper(ExprInfo exprInfo) {
+    protected Statement exprOper(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprEnd(ExprInfo exprInfo) {
+    protected Statement exprEnd(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprElse(ExprInfo exprInfo) {
+    protected Statement exprElse(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprThen(ExprInfo exprInfo) {
+    protected Statement exprThen(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprRBrace(ExprInfo exprInfo) {
+    protected Statement exprRBrace(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprLBrace(ExprInfo exprInfo) {
+    protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprIsNull(ExprInfo exprInfo) {
+    protected Statement exprIsNull(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprNullIf(ExprInfo exprInfo) {
+    protected Statement exprNullIf(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprIf(ExprInfo exprInfo) {
+    protected Statement exprIf(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprIfNull(ExprInfo exprInfo) {
+    protected Statement exprIfNull(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprConcat(ExprInfo exprInfo) {
+    protected Statement exprConcat(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprGroupConcat(ExprInfo exprInfo) {
+    protected Statement exprGroupConcat(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprFindInSet(ExprInfo exprInfo) {
+    protected Statement exprFindInSet(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprCoalesce(ExprInfo exprInfo) {
+    protected Statement exprCoalesce(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprConvert(ExprInfo exprInfo) {
+    protected Statement exprConvert(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprCast(ExprInfo exprInfo) {
+    protected Statement exprCast(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprChar(ExprInfo exprInfo) {
+    protected Statement exprChar(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprUnixTimeStamp(ExprInfo exprInfo) {
+    protected Statement exprUnixTimeStamp(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprFromUnixTime(ExprInfo exprInfo) {
+    protected Statement exprFromUnixTime(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprDate(ExprInfo exprInfo) {
+    protected Statement exprDate(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprDateTime(ExprInfo exprInfo) {
+    protected Statement exprDateTime(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprSigned(ExprInfo exprInfo) {
+    protected Statement exprSigned(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprInteger(ExprInfo exprInfo) {
+    protected Statement exprInteger(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprDecimal(ExprInfo exprInfo) {
+    protected Statement exprDecimal(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprYear(ExprInfo exprInfo) {
+    protected Statement exprYear(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprStrToDate(ExprInfo exprInfo) {
+    protected Statement exprStrToDate(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprWeekOfYear(ExprInfo exprInfo) {
+    protected Statement exprWeekOfYear(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprWeek(ExprInfo exprInfo) {
+    protected Statement exprWeek(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprTime(ExprInfo exprInfo) {
+    protected Statement exprTime(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprSecond(ExprInfo exprInfo) {
+    protected Statement exprSecond(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprQuarter(ExprInfo exprInfo) {
+    protected Statement exprQuarter(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprNow(ExprInfo exprInfo) {
+    protected Statement exprNow(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprSysDate(ExprInfo exprInfo) {
+    protected Statement exprSysDate(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprMonth(ExprInfo exprInfo) {
+    protected Statement exprMonth(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprMinute(ExprInfo exprInfo) {
+    protected Statement exprMinute(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLastDay(ExprInfo exprInfo) {
+    protected Statement exprLastDay(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprHour(ExprInfo exprInfo) {
+    protected Statement exprHour(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprDayOfYear(ExprInfo exprInfo) {
+    protected Statement exprDayOfYear(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprDayOfWeek(ExprInfo exprInfo) {
+    protected Statement exprDayOfWeek(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprDay(ExprInfo exprInfo) {
+    protected Statement exprDay(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprDateFormat(ExprInfo exprInfo) {
+    protected Statement exprDateFormat(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprDateAdd(ExprInfo exprInfo) {
+    protected Statement exprDateAdd(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprDateSub(ExprInfo exprInfo) {
+    protected Statement exprDateSub(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprDateDiff(ExprInfo exprInfo) {
+    protected Statement exprDateDiff(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprCurDate(ExprInfo exprInfo) {
+    protected Statement exprCurDate(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprOrder(ExprInfo exprInfo) {
+    protected Statement exprOrder(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprTruncate(ExprInfo exprInfo) {
+    protected Statement exprTruncate(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprTan(ExprInfo exprInfo) {
+    protected Statement exprTan(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprSum(ExprInfo exprInfo) {
+    protected Statement exprSum(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprSqrt(ExprInfo exprInfo) {
+    protected Statement exprSqrt(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprSign(ExprInfo exprInfo) {
+    protected Statement exprSign(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprRound(ExprInfo exprInfo) {
+    protected Statement exprRound(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprRand(ExprInfo exprInfo) {
+    protected Statement exprRand(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprPow(ExprInfo exprInfo) {
+    protected Statement exprPow(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprPower(ExprInfo exprInfo) {
+    protected Statement exprPower(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprPi(ExprInfo exprInfo) {
+    protected Statement exprPi(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprMod(ExprInfo exprInfo) {
+    protected Statement exprMod(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprMin(ExprInfo exprInfo) {
+    protected Statement exprMin(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprMax(ExprInfo exprInfo) {
+    protected Statement exprMax(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLog2(ExprInfo exprInfo) {
+    protected Statement exprLog2(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLog10(ExprInfo exprInfo) {
+    protected Statement exprLog10(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLog(ExprInfo exprInfo) {
+    protected Statement exprLog(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLn(ExprInfo exprInfo) {
+    protected Statement exprLn(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprFloor(ExprInfo exprInfo) {
+    protected Statement exprFloor(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprExp(ExprInfo exprInfo) {
+    protected Statement exprExp(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprCount(ExprInfo exprInfo) {
+    protected Statement exprCount(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprCot(ExprInfo exprInfo) {
+    protected Statement exprCot(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprCos(ExprInfo exprInfo) {
+    protected Statement exprCos(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprCeil(ExprInfo exprInfo) {
+    protected Statement exprCeil(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprCeiling(ExprInfo exprInfo) {
+    protected Statement exprCeiling(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprAtan(ExprInfo exprInfo) {
+    protected Statement exprAtan(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprAsin(ExprInfo exprInfo) {
+    protected Statement exprAsin(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprAcos(ExprInfo exprInfo) {
+    protected Statement exprAcos(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprAvg(ExprInfo exprInfo) {
+    protected Statement exprAvg(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprAbs(ExprInfo exprInfo) {
+    protected Statement exprAbs(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprUpper(ExprInfo exprInfo) {
+    protected Statement exprUpper(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprTrim(ExprInfo exprInfo) {
+    protected Statement exprTrim(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprSubStr(ExprInfo exprInfo) {
+    protected Statement exprSubStr(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprStrcmp(ExprInfo exprInfo) {
+    protected Statement exprStrcmp(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprSeparator(ExprInfo exprInfo) {
+    protected Statement exprSeparator(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprRtrim(ExprInfo exprInfo) {
+    protected Statement exprRtrim(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprReverse(ExprInfo exprInfo) {
+    protected Statement exprReverse(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprReplace(ExprInfo exprInfo) {
+    protected Statement exprReplace(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLtrim(ExprInfo exprInfo) {
+    protected Statement exprLtrim(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLcase(ExprInfo exprInfo) {
+    protected Statement exprLcase(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLower(ExprInfo exprInfo) {
+    protected Statement exprLower(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprInstr(ExprInfo exprInfo) {
+    protected Statement exprInstr(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLocate(ExprInfo exprInfo) {
+    protected Statement exprLocate(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprConcatWs(ExprInfo exprInfo) {
+    protected Statement exprConcatWs(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLen(ExprInfo exprInfo) {
+    protected Statement exprLen(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLength(ExprInfo exprInfo) {
+    protected Statement exprLength(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprAscii(ExprInfo exprInfo) {
+    protected Statement exprAscii(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprJoin(ExprInfo exprInfo) {
+    protected Statement exprJoin(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprOuter(ExprInfo exprInfo) {
+    protected Statement exprOuter(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprCross(ExprInfo exprInfo) {
+    protected Statement exprCross(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprRight(ExprInfo exprInfo) {
+    protected Statement exprRight(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLeft(ExprInfo exprInfo) {
+    protected Statement exprLeft(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
 
-    protected Statement exprNeq(ExprInfo exprInfo) {
+    protected Statement exprNeq(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprGt(ExprInfo exprInfo) {
+    protected Statement exprGt(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprLt(ExprInfo exprInfo) {
+    protected Statement exprLt(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprLlm(ExprInfo exprInfo) {
+    protected Statement exprLlm(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprRrm(ExprInfo exprInfo) {
+    protected Statement exprRrm(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprIs(ExprInfo exprInfo) {
+    protected Statement exprIs(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprIn(ExprInfo exprInfo) {
+    protected Statement exprIn(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprNot(ExprInfo exprInfo) {
+    protected Statement exprNot(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprExists(ExprInfo exprInfo) {
+    protected Statement exprExists(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprEq(ExprInfo exprInfo) {
+    protected Statement exprEq(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprOr(ExprInfo exprInfo) {
+    protected Statement exprOr(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprAnd(ExprInfo exprInfo) {
+    protected Statement exprAnd(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprBitAnd(ExprInfo exprInfo) {
+    protected Statement exprBitAnd(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprBitOr(ExprInfo exprInfo) {
+    protected Statement exprBitOr(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprBitXor(ExprInfo exprInfo) {
+    protected Statement exprBitXor(ExprInfo exprInfo) throws AntlrException {
         return exprOper(exprInfo);
     }
 
-    protected Statement exprWhere(ExprInfo exprInfo) {
+    protected Statement exprWhere(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprWhen(ExprInfo exprInfo) {
+    protected Statement exprWhen(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprCase(ExprInfo exprInfo) {
+    protected Statement exprCase(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprMyFunction(ExprInfo exprInfo) {
+    protected Statement exprMyFunction(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprKeyWord(ExprInfo exprInfo) {
+    protected Statement exprKeyWord(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprFunction(ExprInfo exprInfo) {
+    protected Statement exprFunction(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprDefault(ExprInfo exprInfo) {
+    protected Statement exprDefault(ExprInfo exprInfo) throws AntlrException {
         if (self)
             return exprSelf(exprInfo);
         else if (acceptSet.contains(ExprType.NIL)) {
             Statement statement = nil();
             exprReader.pop();
             return statement;
-        } else throw new AntlrRunTimeException(ExprUtil.wrapper(exprReader));
+        } else throw new AntlrException(ExprUtil.wrapper(exprReader));
     }
 
-    protected Statement exprSelf(ExprInfo exprInfo) {
-        throw new AntlrRunTimeException(this.getClass().getSimpleName() + "未实现'" + exprInfo.getExprType() + "'");
+    protected Statement exprSelf(ExprInfo exprInfo) throws AntlrException {
+        throw new AntlrException(this.getClass().getSimpleName() + "未实现'" + exprInfo.getExprType() + "'");
     }
 
 
-    protected Statement exprDistinct(ExprInfo exprInfo) {
+    protected Statement exprDistinct(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprFrom(ExprInfo exprInfo) {
+    protected Statement exprFrom(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprSelect(ExprInfo exprInfo) {
+    protected Statement exprSelect(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprAs(ExprInfo exprInfo) {
+    protected Statement exprAs(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprComma(ExprInfo exprInfo) {
+    protected Statement exprComma(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprSymbol(ExprInfo exprInfo) {
+    protected Statement exprSymbol(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 
-    protected Statement exprLetter(ExprInfo exprInfo) {
+    protected Statement exprLetter(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 
-    protected Statement exprSkip(ExprInfo exprInfo) {
+    protected Statement exprSkip(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 
-    protected Statement exprStr(ExprInfo exprInfo) {
+    protected Statement exprStr(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 
-    protected Statement exprJavaStr(ExprInfo exprInfo) {
+    protected Statement exprJavaStr(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 
-    protected Statement exprFloat(ExprInfo exprInfo) {
+    protected Statement exprFloat(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 
-    protected Statement exprInt(ExprInfo exprInfo) {
+    protected Statement exprInt(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 
-    protected Statement exprLong(ExprInfo exprInfo) {
+    protected Statement exprLong(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 
-    protected Statement exprDouble(ExprInfo exprInfo) {
+    protected Statement exprDouble(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 
-    protected Statement exprDot(ExprInfo exprInfo) {
+    protected Statement exprDot(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
     }
 

@@ -1,6 +1,7 @@
 package com.moxa.dream.system.antlr.handler.non;
 
 import com.moxa.dream.antlr.config.Assist;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.handler.AbstractHandler;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.Statement;
@@ -23,7 +24,7 @@ public class $Handler extends AbstractHandler {
     }
 
     @Override
-    public String handlerAfter(Statement statement, Assist assist, String sql, int life) {
+    public String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
         $Invoker sqlInvoker = ($Invoker) assist.getInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$);
         List<$Invoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
         if (paramInfoList != null) {

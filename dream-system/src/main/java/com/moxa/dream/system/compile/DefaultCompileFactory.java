@@ -15,7 +15,7 @@ public class DefaultCompileFactory implements CompileFactory {
     }
 
     @Override
-    public PackageStatement compile(String sql) {
+    public PackageStatement compile(String sql) throws Exception {
         ExprReader exprReader = new ExprReader(sql, myFunctionFactory);
         SqlExpr sqlExpr = new PackageExpr(exprReader);
         PackageStatement statement = (PackageStatement) sqlExpr.expr();

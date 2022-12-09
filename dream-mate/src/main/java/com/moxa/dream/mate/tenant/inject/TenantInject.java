@@ -4,10 +4,8 @@ import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.mate.tenant.interceptor.TenantInterceptor;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
-import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
-import com.moxa.dream.system.dialect.DefaultDialectFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.inject.Inject;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
@@ -25,20 +23,17 @@ public class TenantInject implements Inject {
     public void inject(MethodInfo methodInfo) {
         Configuration configuration = methodInfo.getConfiguration();
         DialectFactory dialectFactory = configuration.getDialectFactory();
-        if (!(dialectFactory instanceof DefaultDialectFactory)) {
-            throw new DreamRunTimeException("不支持多租户");
-        }
-        DefaultInvokerFactory invokerFactory = ((DefaultDialectFactory) dialectFactory).getInvokerFactory(DefaultInvokerFactory.class);
-        if (invokerFactory == null) {
-            throw new DreamRunTimeException("不支持多租户");
-        }
         PluginFactory pluginFactory = configuration.getPluginFactory();
         if (pluginFactory == null) {
-            throw new DreamRunTimeException("插件工厂未开启，不支持多租户");
+            throw new DreamRunTimeException("多租户模式，请开启插件");
         }
-        pluginFactory.interceptor(new TenantInterceptor(tenantHandler));
+        TenantInterceptor tenantInterceptor = pluginFactory.getInterceptor(TenantInterceptor.class);
+        if (tenantInterceptor == null) {
+            throw new DreamRunTimeException("多租户模式，请开启插件" + TenantInterceptor.class.getName());
+        }
+
         String invokerName = TenantInvoker.getName();
-        invokerFactory.addInvoker(invokerName, new TenantInvoker());
+        dialectFactory.addInvoker(invokerName, new TenantInvoker());
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement tenantStatement = InvokerUtil.wrapperInvoker(null,
                 invokerName, ",",

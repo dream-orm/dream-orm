@@ -7,6 +7,7 @@ import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.inject.factory.InjectFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -22,7 +23,7 @@ public class MethodInfo {
     protected String[] columnNames;
     protected TypeHandler[] columnTypeHandlers;
     protected boolean cache = true;
-    protected Command command = Command.NONE;
+    protected CompileType compileType = CompileType.UN_COMPILE;
     protected String sql;
     protected int timeOut;
     protected PackageStatement statement;
@@ -32,7 +33,6 @@ public class MethodInfo {
     protected Action[] loopActionList;
     protected Action[] destroyActionList;
     protected MethodParam[] methodParamList;
-    protected boolean compile = false;
 
     protected MethodInfo() {
 
@@ -64,10 +64,6 @@ public class MethodInfo {
 
     public boolean isCache() {
         return cache;
-    }
-
-    public Command getCommand() {
-        return command;
     }
 
     public String getSql() {
@@ -102,12 +98,12 @@ public class MethodInfo {
         return methodKey.clone();
     }
 
-    public Method getMethod() {
-        return method;
+    public CompileType getCompileType() {
+        return compileType;
     }
 
-    public boolean isCompile() {
-        return compile;
+    public Method getMethod() {
+        return method;
     }
 
     public String getId() {
@@ -127,18 +123,27 @@ public class MethodInfo {
     }
 
     public synchronized void compile() {
-        if (!compile) {
-            CompileFactory compileFactory = configuration.getCompileFactory();
-            this.statement = compileFactory.compile(sql);
-            CacheKey uniqueKey = compileFactory.uniqueKey(sql);
-            if (uniqueKey != null) {
-                uniqueKey.update(new Object[]{colType, rowType});
+        if (compileType == CompileType.UN_COMPILE) {
+            try {
+                CompileFactory compileFactory = configuration.getCompileFactory();
+                statement = compileFactory.compile(sql);
+                CacheKey uniqueKey = compileFactory.uniqueKey(sql);
+                if (uniqueKey != null) {
+                    uniqueKey.update(new Object[]{colType, rowType});
+                }
+                this.methodKey = uniqueKey;
+                InjectFactory injectFactory = configuration.getInjectFactory();
+                injectFactory.inject(this);
+                compileType = CompileType.COMPILED;
+            } catch (Exception e) {
+                throw new DreamRunTimeException("编译方法" + getId() + "失败，" + e.getMessage(), e);
             }
-            this.methodKey = uniqueKey;
-            InjectFactory injectFactory = configuration.getInjectFactory();
-            injectFactory.inject(this);
-            compile = true;
         }
+    }
+
+    public enum CompileType {
+        UN_COMPILE,
+        COMPILED,
     }
 
     public static class Builder {

@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 
@@ -35,7 +36,7 @@ public abstract class HelperExpr extends SqlExpr {
     }
 
     @Override
-    public Statement exprDefault(ExprInfo exprInfo) {
+    public Statement exprDefault(ExprInfo exprInfo) throws AntlrException {
         if (accept0)
             return exprSelf(exprInfo);
         if (acceptSet.contains(ExprType.HELP) && accept1) {
@@ -46,7 +47,7 @@ public abstract class HelperExpr extends SqlExpr {
             return super.exprDefault(exprInfo);
     }
 
-    protected abstract Statement exprHelp(Statement statement);
+    protected abstract Statement exprHelp(Statement statement) throws AntlrException;
 
     public interface Helper {
         SqlExpr helper();

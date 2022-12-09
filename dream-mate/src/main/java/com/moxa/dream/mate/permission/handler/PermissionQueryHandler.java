@@ -9,6 +9,7 @@ import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.mate.permission.invoker.PermissionGetInvoker;
 import com.moxa.dream.mate.permission.invoker.PermissionInjectInvoker;
+import com.moxa.dream.mate.util.MateUtil;
 import com.moxa.dream.system.antlr.handler.scan.QueryScanHandler;
 import com.moxa.dream.system.antlr.invoker.ScanInvoker;
 import com.moxa.dream.system.util.InvokerUtil;
@@ -69,13 +70,7 @@ public class PermissionQueryHandler extends AbstractHandler {
                         whereStatement.setCondition(invokerStatement);
                         queryStatement.setWhereStatement(whereStatement);
                     } else {
-                        Statement condition = whereStatement.getCondition();
-                        BraceStatement braceStatement = new BraceStatement(condition);
-                        ConditionStatement conditionStatement = new ConditionStatement();
-                        conditionStatement.setLeft(braceStatement);
-                        conditionStatement.setOper(new OperStatement.ANDStatement());
-                        conditionStatement.setRight(invokerStatement);
-                        whereStatement.setCondition(conditionStatement);
+                        MateUtil.appendWhere(whereStatement, invokerStatement);
                     }
                 }
             }

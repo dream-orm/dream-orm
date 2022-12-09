@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.JoinStatement;
 import com.moxa.dream.antlr.smt.Statement;
@@ -16,7 +17,7 @@ public class JoinExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprCross(ExprInfo exprInfo) {
+    protected Statement exprCross(ExprInfo exprInfo) throws AntlrException {
         push();
         joinStatement = new JoinStatement.CrossJoinStatement();
         ON = new ExprType[]{ExprType.ON, ExprType.NIL};
@@ -25,7 +26,7 @@ public class JoinExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprLeft(ExprInfo exprInfo) {
+    protected Statement exprLeft(ExprInfo exprInfo) throws AntlrException {
         push();
         joinStatement = new JoinStatement.LeftJoinStatement();
         setExprTypes(ExprType.OUTER, ExprType.JOIN);
@@ -33,7 +34,7 @@ public class JoinExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprRight(ExprInfo exprInfo) {
+    protected Statement exprRight(ExprInfo exprInfo) throws AntlrException {
         push();
         joinStatement = new JoinStatement.RightJoinStatement();
         setExprTypes(ExprType.OUTER, ExprType.JOIN);
@@ -41,14 +42,14 @@ public class JoinExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprOuter(ExprInfo exprInfo) {
+    protected Statement exprOuter(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.JOIN);
         return expr();
     }
 
     @Override
-    protected Statement exprInner(ExprInfo exprInfo) {
+    protected Statement exprInner(ExprInfo exprInfo) throws AntlrException {
         push();
         joinStatement = new JoinStatement.InnerJoinStatement();
         setExprTypes(ExprType.OUTER, ExprType.JOIN);
@@ -56,7 +57,7 @@ public class JoinExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprJoin(ExprInfo exprInfo) {
+    protected Statement exprJoin(ExprInfo exprInfo) throws AntlrException {
         push();
         AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader);
         aliasColumnExpr.setExprTypes(ExprType.HELP);
@@ -69,7 +70,7 @@ public class JoinExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprOn(ExprInfo exprInfo) {
+    protected Statement exprOn(ExprInfo exprInfo) throws AntlrException {
         push();
         CompareExpr operTreeExpr = new CompareExpr(exprReader);
         Statement statement = operTreeExpr.expr();

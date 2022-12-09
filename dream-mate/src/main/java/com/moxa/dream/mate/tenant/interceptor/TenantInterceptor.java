@@ -2,7 +2,7 @@ package com.moxa.dream.mate.tenant.interceptor;
 
 import com.moxa.dream.mate.tenant.inject.TenantHandler;
 import com.moxa.dream.system.config.MethodInfo;
-import com.moxa.dream.system.core.session.Session;
+import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.plugin.interceptor.Interceptor;
 import com.moxa.dream.system.plugin.invocation.Invocation;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -28,6 +28,9 @@ public class TenantInterceptor implements Interceptor {
             arg = new HashMap<>();
             args[1] = arg;
         }
+        if (!(arg instanceof Map)) {
+            throw new DreamRunTimeException("多租户模式，参数类型必须是Map");
+        }
         Map paramMap = (Map) arg;
         paramMap.put(tenantHandler.getTenantColumn(), tenantHandler.getTenantObject());
         return invocation.proceed();
@@ -36,12 +39,8 @@ public class TenantInterceptor implements Interceptor {
     @Override
     public Set<Method> methods() throws Exception {
         Set<Method> methods = new HashSet<>();
-        Method method = Session.class.getMethod("execute", MethodInfo.class, Map.class);
+        Method method = DialectFactory.class.getMethod("compile", MethodInfo.class, Object.class);
         methods.add(method);
         return methods;
-    }
-
-    public TenantHandler getTenantHandler() {
-        return tenantHandler;
     }
 }

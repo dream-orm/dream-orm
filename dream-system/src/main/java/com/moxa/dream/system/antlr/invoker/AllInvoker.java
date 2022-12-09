@@ -4,7 +4,6 @@ import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.exception.AntlrException;
-import com.moxa.dream.antlr.exception.AntlrRunTimeException;
 import com.moxa.dream.antlr.expr.AliasColumnExpr;
 import com.moxa.dream.antlr.expr.ListColumnExpr;
 import com.moxa.dream.antlr.invoker.AbstractInvoker;
@@ -77,7 +76,7 @@ public class AllInvoker extends AbstractInvoker {
         return toSQL.toStr(statement, assist, invokerList);
     }
 
-    protected void getQuery(TableFactory tableFactory, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {
+    protected void getQuery(TableFactory tableFactory, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) throws AntlrException {
         if (Map.class.isAssignableFrom(colType)) {
             getQueryFromMap(tableFactory, tableScanInfoMap, queryColumnInfoList, queryColumnList);
         } else {
@@ -107,7 +106,7 @@ public class AllInvoker extends AbstractInvoker {
         }
     }
 
-    protected void getQueryFromBean(TableFactory tableFactory, String table, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {
+    protected void getQueryFromBean(TableFactory tableFactory, String table, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) throws AntlrException {
         TableInfo rootTableInfo = null;
         String alias = null;
         if (!ObjectUtil.isNull(table)) {
@@ -151,7 +150,7 @@ public class AllInvoker extends AbstractInvoker {
                                     }
                                 }
                                 if (!find) {
-                                    throw new AntlrRunTimeException("类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
+                                    throw new AntlrException("类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
                                 }
                             } else {
                                 ColumnInfo columnInfo = rootTableInfo.getColumnInfo(fieldName);

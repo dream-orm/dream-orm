@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.FromStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
@@ -16,7 +17,7 @@ public class FromExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprFrom(ExprInfo exprInfo) {
+    protected Statement exprFrom(ExprInfo exprInfo) throws AntlrException {
         push();
         AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader);
         aliasColumnExpr.setExprTypes(ExprType.HELP);

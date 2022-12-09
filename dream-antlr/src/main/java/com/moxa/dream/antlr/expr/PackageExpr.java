@@ -2,6 +2,7 @@ package com.moxa.dream.antlr.expr;
 
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
+import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.BraceStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
@@ -20,7 +21,7 @@ public class PackageExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprLBrace(ExprInfo exprInfo) {
+    protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
         push();
         BraceStatement braceStatement = new BraceStatement();
         braceStatement.setStatement(this.expr());
@@ -30,27 +31,27 @@ public class PackageExpr extends HelperExpr {
     }
 
     @Override
-    protected Statement exprRBrace(ExprInfo exprInfo) {
+    protected Statement exprRBrace(ExprInfo exprInfo) throws AntlrException {
         push();
         setExprTypes(ExprType.ACC);
         return expr();
     }
 
     @Override
-    protected Statement exprInvoker(ExprInfo exprInfo) {
+    protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
         statement.setStatement(new InvokerExpr(exprReader).expr());
         setExprTypes(ExprType.ACC);
         return expr();
     }
 
     @Override
-    protected Statement exprAcc(ExprInfo exprInfo) {
+    protected Statement exprAcc(ExprInfo exprInfo) throws AntlrException {
         setExprTypes(ExprType.NIL);
         return expr();
     }
 
     @Override
-    protected Statement exprHelp(Statement statement) {
+    protected Statement exprHelp(Statement statement) throws AntlrException {
         this.statement.setStatement(statement);
         setExprTypes(ExprType.ACC);
         return expr();
