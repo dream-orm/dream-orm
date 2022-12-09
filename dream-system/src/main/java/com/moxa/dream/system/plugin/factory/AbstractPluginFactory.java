@@ -10,7 +10,7 @@ import java.util.Map;
 public abstract class AbstractPluginFactory implements PluginFactory {
     private Map<Class, Interceptor> interceptorMap = new HashMap<>();
 
-    public void interceptor(Interceptor[] interceptors) {
+    public void interceptor(Interceptor...interceptors) {
         interceptorMap.clear();
         for (Interceptor interceptor : interceptors) {
             interceptorMap.put(interceptor.getClass(), interceptor);

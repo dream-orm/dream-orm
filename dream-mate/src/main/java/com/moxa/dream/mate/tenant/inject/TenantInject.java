@@ -2,12 +2,15 @@ package com.moxa.dream.mate.tenant.inject;
 
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
+import com.moxa.dream.mate.tenant.interceptor.TenantInterceptor;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
 import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
+import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.dialect.DefaultDialectFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.inject.Inject;
+import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.util.InvokerUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
@@ -20,7 +23,8 @@ public class TenantInject implements Inject {
 
     @Override
     public void inject(MethodInfo methodInfo) {
-        DialectFactory dialectFactory = methodInfo.getConfiguration().getDialectFactory();
+        Configuration configuration = methodInfo.getConfiguration();
+        DialectFactory dialectFactory = configuration.getDialectFactory();
         if (!(dialectFactory instanceof DefaultDialectFactory)) {
             throw new DreamRunTimeException("不支持多租户");
         }
@@ -28,6 +32,11 @@ public class TenantInject implements Inject {
         if (invokerFactory == null) {
             throw new DreamRunTimeException("不支持多租户");
         }
+        PluginFactory pluginFactory = configuration.getPluginFactory();
+        if (pluginFactory == null) {
+            throw new DreamRunTimeException("插件工厂未开启，不支持多租户");
+        }
+        pluginFactory.interceptor(new TenantInterceptor(tenantHandler));
         String invokerName = TenantInvoker.getName();
         invokerFactory.addInvoker(invokerName, new TenantInvoker());
         PackageStatement statement = methodInfo.getStatement();

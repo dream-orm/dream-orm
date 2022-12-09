@@ -14,8 +14,7 @@ public abstract class ToPubSQL extends ToNativeSQL {
 
     @Override
     protected String before(Statement statement) {
-        String sql = statement.getQuickValue();
-        return sql;
+        return statement.getQuickValue();
     }
 
     @Override

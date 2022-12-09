@@ -4,7 +4,7 @@ import com.moxa.dream.system.plugin.interceptor.Interceptor;
 
 public interface PluginFactory {
 
-    void interceptor(Interceptor[] interceptors);
+    void interceptor(Interceptor...interceptors);
 
     Object plugin(Object target);
 
