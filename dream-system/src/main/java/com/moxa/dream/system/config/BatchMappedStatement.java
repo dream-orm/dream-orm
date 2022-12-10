@@ -29,9 +29,6 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
     }
 
     public void compile(DialectFactory dialectFactory) {
-        if (methodInfo.getCompileType() == MethodInfo.CompileType.UN_COMPILE) {
-            methodInfo.compile();
-        }
         for (Object arg : argList) {
             Map<String, Object> argMap;
             if (arg instanceof Map) {
@@ -42,7 +39,7 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
             try {
                 mappedStatementList.add(dialectFactory.compile(methodInfo, argMap));
             } catch (Exception e) {
-                throw new DreamRunTimeException("抽象树方法" + methodInfo.getId() + "翻译失败" + e.getMessage(), e);
+                throw new DreamRunTimeException("抽象树方法" + methodInfo.getId() + "翻译失败，" + e.getMessage(), e);
             }
         }
     }

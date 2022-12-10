@@ -39,21 +39,13 @@ public class DefaultSession implements Session {
 
     @Override
     public Object execute(MethodInfo methodInfo, Map<String, Object> argMap) {
-        switch (methodInfo.getCompileType()) {
-            case UN_COMPILE:
-                methodInfo.compile();
-            case COMPILED:
-                MappedStatement mappedStatement;
-                try {
-                    mappedStatement = dialectFactory.compile(methodInfo, argMap);
-                } catch (Exception e) {
-                    throw new DreamRunTimeException(e);
-                }
-                return execute(mappedStatement);
-
-            default:
-                throw new DreamRunTimeException("不支持的命令：" + methodInfo.getCompileType());
+        MappedStatement mappedStatement;
+        try {
+            mappedStatement = dialectFactory.compile(methodInfo, argMap);
+        } catch (Exception e) {
+            throw new DreamRunTimeException(e);
         }
+        return execute(mappedStatement);
     }
 
     @Override

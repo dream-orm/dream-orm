@@ -23,7 +23,7 @@ public class MethodInfo {
     protected String[] columnNames;
     protected TypeHandler[] columnTypeHandlers;
     protected boolean cache = true;
-    protected CompileType compileType = CompileType.UN_COMPILE;
+    protected Compile compile = Compile.UN_COMPILE;
     protected String sql;
     protected int timeOut;
     protected PackageStatement statement;
@@ -98,8 +98,8 @@ public class MethodInfo {
         return methodKey.clone();
     }
 
-    public CompileType getCompileType() {
-        return compileType;
+    public Compile getCompile() {
+        return compile;
     }
 
     public Method getMethod() {
@@ -123,7 +123,7 @@ public class MethodInfo {
     }
 
     public synchronized void compile() {
-        if (compileType == CompileType.UN_COMPILE) {
+        if (compile == Compile.UN_COMPILE) {
             try {
                 CompileFactory compileFactory = configuration.getCompileFactory();
                 statement = compileFactory.compile(sql);
@@ -134,16 +134,11 @@ public class MethodInfo {
                 this.methodKey = uniqueKey;
                 InjectFactory injectFactory = configuration.getInjectFactory();
                 injectFactory.inject(this);
-                compileType = CompileType.COMPILED;
+                compile = Compile.COMPILED;
             } catch (Exception e) {
                 throw new DreamRunTimeException("编译方法" + getId() + "失败，" + e.getMessage(), e);
             }
         }
-    }
-
-    public enum CompileType {
-        UN_COMPILE,
-        COMPILED,
     }
 
     public static class Builder {

@@ -50,6 +50,16 @@ public class DefaultDialectFactory implements DialectFactory {
 
     @Override
     public synchronized MappedStatement compile(MethodInfo methodInfo, Object arg) throws Exception {
+        Compile compile = methodInfo.getCompile();
+        switch (compile) {
+            case UN_COMPILE:
+                methodInfo.compile();
+            default:
+                return compileAntlr(methodInfo, arg);
+        }
+    }
+
+    public MappedStatement compileAntlr(MethodInfo methodInfo, Object arg) throws Exception {
         Configuration configuration = methodInfo.getConfiguration();
         PackageStatement statement = methodInfo.getStatement();
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
@@ -109,6 +119,7 @@ public class DefaultDialectFactory implements DialectFactory {
                 .uniqueKey(uniqueKey)
                 .build();
     }
+
 
     protected String getSql(MethodInfo methodInfo, Assist assist) throws AntlrException {
         if (toSQL == null) {
@@ -202,7 +213,6 @@ public class DefaultDialectFactory implements DialectFactory {
         }
     }
 
-    @Override
     public DbType getDbType() {
         return dbType;
     }

@@ -8,7 +8,5 @@ public interface DialectFactory {
 
     MappedStatement compile(MethodInfo methodInfo, Object arg) throws Exception;
 
-    DbType getDbType();
-
     void addInvoker(String invokerName, Invoker invoker);
 }
