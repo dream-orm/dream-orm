@@ -1,10 +1,10 @@
 package com.moxa.dream.system.typehandler.factory;
 
+import com.moxa.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.system.typehandler.util.TypeUtil;
 import com.moxa.dream.system.typehandler.wrapper.*;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
     }
 
     @Override
-    public TypeHandler getTypeHandler(Class javaType, int jdbcType) {
+    public TypeHandler getTypeHandler(Class javaType, int jdbcType) throws TypeHandlerNotFoundException {
         TypeHandler typeHandler = getTypeHandler(TypeUtil.hash(javaType, jdbcType));
         if (typeHandler == null)
             return getNoneTypeHandler(javaType, jdbcType);
@@ -74,7 +74,7 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
         return typeHandler;
     }
 
-    protected TypeHandler getNoneTypeHandler(Class javaType, int jdbcType) {
-        throw new DreamRunTimeException("类型选择器未找到,javaType '" + javaType.getTypeName() + "',jdbcType '" + TypeUtil.getTypeName(jdbcType) + "'");
+    protected TypeHandler getNoneTypeHandler(Class javaType, int jdbcType) throws TypeHandlerNotFoundException {
+        throw new TypeHandlerNotFoundException("类型选择器未找到,javaType '" + javaType.getTypeName() + "',jdbcType '" + TypeUtil.getTypeName(jdbcType) + "'");
     }
 }

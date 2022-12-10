@@ -8,6 +8,7 @@ import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
+import com.moxa.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.system.util.InvokerUtil;
@@ -79,7 +80,12 @@ public class InsertMapper extends WrapMapper {
                     throw new DreamRunTimeException("表" + tableInfo.getTable() + "不存在字段" + column);
                 }
                 Class<?> type = tableInfo.getColumnInfo(fieldName).getField().getType();
-                TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(type, Types.NULL);
+                TypeHandler typeHandler;
+                try {
+                    typeHandler = typeHandlerFactory.getTypeHandler(type, Types.NULL);
+                } catch (TypeHandlerNotFoundException e) {
+                    throw new DreamRunTimeException(fieldName + "获取类型转换器失败，" + e.getMessage(), e);
+                }
                 typeHandlers[i] = typeHandler;
             }
         }

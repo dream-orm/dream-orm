@@ -16,6 +16,7 @@ import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
+import com.moxa.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -88,7 +89,11 @@ public class DefaultDialectFactory implements DialectFactory {
                 String paramName = paramInfo.getParamName();
                 ParamType paramType = paramTypeWrapper.get(paramName);
                 if (paramType == null) {
-                    paramType = getParamType(configuration, scanInfo, paramScanInfoMap, paramInfo);
+                    try {
+                        paramType = getParamType(configuration, scanInfo, paramScanInfoMap, paramInfo);
+                    } catch (TypeHandlerNotFoundException e) {
+                        throw new DreamRunTimeException("参数" + paramInfo.getParamName() + "获取类型转换器失败，" + e.getMessage(), e);
+                    }
                     paramTypeWrapper.put(paramName, paramType);
                 }
                 mappedParamList.add(new MappedParam().setParamValue(paramInfo.getParamValue()).setJdbcType(paramType.columnInfo == null ? Types.NULL : paramType.columnInfo.getJdbcType()).setTypeHandler(paramType.getTypeHandler()));
@@ -151,7 +156,7 @@ public class DefaultDialectFactory implements DialectFactory {
         return new Assist(invokerFactoryMap.values(), customMap);
     }
 
-    protected ParamType getParamType(Configuration configuration, ScanInvoker.ScanInfo scanInfo, Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap, $Invoker.ParamInfo paramInfo) {
+    protected ParamType getParamType(Configuration configuration, ScanInvoker.ScanInfo scanInfo, Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap, $Invoker.ParamInfo paramInfo) throws TypeHandlerNotFoundException {
         TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
         TableFactory tableFactory = configuration.getTableFactory();
         ScanInvoker.ParamScanInfo paramScanInfo = paramScanInfoMap.get(paramInfo.getParamName());

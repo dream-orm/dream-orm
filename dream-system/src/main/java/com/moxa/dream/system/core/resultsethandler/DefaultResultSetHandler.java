@@ -12,6 +12,7 @@ import com.moxa.dream.system.extractor.Extractor;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
+import com.moxa.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.common.LowHashSet;
@@ -157,9 +158,14 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     .table(tableName)
                     .columnLabel(columnLabel)
                     .columnInfo(columnInfo);
-            boolean success = linkHandler(builder, mappedStatement, mappedResult, new LowHashSet(tableSet));
+            boolean success;
+            try {
+                success = linkHandler(builder, mappedStatement, mappedResult, new LowHashSet(tableSet));
+            } catch (TypeHandlerNotFoundException e) {
+                throw new DreamRunTimeException("映射" + mappedStatement.getId() + "失败，映射字段:" + columnLabel + "，表：" + tableName + "，" + e.getMessage(), e);
+            }
             if (!success) {
-                throw new DreamRunTimeException("映射失败，映射字段:" + columnLabel + "，归属表名：" + tableName);
+                throw new DreamRunTimeException("映射" + mappedStatement.getId() + "失败，映射字段:" + columnLabel + "，表：" + tableName);
             }
         }
         return mappedResult;
@@ -183,7 +189,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
 
-    protected boolean linkHandler(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+    protected boolean linkHandler(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) throws TypeHandlerNotFoundException {
         Class colType = mappedResult.getColType();
         if (ReflectUtil.isBaseClass(colType))
             return linkHandlerForBase(builder, mappedStatement, mappedResult, tableSet);
@@ -194,7 +200,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         }
     }
 
-    protected boolean linkHandlerForBase(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+    protected boolean linkHandlerForBase(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) throws TypeHandlerNotFoundException {
         builder.typeHandler(mappedStatement
                 .getConfiguration()
                 .getTypeHandlerFactory()
@@ -204,7 +210,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         return true;
     }
 
-    protected boolean linkHandlerForMap(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+    protected boolean linkHandlerForMap(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) throws TypeHandlerNotFoundException {
         builder.typeHandler(mappedStatement
                 .getConfiguration()
                 .getTypeHandlerFactory()
@@ -214,7 +220,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         return true;
     }
 
-    protected boolean linkHandlerForClass(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) {
+    protected boolean linkHandlerForClass(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) throws TypeHandlerNotFoundException {
         Class colType = mappedResult.getColType();
         String curTableName = getTableName(colType);
         List<Field> fieldList = ReflectUtil.findField(colType);
