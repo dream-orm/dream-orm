@@ -26,9 +26,9 @@ public class JdbcExecutor implements Executor {
     @Override
     public Object query(MappedStatement mappedStatement, Session session) throws SQLException {
         return execute(mappedStatement, statement -> {
-            ResultSet resultSet = statementHandler.query(statement, mappedStatement);
+            ResultSet resultSet = statementHandler(mappedStatement).query(statement, mappedStatement);
             try {
-                return resultSetHandler.result(resultSet, mappedStatement, session);
+                return resultSetHandler(mappedStatement).result(resultSet, mappedStatement, session);
             } finally {
                 if (resultSet != null && !resultSet.isClosed()) {
                     resultSet.close();
@@ -39,33 +39,51 @@ public class JdbcExecutor implements Executor {
 
     @Override
     public Object update(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> statementHandler.update(statement, mappedStatement));
+        return execute(mappedStatement, statement -> statementHandler(mappedStatement).update(statement, mappedStatement));
     }
 
     @Override
     public Object insert(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> statementHandler.insert(statement, mappedStatement));
+        return execute(mappedStatement, statement -> statementHandler(mappedStatement).insert(statement, mappedStatement));
     }
 
     @Override
     public Object delete(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> statementHandler.delete(statement, mappedStatement));
+        return execute(mappedStatement, statement -> statementHandler(mappedStatement).delete(statement, mappedStatement));
     }
 
     @Override
     public Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
-        return execute(batchMappedStatement, statement -> statementHandler.batch(statement, batchMappedStatement));
+        return execute(batchMappedStatement, statement -> statementHandler(batchMappedStatement).batch(statement, batchMappedStatement));
     }
 
     protected Object execute(MappedStatement mappedStatement, Function<Statement, Object> function) throws SQLException {
         Statement statement = null;
         try {
-            statement = statementHandler.prepare(transaction.getConnection(), mappedStatement);
+            statement = statementHandler(mappedStatement).prepare(transaction.getConnection(), mappedStatement);
             return function.apply(statement);
         } finally {
             if (statement != null && !statement.isClosed()) {
                 statement.close();
             }
+        }
+    }
+
+    protected StatementHandler statementHandler(MappedStatement mappedStatement) {
+        StatementHandler statementHandler = mappedStatement.getStatementHandler();
+        if (statementHandler == null) {
+            return this.statementHandler;
+        } else {
+            return statementHandler;
+        }
+    }
+
+    protected ResultSetHandler resultSetHandler(MappedStatement mappedStatement) {
+        ResultSetHandler resultSetHandler = mappedStatement.getResultSetHandler();
+        if (resultSetHandler == null) {
+            return this.resultSetHandler;
+        } else {
+            return resultSetHandler;
         }
     }
 

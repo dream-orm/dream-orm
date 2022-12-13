@@ -123,7 +123,9 @@ public class DefaultTemplateMapper implements TemplateMapper {
 
     @Override
     public List<Object> batchUpdateById(List<?> viewList, int batchSize) {
+        if (viewList == null || viewList.isEmpty()) {
+            return null;
+        }
         return (List<Object>) batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
     }
-
 }

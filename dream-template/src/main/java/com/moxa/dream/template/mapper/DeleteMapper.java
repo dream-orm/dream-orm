@@ -24,11 +24,11 @@ public abstract class DeleteMapper extends AbstractMapper {
         if (attachMent != null) {
             sql = sql + " " + attachMent.attach(configuration, tableInfo, arg != null ? arg.getClass() : null, Command.DELETE);
         }
-        return new MethodInfo.Builder(configuration)
-                .rowType(NonCollection.class)
-                .colType(Integer.class)
-                .sql(sql)
-                .build();
+        return new MethodInfo()
+                .setConfiguration(configuration)
+                .setRowType(NonCollection.class)
+                .setColType(Integer.class)
+                .setSql(sql);
     }
 
     protected abstract String getOther(Configuration configuration, TableInfo tableInfo, Object arg);

@@ -2,12 +2,10 @@ package com.moxa.dream.system.config;
 
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
-import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.core.action.Action;
-import com.moxa.dream.system.inject.factory.InjectFactory;
+import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
+import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
-import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -23,7 +21,7 @@ public class MethodInfo {
     protected String[] columnNames;
     protected TypeHandler[] columnTypeHandlers;
     protected boolean cache = true;
-    protected Compile compile = Compile.UN_COMPILE;
+    protected Compile compile = Compile.ANTLR_COMPILE;
     protected String sql;
     protected int timeOut;
     protected PackageStatement statement;
@@ -33,77 +31,178 @@ public class MethodInfo {
     protected Action[] loopActionList;
     protected Action[] destroyActionList;
     protected MethodParam[] methodParamList;
-
-    protected MethodInfo() {
-
-    }
+    protected StatementHandler statementHandler;
+    protected ResultSetHandler resultSetHandler;
 
     public Configuration getConfiguration() {
         return configuration;
+    }
+
+    public MethodInfo setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
+    public MethodInfo setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     public Class<? extends Collection> getRowType() {
         return rowType;
+    }
+
+    public MethodInfo setRowType(Class<? extends Collection> rowType) {
+        this.rowType = rowType;
+        return this;
     }
 
     public Class getColType() {
         return colType;
     }
 
+    public MethodInfo setColType(Class colType) {
+        this.colType = colType;
+        return this;
+    }
+
     public String[] getColumnNames() {
         return columnNames;
+    }
+
+    public MethodInfo setColumnNames(String[] columnNames) {
+        this.columnNames = columnNames;
+        return this;
     }
 
     public TypeHandler[] getColumnTypeHandlers() {
         return columnTypeHandlers;
     }
 
+    public MethodInfo setColumnTypeHandlers(TypeHandler[] columnTypeHandlers) {
+        this.columnTypeHandlers = columnTypeHandlers;
+        return this;
+    }
+
     public boolean isCache() {
         return cache;
     }
 
-    public String getSql() {
-        return sql;
-    }
-
-    public int getTimeOut() {
-        return timeOut;
-    }
-
-    public Action[] getInitActionList() {
-        return initActionList;
-    }
-
-    public Action[] getLoopActionList() {
-        return loopActionList;
-    }
-
-    public Action[] getDestroyActionList() {
-        return destroyActionList;
-    }
-
-    public MethodParam[] getMethodParamList() {
-        return methodParamList;
-    }
-
-    public PackageStatement getStatement() {
-        return statement;
-    }
-
-    public CacheKey getMethodKey() {
-        return methodKey.clone();
+    public MethodInfo setCache(boolean cache) {
+        this.cache = cache;
+        return this;
     }
 
     public Compile getCompile() {
         return compile;
     }
 
+    public MethodInfo setCompile(Compile compile) {
+        this.compile = compile;
+        return this;
+    }
+
+    public String getSql() {
+        return sql;
+    }
+
+    public MethodInfo setSql(String sql) {
+        this.sql = sql;
+        return this;
+    }
+
+    public int getTimeOut() {
+        return timeOut;
+    }
+
+    public MethodInfo setTimeOut(int timeOut) {
+        this.timeOut = timeOut;
+        return this;
+    }
+
+    public PackageStatement getStatement() {
+        return statement;
+    }
+
+    public MethodInfo setStatement(PackageStatement statement) {
+        this.statement = statement;
+        return this;
+    }
+
+    public CacheKey getMethodKey() {
+        return methodKey.clone();
+    }
+
+    public MethodInfo setMethodKey(CacheKey methodKey) {
+        this.methodKey = methodKey;
+        return this;
+    }
+
     public Method getMethod() {
         return method;
+    }
+
+    public MethodInfo setMethod(Method method) {
+        this.method = method;
+        return this;
+    }
+
+    public Action[] getInitActionList() {
+        return initActionList;
+    }
+
+    public MethodInfo setInitActionList(Action[] initActionList) {
+        this.initActionList = initActionList;
+        return this;
+    }
+
+    public Action[] getLoopActionList() {
+        return loopActionList;
+    }
+
+    public MethodInfo setLoopActionList(Action[] loopActionList) {
+        this.loopActionList = loopActionList;
+        return this;
+    }
+
+    public Action[] getDestroyActionList() {
+        return destroyActionList;
+    }
+
+    public MethodInfo setDestroyActionList(Action[] destroyActionList) {
+        this.destroyActionList = destroyActionList;
+        return this;
+    }
+
+    public MethodParam[] getMethodParamList() {
+        return methodParamList;
+    }
+
+    public MethodInfo setMethodParamList(MethodParam[] methodParamList) {
+        this.methodParamList = methodParamList;
+        return this;
+    }
+
+    public StatementHandler getStatementHandler() {
+        return statementHandler;
+    }
+
+    public MethodInfo setStatementHandler(StatementHandler statementHandler) {
+        this.statementHandler = statementHandler;
+        return this;
+    }
+
+    public ResultSetHandler getResultSetHandler() {
+        return resultSetHandler;
+    }
+
+    public MethodInfo setResultSetHandler(ResultSetHandler resultSetHandler) {
+        this.resultSetHandler = resultSetHandler;
+        return this;
     }
 
     public String getId() {
@@ -114,113 +213,12 @@ public class MethodInfo {
         }
     }
 
-    public <T> void set(Class<T> type, T value) {
+    public <T> MethodInfo set(Class<T> type, T value) {
         builtMap.put(type, value);
+        return this;
     }
 
     public <T> T get(Class<T> type) {
         return (T) builtMap.get(type);
-    }
-
-    public synchronized void compile() {
-        if (compile == Compile.UN_COMPILE) {
-            try {
-                CompileFactory compileFactory = configuration.getCompileFactory();
-                statement = compileFactory.compile(sql);
-                CacheKey uniqueKey = compileFactory.uniqueKey(sql);
-                if (uniqueKey != null) {
-                    uniqueKey.update(new Object[]{colType, rowType});
-                }
-                this.methodKey = uniqueKey;
-                InjectFactory injectFactory = configuration.getInjectFactory();
-                injectFactory.inject(this);
-                compile = Compile.COMPILED;
-            } catch (Exception e) {
-                throw new DreamRunTimeException("编译方法" + getId() + "失败，" + e.getMessage(), e);
-            }
-        }
-    }
-
-    public static class Builder {
-        protected final MethodInfo methodInfo;
-
-        public Builder(Configuration configuration) {
-            methodInfo = new MethodInfo();
-            methodInfo.configuration = configuration;
-        }
-
-        public Builder name(String name) {
-            methodInfo.name = name;
-            return this;
-        }
-
-        public Builder rowType(Class<? extends Collection> rowType) {
-            methodInfo.rowType = rowType;
-            return this;
-        }
-
-        public Builder colType(Class colType) {
-            methodInfo.colType = colType;
-            return this;
-        }
-
-        public Builder columnNames(String[] columnNames, TypeHandler[] typeHandlers) {
-            methodInfo.columnNames = columnNames;
-            methodInfo.columnTypeHandlers = typeHandlers;
-            return this;
-        }
-
-
-        public Builder cache(boolean cache) {
-            methodInfo.cache = cache;
-            return this;
-        }
-
-        public Builder methodParamList(MethodParam[] methodParamList) {
-            methodInfo.methodParamList = methodParamList;
-            return this;
-        }
-
-        public Builder sql(String sql) {
-            methodInfo.sql = sql;
-            return this;
-        }
-
-        public Builder timeOut(int timeOut) {
-            methodInfo.timeOut = timeOut;
-            return this;
-        }
-
-        public Builder initActionList(Action[] actionList) {
-            methodInfo.initActionList = actionList;
-            return this;
-        }
-
-        public Builder loopActionList(Action[] actionList) {
-            methodInfo.loopActionList = actionList;
-            return this;
-        }
-
-        public Builder destroyActionList(Action[] actionList) {
-            methodInfo.destroyActionList = actionList;
-            return this;
-        }
-
-        public Builder method(Method method) {
-            methodInfo.method = method;
-            return this;
-        }
-
-        protected boolean isValid() {
-            return !ObjectUtil.isNull(methodInfo.getSql());
-        }
-
-        public MethodInfo build() {
-            if (isValid()) {
-                return methodInfo;
-            } else {
-                return null;
-            }
-        }
     }
 }

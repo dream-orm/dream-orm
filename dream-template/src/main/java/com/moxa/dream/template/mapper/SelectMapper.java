@@ -28,11 +28,11 @@ public abstract class SelectMapper extends AbstractMapper {
         if (attachMent != null) {
             sql = sql + " " + attachMent.attach(configuration, tableInfo, arg != null ? arg.getClass() : null, Command.QUERY);
         }
-        return new MethodInfo.Builder(configuration)
-                .rowType(getRowType())
-                .colType(getColType(type))
-                .sql(sql)
-                .build();
+        return new MethodInfo()
+                .setConfiguration(configuration)
+                .setRowType(getRowType())
+                .setColType(getColType(type))
+                .setSql(sql);
     }
 
     protected String getSelectColumn(Class<?> type) {

@@ -1,6 +1,7 @@
 package com.moxa.dream.system.config;
 
 public enum Compile {
-    UN_COMPILE,
-    COMPILED,
+    ANTLR_COMPILE,
+    ANTLR_COMPILED,
+    UN_ANTLR_COMPILE,
 }

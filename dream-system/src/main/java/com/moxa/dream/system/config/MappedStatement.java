@@ -3,6 +3,8 @@ package com.moxa.dream.system.config;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.core.action.Action;
+import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
+import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 
 import java.lang.reflect.Method;
@@ -126,6 +128,14 @@ public class MappedStatement {
 
     public Action[] getDestroyActionList() {
         return methodInfo.getDestroyActionList();
+    }
+
+    public StatementHandler getStatementHandler() {
+        return methodInfo.getStatementHandler();
+    }
+
+    public ResultSetHandler getResultSetHandler() {
+        return methodInfo.getResultSetHandler();
     }
 
     public void put(String key, Object value) {

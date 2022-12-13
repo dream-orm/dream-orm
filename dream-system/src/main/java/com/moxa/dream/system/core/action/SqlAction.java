@@ -45,12 +45,12 @@ public class SqlAction implements Action {
             throw new DreamRunTimeException("colType不能为空");
         }
         this.property = property;
-        methodInfo = new MethodInfo.Builder(configuration)
-                .rowType(rowType)
-                .colType(colType)
-                .sql(sql)
-                .cache(cache)
-                .build();
+        methodInfo = new MethodInfo()
+                .setConfiguration(configuration)
+                .setRowType(rowType)
+                .setColType(colType)
+                .setSql(sql)
+                .setCache(cache);
     }
 
     @Override

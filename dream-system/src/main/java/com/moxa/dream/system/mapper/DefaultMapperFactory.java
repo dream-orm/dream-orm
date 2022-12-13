@@ -32,24 +32,23 @@ public class DefaultMapperFactory implements MapperFactory {
     @Override
     public boolean addMapper(Configuration configuration, Class mapperClass) {
         if (isMapper(mapperClass)) {
-            Map<String, MethodInfo.Builder> builderMap = new HashMap<>();
+            Map<String, MethodInfo> methodInfoMap = new HashMap<>();
             List<Method> methodList = ReflectUtil.findMethod(mapperClass);
             if (!ObjectUtil.isNull(methodList)) {
                 for (Method method : methodList) {
                     String name = method.getName();
-                    if (builderMap.containsKey(name)) {
+                    if (methodInfoMap.containsKey(name)) {
                         throw new DreamRunTimeException("方法名'" + name + "'重复定义，请检查" + mapperClass.getName());
                     }
-                    MethodInfo.Builder builder = createMethodInfoBuilder(configuration, mapperClass, method);
-                    builderMap.put(name, builder);
+                    MethodInfo methodInfo = createMethodInfo(configuration, mapperClass, method);
+                    methodInfoMap.put(name, methodInfo);
                 }
             }
-            fillMethodInfoFromAction(configuration, mapperClass, builderMap);
-            for (String name : builderMap.keySet()) {
-                MethodInfo.Builder builder = builderMap.get(name);
-                MethodInfo methodInfo = builder.build();
-                if (methodInfo != null) {
-                    methodInfoMap.put(methodInfo.getMethod(), methodInfo);
+            fillMethodInfoFromAction(configuration, mapperClass, methodInfoMap);
+            for (String name : methodInfoMap.keySet()) {
+                MethodInfo methodInfo = methodInfoMap.get(name);
+                if (!ObjectUtil.isNull(methodInfo.getSql())) {
+                    this.methodInfoMap.put(methodInfo.getMethod(), methodInfo);
                 }
             }
             this.mapperTypeMap.put(mapperClass, getAllInterface(mapperClass));
@@ -71,7 +70,7 @@ public class DefaultMapperFactory implements MapperFactory {
         return value;
     }
 
-    protected void fillMethodInfoFromAction(Configuration configuration, Class type, Map<String, MethodInfo.Builder> builderMap) {
+    protected void fillMethodInfoFromAction(Configuration configuration, Class type, Map<String, MethodInfo> methodInfoMap) {
         Class<?> actionType = getActionType(type);
         List<Method> methodList = ReflectUtil.find(actionType,
                 (aType) -> Arrays.stream(aType.getDeclaredMethods())
@@ -81,8 +80,8 @@ public class DefaultMapperFactory implements MapperFactory {
             Object actionObject = ReflectUtil.create(actionType);
             for (Method method : methodList) {
                 String methodName = method.getName();
-                MethodInfo.Builder builder = builderMap.get(methodName);
-                if (builder == null) {
+                MethodInfo methodInfo = methodInfoMap.get(methodName);
+                if (methodInfo == null) {
                     throw new DreamRunTimeException("类" + type.getName() + "不存在方法" + methodName);
                 }
                 ActionProvider actionProvider = null;
@@ -107,51 +106,51 @@ public class DefaultMapperFactory implements MapperFactory {
                     Boolean cache = actionProvider.cache(type);
                     Integer timeOut = actionProvider.timeOut(type);
                     if (initActionList != null) {
-                        builder.initActionList(initActionList);
+                        methodInfo.setInitActionList(initActionList);
                     }
                     if (sql != null) {
-                        builder.sql(sql);
+                        methodInfo.setSql(sql);
                     }
                     if (loopActionList != null) {
-                        builder.loopActionList(loopActionList);
+                        methodInfo.setLoopActionList(loopActionList);
                     }
                     if (destroyActionList != null) {
-                        builder.destroyActionList(destroyActionList);
+                        methodInfo.setDestroyActionList(destroyActionList);
                     }
                     if (rowType != null) {
-                        builder.rowType(rowType);
+                        methodInfo.setRowType(rowType);
                     }
                     if (colType != null) {
-                        builder.colType(colType);
+                        methodInfo.setColType(colType);
                     }
                     if (cache != null) {
-                        builder.cache(cache);
+                        methodInfo.setCache(cache);
                     }
                     if (timeOut != null) {
-                        builder.timeOut(timeOut);
+                        methodInfo.setTimeOut(timeOut);
                     }
                 }
             }
         }
     }
 
-    protected MethodInfo.Builder createMethodInfoBuilder(Configuration configuration, Class mapperClass, Method method) {
+    protected MethodInfo createMethodInfo(Configuration configuration, Class mapperClass, Method method) {
         Class<? extends Collection> rowType = getRowType(mapperClass, method);
         Class colType = getColType(mapperClass, method);
         boolean cache = isCache(mapperClass, method);
         MethodParam[] methodParamList = getMethodParamList(method);
         String sql = getSql(configuration, method);
         int timeOut = getTimeOut(method);
-        MethodInfo.Builder builder = new MethodInfo.Builder(configuration)
-                .name(method.getName())
-                .rowType(rowType)
-                .colType(colType)
-                .cache(cache)
-                .methodParamList(methodParamList)
-                .sql(sql)
-                .timeOut(timeOut)
-                .method(method);
-        return builder;
+        return new MethodInfo()
+                .setConfiguration(configuration)
+                .setName(method.getName())
+                .setRowType(rowType)
+                .setColType(colType)
+                .setCache(cache)
+                .setMethodParamList(methodParamList)
+                .setSql(sql)
+                .setTimeOut(timeOut)
+                .setMethod(method);
     }
 
     protected boolean isMapper(Class mapperClass) {

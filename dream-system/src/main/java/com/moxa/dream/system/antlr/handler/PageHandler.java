@@ -16,7 +16,6 @@ import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.action.SqlAction;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.util.List;
@@ -81,7 +80,7 @@ public class PageHandler extends AbstractHandler {
             property = value + "." + property;
         }
         countInitActionList[countInitActionList.length - 1] = new SqlAction(methodInfo.getConfiguration(), property, countSql, NonCollection.class, Long.class, true);
-        ObjectWrapper.wrapper(methodInfo).set("initActionList", countInitActionList);
+        methodInfo.setInitActionList(countInitActionList);
     }
 
     void handlerPage(QueryStatement queryStatement) throws AntlrException {

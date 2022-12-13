@@ -89,14 +89,15 @@ public class InsertMapper extends WrapMapper {
                 typeHandlers[i] = typeHandler;
             }
         }
-        return new MethodInfo.Builder(configuration)
-                .rowType(NonCollection.class)
-                .colType(Integer.class)
-                .columnNames(columnNames, typeHandlers)
-                .initActionList(initActionList.toArray(new Action[0]))
-                .destroyActionList(destroyActionList.toArray(new Action[0]))
-                .sql(sql)
-                .build();
+        return new MethodInfo()
+                .setConfiguration(configuration)
+                .setRowType(NonCollection.class)
+                .setColType(Integer.class)
+                .setColumnNames(columnNames)
+                .setColumnTypeHandlers(typeHandlers)
+                .setInitActionList(initActionList.toArray(new Action[0]))
+                .setDestroyActionList(destroyActionList.toArray(new Action[0]))
+                .setSql(sql);
     }
 
     @Override
