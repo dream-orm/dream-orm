@@ -31,10 +31,6 @@ public class DefaultDialectFactory extends AbstractRouteDialectFactory {
         antlrDialectFactory.addInvoker(invokerName, invoker);
     }
 
-    public void setDbType(DbType dbType) {
-        antlrDialectFactory.setDbType(dbType);
-    }
-
     public void setToSQL(ToSQL toSQL) {
         antlrDialectFactory.setToSQL(toSQL);
     }

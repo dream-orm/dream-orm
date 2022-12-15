@@ -33,6 +33,7 @@ public class UnAntlrDialectFactory implements DialectFactory {
         ExprReader exprReader = new ExprReader(sql);
         int startIndex = 0;
         StringBuilder sqlBuilder = new StringBuilder();
+        String table;
         while (true) {
             ExprInfo exprInfo;
             switch (((exprInfo = exprReader.push()).getExprType())) {
@@ -44,6 +45,11 @@ public class UnAntlrDialectFactory implements DialectFactory {
                 case UPDATE:
                     if (command == Command.NONE) {
                         command = Command.UPDATE;
+                    }
+                    exprInfo = exprReader.push();
+                    table = getTable(exprInfo);
+                    if (table != null) {
+                        tableList.add(table);
                     }
                     break;
                 case INSERT:
@@ -60,13 +66,9 @@ public class UnAntlrDialectFactory implements DialectFactory {
                 case JOIN:
                 case INTO:
                     exprInfo = exprReader.push();
-                    switch (exprInfo.getExprType()) {
-                        case LETTER:
-                        case SINGLE_MARK:
-                        case STR:
-                        case JAVA_STR:
-                            tableList.add(exprInfo.getInfo());
-                            break;
+                    table = getTable(exprInfo);
+                    if (table != null) {
+                        tableList.add(table);
                     }
                     break;
                 case INVOKER:
@@ -145,6 +147,18 @@ public class UnAntlrDialectFactory implements DialectFactory {
             }
             return new MappedParam().setJdbcType(Types.NULL).setParamValue(par).setTypeHandler(typeHandler);
         }).collect(Collectors.toList())).build();
+    }
+
+    private String getTable(ExprInfo exprInfo) {
+        switch (exprInfo.getExprType()) {
+            case LETTER:
+            case SINGLE_MARK:
+            case STR:
+            case JAVA_STR:
+                return exprInfo.getInfo();
+            default:
+                return null;
+        }
     }
 
     @Override

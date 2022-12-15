@@ -11,14 +11,12 @@ import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
 import com.moxa.dream.system.transaction.Transaction;
-import com.moxa.dream.system.transaction.factory.TransactionFactory;
 
 import javax.sql.DataSource;
 
 
 public class DefaultSessionFactory implements SessionFactory {
     protected Configuration configuration;
-    protected TransactionFactory transactionFactory;
     protected DataSource dataSource;
     protected StatementHandler statementHandler;
     protected ResultSetHandler resultSetHandler;
@@ -31,7 +29,6 @@ public class DefaultSessionFactory implements SessionFactory {
     public DefaultSessionFactory(Configuration configuration, StatementHandler statementHandler, ResultSetHandler resultSetHandler) {
         this.configuration = configuration;
         DataSourceFactory dataSourceFactory = configuration.getDataSourceFactory();
-        transactionFactory = configuration.getTransactionFactory();
         dataSource = dataSourceFactory.getDataSource();
         CacheFactory cacheFactory = configuration.getCacheFactory();
         if (cacheFactory != null) {
@@ -39,8 +36,8 @@ public class DefaultSessionFactory implements SessionFactory {
         }
         PluginFactory pluginFactory = configuration.getPluginFactory();
         if (pluginFactory != null) {
-            statementHandler = (StatementHandler) pluginFactory.plugin(statementHandler);
-            resultSetHandler = (ResultSetHandler) pluginFactory.plugin(resultSetHandler);
+            statementHandler = pluginFactory.plugin(statementHandler);
+            resultSetHandler = pluginFactory.plugin(resultSetHandler);
         }
         this.statementHandler = statementHandler;
         this.resultSetHandler = resultSetHandler;
@@ -48,7 +45,7 @@ public class DefaultSessionFactory implements SessionFactory {
 
     @Override
     public Session openSession(boolean autoCommit) {
-        Transaction transaction = transactionFactory.getTransaction(dataSource);
+        Transaction transaction = configuration.getTransactionFactory().getTransaction(dataSource);
         transaction.setAutoCommit(autoCommit);
         Executor executor = new JdbcExecutor(transaction, statementHandler, resultSetHandler);
         if (this.cache != null) {
