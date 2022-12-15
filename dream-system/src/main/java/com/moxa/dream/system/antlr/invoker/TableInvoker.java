@@ -91,4 +91,9 @@ public class TableInvoker extends AbstractInvoker {
             return toSQL.toStr(statement, assist, invokerList).substring(5);
         }
     }
+
+    @Override
+    public Invoker newInstance() {
+        return this;
+    }
 }

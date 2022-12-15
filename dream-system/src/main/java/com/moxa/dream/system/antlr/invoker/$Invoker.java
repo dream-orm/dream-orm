@@ -13,12 +13,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class $Invoker extends AbstractInvoker {
+    public static final String FUNCTION = "$";
     private final List<ParamInfo> paramInfoList = new ArrayList<>();
     ObjectWrapper paramWrapper;
 
     @Override
     public void init(Assist assist) {
         paramWrapper = assist.getCustom(ObjectWrapper.class);
+    }
+
+    @Override
+    public Invoker newInstance() {
+        return new $Invoker();
+    }
+
+    @Override
+    public String function() {
+        return FUNCTION;
     }
 
     @Override

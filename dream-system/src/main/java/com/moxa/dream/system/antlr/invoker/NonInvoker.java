@@ -29,4 +29,14 @@ public class NonInvoker extends AbstractInvoker {
     public boolean isEmpty(Object value) {
         return value == null;
     }
+
+    @Override
+    public Invoker newInstance() {
+        return this;
+    }
+
+    @Override
+    public String function() {
+        return "non";
+    }
 }

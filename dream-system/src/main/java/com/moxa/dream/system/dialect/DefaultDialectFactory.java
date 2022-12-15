@@ -10,13 +10,6 @@ public class DefaultDialectFactory extends AbstractRouteDialectFactory {
     private AntlrDialectFactory antlrDialectFactory = new AntlrDialectFactory();
     private UnAntlrDialectFactory unAntlrDialectFactory = new UnAntlrDialectFactory();
 
-    public void addInvokerFactory(InvokerFactory invokerFactory) {
-        antlrDialectFactory.addInvokerFactory(invokerFactory);
-    }
-
-    public <T extends InvokerFactory> T getInvokerFactory(Class<T> invokerFactoryType) {
-        return antlrDialectFactory.getInvokerFactory(invokerFactoryType);
-    }
 
     protected MappedStatement compileUnAntlr(MethodInfo methodInfo, Object arg) throws Exception {
         return unAntlrDialectFactory.compile(methodInfo, arg);
@@ -24,11 +17,6 @@ public class DefaultDialectFactory extends AbstractRouteDialectFactory {
 
     protected MappedStatement compileAntlr(MethodInfo methodInfo, Object arg) throws Exception {
         return antlrDialectFactory.compile(methodInfo, arg);
-    }
-
-    @Override
-    public void addInvoker(String invokerName, Invoker invoker) {
-        antlrDialectFactory.addInvoker(invokerName, invoker);
     }
 
     public void setToSQL(ToSQL toSQL) {

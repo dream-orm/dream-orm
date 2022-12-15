@@ -3,10 +3,12 @@ package com.moxa.dream.system.inject;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
+import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.system.annotation.PageQuery;
-import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.system.antlr.invoker.$Invoker;
+import com.moxa.dream.system.antlr.invoker.LimitInvoker;
+import com.moxa.dream.system.antlr.invoker.OffSetInvoker;
 import com.moxa.dream.system.config.MethodInfo;
-import com.moxa.dream.system.util.InvokerUtil;
 import com.moxa.dream.util.common.ObjectUtil;
 
 public class PageInject implements Inject {
@@ -23,27 +25,17 @@ public class PageInject implements Inject {
             String startRow = prefix + START_ROW;
             String pageSize = prefix + PAGE_SIZE;
             InvokerStatement pageStatement;
+            $Invoker $invoker = new $Invoker();
             if (pageQuery.offset()) {
-                pageStatement = InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
-                        SystemInvokerFactory.OFFSET, ",",
+                pageStatement = AntlrUtil.invokerStatement(new OffSetInvoker(),
                         statement.getStatement(),
-                        InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
-                                SystemInvokerFactory.$, ",",
-                                new SymbolStatement.LetterStatement(pageSize)),
-                        InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
-                                SystemInvokerFactory.$, ",",
-                                new SymbolStatement.LetterStatement(startRow)));
-
+                        AntlrUtil.invokerStatement($invoker, new SymbolStatement.LetterStatement(pageSize)),
+                        AntlrUtil.invokerStatement($invoker, new SymbolStatement.LetterStatement(startRow)));
             } else {
-                pageStatement = InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
-                        SystemInvokerFactory.LIMIT, ",",
+                pageStatement = AntlrUtil.invokerStatement(new LimitInvoker(),
                         statement.getStatement(),
-                        InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
-                                SystemInvokerFactory.$, ",",
-                                new SymbolStatement.LetterStatement(startRow)),
-                        InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE,
-                                SystemInvokerFactory.$, ",",
-                                new SymbolStatement.LetterStatement(pageSize)));
+                        AntlrUtil.invokerStatement($invoker, new SymbolStatement.LetterStatement(startRow)),
+                        AntlrUtil.invokerStatement($invoker, new SymbolStatement.LetterStatement(pageSize)));
             }
             statement.setStatement(pageStatement);
         }

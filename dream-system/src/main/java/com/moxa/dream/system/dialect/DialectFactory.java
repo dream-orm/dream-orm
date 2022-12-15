@@ -7,6 +7,4 @@ import com.moxa.dream.system.config.MethodInfo;
 public interface DialectFactory {
 
     MappedStatement compile(MethodInfo methodInfo, Object arg) throws Exception;
-
-    void addInvoker(String invokerName, Invoker invoker);
 }

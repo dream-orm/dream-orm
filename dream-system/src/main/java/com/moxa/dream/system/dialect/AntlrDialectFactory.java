@@ -2,12 +2,9 @@ package com.moxa.dream.system.dialect;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.AntlrException;
-import com.moxa.dream.antlr.factory.InvokerFactory;
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
-import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.system.antlr.invoker.$Invoker;
 import com.moxa.dream.system.antlr.invoker.ScanInvoker;
 import com.moxa.dream.system.cache.CacheKey;
@@ -27,20 +24,6 @@ import java.util.*;
 
 public class AntlrDialectFactory implements DialectFactory {
     protected ToSQL toSQL;
-    protected Map<Class<? extends InvokerFactory>, InvokerFactory> invokerFactoryMap = new HashMap();
-
-    public AntlrDialectFactory() {
-        invokerFactoryMap.put(SystemInvokerFactory.class, new SystemInvokerFactory());
-        invokerFactoryMap.put(DefaultInvokerFactory.class, new DefaultInvokerFactory());
-    }
-
-    public void addInvokerFactory(InvokerFactory invokerFactory) {
-        invokerFactoryMap.put(invokerFactory.getClass(), invokerFactory);
-    }
-
-    public <T extends InvokerFactory> T getInvokerFactory(Class<T> invokerFactoryType) {
-        return (T) invokerFactoryMap.get(invokerFactoryType);
-    }
 
     @Override
     public MappedStatement compile(MethodInfo methodInfo, Object arg) throws Exception {
@@ -104,8 +87,8 @@ public class AntlrDialectFactory implements DialectFactory {
                 .build();
     }
 
-    protected List<$Invoker.ParamInfo> getParamInfoList(Assist assist) throws AntlrException {
-        $Invoker invoker = ($Invoker) assist.getInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$);
+    protected List<$Invoker.ParamInfo> getParamInfoList(Assist assist) {
+        $Invoker invoker = assist.getInvoker($Invoker.class);
         if (invoker != null) {
             return invoker.getParamInfoList();
         } else {
@@ -135,12 +118,14 @@ public class AntlrDialectFactory implements DialectFactory {
 
     protected Assist getAssist(MethodInfo methodInfo, Object arg) {
         Map<Class, Object> customMap = new HashMap<>();
+        Configuration configuration = methodInfo.getConfiguration();
         customMap.put(MethodInfo.class, methodInfo);
+        customMap.put(Configuration.class, configuration);
         if (arg == null) {
             arg = new HashMap<>();
         }
         customMap.put(ObjectWrapper.class, ObjectWrapper.wrapper(arg));
-        return new Assist(invokerFactoryMap.values(), customMap);
+        return new Assist(configuration.getInvokerFactory(), customMap);
     }
 
     protected ParamType getParamType(Configuration configuration, ScanInvoker.ScanInfo scanInfo, Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap, $Invoker.ParamInfo paramInfo) throws TypeHandlerNotFoundException {
@@ -187,11 +172,6 @@ public class AntlrDialectFactory implements DialectFactory {
         } else {
             return new ParamType(null, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), Types.NULL));
         }
-    }
-
-    @Override
-    public void addInvoker(String invokerName, Invoker invoker) {
-        getInvokerFactory(DefaultInvokerFactory.class).addInvoker(invokerName, invoker);
     }
 
     public void setToSQL(ToSQL toSQL) {

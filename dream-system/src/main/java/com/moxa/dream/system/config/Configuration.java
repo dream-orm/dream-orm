@@ -1,5 +1,6 @@
 package com.moxa.dream.system.config;
 
+import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
@@ -20,6 +21,8 @@ public class Configuration {
     private CompileFactory compileFactory;
     private InjectFactory injectFactory;
     private DialectFactory dialectFactory;
+
+    private InvokerFactory invokerFactory;
     private PluginFactory pluginFactory;
     private ListenerFactory listenerFactory;
     private TransactionFactory transactionFactory;
@@ -84,6 +87,14 @@ public class Configuration {
 
     public void setDialectFactory(DialectFactory dialectFactory) {
         this.dialectFactory = dialectFactory;
+    }
+
+    public InvokerFactory getInvokerFactory() {
+        return invokerFactory;
+    }
+
+    public void setInvokerFactory(InvokerFactory invokerFactory) {
+        this.invokerFactory = invokerFactory;
     }
 
     public PluginFactory getPluginFactory() {

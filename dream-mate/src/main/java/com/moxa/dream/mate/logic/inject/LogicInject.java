@@ -1,7 +1,9 @@
 package com.moxa.dream.mate.logic.inject;
 
+import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
+import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.mate.logic.invoker.LogicInvoker;
 import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.moxa.dream.system.config.MethodInfo;
@@ -20,20 +22,10 @@ public class LogicInject implements Inject {
 
     @Override
     public void inject(MethodInfo methodInfo) {
-        DialectFactory dialectFactory = methodInfo.getConfiguration().getDialectFactory();
-        if (!(dialectFactory instanceof DefaultDialectFactory)) {
-            throw new DreamRunTimeException("不支持逻辑删除");
-        }
-        DefaultInvokerFactory invokerFactory = ((DefaultDialectFactory) dialectFactory).getInvokerFactory(DefaultInvokerFactory.class);
-        if (invokerFactory == null) {
-            throw new DreamRunTimeException("不支持逻辑删除");
-        }
-        String invokerName = LogicInvoker.getName();
-        invokerFactory.addInvoker(invokerName, new LogicInvoker());
+        InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
+        invokerFactory.addInvoker(new LogicInvoker());
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement tenantStatement = InvokerUtil.wrapperInvoker(null,
-                invokerName, ",",
-                statement.getStatement());
+        InvokerStatement tenantStatement = AntlrUtil.invokerStatement(new LogicInvoker(), statement.getStatement());
         statement.setStatement(tenantStatement);
     }
 

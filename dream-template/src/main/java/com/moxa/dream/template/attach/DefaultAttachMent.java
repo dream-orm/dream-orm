@@ -1,11 +1,11 @@
 package com.moxa.dream.template.attach;
 
-import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.antlr.util.AntlrUtil;
+import com.moxa.dream.system.antlr.invoker.$Invoker;
 import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
-import com.moxa.dream.system.util.InvokerUtil;
 import com.moxa.dream.template.mapper.AbstractMapper;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -35,7 +35,7 @@ public class DefaultAttachMent implements AttachMent {
                         if (field.getName().equals(fieldName)) {
                             ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
                             String column = tableInfo.getTable() + "." + columnInfo.getColumn();
-                            String invokerSQL = InvokerUtil.wrapperInvokerSQL(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$, ",", AbstractMapper.DREAM_TEMPLATE_PARAM + "." + columnInfo.getName());
+                            String invokerSQL = AntlrUtil.invokerSQL(new $Invoker(), AbstractMapper.DREAM_TEMPLATE_PARAM + "." + columnInfo.getName());
                             return "and(" + column + " is null or " + column + "=" + invokerSQL + ")";
                         }
                     }

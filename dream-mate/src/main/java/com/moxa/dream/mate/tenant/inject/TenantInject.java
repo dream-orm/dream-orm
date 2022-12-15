@@ -1,7 +1,9 @@
 package com.moxa.dream.mate.tenant.inject;
 
+import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
+import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.mate.tenant.interceptor.TenantInterceptor;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
 import com.moxa.dream.system.config.Configuration;
@@ -22,7 +24,7 @@ public class TenantInject implements Inject {
     @Override
     public void inject(MethodInfo methodInfo) {
         Configuration configuration = methodInfo.getConfiguration();
-        DialectFactory dialectFactory = configuration.getDialectFactory();
+        InvokerFactory invokerFactory = configuration.getInvokerFactory();
         PluginFactory pluginFactory = configuration.getPluginFactory();
         if (pluginFactory == null) {
             throw new DreamRunTimeException("多租户模式，请开启插件");
@@ -33,11 +35,9 @@ public class TenantInject implements Inject {
         }
 
         String invokerName = TenantInvoker.getName();
-        dialectFactory.addInvoker(invokerName, new TenantInvoker());
+        invokerFactory.addInvoker(new TenantInvoker());
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement tenantStatement = InvokerUtil.wrapperInvoker(null,
-                invokerName, ",",
-                statement.getStatement());
+        InvokerStatement tenantStatement = AntlrUtil.invokerStatement(new TenantInvoker(), statement.getStatement());
         statement.setStatement(tenantStatement);
     }
 

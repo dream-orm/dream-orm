@@ -32,4 +32,14 @@ public class LimitInvoker extends AbstractInvoker {
         invokerStatement.replaceWith(columnList[0]);
         return sql;
     }
+
+    @Override
+    public Invoker newInstance() {
+        return new LimitInvoker();
+    }
+
+    @Override
+    public String function() {
+        return "limit";
+    }
 }

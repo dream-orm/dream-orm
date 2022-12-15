@@ -1,7 +1,9 @@
 package com.moxa.dream.mate.permission.inject;
 
+import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
+import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.mate.permission.invoker.PermissionGetInvoker;
 import com.moxa.dream.mate.permission.invoker.PermissionInjectInvoker;
 import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
@@ -21,22 +23,11 @@ public class PermissionInject implements Inject {
 
     @Override
     public void inject(MethodInfo methodInfo) {
-        DialectFactory dialectFactory = methodInfo.getConfiguration().getDialectFactory();
-        if (!(dialectFactory instanceof DefaultDialectFactory)) {
-            throw new DreamRunTimeException("不支持数据权限");
-        }
-        DefaultInvokerFactory invokerFactory = ((DefaultDialectFactory) dialectFactory).getInvokerFactory(DefaultInvokerFactory.class);
-        if (invokerFactory == null) {
-            throw new DreamRunTimeException("不支持数据权限");
-        }
-        String invokerName = PermissionInjectInvoker.getName();
-        invokerFactory.addInvoker(invokerName, new PermissionInjectInvoker());
-        invokerFactory.addInvoker(PermissionGetInvoker.getName(), new PermissionGetInvoker());
-
+        InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
+        invokerFactory.addInvoker(new PermissionInjectInvoker());
+        invokerFactory.addInvoker(new PermissionGetInvoker());
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement tenantStatement = InvokerUtil.wrapperInvoker(null,
-                invokerName, ",",
-                statement.getStatement());
+        InvokerStatement tenantStatement = AntlrUtil.invokerStatement(new PermissionInjectInvoker(), statement.getStatement());
         statement.setStatement(tenantStatement);
     }
 

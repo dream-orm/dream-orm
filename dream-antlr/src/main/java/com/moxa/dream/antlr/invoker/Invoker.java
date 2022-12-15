@@ -5,10 +5,13 @@ import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.antlr.util.AntlrUtil;
 
 import java.util.List;
 
 public interface Invoker {
+    String DEFAULT_NAMESPACE = "default";
+
     default void init(Assist assist) {
 
     }
@@ -20,4 +23,15 @@ public interface Invoker {
     boolean isAccessible();
 
     void setAccessible(boolean accessible);
+
+
+    Invoker newInstance();
+
+    default String namespace() {
+        return DEFAULT_NAMESPACE;
+    }
+
+    default String function() {
+        return AntlrUtil.getInvokerFunction(this.getClass());
+    }
 }

@@ -9,7 +9,7 @@ import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.util.Arrays;
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ForEachInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "foreach";
     private final String cut = ",";
     private final String index = "index";
     private final String item = "item";
@@ -54,7 +55,7 @@ public class ForEachInvoker extends AbstractInvoker {
                 paramMap.remove(this.index);
                 paramMap.remove(this.item);
             } else {
-                $Invoker sqlInvoker = ($Invoker) assist.getInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$);
+                $Invoker sqlInvoker = assist.getInvoker($Invoker.class);
                 List<$Invoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
                 int index = 0;
                 for (Object item : collection) {
@@ -65,5 +66,15 @@ public class ForEachInvoker extends AbstractInvoker {
             listColumnStatement.setParentStatement(invokerStatement.getParentStatement());
             return toSQL.toStr(listColumnStatement, assist, invokerList);
         } else throw new AntlrException("类'" + arrayList.getClass().getName() + "'不是集合或数组类型");
+    }
+
+    @Override
+    public Invoker newInstance() {
+        return this;
+    }
+
+    @Override
+    public String function() {
+        return FUNCTION;
     }
 }

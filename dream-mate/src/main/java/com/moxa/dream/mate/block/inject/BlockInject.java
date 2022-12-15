@@ -1,7 +1,9 @@
 package com.moxa.dream.mate.block.inject;
 
+import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
+import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.mate.block.invoker.BlockInvoker;
 import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.moxa.dream.system.config.MethodInfo;
@@ -14,20 +16,13 @@ import com.moxa.dream.util.exception.DreamRunTimeException;
 public class BlockInject implements Inject {
     @Override
     public void inject(MethodInfo methodInfo) {
-        DialectFactory dialectFactory = methodInfo.getConfiguration().getDialectFactory();
-        if (!(dialectFactory instanceof DefaultDialectFactory)) {
-            throw new DreamRunTimeException("不支持关键字拦截");
-        }
-        DefaultInvokerFactory invokerFactory = ((DefaultDialectFactory) dialectFactory).getInvokerFactory(DefaultInvokerFactory.class);
+        InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
         if (invokerFactory == null) {
             throw new DreamRunTimeException("不支持关键字拦截");
         }
-        String invokerName = BlockInvoker.getName();
-        invokerFactory.addInvoker(invokerName, new BlockInvoker());
+        invokerFactory.addInvoker(new BlockInvoker());
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement columnFilterStatement = InvokerUtil.wrapperInvoker(null,
-                invokerName, ",",
-                statement.getStatement());
+        InvokerStatement columnFilterStatement = AntlrUtil.invokerStatement(new BlockInvoker(), statement.getStatement());
         statement.setStatement(columnFilterStatement);
     }
 }

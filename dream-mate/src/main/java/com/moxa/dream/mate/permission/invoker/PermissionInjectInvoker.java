@@ -39,6 +39,11 @@ public class PermissionInjectInvoker extends AbstractInvoker {
     }
 
     @Override
+    public Invoker newInstance() {
+        return new PermissionInjectInvoker();
+    }
+
+    @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         String sql = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
         invokerStatement.replaceWith(invokerStatement.getParamStatement());

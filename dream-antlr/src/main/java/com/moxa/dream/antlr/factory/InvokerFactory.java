@@ -3,8 +3,9 @@ package com.moxa.dream.antlr.factory;
 import com.moxa.dream.antlr.invoker.Invoker;
 
 public interface InvokerFactory {
+    void addInvoker(Invoker invoker);
 
-    Invoker create(String function);
+    Invoker getInvoker(String function, String namespace);
 
-    String namespace();
+    <T extends Invoker> T getInvoker(Class<T> invokerType);
 }

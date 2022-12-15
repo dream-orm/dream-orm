@@ -76,5 +76,10 @@ public class BlockInvoker extends AbstractInvoker {
     public boolean filter(String column) {
         return filterSet.contains(column);
     }
+
+    @Override
+    public Invoker newInstance() {
+        return this;
+    }
 }
 

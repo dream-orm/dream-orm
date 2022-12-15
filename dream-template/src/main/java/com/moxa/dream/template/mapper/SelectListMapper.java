@@ -1,12 +1,12 @@
 package com.moxa.dream.template.mapper;
 
-import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.antlr.util.AntlrUtil;
+import com.moxa.dream.system.antlr.invoker.NotInvoker;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
-import com.moxa.dream.system.util.InvokerUtil;
 import com.moxa.dream.template.attach.AttachMent;
 import com.moxa.dream.template.condition.Condition;
 import com.moxa.dream.template.util.ConditionObject;
@@ -54,7 +54,7 @@ public class SelectListMapper extends SelectMapper {
                 whereSql = whereSql + whereFalseSql;
             }
             if (!ObjectUtil.isNull(whereTrueSql)) {
-                whereTrueSql = InvokerUtil.wrapperInvokerSQL(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.NOT, ",", whereTrueSql);
+                whereTrueSql = AntlrUtil.invokerSQL(new NotInvoker(), whereTrueSql);
                 if (!ObjectUtil.isNull(whereFalseSql)) {
                     whereSql = whereSql + " and " + whereTrueSql;
                 } else {

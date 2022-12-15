@@ -40,6 +40,11 @@ public class PermissionGetInvoker extends AbstractInvoker {
     }
 
     @Override
+    public Invoker newInstance() {
+        return new PermissionGetInvoker();
+    }
+
+    @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         String table = ((SymbolStatement.LetterStatement) columnList[0]).getValue();

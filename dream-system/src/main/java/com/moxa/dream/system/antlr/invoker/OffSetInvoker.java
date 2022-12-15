@@ -32,4 +32,14 @@ public class OffSetInvoker extends AbstractInvoker {
     public Handler[] handler() {
         return new Handler[]{pageHandler};
     }
+
+    @Override
+    public Invoker newInstance() {
+        return new OffSetInvoker();
+    }
+
+    @Override
+    public String function() {
+        return "offset";
+    }
 }

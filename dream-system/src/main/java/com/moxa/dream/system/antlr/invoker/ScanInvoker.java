@@ -8,7 +8,7 @@ import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.system.antlr.handler.scan.*;
 import com.moxa.dream.util.common.LowHashMap;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -48,7 +48,7 @@ public class ScanInvoker extends AbstractInvoker {
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         if (columnList.length != 1)
-            throw new AntlrException("参数个数错误,不满足@" + SystemInvokerFactory.SCAN + ":" + SystemInvokerFactory.NAMESPACE + "(crud)");
+            throw new AntlrException("函数" + this.function() + "参数个数错误");
         String sql = toSQL.toStr(columnList[0], assist, invokerList);
         Statement parentStatement = invokerStatement.getParentStatement();
         while (!(parentStatement instanceof PackageStatement)
@@ -63,7 +63,7 @@ public class ScanInvoker extends AbstractInvoker {
             int i = 0;
             for (; i < invokerStatementList.size(); i++) {
                 InvokerStatement invoker = invokerStatementList.get(i);
-                if (!invoker.getFunction().equals(SystemInvokerFactory.$)) {
+                if (!invoker.getFunction().equals($Invoker.FUNCTION)) {
                     break;
                 }
             }
@@ -71,7 +71,7 @@ public class ScanInvoker extends AbstractInvoker {
                 for (InvokerStatement invoker : invokerStatementList) {
                     invoker.replaceWith(new SymbolStatement.MarkStatement());
                 }
-                $Invoker $invoker = ($Invoker) assist.getInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$);
+                $Invoker $invoker = assist.getInvoker($Invoker.class);
                 scanInfo.setParamInfoList($invoker.getParamInfoList());
                 scanInfo.sql = sql;
             }
@@ -89,6 +89,16 @@ public class ScanInvoker extends AbstractInvoker {
 
     public ScanInfo getScanInfo() {
         return scanInfo;
+    }
+
+    @Override
+    public Invoker newInstance() {
+        return new ScanInvoker();
+    }
+
+    @Override
+    public String function() {
+        return "scan";
     }
 
     public static class ScanInfo {

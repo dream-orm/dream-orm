@@ -3,9 +3,10 @@ package com.moxa.dream.system.dialect;
 import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
-import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
+import com.moxa.dream.system.antlr.invoker.$Invoker;
+import com.moxa.dream.system.antlr.invoker.ForEachInvoker;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.MappedParam;
 import com.moxa.dream.system.config.MappedSql;
@@ -75,8 +76,8 @@ public class UnAntlrDialectFactory implements DialectFactory {
                     exprInfo = exprReader.push();
                     String _info = exprInfo.getInfo();
                     switch (_info) {
-                        case SystemInvokerFactory.$:
-                        case SystemInvokerFactory.FOREACH:
+                        case $Invoker.FUNCTION:
+                        case ForEachInvoker.FUNCTION:
                             ExprInfo tempExprInfo = exprReader.push();
                             if (tempExprInfo.getExprType() == ExprType.LBRACE) {
                                 sqlBuilder.append(sql, startIndex, exprInfo.getStart() - 1);
@@ -86,16 +87,16 @@ public class UnAntlrDialectFactory implements DialectFactory {
                                 }
                                 Object value = ObjectWrapper.wrapper(arg, false).get(paramBuilder.toString());
                                 startIndex = tempExprInfo.getEnd();
-                                if (_info.equals(SystemInvokerFactory.$)) {
+                                if (_info.equals($Invoker.FUNCTION)) {
                                     paramList.add(value);
                                     sqlBuilder.append("?");
-                                } else if (_info.equals(SystemInvokerFactory.FOREACH)) {
+                                } else if (_info.equals(ForEachInvoker.FUNCTION)) {
                                     if (value == null) {
-                                        throw new DreamRunTimeException(SystemInvokerFactory.FOREACH + "参数值不能为空");
+                                        throw new DreamRunTimeException("函数" + ForEachInvoker.FUNCTION + "参数值不能为空");
                                     }
                                     if (value instanceof Collection) {
                                         if (((Collection<?>) value).isEmpty()) {
-                                            throw new DreamRunTimeException(SystemInvokerFactory.FOREACH + "参数值不能为空");
+                                            throw new DreamRunTimeException("函数" + ForEachInvoker.FUNCTION + "参数值不能为空");
                                         }
                                         for (int i = 0; i < ((Collection<?>) value).size() - 1; i++) {
                                             sqlBuilder.append("?,");
@@ -105,7 +106,7 @@ public class UnAntlrDialectFactory implements DialectFactory {
                                     } else if (value.getClass().isArray()) {
                                         int length = Array.getLength(value);
                                         if (length == 0) {
-                                            throw new DreamRunTimeException(SystemInvokerFactory.FOREACH + "参数值不能为空");
+                                            throw new DreamRunTimeException("函数" + ForEachInvoker.FUNCTION + "参数值不能为空");
                                         }
                                         int i = 0;
                                         for (; i < length - 1; i++) {
@@ -159,10 +160,5 @@ public class UnAntlrDialectFactory implements DialectFactory {
             default:
                 return null;
         }
-    }
-
-    @Override
-    public void addInvoker(String invokerName, Invoker invoker) {
-        throw new DreamRunTimeException("不支持invoker");
     }
 }

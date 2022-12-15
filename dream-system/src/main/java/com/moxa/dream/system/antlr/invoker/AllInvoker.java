@@ -12,7 +12,7 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
+import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
@@ -50,7 +50,7 @@ public class AllInvoker extends AbstractInvoker {
                 }
             }
         }
-        ScanInvoker scanInvoker = (ScanInvoker) assist.getInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.SCAN);
+        ScanInvoker scanInvoker = assist.getInvoker(ScanInvoker.class);
         ScanInvoker.ScanInfo scanInfo = scanInvoker.getScanInfo();
         Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = scanInfo.getTableScanInfoMap();
         if (!ObjectUtil.isNull(tableList)) {
@@ -221,6 +221,16 @@ public class AllInvoker extends AbstractInvoker {
                 queryColumnInfoList.add(new QueryColumnInfo(database, table, column, alias));
         }
         return queryColumnInfoList;
+    }
+
+    @Override
+    public Invoker newInstance() {
+        return this;
+    }
+
+    @Override
+    public String function() {
+        return "all";
     }
 
     public static class QueryColumnInfo {

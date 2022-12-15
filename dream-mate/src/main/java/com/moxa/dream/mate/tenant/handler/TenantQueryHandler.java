@@ -9,12 +9,12 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
 import com.moxa.dream.mate.util.MateUtil;
-import com.moxa.dream.system.antlr.factory.SystemInvokerFactory;
 import com.moxa.dream.system.antlr.handler.scan.QueryScanHandler;
+import com.moxa.dream.system.antlr.invoker.$Invoker;
 import com.moxa.dream.system.antlr.invoker.ScanInvoker;
-import com.moxa.dream.system.util.InvokerUtil;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -64,7 +64,7 @@ public class TenantQueryHandler extends AbstractHandler {
                     ConditionStatement conditionStatement = new ConditionStatement();
                     conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                     conditionStatement.setOper(new OperStatement.EQStatement());
-                    conditionStatement.setRight(InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn)));
+                    conditionStatement.setRight(AntlrUtil.invokerStatement(new $Invoker(), new SymbolStatement.LetterStatement(tenantColumn)));
                     QueryStatement queryStatement = queryDeque.peek();
                     WhereStatement whereStatement = queryStatement.getWhereStatement();
                     if (whereStatement == null) {
@@ -101,7 +101,7 @@ public class TenantQueryHandler extends AbstractHandler {
                         ConditionStatement conditionStatement = new ConditionStatement();
                         conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                         conditionStatement.setOper(new OperStatement.EQStatement());
-                        conditionStatement.setRight(InvokerUtil.wrapperInvoker(SystemInvokerFactory.NAMESPACE, SystemInvokerFactory.$, ",", new SymbolStatement.LetterStatement(tenantColumn)));
+                        conditionStatement.setRight(AntlrUtil.invokerStatement(new $Invoker(), new SymbolStatement.LetterStatement(tenantColumn)));
                         Statement joinOnStatement = joinStatement.getOn();
                         BraceStatement braceStatement = new BraceStatement(joinOnStatement);
                         ConditionStatement joinConditionStatement = new ConditionStatement();
