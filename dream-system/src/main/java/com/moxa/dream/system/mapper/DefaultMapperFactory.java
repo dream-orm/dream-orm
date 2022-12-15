@@ -2,12 +2,13 @@ package com.moxa.dream.system.mapper;
 
 import com.moxa.dream.system.annotation.Mapper;
 import com.moxa.dream.system.annotation.Param;
-import com.moxa.dream.system.annotation.Setup;
 import com.moxa.dream.system.annotation.Sql;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.MethodParam;
 import com.moxa.dream.system.core.action.Action;
+import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
+import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.provider.ActionProvider;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.NullObject;
@@ -17,10 +18,7 @@ import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.Proxy;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,62 +70,72 @@ public class DefaultMapperFactory implements MapperFactory {
 
     protected void fillMethodInfoFromAction(Configuration configuration, Class type, Map<String, MethodInfo> methodInfoMap) {
         Class<?> actionType = getActionType(type);
-        List<Method> methodList = ReflectUtil.find(actionType,
-                (aType) -> Arrays.stream(aType.getDeclaredMethods())
-                        .filter(method -> method.getParameters().length == 0)
-                        .collect(Collectors.toList()));
-        if (!ObjectUtil.isNull(methodList)) {
-            Object actionObject = ReflectUtil.create(actionType);
-            for (Method method : methodList) {
-                String methodName = method.getName();
-                MethodInfo methodInfo = methodInfoMap.get(methodName);
-                if (methodInfo == null) {
-                    throw new DreamRunTimeException("类" + type.getName() + "不存在方法" + methodName);
-                }
-                ActionProvider actionProvider = null;
-                try {
-                    Class<?> returnType = method.getReturnType();
-                    Object value = method.invoke(actionObject);
-                    if (ActionProvider.class.isAssignableFrom(returnType)) {
-                        actionProvider = (ActionProvider) value;
-                    } else if (String.class == returnType) {
-                        actionProvider = (mapperType) -> (String) value;
+        if (actionType != null) {
+            List<Method> methodList = ReflectUtil.findMethod(actionType)
+                    .stream()
+                    .filter(method -> Modifier.isPublic(method.getModifiers()) && method.getParameters().length == 0)
+                    .collect(Collectors.toList());
+            if (!ObjectUtil.isNull(methodList)) {
+                Object actionObject = ReflectUtil.create(actionType);
+                for (Method method : methodList) {
+                    String methodName = method.getName();
+                    MethodInfo methodInfo = methodInfoMap.get(methodName);
+                    if (methodInfo == null) {
+                        throw new DreamRunTimeException("类" + type.getName() + "不存在方法" + methodName);
                     }
-                } catch (Exception e) {
-                    throw new DreamRunTimeException("调用方法" + actionType.getName() + "." + methodName + "失败，" + e.getMessage(), e);
-                }
-                if (actionProvider != null) {
-                    Action[] initActionList = actionProvider.init(type);
-                    String sql = actionProvider.sql(type);
-                    Action[] loopActionList = actionProvider.loop(type);
-                    Action[] destroyActionList = actionProvider.destroy(type);
-                    Class<? extends Collection> rowType = actionProvider.rowType(type);
-                    Class<?> colType = actionProvider.colType(type);
-                    Boolean cache = actionProvider.cache(type);
-                    Integer timeOut = actionProvider.timeOut(type);
-                    if (initActionList != null) {
-                        methodInfo.setInitActionList(initActionList);
+                    ActionProvider actionProvider = null;
+                    try {
+                        Class<?> returnType = method.getReturnType();
+                        Object value = method.invoke(actionObject);
+                        if (ActionProvider.class.isAssignableFrom(returnType)) {
+                            actionProvider = (ActionProvider) value;
+                        } else if (String.class == returnType) {
+                            actionProvider = () -> (String) value;
+                        }
+                    } catch (Exception e) {
+                        throw new DreamRunTimeException("调用方法" + actionType.getName() + "." + methodName + "失败，" + e.getMessage(), e);
                     }
-                    if (sql != null) {
-                        methodInfo.setSql(sql);
-                    }
-                    if (loopActionList != null) {
-                        methodInfo.setLoopActionList(loopActionList);
-                    }
-                    if (destroyActionList != null) {
-                        methodInfo.setDestroyActionList(destroyActionList);
-                    }
-                    if (rowType != null) {
-                        methodInfo.setRowType(rowType);
-                    }
-                    if (colType != null) {
-                        methodInfo.setColType(colType);
-                    }
-                    if (cache != null) {
-                        methodInfo.setCache(cache);
-                    }
-                    if (timeOut != null) {
-                        methodInfo.setTimeOut(timeOut);
+                    if (actionProvider != null) {
+                        Action[] initActionList = actionProvider.initActionList();
+                        String sql = actionProvider.sql();
+                        Action[] loopActionList = actionProvider.loopActionList();
+                        Action[] destroyActionList = actionProvider.destroyActionList();
+                        Class<? extends Collection> rowType = actionProvider.rowType();
+                        Class<?> colType = actionProvider.colType();
+                        Boolean cache = actionProvider.cache();
+                        Integer timeOut = actionProvider.timeOut();
+                        StatementHandler statementHandler = actionProvider.statementHandler();
+                        ResultSetHandler resultSetHandler = actionProvider.resultSetHandler();
+                        if (initActionList != null) {
+                            methodInfo.setInitActionList(initActionList);
+                        }
+                        if (sql != null) {
+                            methodInfo.setSql(sql);
+                        }
+                        if (loopActionList != null) {
+                            methodInfo.setLoopActionList(loopActionList);
+                        }
+                        if (destroyActionList != null) {
+                            methodInfo.setDestroyActionList(destroyActionList);
+                        }
+                        if (rowType != null) {
+                            methodInfo.setRowType(rowType);
+                        }
+                        if (colType != null) {
+                            methodInfo.setColType(colType);
+                        }
+                        if (cache != null) {
+                            methodInfo.setCache(cache);
+                        }
+                        if (timeOut != null) {
+                            methodInfo.setTimeOut(timeOut);
+                        }
+                        if (statementHandler != null) {
+                            methodInfo.setStatementHandler(statementHandler);
+                        }
+                        if (resultSetHandler != null) {
+                            methodInfo.setResultSetHandler(resultSetHandler);
+                        }
                     }
                 }
             }
@@ -140,7 +148,7 @@ public class DefaultMapperFactory implements MapperFactory {
         boolean cache = isCache(mapperClass, method);
         MethodParam[] methodParamList = getMethodParamList(method);
         String sql = getSql(configuration, method);
-        int timeOut = getTimeOut(method);
+        int timeOut = getTimeOut(mapperClass, method);
         return new MethodInfo()
                 .setConfiguration(configuration)
                 .setName(method.getName())
@@ -166,13 +174,12 @@ public class DefaultMapperFactory implements MapperFactory {
         return sql;
     }
 
-    protected int getTimeOut(Method method) {
-        int timeOut = 0;
-        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
-        if (setupAnnotation != null) {
-            timeOut = setupAnnotation.timeOut();
+    protected int getTimeOut(Class mapperClass, Method method) {
+        Sql sqlAnnotation = method.getDeclaredAnnotation(Sql.class);
+        if (sqlAnnotation != null) {
+            return sqlAnnotation.timeOut();
         }
-        return timeOut;
+        return 0;
     }
 
     protected String getParamName(Parameter parameter) {
@@ -184,42 +191,23 @@ public class DefaultMapperFactory implements MapperFactory {
     }
 
     protected Class<? extends Collection> getRowType(Class mapperClass, Method method) {
-        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
-        Class<? extends Collection> rowType;
-        if (setupAnnotation == null) {
-            rowType = ReflectUtil.getRowType(mapperClass, method);
-        } else {
-            rowType = setupAnnotation.rowType();
-            if (rowType == NullObject.class) {
-                rowType = ReflectUtil.getRowType(mapperClass, method);
-            }
-        }
-        if (rowType == null)
+        Class<? extends Collection> rowType = ReflectUtil.getRowType(mapperClass, method);
+        if (rowType == null) {
             rowType = NonCollection.class;
+        }
         return rowType;
     }
 
     protected Class getColType(Class mapperClass, Method method) {
-        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
-        Class<?> colType;
-        if (setupAnnotation == null) {
-            colType = ReflectUtil.getColType(mapperClass, method);
-        } else {
-            colType = setupAnnotation.colType();
-            if (colType == NullObject.class) {
-                colType = ReflectUtil.getColType(mapperClass, method);
-            }
-        }
-        return colType;
+        return ReflectUtil.getColType(mapperClass, method);
     }
 
     protected boolean isCache(Class mapperClass, Method method) {
-        Setup setupAnnotation = method.getDeclaredAnnotation(Setup.class);
-        boolean cache = true;
-        if (setupAnnotation != null) {
-            cache = setupAnnotation.cache();
+        Sql sqlAnnotation = method.getDeclaredAnnotation(Sql.class);
+        if (sqlAnnotation != null) {
+            return sqlAnnotation.cache();
         }
-        return cache;
+        return true;
     }
 
     protected MethodParam[] getMethodParamList(Method method) {

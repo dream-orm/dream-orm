@@ -1,38 +1,48 @@
 package com.moxa.dream.system.provider;
 
 import com.moxa.dream.system.core.action.Action;
+import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
+import com.moxa.dream.system.core.statementhandler.StatementHandler;
 
 import java.util.Collection;
 
 public interface ActionProvider {
 
-    String sql(Class<?> type);
+    String sql();
 
-    default Action[] init(Class<?> type) {
+    default Action[] initActionList() {
         return null;
     }
 
-    default Action[] loop(Class<?> type) {
+    default Action[] loopActionList() {
         return null;
     }
 
-    default Action[] destroy(Class<?> type) {
+    default Action[] destroyActionList() {
         return null;
     }
 
-    default Class<? extends Collection> rowType(Class<?> type) {
+    default Class<? extends Collection> rowType() {
         return null;
     }
 
-    default Class<?> colType(Class<?> type) {
+    default Class<?> colType() {
         return null;
     }
 
-    default Boolean cache(Class<?> type) {
+    default Boolean cache() {
         return null;
     }
 
-    default Integer timeOut(Class<?> type) {
+    default Integer timeOut() {
+        return null;
+    }
+
+    default StatementHandler statementHandler() {
+        return null;
+    }
+
+    default ResultSetHandler resultSetHandler() {
         return null;
     }
 }

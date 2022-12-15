@@ -7,6 +7,7 @@ import com.moxa.dream.template.sequence.BatchSequence;
 import com.moxa.dream.template.sequence.FetchKeySequence;
 import com.moxa.dream.template.sequence.Sequence;
 
+import java.util.Collection;
 import java.util.List;
 
 public class DefaultTemplateMapper implements TemplateMapper {
@@ -25,6 +26,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private BatchInsertMapper batchInsertMapper;
     private ExistByIdMapper existByIdMapper;
     private ExistMapper existMapper;
+    private ExecuteMapper executeMapper;
 
     public DefaultTemplateMapper(Session session, Sequence sequence, AttachMent attachMent) {
         selectByIdSqlMapper = new SelectByIdMapper(session, attachMent);
@@ -42,6 +44,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
         batchInsertMapper = new BatchInsertMapper(session, new BatchSequence(sequence));
         existByIdMapper = new ExistByIdMapper(session, attachMent);
         existMapper = new ExistMapper(session, attachMent);
+        executeMapper = new ExecuteMapper(session);
     }
 
     @Override
@@ -127,5 +130,10 @@ public class DefaultTemplateMapper implements TemplateMapper {
             return null;
         }
         return (List<Object>) batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
+    }
+
+    @Override
+    public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType, boolean cache) {
+        return executeMapper.execute(sql, param, rowType, colType, cache);
     }
 }

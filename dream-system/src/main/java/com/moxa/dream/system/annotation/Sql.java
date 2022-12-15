@@ -9,4 +9,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Sql {
     String value();
+
+    boolean cache() default true;
+
+    int timeOut() default 0;
 }
