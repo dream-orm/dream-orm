@@ -1,5 +1,6 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.system.antlr.invoker.$Invoker;
 import com.moxa.dream.system.antlr.invoker.ForEachInvoker;
@@ -87,7 +88,7 @@ public abstract class AbstractMapper {
         if (appendField) {
             param = param + "." + columnInfo.getName();
         }
-        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + "=" + AntlrUtil.invokerSQL(new $Invoker(), param);
+        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + "=" + AntlrUtil.invokerSQL($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, param);
     }
 
     protected String getIdsWhere(TableInfo tableInfo) {
@@ -95,6 +96,6 @@ public abstract class AbstractMapper {
         if (columnInfo == null) {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'未注册主键");
         }
-        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + " in(" + AntlrUtil.invokerSQL(new ForEachInvoker(), DREAM_TEMPLATE_PARAM) + ")";
+        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, DREAM_TEMPLATE_PARAM) + ")";
     }
 }

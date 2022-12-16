@@ -22,6 +22,8 @@ import java.util.List;
 
 public class TableInvoker extends AbstractInvoker {
 
+    public static final String FUNCTION = "table";
+
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
@@ -95,5 +97,10 @@ public class TableInvoker extends AbstractInvoker {
     @Override
     public Invoker newInstance() {
         return this;
+    }
+
+    @Override
+    public String function() {
+        return FUNCTION;
     }
 }

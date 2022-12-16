@@ -22,13 +22,10 @@ import com.moxa.dream.system.table.factory.TableFactory;
 import java.util.List;
 
 public class TenantInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "dream_mate_tenant";
     private TableFactory tableFactory;
     private MethodInfo methodInfo;
     private TenantHandler tenantHandler;
-
-    public static String getName() {
-        return "dream_mate_tenant";
-    }
 
     @Override
     public void init(Assist assist) {
@@ -44,6 +41,11 @@ public class TenantInvoker extends AbstractInvoker {
     @Override
     public Invoker newInstance() {
         return new TenantInvoker();
+    }
+
+    @Override
+    public String function() {
+        return FUNCTION;
     }
 
     @Override

@@ -20,13 +20,10 @@ import com.moxa.dream.system.table.factory.TableFactory;
 import java.util.List;
 
 public class PermissionGetInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "dream_mate_permission_get";
     private TableFactory tableFactory;
     private MethodInfo methodInfo;
     private PermissionHandler permissionHandler;
-
-    public static String getName() {
-        return "dream_mate_permission_get";
-    }
 
     @Override
     public void init(Assist assist) {
@@ -42,6 +39,11 @@ public class PermissionGetInvoker extends AbstractInvoker {
     @Override
     public Invoker newInstance() {
         return new PermissionGetInvoker();
+    }
+
+    @Override
+    public String function() {
+        return FUNCTION;
     }
 
     @Override

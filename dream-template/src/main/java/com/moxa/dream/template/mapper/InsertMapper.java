@@ -1,5 +1,6 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.system.antlr.invoker.$Invoker;
 import com.moxa.dream.system.config.Configuration;
@@ -44,7 +45,7 @@ public class InsertMapper extends WrapMapper {
                 ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                 if (columnInfo != null) {
                     String column = columnInfo.getColumn();
-                    String invokerSQL = AntlrUtil.invokerSQL(new $Invoker(), DREAM_TEMPLATE_PARAM + "." + columnInfo.getName());
+                    String invokerSQL = AntlrUtil.invokerSQL($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, DREAM_TEMPLATE_PARAM + "." + columnInfo.getName());
                     if (columnInfo.isPrimary()) {
                         columnList.add(0, column);
                         valueList.add(0, invokerSQL);

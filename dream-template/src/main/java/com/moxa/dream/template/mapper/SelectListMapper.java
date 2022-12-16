@@ -1,5 +1,6 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.system.antlr.invoker.NotInvoker;
 import com.moxa.dream.system.config.Configuration;
@@ -54,7 +55,7 @@ public class SelectListMapper extends SelectMapper {
                 whereSql = whereSql + whereFalseSql;
             }
             if (!ObjectUtil.isNull(whereTrueSql)) {
-                whereTrueSql = AntlrUtil.invokerSQL(new NotInvoker(), whereTrueSql);
+                whereTrueSql = AntlrUtil.invokerSQL(NotInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, whereTrueSql);
                 if (!ObjectUtil.isNull(whereFalseSql)) {
                     whereSql = whereSql + " and " + whereTrueSql;
                 } else {

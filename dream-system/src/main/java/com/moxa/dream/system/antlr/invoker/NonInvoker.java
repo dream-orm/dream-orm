@@ -16,6 +16,8 @@ import java.util.List;
 
 public class NonInvoker extends AbstractInvoker {
 
+    public static final String FUNCTION = "non";
+
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         return toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
@@ -37,6 +39,6 @@ public class NonInvoker extends AbstractInvoker {
 
     @Override
     public String function() {
-        return "non";
+        return FUNCTION;
     }
 }

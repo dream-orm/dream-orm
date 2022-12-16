@@ -1,5 +1,6 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.system.antlr.invoker.AllInvoker;
 import com.moxa.dream.system.antlr.invoker.TableInvoker;
@@ -37,7 +38,7 @@ public abstract class SelectMapper extends AbstractMapper {
     }
 
     protected String getSelectColumn(Class<?> type) {
-        return AntlrUtil.invokerSQL(new AllInvoker());
+        return AntlrUtil.invokerSQL(AllInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
     }
 
     protected abstract String getOther(Configuration configuration, TableInfo tableInfo, Class<?> type, Object arg);
@@ -50,7 +51,7 @@ public abstract class SelectMapper extends AbstractMapper {
 
     protected String getFromTable(Class type) {
         Set<String> tableNameSet = TemplateUtil.getTableNameSet(type);
-        return AntlrUtil.invokerSQL(new TableInvoker(), tableNameSet.toArray(new String[0])
+        return AntlrUtil.invokerSQL(TableInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, tableNameSet.toArray(new String[0])
         );
     }
 

@@ -1,5 +1,6 @@
 package com.moxa.dream.template.attach;
 
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.system.antlr.invoker.$Invoker;
 import com.moxa.dream.system.config.Command;
@@ -35,7 +36,7 @@ public class DefaultAttachMent implements AttachMent {
                         if (field.getName().equals(fieldName)) {
                             ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
                             String column = tableInfo.getTable() + "." + columnInfo.getColumn();
-                            String invokerSQL = AntlrUtil.invokerSQL(new $Invoker(), AbstractMapper.DREAM_TEMPLATE_PARAM + "." + columnInfo.getName());
+                            String invokerSQL = AntlrUtil.invokerSQL($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, AbstractMapper.DREAM_TEMPLATE_PARAM + "." + columnInfo.getName());
                             return "and(" + column + " is null or " + column + "=" + invokerSQL + ")";
                         }
                     }

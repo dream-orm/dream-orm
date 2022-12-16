@@ -8,7 +8,6 @@ import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.system.antlr.handler.scan.*;
 import com.moxa.dream.util.common.LowHashMap;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -20,6 +19,8 @@ import java.util.Map;
 
 
 public class ScanInvoker extends AbstractInvoker {
+
+    public static final String FUNCTION = "scan";
 
     private final QueryScanHandler queryScanHandler;
 
@@ -71,7 +72,7 @@ public class ScanInvoker extends AbstractInvoker {
                 for (InvokerStatement invoker : invokerStatementList) {
                     invoker.replaceWith(new SymbolStatement.MarkStatement());
                 }
-                $Invoker $invoker = assist.getInvoker($Invoker.class);
+                $Invoker $invoker = ($Invoker) assist.getInvoker($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
                 scanInfo.setParamInfoList($invoker.getParamInfoList());
                 scanInfo.sql = sql;
             }

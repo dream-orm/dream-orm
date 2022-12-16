@@ -44,7 +44,7 @@ public class TenantInsertHandler extends AbstractHandler {
                         break;
                     }
                 }
-                InvokerStatement invokerStatement = AntlrUtil.invokerStatement(new $Invoker(), new SymbolStatement.LetterStatement(tenantColumn));
+                InvokerStatement invokerStatement = AntlrUtil.invokerStatement($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
                 if (i < paramColumnList.length) {
                     valuesColumnList[i] = invokerStatement;
                 } else {

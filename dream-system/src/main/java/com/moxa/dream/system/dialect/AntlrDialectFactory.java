@@ -1,10 +1,9 @@
 package com.moxa.dream.system.dialect;
 
 import com.moxa.dream.antlr.config.Assist;
-import com.moxa.dream.antlr.exception.AntlrException;
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.system.antlr.invoker.$Invoker;
 import com.moxa.dream.system.antlr.invoker.ScanInvoker;
 import com.moxa.dream.system.cache.CacheKey;
@@ -88,12 +87,8 @@ public class AntlrDialectFactory implements DialectFactory {
     }
 
     protected List<$Invoker.ParamInfo> getParamInfoList(Assist assist) {
-        $Invoker invoker = assist.getInvoker($Invoker.class);
-        if (invoker != null) {
-            return invoker.getParamInfoList();
-        } else {
-            return null;
-        }
+        $Invoker invoker = ($Invoker) assist.getInvoker($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+        return invoker.getParamInfoList();
     }
 
     protected CacheKey getUniqueKey(MethodInfo methodInfo, List<MappedParam> mappedParamList, String sql) {

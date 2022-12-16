@@ -5,7 +5,6 @@ import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.handler.Handler;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.antlr.util.AntlrUtil;
 
 import java.util.List;
 
@@ -31,7 +30,5 @@ public interface Invoker {
         return DEFAULT_NAMESPACE;
     }
 
-    default String function() {
-        return AntlrUtil.getInvokerFunction(this.getClass());
-    }
+    String function();
 }

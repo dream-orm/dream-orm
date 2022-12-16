@@ -64,7 +64,7 @@ public class TenantQueryHandler extends AbstractHandler {
                     ConditionStatement conditionStatement = new ConditionStatement();
                     conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                     conditionStatement.setOper(new OperStatement.EQStatement());
-                    conditionStatement.setRight(AntlrUtil.invokerStatement(new $Invoker(), new SymbolStatement.LetterStatement(tenantColumn)));
+                    conditionStatement.setRight(AntlrUtil.invokerStatement($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                     QueryStatement queryStatement = queryDeque.peek();
                     WhereStatement whereStatement = queryStatement.getWhereStatement();
                     if (whereStatement == null) {
@@ -101,7 +101,7 @@ public class TenantQueryHandler extends AbstractHandler {
                         ConditionStatement conditionStatement = new ConditionStatement();
                         conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                         conditionStatement.setOper(new OperStatement.EQStatement());
-                        conditionStatement.setRight(AntlrUtil.invokerStatement(new $Invoker(), new SymbolStatement.LetterStatement(tenantColumn)));
+                        conditionStatement.setRight(AntlrUtil.invokerStatement($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                         Statement joinOnStatement = joinStatement.getOn();
                         BraceStatement braceStatement = new BraceStatement(joinOnStatement);
                         ConditionStatement joinConditionStatement = new ConditionStatement();

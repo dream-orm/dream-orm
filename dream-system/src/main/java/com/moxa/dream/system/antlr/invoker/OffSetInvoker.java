@@ -15,6 +15,7 @@ import com.moxa.dream.system.config.MethodInfo;
 import java.util.List;
 
 public class OffSetInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "offset";
     PageHandler pageHandler;
 
     @Override
@@ -40,6 +41,6 @@ public class OffSetInvoker extends AbstractInvoker {
 
     @Override
     public String function() {
-        return "offset";
+        return FUNCTION;
     }
 }

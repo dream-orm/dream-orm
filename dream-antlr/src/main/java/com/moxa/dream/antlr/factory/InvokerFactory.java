@@ -6,6 +6,4 @@ public interface InvokerFactory {
     void addInvoker(Invoker invoker);
 
     Invoker getInvoker(String function, String namespace);
-
-    <T extends Invoker> T getInvoker(Class<T> invokerType);
 }

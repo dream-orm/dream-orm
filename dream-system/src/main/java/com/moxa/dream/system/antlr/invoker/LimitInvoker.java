@@ -15,6 +15,7 @@ import com.moxa.dream.system.config.MethodInfo;
 import java.util.List;
 
 public class LimitInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "limit";
     PageHandler pageHandler;
 
     @Override
@@ -40,6 +41,6 @@ public class LimitInvoker extends AbstractInvoker {
 
     @Override
     public String function() {
-        return "limit";
+        return FUNCTION;
     }
 }

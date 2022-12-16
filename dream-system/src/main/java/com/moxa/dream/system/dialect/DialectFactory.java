@@ -1,6 +1,5 @@
 package com.moxa.dream.system.dialect;
 
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 

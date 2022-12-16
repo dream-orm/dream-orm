@@ -2,6 +2,8 @@ package com.moxa.dream.system.antlr.invoker;
 
 
 public class NotInvoker extends NonInvoker {
+    public static final String FUNCTION = "not";
+
     @Override
     public boolean isEmpty(Object value) {
         return super.isEmpty(value) || "".equals(value.toString());
@@ -9,6 +11,6 @@ public class NotInvoker extends NonInvoker {
 
     @Override
     public String function() {
-        return "not";
+        return FUNCTION;
     }
 }

@@ -21,6 +21,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 public class BlockInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "dream_mate_block";
     private Set<String> filterSet;
 
     public BlockInvoker() {
@@ -56,10 +57,6 @@ public class BlockInvoker extends AbstractInvoker {
         this.filterSet = filterSet;
     }
 
-    public static String getName() {
-        return "dream_mate_column_block";
-    }
-
     @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement statement = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList()[0];
@@ -80,6 +77,11 @@ public class BlockInvoker extends AbstractInvoker {
     @Override
     public Invoker newInstance() {
         return this;
+    }
+
+    @Override
+    public String function() {
+        return FUNCTION;
     }
 }
 

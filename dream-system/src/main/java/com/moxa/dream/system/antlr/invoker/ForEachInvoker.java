@@ -9,7 +9,6 @@ import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.util.common.ObjectWrapper;
 
 import java.util.Arrays;
@@ -55,7 +54,7 @@ public class ForEachInvoker extends AbstractInvoker {
                 paramMap.remove(this.index);
                 paramMap.remove(this.item);
             } else {
-                $Invoker sqlInvoker = assist.getInvoker($Invoker.class);
+                $Invoker sqlInvoker = ($Invoker) assist.getInvoker($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
                 List<$Invoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
                 int index = 0;
                 for (Object item : collection) {

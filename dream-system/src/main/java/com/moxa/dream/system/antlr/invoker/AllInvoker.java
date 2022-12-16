@@ -12,7 +12,6 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
@@ -30,6 +29,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AllInvoker extends AbstractInvoker {
+
+    public static final String FUNCTION = "all";
 
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
@@ -50,7 +51,7 @@ public class AllInvoker extends AbstractInvoker {
                 }
             }
         }
-        ScanInvoker scanInvoker = assist.getInvoker(ScanInvoker.class);
+        ScanInvoker scanInvoker = (ScanInvoker) assist.getInvoker(ScanInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
         ScanInvoker.ScanInfo scanInfo = scanInvoker.getScanInfo();
         Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = scanInfo.getTableScanInfoMap();
         if (!ObjectUtil.isNull(tableList)) {
@@ -230,7 +231,7 @@ public class AllInvoker extends AbstractInvoker {
 
     @Override
     public String function() {
-        return "all";
+        return FUNCTION;
     }
 
     public static class QueryColumnInfo {

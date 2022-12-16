@@ -1,5 +1,6 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.system.antlr.invoker.$Invoker;
 import com.moxa.dream.system.config.Command;
@@ -37,7 +38,7 @@ public abstract class UpdateMapper extends WrapMapper {
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
                         setList.add(columnInfo.getColumn() + "=" +
-                                AntlrUtil.invokerSQL(new $Invoker(), DREAM_TEMPLATE_PARAM + "." + columnInfo.getName()));
+                                AntlrUtil.invokerSQL($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, DREAM_TEMPLATE_PARAM + "." + columnInfo.getName()));
                     }
                 }
             }

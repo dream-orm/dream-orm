@@ -1,11 +1,9 @@
 package com.moxa.dream.antlr.util;
 
 import com.moxa.dream.antlr.exception.AntlrException;
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
-import com.moxa.dream.antlr.smt.SymbolStatement;
 
 import java.lang.reflect.Field;
 
@@ -25,18 +23,7 @@ public class AntlrUtil {
         }
     }
 
-    public static String getInvokerFunction(Class<? extends Invoker> invokerType) {
-        String function;
-        String simpleName = invokerType.getSimpleName();
-        if (simpleName.endsWith("Invoker") && simpleName.length() > 7) {
-            function = simpleName.substring(0, simpleName.length() - 7);
-        } else {
-            function = simpleName;
-        }
-        return function.toLowerCase();
-    }
-
-    public static InvokerStatement invokerStatement(Invoker invoker, Statement... statements) {
+    public static InvokerStatement invokerStatement(String function, String namespace, Statement... statements) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         if (statements != null) {
             for (Statement statement : statements) {
@@ -44,13 +31,13 @@ public class AntlrUtil {
             }
         }
         InvokerStatement invokerStatement = new InvokerStatement();
-        invokerStatement.setFunction(invoker.function());
-        invokerStatement.setNamespace(invoker.namespace());
+        invokerStatement.setFunction(function);
+        invokerStatement.setNamespace(namespace);
         invokerStatement.setParamStatement(listColumnStatement);
         return invokerStatement;
     }
 
-    public static String invokerSQL(Invoker invoker, String... args) {
+    public static String invokerSQL(String function, String namespace, String... args) {
         StringBuilder paramBuilder = new StringBuilder();
         if (args != null && args.length > 0) {
             String cut = ",";
@@ -59,7 +46,11 @@ public class AntlrUtil {
             }
             paramBuilder.delete(paramBuilder.length() - cut.length(), paramBuilder.length());
         }
-        return "@" + invoker.function() + ":" + invoker.namespace() + "(" + paramBuilder + ")";
-
+        if (namespace != null && namespace.trim().length() != 0) {
+            namespace = ":" + namespace;
+        } else {
+            namespace = "";
+        }
+        return "@" + function + namespace + "(" + paramBuilder + ")";
     }
 }

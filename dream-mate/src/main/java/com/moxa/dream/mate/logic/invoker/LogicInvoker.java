@@ -21,13 +21,10 @@ import com.moxa.dream.system.table.factory.TableFactory;
 import java.util.List;
 
 public class LogicInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "dream_mate_logic";
     private TableFactory tableFactory;
     private MethodInfo methodInfo;
     private LogicHandler logicHandler;
-
-    public static String getName() {
-        return "dream_mate_logic_delete";
-    }
 
     @Override
     public void init(Assist assist) {
@@ -43,6 +40,11 @@ public class LogicInvoker extends AbstractInvoker {
     @Override
     public Invoker newInstance() {
         return new LogicInvoker();
+    }
+
+    @Override
+    public String function() {
+        return FUNCTION;
     }
 
     @Override

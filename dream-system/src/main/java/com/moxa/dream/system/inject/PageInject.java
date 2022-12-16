@@ -1,5 +1,6 @@
 package com.moxa.dream.system.inject;
 
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
@@ -25,17 +26,20 @@ public class PageInject implements Inject {
             String startRow = prefix + START_ROW;
             String pageSize = prefix + PAGE_SIZE;
             InvokerStatement pageStatement;
-            $Invoker $invoker = new $Invoker();
             if (pageQuery.offset()) {
-                pageStatement = AntlrUtil.invokerStatement(new OffSetInvoker(),
+                pageStatement = AntlrUtil.invokerStatement(
+                        OffSetInvoker.FUNCTION,
+                        Invoker.DEFAULT_NAMESPACE,
                         statement.getStatement(),
-                        AntlrUtil.invokerStatement($invoker, new SymbolStatement.LetterStatement(pageSize)),
-                        AntlrUtil.invokerStatement($invoker, new SymbolStatement.LetterStatement(startRow)));
+                        AntlrUtil.invokerStatement($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(pageSize)),
+                        AntlrUtil.invokerStatement($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(startRow)));
             } else {
-                pageStatement = AntlrUtil.invokerStatement(new LimitInvoker(),
+                pageStatement = AntlrUtil.invokerStatement(
+                        LimitInvoker.FUNCTION,
+                        Invoker.DEFAULT_NAMESPACE,
                         statement.getStatement(),
-                        AntlrUtil.invokerStatement($invoker, new SymbolStatement.LetterStatement(startRow)),
-                        AntlrUtil.invokerStatement($invoker, new SymbolStatement.LetterStatement(pageSize)));
+                        AntlrUtil.invokerStatement($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(startRow)),
+                        AntlrUtil.invokerStatement($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(pageSize)));
             }
             statement.setStatement(pageStatement);
         }
