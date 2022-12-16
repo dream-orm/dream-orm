@@ -6,7 +6,7 @@ import com.moxa.dream.system.typehandler.wrapper.TypeHandlerWrapper;
 
 
 public interface TypeHandlerFactory {
-    void wrapper(TypeHandlerWrapper[] typeHandlerWrapperList);
+    void wrappers(TypeHandlerWrapper... typeHandlerWrappers);
 
     TypeHandler getTypeHandler(Class javaType, int jdbcType) throws TypeHandlerNotFoundException;
 

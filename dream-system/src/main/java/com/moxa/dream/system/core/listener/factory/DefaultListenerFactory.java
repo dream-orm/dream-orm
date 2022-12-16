@@ -15,7 +15,7 @@ public class DefaultListenerFactory implements ListenerFactory {
     private BatchListener[] batchListeners = new BatchListener[0];
 
     @Override
-    public void listener(Listener[] listeners) {
+    public void listeners(Listener... listeners) {
         List<QueryListener> queryListenerList = new ArrayList<>();
         List<InsertListener> insertListenerList = new ArrayList<>();
         List<UpdateListener> updateListenerList = new ArrayList<>();

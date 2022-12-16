@@ -3,7 +3,7 @@ package com.moxa.dream.system.core.listener.factory;
 import com.moxa.dream.system.core.listener.*;
 
 public interface ListenerFactory {
-    void listener(Listener[] listeners);
+    void listeners(Listener... listeners);
 
     QueryListener[] getQueryListener();
 

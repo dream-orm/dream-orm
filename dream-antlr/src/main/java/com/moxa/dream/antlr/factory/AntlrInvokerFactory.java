@@ -10,7 +10,15 @@ public class AntlrInvokerFactory implements InvokerFactory {
     protected Map<String, Map<String, Invoker>> functionInvokerMap = new HashMap<>(16);
 
     @Override
-    public void addInvoker(Invoker invoker) {
+    public void addInvokers(Invoker... invokers) {
+        if (invokers != null && invokers.length > 0) {
+            for (Invoker invoker : invokers) {
+                addInvoker(invoker);
+            }
+        }
+    }
+
+    protected void addInvoker(Invoker invoker) {
         String function = invoker.function();
         String namespace = invoker.namespace();
         Map<String, Invoker> invokerMap = functionInvokerMap.get(function);

@@ -21,7 +21,6 @@ public class Configuration {
     private CompileFactory compileFactory;
     private InjectFactory injectFactory;
     private DialectFactory dialectFactory;
-
     private InvokerFactory invokerFactory;
     private PluginFactory pluginFactory;
     private ListenerFactory listenerFactory;

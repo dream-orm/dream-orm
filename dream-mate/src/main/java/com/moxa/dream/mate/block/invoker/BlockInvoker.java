@@ -24,12 +24,8 @@ public class BlockInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_block";
     private Set<String> filterSet;
 
-    public BlockInvoker() {
-        this("META-INF/keyword.txt");
-    }
-
-    public BlockInvoker(String txt) {
-        InputStream inputStream = ResourceUtil.getResourceAsStream(txt);
+    public BlockInvoker(String resource) {
+        InputStream inputStream = ResourceUtil.getResourceAsStream(resource);
         Set<String> filterSet = new LowHashSet();
         if (inputStream != null) {
             ByteArrayOutputStream result = new ByteArrayOutputStream();
@@ -45,10 +41,10 @@ public class BlockInvoker extends AbstractInvoker {
                     filterSet.add(tokenizer.nextToken());
                 }
             } catch (Exception e) {
-                throw new DreamRunTimeException("读取" + txt + "失败", e);
+                throw new DreamRunTimeException("读取" + resource + "失败", e);
             }
         } else {
-            throw new DreamRunTimeException(txt + "不存在");
+            throw new DreamRunTimeException(resource + "不存在");
         }
         this.filterSet = filterSet;
     }

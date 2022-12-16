@@ -14,13 +14,13 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
     protected Map<Integer, TypeHandler> typeHandlerMap = new HashMap<>();
 
     public DefaultTypeHandlerFactory() {
-        wrapper(getTypeHandlerWrapperList());
+        wrappers(getTypeHandlerWrappers());
     }
 
     @Override
-    public void wrapper(TypeHandlerWrapper[] typeHandlerWrapperList) {
-        if (!ObjectUtil.isNull(typeHandlerWrapperList)) {
-            for (TypeHandlerWrapper typeHandlerWrapper : typeHandlerWrapperList) {
+    public void wrappers(TypeHandlerWrapper... typeHandlerWrappers) {
+        if (!ObjectUtil.isNull(typeHandlerWrappers)) {
+            for (TypeHandlerWrapper typeHandlerWrapper : typeHandlerWrappers) {
                 TypeHandler typeHandler = typeHandlerWrapper.getTypeHandler();
                 if (typeHandler != null) {
                     typeHandler = wrapper(typeHandler);
@@ -49,7 +49,7 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
         return typeHandler;
     }
 
-    protected TypeHandlerWrapper[] getTypeHandlerWrapperList() {
+    protected TypeHandlerWrapper[] getTypeHandlerWrappers() {
         return new TypeHandlerWrapper[]{
                 new BigDecimalTypeHandlerWrapper(),
                 new BlobInputStreamTypeHandlerWrapper(),

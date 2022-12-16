@@ -8,6 +8,7 @@ import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.mate.logic.invoker.LogicInvoker;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.inject.Inject;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 public class LogicInject implements Inject {
     private LogicHandler logicHandler;
@@ -20,7 +21,7 @@ public class LogicInject implements Inject {
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
         if (invokerFactory.getInvoker(LogicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            invokerFactory.addInvoker(new LogicInvoker());
+            throw new DreamRunTimeException("逻辑删除模式，请开启函数@" + LogicInvoker.FUNCTION + ":" + Invoker.DEFAULT_NAMESPACE);
         }
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement tenantStatement = AntlrUtil.invokerStatement(LogicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());

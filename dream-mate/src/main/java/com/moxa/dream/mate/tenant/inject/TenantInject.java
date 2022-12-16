@@ -33,7 +33,7 @@ public class TenantInject implements Inject {
             throw new DreamRunTimeException("多租户模式，请开启插件" + TenantInterceptor.class.getName());
         }
         if (invokerFactory.getInvoker(TenantInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            invokerFactory.addInvoker(new TenantInvoker());
+            throw new DreamRunTimeException("多租户模式，请开启函数@" + TenantInvoker.FUNCTION + ":" + Invoker.DEFAULT_NAMESPACE);
         }
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement tenantStatement = AntlrUtil.invokerStatement(TenantInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
