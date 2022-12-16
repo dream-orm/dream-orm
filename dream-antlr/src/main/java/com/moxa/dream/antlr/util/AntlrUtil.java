@@ -42,15 +42,14 @@ public class AntlrUtil {
         if (args != null && args.length > 0) {
             String cut = ",";
             for (String param : args) {
-                paramBuilder.append(param).append(",");
+                paramBuilder.append(param).append(cut);
             }
             paramBuilder.delete(paramBuilder.length() - cut.length(), paramBuilder.length());
         }
         if (namespace != null && namespace.trim().length() != 0) {
-            namespace = ":" + namespace;
+            return "@" + function + ":" + namespace + "(" + paramBuilder + ")";
         } else {
-            namespace = "";
+            return "@" + function + "(" + paramBuilder + ")";
         }
-        return "@" + function + namespace + "(" + paramBuilder + ")";
     }
 }
