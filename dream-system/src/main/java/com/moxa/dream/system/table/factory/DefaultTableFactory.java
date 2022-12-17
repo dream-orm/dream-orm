@@ -88,7 +88,9 @@ public class DefaultTableFactory implements TableFactory {
             return null;
         Class<?> colType = ReflectUtil.getColType(field.getGenericType());
         String joinTable = getTable(colType);
-        ObjectUtil.requireNonNull(joinTable, "@Join修饰的属性'" + field.getName() + "'未获取关联表名");
+        if (ObjectUtil.isNull(joinTable)) {
+            throw new DreamRunTimeException(colType.getName() + "不存在注解" + Table.class.getName());
+        }
         JoinInfo joinInfo = new JoinInfo(table, joinAnnotation.column(), joinTable, joinAnnotation.joinColumn(), joinAnnotation.joinType());
         return joinInfo;
     }

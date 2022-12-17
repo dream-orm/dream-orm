@@ -7,8 +7,9 @@ import com.moxa.dream.system.antlr.invoker.$Invoker;
 import static com.moxa.dream.template.mapper.AbstractMapper.DREAM_TEMPLATE_PARAM;
 
 public class EndWithCondition implements Condition {
+
     @Override
     public String getCondition(String table, String column, String field) {
-        return table + "." + column + " like concat(" + AntlrUtil.invokerSQL($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, DREAM_TEMPLATE_PARAM + "." + field) + ",'%')";
+        return table + "." + column + " like concat('%'," + AntlrUtil.invokerSQL($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, DREAM_TEMPLATE_PARAM + "." + field) + ")";
     }
 }

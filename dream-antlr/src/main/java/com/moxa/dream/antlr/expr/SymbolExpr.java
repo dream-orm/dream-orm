@@ -64,11 +64,9 @@ public class SymbolExpr extends SqlExpr {
 
     @Override
     protected Statement exprLetter(ExprInfo exprInfo) throws AntlrException {
-        ListColumnStatement listColumnStatement = (ListColumnStatement) new ListColumnExpr(exprReader, () -> {
-            LetterExpr letterExpr = new LetterExpr(exprReader);
-            letterExpr.setExprTypes(ExprType.LETTER, ExprType.STR, ExprType.JAVA_STR, ExprType.STAR, ExprType.SINGLE_MARK);
-            return letterExpr;
-        }, new ExprInfo(ExprType.DOT, ".")).expr();
+        ListColumnStatement listColumnStatement = (ListColumnStatement) new ListColumnExpr(exprReader, () ->
+                new LetterExpr(exprReader)
+                , new ExprInfo(ExprType.DOT, ".")).expr();
         Statement[] columnList = listColumnStatement.getColumnList();
         if (columnList.length > 1) {
             statement = listColumnStatement;
@@ -115,7 +113,7 @@ public class SymbolExpr extends SqlExpr {
 
         public LetterExpr(ExprReader exprReader) {
             super(exprReader);
-            setExprTypes(ExprType.STR, ExprType.JAVA_STR, ExprType.STAR, ExprType.SINGLE_MARK, ExprType.LETTER);
+            setExprTypes(ExprType.LETTER, ExprType.STR, ExprType.JAVA_STR, ExprType.STAR, ExprType.SINGLE_MARK, ExprType.INT);
         }
 
         @Override
@@ -159,6 +157,14 @@ public class SymbolExpr extends SqlExpr {
         protected Statement exprSingleMark(ExprInfo exprInfo) throws AntlrException {
             push();
             statement = new SymbolStatement.SingleMarkStatement(exprInfo.getInfo());
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprInt(ExprInfo exprInfo) throws AntlrException {
+            push();
+            statement = new SymbolStatement.IntStatement(exprInfo.getInfo());
             setExprTypes(ExprType.NIL);
             return expr();
         }

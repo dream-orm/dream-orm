@@ -34,20 +34,23 @@ public class DefaultMapperFactory implements MapperFactory {
             List<Method> methodList = ReflectUtil.findMethod(mapperClass);
             if (!ObjectUtil.isNull(methodList)) {
                 for (Method method : methodList) {
-                    String name = method.getName();
-                    if (methodInfoMap.containsKey(name)) {
-                        throw new DreamRunTimeException("方法名'" + name + "'重复定义，请检查" + mapperClass.getName());
+                    if (!method.isDefault()) {
+                        String name = method.getName();
+                        if (methodInfoMap.containsKey(name)) {
+                            throw new DreamRunTimeException("方法名'" + name + "'重复定义，请检查" + mapperClass.getName());
+                        }
+                        MethodInfo methodInfo = createMethodInfo(configuration, mapperClass, method);
+                        methodInfoMap.put(name, methodInfo);
                     }
-                    MethodInfo methodInfo = createMethodInfo(configuration, mapperClass, method);
-                    methodInfoMap.put(name, methodInfo);
                 }
             }
             fillMethodInfoFromAction(configuration, mapperClass, methodInfoMap);
             for (String name : methodInfoMap.keySet()) {
                 MethodInfo methodInfo = methodInfoMap.get(name);
-                if (!ObjectUtil.isNull(methodInfo.getSql())) {
-                    this.methodInfoMap.put(methodInfo.getMethod(), methodInfo);
+                if (ObjectUtil.isNull(methodInfo.getSql())) {
+                    throw new DreamRunTimeException(methodInfo.getId()+"未绑定SQL");
                 }
+                this.methodInfoMap.put(methodInfo.getMethod(), methodInfo);
             }
             this.mapperTypeMap.put(mapperClass, getAllInterface(mapperClass));
             return true;

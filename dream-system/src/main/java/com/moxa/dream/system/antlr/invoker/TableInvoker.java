@@ -16,6 +16,7 @@ import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.util.common.LowHashMap;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,9 @@ public class TableInvoker extends AbstractInvoker {
         TableFactory tableFactory = configuration.getTableFactory();
         for (String table : tableList) {
             TableInfo tableInfo = tableFactory.getTableInfo(table);
-            ObjectUtil.requireNonNull(tableInfo, "表'" + table + "'没有生成对应TableInfo");
+            if (tableInfo == null) {
+                throw new DreamRunTimeException("TableFactory不存在表" + table);
+            }
             for (String joinTable : tableList) {
                 if (!table.equalsIgnoreCase(joinTable)) {
                     JoinInfo joinInfo = tableInfo.getJoinInfo(joinTable);

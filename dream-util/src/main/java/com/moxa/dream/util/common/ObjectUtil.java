@@ -1,16 +1,10 @@
 package com.moxa.dream.util.common;
 
-import com.moxa.dream.util.exception.DreamRunTimeException;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
 public class ObjectUtil {
-    public static void requireNonNull(Object obj, String msg) {
-        if (obj == null)
-            throw new DreamRunTimeException(msg);
-    }
 
     public static boolean isNull(Map value) {
         return value == null || value.isEmpty();

@@ -58,18 +58,22 @@ public class ObjectWrapper {
     }
 
     public Object get(String property) {
-        String[] propertyList = property.split("\\.");
-        if (propertyList.length > 1) {
-            ObjectFactory targetFactory = objectFactory;
-            for (int i = 0; i < propertyList.length - 1; i++) {
-                Object value = targetFactory.get(propertyList[i]);
-                ObjectWrapper wrapper = ObjectWrapper.wrapper(value);
-                targetFactory = wrapper.objectFactory;
+        if (!ObjectUtil.isNull(property)) {
+            String[] propertyList = property.split("\\.");
+            if (propertyList.length > 1) {
+                ObjectFactory targetFactory = objectFactory;
+                for (int i = 0; i < propertyList.length - 1; i++) {
+                    Object value = targetFactory.get(propertyList[i]);
+                    if (value == null) {
+                        return null;
+                    }
+                    ObjectWrapper wrapper = ObjectWrapper.wrapper(value);
+                    targetFactory = wrapper.objectFactory;
+                }
+                return targetFactory.get(propertyList[propertyList.length - 1]);
             }
-            return targetFactory.get(propertyList[propertyList.length - 1]);
-        } else {
-            return objectFactory.get(property);
         }
+        return objectFactory.get(property);
     }
 
     public Object getObject() {

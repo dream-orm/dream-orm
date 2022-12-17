@@ -1,5 +1,6 @@
 package com.moxa.dream.util.reflection.factory;
 
+import com.moxa.dream.util.common.ObjectUtil;
 
 public class BasicObjectFactory implements ObjectFactory {
     private Object result;
@@ -15,7 +16,11 @@ public class BasicObjectFactory implements ObjectFactory {
 
     @Override
     public Object get(String property) {
-        return result;
+        if (ObjectUtil.isNull(property)) {
+            return result;
+        } else {
+            return null;
+        }
     }
 
     @Override

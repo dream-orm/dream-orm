@@ -21,6 +21,7 @@ import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.common.LowHashMap;
 import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
@@ -58,7 +59,9 @@ public class AllInvoker extends AbstractInvoker {
             Map<String, ScanInvoker.TableScanInfo> scanInfoMap = new LowHashMap<>();
             for (String table : tableList) {
                 ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(table);
-                ObjectUtil.requireNonNull(tableScanInfo, "@all参数'" + table + "'未在操作表注册");
+                if (tableScanInfo == null) {
+                    throw new DreamRunTimeException("函数@" + this.function() + ":" + this.namespace() + "参数值" + table + "未出现在操作表语句");
+                }
                 scanInfoMap.put(table, tableScanInfo);
             }
             tableScanInfoMap = scanInfoMap;
@@ -96,7 +99,9 @@ public class AllInvoker extends AbstractInvoker {
             String table = tableScanInfo.getTable();
             String alias = tableScanInfo.getAlias();
             TableInfo tableInfo = tableFactory.getTableInfo(table);
-            ObjectUtil.requireNonNull(tableInfo, "表'" + table + "'未在TableFactory注册");
+            if (tableInfo == null) {
+                throw new DreamRunTimeException("TableFactory不存在表" + table);
+            }
             Collection<ColumnInfo> columnInfoList = tableInfo.getColumnInfoList();
             List<String> columnList = columnInfoList.stream()
                     .filter(columnInfo -> !columnSet.contains(columnInfo.getColumn())
@@ -115,7 +120,9 @@ public class AllInvoker extends AbstractInvoker {
             if (tableScanInfo == null)
                 return;
             rootTableInfo = tableFactory.getTableInfo(table);
-            ObjectUtil.requireNonNull(rootTableInfo, "表'" + table + "'未在TableFactory注册");
+            if (rootTableInfo == null) {
+                throw new DreamRunTimeException("TableFactory不存在表" + table);
+            }
             alias = tableScanInfo.getAlias();
         }
         List<Field> fieldList = ReflectUtil.findField(colType);
@@ -155,7 +162,9 @@ public class AllInvoker extends AbstractInvoker {
                                 }
                             } else {
                                 ColumnInfo columnInfo = rootTableInfo.getColumnInfo(fieldName);
-                                ObjectUtil.requireNonNull(columnInfo, "类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
+                                if (columnInfo == null) {
+                                    throw new AntlrException("数据表映射类不存在" + fieldName + "属性");
+                                }
                                 boolean add = true;
                                 for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
                                     String _table = queryColumnInfo.getTable();
