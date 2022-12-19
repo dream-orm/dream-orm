@@ -53,7 +53,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public <T> List<T> selectByIds(Class<T> type, List<Object> idList) {
+    public <T> List<T> selectByIds(Class<T> type, List<?> idList) {
         return (List<T>) selectByIdsSqlMapper.execute(type, idList);
     }
 

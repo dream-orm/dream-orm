@@ -48,7 +48,7 @@ public class DefaultMapperFactory implements MapperFactory {
             for (String name : methodInfoMap.keySet()) {
                 MethodInfo methodInfo = methodInfoMap.get(name);
                 if (ObjectUtil.isNull(methodInfo.getSql())) {
-                    throw new DreamRunTimeException(methodInfo.getId()+"未绑定SQL");
+                    throw new DreamRunTimeException(methodInfo.getId() + "未绑定SQL");
                 }
                 this.methodInfoMap.put(methodInfo.getMethod(), methodInfo);
             }

@@ -11,7 +11,7 @@ public interface TemplateMapper {
 
     <T> T selectById(Class<T> type, Object id);
 
-    <T> List<T> selectByIds(Class<T> type, List<Object> idList);
+    <T> List<T> selectByIds(Class<T> type, List<?> idList);
 
     <T> T selectOne(Class<T> type, Object conditionObject);
 
