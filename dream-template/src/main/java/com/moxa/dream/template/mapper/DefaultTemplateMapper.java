@@ -3,6 +3,7 @@ package com.moxa.dream.template.mapper;
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.template.attach.AttachMent;
+import com.moxa.dream.template.resulthandler.Tree;
 import com.moxa.dream.template.sequence.BatchSequence;
 import com.moxa.dream.template.sequence.FetchKeySequence;
 import com.moxa.dream.template.sequence.Sequence;
@@ -15,6 +16,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private SelectByIdsMapper selectByIdsSqlMapper;
     private SelectOneMapper selectOneSqlMapper;
     private SelectListMapper selectListMapper;
+    private SelectTreeMapper selectTreeMapper;
     private SelectPageMapper selectPageSqlMapper;
     private DeleteByIdMapper deleteByIdSqlMapper;
     private DeleteByIdsMapper deleteByIdsSqlMapper;
@@ -33,6 +35,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
         selectByIdsSqlMapper = new SelectByIdsMapper(session, attachMent);
         selectOneSqlMapper = new SelectOneMapper(session, attachMent);
         selectListMapper = new SelectListMapper(session, attachMent);
+        selectTreeMapper = new SelectTreeMapper(session, attachMent);
         selectPageSqlMapper = new SelectPageMapper(session, attachMent);
         deleteByIdSqlMapper = new DeleteByIdMapper(session, attachMent);
         deleteByIdsSqlMapper = new DeleteByIdsMapper(session, attachMent);
@@ -65,6 +68,11 @@ public class DefaultTemplateMapper implements TemplateMapper {
     @Override
     public <T> List<T> selectList(Class<T> type, Object conditionObject) {
         return (List<T>) selectListMapper.execute(type, conditionObject);
+    }
+
+    @Override
+    public <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject) {
+        return (List<T>) selectTreeMapper.execute(type, conditionObject);
     }
 
     @Override

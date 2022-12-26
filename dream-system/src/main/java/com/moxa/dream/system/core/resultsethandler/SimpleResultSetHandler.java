@@ -7,6 +7,7 @@ import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.system.typehandler.TypeHandlerNotFoundException;
+import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectHandler;
 import com.moxa.dream.util.reflect.ReflectUtil;
@@ -98,7 +99,7 @@ public class SimpleResultSetHandler implements ResultSetHandler {
                     }
                 }
                 if (fieldName == null) {
-                    fieldName = underlineToCamel(columnLabel);
+                    fieldName = SystemUtil.underlineToCamel(columnLabel);
                 }
                 if (Map.class.isAssignableFrom(colType)) {
                     builder.property(fieldName).typeHandler(mappedStatement
@@ -154,25 +155,6 @@ public class SimpleResultSetHandler implements ResultSetHandler {
             }
         }
         return writeMethod;
-    }
-
-    protected String underlineToCamel(String column) {
-        if (column == null) {
-            return null;
-        }
-        int len = column.length();
-        StringBuilder sb = new StringBuilder(len);
-        for (int i = 0; i < len; i++) {
-            char c = Character.toLowerCase(column.charAt(i));
-            if (c == '_') {
-                if (++i < len) {
-                    sb.append(Character.toUpperCase(column.charAt(i)));
-                }
-            } else {
-                sb.append(c);
-            }
-        }
-        return sb.toString();
     }
 
     public class MappedColumnWrapper {

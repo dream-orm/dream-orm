@@ -1,6 +1,7 @@
 package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.config.Page;
+import com.moxa.dream.template.resulthandler.Tree;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
@@ -16,6 +17,8 @@ public interface TemplateMapper {
     <T> T selectOne(Class<T> type, Object conditionObject);
 
     <T> List<T> selectList(Class<T> type, Object conditionObject);
+
+    <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject);
 
     <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page);
 

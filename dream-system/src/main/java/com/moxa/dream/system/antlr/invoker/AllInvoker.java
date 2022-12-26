@@ -171,7 +171,7 @@ public class AllInvoker extends AbstractInvoker {
                                     if ((columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
                                             || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias()))
                                             && (ObjectUtil.isNull(_table)
-                                            || _table.equalsIgnoreCase(table))) {
+                                            || _table.equalsIgnoreCase(alias))) {
                                         add = false;
                                         break;
                                     }
@@ -227,7 +227,7 @@ public class AllInvoker extends AbstractInvoker {
                     column = ((SymbolStatement) columnLists[1]).getValue();
                 }
             }
-            if (!ObjectUtil.isNull(alias) || !ObjectUtil.isNull(column))
+            if (!ObjectUtil.isNull(column))
                 queryColumnInfoList.add(new QueryColumnInfo(database, table, column, alias));
         }
         return queryColumnInfoList;

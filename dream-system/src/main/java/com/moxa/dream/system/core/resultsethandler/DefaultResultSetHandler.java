@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.*;
 
 public class DefaultResultSetHandler implements ResultSetHandler {
@@ -116,7 +117,9 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             Object value = mappedColumn.getValue(resultSet);
             Extractor extractor = mappedColumn.getExtractor();
             if (extractor == null) {
-                objectFactory.set(mappedColumn.getProperty(), value);
+                if (value != null) {
+                    objectFactory.set(mappedColumn.getProperty(), value);
+                }
             } else {
                 extractor.extract(mappedColumn, value, objectFactory);
             }
@@ -150,7 +153,15 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             int jdbcType = metaData.getColumnType(i);
             String columnLabel = metaData.getColumnLabel(i);
             String tableName = metaData.getTableName(i);
-            ColumnInfo columnInfo = getColumnInfo(mappedStatement, tableName, columnLabel);
+            ColumnInfo columnInfo = null;
+            if (ObjectUtil.isNull(tableName)) {
+                columnLabel = SystemUtil.underlineToCamel(columnLabel);
+            } else {
+                columnInfo = getColumnInfo(mappedStatement, tableName, columnLabel);
+                if (columnInfo != null && columnInfo.getJdbcType() != Types.NULL && columnInfo.getJdbcType() != jdbcType) {
+                    jdbcType = columnInfo.getJdbcType();
+                }
+            }
             MappedColumn.Builder builder = new MappedColumn
                     .Builder()
                     .index(i)

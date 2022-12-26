@@ -22,4 +22,23 @@ public class SystemUtil {
         }
         return false;
     }
+
+    public static String underlineToCamel(String column) {
+        if (column == null) {
+            return null;
+        }
+        int len = column.length();
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            char c = Character.toLowerCase(column.charAt(i));
+            if (c == '_') {
+                if (++i < len) {
+                    sb.append(Character.toUpperCase(column.charAt(i)));
+                }
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
 }

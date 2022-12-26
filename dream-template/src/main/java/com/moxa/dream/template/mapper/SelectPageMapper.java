@@ -29,15 +29,11 @@ public class SelectPageMapper extends SelectListMapper {
         if (page == null) {
             page = new Page();
         }
-        String paramTypeName = null;
-        if (arg != null) {
-            paramTypeName = arg.getClass().getName();
-        }
-        String keyName = type.getName() + ":" + paramTypeName;
-        MethodInfo methodInfo = methodInfoMap.get(keyName);
+        String key = getKey(type, arg);
+        MethodInfo methodInfo = methodInfoMap.get(key);
         if (methodInfo == null) {
             synchronized (this) {
-                methodInfo = methodInfoMap.get(keyName);
+                methodInfo = methodInfoMap.get(key);
                 if (methodInfo == null) {
                     Configuration configuration = this.session.getConfiguration();
                     TableFactory tableFactory = configuration.getTableFactory();
@@ -59,7 +55,7 @@ public class SelectPageMapper extends SelectListMapper {
                             return PAGE;
                         }
                     });
-                    methodInfoMap.put(keyName, methodInfo);
+                    methodInfoMap.put(key, methodInfo);
                 }
             }
         }

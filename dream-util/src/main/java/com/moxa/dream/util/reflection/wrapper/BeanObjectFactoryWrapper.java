@@ -1,6 +1,7 @@
 package com.moxa.dream.util.reflection.wrapper;
 
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
 import com.moxa.dream.util.reflection.factory.BeanObjectFactory;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
@@ -92,25 +93,31 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
 
     public void set(Object result, String property, Object value) {
         PropertyInfo propertyInfo = propertyInfoMap.get(property);
+        if (propertyInfo == null) {
+            throw new DreamRunTimeException(type.getName() + "不存在属性" + property);
+        }
         Method writeMethod = propertyInfo.getWriteMethod();
         if (writeMethod != null) {
             try {
                 writeMethod.invoke(result, value);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new DreamRunTimeException(e);
             }
         } else {
             Field field = propertyInfo.getField();
             try {
                 field.set(result, value);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new DreamRunTimeException(e);
             }
         }
     }
 
     public Object get(Object result, String property) {
         PropertyInfo propertyInfo = propertyInfoMap.get(property);
+        if (propertyInfo == null) {
+            throw new DreamRunTimeException(type.getName() + "不存在属性" + property);
+        }
         Method readMethod = propertyInfo.getReadMethod();
         if (readMethod != null) {
             try {
