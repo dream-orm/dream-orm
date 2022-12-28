@@ -13,7 +13,6 @@ import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
-import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +36,7 @@ public abstract class AbstractMapper {
                 if (methodInfo == null) {
                     String table = getTableName(type);
                     if (ObjectUtil.isNull(table)) {
-                        throw new DreamRunTimeException("类'" + type.getClass().getName() + "'未注册数据表");
+                        throw new DreamRunTimeException("" + type.getName() + "未绑定表");
                     }
                     Configuration configuration = this.session.getConfiguration();
                     TableFactory tableFactory = configuration.getTableFactory();

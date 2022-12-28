@@ -2,15 +2,14 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.factory.TableFactory;
-import com.moxa.dream.template.attach.AttachMent;
 import com.moxa.dream.util.common.NonCollection;
 
 import java.util.Collection;
 import java.util.Set;
 
 public class ExistMapper extends SelectListMapper {
-    public ExistMapper(Session session, AttachMent attachMent) {
-        super(session, attachMent);
+    public ExistMapper(Session session) {
+        super(session);
     }
 
     @Override

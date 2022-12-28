@@ -2,7 +2,6 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.template.attach.AttachMent;
 import com.moxa.dream.template.resulthandler.Tree;
 import com.moxa.dream.template.sequence.BatchSequence;
 import com.moxa.dream.template.sequence.FetchKeySequence;
@@ -30,23 +29,23 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private ExistMapper existMapper;
     private ExecuteMapper executeMapper;
 
-    public DefaultTemplateMapper(Session session, Sequence sequence, AttachMent attachMent) {
-        selectByIdSqlMapper = new SelectByIdMapper(session, attachMent);
-        selectByIdsSqlMapper = new SelectByIdsMapper(session, attachMent);
-        selectOneSqlMapper = new SelectOneMapper(session, attachMent);
-        selectListMapper = new SelectListMapper(session, attachMent);
-        selectTreeMapper = new SelectTreeMapper(session, attachMent);
-        selectPageSqlMapper = new SelectPageMapper(session, attachMent);
-        deleteByIdSqlMapper = new DeleteByIdMapper(session, attachMent);
-        deleteByIdsSqlMapper = new DeleteByIdsMapper(session, attachMent);
-        updateByIdSqlMapper = new UpdateByIdMapper(session, attachMent);
-        batchUpdateByIdMapper = new BatchUpdateByIdMapper(session, attachMent);
-        updateNonByIdSqlMapper = new UpdateNonByIdMapper(session, attachMent);
+    public DefaultTemplateMapper(Session session, Sequence sequence) {
+        selectByIdSqlMapper = new SelectByIdMapper(session);
+        selectByIdsSqlMapper = new SelectByIdsMapper(session);
+        selectOneSqlMapper = new SelectOneMapper(session);
+        selectListMapper = new SelectListMapper(session);
+        selectTreeMapper = new SelectTreeMapper(session);
+        selectPageSqlMapper = new SelectPageMapper(session);
+        deleteByIdSqlMapper = new DeleteByIdMapper(session);
+        deleteByIdsSqlMapper = new DeleteByIdsMapper(session);
+        updateByIdSqlMapper = new UpdateByIdMapper(session);
+        batchUpdateByIdMapper = new BatchUpdateByIdMapper(session);
+        updateNonByIdSqlMapper = new UpdateNonByIdMapper(session);
         insertSqlMapper = new InsertMapper(session, sequence);
         insertFetchKeyMapper = new InsertMapper(session, new FetchKeySequence(sequence));
         batchInsertMapper = new BatchInsertMapper(session, new BatchSequence(sequence));
-        existByIdMapper = new ExistByIdMapper(session, attachMent);
-        existMapper = new ExistMapper(session, attachMent);
+        existByIdMapper = new ExistByIdMapper(session);
+        existMapper = new ExistMapper(session);
         executeMapper = new ExecuteMapper(session);
     }
 

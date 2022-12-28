@@ -6,7 +6,6 @@ import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.factory.TableFactory;
-import com.moxa.dream.template.attach.AttachMent;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -16,8 +15,8 @@ import java.util.Map;
 public class SelectPageMapper extends SelectListMapper {
     private final String PAGE = "page";
 
-    public SelectPageMapper(Session session, AttachMent attachMent) {
-        super(session, attachMent);
+    public SelectPageMapper(Session session) {
+        super(session);
     }
 
     @Override

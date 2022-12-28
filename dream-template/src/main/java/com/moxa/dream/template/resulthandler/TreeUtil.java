@@ -15,7 +15,7 @@ public class TreeUtil {
         }
         List<Tree> parentList = new ArrayList();
         Set<String> recordSet = new HashSet<>();
-        for (Tree tree: treeList) {
+        for (Tree tree : treeList) {
             createTree(tree.getTreeId(), treeMap, parentList, recordSet);
         }
         return parentList;
