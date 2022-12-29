@@ -1,9 +1,11 @@
 package com.moxa.dream.template.resulthandler;
 
-public interface Tree<T extends Tree> {
+import java.util.List;
+
+public interface Tree {
     String getTreeId();
 
     String getParentId();
 
-    void addChild(T tree);
+    List<Tree> getChildren();
 }

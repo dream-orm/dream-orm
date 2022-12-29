@@ -27,11 +27,11 @@ public class Assist {
         }
         invoker = invokerMap.get(name);
         if (invoker == null) {
-            invoker = invokerFactory.getInvoker(function, namespace).newInstance();
+            invoker = invokerFactory.getInvoker(function, namespace);
             if (invoker == null) {
                 throw new AntlrRunTimeException("@" + name + "不存在");
             }
-            invokerMap.put(name, invoker);
+            invokerMap.put(name, invoker.newInstance());
             String invokerName = invoker.function() + ":" + invoker.namespace();
             if (!invokerName.equals(name)) {
                 invokerMap.put(invokerName, invoker);
