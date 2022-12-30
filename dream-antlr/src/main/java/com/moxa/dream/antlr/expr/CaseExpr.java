@@ -26,7 +26,7 @@ public class CaseExpr extends SqlExpr {
 
     @Override
     protected Statement exprWhen(ExprInfo exprInfo) throws AntlrException {
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new WhenThenExpr(exprReader, caseStatement.getCaseColumn() == null), new ExprInfo(ExprType.BLANK, " "));
+        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new WhenThenExpr(exprReader), new ExprInfo(ExprType.BLANK, " "));
         caseStatement.setWhenthenList(listColumnExpr.expr());
         setExprTypes(ExprType.ELSE, ExprType.END);
         return expr();
@@ -80,12 +80,10 @@ public class CaseExpr extends SqlExpr {
 
     public static class WhenThenExpr extends SqlExpr {
         private final CaseStatement.WhenThenStatement whenThenStatement = new CaseStatement.WhenThenStatement();
-        private final boolean compare;
 
-        public WhenThenExpr(ExprReader exprReader, boolean compare) {
+        public WhenThenExpr(ExprReader exprReader) {
             super(exprReader);
             setExprTypes(ExprType.WHEN);
-            this.compare = compare;
         }
 
 
@@ -165,7 +163,7 @@ public class CaseExpr extends SqlExpr {
             private Statement statement;
 
             public CaseElseExpr(ExprReader exprReader) {
-                super(exprReader, () -> new CompareExpr(exprReader));
+                this(exprReader, () -> new CompareExpr(exprReader));
             }
 
             public CaseElseExpr(ExprReader exprReader, Helper helper) {
