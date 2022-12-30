@@ -8,7 +8,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class ServiceImpl<ListView, EditView> implements IService<ListView, EditView> {
+public abstract class ServiceImpl<ListView, EditView> implements IService<ListView, EditView> {
     protected TemplateMapper templateMapper;
     private Class listViewType;
     private Class editViewType;
