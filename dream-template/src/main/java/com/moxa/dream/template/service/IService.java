@@ -34,8 +34,4 @@ public interface IService<ListView, EditView> {
     List<Object> batchInsert(List<EditView> viewList);
 
     List<Object> batchUpdateById(List<EditView> viewList);
-
-    List<Object> batchInsert(List<EditView> viewList, int batchSize);
-
-    List<Object> batchUpdateById(List<EditView> viewList, int batchSize);
 }

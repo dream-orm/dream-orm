@@ -28,7 +28,7 @@ public class Assist {
         invoker = invokerMap.get(name);
         if (invoker == null) {
             invoker = invokerFactory.getInvoker(function, namespace);
-            if(invoker!=null){
+            if (invoker != null) {
                 invoker = invoker.newInstance();
             }
             if (invoker == null) {

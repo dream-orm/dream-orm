@@ -121,7 +121,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     objectFactory.set(mappedColumn.getProperty(), value);
                 }
             } else {
-                extractor.extract(mappedColumn, value, objectFactory);
+                extractor.extract(mappedStatement, mappedColumn, value, objectFactory);
             }
         }
         return objectFactory;

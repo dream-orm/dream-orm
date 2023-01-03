@@ -64,7 +64,7 @@ public class ListenerExecutor implements Executor {
     }
 
     protected Object execute(MappedStatement mappedStatement, Listener[] listeners, Function<MappedStatement, Object> function) throws SQLException {
-        if (!ObjectUtil.isNull(listeners)) {
+        if (mappedStatement.isListener() && !ObjectUtil.isNull(listeners)) {
             beforeListeners(listeners, mappedStatement);
             Object result;
             try {

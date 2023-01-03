@@ -25,7 +25,7 @@ public class ExecuteMapper {
     }
 
 
-    public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType, boolean cache) {
+    public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType) {
         CacheKey cacheKey = new CacheKey();
         cacheKey.update(new Object[]{sql, rowType, colType});
         MethodInfo methodInfo = new MethodInfo()
@@ -35,14 +35,19 @@ public class ExecuteMapper {
                 .setMethodKey(cacheKey)
                 .setSql(sql)
                 .setRowType(rowType)
-                .setColType(colType)
-                .setCache(cache);
-        if (param == null) {
-            return session.execute(methodInfo, null);
-        } else if (param instanceof Map) {
-            return session.execute(methodInfo, (Map<String, Object>) param);
+                .setColType(colType);
+        return session.execute(methodInfo, wrapArg(wrapArg(param)));
+    }
+
+    protected Map<String, Object> wrapArg(Object arg) {
+        if (arg != null) {
+            if (arg instanceof Map) {
+                return (Map<String, Object>) arg;
+            } else {
+                return new ObjectMap(arg);
+            }
         } else {
-            return session.execute(methodInfo, new ObjectMap(param));
+            return null;
         }
     }
 }

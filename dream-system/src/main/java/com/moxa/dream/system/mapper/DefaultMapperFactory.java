@@ -106,6 +106,7 @@ public class DefaultMapperFactory implements MapperFactory {
                         Class<? extends Collection> rowType = actionProvider.rowType();
                         Class<?> colType = actionProvider.colType();
                         Boolean cache = actionProvider.cache();
+                        Boolean listener = actionProvider.listener();
                         Integer timeOut = actionProvider.timeOut();
                         StatementHandler statementHandler = actionProvider.statementHandler();
                         ResultSetHandler resultSetHandler = actionProvider.resultSetHandler();
@@ -130,6 +131,9 @@ public class DefaultMapperFactory implements MapperFactory {
                         if (cache != null) {
                             methodInfo.setCache(cache);
                         }
+                        if (listener != null) {
+                            methodInfo.setListener(listener);
+                        }
                         if (timeOut != null) {
                             methodInfo.setTimeOut(timeOut);
                         }
@@ -149,6 +153,7 @@ public class DefaultMapperFactory implements MapperFactory {
         Class<? extends Collection> rowType = getRowType(mapperClass, method);
         Class colType = getColType(mapperClass, method);
         boolean cache = isCache(mapperClass, method);
+        boolean listener = isListener(mapperClass, method);
         MethodParam[] methodParamList = getMethodParamList(method);
         String sql = getSql(configuration, method);
         int timeOut = getTimeOut(mapperClass, method);
@@ -158,6 +163,7 @@ public class DefaultMapperFactory implements MapperFactory {
                 .setRowType(rowType)
                 .setColType(colType)
                 .setCache(cache)
+                .setListener(listener)
                 .setMethodParamList(methodParamList)
                 .setSql(sql)
                 .setTimeOut(timeOut)
@@ -209,6 +215,14 @@ public class DefaultMapperFactory implements MapperFactory {
         Sql sqlAnnotation = method.getDeclaredAnnotation(Sql.class);
         if (sqlAnnotation != null) {
             return sqlAnnotation.cache();
+        }
+        return true;
+    }
+
+    protected boolean isListener(Class mapperClass, Method method) {
+        Sql sqlAnnotation = method.getDeclaredAnnotation(Sql.class);
+        if (sqlAnnotation != null) {
+            return sqlAnnotation.listener();
         }
         return true;
     }

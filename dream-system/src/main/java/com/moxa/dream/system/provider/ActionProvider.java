@@ -34,6 +34,10 @@ public interface ActionProvider {
         return null;
     }
 
+    default Boolean listener() {
+        return null;
+    }
+
     default Integer timeOut() {
         return null;
     }

@@ -7,5 +7,5 @@ public interface Tree {
 
     String getParentId();
 
-    List<?extends Tree> getChildren();
+    List<? extends Tree> getChildren();
 }

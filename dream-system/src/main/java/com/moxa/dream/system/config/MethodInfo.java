@@ -21,6 +21,7 @@ public class MethodInfo {
     protected String[] columnNames;
     protected TypeHandler[] columnTypeHandlers;
     protected boolean cache = true;
+    protected boolean listener = true;
     protected Compile compile = Compile.ANTLR_COMPILE;
     protected String sql;
     protected int timeOut;
@@ -94,6 +95,15 @@ public class MethodInfo {
 
     public MethodInfo setCache(boolean cache) {
         this.cache = cache;
+        return this;
+    }
+
+    public boolean isListener() {
+        return listener;
+    }
+
+    public MethodInfo setListener(boolean listener) {
+        this.listener = listener;
         return this;
     }
 

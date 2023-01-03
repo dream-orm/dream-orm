@@ -38,24 +38,13 @@ public interface TemplateMapper {
 
     boolean exist(Class<?> type, Object conditionObject);
 
-    default List<Object> batchInsert(List<?> viewList) {
-        return batchInsert(viewList, 1000);
-    }
+    List<Object> batchInsert(List<?> viewList);
 
-    default List<Object> batchUpdateById(List<?> viewList) {
-        return batchUpdateById(viewList, 1000);
-    }
+    List<Object> batchUpdateById(List<?> viewList);
 
-    List<Object> batchInsert(List<?> viewList, int batchSize);
-
-    List<Object> batchUpdateById(List<?> viewList, int batchSize);
 
     default <T> T selectOne(String sql, Object param, Class<T> colType) {
-        return selectOne(sql, param, colType, true);
-    }
-
-    default <T> T selectOne(String sql, Object param, Class<T> colType, boolean cache) {
-        List<T> resultList = selectList(sql, param, colType, cache);
+        List<T> resultList = selectList(sql, param, colType);
         if (resultList.isEmpty()) {
             throw new DreamRunTimeException("查询数据不存在，请检查SQL:'" + sql + "'");
         }
@@ -65,12 +54,9 @@ public interface TemplateMapper {
         return resultList.get(0);
     }
 
-    default <T> List<T> selectList(String sql, Object param, Class<T> colType) {
-        return selectList(sql, param, colType, true);
-    }
 
-    default <T> List<T> selectList(String sql, Object param, Class<T> colType, boolean cache) {
-        return (List<T>) execute(sql, param, List.class, colType, cache);
+    default <T> List<T> selectList(String sql, Object param, Class<T> colType) {
+        return (List<T>) execute(sql, param, List.class, colType);
     }
 
     default Integer execute(String sql) {
@@ -78,10 +64,10 @@ public interface TemplateMapper {
     }
 
     default Integer execute(String sql, Object param) {
-        return (Integer) execute(sql, param, NonCollection.class, Integer.class, false);
+        return (Integer) execute(sql, param, NonCollection.class, Integer.class);
     }
 
-    Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType, boolean cache);
+    Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType);
 
 
 }

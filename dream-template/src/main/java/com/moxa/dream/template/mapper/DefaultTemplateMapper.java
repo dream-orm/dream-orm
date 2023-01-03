@@ -124,23 +124,23 @@ public class DefaultTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public List<Object> batchInsert(List<?> viewList, int batchSize) {
+    public List<Object> batchInsert(List<?> viewList) {
         if (viewList == null || viewList.isEmpty()) {
             return null;
         }
-        return (List<Object>) batchInsertMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
+        return (List<Object>) batchInsertMapper.execute(viewList.get(0).getClass(), viewList);
     }
 
     @Override
-    public List<Object> batchUpdateById(List<?> viewList, int batchSize) {
+    public List<Object> batchUpdateById(List<?> viewList) {
         if (viewList == null || viewList.isEmpty()) {
             return null;
         }
-        return (List<Object>) batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
+        return (List<Object>) batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList);
     }
 
     @Override
-    public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType, boolean cache) {
-        return executeMapper.execute(sql, param, rowType, colType, cache);
+    public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType) {
+        return executeMapper.execute(sql, param, rowType, colType);
     }
 }

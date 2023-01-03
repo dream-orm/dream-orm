@@ -17,9 +17,8 @@ public class MappedStatement {
     protected MethodInfo methodInfo;
     protected CacheKey uniqueKey;
     protected Object arg;
-    protected Class<? extends Collection> rowType;
-    protected Class<?> colType;
     protected boolean cache;
+    protected boolean listener;
     protected Map<String, Object> envMap;
 
     protected MappedStatement() {
@@ -32,10 +31,6 @@ public class MappedStatement {
 
     public Command getCommand() {
         return mappedSql.getCommand();
-    }
-
-    public MethodInfo getMethodInfo() {
-        return methodInfo;
     }
 
     public String getId() {
@@ -59,19 +54,11 @@ public class MappedStatement {
     }
 
     public Class<?> getColType() {
-        return colType;
-    }
-
-    public void setColType(Class<?> colType) {
-        this.colType = colType;
+        return methodInfo.getColType();
     }
 
     public Class<? extends Collection> getRowType() {
-        return rowType;
-    }
-
-    public void setRowType(Class<? extends Collection> rowType) {
-        this.rowType = rowType;
+        return methodInfo.getRowType();
     }
 
     public String[] getColumnNames() {
@@ -88,6 +75,14 @@ public class MappedStatement {
 
     public void setCache(boolean cache) {
         this.cache = cache;
+    }
+
+    public boolean isListener() {
+        return listener;
+    }
+
+    public void setListener(boolean listener) {
+        this.listener = listener;
     }
 
     public Method getMethod() {
@@ -162,9 +157,8 @@ public class MappedStatement {
 
         public Builder methodInfo(MethodInfo methodInfo) {
             mappedStatement.methodInfo = methodInfo;
-            mappedStatement.rowType = methodInfo.getRowType();
-            mappedStatement.colType = methodInfo.getColType();
             mappedStatement.cache = methodInfo.isCache();
+            mappedStatement.listener = methodInfo.isListener();
             return this;
         }
 
