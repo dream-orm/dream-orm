@@ -73,16 +73,18 @@ public class MappedStatement {
         return cache;
     }
 
-    public void setCache(boolean cache) {
+    public MappedStatement setCache(boolean cache) {
         this.cache = cache;
+        return this;
     }
 
     public boolean isListener() {
         return listener;
     }
 
-    public void setListener(boolean listener) {
+    public MappedStatement setListener(boolean listener) {
         this.listener = listener;
+        return this;
     }
 
     public Method getMethod() {
@@ -105,8 +107,9 @@ public class MappedStatement {
         return methodInfo.get(type);
     }
 
-    public <T> void set(Class<T> type, T value) {
+    public <T> MappedStatement set(Class<T> type, T value) {
         methodInfo.set(type, value);
+        return this;
     }
 
     public List<MappedParam> getMappedParamList() {
@@ -133,11 +136,12 @@ public class MappedStatement {
         return methodInfo.getResultSetHandler();
     }
 
-    public void put(String key, Object value) {
+    public MappedStatement put(String key, Object value) {
         if (envMap == null) {
             envMap = new HashMap<>();
         }
         envMap.put(key, value);
+        return this;
     }
 
     public Object get(String key) {
