@@ -5,12 +5,15 @@ import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.system.antlr.invoker.$Invoker;
 import com.moxa.dream.system.antlr.invoker.ForEachInvoker;
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
+import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.system.util.SystemUtil;
+import com.moxa.dream.template.resolve.MappedResolve;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
@@ -22,12 +25,14 @@ public abstract class AbstractMapper {
     public static final String DREAM_TEMPLATE_PARAM = "dream_template_param";
     protected Session session;
     protected Map<String, MethodInfo> methodInfoMap = new HashMap<>();
+    private DialectFactory dialectFactory;
 
     public AbstractMapper(Session session) {
         this.session = session;
+        this.dialectFactory = session.getConfiguration().getDialectFactory();
     }
 
-    public Object execute(Class<?> type, Object arg) {
+    public Object execute(Class<?> type, Object arg, MappedResolve mappedResolve) {
         String key = getKey(type, arg);
         MethodInfo methodInfo = methodInfoMap.get(key);
         if (methodInfo == null) {
@@ -49,15 +54,28 @@ public abstract class AbstractMapper {
                 }
             }
         }
-        return execute(methodInfo, arg);
+        return execute(methodInfo, arg, mappedResolve);
     }
 
     protected String getKey(Class<?> type, Object arg) {
         return arg == null ? type.getName() : type.getName() + ":" + arg.getClass().getName();
     }
 
-    protected Object execute(MethodInfo methodInfo, Object arg) {
-        return session.execute(methodInfo, wrapArg(arg));
+    protected Object execute(MethodInfo methodInfo, Object arg, MappedResolve mappedResolve) {
+        MappedStatement mappedStatement;
+        try {
+            mappedStatement = dialectFactory.compile(methodInfo, wrapArg(arg));
+        } catch (Exception e) {
+            throw new DreamRunTimeException(e);
+        }
+        return execute(mappedStatement, mappedResolve);
+    }
+
+    protected Object execute(MappedStatement mappedStatement, MappedResolve mappedResolve) {
+        if (mappedResolve != null) {
+            mappedResolve.resolve(mappedStatement);
+        }
+        return session.execute(mappedStatement);
     }
 
     protected Map<String, Object> wrapArg(Object arg) {

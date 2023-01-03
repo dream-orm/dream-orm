@@ -2,11 +2,15 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Compile;
+import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.resultsethandler.SimpleResultSetHandler;
 import com.moxa.dream.system.core.session.Session;
+import com.moxa.dream.system.dialect.DialectFactory;
+import com.moxa.dream.template.resolve.MappedResolve;
 import com.moxa.dream.util.common.ObjectMap;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.Collection;
 import java.util.Map;
@@ -14,6 +18,7 @@ import java.util.Map;
 public class ExecuteMapper {
     private Session session;
     private ResultSetHandler resultSetHandler;
+    private DialectFactory dialectFactory;
 
     public ExecuteMapper(Session session) {
         this(session, new SimpleResultSetHandler());
@@ -22,10 +27,11 @@ public class ExecuteMapper {
     public ExecuteMapper(Session session, ResultSetHandler resultSetHandler) {
         this.session = session;
         this.resultSetHandler = resultSetHandler;
+        this.dialectFactory = session.getConfiguration().getDialectFactory();
     }
 
 
-    public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType) {
+    public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType, MappedResolve mappedResolve) {
         CacheKey cacheKey = new CacheKey();
         cacheKey.update(new Object[]{sql, rowType, colType});
         MethodInfo methodInfo = new MethodInfo()
@@ -36,7 +42,16 @@ public class ExecuteMapper {
                 .setSql(sql)
                 .setRowType(rowType)
                 .setColType(colType);
-        return session.execute(methodInfo, wrapArg(wrapArg(param)));
+        MappedStatement mappedStatement;
+        try {
+            mappedStatement = dialectFactory.compile(methodInfo, wrapArg(param));
+        } catch (Exception e) {
+            throw new DreamRunTimeException(e);
+        }
+        if (mappedResolve != null) {
+            mappedResolve.resolve(mappedStatement);
+        }
+        return session.execute(mappedStatement);
     }
 
     protected Map<String, Object> wrapArg(Object arg) {

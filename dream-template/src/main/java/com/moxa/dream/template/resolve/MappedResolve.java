@@ -3,8 +3,6 @@ package com.moxa.dream.template.resolve;
 import com.moxa.dream.system.config.MappedStatement;
 
 public interface MappedResolve {
-    void resolve(MappedStatement mappedStatement);
-
     ThreadLocal<MappedResolve> threadLocal = new ThreadLocal<>();
 
     static void set(MappedResolve mappedResolve) {
@@ -16,4 +14,6 @@ public interface MappedResolve {
         threadLocal.remove();
         return mappedResolve;
     }
+
+    void resolve(MappedStatement mappedStatement);
 }
