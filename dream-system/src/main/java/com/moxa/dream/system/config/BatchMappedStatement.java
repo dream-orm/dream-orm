@@ -12,18 +12,19 @@ import java.util.stream.Collectors;
 
 public class BatchMappedStatement extends MappedStatement implements Iterator<BatchMappedStatement> {
     List<?> argList;
-    int batchSize = 1000;
+    int batchSize;
     List<MappedStatement> mappedStatementList;
     int fromIndex;
     int toIndex;
     boolean hasNext = true;
 
-    public BatchMappedStatement(MethodInfo methodInfo, List<?> argList) {
+    public BatchMappedStatement(MethodInfo methodInfo, List<?> argList, int batchSize) {
         if (batchSize <= 0) {
             batchSize = Integer.MAX_VALUE;
         }
         this.methodInfo = methodInfo;
         this.argList = argList;
+        this.batchSize = batchSize;
         mappedStatementList = new ArrayList<>(argList.size());
     }
 
@@ -124,12 +125,5 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
     @Override
     public List<MappedParam> getMappedParamList() {
         return getMappedStatementList().stream().flatMap(mappedStatement -> mappedStatement.getMappedParamList().stream()).collect(Collectors.toList());
-    }
-
-    public void setBatchSize(int batchSize) {
-        if (batchSize <= 0) {
-            batchSize = Integer.MAX_VALUE;
-        }
-        this.batchSize = batchSize;
     }
 }

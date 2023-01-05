@@ -6,7 +6,6 @@ import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.factory.TableFactory;
-import com.moxa.dream.template.resolve.MappedResolve;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -21,11 +20,11 @@ public class SelectPageMapper extends SelectListMapper {
     }
 
     @Override
-    public Object execute(Class<?> type, Object arg, MappedResolve mappedResolve) {
-        return execute(type, arg, null, mappedResolve);
+    public Object execute(Class<?> type, Object arg) {
+        return execute(type, arg, null);
     }
 
-    public Object execute(Class<?> type, Object arg, Page page, MappedResolve mappedResolve) {
+    public Object execute(Class<?> type, Object arg, Page page) {
         if (page == null) {
             page = new Page();
         }

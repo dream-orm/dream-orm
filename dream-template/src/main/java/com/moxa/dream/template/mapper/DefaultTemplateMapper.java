@@ -2,7 +2,6 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.template.resolve.MappedResolve;
 import com.moxa.dream.template.resulthandler.Tree;
 import com.moxa.dream.template.sequence.BatchSequence;
 import com.moxa.dream.template.sequence.FetchKeySequence;
@@ -51,97 +50,97 @@ public class DefaultTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public <T> T selectById(Class<T> type, Object id, MappedResolve mappedResolve) {
-        return (T) selectByIdSqlMapper.execute(type, id, mappedResolve);
+    public <T> T selectById(Class<T> type, Object id) {
+        return (T) selectByIdSqlMapper.execute(type, id);
     }
 
     @Override
-    public <T> List<T> selectByIds(Class<T> type, List<?> idList, MappedResolve mappedResolve) {
-        return (List<T>) selectByIdsSqlMapper.execute(type, idList, mappedResolve);
+    public <T> List<T> selectByIds(Class<T> type, List<?> idList) {
+        return (List<T>) selectByIdsSqlMapper.execute(type, idList);
     }
 
     @Override
-    public <T> T selectOne(Class<T> type, Object conditionObject, MappedResolve mappedResolve) {
-        return (T) selectOneSqlMapper.execute(type, conditionObject, mappedResolve);
+    public <T> T selectOne(Class<T> type, Object conditionObject) {
+        return (T) selectOneSqlMapper.execute(type, conditionObject);
     }
 
     @Override
-    public <T> List<T> selectList(Class<T> type, Object conditionObject, MappedResolve mappedResolve) {
-        return (List<T>) selectListMapper.execute(type, conditionObject, mappedResolve);
+    public <T> List<T> selectList(Class<T> type, Object conditionObject) {
+        return (List<T>) selectListMapper.execute(type, conditionObject);
     }
 
     @Override
-    public <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject, MappedResolve mappedResolve) {
-        return (List<T>) selectTreeMapper.execute(type, conditionObject, mappedResolve);
+    public <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject) {
+        return (List<T>) selectTreeMapper.execute(type, conditionObject);
     }
 
     @Override
-    public <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page, MappedResolve mappedResolve) {
-        return (Page<T>) selectPageSqlMapper.execute(type, conditionObject, page, mappedResolve);
+    public <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page) {
+        return (Page<T>) selectPageSqlMapper.execute(type, conditionObject, page);
     }
 
     @Override
-    public int updateById(Object view, MappedResolve mappedResolve) {
-        return (int) updateByIdSqlMapper.execute(view.getClass(), view, mappedResolve);
+    public int updateById(Object view) {
+        return (int) updateByIdSqlMapper.execute(view.getClass(), view);
     }
 
     @Override
-    public int updateNonById(Object view, MappedResolve mappedResolve) {
-        return (int) updateNonByIdSqlMapper.execute(view.getClass(), view, mappedResolve);
+    public int updateNonById(Object view) {
+        return (int) updateNonByIdSqlMapper.execute(view.getClass(), view);
     }
 
     @Override
-    public int insert(Object view, MappedResolve mappedResolve) {
+    public int insert(Object view) {
         Class<?> type = view.getClass();
-        return (int) insertSqlMapper.execute(type, view, mappedResolve);
+        return (int) insertSqlMapper.execute(type, view);
     }
 
     @Override
-    public Object insertFetchKey(Object view, MappedResolve mappedResolve) {
+    public Object insertFetchKey(Object view) {
         Class<?> type = view.getClass();
-        return insertFetchKeyMapper.execute(type, view, mappedResolve);
+        return insertFetchKeyMapper.execute(type, view);
     }
 
     @Override
-    public int deleteById(Class<?> type, Object id, MappedResolve mappedResolve) {
-        return (int) deleteByIdSqlMapper.execute(type, id, mappedResolve);
+    public int deleteById(Class<?> type, Object id) {
+        return (int) deleteByIdSqlMapper.execute(type, id);
     }
 
     @Override
-    public int deleteByIds(Class<?> type, List<?> idList, MappedResolve mappedResolve) {
-        return (int) deleteByIdsSqlMapper.execute(type, idList, mappedResolve);
+    public int deleteByIds(Class<?> type, List<?> idList) {
+        return (int) deleteByIdsSqlMapper.execute(type, idList);
     }
 
     @Override
-    public boolean existById(Class<?> type, Object id, MappedResolve mappedResolve) {
-        Integer result = (Integer) existByIdMapper.execute(type, id, mappedResolve);
+    public boolean existById(Class<?> type, Object id) {
+        Integer result = (Integer) existByIdMapper.execute(type, id);
         return result != null;
     }
 
     @Override
-    public boolean exist(Class<?> type, Object conditionObject, MappedResolve mappedResolve) {
-        Integer result = (Integer) existMapper.execute(type, conditionObject, mappedResolve);
+    public boolean exist(Class<?> type, Object conditionObject) {
+        Integer result = (Integer) existMapper.execute(type, conditionObject);
         return result != null;
     }
 
     @Override
-    public List<Object> batchInsert(List<?> viewList, MappedResolve mappedResolve) {
+    public List<Object> batchInsert(List<?> viewList, int batchSize) {
         if (viewList == null || viewList.isEmpty()) {
             return null;
         }
-        return (List<Object>) batchInsertMapper.execute(viewList.get(0).getClass(), viewList, mappedResolve);
+        return (List<Object>) batchInsertMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
     }
 
     @Override
-    public List<Object> batchUpdateById(List<?> viewList, MappedResolve mappedResolve) {
+    public List<Object> batchUpdateById(List<?> viewList, int batchSize) {
         if (viewList == null || viewList.isEmpty()) {
             return null;
         }
-        return (List<Object>) batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList, mappedResolve);
+        return (List<Object>) batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
     }
 
     @Override
-    public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType, MappedResolve mappedResolve) {
-        return executeMapper.execute(sql, param, rowType, colType, mappedResolve);
+    public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType) {
+        return executeMapper.execute(sql, param, rowType, colType);
     }
 }

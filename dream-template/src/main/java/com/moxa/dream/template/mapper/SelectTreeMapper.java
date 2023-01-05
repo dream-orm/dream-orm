@@ -3,7 +3,6 @@ package com.moxa.dream.template.mapper;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.template.resolve.MappedResolve;
 import com.moxa.dream.template.resulthandler.TreeResultSetHandler;
 
 public class SelectTreeMapper extends SelectListMapper {
@@ -14,8 +13,8 @@ public class SelectTreeMapper extends SelectListMapper {
     }
 
     @Override
-    protected Object execute(MethodInfo methodInfo, Object arg, MappedResolve mappedResolve) {
+    protected Object execute(MethodInfo methodInfo, Object arg) {
         methodInfo.setResultSetHandler(resultSetHandler);
-        return super.execute(methodInfo, arg, mappedResolve);
+        return super.execute(methodInfo, arg);
     }
 }

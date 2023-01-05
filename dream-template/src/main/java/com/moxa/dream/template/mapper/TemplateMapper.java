@@ -1,7 +1,6 @@
 package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.config.Page;
-import com.moxa.dream.template.resolve.MappedResolve;
 import com.moxa.dream.template.resulthandler.Tree;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -11,120 +10,48 @@ import java.util.List;
 
 public interface TemplateMapper {
 
-    default <T> T selectById(Class<T> type, Object id) {
-        return selectById(type, id, null);
-    }
+    <T> T selectById(Class<T> type, Object id);
 
-    default <T> List<T> selectByIds(Class<T> type, List<?> idList) {
-        return selectByIds(type, idList, null);
-    }
+    <T> List<T> selectByIds(Class<T> type, List<?> idList);
 
-    default <T> T selectOne(Class<T> type, Object conditionObject) {
-        return selectOne(type, conditionObject, null);
-    }
+    <T> T selectOne(Class<T> type, Object conditionObject);
 
-    default <T> List<T> selectList(Class<T> type, Object conditionObject) {
-        return selectList(type, conditionObject, null);
-    }
+    <T> List<T> selectList(Class<T> type, Object conditionObject);
 
-    default <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject) {
-        return selectTree(type, conditionObject, null);
-    }
+    <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject);
 
-    default <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page) {
-        return selectPage(type, conditionObject, page, null);
-    }
+    <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page);
 
-    default int updateById(Object view) {
-        return updateById(view, null);
-    }
+    int updateById(Object view);
 
-    default int updateNonById(Object view) {
-        return updateNonById(view, null);
-    }
+    int updateNonById(Object view);
 
-    default int insert(Object view) {
-        return insert(view, null);
-    }
+    int insert(Object view);
 
-    default Object insertFetchKey(Object view) {
-        return insertFetchKey(view, null);
-    }
+    Object insertFetchKey(Object view);
 
-    default int deleteById(Class<?> type, Object id) {
-        return deleteById(type, id, null);
-    }
+    int deleteById(Class<?> type, Object id);
 
-    default int deleteByIds(Class<?> type, List<?> idList) {
-        return deleteByIds(type, idList, null);
-    }
+    int deleteByIds(Class<?> type, List<?> idList);
 
-    default boolean existById(Class<?> type, Object id) {
-        return existById(type, id, null);
-    }
+    boolean existById(Class<?> type, Object id);
 
-    default boolean exist(Class<?> type, Object conditionObject) {
-        return exist(type, conditionObject, null);
-    }
+    boolean exist(Class<?> type, Object conditionObject);
 
     default List<Object> batchInsert(List<?> viewList) {
-        return batchInsert(viewList, null);
+        return batchInsert(viewList, 1000);
     }
 
     default List<Object> batchUpdateById(List<?> viewList) {
-        return batchUpdateById(viewList, null);
+        return batchUpdateById(viewList, 1000);
     }
+
+    List<Object> batchInsert(List<?> viewList, int batchSize);
+
+    List<Object> batchUpdateById(List<?> viewList, int batchSize);
 
     default <T> T selectOne(String sql, Object param, Class<T> colType) {
-        return selectOne(sql, param, colType, null);
-    }
-
-    default <T> List<T> selectList(String sql, Object param, Class<T> colType) {
-        return selectList(sql, param, colType, null);
-    }
-
-    default Integer execute(String sql) {
-        return execute(sql, null);
-    }
-
-    default Integer execute(String sql, Object param) {
-        return execute(sql, param, null);
-    }
-
-    <T> T selectById(Class<T> type, Object id, MappedResolve mappedResolve);
-
-    <T> List<T> selectByIds(Class<T> type, List<?> idList, MappedResolve mappedResolve);
-
-    <T> T selectOne(Class<T> type, Object conditionObject, MappedResolve mappedResolve);
-
-    <T> List<T> selectList(Class<T> type, Object conditionObject, MappedResolve mappedResolve);
-
-    <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject, MappedResolve mappedResolve);
-
-    <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page, MappedResolve mappedResolve);
-
-    int updateById(Object view, MappedResolve mappedResolve);
-
-    int updateNonById(Object view, MappedResolve mappedResolve);
-
-    int insert(Object view, MappedResolve mappedResolve);
-
-    Object insertFetchKey(Object view, MappedResolve mappedResolve);
-
-    int deleteById(Class<?> type, Object id, MappedResolve mappedResolve);
-
-    int deleteByIds(Class<?> type, List<?> idList, MappedResolve mappedResolve);
-
-    boolean existById(Class<?> type, Object id, MappedResolve mappedResolve);
-
-    boolean exist(Class<?> type, Object conditionObject, MappedResolve mappedResolve);
-
-    List<Object> batchInsert(List<?> viewList, MappedResolve mappedResolve);
-
-    List<Object> batchUpdateById(List<?> viewList, MappedResolve mappedResolve);
-
-    default <T> T selectOne(String sql, Object param, Class<T> colType, MappedResolve mappedResolve) {
-        List<T> resultList = selectList(sql, param, colType, mappedResolve);
+        List<T> resultList = selectList(sql, param, colType);
         if (resultList.isEmpty()) {
             throw new DreamRunTimeException("查询数据不存在，请检查SQL:'" + sql + "'");
         }
@@ -134,14 +61,19 @@ public interface TemplateMapper {
         return resultList.get(0);
     }
 
-    default <T> List<T> selectList(String sql, Object param, Class<T> colType, MappedResolve mappedResolve) {
-        return (List<T>) execute(sql, param, List.class, colType, mappedResolve);
+    default <T> List<T> selectList(String sql, Object param, Class<T> colType) {
+        return (List<T>) execute(sql, param, List.class, colType);
     }
 
-    default Integer execute(String sql, Object param, MappedResolve mappedResolve) {
-        return (Integer) execute(sql, param, NonCollection.class, Integer.class, mappedResolve);
+    default Integer execute(String sql) {
+        return execute(sql, null);
     }
 
-    Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType, MappedResolve mappedResolve);
+    default Integer execute(String sql, Object param) {
+        return (Integer) execute(sql, param, NonCollection.class, Integer.class);
+    }
+
+    Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType);
+
 
 }

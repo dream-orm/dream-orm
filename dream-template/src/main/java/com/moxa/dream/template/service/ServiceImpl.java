@@ -2,7 +2,6 @@ package com.moxa.dream.template.service;
 
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.template.mapper.TemplateMapper;
-import com.moxa.dream.template.resolve.MappedResolve;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.lang.reflect.ParameterizedType;
@@ -28,77 +27,87 @@ public abstract class ServiceImpl<ListView, EditView> implements IService<ListVi
     }
 
     @Override
-    public EditView selectById(Object id, MappedResolve mappedResolve) {
-        return (EditView) templateMapper.selectById(editViewType, id, mappedResolve);
+    public EditView selectById(Object id) {
+        return (EditView) templateMapper.selectById(editViewType, id);
     }
 
     @Override
-    public List<EditView> selectByIds(List<?> idList, MappedResolve mappedResolve) {
-        return templateMapper.selectByIds(editViewType, idList, mappedResolve);
+    public List<EditView> selectByIds(List<?> idList) {
+        return templateMapper.selectByIds(editViewType, idList);
     }
 
     @Override
-    public EditView selectOne(Object conditionObject, MappedResolve mappedResolve) {
-        return (EditView) templateMapper.selectOne(editViewType, conditionObject, mappedResolve);
+    public EditView selectOne(Object conditionObject) {
+        return (EditView) templateMapper.selectOne(editViewType, conditionObject);
     }
 
     @Override
-    public List<ListView> selectList(Object conditionObject, MappedResolve mappedResolve) {
-        return templateMapper.selectList(listViewType, conditionObject, mappedResolve);
+    public List<ListView> selectList(Object conditionObject) {
+        return templateMapper.selectList(listViewType, conditionObject);
     }
 
     @Override
-    public Page<ListView> selectPage(Object conditionObject, Page page, MappedResolve mappedResolve) {
-        return templateMapper.selectPage(listViewType, conditionObject, page, mappedResolve);
+    public Page<ListView> selectPage(Object conditionObject, Page page) {
+        return templateMapper.selectPage(listViewType, conditionObject, page);
     }
 
     @Override
-    public int updateById(EditView editView, MappedResolve mappedResolve) {
-        return templateMapper.updateById(editView, mappedResolve);
+    public int updateById(EditView editView) {
+        return templateMapper.updateById(editView);
     }
 
     @Override
-    public int updateNonById(EditView editView, MappedResolve mappedResolve) {
-        return templateMapper.updateNonById(editView, mappedResolve);
+    public int updateNonById(EditView editView) {
+        return templateMapper.updateNonById(editView);
     }
 
     @Override
-    public int insert(EditView EditView, MappedResolve mappedResolve) {
-        return templateMapper.insert(EditView, mappedResolve);
+    public int insert(EditView EditView) {
+        return templateMapper.insert(EditView);
     }
 
     @Override
-    public Object insertFetchKey(EditView EditView, MappedResolve mappedResolve) {
-        return templateMapper.insertFetchKey(EditView, mappedResolve);
+    public Object insertFetchKey(EditView EditView) {
+        return templateMapper.insertFetchKey(EditView);
     }
 
     @Override
-    public int deleteById(Object id, MappedResolve mappedResolve) {
-        return templateMapper.deleteById(editViewType, id, mappedResolve);
+    public int deleteById(Object id) {
+        return templateMapper.deleteById(editViewType, id);
     }
 
     @Override
-    public int deleteByIds(List<?> idList, MappedResolve mappedResolve) {
-        return templateMapper.deleteByIds(editViewType, idList, mappedResolve);
+    public int deleteByIds(List<?> idList) {
+        return templateMapper.deleteByIds(editViewType, idList);
     }
 
     @Override
-    public boolean existById(Object id, MappedResolve mappedResolve) {
-        return templateMapper.existById(editViewType, id, mappedResolve);
+    public boolean existById(Object id) {
+        return templateMapper.existById(editViewType, id);
     }
 
     @Override
-    public boolean exist(Object conditionObject, MappedResolve mappedResolve) {
-        return templateMapper.exist(editViewType, conditionObject, mappedResolve);
+    public boolean exist(Object conditionObject) {
+        return templateMapper.exist(editViewType, conditionObject);
     }
 
     @Override
-    public List<Object> batchInsert(List<EditView> EditViews, MappedResolve mappedResolve) {
-        return templateMapper.batchInsert(EditViews, mappedResolve);
+    public List<Object> batchInsert(List<EditView> EditViews) {
+        return templateMapper.batchInsert(EditViews);
     }
 
     @Override
-    public List<Object> batchUpdateById(List<EditView> editViews, MappedResolve mappedResolve) {
-        return templateMapper.batchUpdateById(editViews, mappedResolve);
+    public List<Object> batchUpdateById(List<EditView> editViews) {
+        return templateMapper.batchUpdateById(editViews);
+    }
+
+    @Override
+    public List<Object> batchInsert(List<EditView> EditViews, int batchSize) {
+        return templateMapper.batchInsert(EditViews, batchSize);
+    }
+
+    @Override
+    public List<Object> batchUpdateById(List<EditView> editViews, int batchSize) {
+        return templateMapper.batchUpdateById(editViews, batchSize);
     }
 }

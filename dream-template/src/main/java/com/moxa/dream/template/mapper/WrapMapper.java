@@ -7,7 +7,6 @@ import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.template.annotation.Wrap;
 import com.moxa.dream.template.annotation.WrapType;
-import com.moxa.dream.template.resolve.MappedResolve;
 import com.moxa.dream.template.wrap.Wrapper;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.common.ObjectWrapper;
@@ -54,7 +53,7 @@ public abstract class WrapMapper extends AbstractMapper {
     protected abstract MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg);
 
     @Override
-    protected Object execute(MethodInfo methodInfo, Object arg, MappedResolve mappedResolve) {
+    protected Object execute(MethodInfo methodInfo, Object arg) {
         Map<String, Object> argMap = wrapArg(arg);
         WrapObjectMap wrapObjectMap = methodInfo.get(WrapObjectMap.class);
         if (wrapObjectMap != null) {
@@ -68,7 +67,7 @@ public abstract class WrapMapper extends AbstractMapper {
                 objectWrapper.set(key, wrapper.wrap(value));
             }
         }
-        return super.execute(methodInfo, argMap, mappedResolve);
+        return super.execute(methodInfo, argMap);
     }
 
     protected boolean ignore(Field field) {

@@ -13,7 +13,6 @@ import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.system.util.SystemUtil;
-import com.moxa.dream.template.resolve.MappedResolve;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
@@ -32,7 +31,7 @@ public abstract class AbstractMapper {
         this.dialectFactory = session.getConfiguration().getDialectFactory();
     }
 
-    public Object execute(Class<?> type, Object arg, MappedResolve mappedResolve) {
+    public Object execute(Class<?> type, Object arg) {
         String key = getKey(type, arg);
         MethodInfo methodInfo = methodInfoMap.get(key);
         if (methodInfo == null) {
@@ -54,27 +53,24 @@ public abstract class AbstractMapper {
                 }
             }
         }
-        return execute(methodInfo, arg, mappedResolve);
+        return execute(methodInfo, arg);
     }
 
     protected String getKey(Class<?> type, Object arg) {
         return arg == null ? type.getName() : type.getName() + ":" + arg.getClass().getName();
     }
 
-    protected Object execute(MethodInfo methodInfo, Object arg, MappedResolve mappedResolve) {
+    protected Object execute(MethodInfo methodInfo, Object arg) {
         MappedStatement mappedStatement;
         try {
             mappedStatement = dialectFactory.compile(methodInfo, wrapArg(arg));
         } catch (Exception e) {
             throw new DreamRunTimeException(e);
         }
-        return execute(mappedStatement, mappedResolve);
+        return execute(mappedStatement);
     }
 
-    protected Object execute(MappedStatement mappedStatement, MappedResolve mappedResolve) {
-        if (mappedResolve != null) {
-            mappedResolve.resolve(mappedStatement);
-        }
+    protected Object execute(MappedStatement mappedStatement) {
         return session.execute(mappedStatement);
     }
 

@@ -1,98 +1,41 @@
 package com.moxa.dream.template.service;
 
 import com.moxa.dream.system.config.Page;
-import com.moxa.dream.template.resolve.MappedResolve;
 
 import java.util.List;
 
 public interface IService<ListView, EditView> {
-    default EditView selectById(Object id) {
-        return selectById(id, null);
-    }
+    EditView selectById(Object id);
 
-    default List<EditView> selectByIds(List<?> idList) {
-        return selectByIds(idList, null);
-    }
+    List<EditView> selectByIds(List<?> idList);
 
-    default EditView selectOne(Object conditionObject) {
-        return selectOne(conditionObject, null);
-    }
+    EditView selectOne(Object conditionObject);
 
-    default List<ListView> selectList(Object conditionObject) {
-        return selectList(conditionObject, null);
-    }
+    List<ListView> selectList(Object conditionObject);
 
-    default Page<ListView> selectPage(Object conditionObject, Page page) {
-        return selectPage(conditionObject, page, null);
-    }
+    Page<ListView> selectPage(Object conditionObject, Page page);
 
-    default int updateById(EditView view) {
-        return updateById(view, null);
-    }
+    int updateById(EditView view);
 
-    default int updateNonById(EditView view) {
-        return updateNonById(view, null);
-    }
+    int updateNonById(EditView view);
 
-    default int insert(EditView view) {
-        return insert(view, null);
-    }
+    int insert(EditView view);
 
-    default Object insertFetchKey(EditView view) {
-        return insert(view, null);
-    }
+    Object insertFetchKey(EditView view);
 
-    default int deleteById(Object id) {
-        return deleteById(id, null);
-    }
+    int deleteById(Object id);
 
-    default int deleteByIds(List<?> idList) {
-        return deleteByIds(idList, null);
-    }
+    int deleteByIds(List<?> idList);
 
-    default boolean existById(Object id) {
-        return existById(id, null);
-    }
+    boolean existById(Object id);
 
-    default boolean exist(Object conditionObject) {
-        return exist(conditionObject, null);
-    }
+    boolean exist(Object conditionObject);
 
-    default List<Object> batchInsert(List<EditView> viewList) {
-        return batchInsert(viewList, null);
-    }
+    List<Object> batchInsert(List<EditView> viewList);
 
-    default List<Object> batchUpdateById(List<EditView> viewList) {
-        return batchUpdateById(viewList, null);
-    }
+    List<Object> batchUpdateById(List<EditView> viewList);
 
-    EditView selectById(Object id, MappedResolve mappedResolve);
+    List<Object> batchInsert(List<EditView> viewList, int batchSize);
 
-    List<EditView> selectByIds(List<?> idList, MappedResolve mappedResolve);
-
-    EditView selectOne(Object conditionObject, MappedResolve mappedResolve);
-
-    List<ListView> selectList(Object conditionObject, MappedResolve mappedResolve);
-
-    Page<ListView> selectPage(Object conditionObject, Page page, MappedResolve mappedResolve);
-
-    int updateById(EditView view, MappedResolve mappedResolve);
-
-    int updateNonById(EditView view, MappedResolve mappedResolve);
-
-    int insert(EditView view, MappedResolve mappedResolve);
-
-    Object insertFetchKey(EditView view, MappedResolve mappedResolve);
-
-    int deleteById(Object id, MappedResolve mappedResolve);
-
-    int deleteByIds(List<?> idList, MappedResolve mappedResolve);
-
-    boolean existById(Object id, MappedResolve mappedResolve);
-
-    boolean exist(Object conditionObject, MappedResolve mappedResolve);
-
-    List<Object> batchInsert(List<EditView> viewList, MappedResolve mappedResolve);
-
-    List<Object> batchUpdateById(List<EditView> viewList, MappedResolve mappedResolve);
+    List<Object> batchUpdateById(List<EditView> viewList, int batchSize);
 }
