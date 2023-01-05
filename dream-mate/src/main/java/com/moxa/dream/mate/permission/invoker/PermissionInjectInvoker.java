@@ -57,12 +57,12 @@ public class PermissionInjectInvoker extends AbstractInvoker {
         return new Handler[]{new PermissionQueryHandler(this)};
     }
 
-    public boolean isPermissionInject(String table, int life) {
+    public boolean isPermissionInject(String table) {
         TableInfo tableInfo = tableFactory.getTableInfo(table);
         if (tableInfo == null) {
             return false;
         } else {
-            return permissionHandler.isPermissionInject(methodInfo, tableInfo, life);
+            return permissionHandler.isPermissionInject(methodInfo, tableInfo);
         }
     }
 }

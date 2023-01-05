@@ -57,7 +57,7 @@ public class PermissionQueryHandler extends AbstractHandler {
             ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(fromStatement.getMainTable(), true);
             if (tableScanInfo != null) {
                 String table = tableScanInfo.getTable();
-                if (permissionInjectInvoker.isPermissionInject(table, life)) {
+                if (permissionInjectInvoker.isPermissionInject(table)) {
                     QueryStatement queryStatement = queryDeque.peek();
                     WhereStatement whereStatement = queryStatement.getWhereStatement();
                     InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
