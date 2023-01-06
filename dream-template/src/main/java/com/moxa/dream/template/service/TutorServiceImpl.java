@@ -6,9 +6,9 @@ import com.moxa.dream.template.mapper.TemplateMapper;
 
 import java.util.function.Consumer;
 
-public class TutorServiceImpl<ListView, EditView> extends ServiceImpl<ListView, EditView> {
+public final class TutorServiceImpl<ListView, EditView> extends ServiceImpl<ListView, EditView> {
 
-    public TutorServiceImpl(TemplateMapper templateMapper, Class listViewType, Class editViewType) {
+    protected TutorServiceImpl(TemplateMapper templateMapper, Class listViewType, Class editViewType) {
         super(templateMapper, listViewType, editViewType);
     }
 
