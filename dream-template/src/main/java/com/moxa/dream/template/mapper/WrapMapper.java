@@ -1,6 +1,7 @@
 package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
@@ -14,6 +15,7 @@ import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Consumer;
 
 public abstract class WrapMapper extends AbstractMapper {
 
@@ -53,7 +55,7 @@ public abstract class WrapMapper extends AbstractMapper {
     protected abstract MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg);
 
     @Override
-    protected Object execute(MethodInfo methodInfo, Object arg) {
+    protected Object execute(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
         Map<String, Object> argMap = wrapArg(arg);
         WrapObjectMap wrapObjectMap = methodInfo.get(WrapObjectMap.class);
         if (wrapObjectMap != null) {
@@ -67,7 +69,7 @@ public abstract class WrapMapper extends AbstractMapper {
                 objectWrapper.set(key, wrapper.wrap(value));
             }
         }
-        return super.execute(methodInfo, argMap);
+        return super.execute(methodInfo, argMap, mappedStatementConsumer);
     }
 
     protected boolean ignore(Field field) {

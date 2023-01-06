@@ -101,13 +101,4 @@ public abstract class ServiceImpl<ListView, EditView> implements IService<ListVi
         return templateMapper.batchUpdateById(editViews);
     }
 
-    @Override
-    public List<Object> batchInsert(List<EditView> EditViews, int batchSize) {
-        return templateMapper.batchInsert(EditViews, batchSize);
-    }
-
-    @Override
-    public List<Object> batchUpdateById(List<EditView> editViews, int batchSize) {
-        return templateMapper.batchUpdateById(editViews, batchSize);
-    }
 }

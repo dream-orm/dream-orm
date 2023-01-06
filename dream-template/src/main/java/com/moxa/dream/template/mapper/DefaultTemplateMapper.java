@@ -1,5 +1,7 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.system.config.MappedStatement;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.template.resulthandler.Tree;
@@ -9,6 +11,7 @@ import com.moxa.dream.template.sequence.Sequence;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class DefaultTemplateMapper implements TemplateMapper {
     private SelectByIdMapper selectByIdSqlMapper;
@@ -50,97 +53,176 @@ public class DefaultTemplateMapper implements TemplateMapper {
     }
 
     @Override
+    public TemplateMapper methodInfo(Consumer<MethodInfo> consumer) {
+        return new TutorTemplateMapper(this).methodInfo(consumer);
+    }
+
+    @Override
+    public TemplateMapper mappedStatement(Consumer<MappedStatement> consumer) {
+        return new TutorTemplateMapper(this).mappedStatement(consumer);
+    }
+
+    @Override
     public <T> T selectById(Class<T> type, Object id) {
-        return (T) selectByIdSqlMapper.execute(type, id);
+        return selectById(type, id, null, null);
     }
 
     @Override
     public <T> List<T> selectByIds(Class<T> type, List<?> idList) {
-        return (List<T>) selectByIdsSqlMapper.execute(type, idList);
+        return selectByIds(type, idList, null, null);
     }
 
     @Override
     public <T> T selectOne(Class<T> type, Object conditionObject) {
-        return (T) selectOneSqlMapper.execute(type, conditionObject);
+        return selectOne(type, conditionObject, null, null);
     }
 
     @Override
     public <T> List<T> selectList(Class<T> type, Object conditionObject) {
-        return (List<T>) selectListMapper.execute(type, conditionObject);
+        return selectList(type, conditionObject, null, null);
     }
 
     @Override
     public <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject) {
-        return (List<T>) selectTreeMapper.execute(type, conditionObject);
+        return selectTree(type, conditionObject, null, null);
     }
 
     @Override
     public <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page) {
-        return (Page<T>) selectPageSqlMapper.execute(type, conditionObject, page);
+        return selectPage(type, conditionObject, page, null, null);
     }
 
     @Override
     public int updateById(Object view) {
-        return (int) updateByIdSqlMapper.execute(view.getClass(), view);
+        return updateById(view, null, null);
     }
 
     @Override
     public int updateNonById(Object view) {
-        return (int) updateNonByIdSqlMapper.execute(view.getClass(), view);
+        return updateNonById(view, null, null);
     }
 
     @Override
     public int insert(Object view) {
-        Class<?> type = view.getClass();
-        return (int) insertSqlMapper.execute(type, view);
+        return insert(view, null, null);
     }
 
     @Override
     public Object insertFetchKey(Object view) {
-        Class<?> type = view.getClass();
-        return insertFetchKeyMapper.execute(type, view);
+        return insertFetchKey(view, null, null);
     }
 
     @Override
     public int deleteById(Class<?> type, Object id) {
-        return (int) deleteByIdSqlMapper.execute(type, id);
+        return deleteById(type, id, null, null);
     }
 
     @Override
     public int deleteByIds(Class<?> type, List<?> idList) {
-        return (int) deleteByIdsSqlMapper.execute(type, idList);
+        return deleteByIds(type, idList, null, null);
     }
 
     @Override
     public boolean existById(Class<?> type, Object id) {
-        Integer result = (Integer) existByIdMapper.execute(type, id);
-        return result != null;
+        return existById(type, id, null, null);
     }
 
     @Override
     public boolean exist(Class<?> type, Object conditionObject) {
-        Integer result = (Integer) existMapper.execute(type, conditionObject);
-        return result != null;
+        return exist(type, conditionObject, null, null);
     }
 
     @Override
-    public List<Object> batchInsert(List<?> viewList, int batchSize) {
-        if (viewList == null || viewList.isEmpty()) {
-            return null;
-        }
-        return (List<Object>) batchInsertMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
+    public List<Object> batchInsert(List<?> viewList) {
+        return batchInsert(viewList, null, null);
     }
 
     @Override
-    public List<Object> batchUpdateById(List<?> viewList, int batchSize) {
-        if (viewList == null || viewList.isEmpty()) {
-            return null;
-        }
-        return (List<Object>) batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList, batchSize);
+    public List<Object> batchUpdateById(List<?> viewList) {
+        return batchUpdateById(viewList, null, null);
     }
 
     @Override
     public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType) {
-        return executeMapper.execute(sql, param, rowType, colType);
+        return execute(sql, param, rowType, colType, null, null);
+    }
+
+
+    protected <T> T selectById(Class<T> type, Object id, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        return (T) selectByIdSqlMapper.execute(type, id, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected <T> List<T> selectByIds(Class<T> type, List<?> idList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        return (List<T>) selectByIdsSqlMapper.execute(type, idList, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected <T> T selectOne(Class<T> type, Object conditionObject, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        return (T) selectOneSqlMapper.execute(type, conditionObject, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected <T> List<T> selectList(Class<T> type, Object conditionObject, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        return (List<T>) selectListMapper.execute(type, conditionObject, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        return (List<T>) selectTreeMapper.execute(type, conditionObject, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        return (Page<T>) selectPageSqlMapper.execute(type, conditionObject, page, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected int updateById(Object view, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        return (int) updateByIdSqlMapper.execute(view.getClass(), view, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected int updateNonById(Object view, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        return (int) updateNonByIdSqlMapper.execute(view.getClass(), view, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected int insert(Object view, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        Class<?> type = view.getClass();
+        return (int) insertSqlMapper.execute(type, view, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected Object insertFetchKey(Object view, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        Class<?> type = view.getClass();
+        return insertFetchKeyMapper.execute(type, view, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected int deleteById(Class<?> type, Object id, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        return (int) deleteByIdSqlMapper.execute(type, id, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected int deleteByIds(Class<?> type, List<?> idList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        return (int) deleteByIdsSqlMapper.execute(type, idList, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected boolean existById(Class<?> type, Object id, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        Integer result = (Integer) existByIdMapper.execute(type, id, methodInfoConsumer, mappedStatementConsumer);
+        return result != null;
+    }
+
+    protected boolean exist(Class<?> type, Object conditionObject, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        Integer result = (Integer) existMapper.execute(type, conditionObject, methodInfoConsumer, mappedStatementConsumer);
+        return result != null;
+    }
+
+    protected List<Object> batchInsert(List<?> viewList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        if (viewList == null || viewList.isEmpty()) {
+            return null;
+        }
+        return (List<Object>) batchInsertMapper.execute(viewList.get(0).getClass(), viewList, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected List<Object> batchUpdateById(List<?> viewList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        if (viewList == null || viewList.isEmpty()) {
+            return null;
+        }
+        return (List<Object>) batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList, methodInfoConsumer, mappedStatementConsumer);
+    }
+
+    protected Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+        return executeMapper.execute(sql, param, rowType, colType, methodInfoConsumer, mappedStatementConsumer);
     }
 }

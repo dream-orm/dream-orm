@@ -1,5 +1,7 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.system.config.MappedStatement;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.template.resulthandler.Tree;
 import com.moxa.dream.util.common.NonCollection;
@@ -7,8 +9,12 @@ import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface TemplateMapper {
+    TemplateMapper methodInfo(Consumer<MethodInfo> consumer);
+
+    TemplateMapper mappedStatement(Consumer<MappedStatement> consumer);
 
     <T> T selectById(Class<T> type, Object id);
 
@@ -38,17 +44,9 @@ public interface TemplateMapper {
 
     boolean exist(Class<?> type, Object conditionObject);
 
-    default List<Object> batchInsert(List<?> viewList) {
-        return batchInsert(viewList, 1000);
-    }
+    List<Object> batchInsert(List<?> viewList);
 
-    default List<Object> batchUpdateById(List<?> viewList) {
-        return batchUpdateById(viewList, 1000);
-    }
-
-    List<Object> batchInsert(List<?> viewList, int batchSize);
-
-    List<Object> batchUpdateById(List<?> viewList, int batchSize);
+    List<Object> batchUpdateById(List<?> viewList);
 
     default <T> T selectOne(String sql, Object param, Class<T> colType) {
         List<T> resultList = selectList(sql, param, colType);
