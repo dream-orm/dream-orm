@@ -96,8 +96,8 @@ public class InsertMapper extends WrapMapper {
                 .setColType(Integer.class)
                 .setColumnNames(columnNames)
                 .setColumnTypeHandlers(typeHandlers)
-                .setInitActionList(initActionList.toArray(new Action[0]))
-                .setDestroyActionList(destroyActionList.toArray(new Action[0]))
+                .addInitAction(initActionList.toArray(new Action[0]))
+                .addDestroyAction(destroyActionList.toArray(new Action[0]))
                 .setSql(sql);
     }
 

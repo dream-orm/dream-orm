@@ -12,10 +12,10 @@ import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.system.annotation.PageQuery;
 import com.moxa.dream.system.config.MethodInfo;
-import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.action.SqlAction;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
+import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.util.List;
@@ -65,22 +65,17 @@ public class PageHandler extends AbstractHandler {
         if (ObjectUtil.isNull(countSql)) {
             countSql = "select count(1) from (" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp";
         }
-        Action[] initActionList = this.methodInfo.getInitActionList();
-        Action[] countInitActionList;
-        if (initActionList == null) {
-            countInitActionList = new Action[1];
-        } else {
-            countInitActionList = new Action[initActionList.length + 1];
-            System.arraycopy(initActionList, 0, countInitActionList, 0, initActionList.length);
-        }
-        PageQuery pageQuery = methodInfo.get(PageQuery.class);
-        String value = pageQuery.value();
-        String property = "total";
-        if (!ObjectUtil.isNull(value)) {
-            property = value + "." + property;
-        }
-        countInitActionList[countInitActionList.length - 1] = new SqlAction(methodInfo.getConfiguration(), property, countSql, NonCollection.class, Long.class, true);
-        methodInfo.setInitActionList(countInitActionList);
+        SqlAction sqlAction = new SqlAction(methodInfo.getConfiguration(), countSql, NonCollection.class, Long.class, (arg, result) -> {
+            ObjectWrapper wrapper = ObjectWrapper.wrapper(arg);
+            PageQuery pageQuery = methodInfo.get(PageQuery.class);
+            String value = pageQuery.value();
+            String property = "total";
+            if (!ObjectUtil.isNull(value)) {
+                property = value + "." + property;
+            }
+            wrapper.set(property, result);
+        });
+        methodInfo.addInitAction(sqlAction);
     }
 
     void handlerPage(QueryStatement queryStatement) throws AntlrException {

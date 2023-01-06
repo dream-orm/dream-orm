@@ -111,16 +111,16 @@ public class DefaultMapperFactory implements MapperFactory {
                         StatementHandler statementHandler = actionProvider.statementHandler();
                         ResultSetHandler resultSetHandler = actionProvider.resultSetHandler();
                         if (initActionList != null) {
-                            methodInfo.setInitActionList(initActionList);
+                            methodInfo.addInitAction(initActionList);
                         }
                         if (sql != null) {
                             methodInfo.setSql(sql);
                         }
                         if (loopActionList != null) {
-                            methodInfo.setLoopActionList(loopActionList);
+                            methodInfo.addLoopAction(loopActionList);
                         }
                         if (destroyActionList != null) {
-                            methodInfo.setDestroyActionList(destroyActionList);
+                            methodInfo.addDestroyAction(destroyActionList);
                         }
                         if (rowType != null) {
                             methodInfo.setRowType(rowType);

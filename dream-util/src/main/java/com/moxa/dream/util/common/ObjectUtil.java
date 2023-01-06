@@ -40,4 +40,17 @@ public class ObjectUtil {
         return Arrays.hashCode(values);
     }
 
+    public static <T> T[] merge(T[] source1, T[] source2) {
+        if (source1 == null) {
+            return source2;
+        }
+        if (source2 == null) {
+            return source1;
+        }
+        Object[] source = new Object[source1.length + source2.length];
+        System.arraycopy(source1, 0, source, 0, source1.length);
+        System.arraycopy(source2, 0, source, source1.length, source2.length);
+        return (T[]) source;
+    }
+
 }

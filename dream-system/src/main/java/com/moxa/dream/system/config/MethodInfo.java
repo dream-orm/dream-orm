@@ -6,6 +6,7 @@ import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
+import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -165,8 +166,8 @@ public class MethodInfo {
         return initActionList;
     }
 
-    public MethodInfo setInitActionList(Action[] initActionList) {
-        this.initActionList = initActionList;
+    public MethodInfo addInitAction(Action... initActions) {
+        this.initActionList = ObjectUtil.merge(this.initActionList, initActions);
         return this;
     }
 
@@ -174,8 +175,8 @@ public class MethodInfo {
         return loopActionList;
     }
 
-    public MethodInfo setLoopActionList(Action[] loopActionList) {
-        this.loopActionList = loopActionList;
+    public MethodInfo addLoopAction(Action... loopActionList) {
+        this.loopActionList = ObjectUtil.merge(this.loopActionList, loopActionList);
         return this;
     }
 
@@ -183,8 +184,8 @@ public class MethodInfo {
         return destroyActionList;
     }
 
-    public MethodInfo setDestroyActionList(Action[] destroyActionList) {
-        this.destroyActionList = destroyActionList;
+    public MethodInfo addDestroyAction(Action... destroyActionList) {
+        this.destroyActionList = ObjectUtil.merge(this.destroyActionList, destroyActionList);
         return this;
     }
 
