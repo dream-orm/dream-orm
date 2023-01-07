@@ -44,7 +44,7 @@ public class DefaultMapperFactory implements MapperFactory {
                     }
                 }
             }
-            fillMethodInfoFromAction(configuration, mapperClass, methodInfoMap);
+            padMethodInfo(configuration, mapperClass, methodInfoMap);
             for (String name : methodInfoMap.keySet()) {
                 MethodInfo methodInfo = methodInfoMap.get(name);
                 if (ObjectUtil.isNull(methodInfo.getSql())) {
@@ -71,7 +71,7 @@ public class DefaultMapperFactory implements MapperFactory {
         return value;
     }
 
-    protected void fillMethodInfoFromAction(Configuration configuration, Class type, Map<String, MethodInfo> methodInfoMap) {
+    protected void padMethodInfo(Configuration configuration, Class type, Map<String, MethodInfo> methodInfoMap) {
         Class<?> actionType = getActionType(type);
         if (actionType != null) {
             List<Method> methodList = ReflectUtil.findMethod(actionType)

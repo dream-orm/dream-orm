@@ -34,7 +34,7 @@ public class InsertMapper extends WrapMapper {
     }
 
     @Override
-    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg) {
+    protected MethodInfo getWrapMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg) {
         this.sequence.init(tableInfo);
         String table = tableInfo.getTable();
         List<String> columnList = new ArrayList<>();

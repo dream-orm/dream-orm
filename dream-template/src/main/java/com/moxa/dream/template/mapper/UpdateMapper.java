@@ -26,7 +26,7 @@ public abstract class UpdateMapper extends WrapMapper {
     }
 
     @Override
-    protected MethodInfo doGetMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg) {
+    protected MethodInfo getWrapMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg) {
         String table = tableInfo.getTable();
         List<String> setList = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {
