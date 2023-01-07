@@ -3,6 +3,7 @@ package com.moxa.dream.template.mapper;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.system.antlr.invoker.$Invoker;
+import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
@@ -104,6 +105,11 @@ public class InsertMapper extends WrapMapper {
     @Override
     protected boolean accept(WrapType wrapType) {
         return (CODE & wrapType.getCode()) > 0;
+    }
+
+    @Override
+    protected Command getCommand() {
+        return Command.INSERT;
     }
 
     protected class SequenceAction implements Action {

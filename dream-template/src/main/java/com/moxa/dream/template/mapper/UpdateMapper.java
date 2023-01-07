@@ -3,6 +3,7 @@ package com.moxa.dream.template.mapper;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.system.antlr.invoker.$Invoker;
+import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
@@ -60,5 +61,10 @@ public abstract class UpdateMapper extends WrapMapper {
 
     protected String getUpdateParam(List<String> setList) {
         return String.join(",", setList);
+    }
+
+    @Override
+    protected Command getCommand() {
+        return Command.UPDATE;
     }
 }
