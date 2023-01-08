@@ -30,40 +30,50 @@ public abstract class ValidateMapper extends AbstractMapper {
     @Override
     protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
         MethodInfo methodInfo = getValidateMethodInfo(configuration, tableInfo, type, arg);
-        List<Field> fieldList = ReflectUtil.findField(type);
-        if (!ObjectUtil.isNull(fieldList)) {
-            ValidatePackageList validatePackageList = new ValidatePackageList();
-            for (Field field : fieldList) {
-                Annotation[] annotations = field.getAnnotations();
-                if (!ObjectUtil.isNull(annotations)) {
-                    for (Annotation annotation : annotations) {
-                        Class<? extends Annotation> annotationType = annotation.annotationType();
-                        Validated validatedAnnotation = annotationType.getAnnotation(Validated.class);
-                        if (validatedAnnotation != null) {
-                            Method[] methods = annotationType.getDeclaredMethods();
-                            Map<String, Object> paramMap = new HashMap<>();
-                            if (!ObjectUtil.isNull(methods)) {
-                                for (Method method : methods) {
-                                    try {
-                                        Object value = method.invoke(annotation);
-                                        paramMap.put(method.getName(), value);
-                                    } catch (Exception e) {
-                                        throw new DreamRunTimeException(e);
+        Class validateType = null;
+        if (getCommand() == Command.QUERY) {
+            if (arg != null) {
+                validateType = arg.getClass();
+            }
+        } else {
+            validateType = type;
+        }
+        if (validateType != null) {
+            List<Field> fieldList = ReflectUtil.findField(validateType);
+            if (!ObjectUtil.isNull(fieldList)) {
+                ValidatePackageList validatePackageList = new ValidatePackageList();
+                for (Field field : fieldList) {
+                    Annotation[] annotations = field.getAnnotations();
+                    if (!ObjectUtil.isNull(annotations)) {
+                        for (Annotation annotation : annotations) {
+                            Class<? extends Annotation> annotationType = annotation.annotationType();
+                            Validated validatedAnnotation = annotationType.getAnnotation(Validated.class);
+                            if (validatedAnnotation != null) {
+                                Method[] methods = annotationType.getDeclaredMethods();
+                                Map<String, Object> paramMap = new HashMap<>();
+                                if (!ObjectUtil.isNull(methods)) {
+                                    for (Method method : methods) {
+                                        try {
+                                            Object value = method.invoke(annotation);
+                                            paramMap.put(method.getName(), value);
+                                        } catch (Exception e) {
+                                            throw new DreamRunTimeException(e);
+                                        }
                                     }
                                 }
-                            }
-                            Class<? extends Validator> validatorType = validatedAnnotation.value();
-                            Validator validator = ReflectUtil.create(validatorType);
-                            if (validator.isValid(configuration, type, field, getCommand())) {
-                                validatePackageList.validatePackageList.add(new ValidatePackage(validator, field.getName(), paramMap));
+                                Class<? extends Validator> validatorType = validatedAnnotation.value();
+                                Validator validator = ReflectUtil.create(validatorType);
+                                if (validator.isValid(configuration, validateType, field, getCommand())) {
+                                    validatePackageList.validatePackageList.add(new ValidatePackage(validator, field.getName(), paramMap));
+                                }
                             }
                         }
                     }
-                }
 
-            }
-            if (!validatePackageList.validatePackageList.isEmpty()) {
-                methodInfo.set(ValidatePackageList.class, validatePackageList);
+                }
+                if (!validatePackageList.validatePackageList.isEmpty()) {
+                    methodInfo.set(ValidatePackageList.class, validatePackageList);
+                }
             }
         }
         return methodInfo;
