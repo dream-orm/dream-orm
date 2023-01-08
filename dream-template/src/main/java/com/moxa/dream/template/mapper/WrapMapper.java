@@ -53,7 +53,7 @@ public abstract class WrapMapper extends ValidateMapper {
     protected abstract MethodInfo getWrapMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg);
 
     @Override
-    protected Object executeValidate(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
+    protected Object execute(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
         WrapObjectMap wrapObjectMap = methodInfo.get(WrapObjectMap.class);
         Command command = getCommand();
         if (command == Command.BATCH) {
@@ -68,10 +68,6 @@ public abstract class WrapMapper extends ValidateMapper {
                 wrap(wrapObjectMap, arg);
             }
         }
-        return executeWrap(methodInfo, arg, mappedStatementConsumer);
-    }
-
-    protected Object executeWrap(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
         return super.execute(methodInfo, arg, mappedStatementConsumer);
     }
 

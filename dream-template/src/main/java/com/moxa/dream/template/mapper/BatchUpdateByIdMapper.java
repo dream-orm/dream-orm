@@ -16,7 +16,7 @@ public class BatchUpdateByIdMapper extends UpdateByIdMapper {
     }
 
     @Override
-    protected Object executeWrap(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
+    protected Object executeValidate(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
         return super.execute(new BatchMappedStatement(methodInfo, (List<?>) arg), mappedStatementConsumer);
     }
 
