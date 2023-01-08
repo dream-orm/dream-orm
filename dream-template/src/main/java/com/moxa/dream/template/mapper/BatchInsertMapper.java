@@ -16,7 +16,7 @@ public class BatchInsertMapper extends InsertMapper {
     }
 
     @Override
-    protected Object execute(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
+    protected Object executeWrap(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
         return super.execute(new BatchMappedStatement(methodInfo, (List<?>) arg), mappedStatementConsumer);
     }
 

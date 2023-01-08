@@ -1,0 +1,13 @@
+package com.moxa.dream.template.validate;
+
+
+import java.util.Map;
+
+public class NullValidator implements Validator<Object> {
+    @Override
+    public void validate(Object value, Map<String, Object> paramMap) {
+        if (value != null) {
+            throw new ValidateDreamRunTimeException((String) paramMap.get("msg"));
+        }
+    }
+}

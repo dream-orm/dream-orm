@@ -40,7 +40,7 @@ public abstract class ValidateMapper extends AbstractMapper {
                         Class<? extends Annotation> annotationType = annotation.annotationType();
                         Validated validatedAnnotation = annotationType.getAnnotation(Validated.class);
                         if (validatedAnnotation != null) {
-                            Method[] methods = annotationType.getMethods();
+                            Method[] methods = annotationType.getDeclaredMethods();
                             Map<String, Object> paramMap = new HashMap<>();
                             if (!ObjectUtil.isNull(methods)) {
                                 for (Method method : methods) {
@@ -86,6 +86,10 @@ public abstract class ValidateMapper extends AbstractMapper {
                 }
             }
         }
+        return executeValidate(methodInfo, arg, mappedStatementConsumer);
+    }
+
+    protected Object executeValidate(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
         return super.execute(methodInfo, arg, mappedStatementConsumer);
     }
 

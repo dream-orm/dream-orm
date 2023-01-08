@@ -56,11 +56,14 @@ public class SelectPageMapper extends SelectListMapper {
                             return PAGE;
                         }
                     });
+                    if (methodInfoConsumer != null) {
+                        methodInfoConsumer.accept(methodInfo);
+                    }
                     methodInfoMap.put(key, methodInfo);
                 }
             }
         }
-        List<?> result = (List<?>) session.execute(methodInfo, wrapArg(arg, page));
+        List<?> result = (List<?>) super.execute(methodInfo, wrapArg(arg, page), mappedStatementConsumer);
         page.setRows(result);
         return page;
     }

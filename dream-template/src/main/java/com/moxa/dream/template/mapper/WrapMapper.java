@@ -1,5 +1,6 @@
 package com.moxa.dream.template.mapper;
 
+import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
@@ -35,7 +36,7 @@ public abstract class WrapMapper extends ValidateMapper {
                     if (accept(wrapType)) {
                         acceptList.add(field);
                         Wrapper wrapper = ReflectUtil.create(wrapAnnotation.value());
-                        wrapObjectMap.put(DREAM_TEMPLATE_PARAM + "." + field.getName(), wrapper);
+                        wrapObjectMap.put(field.getName(), wrapper);
                     }
                 } else {
                     acceptList.add(field);
@@ -52,21 +53,38 @@ public abstract class WrapMapper extends ValidateMapper {
     protected abstract MethodInfo getWrapMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg);
 
     @Override
-    protected Object execute(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
-        Map<String, Object> argMap = wrapArg(arg);
+    protected Object executeValidate(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
         WrapObjectMap wrapObjectMap = methodInfo.get(WrapObjectMap.class);
-        if (wrapObjectMap != null) {
-            Iterator<Map.Entry<String, Wrapper>> iterator = wrapObjectMap.wrapObjectMap.entrySet().iterator();
-            ObjectWrapper objectWrapper = ObjectWrapper.wrapper(argMap);
-            while (iterator.hasNext()) {
-                Map.Entry<String, Wrapper> entry = iterator.next();
-                String key = entry.getKey();
-                Object value = objectWrapper.get(key);
-                Wrapper wrapper = entry.getValue();
-                objectWrapper.set(key, wrapper.wrap(value));
+        Command command = getCommand();
+        if (command == Command.BATCH) {
+            List<?> argList = (List<?>) arg;
+            if (wrapObjectMap != null) {
+                for (int i = 0; i < argList.size(); i++) {
+                    wrap(wrapObjectMap, argList.get(i));
+                }
+            }
+        } else {
+            if (wrapObjectMap != null) {
+                wrap(wrapObjectMap, arg);
             }
         }
-        return super.execute(methodInfo, argMap, mappedStatementConsumer);
+        return executeWrap(methodInfo, arg, mappedStatementConsumer);
+    }
+
+    protected Object executeWrap(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
+        return super.execute(methodInfo, arg, mappedStatementConsumer);
+    }
+
+    protected void wrap(WrapObjectMap wrapObjectMap, Object arg) {
+        Iterator<Map.Entry<String, Wrapper>> iterator = wrapObjectMap.wrapObjectMap.entrySet().iterator();
+        ObjectWrapper objectWrapper = ObjectWrapper.wrapper(arg);
+        while (iterator.hasNext()) {
+            Map.Entry<String, Wrapper> entry = iterator.next();
+            String key = entry.getKey();
+            Object value = objectWrapper.get(key);
+            Wrapper wrapper = entry.getValue();
+            objectWrapper.set(key, wrapper.wrap(value));
+        }
     }
 
     protected abstract boolean accept(WrapType wrapType);

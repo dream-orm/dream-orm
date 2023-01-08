@@ -11,5 +11,6 @@ public interface Validator<T> {
     default boolean isValid(Configuration configuration, Class type, Field field, Command command) {
         return true;
     }
+
     void validate(T value, Map<String, Object> paramMap);
 }
