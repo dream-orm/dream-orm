@@ -28,17 +28,10 @@ public abstract class ValidateMapper extends AbstractMapper {
     }
 
     @Override
-    protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
+    protected final MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
         MethodInfo methodInfo = getValidateMethodInfo(configuration, tableInfo, type, arg);
-        Class validateType = null;
-        if (getCommand() == Command.QUERY) {
-            if (arg != null) {
-                validateType = arg.getClass();
-            }
-        } else {
-            validateType = type;
-        }
-        if (validateType != null) {
+        if (arg != null) {
+            Class validateType = arg.getClass();
             List<Field> fieldList = ReflectUtil.findField(validateType);
             if (!ObjectUtil.isNull(fieldList)) {
                 ValidatePackageList validatePackageList = new ValidatePackageList();
