@@ -2,10 +2,10 @@ package com.moxa.dream.template.resulthandler;
 
 import java.util.List;
 
-public interface Tree {
-    String getTreeId();
+public interface Tree<T> {
+    T getTreeId();
 
-    String getParentId();
+    T getParentId();
 
     List<? extends Tree> getChildren();
 }

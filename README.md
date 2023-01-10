@@ -4,7 +4,7 @@
 
 ## **简介**
 
-DREAM（https://github.com/moxa-lzf/dream）是一款基于翻译的以技术为中心，辐射业务持久层框架
+DREAM（ https://github.com/moxa-lzf/dream ）是一款基于翻译的以技术为中心，辐射业务持久层框架
 
 ## **特性**
 
