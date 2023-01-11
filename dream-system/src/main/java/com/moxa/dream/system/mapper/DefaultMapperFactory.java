@@ -159,7 +159,7 @@ public class DefaultMapperFactory implements MapperFactory {
         int timeOut = getTimeOut(mapperClass, method);
         return new MethodInfo()
                 .setConfiguration(configuration)
-                .setName(method.getName())
+                .setId(method.getDeclaringClass().getName()+"."+method.getName())
                 .setRowType(rowType)
                 .setColType(colType)
                 .setCache(cache)

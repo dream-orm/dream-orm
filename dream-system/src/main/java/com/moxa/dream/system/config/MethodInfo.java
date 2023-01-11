@@ -15,7 +15,7 @@ import java.util.Map;
 public class MethodInfo {
     protected final Map<Class, Object> builtMap = new HashMap<>();
     protected Configuration configuration;
-    protected String name;
+    protected String id;
     protected Class<? extends Collection> rowType;
     protected Class colType;
     protected String[] columnNames;
@@ -43,13 +43,12 @@ public class MethodInfo {
         this.configuration = configuration;
         return this;
     }
-
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
-    public MethodInfo setName(String name) {
-        this.name = name;
+    public MethodInfo setId(String id) {
+        this.id = id;
         return this;
     }
 
@@ -226,14 +225,6 @@ public class MethodInfo {
     public MethodInfo setResultSetHandler(ResultSetHandler resultSetHandler) {
         this.resultSetHandler = resultSetHandler;
         return this;
-    }
-
-    public String getId() {
-        if (method == null) {
-            return "";
-        } else {
-            return method.getDeclaringClass().getName() + "." + method.getName();
-        }
     }
 
     public <T> MethodInfo set(Class<T> type, T value) {
