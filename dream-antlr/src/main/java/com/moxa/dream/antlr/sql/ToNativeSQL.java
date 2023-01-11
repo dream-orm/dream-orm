@@ -220,11 +220,7 @@ public class ToNativeSQL extends ToSQL {
     @Override
     protected String toString(WhereStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String condition = toStr(statement.getCondition(), assist, invokerList);
-        if (condition == null || "".equals(condition.trim())) {
-            return "";
-        } else {
-            return " WHERE " + condition;
-        }
+        return " WHERE " + condition;
     }
 
     @Override

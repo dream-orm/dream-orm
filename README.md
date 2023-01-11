@@ -26,8 +26,6 @@ DREAM（ https://github.com/moxa-lzf/dream ）是一款基于翻译的以技术�
 
 **开箱即用**：数据权限，逻辑删除，多租户，多数据源，参数值注入（默认值，加密），主键序列、查询字段值提取（解密，字典等）
 
-
-
 ## **优势**
 
 ### **精简SQL**
@@ -54,7 +52,8 @@ select @all() from ...
 
 为什么基于注解，而不是基于lambda SQL；并非dream不想支持，而是不能支持！
 
-一条简单的SQL在其他orm框架眼里可以说一文不值，即便每次SQL操作重复解析，也没什么大不了影响不到性能，但dream不一样，一条SQL的解析是非常复杂的，而且极度耗时，每一条SQL处理的结果必须保存起来，基于lambda SQL必然的要重复解析SQL
+一条简单的SQL在其他orm框架眼里可以说一文不值，即便每次SQL操作重复解析，也没什么大不了影响不到性能，但dream不一样，一条SQL的解析是非常复杂的，而且极度耗时，每一条SQL处理的结果必须保存起来，基于lambda
+SQL必然的要重复解析SQL
 
 基于注解的生成where条件，虽不易阅读，换来了在前端传入数据给后台时，查询条件间接生成。只需要在Java对象属性字段标记对应注解即可，列如：where条件
 
@@ -76,7 +75,7 @@ and age in
 
 ```java
 public class UserCondition {
-    @Conditional(table = "user",value = ContainsCondition.class)
+    @Conditional(table = "user", value = ContainsCondition.class)
     private String name;
 
     @Conditional(value = InCondition.class)
@@ -154,8 +153,6 @@ public class Blog {
     private String name;
 }
 ```
-
-
 
 ### **无感屏蔽多租户**
 
@@ -364,8 +361,6 @@ MySQL，SqlServer， PostgreSQL，Oracle
 
 ## **快速开始**
 
-
-
 现有一张user表，表结构如下：
 
 | id   | name   | age  | email                                           |
@@ -403,8 +398,6 @@ INSERT INTO user (id, name, age, email) VALUES
 (4, 'Sandy', 21, 'test4@baomidou.com'),
 (5, 'Billie', 24, 'test5@baomidou.com');
 ```
-
-
 
 ### 初始化工程
 
@@ -444,8 +437,6 @@ INSERT INTO user (id, name, age, email) VALUES
 </dependency>
 ```
 
-
-
 ### **配置**
 
 在 Spring Boot 创建 ConfigurationBean对象
@@ -465,8 +456,6 @@ public class BootApplication {
 }
 ```
 
-
-
 ### **开始使用**
 
 ```java
@@ -484,8 +473,6 @@ public class QueryTest {
 }
 ```
 
-
-
 ### **控制台输出**
 
 ```tex
@@ -496,11 +483,9 @@ User{id=4, name='Sandy', age=21, email='test4@baomidou.com'}
 User{id=5, name='Billie', age=24, email='test5@baomidou.com'}
 ```
 
-
-
 ### 小结
 
-1  通过以上几个简单的步骤，我们就实现了 User 表的 CRUD 功能，使用内置的mapper，甚至连 XML 文件都不用编写！
+1 通过以上几个简单的步骤，我们就实现了 User 表的 CRUD 功能，使用内置的mapper，甚至连 XML 文件都不用编写！
 
 # **内置@函数**
 
@@ -513,14 +498,13 @@ User{id=5, name='Billie', age=24, email='test5@baomidou.com'}
 ### **举例**
 
 ```java
+
 @Mapper
 public interface UserMapper {
     @Sql("select id, name, age,email from user where name = @$(name)")
     User findByName(String name);
 }
 ```
-
-
 
 ### **测试**
 
@@ -537,16 +521,12 @@ public class QueryTest {
 }
 ```
 
-
-
 ### **控制台输出**
 
 ```tex
 SQL:SELECT id,name,age,email FROM user WHERE name=?
 PARAM:[Jone]
 ```
-
-
 
 ## **rep**
 
@@ -557,14 +537,13 @@ PARAM:[Jone]
 ### **举例**
 
 ```java
+
 @Mapper
 public interface UserMapper {
     @Sql("select id, name, age,email from user where name = @rep(name)")
     User findByName2(String name);
 }
 ```
-
-
 
 ### **测试**
 
@@ -581,16 +560,12 @@ public class QueryTest {
 }    
 ```
 
-
-
 ### **控制台输出**
 
 ```tex
 SQL:SELECT id,name,age,email FROM user WHERE name='Jone'
 PARAM:[]
 ```
-
-
 
 ## **foreach**
 
@@ -601,6 +576,7 @@ PARAM:[]
 ### **举例：删除数组**
 
 ```java
+
 @Mapper
 public interface UserMapper {
     @Sql("delete from user where id in (@foreach(list))")
@@ -608,11 +584,7 @@ public interface UserMapper {
 }
 ```
 
-
-
 ### **测试**
-
-
 
 ```java
 @RunWith(SpringRunner.class)
@@ -627,16 +599,12 @@ public class DeleteTest {
 }    
 ```
 
-
-
 ### **控制台输出**
 
 ```tex
 SQL:DELETE FROM user WHERE id IN (?,?,?,?,?,?)
 PARAM:[1, 2, 3, 4, 5, 6]
 ```
-
-
 
 ## **non**
 
@@ -647,6 +615,7 @@ PARAM:[1, 2, 3, 4, 5, 6]
 ### **举例**
 
 ```java
+
 @Mapper
 public interface UserMapper {
     @Sql("update user set @non(name=@$(user.name),age=@$(user.age),email=@$(user.email)) where id=@$(user.id)")
@@ -675,16 +644,12 @@ public class UpdateTest {
 }  
 ```
 
-
-
 ### **控制台输出**
 
 ```tex
 SQL:UPDATE user SET name=?,email=? WHERE id=?
 PARAM:[hli, , 1]
 ```
-
-
 
 ## **not**
 
@@ -705,6 +670,7 @@ PARAM:[hli, , 1]
 ### **举例**
 
 ```java
+
 @Mapper
 public interface UserMapper {
     @Sql("select @all(),'hello' name from user")
@@ -715,8 +681,6 @@ public interface UserMapper {
 **注：后文查询 'hello'**
 
 ### **测试**
-
-
 
 ```java
 @RunWith(SpringRunner.class)
@@ -732,8 +696,6 @@ public class QueryTest {
 } 
 ```
 
-
-
 ### **控制台输出**
 
 ```tex
@@ -747,8 +709,6 @@ User{id=3, name='hello', age=28, email='test3@baomidou.com'}
 User{id=4, name='hello', age=21, email='test4@baomidou.com'}
 User{id=5, name='hello', age=24, email='test5@baomidou.com'}
 ```
-
-
 
 ## **table**
 
@@ -765,18 +725,14 @@ public interface UserMapper {
 }
 ```
 
-
-
 ### **测试**
 
 ```java
  @Test
-    public void test8() {
-        List<User> userList = userMapper.selectAll3();
-    }
+public void test8(){
+        List<User> userList=userMapper.selectAll3();
+        }
 ```
-
-
 
 ### **控制台输出**
 
@@ -785,8 +741,6 @@ public interface UserMapper {
 执行参数:[]
 执行用时：17ms
 ```
-
-
 
 # **注解**
 
@@ -805,8 +759,6 @@ public @interface Table {
 }
 ```
 
-
-
 | 注解属性 | 描述                         |
 | -------- | ---------------------------- |
 | value    | 指定绑定的数据表             |
@@ -815,12 +767,11 @@ public @interface Table {
 ### **举例**
 
 ```java
+
 @Table("user")
 public class User {
 }
 ```
-
-
 
 ## **Id**
 
@@ -838,8 +789,6 @@ public @interface Id {
 }
 ```
 
-
-
 ### **举例**
 
 ```java
@@ -850,8 +799,6 @@ public class User {
     private Integer id;
 }
 ```
-
-
 
 ## **Column**
 
@@ -867,8 +814,6 @@ public @interface Column {
     int jdbcType() default Types.NULL;
 }
 ```
-
-
 
 | 注解属性 | 描述             |
 | -------- | ---------------- |
@@ -892,8 +837,6 @@ public class User {
 }
 ```
 
-
-
 ## **Join**
 
 ### **用法**
@@ -911,8 +854,6 @@ public @interface Join {
     JoinType joinType() default JoinType.LEFT_JOIN;
 }
 ```
-
-
 
 | 注解属性   | 描述           |
 | ---------- | -------------- |
@@ -957,8 +898,6 @@ public @interface View {
 }
 ```
 
-
-
 | 注解属性 | 描述             |
 | -------- | ---------------- |
 | value    | 来源数据表映射类 |
@@ -970,6 +909,7 @@ public @interface View {
 仅仅就想查询id以及name字段，email与age不查询
 
 ```java
+
 @View("user")
 public class UserView2 {
     private Integer id;
@@ -977,32 +917,26 @@ public class UserView2 {
 }
 ```
 
-
-
 ```java
   @Sql("select @all() from user")
     List<UserView2> selectAll2();
 ```
 
-
-
 ### **测试**
 
 ```java
   @Test
-    public void test7() {
-        List<UserView2> userViews = userMapper.selectAll2();
-    }
+public void test7(){
+        List<UserView2> userViews=userMapper.selectAll2();
+        }
 ```
-
-
 
 ### **控制台输出**
 
 ```java
 SQL:SELECT user.id,user.name FROM user
-PARAM:[]
-TIME:33ms
+        PARAM:[]
+        TIME:33ms
 ```
 
 **注：做到修改字段就可以间接修改SQL语句目的，存在情况，view字段与table字段一致，但不想查询，或者不想多表查询，可以使用Ignore忽略此字段**
@@ -1021,11 +955,10 @@ public @interface Ignore {
 }
 ```
 
-
-
 ### **举例**
 
 ```java
+
 @View("user")
 public class UserView {
     private Integer id;
@@ -1051,23 +984,18 @@ public @interface Mapper {
 }
 ```
 
-
-
 | 属性名 | 描述                                                         |
 | ------ | ------------------------------------------------------------ |
 | value  | 根据java类生成的sql，value指定类的方法名称若为无参公共方法必须为mapper对应的接口方法名一致，且返回值类型必须是字符串或者ActionProvider类 |
 
-
-
 ### **举例**
 
 ```java
+
 @Mapper
 public interface UserMapper {
 }
 ```
-
-
 
 ## **Sql**
 
@@ -1085,8 +1013,6 @@ public @interface Sql {
 }
 ```
 
-
-
 | 属性名   | 描述                 |
 | -------- | -------------------- |
 | value    | 绑定的SQL语句        |
@@ -1096,14 +1022,13 @@ public @interface Sql {
 ### **举例**
 
 ```java
+
 @Mapper
 public interface UserMapper {
-   @Sql("select id, name, age,email from user where name = @$(name)")
+    @Sql("select id, name, age,email from user where name = @$(name)")
     User findByName(String name);
 }
 ```
-
-
 
 ## **Param**
 
@@ -1118,8 +1043,6 @@ public @interface Param {
     String value();
 }
 ```
-
-
 
 | 属性名 | 描述     |
 | ------ | -------- |
@@ -1141,8 +1064,6 @@ public @interface PageQuery {
 }
 ```
 
-
-
 | 属性名 | 描述                          |
 | ------ | ----------------------------- |
 | offset | 是否使用offset分页，默认limit |
@@ -1159,21 +1080,17 @@ public interface UserMapper {
 }
 ```
 
-
-
 ### **测试**
 
 ```java
 @Test
-public void testPage() {
-    Page page = new Page(1, 1);
-    List<User> userList = userMapper.findByPage(page);
-    page.setRows(userList);
-    System.out.println("总数："+page.getTotal());
-}
+public void testPage(){
+        Page page=new Page(1,1);
+        List<User> userList=userMapper.findByPage(page);
+        page.setRows(userList);
+        System.out.println("总数："+page.getTotal());
+        }
 ```
-
-
 
 ### **控制台输出**
 
@@ -1187,8 +1104,6 @@ TIME:36ms
 总数：5
 ```
 
-
-
 ## **Extract**
 
 用法：对查询的值做处理，列如，解密，字段脱敏，反查字典等操作
@@ -1199,21 +1114,15 @@ public @interface Extract {
 }
 ```
 
-
-
 | 属性名 | 描述             |
 | ------ | ---------------- |
 | value  | 提取的具体操作类 |
 
-
-
 ```java
 public interface Extractor {
-    void extract(MappedStatement mappedStatement,MappedColumn mappedColumn, Object value, ObjectFactory objectFactory);
+    void extract(MappedStatement mappedStatement, MappedColumn mappedColumn, Object value, ObjectFactory objectFactory);
 }
 ```
-
-
 
 | 参数名          | 描述                       |
 | --------------- | -------------------------- |
@@ -1221,8 +1130,6 @@ public interface Extractor {
 | mappedColumn    | 字段的所有信息             |
 | value           | 数据库查询的值             |
 | objectFactory   | 反射工厂，用来给字段填充值 |
-
-
 
 # **Springboot配置**
 
@@ -1251,8 +1158,6 @@ public class Configuration {
     private DataSourceFactory dataSourceFactory;
 }
 ```
-
-
 
 | 属性               | 描述                                             |
 | ------------------ | ------------------------------------------------ |
@@ -1290,22 +1195,16 @@ public @interface Wrap {
 }
 ```
 
-
-
 | 属性名 | 描述                             |
 | ------ | -------------------------------- |
 | value  | 处理的实现类                     |
 | type   | 处理时机，更新，插入，更新或插入 |
-
-
 
 ```java
 public interface Wrapper {
     Object wrap(Object value);
 }
 ```
-
-
 
 | 参数名 | 描述                         |
 | ------ | ---------------------------- |
@@ -1326,23 +1225,17 @@ public @interface Conditional {
 }
 ```
 
-
-
 | 属性名      | 描述             |
 | ----------- | ---------------- |
 | table       | 条件的表名       |
 | fillterNull | 为空是否剔除     |
 | value       | 生成条件的实现类 |
 
-
-
 ```java
 public interface Condition {
     String getCondition(String table, String column, String field);
 }
 ```
-
-
 
 | 参数名 | 描述         |
 | ------ | ------------ |
@@ -1357,8 +1250,8 @@ public interface Condition {
 | ContainsCondition  | like '%?%'  |
 | EndWithCondition   | like '?%'   |
 | EqCondition        | =?          |
-| GeqCondition       | >=?         |
-| GtCondition        | >?          |
+| GeqCondition       | > =?         |
+| GtCondition        | > ?          |
 | InCondition        | in(?,?)     |
 | LeqCondition       | <=?         |
 | LtCondition        | <?          |
@@ -1380,8 +1273,6 @@ public @interface Sort {
     int order() default 0;
 }
 ```
-
-
 
 | 属性名 | 描述                                           |
 | ------ | ---------------------------------------------- |
@@ -1427,19 +1318,15 @@ public class BlogView {
 }
 ```
 
-
-
 ##### **测试**
 
 ```java
 @Test
-public void testSelectById2() {
-    UserView3 userView3 = templateMapper.selectById(UserView3.class, 1);
-    System.out.println(userView3);
-}
+public void testSelectById2(){
+        UserView3 userView3=templateMapper.selectById(UserView3.class,1);
+        System.out.println(userView3);
+        }
 ```
-
-
 
 ##### **控制台输出**
 
@@ -1449,8 +1336,6 @@ PARAM:[1]
 TIME:26ms
 com.moxa.dream.boot.view.UserView3@5477a1ca
 ```
-
-
 
 # **监听器**
 
@@ -1464,11 +1349,9 @@ public interface Listener {
 
     Object afterReturn(Object result, MappedStatement mappedStatement);
 
-    void (Exception e, MappedStatement mappedStatement);
+    void(Exception e, MappedStatement mappedStatement);
 }
 ```
-
-
 
 | 方法名      | 描述                         |
 | ----------- | ---------------------------- |
@@ -1492,8 +1375,6 @@ public interface Interceptor {
 }
 ```
 
-
-
 | 方法名      | 描述             |
 | ----------- | ---------------- |
 | interceptor | 此处进行注入插件 |
@@ -1509,12 +1390,10 @@ public interface Interceptor {
 
 ```java
  @Bean
-    public Inject[] injects() {
+public Inject[]injects(){
         return new Inject[]{new BlockInject()};
-    }
+        }
 ```
-
-
 
 ### **用法**
 
@@ -1533,9 +1412,9 @@ public interface UserMapper {
 
 ```java
     @Test
-    public void test() {
-        User user = userMapper.findByName("Jone");
-    }
+public void test(){
+        User user=userMapper.findByName("Jone");
+        }
 ```
 
 输出
@@ -1555,8 +1434,6 @@ public @interface EnableShare {
     Class<? extends DataSource> value();
 }
 ```
-
-
 
 | 属性  | 描述                 |
 | ----- | -------------------- |
@@ -1591,8 +1468,6 @@ public @interface Share {
 }
 ```
 
-
-
 | 属性  | 描述                         |
 | ----- | ---------------------------- |
 | value | 数据连接池名称，默认是master |
@@ -1619,19 +1494,19 @@ public interface UserMapper {
 
 ```java
   @Bean
-    public TenantHandler tenantHandler() {
-        return ()->1;
-    }
+public TenantHandler tenantHandler(){
+        return()->1;
+        }
 
-    @Bean
-    public Inject[] injects(TenantHandler tenantHandler) {
+@Bean
+public Inject[]injects(TenantHandler tenantHandler){
         return new Inject[]{new TenantInject(tenantHandler)};
-    }
+        }
 
-    @Bean
-    public Interceptor[] interceptors(TenantHandler tenantHandler) {
+@Bean
+public Interceptor[]interceptors(TenantHandler tenantHandler){
         return new Interceptor[]{new TenantInterceptor(tenantHandler)};
-    }
+        }
 ```
 
 注：重写TenantHandler完成租户需求
@@ -1650,8 +1525,6 @@ public interface TenantHandler {
 }
 ```
 
-
-
 | 方法名          | 描述                                                         |
 | --------------- | ------------------------------------------------------------ |
 | isTenant        | 判断当前方法或当前表是否应用租户MethodInfo：记录了方法的一切信息TableInfo：记录了表的一切信息 |
@@ -1664,14 +1537,13 @@ public interface TenantHandler {
 
 ```java
     @Bean
-    public Interceptor[] interceptors() {
-        return new Interceptor[]{new TenantInterceptor(() -> 1)};
-    }
+public Interceptor[]interceptors(){
+        return new Interceptor[]{new TenantInterceptor(()->1)};
+        }
 ```
 
-
-
 ```java
+
 @Mapper
 public interface UserMapper {
     @Sql("select* from (select id, name, age,email from user where 1=1 or 1<>2)A inner join user u on 1=2 where A.name=@$(name)")
@@ -1682,17 +1554,17 @@ public interface UserMapper {
 
 ```java
     @Test
-    public void test() {
+public void test(){
         Map map=userMapper.findByName("Jone");
-    }
+        }
 ```
 
 控制台输出
 
 ```java
-执行SQL:SELECT * FROM (SELECT id,name,age,email FROM user WHERE (1=1 OR 1<>2) AND user.tenant_id=?) A  INNER JOIN user u ON (1=2) AND u.tenant_id=? WHERE A.name=?
-执行参数:[1, 1, Jone]
-执行用时：19ms
+执行SQL:SELECT*FROM(SELECT id,name,age,email FROM user WHERE(1=1OR 1<>2)AND user.tenant_id=?)A INNER JOIN user u ON(1=2)AND u.tenant_id=?WHERE A.name=?
+        执行参数:[1,1,Jone]
+        执行用时：19ms
 ```
 
 **注：一旦当前方法应用租户，插入对租户字段赋值，更新赋值将失效**
@@ -1705,22 +1577,20 @@ public interface UserMapper {
 
 ```java
     @Bean
-    public Inject[] injects() {
-        return new Inject[]{new PermissionInject(new PermissionHandler() {
-            @Override
-            public boolean isPermissionInject(MethodInfo methodInfo, TableInfo tableInfo, int life) {
-                return tableInfo.getFieldName("dept_id") != null;
-            }
+public Inject[]injects(){
+        return new Inject[]{new PermissionInject(new PermissionHandler(){
+@Override
+public boolean isPermissionInject(MethodInfo methodInfo,TableInfo tableInfo,int life){
+        return tableInfo.getFieldName("dept_id")!=null;
+        }
 
-            @Override
-            public String getPermission(MethodInfo methodInfo, TableInfo tableInfo, String alias) {
-                return alias + ".dept_id=1";
-            }
+@Override
+public String getPermission(MethodInfo methodInfo,TableInfo tableInfo,String alias){
+        return alias+".dept_id=1";
+        }
         })};
-    }
+        }
 ```
-
-
 
 ```java
 public interface PermissionHandler {
@@ -1730,8 +1600,6 @@ public interface PermissionHandler {
 
 }
 ```
-
-
 
 | 方法名             | 描述                                                         |
 | ------------------ | ------------------------------------------------------------ |
@@ -1744,22 +1612,20 @@ public interface PermissionHandler {
 
 ```java
     @Bean
-    public Interceptor[] interceptors() {
-        return new Interceptor[]{new PermissionInterceptor(new PermissionHandler() {
-            @Override
-            public boolean isPermissionInject(MethodInfo methodInfo, TableInfo tableInfo, int life) {
-                return tableInfo.getFieldName("dept_id") != null;
-            }
+public Interceptor[]interceptors(){
+        return new Interceptor[]{new PermissionInterceptor(new PermissionHandler(){
+@Override
+public boolean isPermissionInject(MethodInfo methodInfo,TableInfo tableInfo,int life){
+        return tableInfo.getFieldName("dept_id")!=null;
+        }
 
-            @Override
-            public String getPermission(MethodInfo methodInfo, TableInfo tableInfo, String alias) {
-                return alias + ".dept_id=1";
-            }
+@Override
+public String getPermission(MethodInfo methodInfo,TableInfo tableInfo,String alias){
+        return alias+".dept_id=1";
+        }
         })};
-    }
+        }
 ```
-
-
 
 ```java
     @Sql("select*from(select id, name, age,email from user u where 1=1 or 2=2)A")
@@ -1770,9 +1636,9 @@ public interface PermissionHandler {
 
 ```java
     @Test
-    public void test4() {
-        Object v = userMapper.findByAll();
-    }
+public void test4(){
+        Object v=userMapper.findByAll();
+        }
 ```
 
 控制台输出
@@ -1783,8 +1649,6 @@ public interface PermissionHandler {
 执行用时：22ms
 ```
 
-
-
 ## **逻辑删除**
 
 用删除标志代替真正删除，查询时将删除标志作为条件，筛选数据
@@ -1793,17 +1657,15 @@ public interface PermissionHandler {
 
 ```java
   @Bean
-    public Invoker invoker() {
+public Invoker invoker(){
         return new LogicInvoker();
-    }
+        }
 
-    @Bean
-    public Inject[] injects() {
-        return new Inject[]{new LogicInject(() -> "del_flag")};
-    }
+@Bean
+public Inject[]injects(){
+        return new Inject[]{new LogicInject(()->"del_flag")};
+        }
 ```
-
-
 
 ```java
 public interface LogicHandler {
@@ -1824,8 +1686,6 @@ public interface LogicHandler {
 }
 ```
 
-
-
 | 方法名           | 描述                                                         |
 | ---------------- | ------------------------------------------------------------ |
 | isLogic          | 是否使用逻辑删除methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息 |
@@ -1840,8 +1700,8 @@ public interface LogicHandler {
 ```java
     @Sql("delete from user where id in (@foreach(list))")
     int delete(List<Integer> idList);
- 
-  @Sql("select user.id, user.name, user.age,user.email from user left join user u on user.id=u.id where user.name = @$(name)")
+
+@Sql("select user.id, user.name, user.age,user.email from user left join user u on user.id=u.id where user.name = @$(name)")
     User findByName(String name);
 ```
 
@@ -1849,9 +1709,9 @@ public interface LogicHandler {
 
 ```java
     @Test
-    public void deleteById3() {
-        userMapper.delete(Arrays.asList(1, 2, 3, 4, 5, 6));
-    }
+public void deleteById3(){
+        userMapper.delete(Arrays.asList(1,2,3,4,5,6));
+        }
 ```
 
 控制台输出
@@ -1866,9 +1726,9 @@ public interface LogicHandler {
 
 ```java
     @Test
-    public void test() {
-        User user = userMapper.findByName("Jone");
-    }
+public void test(){
+        User user=userMapper.findByName("Jone");
+        }
 ```
 
 控制台输出

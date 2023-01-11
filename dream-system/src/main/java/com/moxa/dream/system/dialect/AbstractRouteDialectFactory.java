@@ -7,8 +7,6 @@ import com.moxa.dream.system.config.Compile;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
-import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
-import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.inject.factory.InjectFactory;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
@@ -30,7 +28,7 @@ public abstract class AbstractRouteDialectFactory implements DialectFactory {
                             methodInfo.setStatement(statement);
                             CacheKey methodKey = compileFactory.uniqueKey(sql);
                             if (methodKey != null) {
-                                methodKey.update(new Object[]{methodInfo.getId(),methodInfo.getColType(), methodInfo.getRowType()});
+                                methodKey.update(new Object[]{methodInfo.getId(), methodInfo.getColType(), methodInfo.getRowType()});
                                 methodInfo.setMethodKey(methodKey);
                             }
                             InjectFactory injectFactory = configuration.getInjectFactory();

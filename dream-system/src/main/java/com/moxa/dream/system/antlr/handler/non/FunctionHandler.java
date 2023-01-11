@@ -23,7 +23,7 @@ public class FunctionHandler extends AbstractHandler {
 
     @Override
     protected Handler[] handlerBound() {
-        return new Handler[]{new ParamListHandler(this)};
+        return new Handler[]{new ParamListHandler()};
     }
 
     @Override
@@ -42,12 +42,6 @@ public class FunctionHandler extends AbstractHandler {
     }
 
     public static class ParamListHandler extends AbstractHandler {
-
-        private FunctionHandler functionHandler;
-
-        public ParamListHandler(FunctionHandler functionHandler) {
-            this.functionHandler = functionHandler;
-        }
 
         @Override
         protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {

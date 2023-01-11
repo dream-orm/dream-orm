@@ -362,7 +362,7 @@ public class ExprUtil {
     }
 
     public static boolean isEmpty(String val) {
-        return val == null || "".equals(val);
+        return val == null || val.length() == 0;
     }
 
     public static boolean isBlank(int c) {

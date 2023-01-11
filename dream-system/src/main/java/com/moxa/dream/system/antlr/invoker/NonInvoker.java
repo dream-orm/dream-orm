@@ -7,6 +7,7 @@ import com.moxa.dream.antlr.invoker.AbstractInvoker;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.antlr.util.ExprUtil;
 import com.moxa.dream.system.antlr.handler.non.$Handler;
 import com.moxa.dream.system.antlr.handler.non.BraceHandler;
 import com.moxa.dream.system.antlr.handler.non.ConditionHandler;
@@ -20,7 +21,11 @@ public class NonInvoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
-        return toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
+        String sql = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
+        if (ExprUtil.isEmpty(sql)) {
+            sql = "1=1";
+        }
+        return sql;
     }
 
     @Override

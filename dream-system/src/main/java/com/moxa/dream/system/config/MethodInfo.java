@@ -43,6 +43,7 @@ public class MethodInfo {
         this.configuration = configuration;
         return this;
     }
+
     public String getId() {
         return id;
     }
