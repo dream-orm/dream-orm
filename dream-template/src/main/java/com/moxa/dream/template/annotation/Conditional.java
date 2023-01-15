@@ -14,6 +14,9 @@ public @interface Conditional {
 
     boolean filterNull() default true;
 
+    boolean or() default false;
+
     Class<? extends Condition> value();
+
 
 }

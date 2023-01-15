@@ -21,8 +21,9 @@ class ConditionUtil {
                     Conditional conditionalAnnotation = field.getAnnotation(Conditional.class);
                     String table = conditionalAnnotation.table();
                     boolean filterNull = conditionalAnnotation.filterNull();
+                    boolean or = conditionalAnnotation.or();
                     Class<? extends Condition> conditionType = conditionalAnnotation.value();
-                    conditionObjectList.add(new ConditionObject(table, field.getName(), filterNull, ReflectUtil.create(conditionType)));
+                    conditionObjectList.add(new ConditionObject(table, field.getName(), filterNull,or, ReflectUtil.create(conditionType)));
                 }
             }
             return conditionObjectList;

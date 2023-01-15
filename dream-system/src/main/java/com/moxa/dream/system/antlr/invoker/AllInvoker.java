@@ -133,52 +133,49 @@ public class AllInvoker extends AbstractInvoker {
                     Type genericType = field.getGenericType();
                     String fieldTable = getTableName(ReflectUtil.getColType(genericType));
                     if (ObjectUtil.isNull(fieldTable)) {
-                        Class<?> type = field.getType();
-                        if (ReflectUtil.isBaseClass(type) || type.isEnum()) {
-                            if (rootTableInfo == null) {
-                                boolean find = false;
-                                for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {
-                                    alias = tableScanInfo.getAlias();
-                                    TableInfo tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
-                                    ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-                                    if (columnInfo != null) {
-                                        find = true;
-                                        boolean add = true;
-                                        for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
-                                            if (columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
-                                                    || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias())) {
-                                                add = false;
-                                                break;
-                                            }
-                                        }
-                                        if (add) {
-                                            queryColumnList.add(alias + "." + columnInfo.getColumn());
+                        if (rootTableInfo == null) {
+                            boolean find = false;
+                            for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {
+                                alias = tableScanInfo.getAlias();
+                                TableInfo tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
+                                ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
+                                if (columnInfo != null) {
+                                    find = true;
+                                    boolean add = true;
+                                    for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
+                                        if (columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
+                                                || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias())) {
+                                            add = false;
                                             break;
                                         }
                                     }
-                                }
-                                if (!find) {
-                                    throw new AntlrException("类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
-                                }
-                            } else {
-                                ColumnInfo columnInfo = rootTableInfo.getColumnInfo(fieldName);
-                                if (columnInfo == null) {
-                                    throw new AntlrException("数据表映射类不存在" + fieldName + "属性");
-                                }
-                                boolean add = true;
-                                for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
-                                    String _table = queryColumnInfo.getTable();
-                                    if ((columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
-                                            || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias()))
-                                            && (ObjectUtil.isNull(_table)
-                                            || _table.equalsIgnoreCase(alias))) {
-                                        add = false;
+                                    if (add) {
+                                        queryColumnList.add(alias + "." + columnInfo.getColumn());
                                         break;
                                     }
                                 }
-                                if (add) {
-                                    queryColumnList.add(alias + "." + columnInfo.getColumn());
+                            }
+                            if (!find) {
+                                throw new AntlrException("类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
+                            }
+                        } else {
+                            ColumnInfo columnInfo = rootTableInfo.getColumnInfo(fieldName);
+                            if (columnInfo == null) {
+                                throw new AntlrException("数据表映射类不存在" + fieldName + "属性");
+                            }
+                            boolean add = true;
+                            for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
+                                String _table = queryColumnInfo.getTable();
+                                if ((columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
+                                        || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias()))
+                                        && (ObjectUtil.isNull(_table)
+                                        || _table.equalsIgnoreCase(alias))) {
+                                    add = false;
+                                    break;
                                 }
+                            }
+                            if (add) {
+                                queryColumnList.add(alias + "." + columnInfo.getColumn());
                             }
                         }
                     } else {

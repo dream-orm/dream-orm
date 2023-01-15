@@ -67,7 +67,8 @@ public class SelectListMapper extends SelectMapper {
     }
 
     protected String getWhereSql(Set<String> tableSet, TableFactory tableFactory, List<ConditionObject> conditionObjectList) {
-        List<String> conditionList = new ArrayList<>();
+        List<String> andConditionList = new ArrayList<>();
+        List<String> orConditionList = new ArrayList<>();
         if (!ObjectUtil.isNull(conditionObjectList)) {
             for (ConditionObject conditionObject : conditionObjectList) {
                 String table = conditionObject.getTable();
@@ -81,7 +82,11 @@ public class SelectListMapper extends SelectMapper {
                     String fieldName = tableInfo.getFieldName(property);
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
                     String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), property);
-                    conditionList.add(conditionSql);
+                    if (conditionObject.isOr()) {
+                        orConditionList.add(conditionSql);
+                    } else {
+                        andConditionList.add(conditionSql);
+                    }
                 } else {
                     List<TableInfo> tableInfoList = tableSet.stream().map(tab -> {
                         TableInfo tableInfo = tableFactory.getTableInfo(tab);
@@ -104,14 +109,26 @@ public class SelectListMapper extends SelectMapper {
                     String fieldName = tableInfo.getFieldName(property);
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
                     String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), property);
-                    conditionList.add(conditionSql);
+                    if (conditionObject.isOr()) {
+                        orConditionList.add(conditionSql);
+                    } else {
+                        andConditionList.add(conditionSql);
+                    }
                 }
             }
         }
-        if (!ObjectUtil.isNull(conditionList)) {
-            return String.join(" and ", conditionList);
+        String orSql = "";
+        String andSql = "";
+        if (!ObjectUtil.isNull(orConditionList)) {
+            orSql = "(" + String.join(" or ", orConditionList) + ")";
         }
-        return "";
+        if (!ObjectUtil.isNull(andConditionList)) {
+            andSql = String.join(" and ", andConditionList);
+            if (!"".equals(orSql)) {
+                andSql = "and " + andSql;
+            }
+        }
+        return orSql + andSql;
     }
 
     protected String getOrderSql(Class type, Set<String> tableSet, TableFactory tableFactory) {
