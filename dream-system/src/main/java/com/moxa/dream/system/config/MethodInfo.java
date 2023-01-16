@@ -6,6 +6,7 @@ import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
+import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -166,7 +167,7 @@ public class MethodInfo {
     }
 
     public MethodInfo addInitAction(Action... initActions) {
-        this.initActionList = this.merge(this.initActionList, initActions);
+        this.initActionList = ObjectUtil.merge(this.initActionList, initActions);
         return this;
     }
 
@@ -175,7 +176,7 @@ public class MethodInfo {
     }
 
     public MethodInfo addLoopAction(Action... loopActionList) {
-        this.loopActionList = this.merge(this.loopActionList, loopActionList);
+        this.loopActionList = ObjectUtil.merge(this.loopActionList, loopActionList);
         return this;
     }
 
@@ -184,21 +185,8 @@ public class MethodInfo {
     }
 
     public MethodInfo addDestroyAction(Action... destroyActionList) {
-        this.destroyActionList = this.merge(this.destroyActionList, destroyActionList);
+        this.destroyActionList = ObjectUtil.merge(this.destroyActionList, destroyActionList);
         return this;
-    }
-
-    private Action[] merge(Action[] source1, Action[] source2) {
-        if (source1 == null) {
-            return source2;
-        }
-        if (source2 == null) {
-            return source1;
-        }
-        Action[] source = new Action[source1.length + source2.length];
-        System.arraycopy(source1, 0, source, 0, source1.length);
-        System.arraycopy(source2, 0, source, source1.length, source2.length);
-        return source;
     }
 
     public MethodParam[] getMethodParamList() {

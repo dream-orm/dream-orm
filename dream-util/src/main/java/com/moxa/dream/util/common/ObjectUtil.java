@@ -1,8 +1,7 @@
 package com.moxa.dream.util.common;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class ObjectUtil {
 
@@ -38,5 +37,22 @@ public class ObjectUtil {
 
     public static int hash(Object... values) {
         return Arrays.hashCode(values);
+    }
+
+    public static <T> T[] merge(T[]... sourcesArray) {
+        if (isNull(sourcesArray)) {
+            return null;
+        }
+        List<T> sourceList = new ArrayList<>();
+        for (T[] sources : sourcesArray) {
+            if (!isNull(sources)) {
+                sourceList.addAll(Arrays.asList(sources));
+            }
+        }
+        if(sourceList.isEmpty()){
+            return null;
+        }
+        T[]source = (T[])Array.newInstance(sourceList.get(0).getClass(), 0);
+        return sourceList.toArray(source);
     }
 }
