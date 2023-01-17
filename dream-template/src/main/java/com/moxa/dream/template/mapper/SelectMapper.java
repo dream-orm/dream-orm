@@ -14,14 +14,14 @@ import com.moxa.dream.template.util.TemplateUtil;
 import java.util.Collection;
 import java.util.Set;
 
-public abstract class SelectMapper extends ValidateMapper {
+public abstract class SelectMapper extends FetchMapper {
 
     public SelectMapper(Session session) {
         super(session);
     }
 
     @Override
-    protected MethodInfo getValidateMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
+    protected MethodInfo getFetchMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
         String sql = "select " + getSelectColumn(type) + " from " +
                 getFromTable(type) + " " + getOther(configuration, tableInfo, type, arg);
         return new MethodInfo()

@@ -141,7 +141,6 @@ public final class Constant {
             ExprType.SET,
             ExprType.UPDATE,
             ExprType.DELETE,
-            ExprType.VALUE,
             ExprType.VALUES,
             ExprType.INTO,
             ExprType.INSERT,

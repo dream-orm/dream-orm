@@ -6,7 +6,6 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedColumn;
 import com.moxa.dream.system.config.MappedResult;
 import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.extractor.Extractor;
 import com.moxa.dream.system.table.ColumnInfo;
@@ -41,7 +40,6 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 ObjectFactory objectFactory = doSimpleResult(resultSet, mappedStatement, mappedResult);
                 Object result = objectFactory.getObject();
                 resultObjectFactory.set(null, result);
-                loopActions(session, mappedStatement, result);
             }
         } else {
             Map<CacheKey, Object> cacheMap = new HashMap<>();
@@ -50,7 +48,6 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 if (objectFactory != null) {
                     Object result = objectFactory.getObject();
                     resultObjectFactory.set(null, result);
-                    loopActions(session, mappedStatement, result);
                 }
             }
             cacheMap.clear();
@@ -121,7 +118,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     objectFactory.set(mappedColumn.getProperty(), value);
                 }
             } else {
-                extractor.extract(mappedStatement, mappedColumn, value, objectFactory);
+                extractor.extract(mappedColumn.getProperty(), value, objectFactory);
             }
         }
         return objectFactory;
@@ -300,16 +297,4 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         return SystemUtil.getTableName(type);
     }
 
-    protected void loopActions(Session session, MappedStatement mappedStatement, Object arg) {
-        Action[] loopActionList = mappedStatement.getLoopActionList();
-        if (!ObjectUtil.isNull(loopActionList)) {
-            try {
-                for (Action action : loopActionList) {
-                    action.doAction(session, mappedStatement, arg);
-                }
-            } catch (Exception e) {
-                throw new DreamRunTimeException(e);
-            }
-        }
-    }
 }

@@ -8,6 +8,7 @@ import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.SQLException;
+import java.util.Collection;
 
 public class ActionExecutor implements Executor {
     protected Executor nextExecutor;
@@ -18,7 +19,25 @@ public class ActionExecutor implements Executor {
 
     @Override
     public Object query(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, (ms) -> nextExecutor.query(mappedStatement, session), session);
+        return execute(mappedStatement, (ms) -> {
+            Object result = nextExecutor.query(mappedStatement, session);
+            if (result != null) {
+                Action[] loopActionList = mappedStatement.getLoopActionList();
+                if (!ObjectUtil.isNull(loopActionList)) {
+                    if (result instanceof Collection) {
+                        Collection resultCollection = (Collection) result;
+                        if (!resultCollection.isEmpty()) {
+                            for (Object arg : resultCollection) {
+                                doActions(loopActionList, mappedStatement, arg, session);
+                            }
+                        }
+                    } else {
+                        doActions(loopActionList, mappedStatement, result, session);
+                    }
+                }
+            }
+            return result;
+        }, session);
     }
 
     @Override
@@ -44,10 +63,14 @@ public class ActionExecutor implements Executor {
     protected Object execute(MappedStatement mappedStatement, Function<MappedStatement, Object> function, Session session) throws SQLException {
         Action[] initActionList = mappedStatement.getInitActionList();
         Action[] destroyActionList = mappedStatement.getDestroyActionList();
-        doActions(initActionList, mappedStatement, mappedStatement.getArg(), session);
+        if (!ObjectUtil.isNull(initActionList)) {
+            doActions(initActionList, mappedStatement, mappedStatement.getArg(), session);
+        }
         Object result;
         result = function.apply(mappedStatement);
-        doActions(destroyActionList, mappedStatement, result, session);
+        if (!ObjectUtil.isNull(destroyActionList)) {
+            doActions(destroyActionList, mappedStatement, result, session);
+        }
         return result;
     }
 
@@ -72,14 +95,12 @@ public class ActionExecutor implements Executor {
     }
 
     protected void doActions(Action[] actions, MappedStatement mappedStatement, Object arg, Session session) {
-        if (!ObjectUtil.isNull(actions)) {
-            try {
-                for (Action action : actions) {
-                    action.doAction(session, mappedStatement, arg);
-                }
-            } catch (Exception e) {
-                throw new DreamRunTimeException(e);
+        try {
+            for (Action action : actions) {
+                action.doAction(session, mappedStatement, arg);
             }
+        } catch (Exception e) {
+            throw new DreamRunTimeException(e);
         }
     }
 }

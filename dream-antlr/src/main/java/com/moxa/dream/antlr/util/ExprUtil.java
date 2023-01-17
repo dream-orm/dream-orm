@@ -102,8 +102,6 @@ public class ExprUtil {
                 return ExprType.INSERT;
             case 2252384://INTO
                 return ExprType.INTO;
-            case 81434961://VALUE
-                return ExprType.VALUE;
             case -1770483422://VALUES
                 return ExprType.VALUES;
             case -1785516855://UPDATE

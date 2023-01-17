@@ -9,11 +9,11 @@ public class ConditionObject {
     private boolean or;
     private Condition condition;
 
-    public ConditionObject(String table, String property, boolean filterNull,boolean or, Condition condition) {
+    public ConditionObject(String table, String property, boolean filterNull, boolean or, Condition condition) {
         this.table = table;
         this.property = property;
         this.filterNull = filterNull;
-        this.or=or;
+        this.or = or;
         this.condition = condition;
     }
 

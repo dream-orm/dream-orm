@@ -40,24 +40,6 @@ public class InsertStatement extends Statement {
         return isNeedInnerCache(table, params, values);
     }
 
-    public static class ValueStatement extends Statement {
-        private Statement statement;
-
-        public Statement getStatement() {
-            return statement;
-        }
-
-        public void setStatement(Statement statement) {
-            this.statement = statement;
-            this.statement.parentStatement = this;
-        }
-
-        @Override
-        protected Boolean isNeedInnerCache() {
-            return isNeedInnerCache(statement);
-        }
-    }
-
     public static class ValuesStatement extends Statement {
         private Statement statement;
 

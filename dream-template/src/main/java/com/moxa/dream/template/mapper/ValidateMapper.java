@@ -42,18 +42,7 @@ public abstract class ValidateMapper extends AbstractMapper {
                             Class<? extends Annotation> annotationType = annotation.annotationType();
                             Validated validatedAnnotation = annotationType.getAnnotation(Validated.class);
                             if (validatedAnnotation != null) {
-                                Method[] methods = annotationType.getDeclaredMethods();
-                                Map<String, Object> paramMap = new HashMap<>();
-                                if (!ObjectUtil.isNull(methods)) {
-                                    for (Method method : methods) {
-                                        try {
-                                            Object value = method.invoke(annotation);
-                                            paramMap.put(method.getName(), value);
-                                        } catch (Exception e) {
-                                            throw new DreamRunTimeException(e);
-                                        }
-                                    }
-                                }
+                                Map<String, Object> paramMap = getParamMap(annotation);
                                 Class<? extends Validator> validatorType = validatedAnnotation.value();
                                 Validator validator = ReflectUtil.create(validatorType);
                                 if (validator.isValid(configuration, validateType, field, getCommand())) {
@@ -73,6 +62,23 @@ public abstract class ValidateMapper extends AbstractMapper {
     }
 
     protected abstract MethodInfo getValidateMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg);
+
+    protected Map<String, Object> getParamMap(Annotation annotation) {
+        Class<? extends Annotation> annotationType = annotation.annotationType();
+        Method[] methods = annotationType.getDeclaredMethods();
+        Map<String, Object> paramMap = new HashMap<>();
+        if (!ObjectUtil.isNull(methods)) {
+            for (Method method : methods) {
+                try {
+                    Object value = method.invoke(annotation);
+                    paramMap.put(method.getName(), value);
+                } catch (Exception e) {
+                    throw new DreamRunTimeException(e);
+                }
+            }
+        }
+        return paramMap;
+    }
 
     protected Object execute(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
         if (arg != null) {

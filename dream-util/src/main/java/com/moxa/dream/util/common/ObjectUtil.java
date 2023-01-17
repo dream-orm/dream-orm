@@ -49,10 +49,10 @@ public class ObjectUtil {
                 sourceList.addAll(Arrays.asList(sources));
             }
         }
-        if(sourceList.isEmpty()){
+        if (sourceList.isEmpty()) {
             return null;
         }
-        T[]source = (T[])Array.newInstance(sourceList.get(0).getClass(), 0);
+        T[] source = (T[]) Array.newInstance(sourceList.get(0).getClass(), 0);
         return sourceList.toArray(source);
     }
 }

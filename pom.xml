@@ -7,7 +7,7 @@
     <groupId>com.moxa.dream</groupId>
     <artifactId>dream-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <modules>
         <module>dream-antlr</module>
         <module>dream-util</module>

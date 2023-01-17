@@ -29,7 +29,11 @@ public class TreeUtil {
             if (parentTree == null) {
                 parentList.add(tree);
             } else {
-                List children = parentTree.getChildren();
+                List<Tree> children = parentTree.getChildren();
+                if (children == null) {
+                    children = new ArrayList<>();
+                    parentTree.setChildren(children);
+                }
                 children.add(tree);
             }
         }
