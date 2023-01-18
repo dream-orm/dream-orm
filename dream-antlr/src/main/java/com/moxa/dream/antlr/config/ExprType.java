@@ -39,7 +39,6 @@ public enum ExprType {
     BLANK,
     LBRACE,
     RBRACE,
-    SKIP,
     COMMA,
     INTERVAL,
     UNION,

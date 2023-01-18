@@ -35,13 +35,15 @@ DREAM（ https://github.com/moxa-lzf/dream ）是一款基于翻译的以技术�
 如果当查询条件非常复杂时，这些要查询的字段依旧必须要写，最简单的做法
 
 ```sql
-select * from ...
+select *
+from...
 ```
 
 没有谁建议这样写，而且查询所有字段，效率太低啦，dream提供了极其简单的写法，可改写成
 
 ```sql
-select @all() from ...
+select @all()
+from...
 ```
 
 引入了@all()，意思是查询所有可以映射成Java属性的字段，而不是数据库所有字段，会随着Java类属性的变化，自动调整查询字段，性能等价于查询具体字段。
@@ -60,12 +62,12 @@ SQL必然的要重复解析SQL
 ```xml
 where 1=1
 <if test="name!=null and name !=''">
-and user.name like('%',name,'%')
+    and user.name like('%',name,'%')
 </if>
 <if test="age!=null">
 and age in
 <foreach item="item" index="index" collection="age"
-  open="(" separator="," close=")">
+         open="(" separator="," close=")">
     #{item}
 </foreach>
 </if>
@@ -102,7 +104,9 @@ mybatis分页可以说是所有orm框架里分页最慢的，而且并没有对�
 int类型，采用setString就不合理啦，dream在选型类型转换器时，是非常严格的，由Java字段返回值类型和数据库字段类型共同决定，列如SQL
 
 ```sql
- select * from user where user_id=@$(userId)
+ select *
+ from user
+ where user_id = @?(userId)
 ```
 
 dream会解析到Java对象字段userId的值，保存到表user字段为user_id里，获取到了java字段属性以及数据库字段属性，进而严格选择类型转换器
@@ -119,6 +123,7 @@ public class User {
     private String name;
     private List<Blog> blogList;
 }
+
 public class Blog {
     private Integer id;
     private String name;
@@ -128,25 +133,28 @@ public class Blog {
 2:编写映射关系
 
 ```xml
+
 <resultMap id="xxx" type="xxx.xxx.User">
+    <result column="id" property="id"></result>
+    <result column="name" property="name"></result>
+    <collection property="blogList" ofType="xxx.xxx.Blog">
         <result column="id" property="id"></result>
         <result column="name" property="name"></result>
-        <collection property="blogList" ofType="xxx.xxx.Blog">
-            <result column="id" property="id"></result>
-            <result column="name" property="name"></result>
-        </collection>
-    </resultMap>
+    </collection>
+</resultMap>
 ```
 
 所谓无感就是不需要感知就已实现，dream仅仅就需要第一步步骤即可，不需要写任何映射关系，因为dream映射原理前提知道这个字段属于那个表，进而进行高级映射
 
 ```java
+
 @View(UserXXX.class)
 public class User {
     private Integer id;
     private String name;
     private List<Blog> blogList;
 }
+
 @View(BlogXXX.class)
 public class Blog {
     private Integer id;
@@ -161,45 +169,36 @@ public class Blog {
 查询用户表user和文章表blog的前一条数据
 
 ```sql
-SELECT
-    * 
-FROM
-    (
-    SELECT
-        u.id,
-        u.NAME,
-        u.age,
-        u.email,
-        b.id bId,
-        b.NAME bName 
-    FROM
-        USER u
-        LEFT JOIN blog b ON b.user_id = u.id 
-    ) t_tmp 
-    LIMIT 1
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON b.user_id = u.id
+     ) t_tmp
+LIMIT 1
 ```
 
 若用户表和文章表都存在租户字段，将其改造为多租户，dream可以让你不用修改当前SQL，在启动类添加开启多租户插件即可自动将其改造成多租户
 
 ```sql
-SELECT
-    * 
-FROM
-    (
-    SELECT
-        u.id,
-        u.NAME,
-        u.age,
-        u.email,
-        b.id bId,
-        b.NAME bName 
-    FROM
-        USER u
-        LEFT JOIN blog b ON ( b.user_id = u.id ) 
-        AND b.tenant_id =? 
-    WHERE
-    u.tenant_id =?) t_tmp 
-    LIMIT 1
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON (b.user_id = u.id)
+             AND b.tenant_id = ?
+         WHERE u.tenant_id = ?) t_tmp
+LIMIT 1
 ```
 
 dream的识别是高强度的，不会因为SQL复杂，漏加任何租户条件，那性能如何？是等价于直接写租户条件的，无性能损耗
@@ -211,45 +210,36 @@ dream的识别是高强度的，不会因为SQL复杂，漏加任何租户条件
 同样SQL，需要注入数据权限，假如：查询自己所在部门
 
 ```sql
-SELECT
-    * 
-FROM
-    (
-    SELECT
-        u.id,
-        u.NAME,
-        u.age,
-        u.email,
-        b.id bId,
-        b.NAME bName 
-    FROM
-        USER u
-        LEFT JOIN blog b ON b.user_id = u.id 
-    ) t_tmp 
-    LIMIT 1
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON b.user_id = u.id
+     ) t_tmp
+LIMIT 1
 ```
 
 开启数据权限插件
 
 ```sql
-SELECT
-    * 
-FROM
-    (
-    SELECT
-        u.id,
-        u.NAME,
-        u.age,
-        u.email,
-        b.id bId,
-        b.NAME bName 
-    FROM
-        USER u
-        LEFT JOIN blog b ON b.user_id = u.id 
-    WHERE
-        u.dept_id = 1 
-    ) t_tmp 
-    LIMIT 1
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON b.user_id = u.id
+         WHERE u.dept_id = 1
+     ) t_tmp
+LIMIT 1
 ```
 
 u.dept_id=1是开发者自己注入的数据权限，不要担心，dream会解析出别名告诉开发者，完成数据权限注入，此时，SQL非常清爽，性能等价于在SQL直接写注入权限条件
@@ -261,46 +251,37 @@ u.dept_id=1是开发者自己注入的数据权限，不要担心，dream会解�
 同样的SQL，假设用户表user和文章表都存在逻辑删除字段，改造为逻辑删除
 
 ```sql
-SELECT
-    * 
-FROM
-    (
-    SELECT
-        u.id,
-        u.NAME,
-        u.age,
-        u.email,
-        b.id bId,
-        b.NAME bName 
-    FROM
-        USER u
-        LEFT JOIN blog b ON b.user_id = u.id 
-    ) t_tmp 
-    LIMIT 1
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON b.user_id = u.id
+     ) t_tmp
+LIMIT 1
 ```
 
 开启逻辑删除插件
 
 ```sql
-SELECT
-    * 
-FROM
-    (
-    SELECT
-        u.id,
-        u.NAME,
-        u.age,
-        u.email,
-        b.id bId,
-        b.NAME bName 
-    FROM
-        USER u
-        LEFT JOIN blog b ON ( b.user_id = u.id ) 
-        AND b.del_flag = 0 
-    WHERE
-        u.del_flag = 0 
-    ) t_tmp 
-    LIMIT 1
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON (b.user_id = u.id)
+             AND b.del_flag = 0
+         WHERE u.del_flag = 0
+     ) t_tmp
+LIMIT 1
 ```
 
 完成了SQL操作的逻辑字段追加，删除数据库里的逻辑字段就不采用逻辑删除，同样，希望某张表采用逻辑删除，加个逻辑字段即可，代码不需要做任何修改，性能等价于直接写逻辑删除条件，性能无损耗
@@ -312,43 +293,35 @@ FROM
 SQL语句，若user和id为关键字，不做处理会执行报错，正确做法需要对user和id加特殊符号
 
 ```sql
-SELECT
-    * 
-FROM
-    (
-    SELECT
-        u.id,
-        u.NAME,
-        u.age,
-        u.email,
-        b.id bId,
-        b.NAME bName 
-    FROM
-        USER u
-        LEFT JOIN blog b ON b.user_id = u.id 
-    ) t_tmp 
-    LIMIT 1
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON b.user_id = u.id
+     ) t_tmp
+LIMIT 1
 ```
 
 开启关键字插件
 
 ```sql
-SELECT
-    * 
-FROM
-    (
-    SELECT
-        u.`id`,
-        u.NAME,
-        u.age,
-        u.email,
-        b.`id` bId,
-        b.NAME bName 
-    FROM
-        `USER` u
-        LEFT JOIN blog b ON b.user_id = u.`id` 
-    ) t_tmp 
-    LIMIT 1
+SELECT *
+FROM (
+         SELECT u.`id`,
+                u.NAME,
+                u.age,
+                u.email,
+                b.`id` bId,
+                b.NAME bName
+         FROM `USER` u
+                  LEFT JOIN blog b ON b.user_id = u.`id`
+     ) t_tmp
+LIMIT 1
 ```
 
 自动完成对user和id关键字处理，性能等价于直接写关键字处理
@@ -378,25 +351,26 @@ DROP TABLE IF EXISTS user;
 
 CREATE TABLE user
 (
-	id BIGINT(20) NOT NULL COMMENT '主键ID',
-	name VARCHAR(30) NULL DEFAULT NULL COMMENT '姓名',
-	age INT(11) NULL DEFAULT NULL COMMENT '年龄',
-	email VARCHAR(50) NULL DEFAULT NULL COMMENT '邮箱',
-	PRIMARY KEY (id)
+    id    BIGINT(20)  NOT NULL COMMENT '主键ID',
+    name  VARCHAR(30) NULL DEFAULT NULL COMMENT '姓名',
+    age   INT(11)     NULL DEFAULT NULL COMMENT '年龄',
+    email VARCHAR(50) NULL DEFAULT NULL COMMENT '邮箱',
+    PRIMARY KEY (id)
 );
 ```
 
 其对应的数据库 Data 脚本如下：
 
 ```sql
-DELETE FROM user;
+DELETE
+FROM user;
 
-INSERT INTO user (id, name, age, email) VALUES
-(1, 'Jone', 18, 'test1@baomidou.com'),
-(2, 'Jack', 20, 'test2@baomidou.com'),
-(3, 'Tom', 28, 'test3@baomidou.com'),
-(4, 'Sandy', 21, 'test4@baomidou.com'),
-(5, 'Billie', 24, 'test5@baomidou.com');
+INSERT INTO user (id, name, age, email)
+VALUES (1, 'Jone', 18, 'test1@baomidou.com'),
+       (2, 'Jack', 20, 'test2@baomidou.com'),
+       (3, 'Tom', 28, 'test3@baomidou.com'),
+       (4, 'Sandy', 21, 'test4@baomidou.com'),
+       (5, 'Billie', 24, 'test5@baomidou.com');
 ```
 
 ### 初始化工程
@@ -408,32 +382,33 @@ INSERT INTO user (id, name, age, email) VALUES
 引入dream-boot-starter
 
 ```xml
+
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter</artifactId>
 </dependency>
 <dependency>
-    <groupId>com.moxa</groupId>
-    <artifactId>dream-boot-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+<groupId>com.moxa</groupId>
+<artifactId>dream-boot-starter</artifactId>
+<version>0.0.1-SNAPSHOT</version>
 </dependency>
 <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-test</artifactId>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-test</artifactId>
 </dependency>
 <dependency>
-    <groupId>com.h2database</groupId>
-    <artifactId>h2</artifactId>
-    <version>1.4.200</version>
+<groupId>com.h2database</groupId>
+<artifactId>h2</artifactId>
+<version>1.4.200</version>
 </dependency>
 <dependency>
-    <groupId>com.zaxxer</groupId>
-    <artifactId>HikariCP</artifactId>
-    <version>4.0.3</version>
+<groupId>com.zaxxer</groupId>
+<artifactId>HikariCP</artifactId>
+<version>4.0.3</version>
 </dependency>
 <dependency>
-    <groupId>junit</groupId>
-    <artifactId>junit</artifactId>
+<groupId>junit</groupId>
+<artifactId>junit</artifactId>
 </dependency>
 ```
 
@@ -442,6 +417,7 @@ INSERT INTO user (id, name, age, email) VALUES
 在 Spring Boot 创建 ConfigurationBean对象
 
 ```java
+
 @SpringBootApplication
 public class BootApplication {
     public static void main(String[] args) {
@@ -450,7 +426,7 @@ public class BootApplication {
 
     @Bean
     public ConfigurationBean sqlSessionFactoryBean() {
-        ConfigurationBean configurationBean = new ConfigurationBean(Arrays.asList(""),Arrays.asList(""));
+        ConfigurationBean configurationBean = new ConfigurationBean(Arrays.asList(""), Arrays.asList(""));
         return configurationBean;
     }
 }
@@ -459,14 +435,16 @@ public class BootApplication {
 ### **开始使用**
 
 ```java
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BootApplication.class)
-public class QueryTest {    
+public class QueryTest {
     @Autowired
-    private TemplateMapper templateMapper;    
-        @Test
+    private TemplateMapper templateMapper;
+
+    @Test
     public void testSelectByIds() {
-        List<User> users=null;
+        List<User> users = null;
         users = templateMapper.selectByIds(User.class, Arrays.asList(1, 2, 3, 4, 5, 6));
         users.forEach(System.out::println);
     }
@@ -501,7 +479,7 @@ User{id=5, name='Billie', age=24, email='test5@baomidou.com'}
 
 @Mapper
 public interface UserMapper {
-    @Sql("select id, name, age,email from user where name = @$(name)")
+    @Sql("select id, name, age,email from user where name = @?(name)")
     User findByName(String name);
 }
 ```
@@ -509,11 +487,13 @@ public interface UserMapper {
 ### **测试**
 
 ```java
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BootApplication.class)
 public class QueryTest {
     @Autowired
     private UserMapper userMapper;
+
     @Test
     public void test() {
         User user = userService.findByName("Jone");
@@ -548,14 +528,16 @@ public interface UserMapper {
 ### **测试**
 
 ```java
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BootApplication.class)
 public class QueryTest {
     @Autowired
     private UserMapper userMapper;
+
     @Test
     public void test() {
-         User user = userMapper.findByName2("'Jone'");
+        User user = userMapper.findByName2("'Jone'");
     }
 }    
 ```
@@ -587,14 +569,16 @@ public interface UserMapper {
 ### **测试**
 
 ```java
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BootApplication.class)
 public class DeleteTest {
     @Autowired
-    private UserMapper userMapper;   
-     @Test
+    private UserMapper userMapper;
+
+    @Test
     public void deleteById2() {
-        templateMapper.deleteByIds(User.class, Arrays.asList(1, 2, 3,4,5,6));
+        templateMapper.deleteByIds(User.class, Arrays.asList(1, 2, 3, 4, 5, 6));
     }
 }    
 ```
@@ -618,7 +602,7 @@ PARAM:[1, 2, 3, 4, 5, 6]
 
 @Mapper
 public interface UserMapper {
-    @Sql("update user set @non(name=@$(user.name),age=@$(user.age),email=@$(user.email)) where id=@$(user.id)")
+    @Sql("update user set @non(name=@?(user.name),age=@?(user.age),email=@?(user.email)) where id=@?(user.id)")
     Integer updateNon(User user);
 }
 ```
@@ -628,19 +612,21 @@ public interface UserMapper {
 ### **测试**
 
 ```java
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BootApplication.class)
 public class UpdateTest {
     @Autowired
-    private UserMapper userMapper;   
+    private UserMapper userMapper;
+
     @Test
     public void updateNonId2() {
-           User user =new User();
-            user.setId(1);
-            user.setName("hli");
-            user.setEmail("");
-            userMapper.updateNon(user);
-        }
+        User user = new User();
+        user.setId(1);
+        user.setName("hli");
+        user.setEmail("");
+        userMapper.updateNon(user);
+    }
 }  
 ```
 
@@ -683,11 +669,13 @@ public interface UserMapper {
 ### **测试**
 
 ```java
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BootApplication.class)
 public class QueryTest {
     @Autowired
     private UserMapper userMapper;
+
     @Test
     public void test3() {
         List<User> userList = userMapper.findAll();
@@ -751,10 +739,12 @@ public void test8(){
 绑定类对象与数据表
 
 ```java
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Table {
     String value();
+
     boolean mapping() default true;
 }
 ```
@@ -782,6 +772,7 @@ public class User {
 **注：应用于仅当表有且仅有一个主键**
 
 ```java
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Id {
@@ -792,6 +783,7 @@ public @interface Id {
 ### **举例**
 
 ```java
+
 @Table("user")
 public class User {
     @Id
@@ -807,10 +799,12 @@ public class User {
 绑定类对象属性与数据表字段
 
 ```java
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Column {
     String value();
+
     int jdbcType() default Types.NULL;
 }
 ```
@@ -823,12 +817,13 @@ public @interface Column {
 ### **举例**
 
 ```java
+
 @Table("user")
 public class User {
     @Id
     @Column("id")
     private Integer id;
-    @Column(value = "name",jdbcType = Types.VARCHAR)
+    @Column(value = "name", jdbcType = Types.VARCHAR)
     private String name;
     @Column("age")
     private Integer age;
@@ -844,6 +839,7 @@ public class User {
 指明表于表关联关系，目的为消灭sql语句写表与表关联而生，@函数table基于此
 
 ```java
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Join {
@@ -866,18 +862,19 @@ public @interface Join {
 ### **举例**
 
 ```java
+
 @Table("user")
 public class User {
     @Id
     @Column("id")
     private Integer id;
-    @Column(value = "name",jdbcType = Types.VARCHAR)
+    @Column(value = "name", jdbcType = Types.VARCHAR)
     private String name;
     @Column("age")
     private Integer age;
     @Column("email")
     private String email;
-    @Join(column = "id",joinColumn = "user_id",joinType = Join.JoinType.LEFT_JOIN)
+    @Join(column = "id", joinColumn = "user_id", joinType = Join.JoinType.LEFT_JOIN)
     private List<Blog> blogList;
 }
 ```
@@ -891,6 +888,7 @@ public class User {
 视图概念，截取数据表的部分数据操作
 
 ```java
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface View {
@@ -948,6 +946,7 @@ SQL:SELECT user.id,user.name FROM user
 查询结果自动映射到对象，忽视此字段
 
 ```java
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Ignore {
@@ -977,10 +976,11 @@ public class UserView {
 声明接口为可执行接口
 
 ```java
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Mapper {
-   Class<?> value() default NullObject.class;
+    Class<?> value() default NullObject.class;
 }
 ```
 
@@ -1004,11 +1004,14 @@ public interface UserMapper {
 方法绑定SQL
 
 ```java
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Sql {
     String value();
+
     boolean cache() default true;
+
     boolean listener() default true;
 }
 ```
@@ -1025,7 +1028,7 @@ public @interface Sql {
 
 @Mapper
 public interface UserMapper {
-    @Sql("select id, name, age,email from user where name = @$(name)")
+    @Sql("select id, name, age,email from user where name = @?(name)")
     User findByName(String name);
 }
 ```
@@ -1037,6 +1040,7 @@ public interface UserMapper {
 绑定参数名名称
 
 ```java
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface Param {
@@ -1055,6 +1059,7 @@ public @interface Param {
 分页
 
 ```java
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface PageQuery {
@@ -1072,6 +1077,7 @@ public @interface PageQuery {
 ### **举例**
 
 ```java
+
 @Mapper
 public interface UserMapper {
     @Sql("select id, name, age,email from user order by id")
@@ -1305,12 +1311,14 @@ public @interface Sort {
 #### **多表查询**
 
 ```java
+
 @View("user")
 public class UserView3 {
     private Integer id;
     private String name;
     private List<BlogView> blogList;
 }
+
 @View("blog")
 public class BlogView {
     private Integer id;
@@ -1403,7 +1411,7 @@ public Inject[]injects(){
 
 ```java
 public interface UserMapper {
-    @Sql("select id, name, age,email from user where name = @$(name)")
+    @Sql("select id, name, age,email from user where name = @?(name)")
     User findByName(String name);
 }
 ```
@@ -1475,9 +1483,10 @@ public @interface Share {
 ### **举例**
 
 ```java
+
 @Share("master")
 public interface UserMapper {
-    @Sql("select id, name, age,email from user where name = @$(name)")
+    @Sql("select id, name, age,email from user where name = @?(name)")
     List<User> findByName(String name);
 
     @Share("slave")
@@ -1546,7 +1555,7 @@ public Interceptor[]interceptors(){
 
 @Mapper
 public interface UserMapper {
-    @Sql("select* from (select id, name, age,email from user where 1=1 or 1<>2)A inner join user u on 1=2 where A.name=@$(name)")
+    @Sql("select* from (select id, name, age,email from user where 1=1 or 1<>2)A inner join user u on 1=2 where A.name=@?(name)")
     Map findByName(String name);
 ```
 
@@ -1701,7 +1710,7 @@ public interface LogicHandler {
     @Sql("delete from user where id in (@foreach(list))")
     int delete(List<Integer> idList);
 
-@Sql("select user.id, user.name, user.age,user.email from user left join user u on user.id=u.id where user.name = @$(name)")
+@Sql("select user.id, user.name, user.age,user.email from user left join user u on user.id=u.id where user.name = @?(name)")
     User findByName(String name);
 ```
 

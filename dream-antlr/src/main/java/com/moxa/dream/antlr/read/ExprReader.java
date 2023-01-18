@@ -209,17 +209,7 @@ public class ExprReader extends StringReader {
                 lastInfo = new ExprInfo(ExprType.MARK, "?", getStart(), getEnd());
                 break;
             case 64:
-                mark();
-                c = read();
-                switch (c) {
-                    case 40:
-                        lastInfo = pushSkip();
-                        break;
-                    default:
-                        reset();
-                        lastInfo = new ExprInfo(ExprType.INVOKER, "@", getStart(), getEnd());
-                        break;
-                }
+                lastInfo = new ExprInfo(ExprType.INVOKER, "@", getStart(), getEnd());
                 break;
             case 94:
                 lastInfo = new ExprInfo(ExprType.BITXOR, "^", getStart(), getEnd());
@@ -312,28 +302,6 @@ public class ExprReader extends StringReader {
         int len = read(chars, 0, count);
         String info = new String(chars, 1, len - 2);
         return new ExprInfo(ExprType.SINGLE_MARK, info, getStart(), getEnd());
-    }
-
-    public ExprInfo pushSkip() throws AntlrException {
-        mark();
-        int c, count = 1;
-        int balance = 0;
-        while ((c = read()) != -1 && (!ExprUtil.isRBrace(c) || balance > 0)) {
-            if (ExprUtil.isLBrace(c)) {
-                balance++;
-            } else if (ExprUtil.isRBrace(c)) {
-                balance--;
-            }
-            count++;
-        }
-        reset();
-        if (!ExprUtil.isRBrace(c)) {
-            throw new AntlrException("右括号未找到");
-        }
-        char[] chars = new char[count];
-        int len = read(chars, 0, count);
-        String info = new String(chars, 0, len - 1);
-        return new ExprInfo(ExprType.SKIP, info, getStart(), getEnd());
     }
 
     private ExprInfo pushNumber() throws AntlrException {

@@ -37,13 +37,6 @@ public abstract class SymbolStatement extends Statement {
         }
     }
 
-    public static class SKipStatement extends SymbolStatement {
-
-        public SKipStatement(String symbol) {
-            super(symbol);
-        }
-    }
-
     public static class StrStatement extends SymbolStatement {
 
         public StrStatement(String symbol) {

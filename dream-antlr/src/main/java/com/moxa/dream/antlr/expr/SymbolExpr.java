@@ -93,14 +93,6 @@ public class SymbolExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprSkip(ExprInfo exprInfo) throws AntlrException {
-        push();
-        statement = new SymbolStatement.SKipStatement(exprInfo.getInfo());
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
-
-    @Override
     protected Statement exprMark(ExprInfo exprInfo) throws AntlrException {
         push();
         statement = new SymbolStatement.MarkStatement();

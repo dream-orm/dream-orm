@@ -109,7 +109,6 @@ public final class Constant {
             ExprType.MARK,
             ExprType.SINGLE_MARK,
             ExprType.LETTER,
-            ExprType.SKIP,
     };
     public static final ExprType[] KEYWORD = {
             ExprType.CHAR,

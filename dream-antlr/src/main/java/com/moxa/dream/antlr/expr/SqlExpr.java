@@ -66,9 +66,6 @@ public abstract class SqlExpr {
             case LETTER:
                 statement = exprLetter(exprInfo);
                 break;
-            case SKIP:
-                statement = exprSkip(exprInfo);
-                break;
             case LIKE:
                 statement = exprLike(exprInfo);
                 break;
@@ -1230,10 +1227,6 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprLetter(ExprInfo exprInfo) throws AntlrException {
-        return exprSymbol(exprInfo);
-    }
-
-    protected Statement exprSkip(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 

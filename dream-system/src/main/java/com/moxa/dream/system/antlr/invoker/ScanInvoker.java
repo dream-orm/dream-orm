@@ -49,7 +49,7 @@ public class ScanInvoker extends AbstractInvoker {
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         if (columnList.length != 1) {
-            throw new AntlrException("函数" + this.function() + "参数个数错误");
+            throw new AntlrException("@" + this.function() + "参数个数错误");
         }
         String sql = toSQL.toStr(columnList[0], assist, invokerList);
         Statement parentStatement = invokerStatement.getParentStatement();

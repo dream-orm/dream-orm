@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MarkInvoker extends AbstractInvoker {
-    public static final String FUNCTION = "$";
+    public static final String FUNCTION = "?";
     private final List<ParamInfo> paramInfoList = new ArrayList<>();
     ObjectWrapper paramWrapper;
 
