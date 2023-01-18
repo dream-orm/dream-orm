@@ -28,7 +28,7 @@ public abstract class AbstractRouteDialectFactory implements DialectFactory {
                             methodInfo.setStatement(statement);
                             CacheKey methodKey = compileFactory.uniqueKey(sql);
                             if (methodKey != null) {
-                                methodKey.update(new Object[]{methodInfo.getId(), methodInfo.getColType(), methodInfo.getRowType()});
+                                methodKey.update(methodInfo.getId());
                                 methodInfo.setMethodKey(methodKey);
                             }
                             InjectFactory injectFactory = configuration.getInjectFactory();

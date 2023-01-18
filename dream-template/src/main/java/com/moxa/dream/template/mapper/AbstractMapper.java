@@ -41,7 +41,7 @@ public abstract class AbstractMapper {
                 if (methodInfo == null) {
                     String table = getTableName(type);
                     if (ObjectUtil.isNull(table)) {
-                        throw new DreamRunTimeException("" + type.getName() + "未绑定表");
+                        throw new DreamRunTimeException(type.getName() + "未绑定表");
                     }
                     Configuration configuration = this.session.getConfiguration();
                     TableFactory tableFactory = configuration.getTableFactory();
@@ -50,6 +50,10 @@ public abstract class AbstractMapper {
                         throw new DreamRunTimeException("表'" + table + "'未在TableFactory注册");
                     }
                     methodInfo = getMethodInfo(configuration, tableInfo, type, arg);
+                    String id=getId();
+                    if(!ObjectUtil.isNull(id)){
+                        methodInfo.setId(id);
+                    }
                     if (methodInfoConsumer != null) {
                         methodInfoConsumer.accept(methodInfo);
                     }
@@ -123,5 +127,17 @@ public abstract class AbstractMapper {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'未注册主键");
         }
         return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, DREAM_TEMPLATE_PARAM) + ")";
+    }
+
+    protected String getId(){
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        String packageName= this.getClass().getPackage().getName();
+        for(int i=1;i<stackTrace.length;i++){
+            String className = stackTrace[i].getClassName();
+            if(!className.startsWith(packageName)){
+                return className+"."+stackTrace[i].getMethodName();
+            }
+        }
+        return null;
     }
 }
