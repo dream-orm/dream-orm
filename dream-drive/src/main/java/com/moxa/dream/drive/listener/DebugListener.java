@@ -19,13 +19,13 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
         List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
         List<Object> paramList;
         if (!ObjectUtil.isNull(mappedParamList)) {
-            paramList = mappedParamList.stream().map(mappedParam -> mappedParam.getParamValue()).collect(Collectors.toList());
+            paramList = mappedParamList.stream().map(MappedParam::getParamValue).collect(Collectors.toList());
         } else {
             paramList = new ArrayList<>();
         }
-        String sql = mappedStatement.getSql();
-        System.out.println("执行SQL:" + sql);
-        System.out.println("执行参数:" + paramList);
+        System.out.println("方法：" + mappedStatement.getId());
+        System.out.println("语句：" + mappedStatement.getSql());
+        System.out.println("参数：" + paramList);
     }
 
     @Override
@@ -35,11 +35,11 @@ public class DebugListener implements QueryListener, UpdateListener, InsertListe
 
     @Override
     public void exception(SQLException e, MappedStatement mappedStatement) {
-        System.err.println("执行异常：" + e.getMessage());
+        System.err.println("异常：" + e.getMessage());
         after(mappedStatement);
     }
 
     public void after(MappedStatement mappedStatement) {
-        System.out.println("执行用时：" + (System.currentTimeMillis() - (long) mappedStatement.get(START_DATE)) + "ms");
+        System.out.println("用时：" + (System.currentTimeMillis() - (long) mappedStatement.get(START_DATE)) + "ms");
     }
 }
