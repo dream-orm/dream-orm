@@ -11,8 +11,9 @@ public class InsertStatement extends Statement {
 
     public void setTable(Statement table) {
         this.table = table;
-        if (table != null)
+        if (table != null) {
             table.parentStatement = this;
+        }
     }
 
     public Statement getParams() {
@@ -21,8 +22,9 @@ public class InsertStatement extends Statement {
 
     public void setParams(Statement params) {
         this.params = params;
-        if (params != null)
+        if (params != null) {
             params.parentStatement = this;
+        }
     }
 
     public Statement getValues() {
@@ -31,8 +33,9 @@ public class InsertStatement extends Statement {
 
     public void setValues(Statement values) {
         this.values = values;
-        if (values != null)
+        if (values != null) {
             values.parentStatement = this;
+        }
     }
 
     @Override

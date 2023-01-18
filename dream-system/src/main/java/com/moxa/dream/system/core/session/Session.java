@@ -21,6 +21,7 @@ public interface Session extends Closeable {
 
     void rollback();
 
+    @Override
     void close();
 
     Configuration getConfiguration();

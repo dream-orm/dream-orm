@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Assist {
     private Map<Class, Object> customObjMap;
-    private Map<String, Invoker> invokerMap = new HashMap<>();
+    private Map<String, Invoker> invokerMap = new HashMap<>(16);
     private InvokerFactory invokerFactory;
 
     public Assist(InvokerFactory invokerFactory, Map<Class, Object> customObjMap) {
@@ -50,7 +50,7 @@ public class Assist {
 
     public <T> void setCustom(Class<T> type, T value) {
         if (customObjMap == null) {
-            customObjMap = new HashMap<>();
+            customObjMap = new HashMap<>(4);
         }
         customObjMap.put(type, value);
     }

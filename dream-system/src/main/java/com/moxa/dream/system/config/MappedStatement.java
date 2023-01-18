@@ -138,7 +138,7 @@ public class MappedStatement {
 
     public MappedStatement put(String key, Object value) {
         if (envMap == null) {
-            envMap = new HashMap<>();
+            envMap = new HashMap<>(4);
         }
         envMap.put(key, value);
         return this;

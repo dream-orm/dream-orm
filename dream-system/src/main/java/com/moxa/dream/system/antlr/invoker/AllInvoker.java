@@ -90,10 +90,10 @@ public class AllInvoker extends AbstractInvoker {
     }
 
     protected void getQueryFromMap(TableFactory tableFactory, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {
-        Set<String> _columnSet = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getColumn()).collect(Collectors.toSet());
-        LowHashSet columnSet = new LowHashSet(_columnSet);
-        Set<String> _fieldSet = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getAlias()).collect(Collectors.toSet());
-        LowHashSet fieldSet = new LowHashSet(_fieldSet);
+        Set<String> set = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getColumn()).collect(Collectors.toSet());
+        LowHashSet columnSet = new LowHashSet(set);
+        Set<String> aliasSet = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getAlias()).collect(Collectors.toSet());
+        LowHashSet fieldSet = new LowHashSet(aliasSet);
         Collection<ScanInvoker.TableScanInfo> tableScanInfoList = tableScanInfoMap.values();
         for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoList) {
             String table = tableScanInfo.getTable();
@@ -117,8 +117,9 @@ public class AllInvoker extends AbstractInvoker {
         String alias = null;
         if (!ObjectUtil.isNull(table)) {
             ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.remove(table);
-            if (tableScanInfo == null)
+            if (tableScanInfo == null) {
                 return;
+            }
             rootTableInfo = tableFactory.getTableInfo(table);
             if (rootTableInfo == null) {
                 throw new DreamRunTimeException("TableFactory不存在表" + table);
@@ -165,11 +166,12 @@ public class AllInvoker extends AbstractInvoker {
                             }
                             boolean add = true;
                             for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
-                                String _table = queryColumnInfo.getTable();
-                                if ((columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
+                                String queryTable = queryColumnInfo.getTable();
+                                boolean hasAdd = (columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
                                         || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias()))
-                                        && (ObjectUtil.isNull(_table)
-                                        || _table.equalsIgnoreCase(alias))) {
+                                        && (ObjectUtil.isNull(queryTable)
+                                        || queryTable.equalsIgnoreCase(alias));
+                                if (hasAdd) {
                                     add = false;
                                     break;
                                 }
@@ -224,8 +226,9 @@ public class AllInvoker extends AbstractInvoker {
                     column = ((SymbolStatement) columnLists[1]).getValue();
                 }
             }
-            if (!ObjectUtil.isNull(column))
+            if (!ObjectUtil.isNull(column)) {
                 queryColumnInfoList.add(new QueryColumnInfo(database, table, column, alias));
+            }
         }
         return queryColumnInfoList;
     }

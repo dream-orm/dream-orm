@@ -42,7 +42,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 resultObjectFactory.set(null, result);
             }
         } else {
-            Map<CacheKey, Object> cacheMap = new HashMap<>();
+            Map<CacheKey, Object> cacheMap = new HashMap<>(4);
             while (resultSet.next()) {
                 ObjectFactory objectFactory = doNestedResult(resultSet, mappedStatement, mappedResult, cacheMap);
                 if (objectFactory != null) {
@@ -67,8 +67,9 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             } else {
                 childObjectFactory = doNestedResult(resultSet, mappedStatement, childMappedResult, cacheMap);
             }
-            if (childObjectFactory == null)
+            if (childObjectFactory == null) {
                 continue;
+            }
             if (targetObjectFactory == null) {
                 CacheKey cacheKey = new CacheKey();
                 MappedColumn[] primaryList = mappedResult.getPrimaryList();
@@ -101,10 +102,11 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 targetObjectFactory.set(childMappedResult.getProperty(), childObjectFactory.getObject());
             }
         }
-        if (returnNull)
+        if (returnNull) {
             return null;
-        else
+        } else {
             return targetObjectFactory;
+        }
     }
 
     protected ObjectFactory doSimpleResult(ResultSet resultSet, MappedStatement mappedStatement, MappedResult mappedResult) throws SQLException {
@@ -142,8 +144,9 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         ResultSetMetaData metaData = resultSet.getMetaData();
         int columnCount = metaData.getColumnCount();
         Class colType = mappedStatement.getColType();
-        if (colType == Object.class && columnCount > 1)
+        if (colType == Object.class && columnCount > 1) {
             colType = HashMap.class;
+        }
         MappedResult mappedResult = new MappedResult(mappedStatement.getRowType(), colType, null);
         Set<String> tableSet = mappedStatement.getTableSet();
         for (int i = 1; i <= columnCount; i++) {
@@ -199,9 +202,9 @@ public class DefaultResultSetHandler implements ResultSetHandler {
 
     protected boolean linkHandler(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) throws TypeHandlerNotFoundException {
         Class colType = mappedResult.getColType();
-        if (ReflectUtil.isBaseClass(colType))
+        if (ReflectUtil.isBaseClass(colType)) {
             return linkHandlerForBase(builder, mappedStatement, mappedResult, tableSet);
-        else if (Map.class.isAssignableFrom(colType)) {
+        } else if (Map.class.isAssignableFrom(colType)) {
             return linkHandlerForMap(builder, mappedStatement, mappedResult, tableSet);
         } else {
             return linkHandlerForClass(builder, mappedStatement, mappedResult, tableSet);
@@ -238,7 +241,8 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             for (Field field : fieldList) {
                 if (!ignore(field)) {
                     String fieldName = field.getName();
-                    if (!lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(builder.getTable()) || curTableName.equalsIgnoreCase(builder.getTable()))) {
+                    boolean mappingField = !lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(builder.getTable()) || curTableName.equalsIgnoreCase(builder.getTable()));
+                    if (mappingField) {
                         if (fieldName.equalsIgnoreCase(property)) {
                             builder.property(fieldName);
                             TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), builder.getJdbcType());
@@ -259,7 +263,8 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     }
                     Type genericType = field.getGenericType();
                     String table = getTableName(ReflectUtil.getColType(genericType));
-                    if (!ObjectUtil.isNull(table) && tableSet.contains(table) && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(builder.getTable()) || !curTableName.equalsIgnoreCase(builder.getTable()))) {
+                    boolean mappingTable = !ObjectUtil.isNull(table) && tableSet.contains(table) && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(builder.getTable()) || !curTableName.equalsIgnoreCase(builder.getTable()));
+                    if (mappingTable) {
                         tableSet.remove(table);
                         Map<String, MappedResult> childMappedResultMap = mappedResult.getChildResultMappingMap();
                         MappedResult childMappedResult = childMappedResultMap.get(fieldName);

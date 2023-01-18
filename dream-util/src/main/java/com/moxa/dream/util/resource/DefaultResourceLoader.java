@@ -35,6 +35,8 @@ public class DefaultResourceLoader implements ResourceLoader {
                 case "jar":
                     classList.addAll(getClassFromJar(url));
                     break;
+                default:
+                    break;
             }
         }
         return classList;

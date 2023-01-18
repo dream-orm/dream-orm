@@ -26,8 +26,9 @@ public class ForEachInvoker extends AbstractInvoker {
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         int len = columnList.length;
-        if (len > 2 || len < 1)
+        if (len > 2 || len < 1) {
             throw new AntlrException("@foreach参数个数不合法");
+        }
         String list = toSQL.toStr(columnList[0], assist, invokerList);
         ObjectWrapper paramWrapper = assist.getCustom(ObjectWrapper.class);
         Object arrayList = paramWrapper.get(list);
@@ -37,10 +38,11 @@ public class ForEachInvoker extends AbstractInvoker {
         boolean isArray = false;
         if (arrayList instanceof Collection || (isArray = arrayList.getClass().isArray())) {
             Collection collection;
-            if (isArray)
+            if (isArray) {
                 collection = Arrays.asList((Object[]) arrayList);
-            else
+            } else {
                 collection = (Collection) arrayList;
+            }
             ListColumnStatement listColumnStatement = new ListColumnStatement(cut);
             if (len == 2) {
                 int index = 0;
@@ -54,17 +56,19 @@ public class ForEachInvoker extends AbstractInvoker {
                 paramMap.remove(this.index);
                 paramMap.remove(this.item);
             } else {
-                $Invoker sqlInvoker = ($Invoker) assist.getInvoker($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
-                List<$Invoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
+                MarkInvoker sqlInvoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+                List<MarkInvoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
                 int index = 0;
                 for (Object item : collection) {
-                    paramInfoList.add(new $Invoker.ParamInfo(list + "[" + index++ + "]", item));
+                    paramInfoList.add(new MarkInvoker.ParamInfo(list + "[" + index++ + "]", item));
                     listColumnStatement.add(new SymbolStatement.MarkStatement());
                 }
             }
             listColumnStatement.setParentStatement(invokerStatement.getParentStatement());
             return toSQL.toStr(listColumnStatement, assist, invokerList);
-        } else throw new AntlrException("类'" + arrayList.getClass().getName() + "'不是集合或数组类型");
+        } else {
+            throw new AntlrException("类'" + arrayList.getClass().getName() + "'不是集合或数组类型");
+        }
     }
 
     @Override

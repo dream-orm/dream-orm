@@ -19,8 +19,9 @@ public class AliasStatement extends Statement {
 
     public void setColumn(Statement column) {
         this.column = column;
-        if (column != null)
+        if (column != null) {
             column.parentStatement = this;
+        }
     }
 
     public Statement getAlias() {
@@ -29,8 +30,9 @@ public class AliasStatement extends Statement {
 
     public void setAlias(Statement alias) {
         this.alias = alias;
-        if (alias != null)
+        if (alias != null) {
             alias.parentStatement = this;
+        }
     }
 
     @Override

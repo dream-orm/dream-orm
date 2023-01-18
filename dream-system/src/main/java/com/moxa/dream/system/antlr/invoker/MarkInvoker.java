@@ -12,7 +12,7 @@ import com.moxa.dream.util.common.ObjectWrapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class $Invoker extends AbstractInvoker {
+public class MarkInvoker extends AbstractInvoker {
     public static final String FUNCTION = "$";
     private final List<ParamInfo> paramInfoList = new ArrayList<>();
     ObjectWrapper paramWrapper;
@@ -24,7 +24,7 @@ public class $Invoker extends AbstractInvoker {
 
     @Override
     public Invoker newInstance() {
-        return new $Invoker();
+        return new MarkInvoker();
     }
 
     @Override

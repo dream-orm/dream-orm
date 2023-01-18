@@ -33,7 +33,9 @@ public abstract class TreeExpr extends HelperExpr {
                     Statement parentStatement = cur.getParentStatement();
                     if (parentStatement instanceof ConditionStatement) {
                         cur = (ConditionStatement) parentStatement;
-                    } else cur = null;
+                    } else {
+                        cur = null;
+                    }
                 }
             }
         }
@@ -41,8 +43,10 @@ public abstract class TreeExpr extends HelperExpr {
 
     protected void exprTree(Statement statement) {
         OperStatement oper = cur.getOper();
-        if (oper == null)
+        if (oper == null) {
             cur.setLeft(statement);
-        else cur.setRight(statement);
+        } else {
+            cur.setRight(statement);
+        }
     }
 }

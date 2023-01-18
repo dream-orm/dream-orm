@@ -319,10 +319,11 @@ public class ExprReader extends StringReader {
         int c, count = 1;
         int balance = 0;
         while ((c = read()) != -1 && (!ExprUtil.isRBrace(c) || balance > 0)) {
-            if (ExprUtil.isLBrace(c))
+            if (ExprUtil.isLBrace(c)) {
                 balance++;
-            else if (ExprUtil.isRBrace(c))
+            } else if (ExprUtil.isRBrace(c)) {
                 balance--;
+            }
             count++;
         }
         reset();
@@ -342,10 +343,11 @@ public class ExprReader extends StringReader {
         ExprType exprType = ExprType.INT;
         while ((c = read()) != -1 && (ExprUtil.isNumber(c) || ExprUtil.isDot(c))) {
             if (ExprUtil.isDot(c)) {
-                if (exprType == ExprType.INT)
+                if (exprType == ExprType.INT) {
                     exprType = ExprType.DOUBLE;
-                else
+                } else {
                     throw new AntlrException("数字格式不正确");
+                }
             }
             count++;
         }
@@ -386,8 +388,9 @@ public class ExprReader extends StringReader {
 
 
     public boolean tryMark(SqlExpr abstractExpr) {
-        if (exprStack.isEmpty() || exprStack.peek() != abstractExpr)
+        if (exprStack.isEmpty() || exprStack.peek() != abstractExpr) {
             return exprStack.add(abstractExpr);
+        }
         return false;
     }
 

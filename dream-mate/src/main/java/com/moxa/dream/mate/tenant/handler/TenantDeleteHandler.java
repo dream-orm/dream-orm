@@ -9,7 +9,7 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
 import com.moxa.dream.mate.util.MateUtil;
-import com.moxa.dream.system.antlr.invoker.$Invoker;
+import com.moxa.dream.system.antlr.invoker.MarkInvoker;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class TenantDeleteHandler extends AbstractHandler {
             ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.LetterStatement(tenantColumn));
             conditionStatement.setOper(new OperStatement.EQStatement());
-            conditionStatement.setRight(AntlrUtil.invokerStatement($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
+            conditionStatement.setRight(AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
             WhereStatement whereStatement = (WhereStatement) deleteStatement.getWhere();
             if (whereStatement == null) {
                 whereStatement = new WhereStatement();

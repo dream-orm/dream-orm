@@ -27,8 +27,9 @@ public class InvokerStatement extends Statement {
 
     public void setParamStatement(Statement paramStatement) {
         this.paramStatement = paramStatement;
-        if (paramStatement != null)
+        if (paramStatement != null) {
             paramStatement.parentStatement = this;
+        }
     }
 
     @Override

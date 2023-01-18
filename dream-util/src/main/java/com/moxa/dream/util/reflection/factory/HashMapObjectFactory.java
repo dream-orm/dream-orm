@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class HashMapObjectFactory extends MapObjectFactory {
     public HashMapObjectFactory() {
-        super(new HashMap<>());
+        super(new HashMap<>(8));
     }
 
     public HashMapObjectFactory(HashMap<String, Object> target) {

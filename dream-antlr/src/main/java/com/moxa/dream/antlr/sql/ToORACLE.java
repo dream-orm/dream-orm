@@ -56,7 +56,9 @@ public class ToORACLE extends ToPubSQL {
 
                 }
                 i++;
-            } else builder.append(patternArray[i]);
+            } else {
+                builder.append(patternArray[i]);
+            }
         }
         return builder.toString();
     }
@@ -253,9 +255,9 @@ public class ToORACLE extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.ConcatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        if (columnList.length == 2)
+        if (columnList.length == 2) {
             return super.toString(statement, assist, invokerList);
-        else {
+        } else {
             StringBuilder stringBuilder = new StringBuilder();
             int i;
             for (i = 0; i < columnList.length - 1; i++) {
@@ -266,6 +268,7 @@ public class ToORACLE extends ToPubSQL {
         }
     }
 
+    @Override
     protected String toString(FunctionStatement.ConcatWsStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String link = toStr(columnList[0], assist, invokerList);
@@ -315,10 +318,11 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.LogStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1)
+        if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1) {
             return "LN(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
-        else
+        } else {
             return "LOG(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+        }
     }
 
     @Override

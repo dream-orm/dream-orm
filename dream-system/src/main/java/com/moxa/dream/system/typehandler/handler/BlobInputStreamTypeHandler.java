@@ -13,16 +13,18 @@ public class BlobInputStreamTypeHandler extends BaseTypeHandler<InputStream> {
     @Override
     public InputStream getResult(ResultSet rs, int index, int jdbcType) throws SQLException {
         Blob blob = rs.getBlob(index);
-        if (blob != null)
+        if (blob != null) {
             return blob.getBinaryStream();
+        }
         return null;
     }
 
     @Override
     public InputStream getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
         Blob blob = rs.getBlob(column);
-        if (blob != null)
+        if (blob != null) {
             return blob.getBinaryStream();
+        }
         return null;
     }
 

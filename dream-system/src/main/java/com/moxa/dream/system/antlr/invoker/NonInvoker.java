@@ -8,10 +8,10 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.ExprUtil;
-import com.moxa.dream.system.antlr.handler.non.$Handler;
 import com.moxa.dream.system.antlr.handler.non.BraceHandler;
 import com.moxa.dream.system.antlr.handler.non.ConditionHandler;
 import com.moxa.dream.system.antlr.handler.non.FunctionHandler;
+import com.moxa.dream.system.antlr.handler.non.MarkHandler;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class NonInvoker extends AbstractInvoker {
 
     @Override
     public Handler[] handler() {
-        return new Handler[]{new $Handler(this), new ConditionHandler(), new BraceHandler(), new FunctionHandler()};
+        return new Handler[]{new MarkHandler(this), new ConditionHandler(), new BraceHandler(), new FunctionHandler()};
     }
 
     public boolean isEmpty(Object value) {

@@ -10,11 +10,13 @@ public interface ReflectHandler<T> {
     default List<Class> goHandler(Class type) {
         List<Class> list = new ArrayList();
         Class[] interfaces = type.getInterfaces();
-        if (interfaces != null && interfaces.length > 0)
+        if (interfaces != null && interfaces.length > 0) {
             list.addAll(Arrays.asList(interfaces));
+        }
         Class superclass = type.getSuperclass();
-        if (superclass != null && superclass != Object.class)
+        if (superclass != null && superclass != Object.class) {
             list.add(superclass);
+        }
         return list;
     }
 }

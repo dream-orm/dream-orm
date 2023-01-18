@@ -37,6 +37,7 @@ public class SelectListMapper extends SelectMapper {
         return "";
     }
 
+    @Override
     protected Class<? extends Collection> getRowType() {
         return List.class;
     }

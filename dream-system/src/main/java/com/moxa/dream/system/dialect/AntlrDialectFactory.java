@@ -4,7 +4,7 @@ import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.system.antlr.invoker.$Invoker;
+import com.moxa.dream.system.antlr.invoker.MarkInvoker;
 import com.moxa.dream.system.antlr.invoker.ScanInvoker;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.*;
@@ -30,7 +30,7 @@ public class AntlrDialectFactory implements DialectFactory {
         PackageStatement statement = methodInfo.getStatement();
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
         String sql;
-        List<$Invoker.ParamInfo> paramInfoList;
+        List<MarkInvoker.ParamInfo> paramInfoList;
         Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap;
         if (scanInfo == null) {
             Assist assist = getAssist(methodInfo, arg);
@@ -47,7 +47,7 @@ public class AntlrDialectFactory implements DialectFactory {
                 paramInfoList = scanInfo.getParamInfoList();
                 if (!ObjectUtil.isNull(paramInfoList)) {
                     ObjectWrapper paramWrapper = ObjectWrapper.wrapper(arg);
-                    for ($Invoker.ParamInfo paramInfo : paramInfoList) {
+                    for (MarkInvoker.ParamInfo paramInfo : paramInfoList) {
                         paramInfo.setParamValue(paramWrapper.get(paramInfo.getParamName()));
                     }
                 }
@@ -61,7 +61,7 @@ public class AntlrDialectFactory implements DialectFactory {
                 paramTypeWrapper = new ParamTypeWrapper();
                 methodInfo.set(ParamTypeWrapper.class, paramTypeWrapper);
             }
-            for ($Invoker.ParamInfo paramInfo : paramInfoList) {
+            for (MarkInvoker.ParamInfo paramInfo : paramInfoList) {
                 String paramName = paramInfo.getParamName();
                 ParamType paramType = paramTypeWrapper.get(paramName);
                 if (paramType == null) {
@@ -86,8 +86,8 @@ public class AntlrDialectFactory implements DialectFactory {
                 .build();
     }
 
-    protected List<$Invoker.ParamInfo> getParamInfoList(Assist assist) {
-        $Invoker invoker = ($Invoker) assist.getInvoker($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+    protected List<MarkInvoker.ParamInfo> getParamInfoList(Assist assist) {
+        MarkInvoker invoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
         return invoker.getParamInfoList();
     }
 
@@ -112,18 +112,18 @@ public class AntlrDialectFactory implements DialectFactory {
     }
 
     protected Assist getAssist(MethodInfo methodInfo, Object arg) {
-        Map<Class, Object> customMap = new HashMap<>();
+        Map<Class, Object> customMap = new HashMap<>(4);
         Configuration configuration = methodInfo.getConfiguration();
         customMap.put(MethodInfo.class, methodInfo);
         customMap.put(Configuration.class, configuration);
         if (arg == null) {
-            arg = new HashMap<>();
+            arg = new HashMap<>(4);
         }
         customMap.put(ObjectWrapper.class, ObjectWrapper.wrapper(arg));
         return new Assist(configuration.getInvokerFactory(), customMap);
     }
 
-    protected ParamType getParamType(Configuration configuration, ScanInvoker.ScanInfo scanInfo, Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap, $Invoker.ParamInfo paramInfo) throws TypeHandlerNotFoundException {
+    protected ParamType getParamType(Configuration configuration, ScanInvoker.ScanInfo scanInfo, Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap, MarkInvoker.ParamInfo paramInfo) throws TypeHandlerNotFoundException {
         TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
         TableFactory tableFactory = configuration.getTableFactory();
         ScanInvoker.ParamScanInfo paramScanInfo = paramScanInfoMap.get(paramInfo.getParamName());
@@ -174,7 +174,7 @@ public class AntlrDialectFactory implements DialectFactory {
     }
 
     static class ParamTypeWrapper {
-        private final Map<String, ParamType> paramTypeMap = new HashMap<>();
+        private final Map<String, ParamType> paramTypeMap = new HashMap<>(4);
 
         public ParamType get(String param) {
             return paramTypeMap.get(param);

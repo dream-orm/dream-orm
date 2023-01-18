@@ -18,8 +18,9 @@ public class BraceStatement extends Statement {
 
     public void setStatement(Statement statement) {
         this.statement = statement;
-        if (statement != null)
+        if (statement != null) {
             statement.parentStatement = this;
+        }
     }
 
     @Override

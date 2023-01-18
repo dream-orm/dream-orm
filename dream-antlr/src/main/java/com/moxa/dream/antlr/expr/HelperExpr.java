@@ -26,25 +26,30 @@ public abstract class HelperExpr extends SqlExpr {
         accept1 = false;
         while (true) {
             accept1 |= helpExpr0.exprBefore(exprInfo);
-            if (accept1)
+            if (accept1) {
                 break;
-            if (helpExpr0 instanceof HelperExpr)
+            }
+            if (helpExpr0 instanceof HelperExpr) {
                 helpExpr0 = ((HelperExpr) helpExpr0).helper.helper();
-            else break;
+            } else {
+                break;
+            }
         }
         return accept0;
     }
 
     @Override
     public Statement exprDefault(ExprInfo exprInfo) throws AntlrException {
-        if (accept0)
+        if (accept0) {
             return exprSelf(exprInfo);
+        }
         if (acceptSet.contains(ExprType.HELP) && accept1) {
             Statement statement = helpExpr.expr();
             helpExpr = helper.helper();
             return exprHelp(statement);
-        } else
+        } else {
             return super.exprDefault(exprInfo);
+        }
     }
 
     protected abstract Statement exprHelp(Statement statement) throws AntlrException;

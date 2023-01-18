@@ -30,8 +30,10 @@ public class OperExpr extends TreeExpr {
     protected Statement exprAdd(ExprInfo exprInfo) throws AntlrException {
         push();
         OperStatement.ADDStatement addStatement = new OperStatement.ADDStatement();
-        if ((cur.getOper() != null && cur.getRight() == null) || cur.getLeft() == null)
+        boolean positiveSign = (cur.getOper() != null && cur.getRight() == null) || cur.getLeft() == null;
+        if (positiveSign) {
             addStatement.setLevel(13);
+        }
         exprTree(addStatement);
         setExprTypes(ExprType.SUB, ExprType.LBRACE, ExprType.HELP);
         return expr();
@@ -41,8 +43,10 @@ public class OperExpr extends TreeExpr {
     protected Statement exprSub(ExprInfo exprInfo) throws AntlrException {
         push();
         OperStatement.SUBStatement subStatement = new OperStatement.SUBStatement();
-        if ((cur.getOper() != null && cur.getRight() == null) || cur.getLeft() == null)
+        boolean negativeSign = (cur.getOper() != null && cur.getRight() == null) || cur.getLeft() == null;
+        if (negativeSign) {
             subStatement.setLevel(13);
+        }
         exprTree(subStatement);
         setExprTypes(ExprType.LBRACE, ExprType.HELP);
         return expr();
@@ -91,10 +95,14 @@ public class OperExpr extends TreeExpr {
     @Override
     public Statement nil() {
         if (compareExpr == null) {
-            if (top.getOper() != null)
+            if (top.getOper() != null) {
                 return top;
-            else return top.getLeft();
-        } else return compareExpr.nil();
+            } else {
+                return top.getLeft();
+            }
+        } else {
+            return compareExpr.nil();
+        }
     }
 
     @Override
@@ -205,15 +213,19 @@ public class OperExpr extends TreeExpr {
 
     @Override
     protected void exprTree(OperStatement oper) {
-        if (compareExpr == null)
+        if (compareExpr == null) {
             super.exprTree(oper);
-        else compareExpr.exprTree(oper);
+        } else {
+            compareExpr.exprTree(oper);
+        }
     }
 
     @Override
     protected void exprTree(Statement statement) {
-        if (compareExpr == null)
+        if (compareExpr == null) {
             super.exprTree(statement);
-        else compareExpr.exprTree(statement);
+        } else {
+            compareExpr.exprTree(statement);
+        }
     }
 }

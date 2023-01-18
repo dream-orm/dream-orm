@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ObjectWrapper {
-    static Map<Class, ObjectFactoryWrapper> factoryWrapperMap = new HashMap<>();
+    static Map<Class, ObjectFactoryWrapper> factoryWrapperMap = new HashMap<>(4);
     private final ObjectFactory objectFactory;
 
     ObjectWrapper(ObjectFactory objectFactory) {

@@ -26,7 +26,8 @@ public class SizeValidator implements Validator<Object> {
                     throw new DreamRunTimeException(e);
                 }
             }
-            if (min >= 0 && size < min || max >= 0 && size > max) {
+            boolean error = min >= 0 && size < min || max >= 0 && size > max;
+            if (error) {
                 throw new ValidateDreamRunTimeException((String) paramMap.get("msg"));
             }
         }

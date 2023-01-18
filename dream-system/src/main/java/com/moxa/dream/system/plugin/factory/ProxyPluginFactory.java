@@ -13,8 +13,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProxyPluginFactory extends AbstractPluginFactory {
-    Map<Integer, Interface> interfaceMap = new HashMap<>();
+    Map<Integer, Interface> interfaceMap = new HashMap<>(4);
 
+    @Override
     public Object plugin(Object origin, Object target, Interceptor interceptor) {
         int hash = hash(origin, interceptor);
         Interface anInterface = interfaceMap.get(hash);
@@ -40,7 +41,9 @@ public class ProxyPluginFactory extends AbstractPluginFactory {
                             }
                         }
                         interfaces = filterInterfaceList.toArray(new Class[0]);
-                    } else interfaces = new Class[0];
+                    } else {
+                        interfaces = new Class[0];
+                    }
                     anInterface = new Interface(interfaces, methods);
                     interfaceMap.put(hash, anInterface);
                 }
@@ -59,7 +62,9 @@ public class ProxyPluginFactory extends AbstractPluginFactory {
                     throw e.getTargetException();
                 }
             });
-        } else return target;
+        } else {
+            return target;
+        }
     }
 
     protected int hash(Object origin, Interceptor interceptor) {

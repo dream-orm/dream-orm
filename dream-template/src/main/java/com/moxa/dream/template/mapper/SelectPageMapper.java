@@ -69,7 +69,7 @@ public class SelectPageMapper extends SelectListMapper {
     }
 
     protected Map<String, Object> wrapArg(Object arg, Page page) {
-        Map<String, Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>(4);
         paramMap.put(DREAM_TEMPLATE_PARAM, arg);
         paramMap.put(PAGE, page);
         return paramMap;

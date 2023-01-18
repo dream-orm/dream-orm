@@ -10,8 +10,9 @@ public class SelectStatement extends Statement {
 
     public void setPreSelect(PreSelectStatement preSelect) {
         this.preSelect = preSelect;
-        if (preSelect != null)
+        if (preSelect != null) {
             preSelect.parentStatement = this;
+        }
     }
 
     public ListColumnStatement getSelectList() {
@@ -20,8 +21,9 @@ public class SelectStatement extends Statement {
 
     public void setSelectList(ListColumnStatement selectList) {
         this.selectList = selectList;
-        if (selectList != null)
+        if (selectList != null) {
             selectList.parentStatement = this;
+        }
     }
 
     @Override

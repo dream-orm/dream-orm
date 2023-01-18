@@ -23,7 +23,7 @@ public class CacheKey implements Cloneable {
         this.count = 0;
     }
 
-    public void update(Object...object) {
+    public void update(Object... object) {
         for (int i = 0; i < object.length; i++) {
             int baseHashCode = Objects.hashCode(object[i]);
             count++;

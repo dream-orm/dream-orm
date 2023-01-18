@@ -9,8 +9,9 @@ public class OrderStatement extends Statement {
 
     public void setOrder(Statement order) {
         this.statement = order;
-        if (statement != null)
+        if (statement != null) {
             order.parentStatement = this;
+        }
     }
 
     @Override
@@ -23,8 +24,9 @@ public class OrderStatement extends Statement {
 
         public AscStatement(Statement statement) {
             this.statement = statement;
-            if (statement != null)
+            if (statement != null) {
                 statement.parentStatement = this;
+            }
 
         }
 
@@ -43,8 +45,9 @@ public class OrderStatement extends Statement {
 
         public DescStatement(Statement statement) {
             this.statement = statement;
-            if (statement != null)
+            if (statement != null) {
                 statement.parentStatement = this;
+            }
         }
 
         public Statement getSort() {

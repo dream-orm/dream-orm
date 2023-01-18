@@ -16,8 +16,9 @@ public class QueryStatement extends Statement {
 
     public void setSelectStatement(SelectStatement selectStatement) {
         this.selectStatement = selectStatement;
-        if (selectStatement != null)
+        if (selectStatement != null) {
             selectStatement.parentStatement = this;
+        }
     }
 
     public FromStatement getFromStatement() {
@@ -26,8 +27,9 @@ public class QueryStatement extends Statement {
 
     public void setFromStatement(FromStatement fromStatement) {
         this.fromStatement = fromStatement;
-        if (fromStatement != null)
+        if (fromStatement != null) {
             fromStatement.parentStatement = this;
+        }
     }
 
     public WhereStatement getWhereStatement() {
@@ -36,8 +38,9 @@ public class QueryStatement extends Statement {
 
     public void setWhereStatement(WhereStatement whereStatement) {
         this.whereStatement = whereStatement;
-        if (whereStatement != null)
+        if (whereStatement != null) {
             whereStatement.parentStatement = this;
+        }
     }
 
     public GroupStatement getGroupStatement() {
@@ -46,8 +49,9 @@ public class QueryStatement extends Statement {
 
     public void setGroupStatement(GroupStatement groupStatement) {
         this.groupStatement = groupStatement;
-        if (groupStatement != null)
+        if (groupStatement != null) {
             groupStatement.parentStatement = this;
+        }
     }
 
     public HavingStatement getHavingStatement() {
@@ -56,8 +60,9 @@ public class QueryStatement extends Statement {
 
     public void setHavingStatement(HavingStatement havingStatement) {
         this.havingStatement = havingStatement;
-        if (havingStatement != null)
+        if (havingStatement != null) {
             havingStatement.parentStatement = this;
+        }
     }
 
     public OrderStatement getOrderStatement() {
@@ -66,8 +71,9 @@ public class QueryStatement extends Statement {
 
     public void setOrderStatement(OrderStatement orderStatement) {
         this.orderStatement = orderStatement;
-        if (orderStatement != null)
+        if (orderStatement != null) {
             orderStatement.parentStatement = this;
+        }
     }
 
     public LimitStatement getLimitStatement() {
@@ -76,8 +82,9 @@ public class QueryStatement extends Statement {
 
     public void setLimitStatement(LimitStatement limitStatement) {
         this.limitStatement = limitStatement;
-        if (limitStatement != null)
+        if (limitStatement != null) {
             limitStatement.parentStatement = this;
+        }
     }
 
     public UnionStatement getUnionStatement() {
@@ -86,8 +93,9 @@ public class QueryStatement extends Statement {
 
     public void setUnionStatement(UnionStatement unionStatement) {
         this.unionStatement = unionStatement;
-        if (unionStatement != null)
+        if (unionStatement != null) {
             unionStatement.parentStatement = this;
+        }
     }
 
     @Override

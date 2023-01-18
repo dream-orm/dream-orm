@@ -23,7 +23,7 @@ public class AntlrInvokerFactory implements InvokerFactory {
         String namespace = invoker.namespace();
         Map<String, Invoker> invokerMap = functionInvokerMap.get(function);
         if (invokerMap == null) {
-            invokerMap = new HashMap<>();
+            invokerMap = new HashMap<>(16);
             functionInvokerMap.put(function, invokerMap);
         }
         if (namespace == null || namespace.trim().length() == 0) {

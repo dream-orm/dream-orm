@@ -15,8 +15,9 @@ public class StringReader {
     }
 
     protected int read() {
-        if (next >= length)
+        if (next >= length) {
             return -1;
+        }
         start = next;
         int c = value.charAt(next++);
         end = next;
@@ -44,8 +45,9 @@ public class StringReader {
     }
 
     protected int value() {
-        if (next >= length)
+        if (next >= length) {
             return -1;
+        }
         return value.charAt(next);
     }
 

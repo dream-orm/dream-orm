@@ -72,9 +72,10 @@ public class AliasColumnExpr extends HelperExpr {
 
     @Override
     public Statement nil() {
-        if (aliasStatement.getAlias() == null)
+        if (aliasStatement.getAlias() == null) {
             return aliasStatement.getColumn();
-        else
+        } else {
             return aliasStatement;
+        }
     }
 }

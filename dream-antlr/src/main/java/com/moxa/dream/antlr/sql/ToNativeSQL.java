@@ -12,10 +12,11 @@ public class ToNativeSQL extends ToSQL {
     public String getName() {
         String name;
         String className = this.getClass().getSimpleName().toLowerCase();
-        if (className.length() > 2 && className.startsWith("to"))
+        if (className.length() > 2 && className.startsWith("to")) {
             name = className.substring(2);
-        else
+        } else {
             name = className;
+        }
         return name;
 
     }
@@ -310,18 +311,21 @@ public class ToNativeSQL extends ToSQL {
     @Override
     protected String toString(ListColumnStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = statement.getColumnList();
-        if (columnList.length == 0)
+        if (columnList.length == 0) {
             return "";
+        }
         String cut = toStr(statement.getCut(), assist, invokerList);
         StringBuilder stringBuilder = new StringBuilder();
         int i;
         for (i = 0; i < columnList.length; i++) {
             String column = toStr(columnList[i], assist, invokerList);
-            if (column != null && column.length() > 0)
+            if (column != null && column.length() > 0) {
                 stringBuilder.append(column + cut);
+            }
         }
-        if (stringBuilder.length() > 0)
+        if (stringBuilder.length() > 0) {
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        }
         return stringBuilder.toString();
     }
 
@@ -897,7 +901,7 @@ public class ToNativeSQL extends ToSQL {
     protected String toString(FromStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String table = toStr(statement.getMainTable(), assist, invokerList);
         String joins = toStr(statement.getJoinList(), assist, invokerList);
-        return " FROM " + table + (joins.equals("") ? "" : " " + joins);
+        return " FROM " + table + ("".equals(joins) ? "" : " " + joins);
     }
 
     @Override

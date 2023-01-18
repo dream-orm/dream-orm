@@ -33,11 +33,13 @@ public abstract class SqlExpr {
         }
         tryMark();
         ExprInfo exprInfo = exprReader.getLastInfo();
-        if (exprInfo == null)
+        if (exprInfo == null) {
             exprInfo = push();
+        }
         ExprType exprType = exprInfo.getExprType();
-        if (!(self = exprBefore(exprInfo)))
+        if (!(self = exprBefore(exprInfo))) {
             exprInfo.setExprType(ExprType.DEFAULT);
+        }
         Statement statement;
         switch (exprInfo.getExprType()) {
             case INT:
@@ -1187,13 +1189,15 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprDefault(ExprInfo exprInfo) throws AntlrException {
-        if (self)
+        if (self) {
             return exprSelf(exprInfo);
-        else if (acceptSet.contains(ExprType.NIL)) {
+        } else if (acceptSet.contains(ExprType.NIL)) {
             Statement statement = nil();
             exprReader.pop();
             return statement;
-        } else throw new AntlrException(ExprUtil.wrapper(exprReader));
+        } else {
+            throw new AntlrException(ExprUtil.wrapper(exprReader));
+        }
     }
 
     protected Statement exprSelf(ExprInfo exprInfo) throws AntlrException {

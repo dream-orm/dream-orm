@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SessionCacheExecutor extends AbstractCacheExecutor {
-    private final Map<CacheKey, Object> cacheMap = new HashMap<>();
+    private final Map<CacheKey, Object> cacheMap = new HashMap<>(4);
 
     public SessionCacheExecutor(Executor executor) {
         super(executor);

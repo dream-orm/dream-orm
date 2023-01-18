@@ -66,7 +66,7 @@ public abstract class ValidateMapper extends AbstractMapper {
     protected Map<String, Object> getParamMap(Annotation annotation) {
         Class<? extends Annotation> annotationType = annotation.annotationType();
         Method[] methods = annotationType.getDeclaredMethods();
-        Map<String, Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>(4);
         if (!ObjectUtil.isNull(methods)) {
             for (Method method : methods) {
                 try {
@@ -80,6 +80,7 @@ public abstract class ValidateMapper extends AbstractMapper {
         return paramMap;
     }
 
+    @Override
     protected Object execute(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
         if (arg != null) {
             ValidatePackageList validatePackageList = methodInfo.get(ValidatePackageList.class);

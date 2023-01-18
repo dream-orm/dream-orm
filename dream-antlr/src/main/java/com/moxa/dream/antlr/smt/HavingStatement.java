@@ -9,8 +9,9 @@ public class HavingStatement extends Statement {
 
     public void setCondition(Statement condition) {
         this.condition = condition;
-        if (condition != null)
+        if (condition != null) {
             condition.parentStatement = this;
+        }
     }
 
     @Override

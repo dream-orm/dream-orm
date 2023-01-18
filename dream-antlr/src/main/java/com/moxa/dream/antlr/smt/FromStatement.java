@@ -10,8 +10,9 @@ public class FromStatement extends Statement {
 
     public void setMainTable(Statement mainTable) {
         this.mainTable = mainTable;
-        if (mainTable != null)
+        if (mainTable != null) {
             mainTable.parentStatement = this;
+        }
     }
 
     public Statement getJoinList() {
@@ -20,8 +21,9 @@ public class FromStatement extends Statement {
 
     public void setJoinList(Statement joinList) {
         this.joinList = joinList;
-        if (joinList != null)
+        if (joinList != null) {
             joinList.parentStatement = this;
+        }
     }
 
     @Override

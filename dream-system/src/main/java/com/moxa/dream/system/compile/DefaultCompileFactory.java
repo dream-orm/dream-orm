@@ -36,8 +36,9 @@ public class DefaultCompileFactory implements CompileFactory {
                 charList[index++] = Character.toLowerCase(c);
             }
         }
-        if (split > index)
+        if (split > index) {
             split = index;
+        }
         Object[] updateList = new Object[split + 2];
         updateList[0] = new String(charList, 0, index);
         updateList[1] = index;

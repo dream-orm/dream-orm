@@ -9,10 +9,12 @@ public class DefaultDialectFactory extends AbstractRouteDialectFactory {
     private UnAntlrDialectFactory unAntlrDialectFactory = new UnAntlrDialectFactory();
 
 
+    @Override
     protected MappedStatement compileUnAntlr(MethodInfo methodInfo, Object arg) throws Exception {
         return unAntlrDialectFactory.compile(methodInfo, arg);
     }
 
+    @Override
     protected MappedStatement compileAntlr(MethodInfo methodInfo, Object arg) throws Exception {
         return antlrDialectFactory.compile(methodInfo, arg);
     }

@@ -25,7 +25,7 @@ public class TenantInterceptor implements Interceptor {
         Object[] args = invocation.getArgs();
         Object arg = args[1];
         if (arg == null) {
-            arg = new HashMap<>();
+            arg = new HashMap<>(4);
             args[1] = arg;
         }
         if (!(arg instanceof Map)) {

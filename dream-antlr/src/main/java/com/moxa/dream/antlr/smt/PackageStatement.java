@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PackageStatement extends Statement {
-    private final Map<Class, Object> infoMap = new HashMap<>();
+    private final Map<Class, Object> infoMap = new HashMap<>(4);
     private Statement statement;
 
     public Statement getStatement() {
@@ -13,8 +13,9 @@ public class PackageStatement extends Statement {
 
     public void setStatement(Statement statement) {
         this.statement = statement;
-        if (statement != null)
+        if (statement != null) {
             statement.parentStatement = this;
+        }
     }
 
     public <T> void setValue(Class<T> type, T value) {

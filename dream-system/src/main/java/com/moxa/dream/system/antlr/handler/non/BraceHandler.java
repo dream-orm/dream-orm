@@ -18,8 +18,9 @@ public class BraceHandler extends AbstractHandler {
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
         BraceStatement braceStatement = (BraceStatement) statement;
         String val = toSQL.toStr(braceStatement.getStatement(), assist, invokerList);
-        if (ExprUtil.isEmpty(val))
+        if (ExprUtil.isEmpty(val)) {
             return null;
+        }
         return new SymbolStatement.LetterStatement("(" + val + ")");
     }
 

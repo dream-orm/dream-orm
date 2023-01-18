@@ -11,8 +11,9 @@ public class CaseStatement extends Statement {
 
     public void setWhenthenList(Statement whenthenList) {
         this.whenthenList = whenthenList;
-        if (whenthenList != null)
+        if (whenthenList != null) {
             whenthenList.parentStatement = this;
+        }
     }
 
     public Statement getCaseColumn() {
@@ -21,8 +22,9 @@ public class CaseStatement extends Statement {
 
     public void setCaseColumn(Statement caseColumn) {
         this.caseColumn = caseColumn;
-        if (caseColumn != null)
+        if (caseColumn != null) {
             caseColumn.parentStatement = this;
+        }
     }
 
 
@@ -32,8 +34,9 @@ public class CaseStatement extends Statement {
 
     public void setElseColumn(Statement elseColumn) {
         this.elseColumn = elseColumn;
-        if (elseColumn != null)
+        if (elseColumn != null) {
             elseColumn.parentStatement = this;
+        }
     }
 
     @Override
@@ -51,8 +54,9 @@ public class CaseStatement extends Statement {
 
         public void setWhen(Statement when) {
             this.when = when;
-            if (when != null)
+            if (when != null) {
                 when.parentStatement = this;
+            }
         }
 
         public Statement getThen() {
@@ -61,8 +65,9 @@ public class CaseStatement extends Statement {
 
         public void setThen(Statement then) {
             this.then = then;
-            if (then != null)
+            if (then != null) {
                 then.parentStatement = this;
+            }
         }
 
         @Override

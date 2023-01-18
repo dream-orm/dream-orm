@@ -67,8 +67,9 @@ public class OrderExpr extends SqlExpr {
 
         @Override
         protected Statement nil() {
-            if (statement == null)
+            if (statement == null) {
                 statement = sortStatement;
+            }
             return statement;
         }
 

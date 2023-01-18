@@ -10,8 +10,9 @@ public abstract class JoinStatement extends Statement {
 
     public void setJoinTable(Statement joinTable) {
         this.joinTable = joinTable;
-        if (joinTable != null)
+        if (joinTable != null) {
             joinTable.parentStatement = this;
+        }
     }
 
     public Statement getOn() {
@@ -20,8 +21,9 @@ public abstract class JoinStatement extends Statement {
 
     public void setOn(Statement on) {
         this.on = on;
-        if (on != null)
+        if (on != null) {
             on.parentStatement = this;
+        }
     }
 
     @Override

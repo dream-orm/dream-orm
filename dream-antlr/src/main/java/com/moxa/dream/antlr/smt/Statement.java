@@ -27,8 +27,9 @@ public abstract class Statement {
     }
 
     public Boolean isNeedCache() {
-        if (needCache != null)
+        if (needCache != null) {
             return needCache;
+        }
         return isNeedInnerCache();
     }
 
@@ -45,8 +46,9 @@ public abstract class Statement {
         for (Statement statement : statements) {
             if (statement != null) {
                 needCache &= statement.isNeedCache();
-                if (!needCache)
+                if (!needCache) {
                     return false;
+                }
             }
         }
         return needCache = true;

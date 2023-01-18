@@ -8,14 +8,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractPluginFactory implements PluginFactory {
-    private Map<Class, Interceptor> interceptorMap = new HashMap<>();
+    private Map<Class, Interceptor> interceptorMap = new HashMap<>(4);
 
+    @Override
     public void interceptors(Interceptor... interceptors) {
         for (Interceptor interceptor : interceptors) {
             interceptorMap.put(interceptor.getClass(), interceptor);
         }
     }
 
+    @Override
     public Object plugin(Object target) {
         Object origin = target;
         return plugin(interceptorMap.values(), origin, target);

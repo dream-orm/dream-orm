@@ -13,7 +13,7 @@ public class ObjectMap implements Map<String, Object> {
     private Map<String, Object> builtMap;
 
     public ObjectMap(Object defaultValue) {
-        this(defaultValue, new HashMap<>());
+        this(defaultValue, new HashMap<>(4));
     }
 
     public ObjectMap(Object defaultValue, Map<String, Object> builtMap) {

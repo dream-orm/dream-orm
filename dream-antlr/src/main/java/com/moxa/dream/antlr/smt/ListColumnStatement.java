@@ -28,8 +28,9 @@ public class ListColumnStatement extends Statement {
 
     public void setCut(SymbolStatement.LetterStatement cut) {
         this.cut = cut;
-        if (cut != null)
+        if (cut != null) {
             cut.parentStatement = this;
+        }
     }
 
     public Statement[] getColumnList() {

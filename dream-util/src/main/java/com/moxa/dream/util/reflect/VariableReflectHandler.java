@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class VariableReflectHandler implements ReflectHandler {
     private final Class rootClass;
-    private final Map<String, Class> variableMap = new HashMap<>();
+    private final Map<String, Class> variableMap = new HashMap<>(4);
 
     public VariableReflectHandler(Class rootClass) {
         this.rootClass = rootClass;
@@ -45,8 +45,9 @@ public class VariableReflectHandler implements ReflectHandler {
             }
         }
         Class superclass = type.getSuperclass();
-        if (superclass != null && rootClass.isAssignableFrom(superclass))
+        if (superclass != null && rootClass.isAssignableFrom(superclass)) {
             list.add(superclass);
+        }
         return list;
     }
 

@@ -39,7 +39,7 @@ public class SimpleResultSetHandler implements ResultSetHandler {
             }
         } else if (Map.class.isAssignableFrom(colType)) {
             while (resultSet.next()) {
-                Map<String, Object> resultMap = new HashMap<>();
+                Map<String, Object> resultMap = new HashMap<>(4);
                 for (MappedColumnWrapper mappedColumnWrapper : mappedColumnList) {
                     Object value = mappedColumnWrapper.getValue(resultSet);
                     resultMap.put(mappedColumnWrapper.getProperty(), value);
@@ -72,8 +72,9 @@ public class SimpleResultSetHandler implements ResultSetHandler {
         MappedColumn.Builder[] builderList = new MappedColumn.Builder[columnCount];
         MappedColumnWrapper[] mappedColumnWrapperList = new MappedColumnWrapper[columnCount];
         Class colType = mappedStatement.getColType();
-        if (colType == Object.class && columnCount > 1)
+        if (colType == Object.class && columnCount > 1) {
             colType = HashMap.class;
+        }
         Map<String, Method> writeMethod = null;
         for (int i = 1; i <= columnCount; i++) {
             int jdbcType = metaData.getColumnType(i);
@@ -129,7 +130,7 @@ public class SimpleResultSetHandler implements ResultSetHandler {
     }
 
     protected Map<String, Method> getWriteMethod(Class<?> colType) {
-        Map<String, Method> writeMethod = new HashMap<>();
+        Map<String, Method> writeMethod = new HashMap<>(4);
         List<Method> methodList = ReflectUtil.find(colType, new ReflectHandler<Method>() {
             @Override
             public List<Method> doHandler(Class type) {
@@ -140,8 +141,9 @@ public class SimpleResultSetHandler implements ResultSetHandler {
             public List<Class> goHandler(Class type) {
                 List<Class> list = new ArrayList();
                 Class superclass = type.getSuperclass();
-                if (superclass != null && superclass != Object.class)
+                if (superclass != null && superclass != Object.class) {
                     list.add(superclass);
+                }
                 return list;
             }
         });

@@ -6,7 +6,7 @@ import com.moxa.dream.system.antlr.invoker.*;
 public class DefaultInvokerFactory extends AntlrInvokerFactory {
     public DefaultInvokerFactory() {
         addInvoker(new ScanInvoker());
-        addInvoker(new $Invoker());
+        addInvoker(new MarkInvoker());
         addInvoker(new RepInvoker());
         addInvoker(new NonInvoker());
         addInvoker(new NotInvoker());

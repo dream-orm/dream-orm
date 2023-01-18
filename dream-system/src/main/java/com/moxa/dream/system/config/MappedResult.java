@@ -14,7 +14,7 @@ public class MappedResult {
     private final Class colType;
     private final ObjectFactoryWrapper rowObjectFactoryWrapper;
     private final ObjectFactoryWrapper colObjectFactoryWrapper;
-    private final Map<String, MappedResult> childResultMappingMap = new HashMap<>();
+    private final Map<String, MappedResult> childResultMappingMap = new HashMap<>(4);
     private final String property;
     private MappedColumn[] primaryList = new MappedColumn[0];
     private MappedColumn[] mappedColumnList = new MappedColumn[0];

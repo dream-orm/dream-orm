@@ -23,11 +23,12 @@ public class DefaultTableFactory implements TableFactory {
 
     protected TableInfo createTableInfo(Class tableClass) {
         String table = getTable(tableClass);
-        if (ObjectUtil.isNull(table))
+        if (ObjectUtil.isNull(table)) {
             return null;
+        }
         Map<String, JoinInfo> joinInfoMap = new LowHashMap<>();
         Map<String, String> fieldMap = new LowHashMap<>();
-        Map<String, ColumnInfo> columnInfoMap = new HashMap<>();
+        Map<String, ColumnInfo> columnInfoMap = new HashMap<>(8);
         List<Field> fieldList = ReflectUtil.findField(tableClass);
         ColumnInfo primColumnInfo = null;
         if (!ObjectUtil.isNull(fieldList)) {
@@ -46,8 +47,9 @@ public class DefaultTableFactory implements TableFactory {
                     }
                 } else {
                     JoinInfo joinInfo = getJoinInfo(table, field);
-                    if (joinInfo != null)
+                    if (joinInfo != null) {
                         joinInfoMap.put(joinInfo.getJoinTable(), joinInfo);
+                    }
                 }
             }
         }
@@ -56,15 +58,16 @@ public class DefaultTableFactory implements TableFactory {
 
     protected String getTable(Class<?> tableClass) {
         Table tableAnnotation = tableClass.getDeclaredAnnotation(Table.class);
-        if (tableAnnotation == null || !tableAnnotation.mapping())
+        if (tableAnnotation == null || !tableAnnotation.mapping()) {
             return null;
+        }
         String table = tableAnnotation.value();
         return table;
     }
 
     protected Map<Class<? extends Annotation>, Annotation> annotationMap(Field field) {
         Annotation[] annotations = field.getDeclaredAnnotations();
-        Map<Class<? extends Annotation>, Annotation> annotationMap = new HashMap();
+        Map<Class<? extends Annotation>, Annotation> annotationMap = new HashMap(4);
         if (!ObjectUtil.isNull(annotations)) {
             for (Annotation annotation : annotations) {
                 annotationMap.put(annotation.annotationType(), annotation);
@@ -76,16 +79,18 @@ public class DefaultTableFactory implements TableFactory {
 
     protected ColumnInfo getColumnInfo(String table, Field field) {
         Column columnAnnotation = field.getDeclaredAnnotation(Column.class);
-        if (columnAnnotation == null)
+        if (columnAnnotation == null) {
             return null;
+        }
         String column = columnAnnotation.value();
         return new ColumnInfo(table, column, field, annotationMap(field), columnAnnotation.jdbcType());
     }
 
     protected JoinInfo getJoinInfo(String table, Field field) {
         Join joinAnnotation = field.getDeclaredAnnotation(Join.class);
-        if (joinAnnotation == null)
+        if (joinAnnotation == null) {
             return null;
+        }
         Class<?> colType = ReflectUtil.getColType(field.getGenericType());
         String joinTable = getTable(colType);
         if (ObjectUtil.isNull(joinTable)) {

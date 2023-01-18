@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
-    protected Map<Integer, TypeHandler> typeHandlerMap = new HashMap<>();
+    protected Map<Integer, TypeHandler> typeHandlerMap = new HashMap<>(4);
 
     public DefaultTypeHandlerFactory() {
         wrappers(getTypeHandlerWrappers());
@@ -38,10 +38,11 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
     @Override
     public TypeHandler getTypeHandler(Class javaType, int jdbcType) throws TypeHandlerNotFoundException {
         TypeHandler typeHandler = getTypeHandler(TypeUtil.hash(javaType, jdbcType));
-        if (typeHandler == null)
+        if (typeHandler == null) {
             return getNoneTypeHandler(javaType, jdbcType);
-        else
+        } else {
             return typeHandler;
+        }
     }
 
     protected TypeHandler getTypeHandler(int typeCode) {

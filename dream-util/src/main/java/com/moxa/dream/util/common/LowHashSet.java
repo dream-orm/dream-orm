@@ -30,8 +30,10 @@ public class LowHashSet extends HashSet<String> {
 
     @Override
     public boolean contains(Object o) {
-        if (o instanceof String)
+        if (o instanceof String) {
             return super.contains(((String) o).toLowerCase(Locale.ENGLISH));
-        else return false;
+        } else {
+            return false;
+        }
     }
 }

@@ -17,9 +17,9 @@ public class CollectionObjectFactory extends BeanObjectFactory {
 
     @Override
     public void set(String property, Object value) {
-        if (property == null)
+        if (property == null) {
             ((Collection) result).add(value);
-        else {
+        } else {
             super.set(property, value);
         }
     }

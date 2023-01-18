@@ -18,8 +18,9 @@ public class ListColumnExpr extends HelperExpr {
 
     public ListColumnExpr(ExprReader exprReader, Helper helper, ExprInfo exprInfo) {
         super(exprReader, helper);
-        if (exprInfo == null)
+        if (exprInfo == null) {
             exprInfo = new ExprInfo(ExprType.BLANK, " ");
+        }
         this.cut = exprInfo.getExprType();
         listColumnStatement.setCut(new SymbolStatement.LetterStatement(exprInfo.getInfo()));
     }
@@ -35,9 +36,11 @@ public class ListColumnExpr extends HelperExpr {
     @Override
     protected Statement exprHelp(Statement statement) throws AntlrException {
         listColumnStatement.add(statement);
-        if (cut == ExprType.BLANK)
+        if (cut == ExprType.BLANK) {
             setExprTypes(ExprType.HELP, ExprType.NIL);
-        else setExprTypes(cut, ExprType.NIL);
+        } else {
+            setExprTypes(cut, ExprType.NIL);
+        }
         return expr();
     }
 

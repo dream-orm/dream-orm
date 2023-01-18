@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class ReflectUtil {
-    private static final ReflectLoader reflectLoader = new ReflectLoader();
+    private static ReflectLoader reflectLoader = new ReflectLoader();
 
     public static <T> T create(Class<T> type) {
         try {
@@ -109,8 +109,9 @@ public class ReflectUtil {
         }
         if (rawType instanceof Class) {
             return Collection.class.isAssignableFrom((Class) rawType) ? ((Class) rawType) : null;
-        } else
+        } else {
             return null;
+        }
     }
 
     public static Class<?> getColType(Class typeClass, Method method) {
@@ -139,8 +140,9 @@ public class ReflectUtil {
         }
         if (rawType instanceof Class) {
             return (Class<?>) rawType;
-        } else
+        } else {
             return Object.class;
+        }
     }
 
     public static <T> void copy(T target, T source) {

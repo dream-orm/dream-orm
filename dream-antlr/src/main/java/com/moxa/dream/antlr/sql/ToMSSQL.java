@@ -178,8 +178,9 @@ public class ToMSSQL extends ToPubSQL {
         String num2;
         if (columnList.length < 3) {
             num2 = "LEN(" + str + ")";
-        } else
+        } else {
             num2 = toStr(columnList[2], assist, invokerList);
+        }
 
         return "SUBSTRING(" + str + "," + start + "," + num2 + ")";
     }
@@ -309,9 +310,11 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.RoundStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1)
+        if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1) {
             return "ROUND(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",0)";
-        else return "ROUND(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+        } else {
+            return "ROUND(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+        }
     }
 
     @Override

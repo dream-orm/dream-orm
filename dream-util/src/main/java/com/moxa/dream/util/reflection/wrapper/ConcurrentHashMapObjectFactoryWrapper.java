@@ -11,7 +11,7 @@ public class ConcurrentHashMapObjectFactoryWrapper implements ObjectFactoryWrapp
     @Override
     public ObjectFactory newObjectFactory(Object target) {
         if (target == null) {
-            return new ConcurrentHashMapObjectFactory(new ConcurrentHashMap());
+            return new ConcurrentHashMapObjectFactory(new ConcurrentHashMap(4));
         } else {
             return new ConcurrentHashMapObjectFactory((ConcurrentHashMap) target);
         }

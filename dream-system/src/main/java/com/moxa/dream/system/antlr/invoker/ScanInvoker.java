@@ -48,8 +48,9 @@ public class ScanInvoker extends AbstractInvoker {
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
-        if (columnList.length != 1)
+        if (columnList.length != 1) {
             throw new AntlrException("函数" + this.function() + "参数个数错误");
+        }
         String sql = toSQL.toStr(columnList[0], assist, invokerList);
         Statement parentStatement = invokerStatement.getParentStatement();
         while (!(parentStatement instanceof PackageStatement)
@@ -64,7 +65,7 @@ public class ScanInvoker extends AbstractInvoker {
             int i = 0;
             for (; i < invokerStatementList.size(); i++) {
                 InvokerStatement invoker = invokerStatementList.get(i);
-                if (!invoker.getFunction().equals($Invoker.FUNCTION)) {
+                if (!invoker.getFunction().equals(MarkInvoker.FUNCTION)) {
                     break;
                 }
             }
@@ -72,8 +73,8 @@ public class ScanInvoker extends AbstractInvoker {
                 for (InvokerStatement invoker : invokerStatementList) {
                     invoker.replaceWith(new SymbolStatement.MarkStatement());
                 }
-                $Invoker $invoker = ($Invoker) assist.getInvoker($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
-                scanInfo.setParamInfoList($invoker.getParamInfoList());
+                MarkInvoker MarkInvoker = (MarkInvoker) assist.getInvoker(com.moxa.dream.system.antlr.invoker.MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+                scanInfo.setParamInfoList(MarkInvoker.getParamInfoList());
                 scanInfo.sql = sql;
             }
         } else {
@@ -104,10 +105,10 @@ public class ScanInvoker extends AbstractInvoker {
 
     public static class ScanInfo {
         private final Map<String, TableScanInfo> tableScanInfoMap = new LowHashMap<>();
-        private final Map<String, ParamScanInfo> paramScanInfoMap = new HashMap<>();
+        private final Map<String, ParamScanInfo> paramScanInfoMap = new HashMap<>(4);
         private final List<InvokerStatement> invokerStatementList = new ArrayList<>();
         private Command command = Command.NONE;
-        private List<$Invoker.ParamInfo> paramInfoList;
+        private List<MarkInvoker.ParamInfo> paramInfoList;
         private String sql;
 
         public void add(TableScanInfo tableScanInfo) {
@@ -143,11 +144,11 @@ public class ScanInvoker extends AbstractInvoker {
             return invokerStatementList;
         }
 
-        public List<$Invoker.ParamInfo> getParamInfoList() {
+        public List<MarkInvoker.ParamInfo> getParamInfoList() {
             return paramInfoList;
         }
 
-        public void setParamInfoList(List<$Invoker.ParamInfo> paramInfoList) {
+        public void setParamInfoList(List<MarkInvoker.ParamInfo> paramInfoList) {
             this.paramInfoList = paramInfoList;
         }
 
@@ -163,8 +164,9 @@ public class ScanInvoker extends AbstractInvoker {
         private final boolean master;
 
         public TableScanInfo(String database, String table, String alias, boolean master) {
-            if (alias == null)
+            if (alias == null) {
                 alias = table;
+            }
             this.database = database;
             this.table = table;
             this.alias = alias;

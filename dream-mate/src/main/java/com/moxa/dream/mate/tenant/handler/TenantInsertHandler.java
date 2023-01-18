@@ -8,7 +8,7 @@ import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
-import com.moxa.dream.system.antlr.invoker.$Invoker;
+import com.moxa.dream.system.antlr.invoker.MarkInvoker;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class TenantInsertHandler extends AbstractHandler {
                         break;
                     }
                 }
-                InvokerStatement invokerStatement = AntlrUtil.invokerStatement($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
+                InvokerStatement invokerStatement = AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
                 if (i < paramColumnList.length) {
                     valuesColumnList[i] = invokerStatement;
                 } else {

@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
     protected Class type;
-    Map<String, PropertyInfo> propertyInfoMap = new HashMap<>();
+    Map<String, PropertyInfo> propertyInfoMap = new HashMap<>(16);
 
     public BeanObjectFactoryWrapper(Class type) {
         this.type = type;

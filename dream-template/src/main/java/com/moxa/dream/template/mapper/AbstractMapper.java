@@ -2,8 +2,8 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.util.AntlrUtil;
-import com.moxa.dream.system.antlr.invoker.$Invoker;
 import com.moxa.dream.system.antlr.invoker.ForEachInvoker;
+import com.moxa.dream.system.antlr.invoker.MarkInvoker;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public abstract class AbstractMapper {
     public static final String DREAM_TEMPLATE_PARAM = "dream_template_param";
     protected Session session;
-    protected Map<String, MethodInfo> methodInfoMap = new HashMap<>();
+    protected Map<String, MethodInfo> methodInfoMap = new HashMap<>(4);
     private DialectFactory dialectFactory;
 
     public AbstractMapper(Session session) {
@@ -50,8 +50,8 @@ public abstract class AbstractMapper {
                         throw new DreamRunTimeException("表'" + table + "'未在TableFactory注册");
                     }
                     methodInfo = getMethodInfo(configuration, tableInfo, type, arg);
-                    String id=getId();
-                    if(!ObjectUtil.isNull(id)){
+                    String id = getId();
+                    if (!ObjectUtil.isNull(id)) {
                         methodInfo.setId(id);
                     }
                     if (methodInfoConsumer != null) {
@@ -90,12 +90,12 @@ public abstract class AbstractMapper {
             if (arg instanceof Map) {
                 return (Map<String, Object>) arg;
             } else {
-                Map<String, Object> paramMap = new HashMap<>();
+                Map<String, Object> paramMap = new HashMap<>(4);
                 paramMap.put(DREAM_TEMPLATE_PARAM, arg);
                 return paramMap;
             }
         } else {
-            return new HashMap<>();
+            return new HashMap<>(4);
         }
     }
 
@@ -118,7 +118,7 @@ public abstract class AbstractMapper {
         if (appendField) {
             param = param + "." + columnInfo.getName();
         }
-        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + "=" + AntlrUtil.invokerSQL($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, param);
+        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + "=" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, param);
     }
 
     protected String getIdsWhere(TableInfo tableInfo) {
@@ -129,13 +129,13 @@ public abstract class AbstractMapper {
         return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, DREAM_TEMPLATE_PARAM) + ")";
     }
 
-    protected String getId(){
+    protected String getId() {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        String packageName= this.getClass().getPackage().getName();
-        for(int i=1;i<stackTrace.length;i++){
+        String packageName = this.getClass().getPackage().getName();
+        for (int i = 1; i < stackTrace.length; i++) {
             String className = stackTrace[i].getClassName();
-            if(!className.startsWith(packageName)){
-                return className+"."+stackTrace[i].getMethodName();
+            if (!className.startsWith(packageName)) {
+                return className + "." + stackTrace[i].getMethodName();
             }
         }
         return null;

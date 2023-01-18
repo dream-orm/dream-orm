@@ -62,6 +62,7 @@ public class JdbcTransaction implements Transaction {
         return autoCommit;
     }
 
+    @Override
     public void setAutoCommit(boolean autoCommit) {
         this.autoCommit = autoCommit;
     }

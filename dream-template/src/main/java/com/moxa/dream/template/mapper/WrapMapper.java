@@ -25,7 +25,7 @@ public abstract class WrapMapper extends ValidateMapper {
 
     @Override
     protected final MethodInfo getValidateMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
-        Map<String, Wrapper> wrapObjectMap = new HashMap<>();
+        Map<String, Wrapper> wrapObjectMap = new HashMap<>(4);
         List<Field> fieldList = ReflectUtil.findField(type);
         List<Field> acceptList = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {

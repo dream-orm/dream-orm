@@ -56,7 +56,9 @@ public class ToPGSQL extends ToPubSQL {
 
                 }
                 i++;
-            } else builder.append(patternArray[i]);
+            } else {
+                builder.append(patternArray[i]);
+            }
         }
         return builder.toString();
     }
@@ -115,9 +117,9 @@ public class ToPGSQL extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.LocateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        if (columnList.length == 2)
+        if (columnList.length == 2) {
             return "STRPOS(" + toStr(columnList[1], assist, invokerList) + "," + toStr(columnList[0], assist, invokerList) + ")";
-        else {
+        } else {
             String targetStr = toStr(columnList[1], assist, invokerList);
             String likeStr = toStr(columnList[0], assist, invokerList);
             String point = toStr(columnList[2], assist, invokerList);
@@ -316,10 +318,11 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.LogStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1)
+        if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1) {
             return "LN(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
-        else
+        } else {
             return "LOG(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+        }
     }
 
     @Override

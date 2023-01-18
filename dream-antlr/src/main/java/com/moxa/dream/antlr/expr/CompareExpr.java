@@ -10,8 +10,8 @@ import com.moxa.dream.antlr.smt.OperStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
 public class CompareExpr extends TreeExpr {
-    public static final ExprType[] compare = {ExprType.LT, ExprType.GT, ExprType.LEQ, ExprType.NEQ, ExprType.EQ, ExprType.GEQ, ExprType.IS, ExprType.IN, ExprType.NOT, ExprType.EXISTS, ExprType.LIKE, ExprType.BETWEEN};
-    public static final ExprType[] condition = {ExprType.AND, ExprType.OR};
+    public static final ExprType[] COMPARE = {ExprType.LT, ExprType.GT, ExprType.LEQ, ExprType.NEQ, ExprType.EQ, ExprType.GEQ, ExprType.IS, ExprType.IN, ExprType.NOT, ExprType.EXISTS, ExprType.LIKE, ExprType.BETWEEN};
+    public static final ExprType[] CONDITION = {ExprType.AND, ExprType.OR};
 
     public CompareExpr(ExprReader exprReader) {
         this(exprReader, () -> new OperExpr(exprReader));
@@ -24,9 +24,11 @@ public class CompareExpr extends TreeExpr {
 
     @Override
     public Statement nil() {
-        if (top.getOper() != null)
+        if (top.getOper() != null) {
             return top;
-        else return top.getLeft();
+        } else {
+            return top.getLeft();
+        }
 
     }
 
@@ -150,7 +152,7 @@ public class CompareExpr extends TreeExpr {
         BraceExpr braceExpr = new BraceExpr(exprReader);
         BraceStatement braceStatement = (BraceStatement) braceExpr.expr();
         exprTree(braceStatement);
-        setExprTypes(compare).addExprTypes(condition).addExprTypes(OperExpr.OPER).addExprTypes(ExprType.NIL);
+        setExprTypes(COMPARE).addExprTypes(CONDITION).addExprTypes(OperExpr.OPER).addExprTypes(ExprType.NIL);
         return expr();
     }
 
@@ -159,14 +161,14 @@ public class CompareExpr extends TreeExpr {
         OperExpr operExpr = new OperExpr(exprReader, this);
         operExpr.setExprTypes(OperExpr.OPER);
         operExpr.expr();
-        setExprTypes(compare).addExprTypes(condition).addExprTypes(ExprType.NIL);
+        setExprTypes(COMPARE).addExprTypes(CONDITION).addExprTypes(ExprType.NIL);
         return expr();
     }
 
     @Override
     protected Statement exprHelp(Statement statement) throws AntlrException {
         exprTree(statement);
-        setExprTypes(compare).addExprTypes(condition).addExprTypes(ExprType.NIL);
+        setExprTypes(COMPARE).addExprTypes(CONDITION).addExprTypes(ExprType.NIL);
         return expr();
     }
 

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TypeUtil {
-    static Map<Integer, String> typeMap = new HashMap<>();
+    static Map<Integer, String> typeMap = new HashMap<>(4);
 
     static {
         List<Field> fieldList = ReflectUtil.findField(Types.class);

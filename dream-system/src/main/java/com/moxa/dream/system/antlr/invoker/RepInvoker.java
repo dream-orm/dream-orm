@@ -33,8 +33,9 @@ public class RepInvoker extends AbstractInvoker {
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
-        if (columnList.length != 1)
+        if (columnList.length != 1) {
             throw new AntlrException("函数@" + this.function() + "参数个数错误");
+        }
         String paramName = toSQL.toStr(columnList[0], assist, null);
         Object value = paramWrapper.get(paramName);
         if (value == null) {

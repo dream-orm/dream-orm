@@ -9,7 +9,7 @@ public class TreeUtil {
         if (ObjectUtil.isNull(treeList)) {
             return new ArrayList<>();
         }
-        Map<Object, Tree> treeMap = new HashMap<>();
+        Map<Object, Tree> treeMap = new HashMap<>(treeList.size());
         for (Tree tree : treeList) {
             treeMap.put(tree.getTreeId(), tree);
         }

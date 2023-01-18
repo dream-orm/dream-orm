@@ -11,8 +11,9 @@ public class ConditionStatement extends Statement {
 
     public void setLeft(Statement left) {
         this.left = left;
-        if (left != null)
+        if (left != null) {
             left.parentStatement = this;
+        }
     }
 
     public OperStatement getOper() {
@@ -21,8 +22,9 @@ public class ConditionStatement extends Statement {
 
     public void setOper(OperStatement oper) {
         this.oper = oper;
-        if (oper != null)
+        if (oper != null) {
             oper.parentStatement = this;
+        }
     }
 
     public Statement getRight() {
@@ -31,8 +33,9 @@ public class ConditionStatement extends Statement {
 
     public void setRight(Statement right) {
         this.right = right;
-        if (right != null)
+        if (right != null) {
             right.parentStatement = this;
+        }
     }
 
     @Override

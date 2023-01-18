@@ -17,8 +17,9 @@ class ReflectLoader {
     }
 
     public <T> List<T> find(Class type, ReflectHandler<T> reflectHandler, HashSet<Class> hashSet) {
-        if (type == null)
+        if (type == null) {
             return null;
+        }
         List<T> resultList = new ArrayList<>();
         List<T> list = reflectHandler.doHandler(type);
         if (list != null) {
@@ -28,8 +29,9 @@ class ReflectLoader {
         List<Class> classes = reflectHandler.goHandler(type);
         if (classes != null) {
             for (Class typeClass : classes) {
-                if (!hashSet.contains(typeClass))
+                if (!hashSet.contains(typeClass)) {
                     resultList.addAll(find(typeClass, reflectHandler, hashSet));
+                }
             }
         }
         return resultList;

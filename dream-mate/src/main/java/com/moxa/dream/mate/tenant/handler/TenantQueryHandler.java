@@ -13,7 +13,7 @@ import com.moxa.dream.antlr.util.AntlrUtil;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
 import com.moxa.dream.mate.util.MateUtil;
 import com.moxa.dream.system.antlr.handler.scan.QueryScanHandler;
-import com.moxa.dream.system.antlr.invoker.$Invoker;
+import com.moxa.dream.system.antlr.invoker.MarkInvoker;
 import com.moxa.dream.system.antlr.invoker.ScanInvoker;
 
 import java.util.ArrayDeque;
@@ -64,7 +64,7 @@ public class TenantQueryHandler extends AbstractHandler {
                     ConditionStatement conditionStatement = new ConditionStatement();
                     conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                     conditionStatement.setOper(new OperStatement.EQStatement());
-                    conditionStatement.setRight(AntlrUtil.invokerStatement($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
+                    conditionStatement.setRight(AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                     QueryStatement queryStatement = queryDeque.peek();
                     WhereStatement whereStatement = queryStatement.getWhereStatement();
                     if (whereStatement == null) {
@@ -101,7 +101,7 @@ public class TenantQueryHandler extends AbstractHandler {
                         ConditionStatement conditionStatement = new ConditionStatement();
                         conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                         conditionStatement.setOper(new OperStatement.EQStatement());
-                        conditionStatement.setRight(AntlrUtil.invokerStatement($Invoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
+                        conditionStatement.setRight(AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                         Statement joinOnStatement = joinStatement.getOn();
                         BraceStatement braceStatement = new BraceStatement(joinOnStatement);
                         ConditionStatement joinConditionStatement = new ConditionStatement();

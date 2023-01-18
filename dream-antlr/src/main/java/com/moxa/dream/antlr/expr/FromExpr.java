@@ -25,8 +25,9 @@ public class FromExpr extends SqlExpr {
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new JoinExpr(exprReader), new ExprInfo(ExprType.BLANK, " "));
         listColumnExpr.addExprTypes(ExprType.NIL);
         ListColumnStatement listColumnStatement = (ListColumnStatement) listColumnExpr.expr();
-        if (listColumnStatement.getColumnList().length > 0)
+        if (listColumnStatement.getColumnList().length > 0) {
             fromStatement.setJoinList(listColumnStatement);
+        }
         setExprTypes(ExprType.NIL);
         return expr();
     }

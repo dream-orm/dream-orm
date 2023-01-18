@@ -15,7 +15,7 @@ public class MemoryCache implements Cache {
     private final int limit;
     private final double rate;
     private final AtomicBoolean canDelete = new AtomicBoolean(true);
-    protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>();
+    protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>(512);
     protected Map<CacheKey, Map<CacheKey, Object>> indexMap = new ConcurrentHashMap<>();
 
     public MemoryCache(int limit, double rate) {
@@ -41,7 +41,7 @@ public class MemoryCache implements Cache {
                     synchronized (this) {
                         cacheKeySet = tableMap.get(table);
                         if (cacheKeySet == null) {
-                            cacheKeySet = Collections.newSetFromMap(new ConcurrentHashMap<>());
+                            cacheKeySet = Collections.newSetFromMap(new ConcurrentHashMap<>(16));
                             tableMap.put(table, cacheKeySet);
                         }
                     }
@@ -53,7 +53,7 @@ public class MemoryCache implements Cache {
                 synchronized (this) {
                     keyMap = indexMap.get(methodKey);
                     if (keyMap == null) {
-                        keyMap = new ConcurrentHashMap<>();
+                        keyMap = new ConcurrentHashMap<>(limit);
                         indexMap.put(methodKey, keyMap);
                     }
                 }

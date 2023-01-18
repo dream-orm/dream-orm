@@ -11,8 +11,9 @@ public class LimitStatement extends Statement {
 
     public void setFirst(Statement first) {
         this.first = first;
-        if (first != null)
+        if (first != null) {
             first.parentStatement = this;
+        }
     }
 
     public Statement getSecond() {
@@ -21,8 +22,9 @@ public class LimitStatement extends Statement {
 
     public void setSecond(Statement second) {
         this.second = second;
-        if (second != null)
+        if (second != null) {
             second.parentStatement = this;
+        }
     }
 
     public boolean isOffset() {

@@ -20,11 +20,13 @@ public abstract class ToSQL {
     protected abstract void after(Statement statement, String sql);
 
     public String toStr(Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        if (statement == null)
+        if (statement == null) {
             return "";
+        }
         String sql = before(statement);
-        if (sql != null)
+        if (sql != null) {
             return sql;
+        }
         Queue<Handler> handlerQueue = null;
         if (invokerList != null && !invokerList.isEmpty()) {
             handlerQueue = new ArrayDeque<>();
@@ -37,8 +39,9 @@ public abstract class ToSQL {
                         for (Handler handler : handlerList) {
                             statement = handler.handlerBefore(statement, assist, this, handlerQueue, invokerList);
                         }
-                        if (statement == null)
+                        if (statement == null) {
                             return "";
+                        }
                     }
                 }
             }

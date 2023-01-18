@@ -22,8 +22,9 @@ public class UpdateStatement extends Statement {
 
     public void setConditionList(Statement conditionList) {
         this.conditionList = conditionList;
-        if (conditionList != null)
+        if (conditionList != null) {
             conditionList.parentStatement = this;
+        }
     }
 
     public Statement getWhere() {
@@ -32,8 +33,9 @@ public class UpdateStatement extends Statement {
 
     public void setWhere(Statement where) {
         this.where = where;
-        if (where != null)
+        if (where != null) {
             where.parentStatement = this;
+        }
     }
 
     @Override

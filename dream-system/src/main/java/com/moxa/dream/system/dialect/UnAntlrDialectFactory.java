@@ -4,8 +4,8 @@ import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.read.ExprReader;
-import com.moxa.dream.system.antlr.invoker.$Invoker;
 import com.moxa.dream.system.antlr.invoker.ForEachInvoker;
+import com.moxa.dream.system.antlr.invoker.MarkInvoker;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.MappedParam;
 import com.moxa.dream.system.config.MappedSql;
@@ -73,9 +73,9 @@ public class UnAntlrDialectFactory implements DialectFactory {
                     break;
                 case INVOKER:
                     exprInfo = exprReader.push();
-                    String _info = exprInfo.getInfo();
-                    switch (_info) {
-                        case $Invoker.FUNCTION:
+                    String info = exprInfo.getInfo();
+                    switch (info) {
+                        case MarkInvoker.FUNCTION:
                         case ForEachInvoker.FUNCTION:
                             ExprInfo tempExprInfo = exprReader.push();
                             if (tempExprInfo.getExprType() == ExprType.LBRACE) {
@@ -86,10 +86,10 @@ public class UnAntlrDialectFactory implements DialectFactory {
                                 }
                                 Object value = ObjectWrapper.wrapper(arg, false).get(paramBuilder.toString());
                                 startIndex = tempExprInfo.getEnd();
-                                if (_info.equals($Invoker.FUNCTION)) {
+                                if (info.equals(MarkInvoker.FUNCTION)) {
                                     paramList.add(value);
                                     sqlBuilder.append("?");
-                                } else if (_info.equals(ForEachInvoker.FUNCTION)) {
+                                } else if (info.equals(ForEachInvoker.FUNCTION)) {
                                     if (value == null) {
                                         throw new DreamRunTimeException("函数" + ForEachInvoker.FUNCTION + "参数值不能为空");
                                     }
@@ -119,7 +119,11 @@ public class UnAntlrDialectFactory implements DialectFactory {
                                 break;
                             }
                             break;
+                        default:
+                            break;
                     }
+                    break;
+                default:
                     break;
             }
             if (exprInfo.getExprType() == ExprType.ACC) {

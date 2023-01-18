@@ -9,8 +9,9 @@ public class GroupStatement extends Statement {
 
     public void setGroup(Statement group) {
         this.group = group;
-        if (group != null)
+        if (group != null) {
             group.parentStatement = this;
+        }
     }
 
     @Override

@@ -24,13 +24,13 @@ import java.util.stream.Collectors;
 
 
 public class DefaultMapperFactory implements MapperFactory {
-    protected Map<Method, MethodInfo> methodInfoMap = new HashMap<>();
-    protected Map<Class, Class[]> mapperTypeMap = new HashMap<>();
+    protected Map<Method, MethodInfo> methodInfoMap = new HashMap<>(1024);
+    protected Map<Class, Class[]> mapperTypeMap = new HashMap<>(512);
 
     @Override
     public boolean addMapper(Configuration configuration, Class mapperClass) {
         if (isMapper(mapperClass)) {
-            Map<String, MethodInfo> methodInfoMap = new HashMap<>();
+            Map<String, MethodInfo> methodInfoMap = new HashMap<>(4);
             List<Method> methodList = ReflectUtil.findMethod(mapperClass);
             if (!ObjectUtil.isNull(methodList)) {
                 for (Method method : methodList) {
@@ -193,10 +193,11 @@ public class DefaultMapperFactory implements MapperFactory {
 
     protected String getParamName(Parameter parameter) {
         Param paramAnnotation = parameter.getDeclaredAnnotation(Param.class);
-        if (paramAnnotation != null)
+        if (paramAnnotation != null) {
             return paramAnnotation.value();
-        else
+        } else {
             return null;
+        }
     }
 
     protected Class<? extends Collection> getRowType(Class mapperClass, Method method) {
@@ -236,8 +237,9 @@ public class DefaultMapperFactory implements MapperFactory {
                 for (int i = 0; i < parameters.length; i++) {
                     Parameter parameter = parameters[i];
                     String paramName = getParamName(parameter);
-                    if (paramName == null)
+                    if (paramName == null) {
                         paramName = parameter.getName();
+                    }
                     methodParamList[i] = new MethodParam(paramName, parameter.getType());
                 }
             } else {
@@ -250,9 +252,9 @@ public class DefaultMapperFactory implements MapperFactory {
     }
 
     protected Class[] getAllInterface(Class type) {
-        return ReflectUtil.find(type, _type -> {
-            if (_type.isInterface()) {
-                return Arrays.asList(_type);
+        return ReflectUtil.find(type, classType -> {
+            if (classType.isInterface()) {
+                return Arrays.asList(classType);
             } else {
                 return null;
             }
@@ -300,13 +302,13 @@ public class DefaultMapperFactory implements MapperFactory {
                 if (ObjectUtil.isNull(paramName)) {
                     arg = new ObjectMap(args[0]);
                 } else {
-                    Map<String, Object> paramMap = new HashMap<>();
+                    Map<String, Object> paramMap = new HashMap<>(4);
                     paramMap.put(paramName, args[0]);
                     arg = paramMap;
                 }
             } else {
                 MethodParam[] methodParamList = methodInfo.getMethodParamList();
-                Map<String, Object> paramMap = new HashMap<>();
+                Map<String, Object> paramMap = new HashMap<>(4);
                 for (int i = 0; i < methodParamList.length; i++) {
                     paramMap.put(methodParamList[i].getParamName(), args[i]);
                 }
