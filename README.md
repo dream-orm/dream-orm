@@ -89,7 +89,8 @@ public class UserCondition {
 
 ### **分页处理**
 
-mybatis分页可以说是所有orm框架里分页最慢的，而且并没有对分页进行优化，列如：统计字段并不需要排序条件，查询字段也是可以精简到select 1。dream框架做到了上述精简。
+mybatis分页可以说是所有orm框架里分页最慢的，而且并没有对分页进行优化，列如：统计字段并不需要排序条件，查询字段也是可以精简到select
+1。dream框架做到了上述精简。
 
 目前持久层框架普遍的一个问题，每次查询时，都要重新注入分页条件，这一点性能对项目整体而言是微乎其微的，但dream做到了只分页一次，拒绝多次分页，性能等价于直接在SQL写分页条件
 
@@ -336,13 +337,13 @@ MySQL，SqlServer， PostgreSQL，Oracle
 
 现有一张user表，表结构如下：
 
-| id   | name   | age  | email                                           |
-| ---- | ------ | ---- | ----------------------------------------------- |
-| 1    | Jone   | 18   | [test1@baomidou.com](mailto:test1@baomidou.com) |
-| 2    | Jack   | 20   | [test2@baomidou.com](mailto:test2@baomidou.com) |
-| 3    | Tom    | 28   | [test3@baomidou.com](mailto:test3@baomidou.com) |
-| 4    | Sandy  | 21   | [test4@baomidou.com](mailto:test4@baomidou.com) |
-| 5    | Billie | 24   | [test5@baomidou.com](mailto:test5@baomidou.com) |
+| id  | name   | age | email                                           |
+|-----|--------|-----|-------------------------------------------------|
+| 1   | Jone   | 18  | [test1@baomidou.com](mailto:test1@baomidou.com) |
+| 2   | Jack   | 20  | [test2@baomidou.com](mailto:test2@baomidou.com) |
+| 3   | Tom    | 28  | [test3@baomidou.com](mailto:test3@baomidou.com) |
+| 4   | Sandy  | 21  | [test4@baomidou.com](mailto:test4@baomidou.com) |
+| 5   | Billie | 24  | [test5@baomidou.com](mailto:test5@baomidou.com) |
 
 其对应的数据库 Data 脚本如下：
 
@@ -749,10 +750,10 @@ public @interface Table {
 }
 ```
 
-| 注解属性 | 描述                         |
-| -------- | ---------------------------- |
-| value    | 指定绑定的数据表             |
-| mapping  | 是否解析当前类与数据库表绑定 |
+| 注解属性    | 描述             |
+|---------|----------------|
+| value   | 指定绑定的数据表       |
+| mapping | 是否解析当前类与数据库表绑定 |
 
 ### **举例**
 
@@ -809,10 +810,10 @@ public @interface Column {
 }
 ```
 
-| 注解属性 | 描述             |
-| -------- | ---------------- |
+| 注解属性     | 描述       |
+|----------|----------|
 | value    | 绑定的数据表字段 |
-| jdbcType | 数据表字段类型   |
+| jdbcType | 数据表字段类型  |
 
 ### **举例**
 
@@ -851,11 +852,11 @@ public @interface Join {
 }
 ```
 
-| 注解属性   | 描述           |
-| ---------- | -------------- |
-| column     | 该表字段名     |
+| 注解属性       | 描述      |
+|------------|---------|
+| column     | 该表字段名   |
 | joinColumn | 关联表的字段名 |
-| joinType   | 关联类型       |
+| joinType   | 关联类型    |
 
 ***\*注：数据表名根据修饰的类属性判断\****
 
@@ -896,9 +897,9 @@ public @interface View {
 }
 ```
 
-| 注解属性 | 描述             |
-| -------- | ---------------- |
-| value    | 来源数据表映射类 |
+| 注解属性  | 描述       |
+|-------|----------|
+| value | 来源数据表映射类 |
 
 **注：View修饰的类属性，必须和Table修饰的属性一致，才能做到映射**
 
@@ -937,7 +938,8 @@ SQL:SELECT user.id,user.name FROM user
         TIME:33ms
 ```
 
-**注：做到修改字段就可以间接修改SQL语句目的，存在情况，view字段与table字段一致，但不想查询，或者不想多表查询，可以使用Ignore忽略此字段**
+**注：做到修改字段就可以间接修改SQL语句目的，存在情况，view字段与table字段一致，但不想查询，或者不想多表查询，可以使用Ignore忽略此字段
+**
 
 ## **Ignore**
 
@@ -984,9 +986,9 @@ public @interface Mapper {
 }
 ```
 
-| 属性名 | 描述                                                         |
-| ------ | ------------------------------------------------------------ |
-| value  | 根据java类生成的sql，value指定类的方法名称若为无参公共方法必须为mapper对应的接口方法名一致，且返回值类型必须是字符串或者ActionProvider类 |
+| 属性名   | 描述                                                                                   |
+|-------|--------------------------------------------------------------------------------------|
+| value | 根据java类生成的sql，value指定类的方法名称若为无参公共方法必须为mapper对应的接口方法名一致，且返回值类型必须是字符串或者ActionProvider类 |
 
 ### **举例**
 
@@ -1016,11 +1018,11 @@ public @interface Sql {
 }
 ```
 
-| 属性名   | 描述                 |
-| -------- | -------------------- |
-| value    | 绑定的SQL语句        |
+| 属性名      | 描述         |
+|----------|------------|
+| value    | 绑定的SQL语句   |
 | cache    | 是否进行数据缓存读取 |
-| listener | 是否执行监听         |
+| listener | 是否执行监听     |
 
 ### **举例**
 
@@ -1048,9 +1050,9 @@ public @interface Param {
 }
 ```
 
-| 属性名 | 描述     |
-| ------ | -------- |
-| value  | 参数名称 |
+| 属性名   | 描述   |
+|-------|------|
+| value | 参数名称 |
 
 ## **PageQuery**
 
@@ -1069,10 +1071,10 @@ public @interface PageQuery {
 }
 ```
 
-| 属性名 | 描述                          |
-| ------ | ----------------------------- |
+| 属性名    | 描述                   |
+|--------|----------------------|
 | offset | 是否使用offset分页，默认limit |
-| value  | Page对象地址                  |
+| value  | Page对象地址             |
 
 ### **举例**
 
@@ -1120,9 +1122,9 @@ public @interface Extract {
 }
 ```
 
-| 属性名 | 描述             |
-| ------ | ---------------- |
-| value  | 提取的具体操作类 |
+| 属性名   | 描述       |
+|-------|----------|
+| value | 提取的具体操作类 |
 
 ```java
 public interface Extractor {
@@ -1130,11 +1132,11 @@ public interface Extractor {
 }
 ```
 
-| 参数名          | 描述                       |
-| --------------- | -------------------------- |
-| mappedStatement | 编译后的方法               |
-| mappedColumn    | 字段的所有信息             |
-| value           | 数据库查询的值             |
+| 参数名             | 描述            |
+|-----------------|---------------|
+| mappedStatement | 编译后的方法        |
+| mappedColumn    | 字段的所有信息       |
+| value           | 数据库查询的值       |
 | objectFactory   | 反射工厂，用来给字段填充值 |
 
 # **Springboot配置**
@@ -1165,19 +1167,19 @@ public class Configuration {
 }
 ```
 
-| 属性               | 描述                                             |
-| ------------------ | ------------------------------------------------ |
-| MapperFactory      | 创建mapper对象工厂                               |
-| TableFactory       | 扫描表，并记录工厂                               |
-| CacheFactory       | 缓存工厂                                         |
-| TypeHandlerFactory | 类型转换器工厂                                   |
-| CompileFactory     | 编译工厂                                         |
+| 属性                 | 描述                       |
+|--------------------|--------------------------|
+| MapperFactory      | 创建mapper对象工厂             |
+| TableFactory       | 扫描表，并记录工厂                |
+| CacheFactory       | 缓存工厂                     |
+| TypeHandlerFactory | 类型转换器工厂                  |
+| CompileFactory     | 编译工厂                     |
 | InjectFactory      | 抽象树修改工厂，基于此可代替插件，不消耗额外性能 |
-| DialectFactory     | 翻译器工厂                                       |
-| PluginFactory      | 插件工厂                                         |
-| ListenerFactory    | 监听器工厂                                       |
-| TransactionFactory | 事务工厂                                         |
-| DataSourceFactory  | 数据连接工厂                                     |
+| DialectFactory     | 翻译器工厂                    |
+| PluginFactory      | 插件工厂                     |
+| ListenerFactory    | 监听器工厂                    |
+| TransactionFactory | 事务工厂                     |
+| DataSourceFactory  | 数据连接工厂                   |
 
 **注：除MapperFactory与TableFactory每个工厂都可以通过springBean注入**
 
@@ -1201,10 +1203,10 @@ public @interface Wrap {
 }
 ```
 
-| 属性名 | 描述                             |
-| ------ | -------------------------------- |
-| value  | 处理的实现类                     |
-| type   | 处理时机，更新，插入，更新或插入 |
+| 属性名   | 描述               |
+|-------|------------------|
+| value | 处理的实现类           |
+| type  | 处理时机，更新，插入，更新或插入 |
 
 ```java
 public interface Wrapper {
@@ -1212,9 +1214,9 @@ public interface Wrapper {
 }
 ```
 
-| 参数名 | 描述                         |
-| ------ | ---------------------------- |
-| value  | 参数传入值，返回为处理后的值 |
+| 参数名   | 描述             |
+|-------|----------------|
+| value | 参数传入值，返回为处理后的值 |
 
 ### **Conditional**
 
@@ -1231,10 +1233,10 @@ public @interface Conditional {
 }
 ```
 
-| 属性名      | 描述             |
-| ----------- | ---------------- |
-| table       | 条件的表名       |
-| fillterNull | 为空是否剔除     |
+| 属性名         | 描述       |
+|-------------|----------|
+| table       | 条件的表名    |
+| fillterNull | 为空是否剔除   |
 | value       | 生成条件的实现类 |
 
 ```java
@@ -1243,21 +1245,21 @@ public interface Condition {
 }
 ```
 
-| 参数名 | 描述         |
-| ------ | ------------ |
-| table  | 表名称       |
+| 参数名    | 描述     |
+|--------|--------|
+| table  | 表名称    |
 | column | 数据库字段名 |
 | field  | 对象属性名称 |
 
 已实现的Condition
 
-| Condition类        | 描述        |
-| ------------------ | ----------- |
+| Condition类         | 描述          |
+|--------------------|-------------|
 | ContainsCondition  | like '%?%'  |
 | EndWithCondition   | like '?%'   |
 | EqCondition        | =?          |
-| GeqCondition       | > =?         |
-| GtCondition        | > ?          |
+| GeqCondition       | > =?        |
+| GtCondition        | > ?         |
 | InCondition        | in(?,?)     |
 | LeqCondition       | <=?         |
 | LtCondition        | <?          |
@@ -1280,31 +1282,31 @@ public @interface Sort {
 }
 ```
 
-| 属性名 | 描述                                           |
-| ------ | ---------------------------------------------- |
-| table  | 表名称                                         |
-| value  | 排序方式                                       |
-| order  | 指定多个排序字段时，显示优先级，越小优先级越高 |
+| 属性名   | 描述                      |
+|-------|-------------------------|
+| table | 表名称                     |
+| value | 排序方式                    |
+| order | 指定多个排序字段时，显示优先级，越小优先级越高 |
 
 ## **模板**
 
-| ***\*方法名\**** | ***\*描述\****                 |
-| ---------------- | ------------------------------ |
-| selectById       | 主键查询（支持多表关联查询）   |
-| selectByIds      | 主键批量查询(支持多表关联查询) |
-| selectOne        | 根据注解生成条件，查询一条     |
-| selectList       | 根据注解生成条件，查询多条     |
-| selectPage       | 根据注解生成条件，分页查询多条 |
-| updateById       | 主键更新                       |
-| updateNonById    | 主键非空更新                   |
-| insert           | 插入                           |
-| insertFetchKey   | 插入并获取主键值               |
-| deleteById       | 主键删除                       |
-| deleteByIds      | 主键批量删除                   |
-| existById        | 判断主键是否存在               |
-| exist            | 根据注解生成条件，判断是否存在 |
-| batchInsert      | 批量插入，可设置批次           |
-| batchUpdateById  | 批量主键更新，可设置批次       |
+| ***\*方法名\****   | ***\*描述\****     |
+|-----------------|------------------|
+| selectById      | 主键查询（支持多表关联查询）   |
+| selectByIds     | 主键批量查询(支持多表关联查询) |
+| selectOne       | 根据注解生成条件，查询一条    |
+| selectList      | 根据注解生成条件，查询多条    |
+| selectPage      | 根据注解生成条件，分页查询多条  |
+| updateById      | 主键更新             |
+| updateNonById   | 主键非空更新           |
+| insert          | 插入               |
+| insertFetchKey  | 插入并获取主键值         |
+| deleteById      | 主键删除             |
+| deleteByIds     | 主键批量删除           |
+| existById       | 判断主键是否存在         |
+| exist           | 根据注解生成条件，判断是否存在  |
+| batchInsert     | 批量插入，可设置批次       |
+| batchUpdateById | 批量主键更新，可设置批次     |
 
 ### **selectById**
 
@@ -1361,13 +1363,14 @@ public interface Listener {
 }
 ```
 
-| 方法名      | 描述                         |
-| ----------- | ---------------------------- |
+| 方法名         | 描述                 |
+|-------------|--------------------|
 | before      | 返回false，SQL不执行，返回空 |
-| afterReturn | 返回结果为查询结果           |
-| exception   | 出现异常调用此处             |
+| afterReturn | 返回结果为查询结果          |
+| exception   | 出现异常调用此处           |
 
-***\*注：全局监听器必须继承接口\*******\*QueryListener，InsertListener，UpdateListener，DeleteListener才能对增删改查起到监听作用\****
+***\*注：全局监听器必须继承接口\*******
+\*QueryListener，InsertListener，UpdateListener，DeleteListener才能对增删改查起到监听作用\****
 
 # **插件**
 
@@ -1383,8 +1386,8 @@ public interface Interceptor {
 }
 ```
 
-| 方法名      | 描述             |
-| ----------- | ---------------- |
+| 方法名         | 描述       |
+|-------------|----------|
 | interceptor | 此处进行注入插件 |
 | methods     | 拦截感兴趣的方法 |
 
@@ -1443,8 +1446,8 @@ public @interface EnableShare {
 }
 ```
 
-| 属性  | 描述                 |
-| ----- | -------------------- |
+| 属性    | 描述              |
+|-------|-----------------|
 | value | DataSource实现类类型 |
 
 ### **数据源配置**
@@ -1476,8 +1479,8 @@ public @interface Share {
 }
 ```
 
-| 属性  | 描述                         |
-| ----- | ---------------------------- |
+| 属性    | 描述                |
+|-------|-------------------|
 | value | 数据连接池名称，默认是master |
 
 ### **举例**
@@ -1534,11 +1537,11 @@ public interface TenantHandler {
 }
 ```
 
-| 方法名          | 描述                                                         |
-| --------------- | ------------------------------------------------------------ |
+| 方法名             | 描述                                                       |
+|-----------------|----------------------------------------------------------|
 | isTenant        | 判断当前方法或当前表是否应用租户MethodInfo：记录了方法的一切信息TableInfo：记录了表的一切信息 |
 | getTenantColumn | 租户字段                                                     |
-| getTenantObject | 租户值                                                       |
+| getTenantObject | 租户值                                                      |
 
 ### **举例**
 
@@ -1610,10 +1613,10 @@ public interface PermissionHandler {
 }
 ```
 
-| 方法名             | 描述                                                         |
-| ------------------ | ------------------------------------------------------------ |
+| 方法名                | 描述                                                                                     |
+|--------------------|----------------------------------------------------------------------------------------|
 | isPermissionInject | 是否对当前查询语句注入where条件，methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息life：遇到查询语句的次数（嵌套查询，life+1） |
-| getPermission      | 插入的where条件，不能为空，列如：1=1methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息alias：当前查询语句主表的别名 |
+| getPermission      | 插入的where条件，不能为空，列如：1=1methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息alias：当前查询语句主表的别名        |
 
 ### **举例**
 
@@ -1695,12 +1698,12 @@ public interface LogicHandler {
 }
 ```
 
-| 方法名           | 描述                                                         |
-| ---------------- | ------------------------------------------------------------ |
+| 方法名              | 描述                                               |
+|------------------|--------------------------------------------------|
 | isLogic          | 是否使用逻辑删除methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息 |
-| getPositiveValue | 逻辑删除后的值                                               |
-| getNegativeValue | 未删除的值                                                   |
-| getLogicColumn   | 逻辑删除字段                                                 |
+| getPositiveValue | 逻辑删除后的值                                          |
+| getNegativeValue | 未删除的值                                            |
+| getLogicColumn   | 逻辑删除字段                                           |
 
 ### **举例**
 

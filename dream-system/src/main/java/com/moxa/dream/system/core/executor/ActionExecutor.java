@@ -5,7 +5,6 @@ import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.action.Action;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.util.common.ObjectUtil;
-import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -95,12 +94,9 @@ public class ActionExecutor implements Executor {
     }
 
     protected void doActions(Action[] actions, MappedStatement mappedStatement, Object arg, Session session) {
-        try {
-            for (Action action : actions) {
-                action.doAction(session, mappedStatement, arg);
-            }
-        } catch (Exception e) {
-            throw new DreamRunTimeException(e);
+        for (Action action : actions) {
+            action.doAction(session, mappedStatement, arg);
         }
+
     }
 }

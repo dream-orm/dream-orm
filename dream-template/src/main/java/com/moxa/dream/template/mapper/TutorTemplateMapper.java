@@ -52,7 +52,7 @@ public class TutorTemplateMapper implements TemplateMapper {
 
     @Override
     public <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject) {
-        return templateMapper.selectList(type, conditionObject, methodInfoConsumer, mappedStatementConsumer);
+        return templateMapper.selectTree(type, conditionObject, methodInfoConsumer, mappedStatementConsumer);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class TutorTemplateMapper implements TemplateMapper {
 
     @Override
     public Object insertFetchKey(Object view) {
-        return templateMapper.insert(view, methodInfoConsumer, mappedStatementConsumer);
+        return templateMapper.insertFetchKey(view, methodInfoConsumer, mappedStatementConsumer);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class TutorTemplateMapper implements TemplateMapper {
 
     @Override
     public boolean exist(Class<?> type, Object conditionObject) {
-        return templateMapper.existById(type, conditionObject, methodInfoConsumer, mappedStatementConsumer);
+        return templateMapper.exist(type, conditionObject, methodInfoConsumer, mappedStatementConsumer);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class TutorTemplateMapper implements TemplateMapper {
 
     @Override
     public List<Object> batchUpdateById(List<?> viewList) {
-        return templateMapper.batchInsert(viewList, methodInfoConsumer, mappedStatementConsumer);
+        return templateMapper.batchUpdateById(viewList, methodInfoConsumer, mappedStatementConsumer);
     }
 
     @Override

@@ -122,7 +122,7 @@ public class InsertMapper extends WrapMapper {
         }
 
         @Override
-        public void doAction(Session session, MappedStatement mappedStatement, Object arg) throws Exception {
+        public void doAction(Session session, MappedStatement mappedStatement, Object arg) {
             sequence.sequence(tableInfo, mappedStatement, arg);
         }
     }

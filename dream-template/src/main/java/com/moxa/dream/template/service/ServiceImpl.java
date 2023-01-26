@@ -81,13 +81,13 @@ public abstract class ServiceImpl<ListView, EditView> implements IService<ListVi
     }
 
     @Override
-    public int insert(EditView EditView) {
-        return templateMapper.insert(EditView);
+    public int insert(EditView editView) {
+        return templateMapper.insert(editView);
     }
 
     @Override
-    public Object insertFetchKey(EditView EditView) {
-        return templateMapper.insertFetchKey(EditView);
+    public Object insertFetchKey(EditView editView) {
+        return templateMapper.insertFetchKey(editView);
     }
 
     @Override
@@ -111,8 +111,8 @@ public abstract class ServiceImpl<ListView, EditView> implements IService<ListVi
     }
 
     @Override
-    public List<Object> batchInsert(List<EditView> EditViews) {
-        return templateMapper.batchInsert(EditViews);
+    public List<Object> batchInsert(List<EditView> editViews) {
+        return templateMapper.batchInsert(editViews);
     }
 
     @Override

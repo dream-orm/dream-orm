@@ -64,7 +64,7 @@ public abstract class FetchMapper extends ValidateMapper {
         }
 
         @Override
-        public void doAction(Session session, MappedStatement mappedStatement, Object arg) throws Exception {
+        public void doAction(Session session, MappedStatement mappedStatement, Object arg) {
             fetcher.fetch(arg, property, paramMap);
         }
     }

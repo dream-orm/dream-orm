@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MethodInfo {
-    protected final Map<Class, Object> builtMap = new HashMap<>(4);
+    protected final Map<Class, Object> builtMap = new HashMap<>(8);
     protected Configuration configuration;
     protected String id;
     protected Class<? extends Collection> rowType;
