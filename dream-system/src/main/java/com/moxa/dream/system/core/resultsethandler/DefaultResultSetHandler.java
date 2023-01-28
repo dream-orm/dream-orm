@@ -1,6 +1,7 @@
 package com.moxa.dream.system.core.resultsethandler;
 
 import com.moxa.dream.system.annotation.Extract;
+import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedColumn;
@@ -295,7 +296,14 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
     protected boolean ignore(Field field) {
-        return SystemUtil.ignoreField(field);
+        if (SystemUtil.ignoreField(field)) {
+            return true;
+        }
+        Ignore ignoreAnnotation = field.getAnnotation(Ignore.class);
+        if (ignoreAnnotation != null) {
+            return !ignoreAnnotation.setter();
+        }
+        return false;
     }
 
     protected String getTableName(Class<?> type) {

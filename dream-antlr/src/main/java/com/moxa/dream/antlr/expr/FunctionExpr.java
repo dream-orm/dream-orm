@@ -822,7 +822,7 @@ public class FunctionExpr extends SqlExpr {
             private final ListColumnStatement listColumnStatement = new ListColumnStatement(" ");
 
             public GroupConcatExpr(ExprReader exprReader) {
-                this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")));
+                this(exprReader, () -> new CompareExpr(exprReader));
             }
 
             public GroupConcatExpr(ExprReader exprReader, Helper helper) {

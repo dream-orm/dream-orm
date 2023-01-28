@@ -1,5 +1,6 @@
 package com.moxa.dream.template.util;
 
+import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.common.LowHashSet;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -25,7 +26,10 @@ class TableUtil {
                 if (!ObjectUtil.isNull(fieldList)) {
                     for (Field field : fieldList) {
                         if (!SystemUtil.ignoreField(field)) {
-                            getTableNameSet(ReflectUtil.getColType(field.getGenericType()), tableNameSet);
+                            Ignore ignoreAnnotation = field.getAnnotation(Ignore.class);
+                            if (ignoreAnnotation == null||ignoreAnnotation.query()) {
+                                getTableNameSet(ReflectUtil.getColType(field.getGenericType()), tableNameSet);
+                            }
                         }
                     }
                 }

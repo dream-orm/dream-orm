@@ -12,6 +12,7 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToNativeSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.table.ColumnInfo;
@@ -189,7 +190,14 @@ public class AllInvoker extends AbstractInvoker {
     }
 
     protected boolean ignore(Field field) {
-        return SystemUtil.ignoreField(field);
+        if (SystemUtil.ignoreField(field)) {
+            return true;
+        }
+        Ignore ignoreAnnotation = field.getAnnotation(Ignore.class);
+        if (ignoreAnnotation != null) {
+            return !ignoreAnnotation.query();
+        }
+        return false;
     }
 
     protected String getTableName(Class<?> type) {
