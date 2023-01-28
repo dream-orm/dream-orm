@@ -18,7 +18,7 @@ public interface TemplateMapper {
 
     <T> T selectById(Class<T> type, Object id);
 
-    <T> List<T> selectByIds(Class<T> type, List<?> idList);
+    <T> List<T> selectByIds(Class<T> type, Collection<?> idList);
 
     <T> T selectOne(Class<T> type, Object conditionObject);
 
@@ -38,15 +38,15 @@ public interface TemplateMapper {
 
     int deleteById(Class<?> type, Object id);
 
-    int deleteByIds(Class<?> type, List<?> idList);
+    int deleteByIds(Class<?> type, Collection<?> idList);
 
     boolean existById(Class<?> type, Object id);
 
     boolean exist(Class<?> type, Object conditionObject);
 
-    List<Object> batchInsert(List<?> viewList);
+    List<Object> batchInsert(Collection<?> viewList);
 
-    List<Object> batchUpdateById(List<?> viewList);
+    List<Object> batchUpdateById(Collection<?> viewList);
 
     default <T> T selectOne(String sql, Object param, Class<T> colType) {
         List<T> resultList = selectList(sql, param, colType);

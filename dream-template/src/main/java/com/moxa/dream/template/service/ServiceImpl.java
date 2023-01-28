@@ -8,6 +8,7 @@ import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -51,7 +52,7 @@ public abstract class ServiceImpl<ListView, EditView> implements IService<ListVi
     }
 
     @Override
-    public List<EditView> selectByIds(List<?> idList) {
+    public List<EditView> selectByIds(Collection<?> idList) {
         return templateMapper.selectByIds(editViewType, idList);
     }
 
@@ -96,7 +97,7 @@ public abstract class ServiceImpl<ListView, EditView> implements IService<ListVi
     }
 
     @Override
-    public int deleteByIds(List<?> idList) {
+    public int deleteByIds(Collection<?> idList) {
         return templateMapper.deleteByIds(editViewType, idList);
     }
 
@@ -111,12 +112,12 @@ public abstract class ServiceImpl<ListView, EditView> implements IService<ListVi
     }
 
     @Override
-    public List<Object> batchInsert(List<EditView> editViews) {
+    public List<Object> batchInsert(Collection<EditView> editViews) {
         return templateMapper.batchInsert(editViews);
     }
 
     @Override
-    public List<Object> batchUpdateById(List<EditView> editViews) {
+    public List<Object> batchUpdateById(Collection<EditView> editViews) {
         return templateMapper.batchUpdateById(editViews);
     }
 }

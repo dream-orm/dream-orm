@@ -68,7 +68,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public <T> List<T> selectByIds(Class<T> type, List<?> idList) {
+    public <T> List<T> selectByIds(Class<T> type, Collection<?> idList) {
         return selectByIds(type, idList, null, null);
     }
 
@@ -118,7 +118,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public int deleteByIds(Class<?> type, List<?> idList) {
+    public int deleteByIds(Class<?> type, Collection<?> idList) {
         return deleteByIds(type, idList, null, null);
     }
 
@@ -133,12 +133,12 @@ public class DefaultTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public List<Object> batchInsert(List<?> viewList) {
+    public List<Object> batchInsert(Collection<?> viewList) {
         return batchInsert(viewList, null, null);
     }
 
     @Override
-    public List<Object> batchUpdateById(List<?> viewList) {
+    public List<Object> batchUpdateById(Collection<?> viewList) {
         return batchUpdateById(viewList, null, null);
     }
 
@@ -152,7 +152,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
         return (T) selectByIdSqlMapper.execute(type, id, methodInfoConsumer, mappedStatementConsumer);
     }
 
-    protected <T> List<T> selectByIds(Class<T> type, List<?> idList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+    protected <T> List<T> selectByIds(Class<T> type, Collection<?> idList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
         return (List<T>) selectByIdsSqlMapper.execute(type, idList, methodInfoConsumer, mappedStatementConsumer);
     }
 
@@ -194,7 +194,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
         return (int) deleteByIdSqlMapper.execute(type, id, methodInfoConsumer, mappedStatementConsumer);
     }
 
-    protected int deleteByIds(Class<?> type, List<?> idList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+    protected int deleteByIds(Class<?> type, Collection<?> idList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
         return (int) deleteByIdsSqlMapper.execute(type, idList, methodInfoConsumer, mappedStatementConsumer);
     }
 
@@ -208,18 +208,18 @@ public class DefaultTemplateMapper implements TemplateMapper {
         return result != null;
     }
 
-    protected List<Object> batchInsert(List<?> viewList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+    protected List<Object> batchInsert(Collection<?> viewList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
         if (viewList == null || viewList.isEmpty()) {
             return null;
         }
-        return (List<Object>) batchInsertMapper.execute(viewList.get(0).getClass(), viewList, methodInfoConsumer, mappedStatementConsumer);
+        return (List<Object>) batchInsertMapper.execute(viewList.iterator().next().getClass(), viewList, methodInfoConsumer, mappedStatementConsumer);
     }
 
-    protected List<Object> batchUpdateById(List<?> viewList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+    protected List<Object> batchUpdateById(Collection<?> viewList, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
         if (viewList == null || viewList.isEmpty()) {
             return null;
         }
-        return (List<Object>) batchUpdateByIdMapper.execute(viewList.get(0).getClass(), viewList, methodInfoConsumer, mappedStatementConsumer);
+        return (List<Object>) batchUpdateByIdMapper.execute(viewList.iterator().next().getClass(), viewList, methodInfoConsumer, mappedStatementConsumer);
     }
 
     protected Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {

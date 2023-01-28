@@ -36,7 +36,7 @@ public class TutorTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public <T> List<T> selectByIds(Class<T> type, List<?> idList) {
+    public <T> List<T> selectByIds(Class<T> type, Collection<?> idList) {
         return templateMapper.selectByIds(type, idList, methodInfoConsumer, mappedStatementConsumer);
     }
 
@@ -86,7 +86,7 @@ public class TutorTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public int deleteByIds(Class<?> type, List<?> idList) {
+    public int deleteByIds(Class<?> type, Collection<?> idList) {
         return templateMapper.deleteByIds(type, idList, methodInfoConsumer, mappedStatementConsumer);
     }
 
@@ -101,12 +101,12 @@ public class TutorTemplateMapper implements TemplateMapper {
     }
 
     @Override
-    public List<Object> batchInsert(List<?> viewList) {
+    public List<Object> batchInsert(Collection<?> viewList) {
         return templateMapper.batchInsert(viewList, methodInfoConsumer, mappedStatementConsumer);
     }
 
     @Override
-    public List<Object> batchUpdateById(List<?> viewList) {
+    public List<Object> batchUpdateById(Collection<?> viewList) {
         return templateMapper.batchUpdateById(viewList, methodInfoConsumer, mappedStatementConsumer);
     }
 

@@ -4,6 +4,7 @@ import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.Page;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -14,7 +15,7 @@ public interface IService<ListView, EditView> {
 
     EditView selectById(Object id);
 
-    List<EditView> selectByIds(List<?> idList);
+    List<EditView> selectByIds(Collection<?> idList);
 
     EditView selectOne(Object conditionObject);
 
@@ -32,13 +33,13 @@ public interface IService<ListView, EditView> {
 
     int deleteById(Object id);
 
-    int deleteByIds(List<?> idList);
+    int deleteByIds(Collection<?> idList);
 
     boolean existById(Object id);
 
     boolean exist(Object conditionObject);
 
-    List<Object> batchInsert(List<EditView> viewList);
+    List<Object> batchInsert(Collection<EditView> viewList);
 
-    List<Object> batchUpdateById(List<EditView> viewList);
+    List<Object> batchUpdateById(Collection<EditView> viewList);
 }
