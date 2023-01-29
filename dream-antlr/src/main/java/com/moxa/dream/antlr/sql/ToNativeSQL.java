@@ -384,7 +384,25 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(FunctionStatement.GroupConcatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "GROUP_CONCAT(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+        boolean distinct = statement.isDistinct();
+        boolean all = statement.isAll();
+        Statement order = statement.getOrder();
+        Statement separator = statement.getSeparator();
+        StringBuilder builder = new StringBuilder();
+        if (distinct) {
+            builder.append("DISTINCT ");
+        }
+        if (all) {
+            builder.append("ALL ");
+        }
+        builder.append(toStr(statement.getParamsStatement(), assist, invokerList));
+        if (order != null) {
+            builder.append(" " + toStr(order, assist, invokerList));
+        }
+        if (separator != null) {
+            builder.append(" SEPARATOR " + toStr(separator, assist, invokerList));
+        }
+        return "GROUP_CONCAT(" + builder + ")";
     }
 
     @Override

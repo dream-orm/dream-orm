@@ -27,7 +27,7 @@ class TableUtil {
                     for (Field field : fieldList) {
                         if (!SystemUtil.ignoreField(field)) {
                             Ignore ignoreAnnotation = field.getAnnotation(Ignore.class);
-                            if (ignoreAnnotation == null||ignoreAnnotation.query()) {
+                            if (ignoreAnnotation == null || ignoreAnnotation.query()) {
                                 getTableNameSet(ReflectUtil.getColType(field.getGenericType()), tableNameSet);
                             }
                         }

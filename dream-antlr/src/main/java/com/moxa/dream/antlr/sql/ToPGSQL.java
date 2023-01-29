@@ -97,7 +97,27 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.GroupConcatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "STRING_AGG(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",',')";
+        boolean distinct = statement.isDistinct();
+        boolean all = statement.isAll();
+        Statement order = statement.getOrder();
+        Statement separator = statement.getSeparator();
+        StringBuilder builder = new StringBuilder();
+        if (distinct) {
+            builder.append("DISTINCT ");
+        }
+        if (all) {
+            builder.append("ALL ");
+        }
+        builder.append(toStr(statement.getParamsStatement(), assist, invokerList));
+        if (separator != null) {
+            builder.append("," + toStr(separator, assist, invokerList));
+        }else{
+            builder.append(",','");
+        }
+        if (order != null) {
+            builder.append(" " + toStr(order, assist, invokerList));
+        }
+        return "STRING_AGG(" + builder + ")";
     }
 
 

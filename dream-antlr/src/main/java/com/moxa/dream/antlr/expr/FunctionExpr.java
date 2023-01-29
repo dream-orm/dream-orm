@@ -24,7 +24,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprAscii(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.AsciiStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -32,7 +32,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLen(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.LenStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -40,7 +40,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLength(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.LengthStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -48,17 +48,15 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprConcat(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.ConcatStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
 
     @Override
     protected Statement exprGroupConcat(ExprInfo exprInfo) throws AntlrException {
-        FunctionStatement func = new FunctionStatement.GroupConcatStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
-                new FunctionParamerExpr.GroupConcatExpr(exprReader)
-        ).expr();
+        FunctionStatement.GroupConcatStatement func = new FunctionStatement.GroupConcatStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func,()->new FunctionParamExpr.GroupConcatExpr(exprReader,func)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -66,9 +64,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprFindInSet(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.FindInSetStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
-                new FunctionParamerExpr.GroupConcatExpr(exprReader)
-        ).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -76,7 +72,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprCoalesce(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.CoalesceStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -84,7 +80,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprConcatWs(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.ConcatWsStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -92,7 +88,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprDateFormat(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.DateForMatStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -100,7 +96,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprStrToDate(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.StrToDateStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -108,7 +104,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLcase(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.LcaseStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -116,7 +112,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLower(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.LowerStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -124,7 +120,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLeft(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.LeftStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -132,7 +128,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprRight(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.RightStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -140,7 +136,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprInstr(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.InStrStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -148,7 +144,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLocate(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.LocateStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -156,7 +152,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLtrim(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.LtrimStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -164,7 +160,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprRtrim(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.RtrimStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -172,7 +168,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprTrim(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.TrimStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -180,7 +176,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprRepeat(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.RepeatStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -188,7 +184,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprReverse(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.ReverseStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -196,7 +192,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprReplace(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.ReplaceStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -204,7 +200,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprStrcmp(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.StrcmpStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -212,7 +208,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprSubStr(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.SubStrStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -220,7 +216,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprUpper(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.UpperStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -228,7 +224,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLpad(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.LpadStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -236,7 +232,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprRpad(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.RpadStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -244,7 +240,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprAbs(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.AbsStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -252,7 +248,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprAcos(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.AcosStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -260,7 +256,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprAsin(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.AsinStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -268,7 +264,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprSin(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.SinStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -276,7 +272,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprAtan(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.AtanStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -284,8 +280,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprAvg(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.AvgStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
-                new FunctionParamerExpr.DistinctAllExpr(exprReader)).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func, () ->
+                new FunctionParamExpr.DistinctAllExpr(exprReader)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -293,7 +289,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprCeil(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.CeilStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -301,7 +297,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprCeiling(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.CeilingStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -309,7 +305,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprCos(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.CosStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -317,7 +313,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprCot(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.CotStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -325,8 +321,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprCount(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.CountStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
-                new FunctionParamerExpr.DistinctAllExpr(exprReader)).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func, () ->
+                new FunctionParamExpr.DistinctAllExpr(exprReader)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -334,7 +330,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprExp(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.ExpStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -342,7 +338,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprFloor(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.FloorStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -350,7 +346,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLn(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.LnStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -358,7 +354,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLog(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.LogStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -366,7 +362,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLog2(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.Log2Statement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -374,7 +370,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLog10(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.Log10Statement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -382,8 +378,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprMax(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.MaxStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
-                new FunctionParamerExpr.DistinctAllExpr(exprReader)).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func, () ->
+                new FunctionParamExpr.DistinctAllExpr(exprReader)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -391,8 +387,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprMin(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.MinStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
-                new FunctionParamerExpr.DistinctAllExpr(exprReader)).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func, () ->
+                new FunctionParamExpr.DistinctAllExpr(exprReader)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -400,7 +396,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprMod(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.ModStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -408,7 +404,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprPi(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.PiStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -416,7 +412,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprPow(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.PowStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -424,7 +420,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprPower(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.PowerStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -432,7 +428,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprRand(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.RandStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -440,7 +436,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprRound(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.RoundStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -448,7 +444,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprSign(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.SignStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -456,7 +452,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprSqrt(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.SqrtStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -464,8 +460,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprSum(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.SumStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () ->
-                new FunctionParamerExpr.DistinctAllExpr(exprReader)).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func, () ->
+                new FunctionParamExpr.DistinctAllExpr(exprReader)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -473,7 +469,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprTan(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.TanStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -481,7 +477,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprTruncate(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.TruncateStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -489,7 +485,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprNow(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.NowStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -497,7 +493,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprSysDate(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.SysDateStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -505,8 +501,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprDateAdd(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.DateAddStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
-                new FunctionParamerExpr.DateAddExpr(exprReader)
+        functionStatement = new FunctionParamExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
+                new FunctionParamExpr.DateAddExpr(exprReader)
                 , new ExprInfo(ExprType.COMMA, ","))).expr();
         setExprTypes(ExprType.NIL);
         return expr();
@@ -515,8 +511,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprDateSub(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.DateAddStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
-                new FunctionParamerExpr.DateSubExpr(exprReader)
+        functionStatement = new FunctionParamExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
+                new FunctionParamExpr.DateSubExpr(exprReader)
                 , new ExprInfo(ExprType.COMMA, ","))).expr();
         setExprTypes(ExprType.NIL);
         return expr();
@@ -525,7 +521,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprCurDate(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.CurDateStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -533,7 +529,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprDateDiff(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.DateDiffStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -541,7 +537,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprYear(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.YearStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -549,7 +545,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprMonth(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.MonthStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -557,7 +553,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprUnixTimeStamp(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.UnixTimeStampStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -565,7 +561,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprFromUnixTime(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.FromUnixTimeStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -573,7 +569,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprDate(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.DateStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -581,7 +577,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprDay(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.DayStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -589,7 +585,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprHour(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.HourStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -597,7 +593,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprMinute(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.MinuteStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -605,7 +601,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprSecond(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.SecondStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -613,7 +609,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprDayOfYear(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.DayOfYearStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -621,7 +617,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprDayOfWeek(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.DayOfWeekStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -629,7 +625,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprLastDay(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.LastDayStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -637,7 +633,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprQuarter(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.QuarterStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -645,7 +641,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprWeekOfYear(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.WeekOfYearStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -653,7 +649,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprSpace(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.SpaceStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -661,7 +657,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprIf(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.IfStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -669,7 +665,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprIfNull(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.IfNullStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -677,7 +673,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprNullIf(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.NullIfStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -685,8 +681,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprConvert(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.ConvertStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
-                new FunctionParamerExpr.ConvertExpr(exprReader)
+        functionStatement = new FunctionParamExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
+                new FunctionParamExpr.ConvertExpr(exprReader)
                 , new ExprInfo(ExprType.COMMA, ","))).expr();
         setExprTypes(ExprType.NIL);
         return expr();
@@ -695,8 +691,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprCast(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.CastStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
-                new FunctionParamerExpr.CastExpr(exprReader)
+        functionStatement = new FunctionParamExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
+                new FunctionParamExpr.CastExpr(exprReader)
                 , new ExprInfo(ExprType.COMMA, ","))).expr();
         setExprTypes(ExprType.NIL);
         return expr();
@@ -705,7 +701,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprIsNull(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.IsNullStatement();
-        functionStatement = new FunctionParamerExpr(exprReader, func).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -725,17 +721,17 @@ public class FunctionExpr extends SqlExpr {
         return expr();
     }
 
-    public static class FunctionParamerExpr extends HelperExpr {
+    public static class FunctionParamExpr extends HelperExpr {
         private final FunctionStatement func;
 
-        public FunctionParamerExpr(ExprReader exprReader, FunctionStatement func) {
+        public FunctionParamExpr(ExprReader exprReader, FunctionStatement func) {
             this(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
                     new CompareExpr(exprReader)
                     , new ExprInfo(ExprType.COMMA, ",")));
 
         }
 
-        public FunctionParamerExpr(ExprReader exprReader, FunctionStatement func, Helper helper) {
+        public FunctionParamExpr(ExprReader exprReader, FunctionStatement func, Helper helper) {
             super(exprReader, helper);
             this.func = func;
             setExprTypes(Constant.FUNCTION);
@@ -814,65 +810,6 @@ public class FunctionExpr extends SqlExpr {
             protected Statement exprHelp(Statement statement) throws AntlrException {
                 listColumnStatement.add(statement);
                 setExprTypes(ExprType.NIL);
-                return expr();
-            }
-        }
-
-        public static class GroupConcatExpr extends HelperExpr {
-            private final ListColumnStatement listColumnStatement = new ListColumnStatement(" ");
-
-            public GroupConcatExpr(ExprReader exprReader) {
-                this(exprReader, () -> new CompareExpr(exprReader));
-            }
-
-            public GroupConcatExpr(ExprReader exprReader, Helper helper) {
-                super(exprReader, helper);
-                setExprTypes(ExprType.DISTINCT, ExprType.ALL, ExprType.HELP);
-            }
-
-            @Override
-            protected Statement exprDistinct(ExprInfo exprInfo) throws AntlrException {
-                push();
-                setExprTypes(ExprType.HELP);
-                listColumnStatement.add(new SymbolStatement.LetterStatement("DISTINCT"));
-                return expr();
-            }
-
-            @Override
-            protected Statement exprAll(ExprInfo exprInfo) throws AntlrException {
-                push();
-                setExprTypes(ExprType.HELP);
-                listColumnStatement.add(new SymbolStatement.LetterStatement("ALL"));
-                return expr();
-            }
-
-            @Override
-            protected Statement exprOrder(ExprInfo exprInfo) throws AntlrException {
-                OrderExpr orderExpr = new OrderExpr(exprReader);
-                listColumnStatement.add(orderExpr.expr());
-                setExprTypes(ExprType.SEPARATOR, ExprType.NIL);
-                return expr();
-            }
-
-            @Override
-            protected Statement exprSeparator(ExprInfo exprInfo) throws AntlrException {
-                push();
-                listColumnStatement.add(new SymbolStatement.LetterStatement("SEPARATOR"));
-                ColumnExpr columnExpr = new ColumnExpr(exprReader);
-                listColumnStatement.add(columnExpr.expr());
-                setExprTypes(ExprType.NIL);
-                return expr();
-            }
-
-            @Override
-            public Statement nil() {
-                return listColumnStatement;
-            }
-
-            @Override
-            protected Statement exprHelp(Statement statement) throws AntlrException {
-                listColumnStatement.add(statement);
-                setExprTypes(ExprType.ORDER, ExprType.NIL);
                 return expr();
             }
         }
@@ -1318,6 +1255,66 @@ public class FunctionExpr extends SqlExpr {
                 return expr();
             }
         }
+
+        public static class GroupConcatExpr extends HelperExpr {
+            private FunctionStatement.GroupConcatStatement groupConcatStatement;
+
+            public GroupConcatExpr(ExprReader exprReader,FunctionStatement.GroupConcatStatement groupConcatStatement) {
+                this(exprReader, () -> new ListColumnExpr(exprReader,new ExprInfo(ExprType.COMMA, ",")),groupConcatStatement);
+            }
+
+            public GroupConcatExpr(ExprReader exprReader, Helper helper,FunctionStatement.GroupConcatStatement groupConcatStatement) {
+                super(exprReader, helper);
+                setExprTypes(ExprType.DISTINCT, ExprType.ALL, ExprType.HELP);
+                this.groupConcatStatement=groupConcatStatement;
+            }
+
+            @Override
+            protected Statement exprDistinct(ExprInfo exprInfo) throws AntlrException {
+                push();
+                setExprTypes(ExprType.HELP);
+                groupConcatStatement.setDistinct(true);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprAll(ExprInfo exprInfo) throws AntlrException {
+                push();
+                setExprTypes(ExprType.HELP);
+                groupConcatStatement.setAll(true);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprOrder(ExprInfo exprInfo) throws AntlrException {
+                OrderExpr orderExpr = new OrderExpr(exprReader);
+                groupConcatStatement.setOrder(orderExpr.expr());
+                setExprTypes(ExprType.SEPARATOR, ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprSeparator(ExprInfo exprInfo) throws AntlrException {
+                push();
+                ColumnExpr columnExpr = new ColumnExpr(exprReader);
+                groupConcatStatement.setSeparator(columnExpr.expr());
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            public Statement nil() {
+                return groupConcatStatement.getParamsStatement();
+            }
+
+            @Override
+            protected Statement exprHelp(Statement statement) throws AntlrException {
+                groupConcatStatement.setParamsStatement(statement);
+                setExprTypes(ExprType.ORDER, ExprType.NIL);
+                return expr();
+            }
+        }
+
     }
 
     public static class RowNumberExpr extends SqlExpr {

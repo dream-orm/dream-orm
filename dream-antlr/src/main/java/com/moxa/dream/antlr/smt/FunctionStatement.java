@@ -47,7 +47,42 @@ public abstract class FunctionStatement extends Statement {
     }
 
     public static class GroupConcatStatement extends FunctionStatement {
+        private boolean distinct = false;
+        private boolean all = false;
+        private Statement order;
+        private Statement separator;
 
+        public boolean isDistinct() {
+            return distinct;
+        }
+
+        public void setDistinct(boolean distinct) {
+            this.distinct = distinct;
+        }
+
+        public boolean isAll() {
+            return all;
+        }
+
+        public void setAll(boolean all) {
+            this.all = all;
+        }
+
+        public Statement getOrder() {
+            return order;
+        }
+
+        public void setOrder(Statement order) {
+            this.order = order;
+        }
+
+        public Statement getSeparator() {
+            return separator;
+        }
+
+        public void setSeparator(Statement separator) {
+            this.separator = separator;
+        }
     }
 
     public static class FindInSetStatement extends FunctionStatement {
