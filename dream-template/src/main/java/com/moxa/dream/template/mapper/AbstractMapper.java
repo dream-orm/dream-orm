@@ -37,7 +37,7 @@ public abstract class AbstractMapper {
         MethodInfo methodInfo = methodInfoMap.get(key);
         if (methodInfo == null) {
             synchronized (this) {
-                methodInfo = methodInfoMap.get(type);
+                methodInfo = methodInfoMap.get(key);
                 if (methodInfo == null) {
                     String table = getTableName(type);
                     if (ObjectUtil.isNull(table)) {

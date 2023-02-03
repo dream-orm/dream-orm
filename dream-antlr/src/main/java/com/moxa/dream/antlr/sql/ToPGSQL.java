@@ -124,7 +124,7 @@ public class ToPGSQL extends ToPubSQL {
     @Override
     protected String toString(OperStatement.DIVIDEStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return "CAST("+toStr(conditionStatement.getLeft(), assist, invokerList) + " as DECIMAL)/" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "CAST(" + toStr(conditionStatement.getLeft(), assist, invokerList) + " as DECIMAL)/" + toStr(conditionStatement.getRight(), assist, invokerList);
     }
 
     @Override
@@ -452,9 +452,9 @@ public class ToPGSQL extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        if(columnList.length==1){
+        if (columnList.length == 1) {
             return "CAST(" + toStr(columnList[0], assist, invokerList) + " AS VARCHAR)";
-        }else{
+        } else {
             return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
         }
     }
@@ -462,9 +462,9 @@ public class ToPGSQL extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.ToNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        if(columnList.length==1){
+        if (columnList.length == 1) {
             return "CAST(" + toStr(columnList[0], assist, invokerList) + " AS DECIMAL)";
-        }else{
+        } else {
             return "TO_NUMBER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
         }
     }

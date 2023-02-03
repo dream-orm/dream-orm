@@ -15,7 +15,8 @@ public class ByteTypeHandlerWrapper implements TypeHandlerWrapper {
     @Override
     public Integer[] typeCode() {
         return new Integer[]{
-                TypeUtil.hash(Object.class, Types.TINYINT),
+                TypeUtil.hash(byte.class, Types.BIT),
+                TypeUtil.hash(Byte.class, Types.BIT),
                 TypeUtil.hash(byte.class, Types.TINYINT),
                 TypeUtil.hash(Byte.class, Types.TINYINT),
                 TypeUtil.hash(byte.class, Types.NULL),

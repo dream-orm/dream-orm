@@ -4,12 +4,10 @@ import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.FunctionStatement;
-import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.util.AntlrUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,22 +44,22 @@ public class ToMYSQL extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        if(columnList.length>1){
+        if (columnList.length > 1) {
             String pattern = statement.getPattern();
             if (pattern == null) {
                 pattern = getPattern(toStr(columnList[1], assist, invokerList));
                 statement.setPattern(pattern);
             }
             return "DATE_FORMAT(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")";
-        }else{
-            return "CONVERT("+toStr(columnList[0],assist,invokerList)+",CHAR)";
+        } else {
+            return "CONVERT(" + toStr(columnList[0], assist, invokerList) + ",CHAR)";
         }
     }
 
     @Override
     protected String toString(FunctionStatement.ToNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        return "CONVERT("+toStr(columnList[0], assist, invokerList)+",DECIMAL)";
+        return "CONVERT(" + toStr(columnList[0], assist, invokerList) + ",DECIMAL)";
     }
 
     @Override

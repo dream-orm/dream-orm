@@ -431,12 +431,12 @@ public abstract class FunctionStatement extends Statement {
     public static class ToCharStatement extends FunctionStatement {
         private String pattern;
 
-        public void setPattern(String pattern) {
-            this.pattern = pattern;
-        }
-
         public String getPattern() {
             return pattern;
+        }
+
+        public void setPattern(String pattern) {
+            this.pattern = pattern;
         }
     }
 
@@ -446,24 +446,24 @@ public abstract class FunctionStatement extends Statement {
     public static class ToDateStatement extends FunctionStatement {
         private String pattern;
 
-        public void setPattern(String pattern) {
-            this.pattern = pattern;
-        }
-
         public String getPattern() {
             return pattern;
+        }
+
+        public void setPattern(String pattern) {
+            this.pattern = pattern;
         }
     }
 
     public static class ToTimeStampStatement extends FunctionStatement {
         private String pattern;
 
-        public void setPattern(String pattern) {
-            this.pattern = pattern;
-        }
-
         public String getPattern() {
             return pattern;
+        }
+
+        public void setPattern(String pattern) {
+            this.pattern = pattern;
         }
     }
 }
