@@ -8,59 +8,32 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.util.AntlrUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ToPGSQL extends ToPubSQL {
-    private String getPattern(String pattern) {
-        char[] patternArray = pattern.toCharArray();
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < patternArray.length; i++) {
-            if (patternArray[i] == '%') {
-                char sign = patternArray[i + 1];
-                switch (sign) {
-                    case 'Y':
-                        builder.append("yyyy");
-                        break;
-                    case 'y':
-                        builder.append("yy");
-                        break;
-                    case 'c':
-                    case 'm':
-                        builder.append("MM");
-                        break;
-                    case 'd':
-                    case 'e':
-                        builder.append("dd");
-                        break;
-                    case 'H':
-                    case 'k':
-                        builder.append("HH24");
-                        break;
-                    case 'h':
-                    case 'l':
-                        builder.append("hh");
-                        break;
-                    case 'i':
-                        builder.append("mi");
-                        break;
-                    case 'S':
-                    case 's':
-                        builder.append("ss");
-                        break;
-                    case 'j':
-                        builder.append("ddd");
-                        break;
-                    default:
-                        builder.append(patternArray[i + 1]);
-                        break;
+    private Map<String, String> replaceMap = new HashMap<>();
 
-                }
-                i++;
-            } else {
-                builder.append(patternArray[i]);
-            }
-        }
-        return builder.toString();
+    public ToPGSQL() {
+        replaceMap.put("%Y", "yyyy");
+        replaceMap.put("%y", "yy");
+        replaceMap.put("%c", "MM");
+        replaceMap.put("%m", "MM");
+        replaceMap.put("%d", "dd");
+        replaceMap.put("%e", "dd");
+        replaceMap.put("%h", "HH24");
+        replaceMap.put("%k", "HH24");
+        replaceMap.put("%h", "hh");
+        replaceMap.put("%l", "hh");
+        replaceMap.put("%i", "mi");
+        replaceMap.put("%S", "ss");
+        replaceMap.put("%s", "ss");
+        replaceMap.put("%j", "ddd");
+    }
+
+    private String getPattern(String pattern) {
+        return AntlrUtil.replace(pattern, replaceMap);
     }
 
     @Override
@@ -111,7 +84,7 @@ public class ToPGSQL extends ToPubSQL {
         builder.append(toStr(statement.getParamsStatement(), assist, invokerList));
         if (separator != null) {
             builder.append("," + toStr(separator, assist, invokerList));
-        }else{
+        } else {
             builder.append(",','");
         }
         if (order != null) {
@@ -151,7 +124,7 @@ public class ToPGSQL extends ToPubSQL {
     @Override
     protected String toString(OperStatement.DIVIDEStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "::DECIMAL/" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "CAST("+toStr(conditionStatement.getLeft(), assist, invokerList) + " as DECIMAL)/" + toStr(conditionStatement.getRight(), assist, invokerList);
     }
 
     @Override
@@ -475,6 +448,27 @@ public class ToPGSQL extends ToPubSQL {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "CASE WHEN " + toStr(columnList[0], assist, invokerList) + " THEN " + toStr(columnList[1], assist, invokerList) + " ELSE " + toStr(columnList[2], assist, invokerList) + " END";
     }
+
+    @Override
+    protected String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
+        if(columnList.length==1){
+            return "CAST(" + toStr(columnList[0], assist, invokerList) + " AS VARCHAR)";
+        }else{
+            return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+        }
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ToNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
+        if(columnList.length==1){
+            return "CAST(" + toStr(columnList[0], assist, invokerList) + " AS DECIMAL)";
+        }else{
+            return "TO_NUMBER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+        }
+    }
+
 
     @Override
     protected String toString(OperStatement.LLMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {

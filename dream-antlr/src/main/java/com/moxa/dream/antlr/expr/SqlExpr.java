@@ -542,6 +542,18 @@ public abstract class SqlExpr {
             case INVOKER:
                 statement = exprInvoker(exprInfo);
                 break;
+            case TO_CHAR:
+                statement = exprToChar(exprInfo);
+                break;
+            case TO_NUMBER:
+                statement = exprToNumber(exprInfo);
+                break;
+            case TO_DATE:
+                statement = exprToDate(exprInfo);
+                break;
+            case TO_TIMESTAMP:
+                statement = exprToTimeStamp(exprInfo);
+                break;
             case COLON:
                 statement = exprColon(exprInfo);
                 break;
@@ -1256,6 +1268,22 @@ public abstract class SqlExpr {
 
     protected Statement exprDot(ExprInfo exprInfo) throws AntlrException {
         return exprDefault(exprInfo);
+    }
+
+    protected Statement exprToChar(ExprInfo exprInfo) throws AntlrException {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprToNumber(ExprInfo exprInfo) throws AntlrException {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprToDate(ExprInfo exprInfo) throws AntlrException {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprToTimeStamp(ExprInfo exprInfo) throws AntlrException {
+        return exprFunction(exprInfo);
     }
 
     protected abstract Statement nil();

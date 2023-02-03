@@ -8,59 +8,32 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.util.AntlrUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ToORACLE extends ToPubSQL {
-    private String getPattern(String pattern) {
-        char[] patternArray = pattern.toCharArray();
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < patternArray.length; i++) {
-            if (patternArray[i] == '%') {
-                char sign = patternArray[i + 1];
-                switch (sign) {
-                    case 'Y':
-                        builder.append("yyyy");
-                        break;
-                    case 'y':
-                        builder.append("yy");
-                        break;
-                    case 'c':
-                    case 'm':
-                        builder.append("MM");
-                        break;
-                    case 'd':
-                    case 'e':
-                        builder.append("dd");
-                        break;
-                    case 'H':
-                    case 'k':
-                        builder.append("HH24");
-                        break;
-                    case 'h':
-                    case 'l':
-                        builder.append("hh");
-                        break;
-                    case 'i':
-                        builder.append("mi");
-                        break;
-                    case 'S':
-                    case 's':
-                        builder.append("ss");
-                        break;
-                    case 'j':
-                        builder.append("ddd");
-                        break;
-                    default:
-                        builder.append(patternArray[i + 1]);
-                        break;
+    private Map<String, String> replaceMap = new HashMap<>();
 
-                }
-                i++;
-            } else {
-                builder.append(patternArray[i]);
-            }
-        }
-        return builder.toString();
+    public ToORACLE() {
+        replaceMap.put("%Y", "yyyy");
+        replaceMap.put("%y", "yy");
+        replaceMap.put("%c", "MM");
+        replaceMap.put("%m", "MM");
+        replaceMap.put("%d", "dd");
+        replaceMap.put("%e", "dd");
+        replaceMap.put("%h", "HH24");
+        replaceMap.put("%k", "HH24");
+        replaceMap.put("%h", "hh");
+        replaceMap.put("%l", "hh");
+        replaceMap.put("%i", "mi");
+        replaceMap.put("%S", "ss");
+        replaceMap.put("%s", "ss");
+        replaceMap.put("%j", "ddd");
+    }
+
+    private String getPattern(String pattern) {
+        return AntlrUtil.replace(pattern, replaceMap);
     }
 
     @Override

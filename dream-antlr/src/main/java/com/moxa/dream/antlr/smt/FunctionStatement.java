@@ -427,4 +427,43 @@ public abstract class FunctionStatement extends Statement {
 
     public static class FromUnixTimeStatement extends FunctionStatement {
     }
+
+    public static class ToCharStatement extends FunctionStatement {
+        private String pattern;
+
+        public void setPattern(String pattern) {
+            this.pattern = pattern;
+        }
+
+        public String getPattern() {
+            return pattern;
+        }
+    }
+
+    public static class ToNumberStatement extends FunctionStatement {
+    }
+
+    public static class ToDateStatement extends FunctionStatement {
+        private String pattern;
+
+        public void setPattern(String pattern) {
+            this.pattern = pattern;
+        }
+
+        public String getPattern() {
+            return pattern;
+        }
+    }
+
+    public static class ToTimeStampStatement extends FunctionStatement {
+        private String pattern;
+
+        public void setPattern(String pattern) {
+            this.pattern = pattern;
+        }
+
+        public String getPattern() {
+            return pattern;
+        }
+    }
 }

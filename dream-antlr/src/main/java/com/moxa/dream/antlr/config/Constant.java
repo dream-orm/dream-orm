@@ -96,7 +96,11 @@ public final class Constant {
             ExprType.IF,
             ExprType.NULLIF,
             ExprType.SPACE,
-            ExprType.MY_FUNCTION
+            ExprType.MY_FUNCTION,
+            ExprType.TO_CHAR,
+            ExprType.TO_NUMBER,
+            ExprType.TO_DATE,
+            ExprType.TO_TIMESTAMP,
     };
 
     public static final ExprType[] SYMBOL = {

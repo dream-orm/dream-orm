@@ -766,6 +766,26 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ToNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_NUMBER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ToDateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_DATE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ToTimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_TIMESTAMP(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.CastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return toStr(statement.getParamsStatement(), assist, invokerList);
     }

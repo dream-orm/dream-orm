@@ -558,6 +558,18 @@ public abstract class ToSQL {
             case -1652936693://MyFunctionStatement
                 sql = toString((MyFunctionStatement) statement, assist, invokerList);
                 break;
+            case 639930334://ToCharStatement
+                sql = toString((FunctionStatement.ToCharStatement) statement, assist, invokerList);
+                break;
+            case -485043189://ToNumberStatement
+                sql = toString((FunctionStatement.ToNumberStatement) statement, assist, invokerList);
+                break;
+            case -2079680890://ToDateStatement
+                sql = toString((FunctionStatement.ToDateStatement) statement, assist, invokerList);
+                break;
+            case -1150076140://ToTimeStampStatement
+                sql = toString((FunctionStatement.ToTimeStampStatement) statement, assist, invokerList);
+                break;
             default:
                 throw new AntlrException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
         }
@@ -837,6 +849,14 @@ public abstract class ToSQL {
 
     protected abstract String toString(FunctionStatement.IfStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
+    protected abstract String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.ToNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.ToDateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.ToTimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+    
     protected abstract String toString(FunctionStatement.CastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(CastTypeStatement.SignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
@@ -912,4 +932,6 @@ public abstract class ToSQL {
     protected abstract String toString(InvokerStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+
 }

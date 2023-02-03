@@ -56,7 +56,7 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprGroupConcat(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement.GroupConcatStatement func = new FunctionStatement.GroupConcatStatement();
-        functionStatement = new FunctionParamExpr(exprReader, func,()->new FunctionParamExpr.GroupConcatExpr(exprReader,func)).expr();
+        functionStatement = new FunctionParamExpr(exprReader, func, () -> new FunctionParamExpr.GroupConcatExpr(exprReader, func)).expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -721,6 +721,38 @@ public class FunctionExpr extends SqlExpr {
         return expr();
     }
 
+    @Override
+    protected Statement exprToChar(ExprInfo exprInfo) throws AntlrException {
+        FunctionStatement func = new FunctionStatement.ToCharStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprToNumber(ExprInfo exprInfo) throws AntlrException {
+        FunctionStatement func = new FunctionStatement.ToNumberStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprToDate(ExprInfo exprInfo) throws AntlrException {
+        FunctionStatement func = new FunctionStatement.ToDateStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprToTimeStamp(ExprInfo exprInfo) throws AntlrException {
+        FunctionStatement func = new FunctionStatement.ToTimeStampStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
     public static class FunctionParamExpr extends HelperExpr {
         private final FunctionStatement func;
 
@@ -1259,14 +1291,14 @@ public class FunctionExpr extends SqlExpr {
         public static class GroupConcatExpr extends HelperExpr {
             private FunctionStatement.GroupConcatStatement groupConcatStatement;
 
-            public GroupConcatExpr(ExprReader exprReader,FunctionStatement.GroupConcatStatement groupConcatStatement) {
-                this(exprReader, () -> new ListColumnExpr(exprReader,new ExprInfo(ExprType.COMMA, ",")),groupConcatStatement);
+            public GroupConcatExpr(ExprReader exprReader, FunctionStatement.GroupConcatStatement groupConcatStatement) {
+                this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")), groupConcatStatement);
             }
 
-            public GroupConcatExpr(ExprReader exprReader, Helper helper,FunctionStatement.GroupConcatStatement groupConcatStatement) {
+            public GroupConcatExpr(ExprReader exprReader, Helper helper, FunctionStatement.GroupConcatStatement groupConcatStatement) {
                 super(exprReader, helper);
                 setExprTypes(ExprType.DISTINCT, ExprType.ALL, ExprType.HELP);
-                this.groupConcatStatement=groupConcatStatement;
+                this.groupConcatStatement = groupConcatStatement;
             }
 
             @Override

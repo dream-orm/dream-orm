@@ -334,6 +334,14 @@ public class ExprUtil {
                 return ExprType.OVER;
             case 986784458://PARTITION
                 return ExprType.PARTITION;
+            case -407597414://TO_CHAR
+                return ExprType.TO_CHAR;
+            case -531820147://TO_NUMBER
+                return ExprType.TO_NUMBER;
+            case -407573774://TO_DATE
+                return ExprType.TO_DATE;
+            case -914382798://TO_TIMESTAMP
+                return ExprType.TO_TIMESTAMP;
             default:
                 return ExprType.LETTER;
         }

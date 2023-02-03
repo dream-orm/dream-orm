@@ -179,5 +179,9 @@ public enum ExprType {
     OVER,
     PARTITION,
     MARK,
-    INVOKER
+    INVOKER,
+    TO_CHAR,
+    TO_NUMBER,
+    TO_DATE,
+    TO_TIMESTAMP,
 }

@@ -6,6 +6,7 @@ import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 
 public class AntlrUtil {
     public static <T extends Statement> void copy(T target, T source) throws AntlrException {
@@ -51,5 +52,30 @@ public class AntlrUtil {
         } else {
             return "@" + function + "(" + paramBuilder + ")";
         }
+    }
+
+    public static String replace(String value, Map<String, String> replaceMap) {
+        StringBuilder builder = new StringBuilder();
+        int length = value.length();
+        int i = 0;
+        while (i < length) {
+            int point = i;
+            String replaceNewStr = null;
+            for (int j = i + 1; j <= length; j++) {
+                String subStr = value.substring(i, j);
+                String newStr = replaceMap.get(subStr);
+                if (newStr != null) {
+                    point = j;
+                    replaceNewStr = newStr;
+                }
+            }
+            if (replaceNewStr != null) {
+                i = point;
+                builder.append(replaceNewStr);
+            } else {
+                builder.append(value.charAt(i++));
+            }
+        }
+        return builder.toString();
     }
 }
