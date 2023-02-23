@@ -65,7 +65,7 @@ public class PageHandler extends AbstractHandler {
         if (ObjectUtil.isNull(countSql)) {
             countSql = "select count(1) from (" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp";
         }
-        SqlAction sqlAction = new SqlAction(methodInfo.getConfiguration(), countSql, NonCollection.class, Long.class, (arg, result) -> {
+        SqlAction sqlAction = new SqlAction(methodInfo, countSql, NonCollection.class, Long.class, (arg, result) -> {
             ObjectWrapper wrapper = ObjectWrapper.wrapper(arg);
             PageQuery pageQuery = methodInfo.get(PageQuery.class);
             String value = pageQuery.value();

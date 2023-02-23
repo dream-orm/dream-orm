@@ -1,7 +1,6 @@
 package com.moxa.dream.system.core.action;
 
 
-import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
@@ -17,9 +16,9 @@ public class SqlAction implements Action {
     private MethodInfo methodInfo;
     private BiConsumer<Object, Object> consumer;
 
-    public SqlAction(Configuration configuration, String sql, Class<? extends Collection> rowType, Class<?> colType, BiConsumer<Object, Object> consumer) {
-        if (configuration == null) {
-            throw new DreamRunTimeException("configuration不能为空");
+    public SqlAction(MethodInfo methodInfo, String sql, Class<? extends Collection> rowType, Class<?> colType, BiConsumer<Object, Object> consumer) {
+        if (methodInfo == null) {
+            throw new DreamRunTimeException("methodInfo不能为空");
         }
         if (ObjectUtil.isNull(sql)) {
             throw new DreamRunTimeException("sql不能为空");
@@ -33,8 +32,9 @@ public class SqlAction implements Action {
         if (consumer == null) {
             throw new DreamRunTimeException("consumer不能为空");
         }
-        methodInfo = new MethodInfo()
-                .setConfiguration(configuration)
+        this.methodInfo = new MethodInfo()
+                .setId(methodInfo.getId() + "#count")
+                .setConfiguration(methodInfo.getConfiguration())
                 .setRowType(rowType)
                 .setColType(colType)
                 .setSql(sql);

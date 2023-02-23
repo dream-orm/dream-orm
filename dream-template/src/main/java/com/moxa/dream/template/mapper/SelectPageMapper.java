@@ -7,6 +7,7 @@ import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.factory.TableFactory;
+import com.moxa.dream.util.common.ObjectUtil;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -40,6 +41,10 @@ public class SelectPageMapper extends SelectListMapper {
                     TableFactory tableFactory = configuration.getTableFactory();
                     String tableName = getTableName(type);
                     methodInfo = getMethodInfo(configuration, tableFactory.getTableInfo(tableName), type, arg);
+                    String id = getId();
+                    if (!ObjectUtil.isNull(id)) {
+                        methodInfo.setId(id);
+                    }
                     methodInfo.set(PageQuery.class, new PageQuery() {
                         @Override
                         public Class<? extends Annotation> annotationType() {
