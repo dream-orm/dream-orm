@@ -114,6 +114,7 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
     }
 
     public Object get(Object result, String property) {
+        property = unWrap(property);
         PropertyInfo propertyInfo = propertyInfoMap.get(property);
         if (propertyInfo == null) {
             throw new DreamRunTimeException(type.getName() + "不存在属性" + property);
@@ -131,6 +132,24 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
             return field.get(result);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    protected String unWrap(String property) {
+        if (property == null) {
+            return null;
+        }
+        char startChar = property.charAt(0);
+        switch (startChar) {
+            case '\'':
+            case '\"':
+            case '`':
+                if (property.charAt(property.length() - 1) == startChar) {
+                    return property.substring(1, property.length() - 1);
+                }
+                return property;
+            default:
+                return property;
         }
     }
 

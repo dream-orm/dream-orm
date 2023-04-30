@@ -45,7 +45,7 @@ public abstract class ValidateMapper extends AbstractMapper {
                                 Map<String, Object> paramMap = getParamMap(annotation);
                                 Class<? extends Validator> validatorType = validatedAnnotation.value();
                                 Validator validator = ReflectUtil.create(validatorType);
-                                if (validator.isValid(configuration, validateType, field, getCommand())) {
+                                if (validator.isValid(session, validateType, field, getCommand())) {
                                     validatePackageList.validatePackageList.add(new ValidatePackage(validator, field.getName(), paramMap));
                                 }
                             }
