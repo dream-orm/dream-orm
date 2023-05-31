@@ -121,6 +121,7 @@ public class ExprReader extends StringReader {
                 break;
             case 9:
             case 10:
+            case 13:
             case 32:
                 lastInfo = push();
                 break;
