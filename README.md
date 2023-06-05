@@ -12,7 +12,7 @@ DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术�
 
 联系微信：<img src=".\wx.jpg" style="zoom:25%;" />
 
-微信群：<img src="D:\projects\dream-project\dream\qun.jpg" style="zoom:25%;" />
+微信群：<img src=".\qun.jpg" style="zoom:25%;" />
 
 ## **特性**
 
