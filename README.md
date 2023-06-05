@@ -4,7 +4,15 @@
 
 DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术为中心，辐射业务持久层框架，理论上支持用开发者习惯的SQL语法，完成对不同数据库的兼容
 
+集成springboot地址：[moxa-lzf/dream-boot-starter: 集成到springboot的dream (github.com)](https://github.com/moxa-lzf/dream-boot-starter)
+
+测试demo：[moxa-lzf/dream: 基于翻译的框架 (github.com)](https://github.com/moxa-lzf/dream-test)
+
+脚手架地址：[moxa-lzf/sooth-boot: 基于dream的sooth脚手架 (github.com)](https://github.com/moxa-lzf/sooth-boot)
+
 联系微信：<img src=".\wx.jpg" style="zoom:25%;" />
+
+微信群：<img src="D:\projects\dream-project\dream\qun.jpg" style="zoom:25%;" />
 
 ## **特性**
 
