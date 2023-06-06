@@ -176,7 +176,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             } catch (TypeHandlerNotFoundException e) {
                 throw new DreamRunTimeException("映射" + mappedStatement.getId() + "失败，映射字段:" + columnLabel + "，表：" + tableName + "，" + e.getMessage(), e);
             }
-            if (!success) {
+            if (!success&&!columnLabel.equals("rn")) {
                 throw new DreamRunTimeException("映射" + mappedStatement.getId() + "失败，映射字段:" + columnLabel + "，表：" + tableName);
             }
         }

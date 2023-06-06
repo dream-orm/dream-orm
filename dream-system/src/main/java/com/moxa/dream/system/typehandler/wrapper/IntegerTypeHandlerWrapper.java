@@ -23,6 +23,8 @@ public class IntegerTypeHandlerWrapper implements TypeHandlerWrapper {
                 TypeUtil.hash(Integer.class, Types.INTEGER),
                 TypeUtil.hash(int.class, Types.BIGINT),
                 TypeUtil.hash(Integer.class, Types.BIGINT),
+                TypeUtil.hash(int.class, Types.NUMERIC),
+                TypeUtil.hash(Integer.class, Types.NUMERIC),
                 TypeUtil.hash(int.class, Types.BIT),
                 TypeUtil.hash(Integer.class, Types.BIT),
                 TypeUtil.hash(int.class, Types.TINYINT),

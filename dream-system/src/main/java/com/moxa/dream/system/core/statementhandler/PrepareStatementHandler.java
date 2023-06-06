@@ -13,7 +13,12 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
 
     @Override
     public PreparedStatement prepare(Connection connection, MappedStatement mappedStatement) throws SQLException {
-        return connection.prepareStatement(mappedStatement.getSql(), mappedStatement.getColumnNames());
+        String[] columnNames = mappedStatement.getColumnNames();
+        if(columnNames!=null&&columnNames.length>0){
+            return connection.prepareStatement(mappedStatement.getSql(), columnNames);
+        }else{
+            return connection.prepareStatement(mappedStatement.getSql());
+        }
     }
 
     protected void doParameter(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {

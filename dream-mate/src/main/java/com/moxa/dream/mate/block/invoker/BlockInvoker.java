@@ -79,5 +79,9 @@ public class BlockInvoker extends AbstractInvoker {
     public String function() {
         return FUNCTION;
     }
+
+    public Set<String> getFilterSet() {
+        return filterSet;
+    }
 }
 

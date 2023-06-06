@@ -20,6 +20,8 @@ public class LongTypeHandlerWrapper implements TypeHandlerWrapper {
                 TypeUtil.hash(Long.class, Types.BIGINT),
                 TypeUtil.hash(long.class, Types.INTEGER),
                 TypeUtil.hash(Long.class, Types.INTEGER),
+                TypeUtil.hash(long.class, Types.NUMERIC),
+                TypeUtil.hash(Long.class, Types.NUMERIC),
                 TypeUtil.hash(long.class, Types.NULL),
                 TypeUtil.hash(Long.class, Types.NULL),
         };

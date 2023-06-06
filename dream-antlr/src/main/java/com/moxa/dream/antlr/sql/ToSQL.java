@@ -570,6 +570,9 @@ public abstract class ToSQL {
             case -1150076140://ToTimeStampStatement
                 sql = toString((FunctionStatement.ToTimeStampStatement) statement, assist, invokerList);
                 break;
+            case -90385098://ReturnParameterStatement
+                sql=toString((FunctionStatement.ReturnParameterStatement)statement,assist,invokerList);
+                break;
             default:
                 throw new AntlrException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
         }
@@ -933,5 +936,6 @@ public abstract class ToSQL {
 
     protected abstract String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
+    protected abstract String toString(FunctionStatement.ReturnParameterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
 }

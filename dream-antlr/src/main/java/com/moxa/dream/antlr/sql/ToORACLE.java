@@ -37,6 +37,37 @@ public class ToORACLE extends ToPubSQL {
     }
 
     @Override
+    protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "\"" + statement.getValue() + "\"";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.GroupConcatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        boolean distinct = statement.isDistinct();
+        boolean all = statement.isAll();
+        Statement order = statement.getOrder();
+        Statement separator = statement.getSeparator();
+        StringBuilder builder = new StringBuilder();
+        if (distinct) {
+            builder.append("DISTINCT ");
+        }
+        if (all) {
+            builder.append("ALL ");
+        }
+        builder.append(toStr(statement.getParamsStatement(), assist, invokerList));
+        if (separator != null) {
+            builder.append("," + toStr(separator, assist, invokerList));
+        }
+        String orderStr;
+        if (order != null) {
+            orderStr=toStr(order, assist, invokerList);
+        }else{
+            orderStr="ORDER BY 0";
+        }
+        return "LISTAGG(" + builder + ") WITHIN GROUP("+orderStr+")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.RepeatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String tar = toStr(columnList[0], assist, invokerList);
@@ -231,13 +262,14 @@ public class ToORACLE extends ToPubSQL {
         if (columnList.length == 2) {
             return super.toString(statement, assist, invokerList);
         } else {
-            StringBuilder stringBuilder = new StringBuilder();
+            ListColumnStatement listColumnStatement=new ListColumnStatement("||");
             int i;
-            for (i = 0; i < columnList.length - 1; i++) {
-                stringBuilder.append(toStr(columnList[i], assist, invokerList) + "||");
+            for (i = 0; i <= columnList.length - 1; i++) {
+                listColumnStatement.add(columnList[i]);
             }
-            stringBuilder.append(toStr(columnList[i], assist, invokerList));
-            return stringBuilder.toString();
+            FunctionStatement.ReturnParameterStatement returnParameterStatement=new FunctionStatement.ReturnParameterStatement();
+            returnParameterStatement.setParamsStatement(listColumnStatement);
+            return toStr(returnParameterStatement,assist,invokerList);
         }
     }
 
@@ -246,12 +278,13 @@ public class ToORACLE extends ToPubSQL {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String link = toStr(columnList[0], assist, invokerList);
         int i;
-        StringBuilder builder = new StringBuilder();
-        for (i = 1; i < columnList.length - 1; i++) {
-            builder.append(toStr(columnList[i], assist, invokerList) + "||" + link + "||");
+        ListColumnStatement listColumnStatement=new ListColumnStatement("||"+link+"||");
+        for (i = 1; i <= columnList.length - 1; i++) {
+            listColumnStatement.add(columnList[i]);
         }
-        builder.append(toStr(columnList[i], assist, invokerList));
-        return builder.toString();
+        FunctionStatement.ReturnParameterStatement returnParameterStatement=new FunctionStatement.ReturnParameterStatement();
+        returnParameterStatement.setParamsStatement(listColumnStatement);
+        return toStr(returnParameterStatement,assist,invokerList);
     }
 
     @Override

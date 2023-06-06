@@ -324,7 +324,7 @@ public class ToNativeSQL extends ToSQL {
             }
         }
         if (stringBuilder.length() > 0) {
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+            return stringBuilder.substring(0,stringBuilder.length() - cut.length());
         }
         return stringBuilder.toString();
     }
@@ -985,5 +985,10 @@ public class ToNativeSQL extends ToSQL {
     @Override
     protected String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return statement.getFunctionName() + "(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    public String toString(FunctionStatement.ReturnParameterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return toStr(statement.getParamsStatement(),assist,invokerList);
     }
 }

@@ -21,6 +21,8 @@ public class FloatTypeHandlerWrapper implements TypeHandlerWrapper {
                 TypeUtil.hash(Object.class, Types.REAL),
                 TypeUtil.hash(float.class, Types.REAL),
                 TypeUtil.hash(Float.class, Types.REAL),
+                TypeUtil.hash(float.class, Types.NUMERIC),
+                TypeUtil.hash(Float.class, Types.NUMERIC),
                 TypeUtil.hash(float.class, Types.NULL),
                 TypeUtil.hash(Float.class, Types.NULL),
         };

@@ -36,7 +36,7 @@ DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术�
 
 ## **系统架构**
 
-![](.\system.png)
+<img src=".\system.png"  />
 
 ## **优势**
 

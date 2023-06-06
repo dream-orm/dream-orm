@@ -53,7 +53,7 @@ public class SelectPageMapper extends SelectListMapper {
 
                         @Override
                         public boolean offset() {
-                            return true;
+                            return false;
                         }
 
                         @Override
