@@ -274,11 +274,6 @@ public class ToMSSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.LogStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LOG(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
     protected String toString(FunctionStatement.Log2Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LOG(2," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
     }
@@ -286,11 +281,6 @@ public class ToMSSQL extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.Log10Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LOG10(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.PiStatement statement, Assist assist, List<Invoker> invokerList) {
-        return "PI()";
     }
 
     @Override

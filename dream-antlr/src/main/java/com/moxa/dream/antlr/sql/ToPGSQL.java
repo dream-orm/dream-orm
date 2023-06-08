@@ -338,19 +338,10 @@ public class ToPGSQL extends ToPubSQL {
         return "POW(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
-    @Override
-    protected String toString(FunctionStatement.PowerStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "POWER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
 
     @Override
     protected String toString(FunctionStatement.RandStatement statement, Assist assist, List<Invoker> invokerList) {
         return "RANDOM()";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.RoundStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "ROUND(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
