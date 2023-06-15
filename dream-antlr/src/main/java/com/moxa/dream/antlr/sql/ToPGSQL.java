@@ -2,9 +2,7 @@ package com.moxa.dream.antlr.sql;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.AntlrException;
-import com.moxa.dream.antlr.expr.QueryExpr;
 import com.moxa.dream.antlr.invoker.Invoker;
-import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.util.AntlrUtil;
 
@@ -38,29 +36,7 @@ public class ToPGSQL extends ToPubSQL {
 
     @Override
     protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        LimitStatement limitStatement = statement.getLimitStatement();
-        if (limitStatement != null && !limitStatement.isOffset()) {
-            Statement first = limitStatement.getFirst();
-            Statement second = limitStatement.getSecond();
-            statement.setLimitStatement(null);
-            ToSQL toNativeSQL = new ToNativeSQL();
-            String minValue;
-            String maxValue;
-            String querySql = toNativeSQL.toStr(statement, null, null);
-            String sql;
-            if (second == null) {
-                maxValue = toNativeSQL.toStr(first, null, null);
-                sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn<=" + maxValue;
-            } else {
-                querySql = toNativeSQL.toStr(statement, null, null);
-                maxValue = toNativeSQL.toStr(second, null, null);
-                minValue = toNativeSQL.toStr(first, null, null);
-                sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn>" + minValue + " and rn<=" + minValue + "+" + maxValue;
-            }
-            QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-            AntlrUtil.copy(statement, queryStatement);
-        }
-        return super.toString(statement, assist, invokerList);
+        return super.toStringForRowNumber(statement, assist, invokerList);
     }
 
     @Override
@@ -274,39 +250,8 @@ public class ToPGSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.LeftStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LEFT(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.RightStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "RIGHT(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-
-    @Override
-    protected String toString(FunctionStatement.SpaceStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LPAD(' '," + toStr(statement.getParamsStatement(), assist, invokerList) + ",' ')";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.LpadStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LPAD(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
     protected String toString(FunctionStatement.RpadStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "RTRIM(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.CeilStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CEIL(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.CeilingStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CEILING(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -458,19 +403,6 @@ public class ToPGSQL extends ToPubSQL {
         } else {
             return "TO_NUMBER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
         }
-    }
-
-
-    @Override
-    protected String toString(OperStatement.LLMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "<<" + toStr(conditionStatement.getRight(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(OperStatement.RRMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + ">>" + toStr(conditionStatement.getRight(), assist, invokerList);
     }
 
     @Override

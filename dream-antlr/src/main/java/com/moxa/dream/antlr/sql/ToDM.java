@@ -58,11 +58,11 @@ public class ToDM extends ToPubSQL {
         }
         String orderStr;
         if (order != null) {
-            orderStr=toStr(order, assist, invokerList);
-        }else{
-            orderStr="ORDER BY 0";
+            orderStr = toStr(order, assist, invokerList);
+        } else {
+            orderStr = "ORDER BY 0";
         }
-        return "LISTAGG(" + builder + ") WITHIN GROUP("+orderStr+")";
+        return "LISTAGG(" + builder + ") WITHIN GROUP(" + orderStr + ")";
     }
 
     @Override
@@ -206,21 +206,6 @@ public class ToDM extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.LpadStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LPAD(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.RpadStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "RPAD(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.CeilStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CEIL(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
     protected String toString(FunctionStatement.CeilingStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CEIL(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
@@ -243,11 +228,6 @@ public class ToDM extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CEIL(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + "-" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.DateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        throw new RuntimeException("尚未完成DATE");
     }
 
     @Override

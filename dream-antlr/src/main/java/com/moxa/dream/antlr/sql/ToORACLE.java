@@ -2,9 +2,7 @@ package com.moxa.dream.antlr.sql;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.AntlrException;
-import com.moxa.dream.antlr.expr.QueryExpr;
 import com.moxa.dream.antlr.invoker.Invoker;
-import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.util.AntlrUtil;
 
@@ -60,11 +58,11 @@ public class ToORACLE extends ToPubSQL {
         }
         String orderStr;
         if (order != null) {
-            orderStr=toStr(order, assist, invokerList);
-        }else{
-            orderStr="ORDER BY 0";
+            orderStr = toStr(order, assist, invokerList);
+        } else {
+            orderStr = "ORDER BY 0";
         }
-        return "LISTAGG(" + builder + ") WITHIN GROUP("+orderStr+")";
+        return "LISTAGG(" + builder + ") WITHIN GROUP(" + orderStr + ")";
     }
 
     @Override
@@ -222,28 +220,7 @@ public class ToORACLE extends ToPubSQL {
 
     @Override
     protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        LimitStatement limitStatement = statement.getLimitStatement();
-        if (limitStatement != null && !limitStatement.isOffset()) {
-            Statement first = limitStatement.getFirst();
-            Statement second = limitStatement.getSecond();
-            statement.setLimitStatement(null);
-            ToSQL toNativeSQL = new ToNativeSQL();
-            String minValue;
-            String maxValue;
-            String querySql = toNativeSQL.toStr(statement, null, null);
-            String sql;
-            if (second == null) {
-                maxValue = toNativeSQL.toStr(first, null, null);
-                sql = "select* from(select rownum rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn <=" + maxValue;
-            } else {
-                maxValue = toNativeSQL.toStr(second, null, null);
-                minValue = toNativeSQL.toStr(first, null, null);
-                sql = "select* from(select rownum rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn > " + minValue + " and rn<=" + minValue + "+" + maxValue;
-            }
-            QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-            AntlrUtil.copy(statement, queryStatement);
-        }
-        return super.toString(statement, assist, invokerList);
+        return super.toStringForRowNumber(statement, assist, invokerList);
     }
 
     @Override
@@ -257,14 +234,14 @@ public class ToORACLE extends ToPubSQL {
         if (columnList.length == 2) {
             return super.toString(statement, assist, invokerList);
         } else {
-            ListColumnStatement listColumnStatement=new ListColumnStatement("||");
+            ListColumnStatement listColumnStatement = new ListColumnStatement("||");
             int i;
             for (i = 0; i <= columnList.length - 1; i++) {
                 listColumnStatement.add(columnList[i]);
             }
-            FunctionStatement.ReturnParameterStatement returnParameterStatement=new FunctionStatement.ReturnParameterStatement();
+            FunctionStatement.ReturnParameterStatement returnParameterStatement = new FunctionStatement.ReturnParameterStatement();
             returnParameterStatement.setParamsStatement(listColumnStatement);
-            return toStr(returnParameterStatement,assist,invokerList);
+            return toStr(returnParameterStatement, assist, invokerList);
         }
     }
 
@@ -273,13 +250,13 @@ public class ToORACLE extends ToPubSQL {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String link = toStr(columnList[0], assist, invokerList);
         int i;
-        ListColumnStatement listColumnStatement=new ListColumnStatement("||"+link+"||");
+        ListColumnStatement listColumnStatement = new ListColumnStatement("||" + link + "||");
         for (i = 1; i <= columnList.length - 1; i++) {
             listColumnStatement.add(columnList[i]);
         }
-        FunctionStatement.ReturnParameterStatement returnParameterStatement=new FunctionStatement.ReturnParameterStatement();
+        FunctionStatement.ReturnParameterStatement returnParameterStatement = new FunctionStatement.ReturnParameterStatement();
         returnParameterStatement.setParamsStatement(listColumnStatement);
-        return toStr(returnParameterStatement,assist,invokerList);
+        return toStr(returnParameterStatement, assist, invokerList);
     }
 
     @Override
@@ -295,21 +272,6 @@ public class ToORACLE extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.SpaceStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LPAD(' '," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",' ')";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.LpadStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LPAD(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.RpadStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "RPAD(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.CeilStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CEIL(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -408,11 +370,6 @@ public class ToORACLE extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.MonthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "TO_NUMBER(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'mm'))";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.DateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        throw new RuntimeException("尚未完成DATE");
     }
 
     @Override

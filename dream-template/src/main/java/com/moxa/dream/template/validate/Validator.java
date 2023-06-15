@@ -2,7 +2,6 @@ package com.moxa.dream.template.validate;
 
 
 import com.moxa.dream.system.config.Command;
-import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.core.session.Session;
 
 import java.lang.reflect.Field;

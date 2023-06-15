@@ -2,15 +2,43 @@ package com.moxa.dream.antlr.sql;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.AntlrException;
-import com.moxa.dream.antlr.expr.QueryExpr;
 import com.moxa.dream.antlr.invoker.Invoker;
-import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
-import com.moxa.dream.antlr.util.AntlrUtil;
 
 import java.util.List;
 
 public class ToMSSQL extends ToPubSQL {
+
+    @Override
+    protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "\"" + statement.getValue() + "\"";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.GroupConcatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        boolean distinct = statement.isDistinct();
+        boolean all = statement.isAll();
+        Statement order = statement.getOrder();
+        Statement separator = statement.getSeparator();
+        StringBuilder builder = new StringBuilder();
+        if (distinct) {
+            builder.append("DISTINCT ");
+        }
+        if (all) {
+            builder.append("ALL ");
+        }
+        builder.append(toStr(statement.getParamsStatement(), assist, invokerList));
+        if (separator != null) {
+            builder.append("," + toStr(separator, assist, invokerList));
+        } else {
+            builder.append(",','");
+        }
+        String sql = "STRING_AGG(" + builder + ")";
+        if (order != null) {
+            sql += "WITHIN GROUP(" + toStr(order, assist, invokerList) + ")";
+        }
+        return sql;
+    }
 
     @Override
     protected String toString(FunctionStatement.RepeatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
@@ -192,29 +220,7 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        LimitStatement limitStatement = statement.getLimitStatement();
-        if (limitStatement != null && !limitStatement.isOffset()) {
-            Statement first = limitStatement.getFirst();
-            Statement second = limitStatement.getSecond();
-            statement.setLimitStatement(null);
-            ToSQL toNativeSQL = new ToNativeSQL();
-            String minValue;
-            String maxValue;
-            String querySql = toNativeSQL.toStr(statement, null, null);
-            String sql;
-            if (second == null) {
-                maxValue = toNativeSQL.toStr(first, null, null);
-                sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn<=" + maxValue;
-            } else {
-                querySql = toNativeSQL.toStr(statement, null, null);
-                maxValue = toNativeSQL.toStr(second, null, null);
-                minValue = toNativeSQL.toStr(first, null, null);
-                sql = "select t_tmp.* from(select row_number() over(order by(select 0)) rn,t_tmp.* from (" + querySql + ")t_tmp)t_tmp where rn > " + minValue + " and rn<=" + minValue + "+" + maxValue;
-            }
-            QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-            AntlrUtil.copy(statement, queryStatement);
-        }
-        return super.toString(statement, assist, invokerList);
+        return super.toStringForRowNumber(statement, assist, invokerList);
     }
 
     @Override
@@ -225,21 +231,6 @@ public class ToMSSQL extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.LengthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LEN(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.LeftStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LEFT(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.RightStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "RIGHT(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.SpaceStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "SPACE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -366,11 +357,6 @@ public class ToMSSQL extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.MonthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "DATEPART(" + "m," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(FunctionStatement.DateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        throw new RuntimeException("尚未完成DATE");
     }
 
     @Override

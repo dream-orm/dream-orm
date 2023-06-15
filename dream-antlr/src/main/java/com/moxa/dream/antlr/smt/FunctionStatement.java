@@ -470,7 +470,7 @@ public abstract class FunctionStatement extends Statement {
     /**
      * 特殊的函数，目的是把concat(a,b,c,...,d)形式，在oracle环境下翻译成a||b||c||...||d用函数表示
      */
-    public static class ReturnParameterStatement extends FunctionStatement{
+    public static class ReturnParameterStatement extends FunctionStatement {
 
     }
 }

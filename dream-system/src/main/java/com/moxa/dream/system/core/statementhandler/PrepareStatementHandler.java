@@ -14,9 +14,9 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
     @Override
     public PreparedStatement prepare(Connection connection, MappedStatement mappedStatement) throws SQLException {
         String[] columnNames = mappedStatement.getColumnNames();
-        if(columnNames!=null&&columnNames.length>0){
+        if (columnNames != null && columnNames.length > 0) {
             return connection.prepareStatement(mappedStatement.getSql(), columnNames);
-        }else{
+        } else {
             return connection.prepareStatement(mappedStatement.getSql());
         }
     }

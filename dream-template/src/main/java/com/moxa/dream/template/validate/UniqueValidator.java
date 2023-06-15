@@ -33,7 +33,7 @@ public class UniqueValidator implements Validator<Object> {
             methodInfo.setSql("select 1 from " + tableName + " where " + column + "=@?(v) limit 1");
             methodInfo.setRowType(NonCollection.class);
             methodInfo.setColType(Integer.class);
-            this.session=session;
+            this.session = session;
             return true;
         } else {
             return false;

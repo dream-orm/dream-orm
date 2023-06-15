@@ -324,7 +324,7 @@ public class ToNativeSQL extends ToSQL {
             }
         }
         if (stringBuilder.length() > 0) {
-            return stringBuilder.substring(0,stringBuilder.length() - cut.length());
+            return stringBuilder.substring(0, stringBuilder.length() - cut.length());
         }
         return stringBuilder.toString();
     }
@@ -989,6 +989,6 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     public String toString(FunctionStatement.ReturnParameterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getParamsStatement(),assist,invokerList);
+        return toStr(statement.getParamsStatement(), assist, invokerList);
     }
 }
