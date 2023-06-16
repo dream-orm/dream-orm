@@ -15,18 +15,18 @@ public class DefaultInjectFactory implements InjectFactory {
 
     public DefaultInjectFactory() {
         injectMap.put(AnnotationInject.class, new AnnotationInject());
-        injectMap.put(PageInject.class, new PageInject());
+        injectMap.put(PageInject.class, new PageInject(false));
         injectMap.put(ScanInject.class, new ScanInject());
     }
 
     @Override
     public void injects(Inject... injects) {
         if (!ObjectUtil.isNull(injects)) {
-            Inject pageInject = injectMap.remove(PageInject.class);
-            Inject scanInject = injectMap.remove(ScanInject.class);
             for (Inject inject : injects) {
                 injectMap.put(inject.getClass(), inject);
             }
+            Inject pageInject = injectMap.remove(PageInject.class);
+            Inject scanInject = injectMap.remove(ScanInject.class);
             injectMap.put(PageInject.class, pageInject);
             injectMap.put(ScanInject.class, scanInject);
         }

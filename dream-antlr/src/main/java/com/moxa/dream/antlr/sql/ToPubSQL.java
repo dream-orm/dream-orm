@@ -42,7 +42,7 @@ public abstract class ToPubSQL extends ToNativeSQL {
 
     protected String toStringForRowNumber(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         LimitStatement limitStatement = statement.getLimitStatement();
-        if (limitStatement != null&&!limitStatement.isOffset()) {
+        if (limitStatement != null && !limitStatement.isOffset()) {
             Statement first = limitStatement.getFirst();
             Statement second = limitStatement.getSecond();
             statement.setLimitStatement(null);

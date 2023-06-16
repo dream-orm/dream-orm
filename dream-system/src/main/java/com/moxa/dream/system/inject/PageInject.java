@@ -15,7 +15,10 @@ import com.moxa.dream.util.common.ObjectUtil;
 public class PageInject implements Inject {
     private final String START_ROW = "startRow";
     private final String PAGE_SIZE = "pageSize";
-
+    private boolean offset;
+    public PageInject(boolean offset){
+        this.offset=offset;
+    }
     @Override
     public void inject(MethodInfo methodInfo) {
         PageQuery pageQuery = methodInfo.get(PageQuery.class);
@@ -26,7 +29,7 @@ public class PageInject implements Inject {
             String startRow = prefix + START_ROW;
             String pageSize = prefix + PAGE_SIZE;
             InvokerStatement pageStatement;
-            if (pageQuery.offset()) {
+            if (offset) {
                 pageStatement = AntlrUtil.invokerStatement(
                         OffSetInvoker.FUNCTION,
                         Invoker.DEFAULT_NAMESPACE,

@@ -2,7 +2,9 @@ package com.moxa.dream.antlr.sql;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.AntlrException;
+import com.moxa.dream.antlr.expr.BraceExpr;
 import com.moxa.dream.antlr.invoker.Invoker;
+import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 
 import java.util.List;
@@ -220,6 +222,15 @@ public class ToMSSQL extends ToPubSQL {
 
     @Override
     protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        LimitStatement limitStatement = statement.getLimitStatement();
+        if (limitStatement != null && limitStatement.isOffset()) {
+            OrderStatement orderStatement = statement.getOrderStatement();
+            if (orderStatement == null) {
+                orderStatement = new OrderStatement();
+                orderStatement.setOrder(new BraceExpr(new ExprReader("(select 0)")).expr());
+                statement.setOrderStatement(orderStatement);
+            }
+        }
         return super.toStringForRowNumber(statement, assist, invokerList);
     }
 
