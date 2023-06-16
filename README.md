@@ -8,11 +8,7 @@ DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术�
 
 测试demo：[moxa-lzf/dream: 基于翻译的框架 (github.com)](https://github.com/moxa-lzf/dream-test)
 
-脚手架地址：[moxa-lzf/sooth-boot: 基于dream的sooth脚手架 (github.com)](https://github.com/moxa-lzf/sooth-boot)
-
 联系微信：<img src=".\wx.jpg" style="zoom:25%;" />
-
-微信群：<img src=".\qun.jpg" style="zoom:25%;" />
 
 ## **特性**
 
