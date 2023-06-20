@@ -176,7 +176,10 @@ public final class Constant {
             ExprType.FROM,
             ExprType.SELECT,
             ExprType.SEPARATOR,
-            ExprType.AS
+            ExprType.AS,
+            ExprType.TABLE,
+            ExprType.TRUNCATE,
+            ExprType.DROP
     };
 
 }

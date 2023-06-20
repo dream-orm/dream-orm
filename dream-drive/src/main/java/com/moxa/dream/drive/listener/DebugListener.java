@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DebugListener implements QueryListener, UpdateListener, InsertListener, DeleteListener, BatchListener {
+public class DebugListener implements QueryListener, UpdateListener, InsertListener, DeleteListener, BatchListener, TruncateListener, DropListener {
     final String START_DATE = "startDate";
 
     @Override

@@ -21,7 +21,6 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
     public BatchMappedStatement(MethodInfo methodInfo, List<?> argList) {
         this.methodInfo = methodInfo;
         this.cache = methodInfo.cache;
-        this.listener = methodInfo.listener;
         this.argList = argList;
         mappedStatementList = new ArrayList<>(argList.size());
     }

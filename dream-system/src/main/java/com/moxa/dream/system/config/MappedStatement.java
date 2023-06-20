@@ -18,7 +18,6 @@ public class MappedStatement {
     protected CacheKey uniqueKey;
     protected Object arg;
     protected boolean cache;
-    protected boolean listener;
     protected Map<String, Object> envMap;
 
     protected MappedStatement() {
@@ -75,15 +74,6 @@ public class MappedStatement {
 
     public MappedStatement setCache(boolean cache) {
         this.cache = cache;
-        return this;
-    }
-
-    public boolean isListener() {
-        return listener;
-    }
-
-    public MappedStatement setListener(boolean listener) {
-        this.listener = listener;
         return this;
     }
 
@@ -162,7 +152,6 @@ public class MappedStatement {
         public Builder methodInfo(MethodInfo methodInfo) {
             mappedStatement.methodInfo = methodInfo;
             mappedStatement.cache = methodInfo.isCache();
-            mappedStatement.listener = methodInfo.isListener();
             return this;
         }
 

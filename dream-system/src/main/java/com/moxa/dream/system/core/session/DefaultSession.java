@@ -66,6 +66,12 @@ public class DefaultSession implements Session {
                 case DELETE:
                     value = executor.delete(mappedStatement, this);
                     break;
+                case TRUNCATE:
+                    value = executor.truncate(mappedStatement, this);
+                    break;
+                case DROP:
+                    value = executor.drop(mappedStatement, this);
+                    break;
                 case BATCH:
                     BatchMappedStatement batchMappedStatement = (BatchMappedStatement) mappedStatement;
                     batchMappedStatement.compile(dialectFactory);

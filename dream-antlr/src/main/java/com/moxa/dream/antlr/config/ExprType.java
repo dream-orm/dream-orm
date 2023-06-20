@@ -72,6 +72,7 @@ public enum ExprType {
     LPAD,
     RPAD,
     SPACE,
+    TABLE,
     ABS,
     AVG,
     ACOS,
@@ -102,6 +103,7 @@ public enum ExprType {
     SUM,
     TAN,
     TRUNCATE,
+    DROP,
     CURDATE,
     UNIX_TIMESTAMP,
     FROM_UNIXTIME,
@@ -183,5 +185,5 @@ public enum ExprType {
     TO_CHAR,
     TO_NUMBER,
     TO_DATE,
-    TO_TIMESTAMP,
+    TO_TIMESTAMP
 }

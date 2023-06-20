@@ -162,6 +162,10 @@ public class ExprUtil {
                 return ExprType.LPAD;
             case 2521825://RPAD
                 return ExprType.RPAD;
+            case 79578030://TABLE
+                return ExprType.TABLE;
+            case 2107119://DROP
+                return ExprType.DROP;
             case 64594://ABS
                 return ExprType.ABS;
             case 65202://AVG

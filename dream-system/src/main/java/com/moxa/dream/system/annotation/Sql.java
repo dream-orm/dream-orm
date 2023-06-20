@@ -12,7 +12,5 @@ public @interface Sql {
 
     boolean cache() default true;
 
-    boolean listener() default true;
-
     int timeOut() default 0;
 }

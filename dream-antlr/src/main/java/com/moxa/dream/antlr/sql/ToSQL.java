@@ -573,6 +573,12 @@ public abstract class ToSQL {
             case -90385098://ReturnParameterStatement
                 sql = toString((FunctionStatement.ReturnParameterStatement) statement, assist, invokerList);
                 break;
+            case -710422425://TruncateTableStatement
+                sql = toString((TruncateTableStatement) statement, assist, invokerList);
+                break;
+            case -609362384://DropTableStatement
+                sql = toString((DropTableStatement) statement, assist, invokerList);
+                break;
             default:
                 throw new AntlrException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
         }
@@ -937,5 +943,9 @@ public abstract class ToSQL {
     protected abstract String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.ReturnParameterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(TruncateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(DropTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
 }

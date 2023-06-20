@@ -991,4 +991,14 @@ public class ToNativeSQL extends ToSQL {
     public String toString(FunctionStatement.ReturnParameterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return toStr(statement.getParamsStatement(), assist, invokerList);
     }
+
+    @Override
+    protected String toString(TruncateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TRUNCATE TABLE " + toStr(statement.getTable(), assist, invokerList);
+    }
+
+    @Override
+    protected String toString(DropTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DROP TABLE " + toStr(statement.getTable(), assist, invokerList);
+    }
 }

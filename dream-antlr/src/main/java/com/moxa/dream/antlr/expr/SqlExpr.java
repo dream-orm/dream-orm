@@ -169,6 +169,9 @@ public abstract class SqlExpr {
             case RPAD:
                 statement = exprRpad(exprInfo);
                 break;
+            case TABLE:
+                statement = exprTable(exprInfo);
+                break;
             case ABS:
                 statement = exprAbs(exprInfo);
                 break;
@@ -258,6 +261,9 @@ public abstract class SqlExpr {
                 break;
             case TRUNCATE:
                 statement = exprTruncate(exprInfo);
+                break;
+            case DROP:
+                statement = exprDrop(exprInfo);
                 break;
             case ORDER:
                 statement = exprOrder(exprInfo);
@@ -612,6 +618,10 @@ public abstract class SqlExpr {
         return exprFunction(exprInfo);
     }
 
+    protected Statement exprTable(ExprInfo exprInfo) throws AntlrException {
+        return exprKeyWord(exprInfo);
+    }
+
     protected Statement exprInterval(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
@@ -910,6 +920,10 @@ public abstract class SqlExpr {
 
     protected Statement exprTruncate(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
+    }
+
+    protected Statement exprDrop(ExprInfo exprInfo) throws AntlrException {
+        return exprKeyWord(exprInfo);
     }
 
     protected Statement exprTan(ExprInfo exprInfo) throws AntlrException {

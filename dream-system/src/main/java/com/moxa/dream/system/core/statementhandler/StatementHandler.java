@@ -14,10 +14,6 @@ public interface StatementHandler<T extends Statement> {
 
     Object update(T statement, MappedStatement mappedStatement) throws SQLException;
 
-    Object insert(T statement, MappedStatement mappedStatement) throws SQLException;
-
-    Object delete(T statement, MappedStatement mappedStatement) throws SQLException;
-
     Object batch(T statement, BatchMappedStatement batchMappedStatement) throws SQLException;
 
     T prepare(Connection connection, MappedStatement mappedStatement) throws SQLException;

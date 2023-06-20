@@ -6,10 +6,12 @@ import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.transaction.Transaction;
+import com.moxa.dream.system.typehandler.handler.TypeHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 
 public class JdbcExecutor implements Executor {
     protected Transaction transaction;
@@ -44,17 +46,42 @@ public class JdbcExecutor implements Executor {
 
     @Override
     public Object insert(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> statementHandler(mappedStatement).insert(statement, mappedStatement));
+        return execute(mappedStatement, statement -> {
+            Object result = statementHandler(mappedStatement).update(statement, mappedStatement);
+            String[] columnNames = mappedStatement.getColumnNames();
+            if (columnNames != null && columnNames.length > 0) {
+                Object[] results = new Object[columnNames.length];
+                TypeHandler[] columnTypeHandlers = mappedStatement.getColumnTypeHandlers();
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    for (int i = 0; i < columnNames.length; i++) {
+                        results[i] = columnTypeHandlers[i].getResult(generatedKeys, columnNames[i], Types.NULL);
+                    }
+                    result = results;
+                }
+            }
+            return result;
+        });
     }
 
     @Override
     public Object delete(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> statementHandler(mappedStatement).delete(statement, mappedStatement));
+        return update(mappedStatement, session);
     }
 
     @Override
     public Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
         return execute(batchMappedStatement, statement -> statementHandler(batchMappedStatement).batch(statement, batchMappedStatement));
+    }
+
+    @Override
+    public Object truncate(MappedStatement mappedStatement, Session session) throws SQLException {
+        return update(mappedStatement, session);
+    }
+
+    @Override
+    public Object drop(MappedStatement mappedStatement, Session session) throws SQLException {
+        return update(mappedStatement, session);
     }
 
     protected Object execute(MappedStatement mappedStatement, Function<Statement, Object> function) throws SQLException {

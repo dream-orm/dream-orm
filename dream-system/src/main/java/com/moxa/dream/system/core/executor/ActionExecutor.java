@@ -59,6 +59,16 @@ public class ActionExecutor implements Executor {
         return execute(batchMappedStatement, (ms) -> nextExecutor.batch(batchMappedStatement, session), session);
     }
 
+    @Override
+    public Object truncate(MappedStatement mappedStatement, Session session) throws SQLException {
+        return execute(mappedStatement, (ms) -> nextExecutor.truncate(mappedStatement, session), session);
+    }
+
+    @Override
+    public Object drop(MappedStatement mappedStatement, Session session) throws SQLException {
+        return execute(mappedStatement, (ms) -> nextExecutor.drop(mappedStatement, session), session);
+    }
+
     protected Object execute(MappedStatement mappedStatement, Function<MappedStatement, Object> function, Session session) throws SQLException {
         Action[] initActionList = mappedStatement.getInitActionList();
         Action[] destroyActionList = mappedStatement.getDestroyActionList();

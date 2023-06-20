@@ -54,6 +54,20 @@ public abstract class AbstractCacheExecutor implements Executor {
     }
 
     @Override
+    public Object truncate(MappedStatement mappedStatement, Session session) throws SQLException {
+        Object result = nextExecutor.truncate(mappedStatement, session);
+        clearObject(mappedStatement);
+        return result;
+    }
+
+    @Override
+    public Object drop(MappedStatement mappedStatement, Session session) throws SQLException {
+        Object result = nextExecutor.drop(mappedStatement, session);
+        clearObject(mappedStatement);
+        return result;
+    }
+
+    @Override
     public Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
         Object result = nextExecutor.batch(batchMappedStatement, session);
         clearObject(batchMappedStatement);

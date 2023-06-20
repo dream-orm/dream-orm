@@ -3,10 +3,12 @@ package com.moxa.dream.system.core.statementhandler;
 import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MappedParam;
 import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.util.common.ObjectUtil;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class PrepareStatementHandler implements StatementHandler<PreparedStatement> {
@@ -42,36 +44,12 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
     public ResultSet query(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
         doParameter(statement, mappedStatement);
         doTimeOut(statement, mappedStatement);
-        return statement.executeQuery();
+        ResultSet resultSet = statement.executeQuery();
+        return resultSet;
     }
 
     @Override
     public Object update(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
-        doParameter(statement, mappedStatement);
-        return statement.executeUpdate();
-    }
-
-    @Override
-    public Object insert(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
-        doParameter(statement, mappedStatement);
-        Object result = statement.executeUpdate();
-        String[] columnNames = mappedStatement.getColumnNames();
-        if (columnNames != null && columnNames.length > 0) {
-            Object[] results = new Object[columnNames.length];
-            TypeHandler[] columnTypeHandlers = mappedStatement.getColumnTypeHandlers();
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                for (int i = 0; i < columnNames.length; i++) {
-                    results[i] = columnTypeHandlers[i].getResult(generatedKeys, columnNames[i], Types.NULL);
-                }
-                result = results;
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public Object delete(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
         doParameter(statement, mappedStatement);
         return statement.executeUpdate();
     }

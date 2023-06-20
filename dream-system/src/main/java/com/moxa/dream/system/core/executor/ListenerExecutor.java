@@ -63,8 +63,26 @@ public class ListenerExecutor implements Executor {
         return execute(batchMappedStatement, batchListeners, (ms) -> nextExecutor.batch(batchMappedStatement, session));
     }
 
+    @Override
+    public Object truncate(MappedStatement mappedStatement, Session session) throws SQLException {
+        TruncateListener[] truncateListeners = null;
+        if (listenerFactory != null) {
+            truncateListeners = listenerFactory.getTruncateListener();
+        }
+        return execute(mappedStatement, truncateListeners, (ms) -> nextExecutor.truncate(mappedStatement, session));
+    }
+
+    @Override
+    public Object drop(MappedStatement mappedStatement, Session session) throws SQLException {
+        DropListener[] dropListeners = null;
+        if (listenerFactory != null) {
+            dropListeners = listenerFactory.getDropListener();
+        }
+        return execute(mappedStatement, dropListeners, (ms) -> nextExecutor.drop(mappedStatement, session));
+    }
+
     protected Object execute(MappedStatement mappedStatement, Listener[] listeners, Function<MappedStatement, Object> function) throws SQLException {
-        if (mappedStatement.isListener() && !ObjectUtil.isNull(listeners)) {
+        if (!ObjectUtil.isNull(listeners)) {
             beforeListeners(listeners, mappedStatement);
             Object result;
             try {

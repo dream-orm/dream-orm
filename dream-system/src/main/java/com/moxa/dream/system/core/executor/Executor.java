@@ -18,6 +18,10 @@ public interface Executor {
 
     Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException;
 
+    Object truncate(MappedStatement mappedStatement, Session session) throws SQLException;
+
+    Object drop(MappedStatement mappedStatement, Session session) throws SQLException;
+
     void commit();
 
     void rollback();

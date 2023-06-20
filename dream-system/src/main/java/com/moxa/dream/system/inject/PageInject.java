@@ -16,9 +16,11 @@ public class PageInject implements Inject {
     private final String START_ROW = "startRow";
     private final String PAGE_SIZE = "pageSize";
     private boolean offset;
-    public PageInject(boolean offset){
-        this.offset=offset;
+
+    public PageInject(boolean offset) {
+        this.offset = offset;
     }
+
     @Override
     public void inject(MethodInfo methodInfo) {
         PageQuery pageQuery = methodInfo.get(PageQuery.class);

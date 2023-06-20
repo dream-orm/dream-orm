@@ -13,6 +13,8 @@ public class DefaultListenerFactory implements ListenerFactory {
     private UpdateListener[] updateListeners = new UpdateListener[0];
     private DeleteListener[] deleteListeners = new DeleteListener[0];
     private BatchListener[] batchListeners = new BatchListener[0];
+    private TruncateListener[] truncateListeners = new TruncateListener[0];
+    private DropListener[] dropListeners = new DropListener[0];
 
     @Override
     public void listeners(Listener... listeners) {
@@ -21,6 +23,8 @@ public class DefaultListenerFactory implements ListenerFactory {
         List<UpdateListener> updateListenerList = new ArrayList<>();
         List<DeleteListener> deleteListenerList = new ArrayList<>();
         List<BatchListener> batchListenerList = new ArrayList<>();
+        List<TruncateListener> truncateListenerList = new ArrayList<>();
+        List<DropListener> dropListenerList = new ArrayList<>();
         if (!ObjectUtil.isNull(listeners)) {
             for (Listener listener : listeners) {
                 if (listener instanceof QueryListener) {
@@ -38,12 +42,20 @@ public class DefaultListenerFactory implements ListenerFactory {
                 if (listener instanceof BatchListener) {
                     batchListenerList.add((BatchListener) listener);
                 }
+                if (listener instanceof TruncateListener) {
+                    truncateListenerList.add((TruncateListener) listener);
+                }
+                if (listener instanceof DropListener) {
+                    dropListenerList.add((DropListener) listener);
+                }
             }
             queryListeners = copyTo(queryListeners, queryListenerList.toArray(new QueryListener[0]));
             insertListeners = copyTo(insertListeners, insertListenerList.toArray(new InsertListener[0]));
             updateListeners = copyTo(updateListeners, updateListenerList.toArray(new UpdateListener[0]));
             deleteListeners = copyTo(deleteListeners, deleteListenerList.toArray(new DeleteListener[0]));
             batchListeners = copyTo(batchListeners, batchListenerList.toArray(new BatchListener[0]));
+            truncateListeners = copyTo(truncateListeners, truncateListenerList.toArray(new TruncateListener[0]));
+            dropListeners = copyTo(dropListeners, dropListenerList.toArray(new DropListener[0]));
         }
     }
 
@@ -79,5 +91,15 @@ public class DefaultListenerFactory implements ListenerFactory {
     @Override
     public BatchListener[] getBatchListener() {
         return batchListeners;
+    }
+
+    @Override
+    public TruncateListener[] getTruncateListener() {
+        return truncateListeners;
+    }
+
+    @Override
+    public DropListener[] getDropListener() {
+        return dropListeners;
     }
 }

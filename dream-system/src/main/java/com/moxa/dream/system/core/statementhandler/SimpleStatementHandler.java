@@ -33,16 +33,6 @@ public class SimpleStatementHandler implements StatementHandler<Statement> {
     }
 
     @Override
-    public Object insert(Statement statement, MappedStatement mappedStatement) throws SQLException {
-        return statement.executeUpdate(mappedStatement.getSql());
-    }
-
-    @Override
-    public Object delete(Statement statement, MappedStatement mappedStatement) throws SQLException {
-        return statement.executeUpdate(mappedStatement.getSql());
-    }
-
-    @Override
     public Object batch(Statement statement, BatchMappedStatement batchMappedStatement) throws SQLException {
         for (MappedStatement mappedStatement : batchMappedStatement.getMappedStatementList()) {
             statement.addBatch(mappedStatement.getSql());

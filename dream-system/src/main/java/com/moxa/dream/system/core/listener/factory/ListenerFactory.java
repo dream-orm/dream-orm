@@ -14,4 +14,8 @@ public interface ListenerFactory {
     DeleteListener[] getDeleteListener();
 
     BatchListener[] getBatchListener();
+
+    TruncateListener[] getTruncateListener();
+
+    DropListener[] getDropListener();
 }
