@@ -39,6 +39,7 @@ public abstract class AbstractRouteDialectFactory implements DialectFactory {
                         }
                     }
                 }
+                return compileAntlr(methodInfo, arg);
             case ANTLR_COMPILED:
                 return compileAntlr(methodInfo, arg);
             default:

@@ -1,17 +1,21 @@
 package com.moxa.dream.system.core.executor;
 
 import com.moxa.dream.system.config.BatchMappedStatement;
+import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.transaction.Transaction;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
+import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JdbcExecutor implements Executor {
     protected Transaction transaction;
@@ -26,62 +30,80 @@ public class JdbcExecutor implements Executor {
     }
 
     @Override
-    public Object query(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> {
-            ResultSet resultSet = statementHandler(mappedStatement).query(statement, mappedStatement);
-            try {
-                return resultSetHandler(mappedStatement).result(resultSet, mappedStatement, session);
-            } finally {
-                if (resultSet != null && !resultSet.isClosed()) {
-                    resultSet.close();
-                }
+    public Object execute(MappedStatement mappedStatement, Session session) throws SQLException {
+        Object result;
+        Statement statement = null;
+        try {
+            statement = statementHandler(mappedStatement).prepare(transaction.getConnection(), mappedStatement);
+            Command command = mappedStatement.getCommand();
+            switch (command) {
+                case QUERY:
+                    result = query(statement, mappedStatement, session);
+                    break;
+                case UPDATE:
+                case DELETE:
+                case TRUNCATE:
+                case DROP:
+                    result = update(statement, mappedStatement, session);
+                    break;
+                case INSERT:
+                    result = insert(statement, mappedStatement, session);
+                    break;
+                case BATCH:
+                    BatchMappedStatement batchMappedStatement = (BatchMappedStatement) mappedStatement;
+                    result = batch(statement, batchMappedStatement, session);
+                    break;
+                default:
+                    result = executeNone(mappedStatement);
+                    break;
             }
-        });
-    }
-
-    @Override
-    public Object update(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> statementHandler(mappedStatement).update(statement, mappedStatement));
-    }
-
-    @Override
-    public Object insert(MappedStatement mappedStatement, Session session) throws SQLException {
-        return execute(mappedStatement, statement -> {
-            Object result = statementHandler(mappedStatement).update(statement, mappedStatement);
-            String[] columnNames = mappedStatement.getColumnNames();
-            if (columnNames != null && columnNames.length > 0) {
-                Object[] results = new Object[columnNames.length];
-                TypeHandler[] columnTypeHandlers = mappedStatement.getColumnTypeHandlers();
-                ResultSet generatedKeys = statement.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    for (int i = 0; i < columnNames.length; i++) {
-                        results[i] = columnTypeHandlers[i].getResult(generatedKeys, columnNames[i], Types.NULL);
-                    }
-                    result = results;
-                }
+        } finally {
+            if (statement != null && !statement.isClosed()) {
+                statement.close();
             }
-            return result;
-        });
+        }
+        return result;
     }
 
-    @Override
-    public Object delete(MappedStatement mappedStatement, Session session) throws SQLException {
-        return update(mappedStatement, session);
+    protected Object query(Statement statement, MappedStatement mappedStatement, Session session) throws SQLException {
+        ResultSet resultSet = statementHandler(mappedStatement).query(statement, mappedStatement);
+        try {
+            return resultSetHandler(mappedStatement).result(resultSet, mappedStatement, session);
+        } finally {
+            if (resultSet != null && !resultSet.isClosed()) {
+                resultSet.close();
+            }
+        }
     }
 
-    @Override
-    public Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
-        return execute(batchMappedStatement, statement -> statementHandler(batchMappedStatement).batch(statement, batchMappedStatement));
+    protected Object update(Statement statement, MappedStatement mappedStatement, Session session) throws SQLException {
+        Object result = statementHandler(mappedStatement).update(statement, mappedStatement);
+        return result;
     }
 
-    @Override
-    public Object truncate(MappedStatement mappedStatement, Session session) throws SQLException {
-        return update(mappedStatement, session);
+    protected Object insert(Statement statement, MappedStatement mappedStatement, Session session) throws SQLException {
+        Object result = statementHandler(mappedStatement).update(statement, mappedStatement);
+        String[] columnNames = mappedStatement.getColumnNames();
+        if (columnNames != null && columnNames.length > 0) {
+            Object[] results = new Object[columnNames.length];
+            TypeHandler[] columnTypeHandlers = mappedStatement.getColumnTypeHandlers();
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                for (int i = 0; i < columnNames.length; i++) {
+                    results[i] = columnTypeHandlers[i].getResult(generatedKeys, columnNames[i], Types.NULL);
+                }
+                result = results;
+            }
+        }
+        return result;
     }
 
-    @Override
-    public Object drop(MappedStatement mappedStatement, Session session) throws SQLException {
-        return update(mappedStatement, session);
+    protected Object batch(Statement statement, BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
+        List<Object> resultList = new ArrayList<>();
+        while (batchMappedStatement.hasNext()) {
+            resultList.add(statementHandler(batchMappedStatement.next()).batch(statement, batchMappedStatement));
+        }
+        return resultList;
     }
 
     protected Object execute(MappedStatement mappedStatement, Function<Statement, Object> function) throws SQLException {
@@ -94,6 +116,10 @@ public class JdbcExecutor implements Executor {
                 statement.close();
             }
         }
+    }
+
+    protected Object executeNone(MappedStatement mappedStatement) {
+        throw new DreamRunTimeException("SQL类型" + mappedStatement.getCommand() + "不支持");
     }
 
     protected StatementHandler statementHandler(MappedStatement mappedStatement) {

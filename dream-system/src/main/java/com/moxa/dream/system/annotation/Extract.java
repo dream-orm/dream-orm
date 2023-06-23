@@ -12,4 +12,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Extract {
     Class<? extends Extractor> value();
+
+    String[] args() default {};
 }

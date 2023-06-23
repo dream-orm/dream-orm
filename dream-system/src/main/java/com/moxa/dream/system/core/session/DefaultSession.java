@@ -1,6 +1,8 @@
 package com.moxa.dream.system.core.session;
 
-import com.moxa.dream.system.config.*;
+import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MappedStatement;
+import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.executor.Executor;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.mapper.DefaultMapperInvokeFactory;
@@ -9,8 +11,6 @@ import com.moxa.dream.system.mapper.MapperInvokeFactory;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class DefaultSession implements Session {
@@ -52,39 +52,7 @@ public class DefaultSession implements Session {
     public Object execute(MappedStatement mappedStatement) {
         Object value;
         try {
-            Command command = mappedStatement.getCommand();
-            switch (command) {
-                case QUERY:
-                    value = executor.query(mappedStatement, this);
-                    break;
-                case UPDATE:
-                    value = executor.update(mappedStatement, this);
-                    break;
-                case INSERT:
-                    value = executor.insert(mappedStatement, this);
-                    break;
-                case DELETE:
-                    value = executor.delete(mappedStatement, this);
-                    break;
-                case TRUNCATE:
-                    value = executor.truncate(mappedStatement, this);
-                    break;
-                case DROP:
-                    value = executor.drop(mappedStatement, this);
-                    break;
-                case BATCH:
-                    BatchMappedStatement batchMappedStatement = (BatchMappedStatement) mappedStatement;
-                    batchMappedStatement.compile(dialectFactory);
-                    List<Object> resultList = new ArrayList<>();
-                    while (batchMappedStatement.hasNext()) {
-                        resultList.add(executor.batch(batchMappedStatement.next(), this));
-                    }
-                    value = resultList;
-                    break;
-                default:
-                    value = executeNone(mappedStatement);
-                    break;
-            }
+            value = executor.execute(mappedStatement, this);
         } catch (SQLException e) {
             throw new DreamRunTimeException("执行'" + mappedStatement.getId() + "'失败：" + e.getMessage(), e);
         }
@@ -116,9 +84,5 @@ public class DefaultSession implements Session {
     @Override
     public Configuration getConfiguration() {
         return configuration;
-    }
-
-    protected Object executeNone(MappedStatement mappedStatement) {
-        throw new DreamRunTimeException("SQL类型" + mappedStatement.getCommand() + "不支持");
     }
 }

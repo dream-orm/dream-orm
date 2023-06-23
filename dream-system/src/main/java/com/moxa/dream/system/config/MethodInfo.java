@@ -29,7 +29,6 @@ public class MethodInfo {
     protected CacheKey methodKey;
     protected Method method;
     protected Action[] initActionList;
-    protected Action[] loopActionList;
     protected Action[] destroyActionList;
     protected MethodParam[] methodParamList;
     protected StatementHandler statementHandler;
@@ -158,15 +157,6 @@ public class MethodInfo {
 
     public MethodInfo addInitAction(Action... initActions) {
         this.initActionList = ObjectUtil.merge(this.initActionList, initActions);
-        return this;
-    }
-
-    public Action[] getLoopActionList() {
-        return loopActionList;
-    }
-
-    public MethodInfo addLoopAction(Action... loopActionList) {
-        this.loopActionList = ObjectUtil.merge(this.loopActionList, loopActionList);
         return this;
     }
 

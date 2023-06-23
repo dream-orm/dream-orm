@@ -101,12 +101,10 @@ public class DefaultMapperFactory implements MapperFactory {
                     if (actionProvider != null) {
                         Action[] initActionList = actionProvider.initActionList();
                         String sql = actionProvider.sql();
-                        Action[] loopActionList = actionProvider.loopActionList();
                         Action[] destroyActionList = actionProvider.destroyActionList();
                         Class<? extends Collection> rowType = actionProvider.rowType();
                         Class<?> colType = actionProvider.colType();
                         Boolean cache = actionProvider.cache();
-                        Boolean listener = actionProvider.listener();
                         Integer timeOut = actionProvider.timeOut();
                         StatementHandler statementHandler = actionProvider.statementHandler();
                         ResultSetHandler resultSetHandler = actionProvider.resultSetHandler();
@@ -115,9 +113,6 @@ public class DefaultMapperFactory implements MapperFactory {
                         }
                         if (sql != null) {
                             methodInfo.setSql(sql);
-                        }
-                        if (loopActionList != null) {
-                            methodInfo.addLoopAction(loopActionList);
                         }
                         if (destroyActionList != null) {
                             methodInfo.addDestroyAction(destroyActionList);

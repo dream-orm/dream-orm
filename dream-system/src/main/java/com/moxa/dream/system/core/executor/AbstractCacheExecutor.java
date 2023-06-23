@@ -2,6 +2,7 @@ package com.moxa.dream.system.core.executor;
 
 
 import com.moxa.dream.system.config.BatchMappedStatement;
+import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.session.Session;
 
@@ -14,62 +15,40 @@ public abstract class AbstractCacheExecutor implements Executor {
         this.nextExecutor = nextExecutor;
     }
 
-
     @Override
-    public Object query(MappedStatement mappedStatement, Session session) throws SQLException {
-        Object value;
+    public Object execute(MappedStatement mappedStatement, Session session) throws SQLException {
+        Command command = mappedStatement.getCommand();
+        if (Command.QUERY == command) {
+            return query(mappedStatement, session);
+        } else {
+            return update(mappedStatement, session);
+        }
+    }
+
+    protected Object query(MappedStatement mappedStatement, Session session) throws SQLException {
+        Object result;
         if (mappedStatement.isCache()) {
-            value = queryFromCache(mappedStatement);
-            if (value == null) {
-                value = nextExecutor.query(mappedStatement, session);
-                if (value != null) {
-                    storeObject(mappedStatement, value);
+            result = queryFromCache(mappedStatement);
+            if (result == null) {
+                result = nextExecutor.execute(mappedStatement, session);
+                if (result != null) {
+                    storeObject(mappedStatement, result);
                 }
             }
         } else {
-            value = nextExecutor.query(mappedStatement, session);
+            result = nextExecutor.execute(mappedStatement, session);
         }
-        return value;
+        return result;
     }
 
-    @Override
-    public Object update(MappedStatement mappedStatement, Session session) throws SQLException {
-        Object result = nextExecutor.update(mappedStatement, session);
+    protected Object update(MappedStatement mappedStatement, Session session) throws SQLException {
+        Object result = nextExecutor.execute(mappedStatement, session);
         clearObject(mappedStatement);
         return result;
     }
 
-    @Override
-    public Object insert(MappedStatement mappedStatement, Session session) throws SQLException {
-        Object result = nextExecutor.insert(mappedStatement, session);
-        clearObject(mappedStatement);
-        return result;
-    }
-
-    @Override
-    public Object delete(MappedStatement mappedStatement, Session session) throws SQLException {
-        Object result = nextExecutor.delete(mappedStatement, session);
-        clearObject(mappedStatement);
-        return result;
-    }
-
-    @Override
-    public Object truncate(MappedStatement mappedStatement, Session session) throws SQLException {
-        Object result = nextExecutor.truncate(mappedStatement, session);
-        clearObject(mappedStatement);
-        return result;
-    }
-
-    @Override
-    public Object drop(MappedStatement mappedStatement, Session session) throws SQLException {
-        Object result = nextExecutor.drop(mappedStatement, session);
-        clearObject(mappedStatement);
-        return result;
-    }
-
-    @Override
-    public Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
-        Object result = nextExecutor.batch(batchMappedStatement, session);
+    protected Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
+        Object result = nextExecutor.execute(batchMappedStatement, session);
         clearObject(batchMappedStatement);
         return result;
     }

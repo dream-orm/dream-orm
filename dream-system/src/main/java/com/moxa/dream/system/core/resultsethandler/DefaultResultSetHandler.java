@@ -252,6 +252,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                                 Extract extractAnnotation = field.getDeclaredAnnotation(Extract.class);
                                 Class<? extends Extractor> extractorType = extractAnnotation.value();
                                 Extractor extractor = ReflectUtil.create(extractorType);
+                                extractor.setArgs(extractAnnotation.args());
                                 builder.extractor(extractor).field(field);
                             }
                             if (!ObjectUtil.isNull(curTableName)) {

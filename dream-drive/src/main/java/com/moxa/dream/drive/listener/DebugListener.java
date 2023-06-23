@@ -2,7 +2,7 @@ package com.moxa.dream.drive.listener;
 
 import com.moxa.dream.system.config.MappedParam;
 import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.core.listener.*;
+import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.util.common.ObjectUtil;
 
 import java.sql.SQLException;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DebugListener implements QueryListener, UpdateListener, InsertListener, DeleteListener, BatchListener, TruncateListener, DropListener {
+public class DebugListener implements Listener {
     final String START_DATE = "startDate";
 
     @Override

@@ -1,12 +1,9 @@
 package com.moxa.dream.system.config;
 
-import com.moxa.dream.antlr.smt.PackageStatement;
-import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.util.common.ObjectMap;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,16 +13,17 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
     List<MappedStatement> mappedStatementList;
     int fromIndex;
     int toIndex;
-    boolean hasNext = true;
 
     public BatchMappedStatement(MethodInfo methodInfo, List<?> argList) {
         this.methodInfo = methodInfo;
         this.cache = methodInfo.cache;
         this.argList = argList;
-        mappedStatementList = new ArrayList<>(argList.size());
+        mappedStatementList = compile(methodInfo.getConfiguration());
     }
 
-    public void compile(DialectFactory dialectFactory) {
+    protected List<MappedStatement> compile(Configuration configuration) {
+        DialectFactory dialectFactory = configuration.getDialectFactory();
+        List<MappedStatement> mappedStatementList = new ArrayList<>(argList.size());
         for (Object arg : argList) {
             Map<String, Object> argMap;
             if (arg instanceof Map) {
@@ -39,11 +37,12 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
                 throw new DreamRunTimeException("抽象树方法" + methodInfo.getId() + "翻译失败，" + e.getMessage(), e);
             }
         }
+        return mappedStatementList;
     }
 
     @Override
     public boolean hasNext() {
-        return hasNext;
+        return toIndex < mappedStatementList.size();
     }
 
     @Override
@@ -53,9 +52,6 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
         int total = mappedStatementList.size();
         if (toIndex >= total) {
             toIndex = total;
-            hasNext = false;
-        } else {
-            hasNext = true;
         }
         return this;
     }
@@ -64,30 +60,12 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
         return mappedStatementList.subList(fromIndex, toIndex);
     }
 
-    @Override
-    public String getId() {
-        return getMappedStatementList().get(0).getId();
-    }
-
-    @Override
-    public Method getMethod() {
-        return getMappedStatementList().get(0).getMethod();
-    }
-
-    @Override
-    public CacheKey getMethodKey() {
-        return getMappedStatementList().get(0).getMethodKey();
-    }
 
     @Override
     public Command getCommand() {
         return Command.BATCH;
     }
 
-    @Override
-    public PackageStatement getStatement() {
-        return getMappedStatementList().get(0).getStatement();
-    }
 
     @Override
     public Class<? extends Collection> getRowType() {
@@ -101,27 +79,23 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
 
     @Override
     public Set<String> getTableSet() {
-        return getMappedStatementList().get(0).getTableSet();
+        return mappedStatementList.get(0).getTableSet();
     }
 
-    @Override
-    public String[] getColumnNames() {
-        return getMappedStatementList().get(0).getColumnNames();
-    }
 
     @Override
     public String getSql() {
-        return getMappedStatementList().get(0).getSql();
+        return mappedStatementList.get(0).getSql();
     }
 
     @Override
     public Object getArg() {
-        return getMappedStatementList().stream().map(mappedStatement -> mappedStatement.getArg()).collect(Collectors.toList());
+        return mappedStatementList.stream().map(mappedStatement -> mappedStatement.getArg()).collect(Collectors.toList());
     }
 
     @Override
     public List<MappedParam> getMappedParamList() {
-        return getMappedStatementList().stream().flatMap(mappedStatement -> mappedStatement.getMappedParamList().stream()).collect(Collectors.toList());
+        return mappedStatementList.stream().flatMap(mappedStatement -> mappedStatement.getMappedParamList().stream()).collect(Collectors.toList());
     }
 
     public void setBatchSize(int batchSize) {

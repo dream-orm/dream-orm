@@ -110,10 +110,6 @@ public class MappedStatement {
         return methodInfo.getInitActionList();
     }
 
-    public Action[] getLoopActionList() {
-        return methodInfo.getLoopActionList();
-    }
-
     public Action[] getDestroyActionList() {
         return methodInfo.getDestroyActionList();
     }

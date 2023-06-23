@@ -1,8 +1,7 @@
 package com.moxa.dream.system.core.executor;
 
-import com.moxa.dream.system.config.BatchMappedStatement;
 import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.core.listener.*;
+import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.util.common.ObjectUtil;
@@ -19,74 +18,16 @@ public class ListenerExecutor implements Executor {
     }
 
     @Override
-    public Object query(MappedStatement mappedStatement, Session session) throws SQLException {
-        QueryListener[] queryListeners = null;
+    public Object execute(MappedStatement mappedStatement, Session session) throws SQLException {
+        Listener[] listeners = null;
         if (listenerFactory != null) {
-            queryListeners = listenerFactory.getQueryListener();
+            listeners = listenerFactory.getListeners();
         }
-        return execute(mappedStatement, queryListeners, (ms) -> nextExecutor.query(mappedStatement, session));
-    }
-
-    @Override
-    public Object update(MappedStatement mappedStatement, Session session) throws SQLException {
-        UpdateListener[] updateListeners = null;
-        if (listenerFactory != null) {
-            updateListeners = listenerFactory.getUpdateListener();
-        }
-        return execute(mappedStatement, updateListeners, (ms) -> nextExecutor.update(mappedStatement, session));
-    }
-
-    @Override
-    public Object insert(MappedStatement mappedStatement, Session session) throws SQLException {
-        InsertListener[] insertListeners = null;
-        if (listenerFactory != null) {
-            insertListeners = listenerFactory.getInsertListener();
-        }
-        return execute(mappedStatement, insertListeners, (ms) -> nextExecutor.insert(mappedStatement, session));
-    }
-
-    @Override
-    public Object delete(MappedStatement mappedStatement, Session session) throws SQLException {
-        DeleteListener[] deleteListeners = null;
-        if (listenerFactory != null) {
-            deleteListeners = listenerFactory.getDeleteListener();
-        }
-        return execute(mappedStatement, deleteListeners, (ms) -> nextExecutor.delete(mappedStatement, session));
-    }
-
-    @Override
-    public Object batch(BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
-        BatchListener[] batchListeners = null;
-        if (listenerFactory != null) {
-            batchListeners = listenerFactory.getBatchListener();
-        }
-        return execute(batchMappedStatement, batchListeners, (ms) -> nextExecutor.batch(batchMappedStatement, session));
-    }
-
-    @Override
-    public Object truncate(MappedStatement mappedStatement, Session session) throws SQLException {
-        TruncateListener[] truncateListeners = null;
-        if (listenerFactory != null) {
-            truncateListeners = listenerFactory.getTruncateListener();
-        }
-        return execute(mappedStatement, truncateListeners, (ms) -> nextExecutor.truncate(mappedStatement, session));
-    }
-
-    @Override
-    public Object drop(MappedStatement mappedStatement, Session session) throws SQLException {
-        DropListener[] dropListeners = null;
-        if (listenerFactory != null) {
-            dropListeners = listenerFactory.getDropListener();
-        }
-        return execute(mappedStatement, dropListeners, (ms) -> nextExecutor.drop(mappedStatement, session));
-    }
-
-    protected Object execute(MappedStatement mappedStatement, Listener[] listeners, Function<MappedStatement, Object> function) throws SQLException {
         if (!ObjectUtil.isNull(listeners)) {
             beforeListeners(listeners, mappedStatement);
             Object result;
             try {
-                result = function.apply(mappedStatement);
+                result = nextExecutor.execute(mappedStatement, session);
             } catch (SQLException e) {
                 exceptionListeners(listeners, e, mappedStatement);
                 throw e;
@@ -94,7 +35,7 @@ public class ListenerExecutor implements Executor {
             afterReturnListeners(listeners, result, mappedStatement);
             return result;
         } else {
-            return function.apply(mappedStatement);
+            return nextExecutor.execute(mappedStatement, session);
         }
     }
 
