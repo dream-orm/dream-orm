@@ -14,10 +14,6 @@ public interface ActionProvider {
         return null;
     }
 
-    default Action[] loopActionList() {
-        return null;
-    }
-
     default Action[] destroyActionList() {
         return null;
     }
@@ -31,10 +27,6 @@ public interface ActionProvider {
     }
 
     default Boolean cache() {
-        return null;
-    }
-
-    default Boolean listener() {
         return null;
     }
 

@@ -10,13 +10,11 @@ import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.inject.factory.InjectFactory;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
-public abstract class AbstractRouteDialectFactory implements DialectFactory {
+public abstract class AbstractDialectFactory implements DialectFactory {
 
     @Override
     public synchronized MappedStatement compile(MethodInfo methodInfo, Object arg) throws Exception {
         switch (methodInfo.getCompile()) {
-            case UN_ANTLR_COMPILE:
-                return compileUnAntlr(methodInfo, arg);
             case ANTLR_COMPILE:
                 synchronized (this) {
                     if (Compile.ANTLR_COMPILE == methodInfo.getCompile()) {
@@ -46,8 +44,6 @@ public abstract class AbstractRouteDialectFactory implements DialectFactory {
                 return null;
         }
     }
-
-    protected abstract MappedStatement compileUnAntlr(MethodInfo methodInfo, Object arg) throws Exception;
 
     protected abstract MappedStatement compileAntlr(MethodInfo methodInfo, Object arg) throws Exception;
 

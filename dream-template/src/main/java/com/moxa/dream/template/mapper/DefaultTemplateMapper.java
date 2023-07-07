@@ -30,7 +30,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private BatchInsertMapper batchInsertMapper;
     private ExistByIdMapper existByIdMapper;
     private ExistMapper existMapper;
-    private ExecuteMapper executeMapper;
 
     public DefaultTemplateMapper(Session session, Sequence sequence) {
         selectByIdSqlMapper = new SelectByIdMapper(session);
@@ -49,7 +48,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
         batchInsertMapper = new BatchInsertMapper(session, new BatchSequence(sequence));
         existByIdMapper = new ExistByIdMapper(session);
         existMapper = new ExistMapper(session);
-        executeMapper = new ExecuteMapper(session);
     }
 
     @Override
@@ -142,12 +140,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
         return batchUpdateById(viewList, null, null);
     }
 
-    @Override
-    public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType) {
-        return execute(sql, param, rowType, colType, null, null);
-    }
-
-
     protected <T> T selectById(Class<T> type, Object id, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
         return (T) selectByIdSqlMapper.execute(type, id, methodInfoConsumer, mappedStatementConsumer);
     }
@@ -220,9 +212,5 @@ public class DefaultTemplateMapper implements TemplateMapper {
             return null;
         }
         return (List<Object>) batchUpdateByIdMapper.execute(viewList.iterator().next().getClass(), viewList, methodInfoConsumer, mappedStatementConsumer);
-    }
-
-    protected Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
-        return executeMapper.execute(sql, param, rowType, colType, methodInfoConsumer, mappedStatementConsumer);
     }
 }

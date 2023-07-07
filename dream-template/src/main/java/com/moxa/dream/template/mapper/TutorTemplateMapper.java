@@ -109,9 +109,4 @@ public class TutorTemplateMapper implements TemplateMapper {
     public List<Object> batchUpdateById(Collection<?> viewList) {
         return templateMapper.batchUpdateById(viewList, methodInfoConsumer, mappedStatementConsumer);
     }
-
-    @Override
-    public Object execute(String sql, Object param, Class<? extends Collection> rowType, Class<?> colType) {
-        return templateMapper.execute(sql, param, rowType, colType, methodInfoConsumer, mappedStatementConsumer);
-    }
 }
