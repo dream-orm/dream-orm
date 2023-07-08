@@ -117,6 +117,7 @@ public final class Constant {
     public static final ExprType[] KEYWORD = {
             ExprType.CHAR,
             ExprType.UNION,
+            ExprType.FOR,
             ExprType.NOT,
             ExprType.IS,
             ExprType.EXISTS,

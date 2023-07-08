@@ -113,6 +113,9 @@ public abstract class ToSQL {
             case 615446400://UnionStatement
                 sql = toString((UnionStatement) statement, assist, invokerList);
                 break;
+            case -1130070339://ForUpdateStatement
+                sql = toString((ForUpdateStatement) statement, assist, invokerList);
+                break;
             case 1602604526://ADDStatement
                 sql = toString((OperStatement.ADDStatement) statement, assist, invokerList);
                 break;
@@ -605,6 +608,8 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.StrToDateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(UnionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(ForUpdateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(AliasStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

@@ -18,7 +18,6 @@ public class ToNativeSQL extends ToSQL {
             name = className;
         }
         return name;
-
     }
 
     @Override
@@ -64,6 +63,11 @@ public class ToNativeSQL extends ToSQL {
     @Override
     protected String toString(UnionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return " UNION" + (statement.isAll() ? " ALL " : " ") + toStr(statement.getStatement(), assist, invokerList);
+    }
+
+    @Override
+    protected String toString(ForUpdateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return " FOR UPDATE";
     }
 
     @Override
@@ -349,7 +353,8 @@ public class ToNativeSQL extends ToSQL {
         String orderBy = toStr(statement.getOrderStatement(), assist, invokerList);
         String limit = toStr(statement.getLimitStatement(), assist, invokerList);
         String union = toStr(statement.getUnionStatement(), assist, invokerList);
-        return select + from + where + groupBy + having + orderBy + limit + union;
+        String forUpdate = toStr(statement.getForUpdateStatement(), assist, invokerList);
+        return select + from + where + groupBy + having + orderBy + limit + union + forUpdate;
     }
 
     @Override

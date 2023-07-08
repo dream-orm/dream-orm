@@ -392,6 +392,9 @@ public abstract class SqlExpr {
             case UNION:
                 statement = exprUnion(exprInfo);
                 break;
+            case FOR:
+                statement = exprFor(exprInfo);
+                break;
             case ISNULL:
                 statement = exprIsNull(exprInfo);
                 break;
@@ -585,6 +588,11 @@ public abstract class SqlExpr {
     protected Statement exprUnion(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
+
+    protected Statement exprFor(ExprInfo exprInfo) throws AntlrException {
+        return exprKeyWord(exprInfo);
+    }
+
 
     protected Statement exprOffSet(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);

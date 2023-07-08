@@ -1,0 +1,9 @@
+<mapper xmlns="http://moxa.com/schema/mapper">
+    <method name="selectAll">
+        select @all() from user
+        <loop>
+            <action type="mapper" property="blogList"
+                    ref="com.moxa.dream.base.mapper.BlogMapper.selectBlogByUser"></action>
+        </loop>
+    </method>
+</mapper>

@@ -1,5 +1,6 @@
 package com.moxa.dream.drive.config;
 
+import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.config.Configuration;
@@ -77,6 +78,15 @@ public class DefaultConfig {
 
     public DefaultConfig setInjectFactory(InjectFactory injectFactory) {
         configuration.setInjectFactory(injectFactory);
+        return this;
+    }
+
+    public InvokerFactory getInvokerFactory() {
+        return configuration.getInvokerFactory();
+    }
+
+    public DefaultConfig setInvokerFactory(InvokerFactory invokerFactory) {
+        configuration.setInvokerFactory(invokerFactory);
         return this;
     }
 

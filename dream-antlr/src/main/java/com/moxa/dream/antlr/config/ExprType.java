@@ -43,6 +43,7 @@ public enum ExprType {
     INTERVAL,
     UNION,
     ALL,
+    FOR,
     ASCII,
     LEN,
     LENGTH,

@@ -7,7 +7,6 @@ import com.moxa.dream.antlr.read.ExprReader;
 import java.util.Stack;
 
 public class ExprUtil {
-
     public static boolean isLetter(int c) {
         return 65 <= c && c <= 90 || 97 <= c && c <= 122 || c == 95 || c == 83 || c == 36;
     }
@@ -324,6 +323,8 @@ public class ExprUtil {
                 return ExprType.OFFSET;
             case 80895663://UNION
                 return ExprType.UNION;
+            case 69801://FOR
+                return ExprType.FOR;
             case 68795://END
                 return ExprType.END;
             case 64897://ALL

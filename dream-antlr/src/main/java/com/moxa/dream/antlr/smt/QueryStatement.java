@@ -9,6 +9,7 @@ public class QueryStatement extends Statement {
     private OrderStatement orderStatement;
     private LimitStatement limitStatement;
     private UnionStatement unionStatement;
+    private ForUpdateStatement forUpdateStatement;
 
     public SelectStatement getSelectStatement() {
         return selectStatement;
@@ -98,8 +99,19 @@ public class QueryStatement extends Statement {
         }
     }
 
+    public ForUpdateStatement getForUpdateStatement() {
+        return forUpdateStatement;
+    }
+
+    public void setForUpdateStatement(ForUpdateStatement forUpdateStatement) {
+        this.forUpdateStatement = forUpdateStatement;
+        if (forUpdateStatement != null) {
+            forUpdateStatement.parentStatement = this;
+        }
+    }
+
     @Override
     protected Boolean isNeedInnerCache() {
-        return isNeedInnerCache(selectStatement, fromStatement, whereStatement, groupStatement, havingStatement, orderStatement, limitStatement, unionStatement);
+        return isNeedInnerCache(selectStatement, fromStatement, whereStatement, groupStatement, havingStatement, orderStatement, limitStatement, unionStatement, forUpdateStatement);
     }
 }

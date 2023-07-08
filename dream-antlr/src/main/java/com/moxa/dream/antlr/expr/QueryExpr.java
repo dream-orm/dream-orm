@@ -20,7 +20,7 @@ public class QueryExpr extends SqlExpr {
         SelectExpr selectExpr = new SelectExpr(exprReader);
         Statement statement = selectExpr.expr();
         queryStatement.setSelectStatement((SelectStatement) statement);
-        this.setExprTypes(ExprType.FROM, ExprType.UNION, ExprType.NIL);
+        this.setExprTypes(ExprType.FROM, ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
     }
 
@@ -29,7 +29,7 @@ public class QueryExpr extends SqlExpr {
         FromExpr fromExpr = new FromExpr(exprReader);
         Statement statement = fromExpr.expr();
         queryStatement.setFromStatement((FromStatement) statement);
-        setExprTypes(ExprType.WHERE, ExprType.GROUP, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.WHERE, ExprType.GROUP, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
     }
 
@@ -37,7 +37,7 @@ public class QueryExpr extends SqlExpr {
     protected Statement exprWhere(ExprInfo exprInfo) throws AntlrException {
         WhereExpr whereExpr = new WhereExpr(exprReader);
         queryStatement.setWhereStatement((WhereStatement) whereExpr.expr());
-        setExprTypes(ExprType.GROUP, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.GROUP, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
     }
 
@@ -45,7 +45,7 @@ public class QueryExpr extends SqlExpr {
     protected Statement exprGroup(ExprInfo exprInfo) throws AntlrException {
         GroupExpr groupExpr = new GroupExpr(exprReader);
         queryStatement.setGroupStatement((GroupStatement) groupExpr.expr());
-        setExprTypes(ExprType.HAVING, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.HAVING, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
     }
 
@@ -53,7 +53,7 @@ public class QueryExpr extends SqlExpr {
     protected Statement exprHaving(ExprInfo exprInfo) throws AntlrException {
         HavingExpr havingExpr = new HavingExpr(exprReader);
         queryStatement.setHavingStatement((HavingStatement) havingExpr.expr());
-        setExprTypes(ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
     }
 
@@ -61,7 +61,7 @@ public class QueryExpr extends SqlExpr {
     protected Statement exprOrder(ExprInfo exprInfo) throws AntlrException {
         OrderExpr orderExpr = new OrderExpr(exprReader);
         queryStatement.setOrderStatement((OrderStatement) orderExpr.expr());
-        setExprTypes(ExprType.LIMIT, ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.LIMIT, ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
     }
 
@@ -78,7 +78,7 @@ public class QueryExpr extends SqlExpr {
     private Statement exprPage(ExprInfo exprInfo) throws AntlrException {
         LimitExpr limitExpr = new LimitExpr(exprReader);
         queryStatement.setLimitStatement((LimitStatement) limitExpr.expr());
-        setExprTypes(ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
     }
 
@@ -87,7 +87,16 @@ public class QueryExpr extends SqlExpr {
         UnionExpr unionExpr = new UnionExpr(exprReader);
         UnionStatement unionStatement = (UnionStatement) unionExpr.expr();
         queryStatement.setUnionStatement(unionStatement);
-        setExprTypes(ExprType.UNION, ExprType.NIL);
+        setExprTypes(ExprType.UNION, ExprType.FOR, ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprFor(ExprInfo exprInfo) throws AntlrException {
+        ForUpdateExpr forUpdateExpr = new ForUpdateExpr(exprReader);
+        ForUpdateStatement forUpdateStatement = (ForUpdateStatement) forUpdateExpr.expr();
+        queryStatement.setForUpdateStatement(forUpdateStatement);
+        setExprTypes(ExprType.NIL);
         return expr();
     }
 
