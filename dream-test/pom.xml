@@ -23,6 +23,7 @@
         <module>dream-permission-test</module>
         <module>dream-logic-test</module>
         <module>dream-util-test</module>
+        <module>dream-benchmark-test</module>
     </modules>
 
     <properties>

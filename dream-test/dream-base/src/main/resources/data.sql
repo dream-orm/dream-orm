@@ -2,11 +2,11 @@ DELETE
 FROM user;
 
 INSERT INTO user (id, name, age, email, tenant_id, dept_id, del_flag)
-VALUES (1, 'Jone', 18, 'test1@baomidou.com', 1, 1, 0),
-       (2, 'Jack', 20, 'test2@baomidou.com', 1, 1, 0),
-       (3, 'Tom', 28, 'test3@baomidou.com', 1, 1, 0),
-       (4, 'Sandy', 21, 'test4@baomidou.com', 2, 2, 0),
-       (5, 'Billie', 24, 'test5@baomidou.com', 2, 2, 0);
+VALUES (1, 'Jone', 18, 'test1', 1, 1, 0),
+       (2, 'Jack', 20, 'test2', 1, 1, 0),
+       (3, 'Tom', 28, 'test3', 1, 1, 0),
+       (4, 'Sandy', 21, 'test4', 2, 2, 0),
+       (5, 'Billie', 24, 'test5', 2, 2, 0);
 DELETE
 FROM blog;
 INSERT INTO blog (user_id, name, publish_time, tenant_id)

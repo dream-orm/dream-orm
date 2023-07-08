@@ -62,6 +62,7 @@ public class MemoryCache implements Cache {
                     Map<CacheKey, Object> finalMap = keyMap;
                     Iterator<Map.Entry<CacheKey, Object>> iterator = finalMap.entrySet().iterator();
                     while (iterator.hasNext()) {
+                        iterator.next();
                         double random = Math.random();
                         if (random <= rate) {
                             iterator.remove();
