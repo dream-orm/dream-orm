@@ -18,11 +18,11 @@ import java.util.function.Function;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BootApplication.class)
 public class QueryTest {
+    int count = 1000;
     @Autowired
     private TemplateMapper templateMapper;
     @Autowired
     private DataSource dataSource;
-    int count = 1000;
 
     @Before
     public void before() {
@@ -36,7 +36,7 @@ public class QueryTest {
             accountCondition.setId(100l);
             accountCondition.setUserName("admin" + ThreadLocalRandom.current().nextInt(10000));
 //            运行时间大约3秒，而mybatis-flex，大约200毫秒，是由于mybatis-flex没有做统计计算
-            templateMapper.selectPage(Account.class, accountCondition,new Page(1,1));
+            templateMapper.selectPage(Account.class, accountCondition, new Page(1, 1));
             return null;
         });
     }

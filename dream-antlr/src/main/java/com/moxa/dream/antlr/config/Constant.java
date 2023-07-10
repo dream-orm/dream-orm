@@ -118,6 +118,7 @@ public final class Constant {
             ExprType.CHAR,
             ExprType.UNION,
             ExprType.FOR,
+            ExprType.NOWAIT,
             ExprType.NOT,
             ExprType.IS,
             ExprType.EXISTS,

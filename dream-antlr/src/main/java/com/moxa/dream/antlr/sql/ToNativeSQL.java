@@ -71,6 +71,11 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(ForUpdateNoWaitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return " FOR UPDATE NOWAIT";
+    }
+
+    @Override
     protected String toString(AliasStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return toStr(statement.getColumn(), assist, invokerList) + (statement.isShowAlias() ? " AS " : " ") + toStr(statement.getAlias(), assist, invokerList);
     }
@@ -364,7 +369,12 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(PreSelectStatement statement, Assist assist, List<Invoker> invokerList) {
-        return "SELECT" + (statement.isDistinct() ? " DISTINCT" : "");
+        return "SELECT";
+    }
+
+    @Override
+    protected String toString(PreDistinctSelectStatement statement, Assist assist, List<Invoker> invokerList) {
+        return "SELECT DISTINCT";
     }
 
     @Override

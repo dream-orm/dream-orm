@@ -4,11 +4,12 @@ import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.template.annotation.Conditional;
 import com.moxa.dream.template.condition.EqCondition;
 import com.moxa.dream.template.condition.GeqCondition;
+
 @View(Account.class)
 public class AccountCondition {
-    @Conditional(value = GeqCondition.class,or = true)
+    @Conditional(value = GeqCondition.class, or = true)
     private Long id;
-    @Conditional(value = EqCondition.class,or = true)
+    @Conditional(value = EqCondition.class, or = true)
     private String userName;
 
     public Long getId() {

@@ -77,6 +77,9 @@ public abstract class ToSQL {
             case 2141894352://PreSelectStatement
                 sql = toString((PreSelectStatement) statement, assist, invokerList);
                 break;
+            case -1084712140://PreDistinctSelectStatement
+                sql = toString((PreDistinctSelectStatement) statement, assist, invokerList);
+                break;
             case 267949595://ListColumnStatement
                 sql = toString((ListColumnStatement) statement, assist, invokerList);
                 break;
@@ -115,6 +118,9 @@ public abstract class ToSQL {
                 break;
             case -1130070339://ForUpdateStatement
                 sql = toString((ForUpdateStatement) statement, assist, invokerList);
+                break;
+            case -444173817://ForUpdateNoWaitStatement
+                sql = toString((ForUpdateNoWaitStatement) statement, assist, invokerList);
                 break;
             case 1602604526://ADDStatement
                 sql = toString((OperStatement.ADDStatement) statement, assist, invokerList);
@@ -611,6 +617,8 @@ public abstract class ToSQL {
 
     protected abstract String toString(ForUpdateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
+    protected abstract String toString(ForUpdateNoWaitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
     protected abstract String toString(AliasStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(DateOperStatement.YearDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
@@ -708,6 +716,8 @@ public abstract class ToSQL {
     protected abstract String toString(SelectStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(PreSelectStatement statement, Assist assist, List<Invoker> invokerList);
+
+    protected abstract String toString(PreDistinctSelectStatement statement, Assist assist, List<Invoker> invokerList);
 
     protected abstract String toString(FunctionStatement.AsciiStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

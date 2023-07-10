@@ -75,6 +75,16 @@ public class SimpleSqlTest extends AbstractSqlTest {
     }
 
     @Test
+    public void testForUpdate() {
+        testSqlForMany("SELECT distinct a from dual for update", null, null);
+    }
+
+    @Test
+    public void testForUpdateNoWait() {
+        testSqlForMany("SELECT distinct a from dual for update nowait", null, null);
+    }
+
+    @Test
     public void testSelectFunction() {
         testSqlForMany("SELECT to_char(11),to_number('11'),to_char(now(),'yyyy-mm-dd hh24:mi:ss'),to_number('111','000'),to_date('2020-12-12','yyyy-mm-dd'),to_date('2020-12-12 12:12:12','yyyy-mm-dd hh24:mi:ss'),`year`.`max`", null, null);
     }

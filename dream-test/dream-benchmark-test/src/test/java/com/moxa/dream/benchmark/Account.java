@@ -5,6 +5,7 @@ import com.moxa.dream.system.annotation.Id;
 import com.moxa.dream.system.annotation.Table;
 
 import java.util.Date;
+
 @Table(value = "account")
 public class Account {
     @Id

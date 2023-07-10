@@ -35,13 +35,17 @@ DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术�
 ### **精简查询字段**
 
 ```sql
-select column1,column2,...,columnN from table_name where 复杂条件
+select column1, column2, ..., columnN
+from table_name
+where 复杂条件
 ```
 
 可改写成
 
 ```sql
-select @all() from table_name where 复杂条件
+select @all()
+from table_name
+where 复杂条件
 ```
 
 采用自定义函数，根据实体属性判断查询的字段，若实体属性修改，同步修改SQL查询字段
@@ -97,6 +101,7 @@ public class UserCondition {
 1:实体类与数据库字段映射
 
 ```java
+
 @Table("user")
 public class UserXXX {
     @Id
@@ -105,6 +110,7 @@ public class UserXXX {
     @Column("name")
     private String name;
 }
+
 @Table("blog")
 public class BlogXXX {
     @Id
@@ -152,8 +158,7 @@ FROM (
                 b.NAME bName
          FROM USER u
                   LEFT JOIN blog b ON b.user_id = u.id
-     ) t_tmp
-LIMIT 1
+     ) t_tmp LIMIT 1
 ```
 
 若用户表和文章表都存在租户字段，将其改造为多租户，dream可以让你不用修改当前SQL，在启动类添加开启多租户插件即可自动将其改造成多租户
@@ -170,8 +175,7 @@ FROM (
          FROM USER u
                   LEFT JOIN blog b ON (b.user_id = u.id)
              AND b.tenant_id = ?
-         WHERE u.tenant_id = ?) t_tmp
-LIMIT 1
+         WHERE u.tenant_id = ?) t_tmp LIMIT 1
 ```
 
 dream的识别是高强度的，不会因为SQL复杂，漏加任何租户条件，那性能如何？是等价于直接写租户条件的，无性能损耗
@@ -193,8 +197,7 @@ FROM (
                 b.NAME bName
          FROM USER u
                   LEFT JOIN blog b ON b.user_id = u.id
-     ) t_tmp
-LIMIT 1
+     ) t_tmp LIMIT 1
 ```
 
 开启数据权限插件
@@ -211,8 +214,7 @@ FROM (
          FROM USER u
                   LEFT JOIN blog b ON b.user_id = u.id
          WHERE u.dept_id = 1
-     ) t_tmp
-LIMIT 1
+     ) t_tmp LIMIT 1
 ```
 
 u.dept_id=1是开发者自己注入的数据权限，不要担心，dream会解析出别名告诉开发者，完成数据权限注入，此时，SQL非常清爽，性能等价于在SQL直接写注入权限条件
@@ -234,8 +236,7 @@ FROM (
                 b.NAME bName
          FROM USER u
                   LEFT JOIN blog b ON b.user_id = u.id
-     ) t_tmp
-LIMIT 1
+     ) t_tmp LIMIT 1
 ```
 
 开启逻辑删除插件
@@ -253,8 +254,7 @@ FROM (
                   LEFT JOIN blog b ON (b.user_id = u.id)
              AND b.del_flag = 0
          WHERE u.del_flag = 0
-     ) t_tmp
-LIMIT 1
+     ) t_tmp LIMIT 1
 ```
 
 完成了SQL操作的逻辑字段追加，删除数据库里的逻辑字段就不采用逻辑删除，同样，希望某张表采用逻辑删除，加个逻辑字段即可，代码不需要做任何修改，性能等价于直接写逻辑删除条件，性能无损耗
@@ -276,8 +276,7 @@ FROM (
                 b.NAME bName
          FROM USER u
                   LEFT JOIN blog b ON b.user_id = u.id
-     ) t_tmp
-LIMIT 1
+     ) t_tmp LIMIT 1
 ```
 
 开启关键字插件
@@ -293,8 +292,7 @@ FROM (
                 b.NAME bName
          FROM `USER` u
                   LEFT JOIN blog b ON b.user_id = u.`id`
-     ) t_tmp
-LIMIT 1
+     ) t_tmp LIMIT 1
 ```
 
 自动完成对user和id关键字处理，性能等价于直接写关键字处理

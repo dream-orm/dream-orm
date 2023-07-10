@@ -325,6 +325,8 @@ public class ExprUtil {
                 return ExprType.UNION;
             case 69801://FOR
                 return ExprType.FOR;
+            case -1986278730://NOWAIT
+                return ExprType.NOWAIT;
             case 68795://END
                 return ExprType.END;
             case 64897://ALL
