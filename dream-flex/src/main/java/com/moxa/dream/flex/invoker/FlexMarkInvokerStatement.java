@@ -2,10 +2,10 @@ package com.moxa.dream.flex.invoker;
 
 import com.moxa.dream.antlr.smt.InvokerStatement;
 
-public class FlexValueInvokerStatement extends InvokerStatement {
+public class FlexMarkInvokerStatement extends InvokerStatement {
     private Object value;
 
-    public FlexValueInvokerStatement(Object value) {
+    public FlexMarkInvokerStatement(Object value) {
         this.value = value;
     }
 
@@ -19,11 +19,11 @@ public class FlexValueInvokerStatement extends InvokerStatement {
 
     @Override
     public String getNamespace() {
-        return FlexValueInvoker.DEFAULT_NAMESPACE;
+        return FlexMarkInvoker.DEFAULT_NAMESPACE;
     }
 
     @Override
     public String getFunction() {
-        return FlexValueInvoker.FUNCTION;
+        return FlexMarkInvoker.FUNCTION;
     }
 }

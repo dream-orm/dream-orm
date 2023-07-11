@@ -1,29 +1,10 @@
 package com.moxa.dream.flex.def;
 
-import java.util.List;
+import com.moxa.dream.antlr.smt.Statement;
+import com.moxa.dream.antlr.sql.ToSQL;
 
-public class SqlDef {
-    private String sql;
-    private List<Object> paramList;
+public interface SqlDef {
+    Statement getStatement();
 
-    public SqlDef(String sql, List<Object> paramList) {
-        this.sql = sql;
-        this.paramList = paramList;
-    }
-
-    public String getSql() {
-        return sql;
-    }
-
-    public List<Object> getParamList() {
-        return paramList;
-    }
-
-    @Override
-    public String toString() {
-        return "SqlDef{" +
-                "sql='" + sql + '\'' +
-                ", paramList=" + paramList +
-                '}';
-    }
+    ResultInfo toSQL(ToSQL toSQL);
 }

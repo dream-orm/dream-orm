@@ -11,13 +11,13 @@ import com.moxa.dream.antlr.sql.ToSQL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlexValueInvoker extends AbstractInvoker {
-    public static final String FUNCTION = "dream_flex_value";
+public class FlexMarkInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "dream_flex_mark";
     private final List<Object> paramList = new ArrayList<>();
 
     @Override
     public Invoker newInstance() {
-        return new FlexValueInvoker();
+        return new FlexMarkInvoker();
     }
 
     @Override
@@ -27,8 +27,8 @@ public class FlexValueInvoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
-        FlexValueInvokerStatement flexValueInvokerStatement = (FlexValueInvokerStatement) invokerStatement;
-        Object value = flexValueInvokerStatement.getValue();
+        FlexMarkInvokerStatement flexMarkInvokerStatement = (FlexMarkInvokerStatement) invokerStatement;
+        Object value = flexMarkInvokerStatement.getValue();
         paramList.add(value);
         return "?";
     }

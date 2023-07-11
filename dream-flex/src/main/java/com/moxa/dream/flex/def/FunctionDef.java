@@ -112,7 +112,7 @@ public class FunctionDef {
     private static ColumnDef functionDef(FunctionStatement functionStatement, ColumnDef... columnDefs) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         for (ColumnDef columnDef : columnDefs) {
-            listColumnStatement.add(columnDef.statement);
+            listColumnStatement.add(columnDef.getStatement());
         }
         functionStatement.setParamsStatement(listColumnStatement);
         return new ColumnDef(functionStatement);

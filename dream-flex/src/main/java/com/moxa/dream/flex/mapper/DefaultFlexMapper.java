@@ -3,7 +3,8 @@ package com.moxa.dream.flex.mapper;
 import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.flex.def.ForUpdateDef;
+import com.moxa.dream.flex.def.QueryDef;
+import com.moxa.dream.flex.def.ResultInfo;
 import com.moxa.dream.flex.def.SqlDef;
 import com.moxa.dream.system.config.*;
 import com.moxa.dream.system.core.session.Session;
@@ -43,26 +44,30 @@ public class DefaultFlexMapper implements FlexMapper {
     }
 
     @Override
-    public <T> T selectOne(ForUpdateDef forUpdateDef, Class<T> type) {
-        SqlDef sqlDef = forUpdateDef.toSQL(toSQL);
-        MappedStatement mappedStatement = getMappedStatement(sqlDef, NonCollection.class, type);
+    public <T> T selectOne(SqlDef sqlDef, Class<T> type) {
+        ResultInfo resultInfo = sqlDef.toSQL(toSQL);
+        MappedStatement mappedStatement = getMappedStatement(resultInfo, NonCollection.class, type);
         return (T) session.execute(mappedStatement);
     }
 
     @Override
-    public <T> List<T> selectList(ForUpdateDef forUpdateDef, Class<T> type) {
-        SqlDef sqlDef = forUpdateDef.toSQL(toSQL);
-        MappedStatement mappedStatement = getMappedStatement(sqlDef, List.class, type);
+    public <T> List<T> selectList(SqlDef sqlDef, Class<T> type) {
+        ResultInfo resultInfo = sqlDef.toSQL(toSQL);
+        MappedStatement mappedStatement = getMappedStatement(resultInfo, List.class, type);
         return (List<T>) session.execute(mappedStatement);
     }
 
     @Override
-    public <T> Page<T> selectPage(ForUpdateDef forUpdateDef, Class<T> type, Page page) {
-        QueryStatement queryStatement = pageQueryStatement(forUpdateDef.getStatement(), page.getStartRow(), page.getPageSize());
-        SqlDef sqlDef = new ForUpdateDef(queryStatement).toSQL(toSQL);
-        SqlDef countSqlDef = new ForUpdateDef(countQueryStatement(queryStatement)).toSQL(toSQL);
-        MappedStatement mappedStatement = getMappedStatement(sqlDef, Collection.class, type);
-        MappedStatement countMappedStatement = getMappedStatement(countSqlDef, NonCollection.class, Long.class);
+    public <T> Page<T> selectPage(SqlDef sqlDef, Class<T> type, Page page) {
+        Statement statement = sqlDef.getStatement();
+        if (statement instanceof QueryStatement) {
+            throw new DreamRunTimeException("抽象树不为查询");
+        }
+        QueryStatement queryStatement = pageQueryStatement((QueryStatement) statement, page.getStartRow(), page.getPageSize());
+        ResultInfo resultInfo = new QueryDef(queryStatement).toSQL(toSQL);
+        ResultInfo countResultInfo = new QueryDef(countQueryStatement(queryStatement)).toSQL(toSQL);
+        MappedStatement mappedStatement = getMappedStatement(resultInfo, Collection.class, type);
+        MappedStatement countMappedStatement = getMappedStatement(countResultInfo, NonCollection.class, Long.class);
         page.setTotal((long) session.execute(countMappedStatement));
         page.setRows((Collection) session.execute(mappedStatement));
         return page;
@@ -128,8 +133,8 @@ public class DefaultFlexMapper implements FlexMapper {
         return countStatement;
     }
 
-    private MappedStatement getMappedStatement(SqlDef sqlDef, Class<? extends Collection> rowType, Class<?> colType) {
-        List<Object> paramList = sqlDef.getParamList();
+    private MappedStatement getMappedStatement(ResultInfo resultInfo, Class<? extends Collection> rowType, Class<?> colType) {
+        List<Object> paramList = resultInfo.getParamList();
         List<MappedParam> mappedParamList = null;
         if (!ObjectUtil.isNull(paramList)) {
             mappedParamList = new ArrayList<>(paramList.size());
@@ -148,7 +153,7 @@ public class DefaultFlexMapper implements FlexMapper {
             }
         }
 
-        MappedSql mappedSql = new MappedSql(Command.QUERY.name(), sqlDef.getSql(), new LowHashSet(Arrays.asList()));
+        MappedSql mappedSql = new MappedSql(Command.QUERY.name(), resultInfo.getSql(), new LowHashSet(Arrays.asList()));
         MappedStatement mappedStatement = new MappedStatement
                 .Builder()
                 .mappedParamList(mappedParamList)

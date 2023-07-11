@@ -14,7 +14,7 @@ public class WhereDef extends GroupByDef {
         GroupStatement groupStatement = new GroupStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         for (ColumnDef columnDef : columnDefs) {
-            listColumnStatement.add(columnDef.statement);
+            listColumnStatement.add(columnDef.getStatement());
         }
         groupStatement.setGroup(listColumnStatement);
         statement.setGroupStatement(groupStatement);

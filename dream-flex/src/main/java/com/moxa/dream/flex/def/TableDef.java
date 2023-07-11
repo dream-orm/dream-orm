@@ -1,16 +1,30 @@
 package com.moxa.dream.flex.def;
 
-import com.moxa.dream.antlr.smt.Statement;
+import com.moxa.dream.antlr.smt.AliasStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 
 public class TableDef {
-    private Statement statement;
+    private AliasStatement statement;
 
     public TableDef(String table) {
-        this.statement = new SymbolStatement.SingleMarkStatement(table);
+        this(table, table);
     }
 
-    public Statement getStatement() {
+    public TableDef(String table, String alias) {
+        AliasStatement aliasStatement = new AliasStatement();
+        aliasStatement.setColumn(new SymbolStatement.SingleMarkStatement(table));
+        this.statement = aliasStatement;
+        if (!table.equals(alias)) {
+            as(alias);
+        }
+    }
+
+    public AliasStatement getStatement() {
         return statement;
+    }
+
+    public TableDef as(String alias) {
+        statement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
+        return this;
     }
 }
