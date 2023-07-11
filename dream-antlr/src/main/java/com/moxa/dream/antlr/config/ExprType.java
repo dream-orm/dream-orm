@@ -44,6 +44,7 @@ public enum ExprType {
     UNION,
     ALL,
     FOR,
+    NOWAIT,
     ASCII,
     LEN,
     LENGTH,

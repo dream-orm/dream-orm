@@ -15,6 +15,7 @@
         <module>dream-drive</module>
         <module>dream-template</module>
         <module>dream-mate</module>
+        <module>dream-flex</module>
     </modules>
 
     <properties>

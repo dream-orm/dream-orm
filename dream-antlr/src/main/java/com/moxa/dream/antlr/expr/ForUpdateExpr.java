@@ -4,6 +4,7 @@ import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
+import com.moxa.dream.antlr.smt.ForUpdateNoWaitStatement;
 import com.moxa.dream.antlr.smt.ForUpdateStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
@@ -24,6 +25,14 @@ public class ForUpdateExpr extends SqlExpr {
 
     @Override
     protected Statement exprUpdate(ExprInfo exprInfo) throws AntlrException {
+        push();
+        setExprTypes(ExprType.NOWAIT, ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprNoWait(ExprInfo exprInfo) throws AntlrException {
+        forUpdateStatement = new ForUpdateNoWaitStatement();
         push();
         setExprTypes(ExprType.NIL);
         return expr();

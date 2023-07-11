@@ -395,6 +395,9 @@ public abstract class SqlExpr {
             case FOR:
                 statement = exprFor(exprInfo);
                 break;
+            case NOWAIT:
+                statement = exprNoWait(exprInfo);
+                break;
             case ISNULL:
                 statement = exprIsNull(exprInfo);
                 break;
@@ -593,6 +596,9 @@ public abstract class SqlExpr {
         return exprKeyWord(exprInfo);
     }
 
+    protected Statement exprNoWait(ExprInfo exprInfo) throws AntlrException {
+        return exprKeyWord(exprInfo);
+    }
 
     protected Statement exprOffSet(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);

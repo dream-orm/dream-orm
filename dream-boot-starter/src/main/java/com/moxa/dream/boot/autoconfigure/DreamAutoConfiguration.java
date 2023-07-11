@@ -10,6 +10,8 @@ import com.moxa.dream.boot.build.SessionFactoryBuilder;
 import com.moxa.dream.boot.factory.SpringDataSourceFactory;
 import com.moxa.dream.boot.factory.SpringTransactionFactory;
 import com.moxa.dream.boot.holder.SpringSessionHolder;
+import com.moxa.dream.flex.mapper.DefaultFlexMapper;
+import com.moxa.dream.flex.mapper.FlexMapper;
 import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.CacheFactory;
@@ -291,5 +293,11 @@ public class DreamAutoConfiguration {
     @ConditionalOnMissingBean
     public TemplateMapper templateMapper(SessionTemplate sessionTemplate, Sequence sequence) {
         return new DefaultTemplateMapper(sessionTemplate, sequence);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
+        return new DefaultFlexMapper(sessionTemplate, toSQL);
     }
 }

@@ -49,4 +49,8 @@ public class PageInject implements Inject {
             statement.setStatement(pageStatement);
         }
     }
+
+    public boolean isOffset() {
+        return offset;
+    }
 }

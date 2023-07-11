@@ -24,11 +24,11 @@
         <module>dream-logic-test</module>
         <module>dream-util-test</module>
         <module>dream-benchmark-test</module>
+        <module>dream-flex-test</module>
     </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
-
 </project>
