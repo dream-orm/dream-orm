@@ -27,12 +27,14 @@ import java.util.List;
 
 public class DefaultFlexMapper implements FlexMapper {
     private Session session;
+    private Configuration configuration;
     private ToSQL toSQL;
     private TypeHandlerFactory typeHandlerFactory;
     private boolean offset;
 
     public DefaultFlexMapper(Session session, ToSQL toSQL) {
         this.session = session;
+        this.configuration=session.getConfiguration();
         this.toSQL = toSQL;
         Configuration configuration = session.getConfiguration();
         this.typeHandlerFactory = configuration.getTypeHandlerFactory();
@@ -60,7 +62,7 @@ public class DefaultFlexMapper implements FlexMapper {
     @Override
     public <T> Page<T> selectPage(SqlDef sqlDef, Class<T> type, Page page) {
         Statement statement = sqlDef.getStatement();
-        if (statement instanceof QueryStatement) {
+        if (!(statement instanceof QueryStatement)) {
             throw new DreamRunTimeException("抽象树不为查询");
         }
         QueryStatement queryStatement = pageQueryStatement((QueryStatement) statement, page.getStartRow(), page.getPageSize());
@@ -158,7 +160,11 @@ public class DefaultFlexMapper implements FlexMapper {
                 .Builder()
                 .mappedParamList(mappedParamList)
                 .mappedSql(mappedSql)
-                .methodInfo(new MethodInfo().setRowType(rowType).setColType(colType).setCompile(Compile.ANTLR_COMPILED))
+                .methodInfo(new MethodInfo()
+                        .setConfiguration(configuration)
+                        .setRowType(rowType)
+                        .setColType(colType)
+                        .setCompile(Compile.ANTLR_COMPILED))
                 .build();
         return mappedStatement;
     }

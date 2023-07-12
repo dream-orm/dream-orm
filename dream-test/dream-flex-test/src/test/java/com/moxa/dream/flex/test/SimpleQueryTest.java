@@ -2,7 +2,6 @@ package com.moxa.dream.flex.test;
 
 import com.moxa.dream.antlr.sql.ToMYSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.flex.def.FunctionDef;
 import com.moxa.dream.flex.def.ResultInfo;
 import org.junit.jupiter.api.Test;
 
@@ -10,12 +9,21 @@ import static com.moxa.dream.flex.def.FunctionDef.select;
 import static com.moxa.dream.flex.test.table.table.BlogTableDef.blog;
 import static com.moxa.dream.flex.test.table.table.UserTableDef.user;
 
-public class MyTest {
+public class SimpleQueryTest {
     private ToSQL toSQL=new ToMYSQL();
     @Test
-    public void test1() {
-        ResultInfo muser = select(user.id, user.name.as("ne"), user.del_flag)
+    public void test0() {
+        ResultInfo muser = select(user.id.add(0).divide(1).multiply(2).sub(4).as("id"), user.name.as("ne"), user.del_flag)
                 .from(user.as("u"))
+                .where(user.name.eq(1).and(user.name.eq(user.name).and(user.name.lt(2)).and(user.name.leq(2.5)).and(user.name.gt(3).and(user.name.geq(4)))))
+                .toSQL(toSQL);
+        System.out.println(muser);
+    }
+    @Test
+    public void test1() {
+        ResultInfo muser = select(user.id.add(0).divide(1).multiply(2).sub(4).as("id"), user.name.as("ne"), user.del_flag)
+                .from(user.as("u"))
+                .where(user.name.in(1,2,3).and(user.name.notIn(1,2,3)).and(user.tenant_id.isNull().or(user.tenant_id.isNotNull())))
                 .toSQL(toSQL);
         System.out.println(muser);
     }
@@ -32,7 +40,7 @@ public class MyTest {
     public void test3() {
         ResultInfo muser = select(user.id, user.name, user.del_flag)
                 .from(user.as("u"))
-                .leftJoin(blog)
+                .innerJoin(blog)
                 .on(user.id.eq(blog.user_id))
                 .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1,2,3)))
                 .toSQL(toSQL);
@@ -42,10 +50,10 @@ public class MyTest {
     public void test4() {
         ResultInfo muser = select(user.dept_id)
                 .from(user.as("u"))
-                .leftJoin(blog)
+                .rightJoin(blog)
                 .on(user.id.eq(blog.user_id))
                 .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1,2,3)))
-                .groupBy(user.dept_id)
+                .groupBy(user.dept_id).forUpdate()
                 .toSQL(toSQL);
         System.out.println(muser);
     }
@@ -57,7 +65,7 @@ public class MyTest {
                 .on(user.id.eq(blog.user_id))
                 .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1,2,3)))
                 .groupBy(user.dept_id)
-                .having(user.del_flag.eq(0))
+                .having(user.del_flag.eq(0)).forUpdateNoWait()
                 .toSQL(toSQL);
         System.out.println(muser);
     }
@@ -76,11 +84,12 @@ public class MyTest {
     }
     @Test
     public void test7() {
+        Integer[]a={4,5,6};
         ResultInfo muser = select(user.dept_id)
                 .from(user.as("u"))
                 .leftJoin(blog)
                 .on(user.id.eq(blog.user_id))
-                .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1,2,3)))
+                .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1,2,3)).and(user.tenant_id.in(a)))
                 .groupBy(user.dept_id)
                 .having(user.del_flag.eq(0))
                 .orderBy(user.del_flag.desc())

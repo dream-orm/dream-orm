@@ -5,7 +5,7 @@ import com.moxa.dream.antlr.smt.ConditionStatement;
 import com.moxa.dream.antlr.smt.OperStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
-public class ConditionDef {
+public class ConditionDef extends AbstractSqlDef {
     protected ConditionStatement statement;
 
     public ConditionDef(ConditionStatement conditionStatement) {
@@ -38,5 +38,10 @@ public class ConditionDef {
             wrapStatement = conditionStatement;
         }
         return wrapStatement;
+    }
+
+    @Override
+    public ConditionStatement getStatement() {
+        return statement;
     }
 }

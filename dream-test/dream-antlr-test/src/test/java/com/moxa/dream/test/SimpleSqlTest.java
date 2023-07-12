@@ -71,7 +71,7 @@ public class SimpleSqlTest extends AbstractSqlTest {
 
     @Test
     public void testSelectDot() {
-        testSqlForMany("SELECT a.b.c,c.d", null, null);
+        testSqlForMany("SELECT a.b.c,c.d from dual where s is null and f is not  null", null, null);
     }
 
     @Test

@@ -24,33 +24,6 @@ public class DreamFlexProcessor extends AbstractProcessor {
     private Types typeUtils;
     private Filer filer;
 
-    public static String buildTableDef(String table, String tableDefPackage, String tableDefClassName, List<ColumnInfo> columnInfos) {
-        StringBuilder content = new StringBuilder("package ");
-        content.append(tableDefPackage).append(";\n\n");
-        content.append("import com.moxa.dream.flex.def.ColumnDef;\n");
-        content.append("import com.moxa.dream.flex.def.TableDef;\n\n");
-        content.append("public class ").append(tableDefClassName).append(" extends TableDef {\n\n");
-        content.append("    public static final ")
-                .append(tableDefClassName)
-                .append(' ')
-                .append(table)
-                .append(" = new ")
-                .append(tableDefClassName)
-                .append("();\n\n");
-        columnInfos.forEach((columnInfo) -> {
-            content.append("    public final ColumnDef ")
-                    .append(columnInfo.column)
-                    .append(" = new ColumnDef(")
-                    .append("this,")
-                    .append("\"").append(columnInfo.column).append("\",")
-                    .append("\"").append(columnInfo.alias).append("\");\n");
-        });
-        content.append("    public ").append(tableDefClassName).append("() {\n")
-                .append("        super").append("(\"").append(table).append("\");\n")
-                .append("    }\n\n}\n");
-        return content.toString();
-    }
-
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
@@ -76,8 +49,9 @@ public class DreamFlexProcessor extends AbstractProcessor {
                     e.printStackTrace();
                 }
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -122,6 +96,33 @@ public class DreamFlexProcessor extends AbstractProcessor {
             packageBuilder.append(entityClass, 0, entityClass.lastIndexOf(".")).append(".table");
         }
         return packageBuilder.toString();
+    }
+
+    private String buildTableDef(String table, String tableDefPackage, String tableDefClassName, List<ColumnInfo> columnInfos) {
+        StringBuilder content = new StringBuilder("package ");
+        content.append(tableDefPackage).append(";\n\n");
+        content.append("import com.moxa.dream.flex.def.ColumnDef;\n");
+        content.append("import com.moxa.dream.flex.def.TableDef;\n\n");
+        content.append("public class ").append(tableDefClassName).append(" extends TableDef {\n\n");
+        content.append("    public static final ")
+                .append(tableDefClassName)
+                .append(' ')
+                .append(table)
+                .append(" = new ")
+                .append(tableDefClassName)
+                .append("();\n\n");
+        columnInfos.forEach((columnInfo) -> {
+            content.append("    public final ColumnDef ")
+                    .append(columnInfo.column)
+                    .append(" = new ColumnDef(")
+                    .append("this,")
+                    .append("\"").append(columnInfo.column).append("\",")
+                    .append("\"").append(columnInfo.alias).append("\");\n");
+        });
+        content.append("\n    public ").append(tableDefClassName).append("() {\n")
+                .append("        super").append("(\"").append(table).append("\");\n")
+                .append("    }\n\n}\n");
+        return content.toString();
     }
 
     private void processGenClass(String tableDefPackage, String tableDefClassName, String content) throws IOException {
