@@ -95,17 +95,13 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
         CacheKey uniqueKey = methodInfo.getMethodKey();
         Object[] updateList;
         if (!ObjectUtil.isNull(mappedParamList)) {
-            updateList = new Object[mappedParamList.size() + 2];
-            updateList[0] = sql;
-            updateList[1] = sql.length();
+            updateList = new Object[mappedParamList.size()];
             for (int i = 0; i < mappedParamList.size(); i++) {
                 MappedParam mappedParam = mappedParamList.get(i);
-                updateList[i + 2] = mappedParam.getParamValue();
+                updateList[i] = mappedParam.getParamValue();
             }
         } else {
-            updateList = new Object[2];
-            updateList[0] = sql;
-            updateList[1] = sql.length();
+            updateList = new Object[0];
         }
         uniqueKey.update(updateList);
         return uniqueKey;

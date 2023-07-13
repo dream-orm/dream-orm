@@ -1,11 +1,14 @@
 package com.moxa.dream.flex.mapper;
 
 import com.moxa.dream.antlr.config.Command;
+import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.flex.config.ResultInfo;
 import com.moxa.dream.flex.def.QueryDef;
 import com.moxa.dream.flex.def.SqlDef;
+import com.moxa.dream.flex.invoker.FlexMarkInvokerStatement;
+import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.*;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.inject.PageInject;
@@ -14,28 +17,28 @@ import com.moxa.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.handler.ObjectTypeHandler;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
-import com.moxa.dream.util.common.LowHashSet;
+import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class DefaultFlexMapper implements FlexMapper {
     private Session session;
     private Configuration configuration;
     private ToSQL toSQL;
+    private Invoker[] invokers;
     private TypeHandlerFactory typeHandlerFactory;
     private boolean offset;
+    private Map<Class, Object> customMap = new HashMap<>();
 
-    public DefaultFlexMapper(Session session, ToSQL toSQL) {
+    public DefaultFlexMapper(Session session, ToSQL toSQL, Invoker... invokers) {
         this.session = session;
         this.configuration = session.getConfiguration();
         this.toSQL = toSQL;
+        this.invokers = invokers;
         Configuration configuration = session.getConfiguration();
         this.typeHandlerFactory = configuration.getTypeHandlerFactory();
         InjectFactory injectFactory = configuration.getInjectFactory();
@@ -43,18 +46,19 @@ public class DefaultFlexMapper implements FlexMapper {
         if (pageInject != null) {
             this.offset = pageInject.isOffset();
         }
+        this.customMap.put(Configuration.class, configuration);
     }
 
     @Override
     public <T> T selectOne(SqlDef sqlDef, Class<T> type) {
-        ResultInfo resultInfo = sqlDef.toSQL(toSQL);
+        ResultInfo resultInfo = sqlDef.toSQL(toSQL, customMap, invokers);
         MappedStatement mappedStatement = getMappedStatement(resultInfo, NonCollection.class, type);
         return (T) session.execute(mappedStatement);
     }
 
     @Override
     public <T> List<T> selectList(SqlDef sqlDef, Class<T> type) {
-        ResultInfo resultInfo = sqlDef.toSQL(toSQL);
+        ResultInfo resultInfo = sqlDef.toSQL(toSQL, customMap, invokers);
         MappedStatement mappedStatement = getMappedStatement(resultInfo, List.class, type);
         return (List<T>) session.execute(mappedStatement);
     }
@@ -66,8 +70,8 @@ public class DefaultFlexMapper implements FlexMapper {
             throw new DreamRunTimeException("抽象树不为查询");
         }
         QueryStatement queryStatement = pageQueryStatement((QueryStatement) statement, page.getStartRow(), page.getPageSize());
-        ResultInfo resultInfo = new QueryDef(queryStatement).toSQL(toSQL);
-        ResultInfo countResultInfo = new QueryDef(countQueryStatement(queryStatement)).toSQL(toSQL);
+        ResultInfo resultInfo = new QueryDef(queryStatement).toSQL(toSQL, customMap, invokers);
+        ResultInfo countResultInfo = new QueryDef(countQueryStatement(queryStatement)).toSQL(toSQL, customMap, invokers);
         MappedStatement mappedStatement = getMappedStatement(resultInfo, Collection.class, type);
         MappedStatement countMappedStatement = getMappedStatement(countResultInfo, NonCollection.class, Long.class);
         page.setTotal((long) session.execute(countMappedStatement));
@@ -81,12 +85,12 @@ public class DefaultFlexMapper implements FlexMapper {
             limitStatement = new LimitStatement();
             if (offset) {
                 limitStatement.setOffset(true);
-                limitStatement.setFirst(new SymbolStatement.LetterStatement(String.valueOf(pageNum)));
-                limitStatement.setSecond(new SymbolStatement.LetterStatement(String.valueOf(startRow)));
+                limitStatement.setFirst(new FlexMarkInvokerStatement(pageNum));
+                limitStatement.setSecond(new FlexMarkInvokerStatement(startRow));
             } else {
                 limitStatement.setOffset(false);
-                limitStatement.setFirst(new SymbolStatement.LetterStatement(String.valueOf(startRow)));
-                limitStatement.setSecond(new SymbolStatement.LetterStatement(String.valueOf(pageNum)));
+                limitStatement.setFirst(new FlexMarkInvokerStatement(startRow));
+                limitStatement.setSecond(new FlexMarkInvokerStatement(pageNum));
             }
             queryStatement.setLimitStatement(limitStatement);
         } else {
@@ -154,18 +158,29 @@ public class DefaultFlexMapper implements FlexMapper {
                 mappedParamList.add(new MappedParam().setParamValue(param).setTypeHandler(typeHandler));
             }
         }
-
-        MappedSql mappedSql = new MappedSql(Command.QUERY.name(), resultInfo.getSql(), new LowHashSet(Arrays.asList()));
+        String sql = resultInfo.getSql();
+        CacheKey methodKey = SystemUtil.cacheKey(sql, 5, false);
+        methodKey.update(rowType, colType);
+        CacheKey uniqueKey = methodKey.clone();
+        uniqueKey.update(resultInfo.getParamList().toArray());
+        MappedSql mappedSql = new MappedSql(Command.QUERY.name(), sql, resultInfo.getTableSet());
+        MethodInfo methodInfo = new MethodInfo()
+                .setConfiguration(configuration)
+                .setMethodKey(methodKey)
+                .setRowType(rowType)
+                .setColType(colType)
+                .setCompile(Compile.ANTLR_COMPILED);
         MappedStatement mappedStatement = new MappedStatement
                 .Builder()
                 .mappedParamList(mappedParamList)
                 .mappedSql(mappedSql)
-                .methodInfo(new MethodInfo()
-                        .setConfiguration(configuration)
-                        .setRowType(rowType)
-                        .setColType(colType)
-                        .setCompile(Compile.ANTLR_COMPILED))
+                .uniqueKey(uniqueKey)
+                .methodInfo(methodInfo)
                 .build();
         return mappedStatement;
+    }
+
+    private CacheKey cacheKey(String sql) {
+        return SystemUtil.cacheKey(sql, 5, false);
     }
 }

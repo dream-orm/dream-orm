@@ -17,6 +17,8 @@ import static com.moxa.dream.flex.test.table.table.UserTableDef.user;
 public class FlexMapperTest {
     @Autowired
     private FlexMapper flexMapper;
+    @Autowired
+    private HelloMapper helloMapper;
 
     @Test
     public void test0() {
@@ -36,6 +38,7 @@ public class FlexMapperTest {
     public void test2() {
         FromDef fromDef = select(user.name).from(user);
         Page<User> list = flexMapper.selectPage(fromDef, User.class, new Page(1, 1));
-        System.out.println(list);
+//             helloMapper.selectPage(new Page(1, 1));
+
     }
 }

@@ -29,7 +29,7 @@ public class LogicInvoker extends AbstractInvoker {
     @Override
     public void init(Assist assist) {
         methodInfo = assist.getCustom(MethodInfo.class);
-        Configuration configuration = methodInfo.getConfiguration();
+        Configuration configuration = assist.getCustom(Configuration.class);
         tableFactory = configuration.getTableFactory();
         InjectFactory injectFactory = configuration.getInjectFactory();
         LogicInject logicInject = injectFactory.getInject(LogicInject.class);

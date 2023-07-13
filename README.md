@@ -84,14 +84,14 @@ public class UserCondition {
 
 ```java
 select(user.dept_id)
-                .from(user.as("u"))
-                .leftJoin(blog)
-                .on(user.id.eq(blog.user_id))
-                .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1,2,3)))
-                .groupBy(user.dept_id)
-                .having(user.del_flag.eq(0))
-                .orderBy(user.del_flag.desc())
-                .limit(2,3)
+        .from(user.as("u"))
+        .leftJoin(blog)
+        .on(user.id.eq(blog.user_id))
+        .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1,2,3)))
+        .groupBy(user.dept_id)
+        .having(user.del_flag.eq(0))
+        .orderBy(user.del_flag.desc())
+        .limit(2,3)
 ```
 
 ### **无感屏蔽映射**
@@ -1081,23 +1081,23 @@ public @interface Sort {
 
 ### **模板**
 
-| 方法名          | 描述                           |
-| --------------- | ------------------------------ |
+| 方法名             | 描述               |
+|-----------------|------------------|
 | selectById      | 主键查询（支持多表关联查询）   |
 | selectByIds     | 主键批量查询(支持多表关联查询) |
-| selectOne       | 根据注解生成条件，查询一条     |
-| selectList      | 根据注解生成条件，查询多条     |
-| selectPage      | 根据注解生成条件，分页查询多条 |
-| updateById      | 主键更新                       |
-| updateNonById   | 主键非空更新                   |
-| insert          | 插入                           |
-| insertFetchKey  | 插入并获取主键值               |
-| deleteById      | 主键删除                       |
-| deleteByIds     | 主键批量删除                   |
-| existById       | 判断主键是否存在               |
-| exist           | 根据注解生成条件，判断是否存在 |
-| batchInsert     | 批量插入，可设置批次           |
-| batchUpdateById | 批量主键更新，可设置批次       |
+| selectOne       | 根据注解生成条件，查询一条    |
+| selectList      | 根据注解生成条件，查询多条    |
+| selectPage      | 根据注解生成条件，分页查询多条  |
+| updateById      | 主键更新             |
+| updateNonById   | 主键非空更新           |
+| insert          | 插入               |
+| insertFetchKey  | 插入并获取主键值         |
+| deleteById      | 主键删除             |
+| deleteByIds     | 主键批量删除           |
+| existById       | 判断主键是否存在         |
+| exist           | 根据注解生成条件，判断是否存在  |
+| batchInsert     | 批量插入，可设置批次       |
+| batchUpdateById | 批量主键更新，可设置批次     |
 
 #### **selectById**
 

@@ -25,6 +25,10 @@ public abstract class SymbolStatement extends Statement {
         return true;
     }
 
+    public interface Symbol {
+        String getValue();
+    }
+
     public static class LetterStatement extends SymbolStatement {
         public LetterStatement(String symbol) {
             super(symbol);
@@ -48,7 +52,6 @@ public abstract class SymbolStatement extends Statement {
             return "'" + getValue() + "'";
         }
     }
-
 
     public static class JavaStrStatement extends SymbolStatement {
         public JavaStrStatement(String symbol) {

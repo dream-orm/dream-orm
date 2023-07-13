@@ -8,6 +8,7 @@ import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.inject.factory.InjectFactory;
+import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 public abstract class AbstractDialectFactory implements DialectFactory {
@@ -24,7 +25,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                             CompileFactory compileFactory = configuration.getCompileFactory();
                             PackageStatement statement = compileFactory.compile(sql);
                             methodInfo.setStatement(statement);
-                            CacheKey methodKey = compileFactory.uniqueKey(sql);
+                            CacheKey methodKey = SystemUtil.cacheKey(sql, 5, true);
                             if (methodKey != null) {
                                 methodKey.update(methodInfo.getId());
                                 methodInfo.setMethodKey(methodKey);

@@ -2,7 +2,7 @@ package com.moxa.dream.flex.def;
 
 import com.moxa.dream.antlr.smt.LimitStatement;
 import com.moxa.dream.antlr.smt.QueryStatement;
-import com.moxa.dream.antlr.smt.SymbolStatement;
+import com.moxa.dream.flex.invoker.FlexMarkInvokerStatement;
 
 public class OrderByDef extends LimitDef {
 
@@ -13,8 +13,8 @@ public class OrderByDef extends LimitDef {
     public LimitDef limit(Integer offset, Integer rows) {
         LimitStatement limitStatement = new LimitStatement();
         limitStatement.setOffset(false);
-        limitStatement.setFirst(new SymbolStatement.LetterStatement(offset.toString()));
-        limitStatement.setSecond(new SymbolStatement.LetterStatement(rows.toString()));
+        limitStatement.setFirst(new FlexMarkInvokerStatement(offset));
+        limitStatement.setSecond(new FlexMarkInvokerStatement(rows));
         statement.setLimitStatement(limitStatement);
         return new LimitDef(statement);
     }
@@ -22,8 +22,8 @@ public class OrderByDef extends LimitDef {
     public LimitDef offset(Integer offset, Integer rows) {
         LimitStatement limitStatement = new LimitStatement();
         limitStatement.setOffset(true);
-        limitStatement.setFirst(new SymbolStatement.LetterStatement(rows.toString()));
-        limitStatement.setSecond(new SymbolStatement.LetterStatement(offset.toString()));
+        limitStatement.setFirst(new FlexMarkInvokerStatement(rows));
+        limitStatement.setSecond(new FlexMarkInvokerStatement(offset));
         statement.setLimitStatement(limitStatement);
         return new LimitDef(statement);
     }

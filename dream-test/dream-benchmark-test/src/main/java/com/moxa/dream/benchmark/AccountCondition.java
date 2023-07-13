@@ -7,9 +7,9 @@ import com.moxa.dream.template.condition.GeqCondition;
 
 @View(Account.class)
 public class AccountCondition {
-    @Conditional(value = GeqCondition.class, or = true,nullFlag = false)
+    @Conditional(value = GeqCondition.class, or = true, nullFlag = false)
     private Long id;
-    @Conditional(value = EqCondition.class, or = true,nullFlag = false)
+    @Conditional(value = EqCondition.class, or = true, nullFlag = false)
     private String userName;
 
     public Long getId() {

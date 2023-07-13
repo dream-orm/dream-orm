@@ -1,11 +1,9 @@
 package com.moxa.dream.flex.test;
 
 import com.moxa.dream.boot.bean.ConfigurationBean;
-import com.moxa.dream.drive.listener.DebugListener;
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.cache.DefaultCacheFactory;
-import com.moxa.dream.system.core.listener.Listener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -28,14 +26,14 @@ public class BootApplication {
         };
     }
 
-    @Bean
-    public Listener[] listeners() {
-        return new Listener[]{new DebugListener()};
-    }
+//    @Bean
+//    public Listener[] listeners() {
+//        return new Listener[]{new DebugListener()};
+//    }
 
     @Bean
     public ConfigurationBean configurationBean() {
-        ConfigurationBean configurationBean = new ConfigurationBean(Arrays.asList("com.moxa.dream.base"), Arrays.asList("com.moxa.dream.base"));
+        ConfigurationBean configurationBean = new ConfigurationBean(Arrays.asList("com.moxa.dream.flex.test"), Arrays.asList("com.moxa.dream.flex.test"));
         return configurationBean;
     }
 }

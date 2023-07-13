@@ -28,7 +28,7 @@ public class PermissionGetInvoker extends AbstractInvoker {
     @Override
     public void init(Assist assist) {
         methodInfo = assist.getCustom(MethodInfo.class);
-        Configuration configuration = methodInfo.getConfiguration();
+        Configuration configuration = assist.getCustom(Configuration.class);
         tableFactory = configuration.getTableFactory();
         InjectFactory injectFactory = configuration.getInjectFactory();
         PermissionInject permissionInject = injectFactory.getInject(PermissionInject.class);

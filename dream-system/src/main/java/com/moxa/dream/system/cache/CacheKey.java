@@ -23,14 +23,16 @@ public class CacheKey implements Cloneable {
         this.count = 0;
     }
 
-    public void update(Object... object) {
-        for (int i = 0; i < object.length; i++) {
-            int baseHashCode = Objects.hashCode(object[i]);
-            count++;
-            checksum += baseHashCode;
-            baseHashCode *= count;
-            hashcode = multiplier * hashcode + baseHashCode;
-            updateList.add(baseHashCode);
+    public void update(Object... objects) {
+        if (objects != null && objects.length > 0) {
+            for (int i = 0; i < objects.length; i++) {
+                int baseHashCode = Objects.hashCode(objects[i]);
+                count++;
+                checksum += baseHashCode;
+                baseHashCode *= count;
+                hashcode = multiplier * hashcode + baseHashCode;
+                updateList.add(baseHashCode);
+            }
         }
     }
 

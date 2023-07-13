@@ -1,6 +1,8 @@
 package com.moxa.dream.system.util;
 
 
+import com.moxa.dream.system.cache.CacheKey;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -37,5 +39,38 @@ public class SystemUtil {
             }
         }
         return sb.toString();
+    }
+
+    public static CacheKey cacheKey(String sql, int split, boolean clean) {
+        char[] charList = sql.toCharArray();
+        int index;
+        if (clean) {
+            index = 0;
+            for (int i = 0; i < charList.length; i++) {
+                char c;
+                if (!Character.isWhitespace(c = charList[i])) {
+                    charList[index++] = Character.toLowerCase(c);
+                }
+            }
+        } else {
+            index = charList.length;
+        }
+        if (split > index) {
+            split = index;
+        }
+        Object[] updateList = new Object[split + 2];
+        updateList[0] = new String(charList, 0, index);
+        updateList[1] = index;
+        int len = (int) Math.ceil(index / (double) split);
+        for (int i = 0; i < split; i++) {
+            int sPoint = i * len;
+            int size = Math.min((i + 1) * len, index) - sPoint;
+            char[] tempChars = new char[size];
+            System.arraycopy(charList, sPoint, tempChars, 0, size);
+            updateList[i + 2] = new String(tempChars);
+        }
+        CacheKey cacheKey = new CacheKey();
+        cacheKey.update(updateList);
+        return cacheKey;
     }
 }
