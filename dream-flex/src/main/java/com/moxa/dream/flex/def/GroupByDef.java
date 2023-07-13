@@ -11,7 +11,7 @@ public class GroupByDef extends HavingDef {
 
     public HavingDef having(ConditionDef conditionDef) {
         HavingStatement havingStatement = new HavingStatement();
-        havingStatement.setCondition(conditionDef.statement);
+        havingStatement.setCondition(conditionDef.getStatement());
         statement.setHavingStatement(havingStatement);
         return new HavingDef(statement);
     }

@@ -189,7 +189,7 @@ public class ColumnDef {
 
     public ConditionDef isNotNull() {
         ConditionStatement conditionStatement = new ConditionStatement();
-        conditionStatement.setLeft(this.statement);
+        conditionStatement.setLeft(this.getStatement());
         conditionStatement.setOper(new OperStatement.ISStatement());
         ConditionStatement rightConditionStatement = new ConditionStatement();
         rightConditionStatement.setOper(new OperStatement.NOTStatement());
@@ -199,7 +199,7 @@ public class ColumnDef {
     }
 
     private ConditionDef not(ConditionDef conditionDef) {
-        ConditionStatement statement = conditionDef.statement;
+        ConditionStatement statement = conditionDef.getStatement();
         Statement left = statement.getLeft();
         statement.setLeft(null);
         ConditionStatement conditionStatement = new ConditionStatement();
@@ -210,7 +210,7 @@ public class ColumnDef {
     }
 
     public ColumnDef add(ColumnDef columnDef) {
-        return new ColumnDef(conditionDef(new OperStatement.ADDStatement(), columnDef.getStatement()).statement);
+        return new ColumnDef(conditionDef(new OperStatement.ADDStatement(), columnDef.getStatement()).getStatement());
     }
 
     public ColumnDef add(Number number) {
@@ -218,7 +218,7 @@ public class ColumnDef {
     }
 
     public ColumnDef sub(ColumnDef columnDef) {
-        return new ColumnDef(conditionDef(new OperStatement.SUBStatement(), columnDef.getStatement()).statement);
+        return new ColumnDef(conditionDef(new OperStatement.SUBStatement(), columnDef.getStatement()).getStatement());
     }
 
     public ColumnDef sub(Number number) {
@@ -226,7 +226,7 @@ public class ColumnDef {
     }
 
     public ColumnDef multiply(ColumnDef columnDef) {
-        return new ColumnDef(conditionDef(new OperStatement.STARStatement(), columnDef.getStatement()).statement);
+        return new ColumnDef(conditionDef(new OperStatement.STARStatement(), columnDef.getStatement()).getStatement());
     }
 
     public ColumnDef multiply(Number number) {
@@ -234,7 +234,7 @@ public class ColumnDef {
     }
 
     public ColumnDef divide(ColumnDef columnDef) {
-        return new ColumnDef(conditionDef(new OperStatement.DIVIDEStatement(), columnDef.getStatement()).statement);
+        return new ColumnDef(conditionDef(new OperStatement.DIVIDEStatement(), columnDef.getStatement()).getStatement());
     }
 
     public ColumnDef divide(Number number) {

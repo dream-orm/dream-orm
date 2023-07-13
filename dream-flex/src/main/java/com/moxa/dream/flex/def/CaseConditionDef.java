@@ -20,7 +20,7 @@ public class CaseConditionDef extends ColumnDef {
 
         public Builder.Then when(ConditionDef conditionDef) {
             this.whenThenStatement = new CaseStatement.WhenThenStatement();
-            this.whenThenStatement.setWhen(conditionDef.statement);
+            this.whenThenStatement.setWhen(conditionDef.getStatement());
             listColumnStatement.add(whenThenStatement);
             return new Builder.Then(this);
         }

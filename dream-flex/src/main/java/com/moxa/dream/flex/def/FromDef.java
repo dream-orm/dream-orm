@@ -41,7 +41,7 @@ public class FromDef extends WhereDef {
 
     public WhereDef where(ConditionDef conditionDef) {
         WhereStatement whereStatement = new WhereStatement();
-        whereStatement.setCondition(conditionDef.statement);
+        whereStatement.setCondition(conditionDef.getStatement());
         statement.setWhereStatement(whereStatement);
         return new WhereDef(statement);
     }

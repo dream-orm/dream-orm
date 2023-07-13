@@ -8,7 +8,7 @@ public class TableDef {
     private AliasStatement statement;
 
     public TableDef(String table) {
-        this(table, table);
+        this(table, null);
     }
 
     public TableDef(String table, String alias) {

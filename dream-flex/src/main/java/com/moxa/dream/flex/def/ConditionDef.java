@@ -24,7 +24,7 @@ public class ConditionDef {
         ConditionStatement conditionStatement = new ConditionStatement();
         conditionStatement.setLeft(getWrapStatement(this.statement, operStatement));
         conditionStatement.setOper(operStatement);
-        conditionStatement.setRight(getWrapStatement(conditionDef.statement, operStatement));
+        conditionStatement.setRight(getWrapStatement(conditionDef.getStatement(), operStatement));
         this.statement = conditionStatement;
         return this;
     }

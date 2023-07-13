@@ -12,7 +12,7 @@ public class JoinDef {
     }
 
     public FromDef on(ConditionDef conditionDef) {
-        joinStatement.setOn(conditionDef.statement);
+        joinStatement.setOn(conditionDef.getStatement());
         return fromDef;
     }
 
