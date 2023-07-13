@@ -21,8 +21,7 @@ public class ActionExecutor implements Executor {
         if (!ObjectUtil.isNull(initActionList)) {
             doActions(initActionList, mappedStatement, mappedStatement.getArg(), session);
         }
-        Object result;
-        result = nextExecutor.execute(mappedStatement, session);
+        Object result = nextExecutor.execute(mappedStatement, session);
         if (!ObjectUtil.isNull(destroyActionList)) {
             doActions(destroyActionList, mappedStatement, result, session);
         }

@@ -1,4 +1,4 @@
-package com.moxa.dream;
+package com.moxa.dream.benchmark;
 
 import com.moxa.dream.boot.bean.ConfigurationBean;
 import com.moxa.dream.system.cache.CacheFactory;
