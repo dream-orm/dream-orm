@@ -5,10 +5,10 @@ import com.moxa.dream.antlr.smt.ConditionStatement;
 import com.moxa.dream.antlr.smt.OperStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
-public class ConditionDef extends AbstractSqlDef {
+public class ConditionDef {
     protected ConditionStatement statement;
 
-    public ConditionDef(ConditionStatement conditionStatement) {
+    protected ConditionDef(ConditionStatement conditionStatement) {
         this.statement = conditionStatement;
     }
 
@@ -20,7 +20,7 @@ public class ConditionDef extends AbstractSqlDef {
         return conditionDef(conditionDef, new OperStatement.ORStatement());
     }
 
-    public ConditionDef conditionDef(ConditionDef conditionDef, OperStatement operStatement) {
+    protected ConditionDef conditionDef(ConditionDef conditionDef, OperStatement operStatement) {
         ConditionStatement conditionStatement = new ConditionStatement();
         conditionStatement.setLeft(getWrapStatement(this.statement, operStatement));
         conditionStatement.setOper(operStatement);
@@ -40,7 +40,6 @@ public class ConditionDef extends AbstractSqlDef {
         return wrapStatement;
     }
 
-    @Override
     public ConditionStatement getStatement() {
         return statement;
     }

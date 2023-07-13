@@ -31,23 +31,23 @@ public class FunctionDef {
     }
 
     public static ColumnDef group_concat(ColumnDef columnDef) {
-        return group_concat(false,columnDef);
+        return group_concat(false, columnDef);
     }
 
-    public static ColumnDef group_concat(boolean distinct,ColumnDef columnDef) {
-        return group_concat(distinct,columnDef, null);
+    public static ColumnDef group_concat(boolean distinct, ColumnDef columnDef) {
+        return group_concat(distinct, columnDef, null);
     }
 
     public static ColumnDef group_concat(ColumnDef columnDef, String split) {
-        return group_concat(false,columnDef, split);
+        return group_concat(false, columnDef, split);
     }
 
     public static ColumnDef group_concat(ColumnDef columnDef, SortDef... sortDefs) {
-        return group_concat(false,columnDef,null, sortDefs);
+        return group_concat(false, columnDef, null, sortDefs);
     }
 
     public static ColumnDef group_concat(boolean distinct, ColumnDef columnDef, SortDef... sortDefs) {
-        return group_concat(distinct,columnDef,null, sortDefs);
+        return group_concat(distinct, columnDef, null, sortDefs);
     }
 
     public static ColumnDef group_concat(boolean distinct, ColumnDef columnDef, String split, SortDef... sortDefs) {
@@ -194,12 +194,12 @@ public class FunctionDef {
     }
 
     public static ColumnDef substr(ColumnDef columnDef, Serializable pos, Serializable len) {
-        ColumnDef columnDef3=null;
+        ColumnDef columnDef3 = null;
         if (len != null) {
             columnDef3 = new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(len)));
         }
-        return substr(columnDef, new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(pos))),columnDef3);
-        }
+        return substr(columnDef, new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(pos))), columnDef3);
+    }
 
     public static ColumnDef substr(ColumnDef columnDef, ColumnDef columnDef2, ColumnDef columnDef3) {
         if (columnDef3 != null) {
@@ -214,21 +214,22 @@ public class FunctionDef {
     }
 
     public static ColumnDef avg(ColumnDef columnDef) {
-        return avg(false,columnDef);
+        return avg(false, columnDef);
     }
 
-    public static ColumnDef avg(boolean distinct,ColumnDef columnDef) {
+    public static ColumnDef avg(boolean distinct, ColumnDef columnDef) {
         if (distinct) {
             return functionDef(new FunctionStatement.AvgStatement(), " ", new ColumnDef(new SymbolStatement.LetterStatement("DISTINCT")), columnDef);
         } else {
             return functionDef(new FunctionStatement.AvgStatement(), columnDef);
         }
     }
+
     public static ColumnDef sum(ColumnDef columnDef) {
-        return sum(false,columnDef);
+        return sum(false, columnDef);
     }
 
-    public static ColumnDef sum(boolean distinct,ColumnDef columnDef) {
+    public static ColumnDef sum(boolean distinct, ColumnDef columnDef) {
         if (distinct) {
             return functionDef(new FunctionStatement.SumStatement(), " ", new ColumnDef(new SymbolStatement.LetterStatement("DISTINCT")), columnDef);
         } else {
@@ -237,10 +238,10 @@ public class FunctionDef {
     }
 
     public static ColumnDef count(ColumnDef columnDef) {
-        return count(false,columnDef);
+        return count(false, columnDef);
     }
 
-    public static ColumnDef count( boolean distinct,ColumnDef columnDef) {
+    public static ColumnDef count(boolean distinct, ColumnDef columnDef) {
         if (distinct) {
             return functionDef(new FunctionStatement.CountStatement(), " ", new ColumnDef(new SymbolStatement.LetterStatement("DISTINCT")), columnDef);
         } else {
@@ -280,18 +281,18 @@ public class FunctionDef {
         return functionDef(new FunctionStatement.SignStatement(), columnDef);
     }
 
-    public static ColumnDef truncate(ColumnDef columnDef,ColumnDef columnDef2) {
-        return functionDef(new FunctionStatement.TruncateStatement(), columnDef,columnDef2);
+    public static ColumnDef truncate(ColumnDef columnDef, ColumnDef columnDef2) {
+        return functionDef(new FunctionStatement.TruncateStatement(), columnDef, columnDef2);
     }
 
     public static ColumnDef round(ColumnDef columnDef) {
-        return round(columnDef,null);
+        return round(columnDef, null);
     }
 
-    public static ColumnDef round(ColumnDef columnDef,ColumnDef columnDef2) {
-        if(columnDef2!=null){
-            return functionDef(new FunctionStatement.RoundStatement(), columnDef,columnDef2);
-        }else{
+    public static ColumnDef round(ColumnDef columnDef, ColumnDef columnDef2) {
+        if (columnDef2 != null) {
+            return functionDef(new FunctionStatement.RoundStatement(), columnDef, columnDef2);
+        } else {
             return functionDef(new FunctionStatement.RoundStatement(), columnDef);
         }
     }
@@ -321,13 +322,13 @@ public class FunctionDef {
     }
 
     public static ColumnDef log(ColumnDef columnDef) {
-        return log(columnDef,null);
+        return log(columnDef, null);
     }
 
-    public static ColumnDef log(ColumnDef columnDef,ColumnDef columnDef2) {
-        if(columnDef2!=null){
-            return functionDef(new FunctionStatement.LogStatement(), columnDef,columnDef2);
-        }else{
+    public static ColumnDef log(ColumnDef columnDef, ColumnDef columnDef2) {
+        if (columnDef2 != null) {
+            return functionDef(new FunctionStatement.LogStatement(), columnDef, columnDef2);
+        } else {
             return functionDef(new FunctionStatement.LogStatement(), columnDef);
         }
     }
@@ -527,7 +528,7 @@ public class FunctionDef {
     }
 
     public static ColumnDef if_(ConditionDef conditionDef, ColumnDef columnDef, ColumnDef columnDef2) {
-        return functionDef(new FunctionStatement.IfStatement(), conditionDef, columnDef, columnDef2);
+        return functionDef(new FunctionStatement.IfStatement(), new ColumnDef(conditionDef.getStatement()), columnDef, columnDef2);
     }
 
     public static ColumnDef lpad(ColumnDef columnDef, Serializable length, String padStr) {
@@ -666,14 +667,14 @@ public class FunctionDef {
         return new QueryDef().select(columnDefs);
     }
 
-    private static ColumnDef functionDef(FunctionStatement functionStatement, SqlDef... sqlDefs) {
-        return functionDef(functionStatement, ",", sqlDefs);
+    private static ColumnDef functionDef(FunctionStatement functionStatement, ColumnDef... columnDefs) {
+        return functionDef(functionStatement, ",", columnDefs);
     }
 
-    private static ColumnDef functionDef(FunctionStatement functionStatement, String split, SqlDef... sqlDefs) {
+    private static ColumnDef functionDef(FunctionStatement functionStatement, String split, ColumnDef... columnDefs) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(split);
-        for (SqlDef sqlDef : sqlDefs) {
-            listColumnStatement.add(sqlDef.getStatement());
+        for (ColumnDef columnDef : columnDefs) {
+            listColumnStatement.add(columnDef.getStatement());
         }
         functionStatement.setParamsStatement(listColumnStatement);
         return new ColumnDef(functionStatement);

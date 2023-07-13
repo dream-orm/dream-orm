@@ -1,4 +1,4 @@
-package com.moxa.dream.flex.def;
+package com.moxa.dream.flex.config;
 
 import java.util.List;
 

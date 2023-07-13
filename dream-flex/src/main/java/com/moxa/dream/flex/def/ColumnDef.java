@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class ColumnDef extends AbstractSqlDef {
+public class ColumnDef {
     private TableDef tableDef;
     private Statement statement;
     private String alias;

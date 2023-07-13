@@ -119,8 +119,12 @@ public class DreamFlexProcessor extends AbstractProcessor {
                     .append("\"").append(columnInfo.column).append("\",")
                     .append("\"").append(columnInfo.alias).append("\");\n");
         });
-        content.append("\n    public ").append(tableDefClassName).append("() {\n")
-                .append("        super").append("(\"").append(table).append("\");\n")
+        content
+                .append("\n    public ").append(tableDefClassName).append("() {\n")
+                .append("        this").append("(null);\n")
+                .append("    }")
+                .append("\n    public ").append(tableDefClassName).append("(String alias) {\n")
+                .append("        super").append("(\"").append(table).append("\",alias);\n")
                 .append("    }\n\n}\n");
         return content.toString();
     }

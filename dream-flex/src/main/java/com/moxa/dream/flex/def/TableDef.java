@@ -1,6 +1,7 @@
 package com.moxa.dream.flex.def;
 
 import com.moxa.dream.antlr.smt.AliasStatement;
+import com.moxa.dream.antlr.smt.BraceStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 
 public class TableDef {
@@ -14,9 +15,20 @@ public class TableDef {
         AliasStatement aliasStatement = new AliasStatement();
         aliasStatement.setColumn(new SymbolStatement.SingleMarkStatement(table));
         this.statement = aliasStatement;
-        if (!table.equals(alias)) {
+        if (alias != null && !alias.isEmpty() && !alias.equals(table)) {
             as(alias);
         }
+    }
+
+    public TableDef(AliasStatement statement) {
+        this.statement = statement;
+    }
+
+    public static TableDef table(SqlDef sqlDef) {
+        BraceStatement braceStatement = new BraceStatement(sqlDef.getStatement());
+        AliasStatement aliasStatement = new AliasStatement();
+        aliasStatement.setColumn(braceStatement);
+        return new TableDef(aliasStatement);
     }
 
     public AliasStatement getStatement() {

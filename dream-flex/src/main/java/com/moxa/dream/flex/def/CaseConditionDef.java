@@ -48,9 +48,9 @@ public class CaseConditionDef extends ColumnDef {
             }
 
             public Builder then(Serializable column) {
-                if(column instanceof Number){
+                if (column instanceof Number) {
                     return then(new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(column))));
-                }else{
+                } else {
                     return then(new ColumnDef(new SymbolStatement.StrStatement(String.valueOf(column))));
                 }
             }

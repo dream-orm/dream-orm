@@ -3,8 +3,8 @@ package com.moxa.dream.flex.mapper;
 import com.moxa.dream.antlr.config.Command;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.flex.config.ResultInfo;
 import com.moxa.dream.flex.def.QueryDef;
-import com.moxa.dream.flex.def.ResultInfo;
 import com.moxa.dream.flex.def.SqlDef;
 import com.moxa.dream.system.config.*;
 import com.moxa.dream.system.core.session.Session;
@@ -34,7 +34,7 @@ public class DefaultFlexMapper implements FlexMapper {
 
     public DefaultFlexMapper(Session session, ToSQL toSQL) {
         this.session = session;
-        this.configuration=session.getConfiguration();
+        this.configuration = session.getConfiguration();
         this.toSQL = toSQL;
         Configuration configuration = session.getConfiguration();
         this.typeHandlerFactory = configuration.getTypeHandlerFactory();

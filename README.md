@@ -8,21 +8,17 @@ DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术�
 
 ## **特性**
 
-**跨平台**：支持采用mysql语法在非mysql环境下执行，并提供接口自定义翻译
+**跨平台：**支持采用mysql语法在非mysql环境下执行，并提供接口自定义翻译
+
+**轻量级：**整个框架不依赖任何第三方框架
+
+**高性能：**匠心独运的架构设计，相比较mybatis系列框架，查询字段越多，嵌套越复杂，性能差距越明显
 
 **函数化**：深度解析SQL特有，sql函数化，封装业务，简化sql写法（数据映射，缓存，数据权限，逻辑删除，关键字拦截，多租户等都基于此实现）
 
 **缓存机制**：基于表的缓存，一切数据皆可缓存，若数据修改皆经过框架，保证读到的数据与数据库一致
 
-**插件机制**：接口代理，相比较函数化，从性能和技术深度来讲，此功能弱小不少
-
-**监听机制**：监听SQL执行
-
 **校验器**：基于注解的校验，可自定义化，列如：完成数据库插入唯一性校验等
-
-**简便性**：提供了简便的jpa操作，满足简单的sql操作，嵌套高级映射0配置
-
-**扩展强**：核心功能全部接口工厂实现，可以重写任意接口自主实现功能
 
 **开箱即用**：数据权限，逻辑删除，多租户，多数据源，参数值注入（默认值，加密），主键序列、查询字段值提取（解密，字典等）
 
@@ -82,17 +78,21 @@ public class UserCondition {
 
 采用注解生成条件有着更容易的阅读性，而且实体类只解析一次
 
-### **分页处理**
+### java编写SQL
 
-分页过程中，会剔除排序，精简查询字段为select 1，而且要执行的SQL只会拦截一次，不用每次查询都分页
+支持常见的任意字符串SQL，皆可改写一下形式，几乎支持所有的MySQL函数，包括字符串，数学，日期，case语句等函数
 
-### **极致缓存**
-
-一切查询的数据都会缓存，若数据的一切修改皆经过框架，则可以保证读到的数据与数据库一致
-
-### **类型转换器**
-
-严格的类型转换器，由数据库字段和实体类型字共同决定
+```java
+select(user.dept_id)
+                .from(user.as("u"))
+                .leftJoin(blog)
+                .on(user.id.eq(blog.user_id))
+                .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1,2,3)))
+                .groupBy(user.dept_id)
+                .having(user.del_flag.eq(0))
+                .orderBy(user.del_flag.desc())
+                .limit(2,3)
+```
 
 ### **无感屏蔽映射**
 
@@ -697,7 +697,7 @@ public @interface Join {
 | joinColumn | 关联表的字段名 |
 | joinType   | 关联类型    |
 
-***\*注：数据表名根据修饰的类属性判断\****
+**注：数据表名根据修饰的类属性判断**
 
 #### **举例**
 
@@ -1081,23 +1081,23 @@ public @interface Sort {
 
 ### **模板**
 
-| ***\*方法名\****   | ***\*描述\****     |
-|-----------------|------------------|
+| 方法名          | 描述                           |
+| --------------- | ------------------------------ |
 | selectById      | 主键查询（支持多表关联查询）   |
 | selectByIds     | 主键批量查询(支持多表关联查询) |
-| selectOne       | 根据注解生成条件，查询一条    |
-| selectList      | 根据注解生成条件，查询多条    |
-| selectPage      | 根据注解生成条件，分页查询多条  |
-| updateById      | 主键更新             |
-| updateNonById   | 主键非空更新           |
-| insert          | 插入               |
-| insertFetchKey  | 插入并获取主键值         |
-| deleteById      | 主键删除             |
-| deleteByIds     | 主键批量删除           |
-| existById       | 判断主键是否存在         |
-| exist           | 根据注解生成条件，判断是否存在  |
-| batchInsert     | 批量插入，可设置批次       |
-| batchUpdateById | 批量主键更新，可设置批次     |
+| selectOne       | 根据注解生成条件，查询一条     |
+| selectList      | 根据注解生成条件，查询多条     |
+| selectPage      | 根据注解生成条件，分页查询多条 |
+| updateById      | 主键更新                       |
+| updateNonById   | 主键非空更新                   |
+| insert          | 插入                           |
+| insertFetchKey  | 插入并获取主键值               |
+| deleteById      | 主键删除                       |
+| deleteByIds     | 主键批量删除                   |
+| existById       | 判断主键是否存在               |
+| exist           | 根据注解生成条件，判断是否存在 |
+| batchInsert     | 批量插入，可设置批次           |
+| batchUpdateById | 批量主键更新，可设置批次       |
 
 #### **selectById**
 
@@ -1159,9 +1159,6 @@ public interface Listener {
 | before      | 返回false，SQL不执行，返回空 |
 | afterReturn | 返回结果为查询结果          |
 | exception   | 出现异常调用此处           |
-
-***\*注：全局监听器必须继承接口\*******
-\*QueryListener，InsertListener，UpdateListener，DeleteListener才能对增删改查起到监听作用\****
 
 ## **插件**
 

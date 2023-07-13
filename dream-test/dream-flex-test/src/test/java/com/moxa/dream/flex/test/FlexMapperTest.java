@@ -35,7 +35,7 @@ public class FlexMapperTest {
     @Test
     public void test2() {
         FromDef fromDef = select(user.name).from(user);
-        Page<User> list = flexMapper.selectPage(fromDef, User.class,new Page(1,1));
+        Page<User> list = flexMapper.selectPage(fromDef, User.class, new Page(1, 1));
         System.out.println(list);
     }
 }
