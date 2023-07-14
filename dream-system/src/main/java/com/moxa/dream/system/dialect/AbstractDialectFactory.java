@@ -18,8 +18,8 @@ public abstract class AbstractDialectFactory implements DialectFactory {
         switch (methodInfo.getCompile()) {
             case ANTLR_COMPILE:
                 synchronized (this) {
+                    Configuration configuration = methodInfo.getConfiguration();
                     if (Compile.ANTLR_COMPILE == methodInfo.getCompile()) {
-                        Configuration configuration = methodInfo.getConfiguration();
                         String sql = methodInfo.getSql();
                         try {
                             CompileFactory compileFactory = configuration.getCompileFactory();
@@ -37,8 +37,9 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                             throw new DreamRunTimeException("编译方法" + methodInfo.getId() + "失败，" + e.getMessage(), e);
                         }
                     }
+                    // 代理，为多租户服务
+                    return configuration.getDialectFactory().compile(methodInfo, arg);
                 }
-                return compileAntlr(methodInfo, arg);
             case ANTLR_COMPILED:
                 return compileAntlr(methodInfo, arg);
             default:

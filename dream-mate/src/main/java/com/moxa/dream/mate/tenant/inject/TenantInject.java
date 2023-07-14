@@ -9,8 +9,10 @@ import com.moxa.dream.mate.tenant.interceptor.TenantInterceptor;
 import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
+import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.inject.Inject;
 import com.moxa.dream.system.plugin.factory.PluginFactory;
+import com.moxa.dream.system.plugin.factory.ProxyPluginFactory;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 public class TenantInject implements Inject {
@@ -30,7 +32,12 @@ public class TenantInject implements Inject {
         }
         TenantInterceptor tenantInterceptor = pluginFactory.getInterceptor(TenantInterceptor.class);
         if (tenantInterceptor == null) {
-            throw new DreamRunTimeException("多租户模式，请开启插件" + TenantInterceptor.class.getName());
+            tenantInterceptor = new TenantInterceptor(tenantHandler);
+            pluginFactory.interceptors(tenantInterceptor);
+            PluginFactory tempPluginFactory = new ProxyPluginFactory();
+            tempPluginFactory.interceptors(tenantInterceptor);
+            DialectFactory dialectFactory = tempPluginFactory.plugin(configuration.getDialectFactory());
+            configuration.setDialectFactory(dialectFactory);
         }
         if (invokerFactory.getInvoker(TenantInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
             invokerFactory.addInvokers(new TenantInvoker());
