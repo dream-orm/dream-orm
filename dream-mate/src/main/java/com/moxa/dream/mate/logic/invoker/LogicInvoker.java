@@ -72,11 +72,11 @@ public class LogicInvoker extends AbstractInvoker {
         return logicHandler.getLogicColumn();
     }
 
-    public String getNegativeValue() {
-        return logicHandler.getNegativeValue();
+    public String getDeletedValue() {
+        return logicHandler.getDeletedValue();
     }
 
-    public String getPositiveValue() {
-        return logicHandler.getPositiveValue();
+    public String getNormalValue() {
+        return logicHandler.getNormalValue();
     }
 }

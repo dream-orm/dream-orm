@@ -7,16 +7,16 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.AntlrUtil;
-import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
-import com.moxa.dream.system.antlr.invoker.MarkInvoker;
+import com.moxa.dream.mate.tenant.invoker.TenantGetInvoker;
+import com.moxa.dream.mate.tenant.invoker.TenantInjectInvoker;
 
 import java.util.List;
 
 public class TenantInsertHandler extends AbstractHandler {
-    private TenantInvoker tenantInvoker;
+    private TenantInjectInvoker tenantInjectInvoker;
 
-    public TenantInsertHandler(TenantInvoker tenantInvoker) {
-        this.tenantInvoker = tenantInvoker;
+    public TenantInsertHandler(TenantInjectInvoker tenantInjectInvoker) {
+        this.tenantInjectInvoker = tenantInjectInvoker;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class TenantInsertHandler extends AbstractHandler {
         InsertStatement insertStatement = (InsertStatement) statement;
         Statement tableStatement = insertStatement.getTable();
         String table = ((SymbolStatement) tableStatement).getValue();
-        if (tenantInvoker.isTenant(table)) {
+        if (tenantInjectInvoker.isTenant(table)) {
             Statement params = insertStatement.getParams();
             Statement values = insertStatement.getValues();
             if (params instanceof BraceStatement && values instanceof InsertStatement.ValuesStatement) {
@@ -36,7 +36,7 @@ public class TenantInsertHandler extends AbstractHandler {
                 ListColumnStatement valuesListStatement = (ListColumnStatement) valuesBraceStatement.getStatement();
                 Statement[] valuesColumnList = valuesListStatement.getColumnList();
                 int i = 0;
-                String tenantColumn = tenantInvoker.getTenantColumn();
+                String tenantColumn = tenantInjectInvoker.getTenantColumn();
                 for (; i < paramColumnList.length; i++) {
                     SymbolStatement symbolStatement = (SymbolStatement) paramColumnList[i];
                     String column = symbolStatement.getValue();
@@ -44,7 +44,7 @@ public class TenantInsertHandler extends AbstractHandler {
                         break;
                     }
                 }
-                InvokerStatement invokerStatement = AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
+                InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
                 if (i < paramColumnList.length) {
                     valuesColumnList[i] = invokerStatement;
                 } else {

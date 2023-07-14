@@ -8,11 +8,11 @@ public interface LogicHandler {
         return tableInfo.getFieldName(getLogicColumn()) != null;
     }
 
-    default String getPositiveValue() {
+    default String getNormalValue() {
         return "1";
     }
 
-    default String getNegativeValue() {
+    default String getDeletedValue() {
         return "0";
     }
 

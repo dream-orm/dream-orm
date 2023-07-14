@@ -5,15 +5,11 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.util.AntlrUtil;
-import com.moxa.dream.mate.tenant.interceptor.TenantInterceptor;
-import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
+import com.moxa.dream.mate.tenant.invoker.TenantGetInvoker;
+import com.moxa.dream.mate.tenant.invoker.TenantInjectInvoker;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.config.MethodInfo;
-import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.inject.Inject;
-import com.moxa.dream.system.plugin.factory.PluginFactory;
-import com.moxa.dream.system.plugin.factory.ProxyPluginFactory;
-import com.moxa.dream.util.exception.DreamRunTimeException;
 
 public class TenantInject implements Inject {
     private TenantHandler tenantHandler;
@@ -26,24 +22,14 @@ public class TenantInject implements Inject {
     public void inject(MethodInfo methodInfo) {
         Configuration configuration = methodInfo.getConfiguration();
         InvokerFactory invokerFactory = configuration.getInvokerFactory();
-        PluginFactory pluginFactory = configuration.getPluginFactory();
-        if (pluginFactory == null) {
-            throw new DreamRunTimeException("多租户模式，请开启插件");
+        if (invokerFactory.getInvoker(TenantInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+            invokerFactory.addInvokers(new TenantInjectInvoker());
         }
-        TenantInterceptor tenantInterceptor = pluginFactory.getInterceptor(TenantInterceptor.class);
-        if (tenantInterceptor == null) {
-            tenantInterceptor = new TenantInterceptor(tenantHandler);
-            pluginFactory.interceptors(tenantInterceptor);
-            PluginFactory tempPluginFactory = new ProxyPluginFactory();
-            tempPluginFactory.interceptors(tenantInterceptor);
-            DialectFactory dialectFactory = tempPluginFactory.plugin(configuration.getDialectFactory());
-            configuration.setDialectFactory(dialectFactory);
-        }
-        if (invokerFactory.getInvoker(TenantInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            invokerFactory.addInvokers(new TenantInvoker());
+        if (invokerFactory.getInvoker(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+            invokerFactory.addInvokers(new TenantGetInvoker());
         }
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement tenantStatement = AntlrUtil.invokerStatement(TenantInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
+        InvokerStatement tenantStatement = AntlrUtil.invokerStatement(TenantInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
         statement.setStatement(tenantStatement);
     }
 

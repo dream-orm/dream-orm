@@ -16,7 +16,6 @@ public class LogicUpdateHandler extends AbstractHandler {
 
     public LogicUpdateHandler(LogicInvoker logicInvoker) {
         this.logicInvoker = logicInvoker;
-
     }
 
     @Override
@@ -28,7 +27,7 @@ public class LogicUpdateHandler extends AbstractHandler {
             ConditionStatement whereConditionStatement = new ConditionStatement();
             whereConditionStatement.setLeft(new SymbolStatement.LetterStatement(logicInvoker.getLogicColumn()));
             whereConditionStatement.setOper(new OperStatement.EQStatement());
-            whereConditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNegativeValue()));
+            whereConditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getDeletedValue()));
             WhereStatement whereStatement = (WhereStatement) updateStatement.getWhere();
             if (whereStatement == null) {
                 whereStatement = new WhereStatement();

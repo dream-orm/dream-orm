@@ -10,10 +10,10 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.AntlrUtil;
-import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
+import com.moxa.dream.mate.tenant.invoker.TenantGetInvoker;
+import com.moxa.dream.mate.tenant.invoker.TenantInjectInvoker;
 import com.moxa.dream.mate.util.MateUtil;
 import com.moxa.dream.system.antlr.handler.scan.QueryScanHandler;
-import com.moxa.dream.system.antlr.invoker.MarkInvoker;
 import com.moxa.dream.system.antlr.invoker.ScanInvoker;
 
 import java.util.ArrayDeque;
@@ -21,11 +21,11 @@ import java.util.Deque;
 import java.util.List;
 
 public class TenantQueryHandler extends AbstractHandler {
-    private TenantInvoker tenantInvoker;
+    private TenantInjectInvoker tenantInjectInvoker;
     private Deque<QueryStatement> queryDeque = new ArrayDeque<>();
 
-    public TenantQueryHandler(TenantInvoker tenantInvoker) {
-        this.tenantInvoker = tenantInvoker;
+    public TenantQueryHandler(TenantInjectInvoker tenantInjectInvoker) {
+        this.tenantInjectInvoker = tenantInjectInvoker;
 
     }
 
@@ -59,12 +59,12 @@ public class TenantQueryHandler extends AbstractHandler {
             ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(fromStatement.getMainTable(), true);
             if (tableScanInfo != null) {
                 String table = tableScanInfo.getTable();
-                if (tenantInvoker.isTenant(table)) {
-                    String tenantColumn = tenantInvoker.getTenantColumn();
+                if (tenantInjectInvoker.isTenant(table)) {
+                    String tenantColumn = tenantInjectInvoker.getTenantColumn();
                     ConditionStatement conditionStatement = new ConditionStatement();
                     conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                     conditionStatement.setOper(new OperStatement.EQStatement());
-                    conditionStatement.setRight(AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
+                    conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                     QueryStatement queryStatement = queryDeque.peek();
                     WhereStatement whereStatement = queryStatement.getWhereStatement();
                     if (whereStatement == null) {
@@ -96,12 +96,12 @@ public class TenantQueryHandler extends AbstractHandler {
                 ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(joinStatement.getJoinTable(), false);
                 if (tableScanInfo != null) {
                     String table = tableScanInfo.getTable();
-                    if (tenantInvoker.isTenant(table)) {
-                        String tenantColumn = tenantInvoker.getTenantColumn();
+                    if (tenantInjectInvoker.isTenant(table)) {
+                        String tenantColumn = tenantInjectInvoker.getTenantColumn();
                         ConditionStatement conditionStatement = new ConditionStatement();
                         conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                         conditionStatement.setOper(new OperStatement.EQStatement());
-                        conditionStatement.setRight(AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
+                        conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                         Statement joinOnStatement = joinStatement.getOn();
                         BraceStatement braceStatement = new BraceStatement(joinOnStatement);
                         ConditionStatement joinConditionStatement = new ConditionStatement();

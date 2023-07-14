@@ -21,8 +21,8 @@ import com.moxa.dream.system.table.factory.TableFactory;
 
 import java.util.List;
 
-public class TenantInvoker extends AbstractInvoker {
-    public static final String FUNCTION = "dream_mate_tenant";
+public class TenantInjectInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "dream_mate_tenant_inject";
     private TableFactory tableFactory;
     private MethodInfo methodInfo;
     private TenantHandler tenantHandler;
@@ -40,7 +40,7 @@ public class TenantInvoker extends AbstractInvoker {
 
     @Override
     public Invoker newInstance() {
-        return new TenantInvoker();
+        return new TenantInjectInvoker();
     }
 
     @Override

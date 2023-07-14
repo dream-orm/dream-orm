@@ -8,17 +8,17 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.antlr.util.AntlrUtil;
-import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
+import com.moxa.dream.mate.tenant.invoker.TenantGetInvoker;
+import com.moxa.dream.mate.tenant.invoker.TenantInjectInvoker;
 import com.moxa.dream.mate.util.MateUtil;
-import com.moxa.dream.system.antlr.invoker.MarkInvoker;
 
 import java.util.List;
 
 public class TenantUpdateHandler extends AbstractHandler {
-    private TenantInvoker tenantInvoker;
+    private TenantInjectInvoker tenantInjectInvoker;
 
-    public TenantUpdateHandler(TenantInvoker tenantInvoker) {
-        this.tenantInvoker = tenantInvoker;
+    public TenantUpdateHandler(TenantInjectInvoker tenantInjectInvoker) {
+        this.tenantInjectInvoker = tenantInjectInvoker;
     }
 
     @Override
@@ -27,12 +27,12 @@ public class TenantUpdateHandler extends AbstractHandler {
         Statement tableStatement = updateStatement.getTable();
         SymbolStatement symbolStatement = (SymbolStatement) tableStatement;
         String table = symbolStatement.getValue();
-        if (tenantInvoker.isTenant(table)) {
-            String tenantColumn = tenantInvoker.getTenantColumn();
+        if (tenantInjectInvoker.isTenant(table)) {
+            String tenantColumn = tenantInjectInvoker.getTenantColumn();
             ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.LetterStatement(tenantColumn));
             conditionStatement.setOper(new OperStatement.EQStatement());
-            conditionStatement.setRight(AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
+            conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
             WhereStatement whereStatement = (WhereStatement) updateStatement.getWhere();
             if (whereStatement == null) {
                 whereStatement = new WhereStatement();
@@ -66,7 +66,7 @@ public class TenantUpdateHandler extends AbstractHandler {
             Statement columnStatement = conditionStatement.getLeft();
             if (columnStatement instanceof SymbolStatement) {
                 String column = ((SymbolStatement) columnStatement).getValue();
-                if (tenantInvoker.getTenantColumn().equalsIgnoreCase(column)) {
+                if (tenantInjectInvoker.getTenantColumn().equalsIgnoreCase(column)) {
                     return null;
                 }
             }
