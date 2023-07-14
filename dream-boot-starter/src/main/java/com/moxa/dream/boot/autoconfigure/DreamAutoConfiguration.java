@@ -297,7 +297,7 @@ public class DreamAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL, Invoker... invokers) {
-        return new DefaultFlexMapper(sessionTemplate, toSQL, invokers);
+    public FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
+        return new DefaultFlexMapper(sessionTemplate, toSQL);
     }
 }

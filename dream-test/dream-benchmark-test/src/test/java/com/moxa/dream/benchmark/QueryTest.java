@@ -1,6 +1,6 @@
 package com.moxa.dream.benchmark;
 
-import com.moxa.dream.flex.def.SqlDef;
+import com.moxa.dream.flex.def.Query;
 import com.moxa.dream.flex.mapper.FlexMapper;
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.template.mapper.TemplateMapper;
@@ -38,9 +38,9 @@ public class QueryTest {
     @Test
     public void test() {
         costTime((t) -> {
-            SqlDef sqlDef = select(account.id, account.user_name, account.password, account.salt, account.nickname, account.email, account.mobile, account.avatar, account.type, account.status, account.created)
+            Query query = select(account.id, account.user_name, account.password, account.salt, account.nickname, account.email, account.mobile, account.avatar, account.type, account.status, account.created)
                     .from(account).where(account.id.geq(100).or(account.user_name.eq("admin" + ThreadLocalRandom.current().nextInt(10000))));
-            Page<Account> page = flexMapper.selectPage(sqlDef, Account.class, new Page(1, 1));
+            Page<Account> page = flexMapper.selectPage(query, Account.class, new Page(1, 1));
 //            AccountCondition accountCondition = new AccountCondition();
 //            accountCondition.setId(100l);
 //            accountCondition.setUserName("admin"+ThreadLocalRandom.current().nextInt(10000));

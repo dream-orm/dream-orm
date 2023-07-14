@@ -1,12 +1,11 @@
 package com.moxa.dream.flex.mapper;
 
 import com.moxa.dream.antlr.config.Command;
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.flex.config.ResultInfo;
+import com.moxa.dream.flex.def.Query;
 import com.moxa.dream.flex.def.QueryDef;
-import com.moxa.dream.flex.def.SqlDef;
 import com.moxa.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.*;
@@ -23,22 +22,21 @@ import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.sql.Types;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class DefaultFlexMapper implements FlexMapper {
     private Session session;
     private Configuration configuration;
     private ToSQL toSQL;
-    private Invoker[] invokers;
     private TypeHandlerFactory typeHandlerFactory;
     private boolean offset;
-    private Map<Class, Object> customMap = new HashMap<>();
 
-    public DefaultFlexMapper(Session session, ToSQL toSQL, Invoker... invokers) {
+    public DefaultFlexMapper(Session session, ToSQL toSQL) {
         this.session = session;
         this.configuration = session.getConfiguration();
         this.toSQL = toSQL;
-        this.invokers = invokers;
         Configuration configuration = session.getConfiguration();
         this.typeHandlerFactory = configuration.getTypeHandlerFactory();
         InjectFactory injectFactory = configuration.getInjectFactory();
@@ -46,32 +44,31 @@ public class DefaultFlexMapper implements FlexMapper {
         if (pageInject != null) {
             this.offset = pageInject.isOffset();
         }
-        this.customMap.put(Configuration.class, configuration);
     }
 
     @Override
-    public <T> T selectOne(SqlDef sqlDef, Class<T> type) {
-        ResultInfo resultInfo = sqlDef.toSQL(toSQL, customMap, invokers);
+    public <T> T selectOne(Query query, Class<T> type) {
+        ResultInfo resultInfo = query.toSQL(toSQL);
         MappedStatement mappedStatement = getMappedStatement(resultInfo, NonCollection.class, type);
         return (T) session.execute(mappedStatement);
     }
 
     @Override
-    public <T> List<T> selectList(SqlDef sqlDef, Class<T> type) {
-        ResultInfo resultInfo = sqlDef.toSQL(toSQL, customMap, invokers);
+    public <T> List<T> selectList(Query query, Class<T> type) {
+        ResultInfo resultInfo = query.toSQL(toSQL);
         MappedStatement mappedStatement = getMappedStatement(resultInfo, List.class, type);
         return (List<T>) session.execute(mappedStatement);
     }
 
     @Override
-    public <T> Page<T> selectPage(SqlDef sqlDef, Class<T> type, Page page) {
-        Statement statement = sqlDef.getStatement();
+    public <T> Page<T> selectPage(Query query, Class<T> type, Page page) {
+        Statement statement = query.getStatement();
         if (!(statement instanceof QueryStatement)) {
             throw new DreamRunTimeException("抽象树不为查询");
         }
         QueryStatement queryStatement = pageQueryStatement((QueryStatement) statement, page.getStartRow(), page.getPageSize());
-        ResultInfo resultInfo = new QueryDef(queryStatement).toSQL(toSQL, customMap, invokers);
-        ResultInfo countResultInfo = new QueryDef(countQueryStatement(queryStatement)).toSQL(toSQL, customMap, invokers);
+        ResultInfo resultInfo = new QueryDef(queryStatement).toSQL(toSQL);
+        ResultInfo countResultInfo = new QueryDef(countQueryStatement(queryStatement)).toSQL(toSQL);
         MappedStatement mappedStatement = getMappedStatement(resultInfo, Collection.class, type);
         MappedStatement countMappedStatement = getMappedStatement(countResultInfo, NonCollection.class, Long.class);
         page.setTotal((long) session.execute(countMappedStatement));

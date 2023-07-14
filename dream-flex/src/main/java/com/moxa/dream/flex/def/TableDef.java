@@ -25,8 +25,8 @@ public class TableDef {
         this.statement = statement;
     }
 
-    public static TableDef table(SqlDef sqlDef) {
-        BraceStatement braceStatement = new BraceStatement(sqlDef.getStatement());
+    public static TableDef table(Query query) {
+        BraceStatement braceStatement = new BraceStatement(query.getStatement());
         AliasStatement aliasStatement = new AliasStatement();
         aliasStatement.setColumn(braceStatement);
         return new TableDef(aliasStatement);

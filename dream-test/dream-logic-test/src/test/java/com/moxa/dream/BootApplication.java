@@ -1,10 +1,8 @@
 package com.moxa.dream;
 
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.boot.bean.ConfigurationBean;
 import com.moxa.dream.drive.listener.DebugListener;
 import com.moxa.dream.mate.logic.inject.LogicInject;
-import com.moxa.dream.mate.logic.invoker.LogicInvoker;
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.cache.DefaultCacheFactory;
@@ -37,10 +35,10 @@ public class BootApplication {
         return new Listener[]{new DebugListener()};
     }
 
-    @Bean
-    public Invoker invoker() {
-        return new LogicInvoker();
-    }
+//    @Bean
+//    public Invoker invoker() {
+//        return new LogicInvoker();
+//    }
 
     @Bean
     public Inject[] injects() {

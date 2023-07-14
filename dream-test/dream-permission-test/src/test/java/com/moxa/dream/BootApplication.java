@@ -1,12 +1,9 @@
 package com.moxa.dream;
 
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.boot.bean.ConfigurationBean;
 import com.moxa.dream.drive.listener.DebugListener;
 import com.moxa.dream.mate.permission.inject.PermissionHandler;
 import com.moxa.dream.mate.permission.inject.PermissionInject;
-import com.moxa.dream.mate.permission.invoker.PermissionGetInvoker;
-import com.moxa.dream.mate.permission.invoker.PermissionInjectInvoker;
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.cache.DefaultCacheFactory;
@@ -41,10 +38,10 @@ public class BootApplication {
         return new Listener[]{new DebugListener()};
     }
 
-    @Bean
-    public Invoker[] invokers() {
-        return new Invoker[]{new PermissionInjectInvoker(), new PermissionGetInvoker()};
-    }
+//    @Bean
+//    public Invoker[] invokers() {
+//        return new Invoker[]{new PermissionInjectInvoker(), new PermissionGetInvoker()};
+//    }
 
     @Bean
     public Inject[] injects() {

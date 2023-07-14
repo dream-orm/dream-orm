@@ -18,12 +18,9 @@ public class ColumnDef {
         this.statement = statement;
     }
 
-    public ColumnDef(TableDef tableDef, String column, String alias) {
+    public ColumnDef(TableDef tableDef, String column) {
         this(new SymbolStatement.SingleMarkStatement(column));
         this.tableDef = tableDef;
-        if (!column.equals(alias)) {
-            this.alias = alias;
-        }
     }
 
     public static ColumnDef column(Serializable column) {
@@ -31,10 +28,6 @@ public class ColumnDef {
     }
 
     public Statement getStatement() {
-        return getStatement(false);
-    }
-
-    public Statement getStatement(boolean hasAlias) {
         Statement tempStatement = statement;
         if (tableDef != null) {
             ListColumnStatement listColumnStatement = new ListColumnStatement(".");
@@ -49,7 +42,7 @@ public class ColumnDef {
             listColumnStatement.add(statement);
             tempStatement = listColumnStatement;
         }
-        if (hasAlias && alias != null && !alias.isEmpty()) {
+        if (alias != null && !alias.isEmpty()) {
             AliasStatement aliasStatement = new AliasStatement();
             aliasStatement.setColumn(tempStatement);
             aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
@@ -126,8 +119,8 @@ public class ColumnDef {
         return conditionDef(new OperStatement.INStatement(), braceStatement);
     }
 
-    public ConditionDef in(SqlDef sqlDef) {
-        BraceStatement braceStatement = new BraceStatement(sqlDef.getStatement());
+    public ConditionDef in(Query query) {
+        BraceStatement braceStatement = new BraceStatement(query.getStatement());
         return conditionDef(new OperStatement.INStatement(), braceStatement);
     }
 
@@ -139,8 +132,8 @@ public class ColumnDef {
         return not(in(values));
     }
 
-    public ConditionDef notIn(SqlDef sqlDef) {
-        return not(in(sqlDef));
+    public ConditionDef notIn(Query query) {
+        return not(in(query));
     }
 
     public ConditionDef like(Serializable value) {

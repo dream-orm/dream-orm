@@ -3,7 +3,7 @@ package com.moxa.dream.flex.def;
 import com.moxa.dream.antlr.smt.FromStatement;
 import com.moxa.dream.antlr.smt.QueryStatement;
 
-public class SelectDef extends AbstractSqlDef {
+public class SelectDef extends AbstractQuery {
     private QueryStatement statement;
 
     protected SelectDef(QueryStatement statement) {

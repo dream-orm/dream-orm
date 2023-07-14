@@ -1,12 +1,10 @@
 package com.moxa.dream;
 
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.boot.bean.ConfigurationBean;
 import com.moxa.dream.drive.listener.DebugListener;
 import com.moxa.dream.mate.tenant.inject.TenantHandler;
 import com.moxa.dream.mate.tenant.inject.TenantInject;
 import com.moxa.dream.mate.tenant.interceptor.TenantInterceptor;
-import com.moxa.dream.mate.tenant.invoker.TenantInvoker;
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.cache.DefaultCacheFactory;
@@ -45,10 +43,10 @@ public class BootApplication {
         return () -> 1;
     }
 
-    @Bean
-    public Invoker invoker() {
-        return new TenantInvoker();
-    }
+//    @Bean
+//    public Invoker invoker() {
+//        return new TenantInvoker();
+//    }
 
     @Bean
     public Inject[] injects(TenantHandler tenantHandler) {

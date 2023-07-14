@@ -10,12 +10,32 @@ import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.inject.Inject;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 
+import java.util.Set;
+
 public class BlockInject implements Inject {
+    private BlockInvoker blockInvoker;
+
+    public BlockInject() {
+
+    }
+
+    public BlockInject(String resource) {
+        blockInvoker = new BlockInvoker(resource);
+    }
+
+    public BlockInject(Set<String> filterSet) {
+        blockInvoker = new BlockInvoker(filterSet);
+    }
+
     @Override
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
         if (invokerFactory.getInvoker(BlockInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            throw new DreamRunTimeException("关键字拦截模式，请开启函数@" + BlockInvoker.FUNCTION + ":" + Invoker.DEFAULT_NAMESPACE);
+            if (blockInvoker == null) {
+                throw new DreamRunTimeException("关键字拦截模式，请开启函数@" + BlockInvoker.FUNCTION + ":" + Invoker.DEFAULT_NAMESPACE);
+            } else {
+                invokerFactory.addInvokers(blockInvoker);
+            }
         }
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement columnFilterStatement = AntlrUtil.invokerStatement(BlockInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());

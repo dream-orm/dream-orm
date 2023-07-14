@@ -1,10 +1,8 @@
 package com.moxa.dream;
 
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.boot.bean.ConfigurationBean;
 import com.moxa.dream.drive.listener.DebugListener;
 import com.moxa.dream.mate.block.inject.BlockInject;
-import com.moxa.dream.mate.block.invoker.BlockInvoker;
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.cache.DefaultCacheFactory;
@@ -37,14 +35,14 @@ public class BootApplication {
         return new Listener[]{new DebugListener()};
     }
 
-    @Bean
-    public Invoker invoker() {
-        return new BlockInvoker("META-INF/keyword.txt");
-    }
+//    @Bean
+//    public Invoker invoker() {
+//        return new BlockInvoker("META-INF/keyword.txt");
+//    }
 
     @Bean
     public Inject[] injects() {
-        return new Inject[]{new BlockInject()};
+        return new Inject[]{new BlockInject("META-INF/keyword.txt")};
     }
 
     @Bean

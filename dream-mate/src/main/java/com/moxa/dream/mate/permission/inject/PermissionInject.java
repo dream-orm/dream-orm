@@ -9,7 +9,6 @@ import com.moxa.dream.mate.permission.invoker.PermissionGetInvoker;
 import com.moxa.dream.mate.permission.invoker.PermissionInjectInvoker;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.inject.Inject;
-import com.moxa.dream.util.exception.DreamRunTimeException;
 
 public class PermissionInject implements Inject {
     private PermissionHandler permissionHandler;
@@ -22,10 +21,10 @@ public class PermissionInject implements Inject {
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
         if (invokerFactory.getInvoker(PermissionInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            throw new DreamRunTimeException("权限模式，请开启函数@" + PermissionInjectInvoker.FUNCTION + ":" + Invoker.DEFAULT_NAMESPACE);
+            invokerFactory.addInvokers(new PermissionInjectInvoker());
         }
         if (invokerFactory.getInvoker(PermissionGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            throw new DreamRunTimeException("权限模式，请开启函数@" + PermissionGetInvoker.FUNCTION + ":" + Invoker.DEFAULT_NAMESPACE);
+            invokerFactory.addInvokers(new PermissionGetInvoker());
         }
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement tenantStatement = AntlrUtil.invokerStatement(PermissionInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());

@@ -9,18 +9,18 @@ public class LimitDef extends UnionDef {
         super(statement);
     }
 
-    public UnionDef union(SqlDef sqlDef) {
-        return union(sqlDef, false);
+    public UnionDef union(Query query) {
+        return union(query, false);
     }
 
-    public UnionDef unionAll(SqlDef sqlDef) {
-        return union(sqlDef, true);
+    public UnionDef unionAll(Query query) {
+        return union(query, true);
     }
 
-    private UnionDef union(SqlDef sqlDef, boolean all) {
+    private UnionDef union(Query query, boolean all) {
         UnionStatement unionStatement = new UnionStatement();
         unionStatement.setAll(all);
-        unionStatement.setStatement(sqlDef.getStatement());
+        unionStatement.setStatement(query.getStatement());
         statement.setUnionStatement(unionStatement);
         return new UnionDef(statement);
     }

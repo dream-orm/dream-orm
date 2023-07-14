@@ -5,7 +5,7 @@ import com.moxa.dream.antlr.smt.PreSelectStatement;
 import com.moxa.dream.antlr.smt.QueryStatement;
 import com.moxa.dream.antlr.smt.SelectStatement;
 
-public class QueryDef extends AbstractSqlDef {
+public class QueryDef extends AbstractQuery {
     protected QueryStatement statement;
 
     public QueryDef() {
@@ -21,7 +21,7 @@ public class QueryDef extends AbstractSqlDef {
         selectStatement.setPreSelect(new PreSelectStatement());
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         for (ColumnDef columnDef : columnDefs) {
-            listColumnStatement.add(columnDef.getStatement(true));
+            listColumnStatement.add(columnDef.getStatement());
         }
         selectStatement.setSelectList(listColumnStatement);
         statement.setSelectStatement(selectStatement);
