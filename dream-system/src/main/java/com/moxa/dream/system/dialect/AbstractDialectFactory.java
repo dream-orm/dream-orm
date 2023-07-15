@@ -31,7 +31,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                                 methodInfo.setMethodKey(methodKey);
                             }
                             InjectFactory injectFactory = configuration.getInjectFactory();
-                            injectFactory.inject(methodInfo);
+                            injectFactory.inject(methodInfo, null);
                             methodInfo.setCompile(Compile.ANTLR_COMPILED);
                         } catch (Exception e) {
                             throw new DreamRunTimeException("编译方法" + methodInfo.getId() + "失败，" + e.getMessage(), e);

@@ -27,8 +27,8 @@ public class PermissionInject implements Inject {
             invokerFactory.addInvokers(new PermissionGetInvoker());
         }
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement tenantStatement = AntlrUtil.invokerStatement(PermissionInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
-        statement.setStatement(tenantStatement);
+        InvokerStatement permissionStatement = AntlrUtil.invokerStatement(PermissionInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
+        statement.setStatement(permissionStatement);
     }
 
     public PermissionHandler getPermissionHandler() {

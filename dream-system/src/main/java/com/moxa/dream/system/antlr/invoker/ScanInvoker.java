@@ -170,7 +170,7 @@ public class ScanInvoker extends AbstractInvoker {
         private final boolean master;
 
         public TableScanInfo(String database, String table, String alias, boolean master) {
-            if (alias == null) {
+            if (alias == null || alias.isEmpty()) {
                 alias = table;
             }
             this.database = database;

@@ -23,8 +23,8 @@ public class LogicInject implements Inject {
             invokerFactory.addInvokers(new LogicInvoker());
         }
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement tenantStatement = AntlrUtil.invokerStatement(LogicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
-        statement.setStatement(tenantStatement);
+        InvokerStatement logicStatement = AntlrUtil.invokerStatement(LogicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
+        statement.setStatement(logicStatement);
     }
 
     public LogicHandler getLogicHandler() {

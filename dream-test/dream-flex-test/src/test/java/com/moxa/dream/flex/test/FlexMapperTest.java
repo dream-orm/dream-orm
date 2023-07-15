@@ -19,12 +19,11 @@ public class FlexMapperTest {
     private FlexMapper flexMapper;
     @Autowired
     private HelloMapper helloMapper;
-
     @Test
     public void test0() {
         FromDef fromDef = select(user.name).from(user);
-        List<String> list = flexMapper.selectList(fromDef, String.class);
-        System.out.println(list);
+        Page<User> list = flexMapper.selectPage(fromDef, User.class, new Page(1, 1));
+//            helloMapper.selectPage(new Page(1,1));
     }
 
     @Test

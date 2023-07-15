@@ -6,7 +6,7 @@ import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.flex.config.ResultInfo;
+import com.moxa.dream.flex.config.SqlInfo;
 import com.moxa.dream.flex.invoker.FlexMarkInvoker;
 import com.moxa.dream.flex.invoker.FlexTableInvoker;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -16,7 +16,7 @@ import java.util.Set;
 
 public abstract class AbstractQuery implements Query {
     @Override
-    public ResultInfo toSQL(ToSQL toSQL) {
+    public SqlInfo toSQL(ToSQL toSQL) {
         Assist assist = getAssist();
         String sql;
         try {
@@ -25,10 +25,10 @@ public abstract class AbstractQuery implements Query {
             throw new DreamRunTimeException(e);
         }
         FlexMarkInvoker flexMarkInvoker = (FlexMarkInvoker) assist.getInvoker(FlexMarkInvoker.FUNCTION, FlexMarkInvoker.DEFAULT_NAMESPACE);
-        FlexTableInvoker flexTableInvoker = (FlexTableInvoker) assist.getInvoker(FlexTableInvoker.FUNCTION, FlexTableInvoker.DEFAULT_NAMESPACE);
+        FlexTableInvoker flexTableInvoker = (FlexTableInvoker) assist.getInvoker(FlexTableInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
         List<Object> paramList = flexMarkInvoker.getParamList();
         Set<String> tableSet = flexTableInvoker.getTableSet();
-        return new ResultInfo(sql, paramList, tableSet);
+        return new SqlInfo(sql, paramList, tableSet);
     }
 
     private Assist getAssist() {

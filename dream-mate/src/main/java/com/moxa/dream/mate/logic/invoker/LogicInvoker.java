@@ -34,7 +34,6 @@ public class LogicInvoker extends AbstractInvoker {
         InjectFactory injectFactory = configuration.getInjectFactory();
         LogicInject logicInject = injectFactory.getInject(LogicInject.class);
         logicHandler = logicInject.getLogicHandler();
-
     }
 
     @Override

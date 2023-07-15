@@ -4,7 +4,7 @@ import com.moxa.dream.antlr.sql.ToMYSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.flex.config.DataType;
 import com.moxa.dream.flex.config.DateType;
-import com.moxa.dream.flex.config.ResultInfo;
+import com.moxa.dream.flex.config.SqlInfo;
 import com.moxa.dream.flex.def.ColumnDef;
 import com.moxa.dream.flex.def.SortDef;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ public class FunctionQueryTest {
 
     @Test
     public void testStr() {
-        ResultInfo muser = select(
+        SqlInfo muser = select(
                 ascii(user.id),
                 len(user.name),
                 length(user.name),
@@ -42,7 +42,7 @@ public class FunctionQueryTest {
 
     @Test
     public void testNumber() {
-        ResultInfo muser = select(
+        SqlInfo muser = select(
                 abs(user.id),
                 acos(user.name),
                 asin(user.name),
@@ -77,7 +77,7 @@ public class FunctionQueryTest {
 
     @Test
     public void testDate() {
-        ResultInfo muser = select(
+        SqlInfo muser = select(
                 curdate(),
                 datediff(now(), now()),
                 date_sub(now(), 1, DateType.HOUR),
@@ -102,7 +102,7 @@ public class FunctionQueryTest {
 
     @Test
     public void testOther() {
-        ResultInfo muser = select(
+        SqlInfo muser = select(
                 convert(user.name, DataType.CHAR),
                 cast(user.name, DataType.SIGNED),
                 isnull(user.name),
@@ -116,7 +116,7 @@ public class FunctionQueryTest {
 
     @Test
     public void testCaseWhen() {
-        ResultInfo muser = select(
+        SqlInfo muser = select(
                 case_().when(user.name.eq(column("3"))).then(user.name).when(user.name.eq("4")).then(column("5")).else_(column(6)).end().as("aa"),
                 case_(user.name).when(column("a")).then(column("b")).when("a").then(4).else_("7").end().as("vv")
         )

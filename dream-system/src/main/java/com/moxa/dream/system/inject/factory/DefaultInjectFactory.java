@@ -9,6 +9,7 @@ import com.moxa.dream.util.common.ObjectUtil;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class DefaultInjectFactory implements InjectFactory {
     private Map<Class<? extends Inject>, Inject> injectMap = new LinkedHashMap<>();
@@ -33,9 +34,11 @@ public class DefaultInjectFactory implements InjectFactory {
     }
 
     @Override
-    public void inject(MethodInfo methodInfo) {
+    public void inject(MethodInfo methodInfo, Predicate<Inject> predicate) {
         for (Inject inject : injectMap.values()) {
-            inject.inject(methodInfo);
+            if (predicate == null || predicate.test(inject)) {
+                inject.inject(methodInfo);
+            }
         }
     }
 

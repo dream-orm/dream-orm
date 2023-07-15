@@ -56,9 +56,6 @@ public class QueryScanHandler extends AbstractHandler {
             table = ((SymbolStatement.Symbol) statement).getValue();
         }
         if (table != null) {
-            if (alias == null || alias.isEmpty()) {
-                alias = table;
-            }
             return new ScanInvoker.TableScanInfo(database, table, alias, master);
         }
         return null;

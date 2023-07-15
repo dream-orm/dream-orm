@@ -3,12 +3,12 @@ package com.moxa.dream.flex.config;
 import java.util.List;
 import java.util.Set;
 
-public class ResultInfo {
+public class SqlInfo {
     private String sql;
     private List<Object> paramList;
     private Set<String> tableSet;
 
-    public ResultInfo(String sql, List<Object> paramList, Set<String> tableSet) {
+    public SqlInfo(String sql, List<Object> paramList, Set<String> tableSet) {
         this.sql = sql;
         this.paramList = paramList;
         this.tableSet = tableSet;
@@ -28,7 +28,7 @@ public class ResultInfo {
 
     @Override
     public String toString() {
-        return "ResultInfo{" +
+        return "SqlInfo{" +
                 "sql='" + sql + '\'' +
                 ", paramList=" + paramList +
                 ", tableSet=" + tableSet +
