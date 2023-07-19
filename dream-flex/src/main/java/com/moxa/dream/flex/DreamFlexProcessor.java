@@ -41,7 +41,7 @@ public class DreamFlexProcessor extends AbstractProcessor {
                 String tableDefPackage = buildTableDefPackage(entityClass);
                 String tableDefClassName = className.concat("TableDef");
                 Table table = element.getAnnotation(Table.class);
-                List<ColumnInfo> columnInfoList = columnInfoList((TypeElement) element);
+                List<String> columnInfoList = columnInfoList((TypeElement) element);
                 String content = buildTableDef(table.value(), tableDefPackage, tableDefClassName, columnInfoList);
                 try {
                     processGenClass(tableDefPackage, tableDefClassName, content);
@@ -70,14 +70,13 @@ public class DreamFlexProcessor extends AbstractProcessor {
         return str.substring(str.lastIndexOf(".") + 1);
     }
 
-    public List<ColumnInfo> columnInfoList(TypeElement classElement) {
-        List<ColumnInfo> columnInfoList = new ArrayList<>();
+    public List<String> columnInfoList(TypeElement classElement) {
+        List<String> columnInfoList = new ArrayList<>();
         for (Element fieldElement : classElement.getEnclosedElements()) {
             if (ElementKind.FIELD == fieldElement.getKind()) {
                 Column column = fieldElement.getAnnotation(Column.class);
                 if (column != null) {
-                    ColumnInfo columnInfo = new ColumnInfo(column.value(), fieldElement.toString());
-                    columnInfoList.add(columnInfo);
+                    columnInfoList.add(column.value());
                 }
             }
         }
@@ -98,7 +97,7 @@ public class DreamFlexProcessor extends AbstractProcessor {
         return packageBuilder.toString();
     }
 
-    private String buildTableDef(String table, String tableDefPackage, String tableDefClassName, List<ColumnInfo> columnInfos) {
+    private String buildTableDef(String table, String tableDefPackage, String tableDefClassName, List<String> columnInfos) {
         StringBuilder content = new StringBuilder("package ");
         content.append(tableDefPackage).append(";\n\n");
         content.append("import com.moxa.dream.flex.def.ColumnDef;\n");
@@ -113,10 +112,10 @@ public class DreamFlexProcessor extends AbstractProcessor {
                 .append("();\n\n");
         columnInfos.forEach((columnInfo) -> {
             content.append("    public final ColumnDef ")
-                    .append(columnInfo.column)
+                    .append(columnInfo)
                     .append(" = new ColumnDef(")
                     .append("this,")
-                    .append("\"").append(columnInfo.column).append("\");\n");
+                    .append("\"").append(columnInfo).append("\");\n");
         });
         content
                 .append("\n    public ").append(tableDefClassName).append("() {\n")
@@ -139,17 +138,6 @@ public class DreamFlexProcessor extends AbstractProcessor {
             if (writer != null) {
                 writer.close();
             }
-        }
-    }
-
-
-    class ColumnInfo {
-        private String column;
-        private String alias;
-
-        public ColumnInfo(String column, String alias) {
-            this.column = column;
-            this.alias = alias;
         }
     }
 }

@@ -58,7 +58,7 @@ public class JdbcExecutor implements Executor {
                     break;
             }
         } finally {
-            if (statement != null && !statement.isClosed()) {
+            if (statement != null) {
                 statement.close();
             }
         }

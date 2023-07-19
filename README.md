@@ -2,53 +2,188 @@
 
 ## **简介**
 
-DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术为中心，辐射业务持久层框架，理论上支持用开发者习惯的SQL语法，完成对不同数据库的兼容
+DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术为中心，辐射业务持久层框架，它非常轻量，不依赖第三方jar包、同时拥有极高的性能与灵活性，可以写一种MySQL语法在非MySQL数据库下执行，其内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成这种形式。
+
+总而言之，DREAM不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装。
 
 联系微信：<img src=".\wx.jpg" style="zoom:25%;" />
 
 ## **特性**
 
-**跨平台**：支持采用mysql语法在非mysql环境下执行，并提供接口自定义翻译
+**跨平台**：支持mysql语法在非mysql环境下执行，并提供接口自定义翻译
 
-**轻量级**：整个框架不依赖任何第三方框架
+**轻量级**：整个框架不依赖任何第三方依赖，而且做到了对每一条SQL深度解析，可改写SQL，性能更优
 
-**高性能**：匠心独运的架构设计，性能基本达到极限
+**灵活**：匠心独运的架构设计，结构层次分明，特别注重如何优雅的设计，设计强调用户开发应该继承接口实现自定义，而不是传入参数
 
-**函数化**：深度解析SQL特有，sql函数化，封装业务，简化sql写法（数据映射，缓存，数据权限，逻辑删除，关键字拦截，多租户等都基于此实现）
+**函数化**：设计围绕的核心，原理基于SQL的深度解析，开发者可自定义开发与业务有关的高级功能，愿景：每个公司都有自己的函数库
 
-**缓存机制**：基于表的缓存，一切数据皆可缓存，若数据修改皆经过框架，保证读到的数据与数据库一致
+**强大**：注解校验，数据权限，逻辑删除，多租户，多数据源，参数值注入与修改（可完成注入默认值、字段加密等），主键序列（可自定义）、查询字段值提取（可完成解密、查询字典和库表、脱密等）
 
-**校验器**：基于注解的校验，可自定义化，列如：完成数据库插入唯一性校验等
+## 支持的数据库
 
-**开箱即用**：数据权限，逻辑删除，多租户，多数据源，参数值注入（默认值，加密），主键序列、查询字段值提取（解密，字典等）
+DREAM支持MySQL、PGSQL、SQLSERVER、ORACLE、达梦，其他数据库语法和提供支持的数据库语法类似，对于特殊的数据库，开发者也可以自己写对应的SQL转换语句，把抽象树转换对应可执行的SQL即可
 
 ## **系统架构**
 
 <img src=".\system.png"  />
 
-## **优势**
+## **基础开发**
 
-### **精简查询字段**
+### 模板操作
 
-```sql
-select column1, column2, ..., columnN
-from table_name
-where 复杂条件
+#### 基础操作
+
+dream提供实例的TemplateMapper完成基础操作
+
+| 方法名                                                       | 描述                                           |
+| ------------------------------------------------------------ | ---------------------------------------------- |
+| selectById(Class<T> type, Object id)                         | 主键查询（支持多表关联查询）                   |
+| selectByIds(Class<T> type, Collection<?> idList)             | 主键批量查询(支持多表关联查询)                 |
+| selectOne(Class<T> type, Object conditionObject)             | 根据注解生成条件，查询一条                     |
+| selectList(Class<T> type, Object conditionObject)            | 根据注解生成条件，查询多条                     |
+| selectTree(Class<T> type, Object conditionObject)            | 根据注解生成条件，查询，并返回树形结构         |
+| selectPage(Class<T> type, Object conditionObject, Page page) | 根据注解生成条件，分页查询多条                 |
+| updateById(Object view)                                      | 主键更新                                       |
+| updateNonById(Object view)                                   | 主键非空更新，注意：空字符串也更新             |
+| insert(Object view)                                          | 插入                                           |
+| insertFetchKey(Object view)                                  | 插入并在view属性记录主键值                     |
+| deleteById(Class<?> type, Object id)                         | 主键删除                                       |
+| deleteByIds(Class<?> type, Collection<?> idList)             | 主键批量删除                                   |
+| existById(Class<?> type, Object id)                          | 判断主键是否存在                               |
+| exist(Class<?> type, Object conditionObject)                 | 根据注解生成条件，判断是否存在                 |
+| batchInsert(Collection<?> viewList)                          | 批量插入，默认一千作为一个批次，可设置批次     |
+| batchUpdateById(Collection<?> viewList)                      | 批量主键更新，默认一千作为一个批次，可设置批次 |
+
+#### 注解操作
+
+##### Validated
+
+用法：对传入的参数进行校验
+
+```java
+public @interface Validated {
+    Class<? extends Validator> value();
+}
 ```
 
-可改写成
+| 属性名 | 描述   |
+| ------ | ------ |
+| value  | 校验器 |
 
-```sql
-select @all()
-from table_name
-where 复杂条件
+```java
+public interface Validator<T> {
+    default boolean isValid(Session session, Class type, Field field, Command command) {
+        return true;
+    }
+
+    void validate(T value, Map<String, Object> paramMap);
+}
 ```
 
-采用自定义函数，根据实体属性判断查询的字段，若实体属性修改，同步修改SQL查询字段
+| 属性名                                                       | 描述                                                 |
+| ------------------------------------------------------------ | ---------------------------------------------------- |
+| isValid                                                      | 返回值标识是否进行校验，如校验，才会进行validate方法 |
+| validate，参数value：待校验的值，paramMap：开发者自定义的参数 | 数据校验，选择性抛异常                               |
 
-### **屏蔽简单查询条件**
+已实现的Validator
 
-对于mybatis语法
+| Validator类          | 描述                                              |
+| -------------------- | ------------------------------------------------- |
+| AssertFalseValidator | 校验值若不为空，值必须为false                     |
+| AssertTrueValidator  | 校验值若不为空，值必须为true                      |
+| LengthValidator      | 校验值若不为空，校验值长度                        |
+| MaxValidator         | 校验值若不为空，校验值是否超过最大值              |
+| MinValidator         | 校验值若不为空，校验值是否小于最小值              |
+| NotBlankValidator    | 校验值不能为空，且不能为空字符串                  |
+| NotNullValidator     | 校验值不能为空                                    |
+| PatternValidator     | 校验值若不为空，校验满足正则表达式                |
+| RangeValidator       | 校验值若不为空，校验值是否在规定范围              |
+| SizeValidator        | 校验值若不为空，校验集合或map的大小是否在规定范围 |
+| UniqueValidator      | 校验值若不为空，与数据库校验值是否唯一            |
+
+##### **Wrap**
+
+用法：参数值注入与修改，可完成填充默认值，字段加密等操作
+
+```java
+public @interface Wrap {
+    Class<? extends Wrapper> value();
+
+    WrapType type() default WrapType.INSERT_UPDATE;
+}
+```
+
+| 属性名 | 描述                             |
+| ------ | -------------------------------- |
+| value  | 处理的实现类                     |
+| type   | 处理时机，更新，插入，更新或插入 |
+
+```java
+public interface Wrapper {
+    Object wrap(Object value);
+}
+```
+
+| 参数名 | 描述                         |
+| ------ | ---------------------------- |
+| value  | 参数传入值，返回为处理后的值 |
+
+##### **Conditional**
+
+用法：指定生成的where条件
+
+```java
+public @interface Conditional {
+    String table() default "";
+
+    boolean nullFlag() default true;
+
+    boolean or() default false;
+
+    Class<? extends Condition> value();
+}
+```
+
+| 属性名   | 描述                         |
+| -------- | ---------------------------- |
+| table    | 条件的表名                   |
+| nullFlag | 为空是否剔除（空字符串为空） |
+| or       | 是否采用or，默认and          |
+| value    | 生成条件的实现类             |
+
+```java
+public interface Condition {
+    String getCondition(String table, String column, String field);
+}
+```
+
+| 参数名 | 描述         |
+| ------ | ------------ |
+| table  | 表名称       |
+| column | 数据库字段名 |
+| field  | 对象属性名称 |
+
+已实现的Condition
+
+| Condition类        | 描述            |
+| ------------------ | --------------- |
+| ContainsCondition  | like '%?%'      |
+| EndWithCondition   | like '?%'       |
+| EqCondition        | =?              |
+| GeqCondition       | > =?            |
+| GtCondition        | > ?             |
+| InCondition        | in(?,?)         |
+| NotInCondition     | not in (?,?)    |
+| LeqCondition       | <=?             |
+| LtCondition        | <?              |
+| NeqCondition       | <>?             |
+| NotNullCondition   | is not null     |
+| NullCondition      | is null         |
+| StartWithCondition | like '%?'       |
+| BetweenCondition   | between ? and ? |
+
+举例：对于mybatis语法
 
 ```xml
 where 1=1
@@ -76,232 +211,159 @@ public class UserCondition {
 }
 ```
 
-采用注解生成条件有着更容易的阅读性，而且实体类只解析一次
+##### **Sort**
 
-### java编写SQL
-
-支持常见的任意字符串SQL，包括子查询，相同表做关联，皆可改写一下形式，几乎支持所有的MySQL函数，包括字符串，数学，日期，case语句等函数
+用法：排序
 
 ```java
-select(user.dept_id)
-        .from(user.as("u"))
+public @interface Sort {
+    String table() default "";
+
+    Order value() default Order.ASC;
+
+    int order() default 0;
+}
+```
+
+| 属性名 | 描述                                           |
+| ------ | ---------------------------------------------- |
+| table  | 表名称                                         |
+| value  | 排序方式                                       |
+| order  | 指定多个排序字段时，显示优先级，越小优先级越高 |
+
+### 流式操作
+
+对与工作经验多年的人来说，写SQL语句如家常便饭，SQL语法才是最强大的，但对与一些新手来说，写SQL语句很容易出错，而且即便错啦，也不知道哪里出错，因此提供好的提示，并实时知道哪里出错是十分必要的。
+
+硬解码SQL
+
+```sql
+select u2.id,u2.name from (select id,name from user) u2 left join blog on u2.id=blog.user_id
+```
+
+改写成流式
+
+```java
+UserTableDef user2 = new UserTableDef("u2");
+SqlInfo muser = select(user2.id, user2.name)
+        .from(table(select(user.id, user.name).from(user)).as("u2"))
         .leftJoin(blog)
-        .on(user.id.eq(blog.user_id))
-        .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1,2,3)))
-        .groupBy(user.dept_id)
-        .having(user.del_flag.eq(0))
-        .orderBy(user.del_flag.desc())
-        .limit(2,3)
+        .on(user2.id.eq(blog.user_id))
 ```
 
-### **无感屏蔽映射**
+这里仅仅展示了其中的一个方面，流式已经基本上全面支持SQL写法，而且写法规范基本上和SQL语法保持一致
 
-使用mybatis需要用resultMap写Java属性与数据库字段的映射
+### 自定义Mapper操作
 
-1:实体类与数据库字段映射
+归根到底手写SQL才是最强大的
 
 ```java
+@Mapper(BlogMapperProvider.class)
+public interface BlogMapper {
+    @Sql("select @all() from blog where user_id=@?(userId)")
+    List<Blog> selectBlogByUserId(@Param("userId")Integer userId);
 
-@Table("user")
-public class UserXXX {
-    @Id
-    @Column("id")
-    private Integer id;
-    @Column("name")
-    private String name;
-}
+    List<Blog> selectBlogByUserId2(Integer userId);
 
-@Table("blog")
-public class BlogXXX {
-    @Id
-    @Column("id")
-    private Integer id;
-    @Column("name")
-    private String name;
+    default List<Blog> selectBlogByUser(UserView userView) {
+        return selectBlogByUserId(userView.getId());
+    }
 }
 ```
 
-2：引用数据库部分字段
+Param：指定参数名称
 
 ```java
-
-@View(UserXXX.class)
-public class User {
-    private Integer id;
-    private String name;
-    private List<Blog> blogList;
-}
-
-@View(BlogXXX.class)
-public class Blog {
-    private Integer id;
-    private String name;
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
+public @interface Param {
+    String value();
 }
 ```
 
-额外增加View注解，是考虑到查询的数据大部分都是表的部分字段
+| 属性名 | 描述     |
+| ------ | -------- |
+| value  | 参数名称 |
 
-### **无感屏蔽多租户**
+每个接口方法必须绑定对应的SQL，有两种绑定形式：
 
-考虑同一个库，同一个schema情况，将现有项目改写成多租户，实现成本是多少，可能会说成本太大啦，所有SQL基本上都要翻新，而dream却给了你0成本方案，既然无感知，成本自然为0
+1：在方法上声明注解Sql
 
-查询用户表user和文章表blog的前一条数据
-
-```sql
-SELECT *
-FROM (
-         SELECT u.id,
-                u.NAME,
-                u.age,
-                u.email,
-                b.id   bId,
-                b.NAME bName
-         FROM USER u
-                  LEFT JOIN blog b ON b.user_id = u.id
-     ) t_tmp LIMIT 1
+```java
+public @interface Sql {
+    String value();
+    boolean cache() default true;
+    int timeOut() default 0;
+}
 ```
 
-若用户表和文章表都存在租户字段，将其改造为多租户，dream可以让你不用修改当前SQL，在启动类添加开启多租户插件即可自动将其改造成多租户
+| 属性名 | 描述                 |
+| ------ | -------------------- |
+| value  | 绑定的SQL语句        |
+| cache  | 是否进行数据缓存读取 |
+| time   | 超时设置             |
 
-```sql
-SELECT *
-FROM (
-         SELECT u.id,
-                u.NAME,
-                u.age,
-                u.email,
-                b.id   bId,
-                b.NAME bName
-         FROM USER u
-                  LEFT JOIN blog b ON (b.user_id = u.id)
-             AND b.tenant_id = ?
-         WHERE u.tenant_id = ?) t_tmp LIMIT 1
+2：在Mapper声明接口方法绑定的Sql
+
+```java
+public class BlogMapperProvider {
+    public String selectBlogByUserId2() {
+        return "select @all() from blog where user_id=@?(userId)";
+    }
+}
 ```
 
-dream的识别是高强度的，不会因为SQL复杂，漏加任何租户条件，那性能如何？是等价于直接写租户条件的，无性能损耗
+也可以返回ActionProvider对象，进行SQL增强操作
 
-### **无感屏蔽数据权限**
-
-采用mybatis方案进行数据权限隔离，会在where条件注入 ${权限条件}，是否可以不写${权限条件}，一样完成数据权限注入，这样实现才是真正意义上的权限SQL与业务SQL解耦
-
-同样SQL，需要注入数据权限，假如：查询自己所在部门
-
-```sql
-SELECT *
-FROM (
-         SELECT u.id,
-                u.NAME,
-                u.age,
-                u.email,
-                b.id   bId,
-                b.NAME bName
-         FROM USER u
-                  LEFT JOIN blog b ON b.user_id = u.id
-     ) t_tmp LIMIT 1
+```java
+public class BlogMapperProvider {
+    public ActionProvider selectBlogByUserId2() {
+        return new BlogActionProvider();
+    }
+}
 ```
 
-开启数据权限插件
-
-```sql
-SELECT *
-FROM (
-         SELECT u.id,
-                u.NAME,
-                u.age,
-                u.email,
-                b.id   bId,
-                b.NAME bName
-         FROM USER u
-                  LEFT JOIN blog b ON b.user_id = u.id
-         WHERE u.dept_id = 1
-     ) t_tmp LIMIT 1
+```java
+public interface ActionProvider {
+    String sql();
+    default Action[] initActionList() {
+        return null;
+    }
+    default Action[] destroyActionList() {
+        return null;
+    }
+    default Class<? extends Collection> rowType() {
+        return null;
+    }
+    default Class<?> colType() {
+        return null;
+    }
+    default Boolean cache() {
+        return null;
+    }
+    default Integer timeOut() {
+        return null;
+    }
+    default StatementHandler statementHandler() {
+        return null;
+    }
+    default ResultSetHandler resultSetHandler() {
+        return null;
+    }
+}
 ```
 
-u.dept_id=1是开发者自己注入的数据权限，不要担心，dream会解析出别名告诉开发者，完成数据权限注入，此时，SQL非常清爽，性能等价于在SQL直接写注入权限条件
-
-### **无感屏蔽逻辑删除**
-
-有些字段是需要进行逻辑删除的，有些字段不需要，区别在于表是否加了逻辑字段，假如：未来有个需求，这个表不需要逻辑删除，另一张表需要逻辑删除，代码修改必不可少，幸运的是有些框架提供了逻辑删除，自动将delete语句改成update语句，代码量基本上无改动，事实上，表与表之间关联条件以及where条件是否都加了逻辑条件，仍然需要一步一步改。
-
-同样的SQL，假设用户表user和文章表都存在逻辑删除字段，改造为逻辑删除
-
-```sql
-SELECT *
-FROM (
-         SELECT u.id,
-                u.NAME,
-                u.age,
-                u.email,
-                b.id   bId,
-                b.NAME bName
-         FROM USER u
-                  LEFT JOIN blog b ON b.user_id = u.id
-     ) t_tmp LIMIT 1
-```
-
-开启逻辑删除插件
-
-```sql
-SELECT *
-FROM (
-         SELECT u.id,
-                u.NAME,
-                u.age,
-                u.email,
-                b.id   bId,
-                b.NAME bName
-         FROM USER u
-                  LEFT JOIN blog b ON (b.user_id = u.id)
-             AND b.del_flag = 0
-         WHERE u.del_flag = 0
-     ) t_tmp LIMIT 1
-```
-
-完成了SQL操作的逻辑字段追加，删除数据库里的逻辑字段就不采用逻辑删除，同样，希望某张表采用逻辑删除，加个逻辑字段即可，代码不需要做任何修改，性能等价于直接写逻辑删除条件，性能无损耗
-
-### **数据库关键字处理**
-
-数据库关键字，不是关键字可以不加特殊符号，关键字必须要加，dream提供方案，SQL语句可以不加特殊符号对关键字处理，一样可以正常执行
-
-SQL语句，若user和id为关键字，不做处理会执行报错，正确做法需要对user和id加特殊符号
-
-```sql
-SELECT *
-FROM (
-         SELECT u.id,
-                u.NAME,
-                u.age,
-                u.email,
-                b.id   bId,
-                b.NAME bName
-         FROM USER u
-                  LEFT JOIN blog b ON b.user_id = u.id
-     ) t_tmp LIMIT 1
-```
-
-开启关键字插件
-
-```sql
-SELECT *
-FROM (
-         SELECT u.`id`,
-                u.NAME,
-                u.age,
-                u.email,
-                b.`id` bId,
-                b.NAME bName
-         FROM `USER` u
-                  LEFT JOIN blog b ON b.user_id = u.`id`
-     ) t_tmp LIMIT 1
-```
-
-自动完成对user和id关键字处理，性能等价于直接写关键字处理
-
-## **支持数据库**
-
-语法以MySQL为标准，将SQL翻译成抽象树，进而在不同数据库下做不同翻译，MySQL，PG已在生产环境下测试
-
-MySQL，SqlServer， PostgreSQL，Oracle
+| ActionProvider方法 | 描述                             |
+| ------------------ | -------------------------------- |
+| sql                | 待执行的SQL语句                  |
+| initActionList     | SQL执行前，待执行的行为          |
+| destroyActionList  | SQL执行后，待执行的行为          |
+| rowType            | 接受的集合类型，一般系统判断即可 |
+| colType            | 接受的对象类型，一般系统判断即可 |
+| cache              | 是否使用缓存                     |
+| timeOut            | 超时设置                         |
+| statementHandler   | 最终交互的数据库操作，默认即可   |
+| resultSetHandler   | 自定义结果集映射                 |
 
 # 用法教程
 
@@ -777,8 +839,7 @@ SQL:SELECT user.id,user.name FROM user
         TIME:33ms
 ```
 
-**注：做到修改字段就可以间接修改SQL语句目的，存在情况，view字段与table字段一致，但不想查询，或者不想多表查询，可以使用Ignore忽略此字段
-**
+**注：做到修改字段就可以间接修改SQL语句目的，存在情况，view字段与table字段一致，但不想查询，或者不想多表查询，可以使用Ignore忽略此字段**
 
 ### **Ignore**
 
@@ -809,89 +870,6 @@ public class UserView {
 ```
 
 **注：email存在Ignore，email数据为空**
-
-### **Mapper**
-
-#### **用法**
-
-声明接口为可执行接口
-
-```java
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Mapper {
-    Class<?> value() default NullObject.class;
-}
-```
-
-| 属性名   | 描述                                                                                   |
-|-------|--------------------------------------------------------------------------------------|
-| value | 根据java类生成的sql，value指定类的方法名称若为无参公共方法必须为mapper对应的接口方法名一致，且返回值类型必须是字符串或者ActionProvider类 |
-
-#### **举例**
-
-```java
-
-@Mapper
-public interface UserMapper {
-}
-```
-
-### **Sql**
-
-#### **用法**
-
-方法绑定SQL
-
-```java
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface Sql {
-    String value();
-
-    boolean cache() default true;
-
-    boolean listener() default true;
-}
-```
-
-| 属性名      | 描述         |
-|----------|------------|
-| value    | 绑定的SQL语句   |
-| cache    | 是否进行数据缓存读取 |
-| listener | 是否执行监听     |
-
-#### **举例**
-
-```java
-
-@Mapper
-public interface UserMapper {
-    @Sql("select id, name, age,email from user where name = @?(name)")
-    User findByName(String name);
-}
-```
-
-### **Param**
-
-#### **用法**
-
-绑定参数名名称
-
-```java
-
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-public @interface Param {
-    String value();
-}
-```
-
-| 属性名   | 描述   |
-|-------|------|
-| value | 参数名称 |
 
 ### **PageQuery**
 
@@ -958,191 +936,35 @@ TIME:36ms
 ```java
 public @interface Extract {
     Class<? extends Extractor> value();
+    String[] args() default {};
 }
 ```
 
-| 属性名   | 描述       |
-|-------|----------|
-| value | 提取的具体操作类 |
+| 属性名 | 描述             |
+| ------ | ---------------- |
+| value  | 提取的具体操作类 |
+| args   | 自定义参数       |
 
 ```java
 public interface Extractor {
-    void extract(MappedStatement mappedStatement, MappedColumn mappedColumn, Object value, ObjectFactory objectFactory);
+    default void setArgs(String[] args) {
+
+    }
+    void extract(String property, Object value, ObjectFactory objectFactory);
 }
 ```
 
-| 参数名             | 描述            |
-|-----------------|---------------|
-| mappedStatement | 编译后的方法        |
-| mappedColumn    | 字段的所有信息       |
-| value           | 数据库查询的值       |
-| objectFactory   | 反射工厂，用来给字段填充值 |
-
-## **JPA模板**
-
-### **注解**
-
-#### **Wrap**
-
-用法：为模板查询服务，字段值修改，列如：填充默认值，字段加密等操作
-
-```java
-public @interface Wrap {
-    Class<? extends Wrapper> value();
-
-    WrapType type() default WrapType.INSERT_UPDATE;
-}
-```
-
-| 属性名   | 描述               |
-|-------|------------------|
-| value | 处理的实现类           |
-| type  | 处理时机，更新，插入，更新或插入 |
-
-```java
-public interface Wrapper {
-    Object wrap(Object value);
-}
-```
-
-| 参数名   | 描述             |
-|-------|----------------|
-| value | 参数传入值，返回为处理后的值 |
-
-### **Conditional**
-
-用法：为模板查询服务，指定生成的where条件
-
-```java
-public @interface Conditional {
-    String table() default "";
-
-    boolean filterNull() default true;
-
-    Class<? extends Condition> value();
-
-}
-```
-
-| 属性名         | 描述       |
-|-------------|----------|
-| table       | 条件的表名    |
-| fillterNull | 为空是否剔除   |
-| value       | 生成条件的实现类 |
-
-```java
-public interface Condition {
-    String getCondition(String table, String column, String field);
-}
-```
-
-| 参数名    | 描述     |
-|--------|--------|
-| table  | 表名称    |
-| column | 数据库字段名 |
-| field  | 对象属性名称 |
-
-已实现的Condition
-
-| Condition类         | 描述          |
-|--------------------|-------------|
-| ContainsCondition  | like '%?%'  |
-| EndWithCondition   | like '?%'   |
-| EqCondition        | =?          |
-| GeqCondition       | > =?        |
-| GtCondition        | > ?         |
-| InCondition        | in(?,?)     |
-| LeqCondition       | <=?         |
-| LtCondition        | <?          |
-| NeqCondition       | <>?         |
-| NotNullCondition   | is not null |
-| NullCondition      | is null     |
-| StartWithCondition | like '%?'   |
-
-#### **Sort**
-
-用法：为模板查询服务，排序
-
-```java
-public @interface Sort {
-    String table() default "";
-
-    Order value() default Order.ASC;
-
-    int order() default 0;
-}
-```
-
-| 属性名   | 描述                      |
-|-------|-------------------------|
-| table | 表名称                     |
-| value | 排序方式                    |
-| order | 指定多个排序字段时，显示优先级，越小优先级越高 |
-
-### **模板**
-
-| 方法名             | 描述               |
-|-----------------|------------------|
-| selectById      | 主键查询（支持多表关联查询）   |
-| selectByIds     | 主键批量查询(支持多表关联查询) |
-| selectOne       | 根据注解生成条件，查询一条    |
-| selectList      | 根据注解生成条件，查询多条    |
-| selectPage      | 根据注解生成条件，分页查询多条  |
-| updateById      | 主键更新             |
-| updateNonById   | 主键非空更新           |
-| insert          | 插入               |
-| insertFetchKey  | 插入并获取主键值         |
-| deleteById      | 主键删除             |
-| deleteByIds     | 主键批量删除           |
-| existById       | 判断主键是否存在         |
-| exist           | 根据注解生成条件，判断是否存在  |
-| batchInsert     | 批量插入，可设置批次       |
-| batchUpdateById | 批量主键更新，可设置批次     |
-
-#### **selectById**
-
-##### **多表查询**
-
-```java
-
-@View("user")
-public class UserView3 {
-    private Integer id;
-    private String name;
-    private List<BlogView> blogList;
-}
-
-@View("blog")
-public class BlogView {
-    private Integer id;
-    private String name;
-}
-```
-
-##### **测试**
-
-```java
-@Test
-public void testSelectById2(){
-        UserView3 userView3=templateMapper.selectById(UserView3.class,1);
-        System.out.println(userView3);
-        }
-```
-
-##### **控制台输出**
-
-```tex
-SQL:SELECT `user`.`id`,`user`.`name`,`blog`.`id`,`blog`.`name` FROM `user`  LEFT JOIN `blog` ON `user`.`id`=`blog`.`user_id` WHERE `user`.`id`=?
-PARAM:[1]
-TIME:26ms
-com.moxa.dream.boot.view.UserView3@5477a1ca
-```
+| 参数名        | 描述                       |
+| ------------- | -------------------------- |
+| property      | 属性名                     |
+| value         | 数据库查询的值             |
+| objectFactory | 反射工厂，用来给字段填充值 |
 
 ## **监听器**
 
 ### **用法**
 
-检查、阻断SQL，修改查询数据
+检查、阻断SQL、SQL审计、修改查询数据
 
 ```java
 public interface Listener {
@@ -1179,50 +1001,56 @@ public interface Interceptor {
 | interceptor | 此处进行注入插件 |
 | methods     | 拦截感兴趣的方法 |
 
-# **业务**
-
-以下功能默认不开启，开启后，不需要改现有代码，使用者无感知
+# **高级开发**
 
 ### **关键字插件**
+
+数据库关键字，不是关键字可以不加特殊符号，关键字必须要加，dream提供方案，SQL语句可以不加特殊符号对关键字处理，一样可以正常执行
+
+SQL语句，若user和id为关键字，不做处理会执行报错，正确做法需要对user和id加特殊符号
+
+```sql
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON b.user_id = u.id
+     ) t_tmp LIMIT 1
+```
+
+开启关键字插件
+
+```sql
+SELECT *
+FROM (
+         SELECT u.`id`,
+                u.NAME,
+                u.age,
+                u.email,
+                b.`id` bId,
+                b.NAME bName
+         FROM `USER` u
+                  LEFT JOIN blog b ON b.user_id = u.`id`
+     ) t_tmp LIMIT 1
+```
+
+自动完成对user和id关键字处理，性能等价于直接写关键字处理
 
 #### **开启插件**
 
 ```java
- @Bean
-public Inject[]injects(){
-        return new Inject[]{new BlockInject()};
-        }
+   @Bean
+    public Inject[] injects() {
+        return new Inject[]{new BlockInject("META-INF/keyword.txt")};
+    }
 ```
 
-#### **用法**
-
-开发者指定的字段默认为数据库关键字，字段特殊处理
-
-#### **测试**
-
-```java
-public interface UserMapper {
-    @Sql("select id, name, age,email from user where name = @?(name)")
-    User findByName(String name);
-}
-```
-
-注：此时user已是关键字
-
-```java
-    @Test
-public void test(){
-        User user=userMapper.findByName("Jone");
-        }
-```
-
-输出
-
-```tex
-执行SQL:SELECT id,name,age,email FROM `user` WHERE name=?
-执行参数:[Jone]
-执行用时：15ms
-```
+META-INF/keyword.txt记录了自定义关键字
 
 ### **多数据源**
 
@@ -1288,25 +1116,50 @@ public interface UserMapper {
 
 ### **多租户**
 
-单库单schema
+考虑同一个库，同一个schema情况，将现有项目改写成多租户，实现成本是多少，可能会说成本太大啦，所有SQL基本上都要翻新，而dream却给了你0成本方案，既然无感知，成本自然为0
+
+查询用户表user和文章表blog的前一条数据
+
+```sql
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON b.user_id = u.id
+     ) t_tmp LIMIT 1
+```
+
+若用户表和文章表都存在租户字段，将其改造为多租户，dream可以让你不用修改当前SQL，在启动类添加开启多租户插件即可自动将其改造成多租户
+
+```sql
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON (b.user_id = u.id)
+             AND b.tenant_id = ?
+         WHERE u.tenant_id = ?) t_tmp LIMIT 1
+```
+
+dream的识别是高强度的，不会因为SQL复杂，漏加任何租户条件，那性能如何？是等价于直接写租户条件的，无性能损耗
 
 #### **开启多租户**
 
 ```java
-  @Bean
-public TenantHandler tenantHandler(){
-        return()->1;
-        }
-
-@Bean
-public Inject[]injects(TenantHandler tenantHandler){
-        return new Inject[]{new TenantInject(tenantHandler)};
-        }
-
-@Bean
-public Interceptor[]interceptors(TenantHandler tenantHandler){
-        return new Interceptor[]{new TenantInterceptor(tenantHandler)};
-        }
+    @Bean
+    public Inject[] injects() {
+        return new Inject[]{new TenantInject(() -> 1)};
+    }
 ```
 
 注：重写TenantHandler完成租户需求
@@ -1331,140 +1184,127 @@ public interface TenantHandler {
 | getTenantColumn | 租户字段                                                     |
 | getTenantObject | 租户值                                                      |
 
-#### **举例**
-
-注册租户插件
-
-```java
-    @Bean
-public Interceptor[]interceptors(){
-        return new Interceptor[]{new TenantInterceptor(()->1)};
-        }
-```
-
-```java
-
-@Mapper
-public interface UserMapper {
-    @Sql("select* from (select id, name, age,email from user where 1=1 or 1<>2)A inner join user u on 1=2 where A.name=@?(name)")
-    Map findByName(String name);
-```
-
-测试
-
-```java
-    @Test
-public void test(){
-        Map map=userMapper.findByName("Jone");
-        }
-```
-
-控制台输出
-
-```java
-执行SQL:SELECT*FROM(SELECT id,name,age,email FROM user WHERE(1=1OR 1<>2)AND user.tenant_id=?)A INNER JOIN user u ON(1=2)AND u.tenant_id=?WHERE A.name=?
-        执行参数:[1,1,Jone]
-        执行用时：19ms
-```
-
-**注：一旦当前方法应用租户，插入对租户字段赋值，更新赋值将失效**
+**注：一旦当前方法应用租户，租户将完全由系统接管，插入对租户字段赋值，更新赋值将失效**
 
 ### **数据权限**
 
-用于给主表字段增加where条件，起到权限控制作用
+采用mybatis方案进行数据权限隔离，会在where条件注入 ${权限条件}，是否可以不写${权限条件}，一样完成数据权限注入，这样实现才是真正意义上的权限SQL与业务SQL解耦
+
+同样SQL，需要注入数据权限，假如：查询自己所在部门
+
+```sql
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON b.user_id = u.id
+     ) t_tmp LIMIT 1
+```
+
+开启数据权限插件
+
+```sql
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON b.user_id = u.id
+         WHERE u.dept_id = 1
+     ) t_tmp LIMIT 1
+```
+
+u.dept_id=1是开发者自己注入的数据权限，不要担心，dream会解析出别名告诉开发者，完成数据权限注入，此时，SQL非常清爽，性能等价于在SQL直接写注入权限条件
 
 #### **开启数据权限**
 
 ```java
     @Bean
-public Inject[]injects(){
-        return new Inject[]{new PermissionInject(new PermissionHandler(){
-@Override
-public boolean isPermissionInject(MethodInfo methodInfo,TableInfo tableInfo,int life){
-        return tableInfo.getFieldName("dept_id")!=null;
-        }
+    public Inject[] injects() {
+        return new Inject[]{new PermissionInject(new PermissionHandler() {
+            @Override
+            public boolean isPermissionInject(MethodInfo methodInfo, TableInfo tableInfo) {
+                return tableInfo.getFieldName("dept_id") != null;
+            }
 
-@Override
-public String getPermission(MethodInfo methodInfo,TableInfo tableInfo,String alias){
-        return alias+".dept_id=1";
-        }
+            @Override
+            public String getPermission(MethodInfo methodInfo, TableInfo tableInfo, String alias) {
+                return alias + ".dept_id=1";
+            }
         })};
-        }
+    }
 ```
 
 ```java
 public interface PermissionHandler {
-    boolean isPermissionInject(MethodInfo methodInfo, TableInfo tableInfo, int life);
+    boolean isPermissionInject(MethodInfo methodInfo, TableInfo tableInfo);
 
     String getPermission(MethodInfo methodInfo, TableInfo tableInfo, String alias);
 
 }
 ```
 
-| 方法名                | 描述                                                                                     |
-|--------------------|----------------------------------------------------------------------------------------|
-| isPermissionInject | 是否对当前查询语句注入where条件，methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息life：遇到查询语句的次数（嵌套查询，life+1） |
-| getPermission      | 插入的where条件，不能为空，列如：1=1methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息alias：当前查询语句主表的别名        |
-
-#### **举例**
-
-注入数据权限插件
-
-```java
-    @Bean
-public Interceptor[]interceptors(){
-        return new Interceptor[]{new PermissionInterceptor(new PermissionHandler(){
-@Override
-public boolean isPermissionInject(MethodInfo methodInfo,TableInfo tableInfo,int life){
-        return tableInfo.getFieldName("dept_id")!=null;
-        }
-
-@Override
-public String getPermission(MethodInfo methodInfo,TableInfo tableInfo,String alias){
-        return alias+".dept_id=1";
-        }
-        })};
-        }
-```
-
-```java
-    @Sql("select*from(select id, name, age,email from user u where 1=1 or 2=2)A")
-    List<Map> findByAll();
-```
-
-测试
-
-```java
-    @Test
-public void test4(){
-        Object v=userMapper.findByAll();
-        }
-```
-
-控制台输出
-
-```tex
-执行SQL:SELECT * FROM (SELECT id,name,age,email FROM user u WHERE (1=1 OR 2=2) AND u.dept_id=1) A
-执行参数:[]
-执行用时：22ms
-```
+| 方法名             | 描述                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| isPermissionInject | 是否对当前查询语句注入where条件，methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息 |
+| getPermission      | 插入的where条件，不能为空，methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息，alias：当前查询语句主表的别名 |
 
 ### **逻辑删除**
 
-用删除标志代替真正删除，查询时将删除标志作为条件，筛选数据
+有些字段是需要进行逻辑删除的，有些字段不需要，区别在于表是否加了逻辑字段，假如：未来有个需求，这个表不需要逻辑删除，另一张表需要逻辑删除，代码修改必不可少，幸运的是有些框架提供了逻辑删除，自动将delete语句改成update语句，代码量基本上无改动，事实上，表与表之间关联条件以及where条件是否都加了逻辑条件，仍然需要一步一步改。
+
+同样的SQL，假设用户表user和文章表都存在逻辑删除字段，改造为逻辑删除
+
+```sql
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON b.user_id = u.id
+     ) t_tmp LIMIT 1
+```
+
+开启逻辑删除插件
+
+```sql
+SELECT *
+FROM (
+         SELECT u.id,
+                u.NAME,
+                u.age,
+                u.email,
+                b.id   bId,
+                b.NAME bName
+         FROM USER u
+                  LEFT JOIN blog b ON (b.user_id = u.id)
+             AND b.del_flag = 0
+         WHERE u.del_flag = 0
+     ) t_tmp LIMIT 1
+```
+
+完成了SQL操作的逻辑字段追加，删除数据库里的逻辑字段就不采用逻辑删除，同样，希望某张表采用逻辑删除，加个逻辑字段即可，代码不需要做任何修改，性能等价于直接写逻辑删除条件，性能无损耗
 
 #### 开启逻辑删除
 
 ```java
-  @Bean
-public Invoker invoker(){
-        return new LogicInvoker();
-        }
-
-@Bean
-public Inject[]injects(){
-        return new Inject[]{new LogicInject(()->"del_flag")};
-        }
+    @Bean
+    public Inject[] injects() {
+        return new Inject[]{new LogicInject(() -> "del_flag")};
+    }
 ```
 
 ```java
@@ -1473,12 +1313,12 @@ public interface LogicHandler {
         return tableInfo.getFieldName(getLogicColumn()) != null;
     }
 
-    default String getPositiveValue() {
-        return "1";
+    default String getNormalValue() {
+        return "0";
     }
 
-    default String getNegativeValue() {
-        return "0";
+    default String getDeletedValue() {
+        return "";
     }
 
     String getLogicColumn();
@@ -1486,58 +1326,108 @@ public interface LogicHandler {
 }
 ```
 
-| 方法名              | 描述                                               |
-|------------------|--------------------------------------------------|
+| 方法名           | 描述                                                         |
+| ---------------- | ------------------------------------------------------------ |
 | isLogic          | 是否使用逻辑删除methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息 |
-| getPositiveValue | 逻辑删除后的值                                          |
-| getNegativeValue | 未删除的值                                            |
-| getLogicColumn   | 逻辑删除字段                                           |
+| getNormalValue   | 未删除的值                                                   |
+| getNegativeValue | 逻辑删除后的值                                               |
+| getLogicColumn   | 逻辑删除字段                                                 |
 
-#### **举例**
+### 数据缓存
 
-注册逻辑删除
-
-```java
-    @Sql("delete from user where id in (@foreach(list))")
-    int delete(List<Integer> idList);
-
-@Sql("select user.id, user.name, user.age,user.email from user left join user u on user.id=u.id where user.name = @?(name)")
-    User findByName(String name);
-```
-
-测试删除
+dream默认开启基于表的缓存，可重新声明自己的缓存工厂，代替默认工厂即可，不同于其他框架缓存，设计的缓存是基于表的，如果是单系统，且数据修改完全来自框架，可默认开启缓存，对查询的任意SQL都会进行缓存，而且可以保证数据库和缓存一致。
 
 ```java
-    @Test
-public void deleteById3(){
-        userMapper.delete(Arrays.asList(1,2,3,4,5,6));
+@Bean
+public CacheFactory cacheFactory() {
+    return new DefaultCacheFactory() {
+        @Override
+        public Cache getCache() {
+            return null;
         }
+    };
+}
 ```
 
-控制台输出
-
-```tex
-执行SQL:UPDATE user SET del_flag=1  WHERE (id IN (?,?,?,?,?,?)) AND del_flag=0
-执行参数:[1, 2, 3, 4, 5, 6]
-执行用时：10ms
-```
-
-测试查询
+既然有了缓存工厂，也可以自定义缓存策略
 
 ```java
-    @Test
-public void test(){
-        User user=userMapper.findByName("Jone");
+public interface Cache {
+    void put(MappedStatement mappedStatement, Object value);
+
+    Object get(MappedStatement mappedStatement);
+
+    void remove(MappedStatement mappedStatement);
+
+    void clear();
+}
+```
+
+| 方法   | 描述                                                         |
+| ------ | ------------------------------------------------------------ |
+| put    | mappedStatement：记录了SQL的详尽信息，包括操作的表名，原始SQL的唯一值，执行SQL的唯一值等，存放数据 |
+| get    | 获取数据                                                     |
+| remove | 删除数据                                                     |
+| clear  | 清空数据                                                     |
+
+### 主键策略
+
+主键策略统一控制全局，自定义主键策略
+
+```java
+    @Bean
+    public Sequence sequence() {
+        return new SnowFlakeSequence();
+    }
+```
+
+```java
+public class SnowFlakeSequence extends AbstractSequence {
+    @Override
+    protected Object sequence(TableInfo tableInfo) {
+        Class<?> type = tableInfo.getPrimColumnInfo().getField().getType();
+        Long nextId = SnowFlake.nextId();
+        if (type == Long.class) {
+            return nextId;
+        } else if (type == String.class) {
+            return Long.toHexString(nextId);
+        } else if (type == Integer.class) {
+            return nextId.intValue();
         }
+        throw new SoothException("不支持的主键类型：" + type.getName());
+    }
+}
 ```
 
-控制台输出
+开发者随意定义主键策略即可
 
-```tex
-执行SQL:SELECT user.id,user.name,user.age,user.email FROM user  LEFT JOIN user u ON (user.id=u.id) AND u.del_flag=0 WHERE (user.name=?) AND user.del_flag=0
-执行参数:[Jone]
-执行用时：18ms
-```
+### 数据填充
+
+存入数据库，采用wrap实现，读取数据库采用Extract实现
+
+### 数据脱敏
+
+存入数据库，采用wrap实现，读取数据库采用Extract实现
+
+### SQL审计
+
+采用监听器自由实现
+
+### SQL打印
+
+采用监听器自由实现
+
+### 字段权限
+
+存入数据库，采用wrap实现，读取数据库采用Extract实现
+
+### 字段加密
+
+存入数据库，采用wrap实现，读取数据库采用Extract实现
+
+### 字典回写
+
+存入数据库，采用wrap实现，读取数据库采用Extract实现
 
 # **问题**
 

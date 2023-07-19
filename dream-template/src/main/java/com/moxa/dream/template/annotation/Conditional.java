@@ -17,6 +17,4 @@ public @interface Conditional {
     boolean or() default false;
 
     Class<? extends Condition> value();
-
-
 }

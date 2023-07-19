@@ -26,7 +26,7 @@ public class LogicDeleteHandler extends AbstractHandler {
             ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.LetterStatement(logicInvoker.getLogicColumn()));
             conditionStatement.setOper(new OperStatement.EQStatement());
-            conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNormalValue()));
+            conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getDeletedValue()));
             UpdateStatement updateStatement = new UpdateStatement();
             updateStatement.setConditionList(conditionStatement);
             updateStatement.setTable(tableSymbolStatement);

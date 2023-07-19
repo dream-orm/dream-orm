@@ -38,10 +38,10 @@ public class BootApplication {
         return new Listener[]{new DebugListener()};
     }
 
-    @Bean
-    public Invoker[] invoker() {
-        return new Invoker[]{new TenantInjectInvoker(), new TenantGetInvoker()};
-    }
+//    @Bean
+//    public Invoker[] invoker() {
+//        return new Invoker[]{new TenantInjectInvoker(), new TenantGetInvoker()};
+//    }
 
     @Bean
     public Inject[] injects() {

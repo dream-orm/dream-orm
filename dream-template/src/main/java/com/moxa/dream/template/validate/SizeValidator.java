@@ -1,9 +1,6 @@
 package com.moxa.dream.template.validate;
 
 
-import com.moxa.dream.util.exception.DreamRunTimeException;
-
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
@@ -19,12 +16,7 @@ public class SizeValidator implements Validator<Object> {
             } else if (value instanceof Map) {
                 size = ((Map<?, ?>) value).size();
             } else {
-                try {
-                    Method sizeMethod = value.getClass().getMethod("size");
-                    size = (Integer) sizeMethod.invoke(value);
-                } catch (Exception e) {
-                    throw new DreamRunTimeException(e);
-                }
+                throw new ValidateDreamRunTimeException(value.getClass().getName() + "必须是集合或者map");
             }
             boolean error = min >= 0 && size < min || max >= 0 && size > max;
             if (error) {
