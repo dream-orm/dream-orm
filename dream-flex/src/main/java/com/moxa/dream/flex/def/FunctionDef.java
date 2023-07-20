@@ -400,6 +400,8 @@ public class FunctionDef {
             case YEAR:
                 dateOperStatement = new DateOperStatement.YearDateAddStatement();
                 break;
+            default:
+                break;
         }
         dateOperStatement.setDate(columnDef.getStatement());
         dateOperStatement.setQty(new SymbolStatement.LetterStatement(String.valueOf(number)));
@@ -432,6 +434,8 @@ public class FunctionDef {
                 break;
             case YEAR:
                 dateOperStatement = new DateOperStatement.YearDateSubStatement();
+                break;
+            default:
                 break;
         }
         dateOperStatement.setDate(columnDef.getStatement());
@@ -575,6 +579,8 @@ public class FunctionDef {
             case DATETIME:
                 convertTypeStatement = new ConvertTypeStatement.DateTimeConvertStatement(columnDef.getStatement());
                 break;
+            default:
+                break;
         }
         return new ColumnDef(convertTypeStatement);
     }
@@ -602,6 +608,8 @@ public class FunctionDef {
                 break;
             case DATETIME:
                 castTypeStatement = new CastTypeStatement.DateTimeCastStatement(columnDef.getStatement());
+                break;
+            default:
                 break;
         }
         return new ColumnDef(castTypeStatement);

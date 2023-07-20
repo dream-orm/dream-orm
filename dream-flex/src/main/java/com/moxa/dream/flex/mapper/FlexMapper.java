@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface FlexMapper {
-     Set<Class<?extends Inject>> WHITE_SET = new HashSet<>();
+    Set<Class<? extends Inject>> WHITE_SET = new HashSet<>();
 
     <T> T selectOne(Query query, Class<T> type);
 

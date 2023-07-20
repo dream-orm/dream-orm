@@ -76,7 +76,7 @@ public class CacheKey implements Cloneable {
 
 
     @Override
-    public CacheKey clone() {
+    public final CacheKey clone() {
         CacheKey clonedCacheKey;
         ArrayList<Integer> cloneUpdateList = new ArrayList<>(updateList);
         try {

@@ -15,6 +15,7 @@ import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.resource.ResourceUtil;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
@@ -42,6 +43,12 @@ public class BlockInvoker extends AbstractInvoker {
                 }
             } catch (Exception e) {
                 throw new DreamRunTimeException("读取" + resource + "失败", e);
+            } finally {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+
+                }
             }
         } else {
             throw new DreamRunTimeException(resource + "不存在");

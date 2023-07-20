@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 
 
 public class DefaultMapperFactory implements MapperFactory {
-    protected Map<Method, MethodInfo> methodInfoMap = new HashMap<>(1024);
-    protected Map<Class, Class[]> mapperTypeMap = new HashMap<>(512);
+    protected Map<Method, MethodInfo> methodInfoMap = new HashMap<>(16);
+    protected Map<Class, Class[]> mapperTypeMap = new HashMap<>(8);
 
     @Override
     public boolean addMapper(Configuration configuration, Class mapperClass) {

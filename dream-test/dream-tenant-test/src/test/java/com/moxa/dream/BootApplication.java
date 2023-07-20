@@ -1,11 +1,8 @@
 package com.moxa.dream;
 
-import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.boot.bean.ConfigurationBean;
 import com.moxa.dream.drive.listener.DebugListener;
 import com.moxa.dream.mate.tenant.inject.TenantInject;
-import com.moxa.dream.mate.tenant.invoker.TenantGetInvoker;
-import com.moxa.dream.mate.tenant.invoker.TenantInjectInvoker;
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.cache.DefaultCacheFactory;

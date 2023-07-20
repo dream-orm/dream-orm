@@ -6,11 +6,9 @@ import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.table.TableInfo;
-import com.moxa.dream.template.sequence.MySQLSequence;
 import com.moxa.dream.template.sequence.Sequence;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
@@ -36,6 +34,7 @@ public class BootApplication {
         ConfigurationBean configurationBean = new ConfigurationBean(Arrays.asList("com.moxa.dream.base"), Arrays.asList("com.moxa.dream.base"));
         return configurationBean;
     }
+
     @Bean
     public Sequence sequence() {
         return new Sequence() {

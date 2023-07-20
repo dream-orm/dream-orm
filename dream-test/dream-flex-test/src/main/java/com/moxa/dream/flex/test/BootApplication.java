@@ -2,7 +2,6 @@ package com.moxa.dream.flex.test;
 
 import com.moxa.dream.boot.bean.ConfigurationBean;
 import com.moxa.dream.drive.listener.DebugListener;
-import com.moxa.dream.flex.mapper.DefaultFlexMapper;
 import com.moxa.dream.flex.mapper.FlexMapper;
 import com.moxa.dream.mate.permission.inject.PermissionHandler;
 import com.moxa.dream.mate.permission.inject.PermissionInject;
@@ -14,18 +13,18 @@ import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.inject.Inject;
 import com.moxa.dream.system.table.TableInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+
 @SpringBootApplication
 public class BootApplication {
     public static void main(String[] args) {
         SpringApplication.run(BootApplication.class, args);
     }
+
     @Bean
     public CacheFactory cacheFactory() {
         return new DefaultCacheFactory() {
@@ -54,7 +53,7 @@ public class BootApplication {
                 return alias + ".dept_id=1";
             }
         })};
-        for(Inject inject:injects){
+        for (Inject inject : injects) {
             FlexMapper.WHITE_SET.add(inject.getClass());
         }
         return injects;

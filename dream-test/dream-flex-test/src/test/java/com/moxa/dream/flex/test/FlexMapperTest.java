@@ -19,6 +19,7 @@ public class FlexMapperTest {
     private FlexMapper flexMapper;
     @Autowired
     private HelloMapper helloMapper;
+
     @Test
     public void test0() {
         FromDef fromDef = select(user.name).from(user);

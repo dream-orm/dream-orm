@@ -2,7 +2,8 @@
 
 ## **简介**
 
-DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术为中心，辐射业务持久层框架，它非常轻量，不依赖第三方jar包、同时拥有极高的性能与灵活性，可以写一种MySQL语法在非MySQL数据库下执行，其内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成这种形式。
+DREAM（ https://github.com/moxa-lzf/dream
+）是一个基于翻译的以技术为中心，辐射业务持久层框架，它非常轻量，不依赖第三方jar包、同时拥有极高的性能与灵活性，可以写一种MySQL语法在非MySQL数据库下执行，其内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成这种形式。
 
 总而言之，DREAM不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装。
 
@@ -245,10 +246,10 @@ select u2.id,u2.name from (select id,name from user) u2 left join blog on u2.id=
 
 ```java
 UserTableDef user2 = new UserTableDef("u2");
-SqlInfo muser = select(user2.id, user2.name)
-        .from(table(select(user.id, user.name).from(user)).as("u2"))
-        .leftJoin(blog)
-        .on(user2.id.eq(blog.user_id))
+select(user2.id, user2.name)
+    .from(table(select(user.id, user.name).from(user)).as("u2"))
+    .leftJoin(blog)
+    .on(user2.id.eq(blog.user_id))
 ```
 
 这里仅仅展示了其中的一个方面，流式已经基本上全面支持SQL写法，而且写法规范基本上和SQL语法保持一致
@@ -1326,12 +1327,12 @@ public interface LogicHandler {
 }
 ```
 
-| 方法名           | 描述                                                         |
-| ---------------- | ------------------------------------------------------------ |
-| isLogic          | 是否使用逻辑删除methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息 |
-| getNormalValue   | 未删除的值                                                   |
-| getNegativeValue | 逻辑删除后的值                                               |
-| getLogicColumn   | 逻辑删除字段                                                 |
+| 方法名          | 描述                                                         |
+| --------------- | ------------------------------------------------------------ |
+| isLogic         | 是否使用逻辑删除methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息 |
+| getNormalValue  | 未删除的值                                                   |
+| getDeletedValue | 逻辑删除后的值                                               |
+| getLogicColumn  | 逻辑删除字段                                                 |
 
 ### 数据缓存
 

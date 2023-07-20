@@ -147,7 +147,7 @@ public class DefaultFlexMapper implements FlexMapper {
                 .setRowType(rowType)
                 .setColType(colType)
                 .setCompile(Compile.ANTLR_COMPILED);
-        injectFactory.inject(methodInfo, inject ->WHITE_SET.contains(inject.getClass()));
+        injectFactory.inject(methodInfo, inject -> WHITE_SET.contains(inject.getClass()));
         return methodInfo;
     }
 
