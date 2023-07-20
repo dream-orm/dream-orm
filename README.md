@@ -37,23 +37,23 @@ DREAM支持MySQL、PGSQL、SQLSERVER、ORACLE、达梦，其他数据库语法�
 
 dream提供实例的TemplateMapper完成基础操作
 
-| 方法名                                                       | 描述                                           |
-| ------------------------------------------------------------ | ---------------------------------------------- |
-| selectById(Class<T> type, Object id)                         | 主键查询（支持多表关联查询）                   |
-| selectByIds(Class<T> type, Collection<?> idList)             | 主键批量查询(支持多表关联查询)                 |
-| selectOne(Class<T> type, Object conditionObject)             | 根据注解生成条件，查询一条                     |
-| selectList(Class<T> type, Object conditionObject)            | 根据注解生成条件，查询多条                     |
-| selectTree(Class<T> type, Object conditionObject)            | 根据注解生成条件，查询，并返回树形结构         |
-| selectPage(Class<T> type, Object conditionObject, Page page) | 根据注解生成条件，分页查询多条                 |
-| updateById(Object view)                                      | 主键更新                                       |
-| updateNonById(Object view)                                   | 主键非空更新，注意：空字符串也更新             |
-| insert(Object view)                                          | 插入                                           |
-| insertFetchKey(Object view)                                  | 插入并在view属性记录主键值                     |
-| deleteById(Class<?> type, Object id)                         | 主键删除                                       |
-| deleteByIds(Class<?> type, Collection<?> idList)             | 主键批量删除                                   |
-| existById(Class<?> type, Object id)                          | 判断主键是否存在                               |
-| exist(Class<?> type, Object conditionObject)                 | 根据注解生成条件，判断是否存在                 |
-| batchInsert(Collection<?> viewList)                          | 批量插入，默认一千作为一个批次，可设置批次     |
+| 方法名                                                          | 描述                      |
+|--------------------------------------------------------------|-------------------------|
+| selectById(Class<T> type, Object id)                         | 主键查询（支持多表关联查询）          |
+| selectByIds(Class<T> type, Collection<?> idList)             | 主键批量查询(支持多表关联查询)        |
+| selectOne(Class<T> type, Object conditionObject)             | 根据注解生成条件，查询一条           |
+| selectList(Class<T> type, Object conditionObject)            | 根据注解生成条件，查询多条           |
+| selectTree(Class<T> type, Object conditionObject)            | 根据注解生成条件，查询，并返回树形结构     |
+| selectPage(Class<T> type, Object conditionObject, Page page) | 根据注解生成条件，分页查询多条         |
+| updateById(Object view)                                      | 主键更新                    |
+| updateNonById(Object view)                                   | 主键非空更新，注意：空字符串也更新       |
+| insert(Object view)                                          | 插入                      |
+| insertFetchKey(Object view)                                  | 插入并在view属性记录主键值         |
+| deleteById(Class<?> type, Object id)                         | 主键删除                    |
+| deleteByIds(Class<?> type, Collection<?> idList)             | 主键批量删除                  |
+| existById(Class<?> type, Object id)                          | 判断主键是否存在                |
+| exist(Class<?> type, Object conditionObject)                 | 根据注解生成条件，判断是否存在         |
+| batchInsert(Collection<?> viewList)                          | 批量插入，默认一千作为一个批次，可设置批次   |
 | batchUpdateById(Collection<?> viewList)                      | 批量主键更新，默认一千作为一个批次，可设置批次 |
 
 #### 注解操作
@@ -68,9 +68,9 @@ public @interface Validated {
 }
 ```
 
-| 属性名 | 描述   |
-| ------ | ------ |
-| value  | 校验器 |
+| 属性名   | 描述  |
+|-------|-----|
+| value | 校验器 |
 
 ```java
 public interface Validator<T> {
@@ -82,26 +82,26 @@ public interface Validator<T> {
 }
 ```
 
-| 属性名                                                       | 描述                                                 |
-| ------------------------------------------------------------ | ---------------------------------------------------- |
-| isValid                                                      | 返回值标识是否进行校验，如校验，才会进行validate方法 |
-| validate，参数value：待校验的值，paramMap：开发者自定义的参数 | 数据校验，选择性抛异常                               |
+| 属性名                                       | 描述                             |
+|-------------------------------------------|--------------------------------|
+| isValid                                   | 返回值标识是否进行校验，如校验，才会进行validate方法 |
+| validate，参数value：待校验的值，paramMap：开发者自定义的参数 | 数据校验，选择性抛异常                    |
 
 已实现的Validator
 
-| Validator类          | 描述                                              |
-| -------------------- | ------------------------------------------------- |
-| AssertFalseValidator | 校验值若不为空，值必须为false                     |
-| AssertTrueValidator  | 校验值若不为空，值必须为true                      |
-| LengthValidator      | 校验值若不为空，校验值长度                        |
-| MaxValidator         | 校验值若不为空，校验值是否超过最大值              |
-| MinValidator         | 校验值若不为空，校验值是否小于最小值              |
-| NotBlankValidator    | 校验值不能为空，且不能为空字符串                  |
-| NotNullValidator     | 校验值不能为空                                    |
-| PatternValidator     | 校验值若不为空，校验满足正则表达式                |
-| RangeValidator       | 校验值若不为空，校验值是否在规定范围              |
+| Validator类           | 描述                         |
+|----------------------|----------------------------|
+| AssertFalseValidator | 校验值若不为空，值必须为false          |
+| AssertTrueValidator  | 校验值若不为空，值必须为true           |
+| LengthValidator      | 校验值若不为空，校验值长度              |
+| MaxValidator         | 校验值若不为空，校验值是否超过最大值         |
+| MinValidator         | 校验值若不为空，校验值是否小于最小值         |
+| NotBlankValidator    | 校验值不能为空，且不能为空字符串           |
+| NotNullValidator     | 校验值不能为空                    |
+| PatternValidator     | 校验值若不为空，校验满足正则表达式          |
+| RangeValidator       | 校验值若不为空，校验值是否在规定范围         |
 | SizeValidator        | 校验值若不为空，校验集合或map的大小是否在规定范围 |
-| UniqueValidator      | 校验值若不为空，与数据库校验值是否唯一            |
+| UniqueValidator      | 校验值若不为空，与数据库校验值是否唯一        |
 
 ##### **Wrap**
 
@@ -115,10 +115,10 @@ public @interface Wrap {
 }
 ```
 
-| 属性名 | 描述                             |
-| ------ | -------------------------------- |
-| value  | 处理的实现类                     |
-| type   | 处理时机，更新，插入，更新或插入 |
+| 属性名   | 描述               |
+|-------|------------------|
+| value | 处理的实现类           |
+| type  | 处理时机，更新，插入，更新或插入 |
 
 ```java
 public interface Wrapper {
@@ -126,9 +126,9 @@ public interface Wrapper {
 }
 ```
 
-| 参数名 | 描述                         |
-| ------ | ---------------------------- |
-| value  | 参数传入值，返回为处理后的值 |
+| 参数名   | 描述             |
+|-------|----------------|
+| value | 参数传入值，返回为处理后的值 |
 
 ##### **Conditional**
 
@@ -146,12 +146,12 @@ public @interface Conditional {
 }
 ```
 
-| 属性名   | 描述                         |
-| -------- | ---------------------------- |
-| table    | 条件的表名                   |
+| 属性名      | 描述             |
+|----------|----------------|
+| table    | 条件的表名          |
 | nullFlag | 为空是否剔除（空字符串为空） |
-| or       | 是否采用or，默认and          |
-| value    | 生成条件的实现类             |
+| or       | 是否采用or，默认and   |
+| value    | 生成条件的实现类       |
 
 ```java
 public interface Condition {
@@ -159,16 +159,16 @@ public interface Condition {
 }
 ```
 
-| 参数名 | 描述         |
-| ------ | ------------ |
-| table  | 表名称       |
+| 参数名    | 描述     |
+|--------|--------|
+| table  | 表名称    |
 | column | 数据库字段名 |
 | field  | 对象属性名称 |
 
 已实现的Condition
 
-| Condition类        | 描述            |
-| ------------------ | --------------- |
+| Condition类         | 描述              |
+|--------------------|-----------------|
 | ContainsCondition  | like '%?%'      |
 | EndWithCondition   | like '?%'       |
 | EqCondition        | =?              |
@@ -226,11 +226,11 @@ public @interface Sort {
 }
 ```
 
-| 属性名 | 描述                                           |
-| ------ | ---------------------------------------------- |
-| table  | 表名称                                         |
-| value  | 排序方式                                       |
-| order  | 指定多个排序字段时，显示优先级，越小优先级越高 |
+| 属性名   | 描述                      |
+|-------|-------------------------|
+| table | 表名称                     |
+| value | 排序方式                    |
+| order | 指定多个排序字段时，显示优先级，越小优先级越高 |
 
 ### 流式操作
 
@@ -282,9 +282,9 @@ public @interface Param {
 }
 ```
 
-| 属性名 | 描述     |
-| ------ | -------- |
-| value  | 参数名称 |
+| 属性名   | 描述   |
+|-------|------|
+| value | 参数名称 |
 
 每个接口方法必须绑定对应的SQL，有两种绑定形式：
 
@@ -298,11 +298,11 @@ public @interface Sql {
 }
 ```
 
-| 属性名 | 描述                 |
-| ------ | -------------------- |
-| value  | 绑定的SQL语句        |
-| cache  | 是否进行数据缓存读取 |
-| time   | 超时设置             |
+| 属性名   | 描述         |
+|-------|------------|
+| value | 绑定的SQL语句   |
+| cache | 是否进行数据缓存读取 |
+| time  | 超时设置       |
 
 2：在Mapper声明接口方法绑定的Sql
 
@@ -354,17 +354,17 @@ public interface ActionProvider {
 }
 ```
 
-| ActionProvider方法 | 描述                             |
-| ------------------ | -------------------------------- |
-| sql                | 待执行的SQL语句                  |
-| initActionList     | SQL执行前，待执行的行为          |
-| destroyActionList  | SQL执行后，待执行的行为          |
-| rowType            | 接受的集合类型，一般系统判断即可 |
-| colType            | 接受的对象类型，一般系统判断即可 |
-| cache              | 是否使用缓存                     |
-| timeOut            | 超时设置                         |
-| statementHandler   | 最终交互的数据库操作，默认即可   |
-| resultSetHandler   | 自定义结果集映射                 |
+| ActionProvider方法  | 描述               |
+|-------------------|------------------|
+| sql               | 待执行的SQL语句        |
+| initActionList    | SQL执行前，待执行的行为    |
+| destroyActionList | SQL执行后，待执行的行为    |
+| rowType           | 接受的集合类型，一般系统判断即可 |
+| colType           | 接受的对象类型，一般系统判断即可 |
+| cache             | 是否使用缓存           |
+| timeOut           | 超时设置             |
+| statementHandler  | 最终交互的数据库操作，默认即可  |
+| resultSetHandler  | 自定义结果集映射         |
 
 # 用法教程
 
@@ -840,7 +840,8 @@ SQL:SELECT user.id,user.name FROM user
         TIME:33ms
 ```
 
-**注：做到修改字段就可以间接修改SQL语句目的，存在情况，view字段与table字段一致，但不想查询，或者不想多表查询，可以使用Ignore忽略此字段**
+**注：做到修改字段就可以间接修改SQL语句目的，存在情况，view字段与table字段一致，但不想查询，或者不想多表查询，可以使用Ignore忽略此字段
+**
 
 ### **Ignore**
 
@@ -941,10 +942,10 @@ public @interface Extract {
 }
 ```
 
-| 属性名 | 描述             |
-| ------ | ---------------- |
-| value  | 提取的具体操作类 |
-| args   | 自定义参数       |
+| 属性名   | 描述       |
+|-------|----------|
+| value | 提取的具体操作类 |
+| args  | 自定义参数    |
 
 ```java
 public interface Extractor {
@@ -955,10 +956,10 @@ public interface Extractor {
 }
 ```
 
-| 参数名        | 描述                       |
-| ------------- | -------------------------- |
-| property      | 属性名                     |
-| value         | 数据库查询的值             |
+| 参数名           | 描述            |
+|---------------|---------------|
+| property      | 属性名           |
+| value         | 数据库查询的值       |
 | objectFactory | 反射工厂，用来给字段填充值 |
 
 ## **监听器**
@@ -1254,9 +1255,9 @@ public interface PermissionHandler {
 }
 ```
 
-| 方法名             | 描述                                                         |
-| ------------------ | ------------------------------------------------------------ |
-| isPermissionInject | 是否对当前查询语句注入where条件，methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息 |
+| 方法名                | 描述                                                                         |
+|--------------------|----------------------------------------------------------------------------|
+| isPermissionInject | 是否对当前查询语句注入where条件，methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息                |
 | getPermission      | 插入的where条件，不能为空，methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息，alias：当前查询语句主表的别名 |
 
 ### **逻辑删除**
@@ -1327,12 +1328,12 @@ public interface LogicHandler {
 }
 ```
 
-| 方法名          | 描述                                                         |
-| --------------- | ------------------------------------------------------------ |
+| 方法名             | 描述                                               |
+|-----------------|--------------------------------------------------|
 | isLogic         | 是否使用逻辑删除methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息 |
-| getNormalValue  | 未删除的值                                                   |
-| getDeletedValue | 逻辑删除后的值                                               |
-| getLogicColumn  | 逻辑删除字段                                                 |
+| getNormalValue  | 未删除的值                                            |
+| getDeletedValue | 逻辑删除后的值                                          |
+| getLogicColumn  | 逻辑删除字段                                           |
 
 ### 数据缓存
 
@@ -1364,12 +1365,12 @@ public interface Cache {
 }
 ```
 
-| 方法   | 描述                                                         |
-| ------ | ------------------------------------------------------------ |
+| 方法     | 描述                                                            |
+|--------|---------------------------------------------------------------|
 | put    | mappedStatement：记录了SQL的详尽信息，包括操作的表名，原始SQL的唯一值，执行SQL的唯一值等，存放数据 |
-| get    | 获取数据                                                     |
-| remove | 删除数据                                                     |
-| clear  | 清空数据                                                     |
+| get    | 获取数据                                                          |
+| remove | 删除数据                                                          |
+| clear  | 清空数据                                                          |
 
 ### 主键策略
 

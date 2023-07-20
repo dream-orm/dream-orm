@@ -44,12 +44,15 @@ public class SimpleQueryTest {
 
     @Test
     public void test3() {
-        SqlInfo muser = select(user.id, user.name, user.del_flag)
+        SqlInfo muser = select(user.id.as("id"), user.name, user.del_flag)
                 .from(user.as("u"))
                 .innerJoin(blog)
                 .on(user.id.eq(blog.user_id))
                 .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1, 2, 3)))
                 .toSQL(toSQL);
+        System.out.println(muser);
+        muser = select(user.id)
+                .from(user).toSQL(toSQL);
         System.out.println(muser);
     }
 

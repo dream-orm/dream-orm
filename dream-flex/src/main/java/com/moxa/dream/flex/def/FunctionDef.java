@@ -675,6 +675,10 @@ public class FunctionDef {
         return new QueryDef().select(columnDefs);
     }
 
+    public static ColumnDef column(Serializable column) {
+        return new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(column)));
+    }
+
     private static ColumnDef functionDef(FunctionStatement functionStatement, ColumnDef... columnDefs) {
         return functionDef(functionStatement, ",", columnDefs);
     }

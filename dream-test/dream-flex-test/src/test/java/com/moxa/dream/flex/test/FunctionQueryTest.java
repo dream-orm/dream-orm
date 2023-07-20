@@ -9,7 +9,6 @@ import com.moxa.dream.flex.def.ColumnDef;
 import com.moxa.dream.flex.def.SortDef;
 import org.junit.jupiter.api.Test;
 
-import static com.moxa.dream.flex.def.ColumnDef.column;
 import static com.moxa.dream.flex.def.FunctionDef.*;
 import static com.moxa.dream.flex.test.table.table.UserTableDef.user;
 

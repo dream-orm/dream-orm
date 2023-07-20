@@ -21,7 +21,7 @@ public class TableDef {
         }
     }
 
-    public TableDef(AliasStatement statement) {
+    TableDef(AliasStatement statement) {
         this.statement = statement;
     }
 
@@ -37,7 +37,9 @@ public class TableDef {
     }
 
     public TableDef as(String alias) {
-        statement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
-        return this;
+        AliasStatement aliasStatement = new AliasStatement();
+        aliasStatement.setColumn(this.statement.getColumn());
+        aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
+        return new TableDef(aliasStatement);
     }
 }

@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class ColumnDef {
-    private TableDef tableDef;
     private Statement statement;
     private String alias;
 
@@ -19,16 +18,7 @@ public class ColumnDef {
     }
 
     public ColumnDef(TableDef tableDef, String column) {
-        this(new SymbolStatement.SingleMarkStatement(column));
-        this.tableDef = tableDef;
-    }
-
-    public static ColumnDef column(Serializable column) {
-        return new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(column)));
-    }
-
-    public Statement getStatement() {
-        Statement tempStatement = statement;
+        Statement statement = new SymbolStatement.SingleMarkStatement(column);
         if (tableDef != null) {
             ListColumnStatement listColumnStatement = new ListColumnStatement(".");
             listColumnStatement.add(new LazyFunctionStatement(() -> {
@@ -40,20 +30,26 @@ public class ColumnDef {
                 return aliasStatement;
             }));
             listColumnStatement.add(statement);
-            tempStatement = listColumnStatement;
+            statement = listColumnStatement;
         }
+        this.statement = statement;
+    }
+
+    public Statement getStatement() {
         if (alias != null && !alias.isEmpty()) {
             AliasStatement aliasStatement = new AliasStatement();
-            aliasStatement.setColumn(tempStatement);
+            aliasStatement.setColumn(statement);
             aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
-            tempStatement = aliasStatement;
+            return aliasStatement;
+        } else {
+            return statement;
         }
-        return tempStatement;
     }
 
     public ColumnDef as(String alias) {
-        this.alias = alias;
-        return this;
+        ColumnDef columnDef = new ColumnDef(statement);
+        columnDef.alias = alias;
+        return columnDef;
     }
 
     public ConditionDef eq(ColumnDef columnDef) {
