@@ -15,10 +15,10 @@ public class TableDef {
     public TableDef(String table, String alias) {
         AliasStatement aliasStatement = new AliasStatement();
         aliasStatement.setColumn(new FlexTableInvokerStatement(table));
-        this.statement = aliasStatement;
-        if (alias != null && !alias.isEmpty() && !alias.equals(table)) {
-            as(alias);
+        if (alias != null && !alias.isEmpty()) {
+            aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
         }
+        this.statement = aliasStatement;
     }
 
     TableDef(AliasStatement statement) {

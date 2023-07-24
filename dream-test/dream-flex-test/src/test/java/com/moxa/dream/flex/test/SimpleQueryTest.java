@@ -121,4 +121,14 @@ public class SimpleQueryTest {
                 .toSQL(toSQL);
         System.out.println(muser);
     }
+
+    @Test
+    public void test9() {
+        SqlInfo muser = select(user.userView)
+                .from(user)
+                .leftJoin(blog)
+                .on(user.id.eq(blog.user_id))
+                .toSQL(toSQL);
+        System.out.println(muser);
+    }
 }
