@@ -4,30 +4,35 @@ import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
-import com.moxa.dream.antlr.smt.*;
+import com.moxa.dream.antlr.smt.ListColumnStatement;
+import com.moxa.dream.antlr.smt.SelectStatement;
+import com.moxa.dream.antlr.smt.Statement;
 
-public class SelectExpr extends SqlExpr {
+public class SelectExpr extends HelperExpr {
     private final SelectStatement selectStatement = new SelectStatement();
 
     public SelectExpr(ExprReader exprReader) {
-        super(exprReader);
+        this(exprReader, () -> new ListColumnExpr(exprReader, () -> new AliasColumnExpr(exprReader),
+                new ExprInfo(ExprType.COMMA, ",")));
+    }
+
+    public SelectExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
         setExprTypes(ExprType.SELECT);
     }
 
     @Override
     protected Statement exprSelect(ExprInfo exprInfo) throws AntlrException {
+        push();
+        setExprTypes(ExprType.DISTINCT, ExprType.HELP);
+        return expr();
+    }
 
-        PreSelectExpr preSelectExpr = new PreSelectExpr(exprReader);
-        preSelectExpr.setExprTypes(ExprType.SELECT);
-        PreSelectStatement preSelect = (PreSelectStatement) preSelectExpr.expr();
-        selectStatement.setPreSelect(preSelect);
-
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader,
-                () -> new AliasColumnExpr(exprReader),
-                new ExprInfo(ExprType.COMMA, ","));
-        ListColumnStatement listColumnStatement = (ListColumnStatement) listColumnExpr.expr();
-        selectStatement.setSelectList(listColumnStatement);
-        setExprTypes(ExprType.NIL);
+    @Override
+    protected Statement exprDistinct(ExprInfo exprInfo) throws AntlrException {
+        push();
+        selectStatement.setDistinct(true);
+        setExprTypes(ExprType.HELP);
         return expr();
     }
 
@@ -36,32 +41,10 @@ public class SelectExpr extends SqlExpr {
         return selectStatement;
     }
 
-    class PreSelectExpr extends SqlExpr {
-        private PreSelectStatement preSelectStatement = new PreSelectStatement();
-
-        public PreSelectExpr(ExprReader exprReader) {
-            super(exprReader);
-            setExprTypes(ExprType.SELECT);
-        }
-
-        @Override
-        protected Statement exprSelect(ExprInfo exprInfo) throws AntlrException {
-            push();
-            setExprTypes(ExprType.DISTINCT, ExprType.NIL);
-            return expr();
-        }
-
-        @Override
-        protected Statement exprDistinct(ExprInfo exprInfo) throws AntlrException {
-            preSelectStatement = new PreDistinctSelectStatement();
-            push();
-            setExprTypes(ExprType.NIL);
-            return expr();
-        }
-
-        @Override
-        public Statement nil() {
-            return preSelectStatement;
-        }
+    @Override
+    protected Statement exprHelp(Statement statement) throws AntlrException {
+        selectStatement.setSelectList((ListColumnStatement) statement);
+        setExprTypes(ExprType.NIL);
+        return expr();
     }
 }

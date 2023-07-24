@@ -364,17 +364,7 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(SelectStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getPreSelect(), assist, invokerList) + " " + toStr(statement.getSelectList(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(PreSelectStatement statement, Assist assist, List<Invoker> invokerList) {
-        return "SELECT";
-    }
-
-    @Override
-    protected String toString(PreDistinctSelectStatement statement, Assist assist, List<Invoker> invokerList) {
-        return "SELECT DISTINCT";
+        return "SELECT " + (statement.isDistinct() ? "DISTINCT " : "") + toStr(statement.getSelectList(), assist, invokerList);
     }
 
     @Override

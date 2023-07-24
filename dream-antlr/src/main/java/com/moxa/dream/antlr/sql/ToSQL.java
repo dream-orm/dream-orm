@@ -74,12 +74,6 @@ public abstract class ToSQL {
             case 669165491://SelectStatement
                 sql = toString((SelectStatement) statement, assist, invokerList);
                 break;
-            case 2141894352://PreSelectStatement
-                sql = toString((PreSelectStatement) statement, assist, invokerList);
-                break;
-            case -1084712140://PreDistinctSelectStatement
-                sql = toString((PreDistinctSelectStatement) statement, assist, invokerList);
-                break;
             case 267949595://ListColumnStatement
                 sql = toString((ListColumnStatement) statement, assist, invokerList);
                 break;
@@ -714,10 +708,6 @@ public abstract class ToSQL {
     protected abstract String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(SelectStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(PreSelectStatement statement, Assist assist, List<Invoker> invokerList);
-
-    protected abstract String toString(PreDistinctSelectStatement statement, Assist assist, List<Invoker> invokerList);
 
     protected abstract String toString(FunctionStatement.AsciiStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

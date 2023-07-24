@@ -1,18 +1,15 @@
 package com.moxa.dream.antlr.smt;
 
 public class SelectStatement extends Statement {
-    private PreSelectStatement preSelect;
+    private boolean distinct;
     private ListColumnStatement selectList;
 
-    public PreSelectStatement getPreSelect() {
-        return preSelect;
+    public boolean isDistinct() {
+        return distinct;
     }
 
-    public void setPreSelect(PreSelectStatement preSelect) {
-        this.preSelect = preSelect;
-        if (preSelect != null) {
-            preSelect.parentStatement = this;
-        }
+    public void setDistinct(boolean distinct) {
+        this.distinct = distinct;
     }
 
     public ListColumnStatement getSelectList() {
@@ -28,6 +25,6 @@ public class SelectStatement extends Statement {
 
     @Override
     protected Boolean isNeedInnerCache() {
-        return isNeedInnerCache(preSelect, selectList);
+        return isNeedInnerCache(selectList);
     }
 }

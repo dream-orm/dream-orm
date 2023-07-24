@@ -103,13 +103,11 @@ public class DefaultFlexMapper implements FlexMapper {
         SelectStatement selectStatement = statement.getSelectStatement();
         queryStatement.setSelectStatement(selectStatement);
         SelectStatement countSelectStatement = new SelectStatement();
-        countSelectStatement.setPreSelect(new PreSelectStatement());
         ListColumnStatement listColumnStatement = new ListColumnStatement();
         listColumnStatement.add(countFunctionStatement());
         countSelectStatement.setSelectList(listColumnStatement);
         queryStatement.setSelectStatement(countSelectStatement);
-        PreSelectStatement preSelect = selectStatement.getPreSelect();
-        if (!(preSelect instanceof PreDistinctSelectStatement)) {
+        if (!(selectStatement.isDistinct())) {
             UnionStatement unionStatement = queryStatement.getUnionStatement();
             if (unionStatement == null) {
                 queryStatement.setFromStatement(statement.getFromStatement());

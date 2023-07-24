@@ -10,6 +10,7 @@ public class BlogView {
     private Integer id;
     private String name;
     private Date publishTime;
+
     public Integer getId() {
         return id;
     }

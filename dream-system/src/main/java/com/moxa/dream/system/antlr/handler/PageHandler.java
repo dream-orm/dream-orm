@@ -48,13 +48,11 @@ public class PageHandler extends AbstractHandler {
             queryStatement.setOrderStatement(null);
         }
         SelectStatement selectStatement = queryStatement.getSelectStatement();
-        PreSelectStatement preSelect = selectStatement.getPreSelect();
         String countSql = null;
-        if (!(preSelect instanceof PreDistinctSelectStatement)) {
+        if (!(selectStatement.isDistinct())) {
             UnionStatement unionStatement = queryStatement.getUnionStatement();
             if (unionStatement == null) {
                 SelectStatement countSelectStatement = new SelectStatement();
-                countSelectStatement.setPreSelect(new PreSelectStatement());
                 ListColumnStatement listColumnStatement = new ListColumnStatement();
                 listColumnStatement.add(new FunctionExpr(new ExprReader("count(1)")).expr());
                 countSelectStatement.setSelectList(listColumnStatement);
