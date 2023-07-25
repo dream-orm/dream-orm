@@ -7,8 +7,6 @@ DREAM（ https://github.com/moxa-lzf/dream
 
 总而言之，DREAM不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装。
 
-联系微信：<img src=".\wx.jpg" style="zoom:25%;" />
-
 ## **特性**
 
 **跨平台**：支持mysql语法在非mysql环境下执行，并提供接口自定义翻译
@@ -1435,5 +1433,7 @@ public class SnowFlakeSequence extends AbstractSequence {
 
 1. 当SQL长度过长，达到几千行以上，翻译报java.lang.StackOverflowError，调大Xss参数
 
- 
+#  联系方式
+
+微信群：<img src=".\wx.jpg" style="zoom:25%;" />QQ群：<img src=".\qq.jpg" style="zoom:25%;" />
 
