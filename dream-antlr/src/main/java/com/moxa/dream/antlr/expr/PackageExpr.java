@@ -73,7 +73,6 @@ public class PackageExpr extends HelperExpr {
 
     @Override
     protected Statement nil() {
-        exprReader.close();
         return statement;
     }
 }

@@ -27,10 +27,7 @@ public class ListColumnStatement extends Statement {
     }
 
     public void setCut(SymbolStatement.LetterStatement cut) {
-        this.cut = cut;
-        if (cut != null) {
-            cut.parentStatement = this;
-        }
+        this.cut = wrapParent(cut);
     }
 
     public Statement[] getColumnList() {
@@ -41,7 +38,7 @@ public class ListColumnStatement extends Statement {
         if (columnList != null) {
             this.columnList = columnList;
             for (Statement statement : columnList) {
-                statement.parentStatement = this;
+                wrapParent(statement);
             }
         }
     }

@@ -2,9 +2,7 @@ package com.moxa.dream.antlr.smt;
 
 import com.moxa.dream.antlr.exception.AntlrException;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.List;
 
 public abstract class Statement {
 
@@ -41,6 +39,13 @@ public abstract class Statement {
         this.parentStatement = parentStatement;
     }
 
+    protected <T extends Statement> T wrapParent(T statement) {
+        if (statement != null) {
+            statement.parentStatement = this;
+        }
+        return statement;
+    }
+
     protected boolean isNeedInnerCache(Statement... statements) {
         needCache = true;
         for (Statement statement : statements) {
@@ -67,32 +72,33 @@ public abstract class Statement {
                     if (child instanceof Statement) {
                         if (child == this) {
                             field.set(parentStatement, statement);
-                            break;
-                        }
-                    } else if (child instanceof List) {
-                        int i;
-                        for (i = 0; i < ((List) child).size(); i++) {
-                            Object value = ((List) child).get(i);
-                            if (value != null && value == this) {
-                                ((List) child).set(i, statement);
-                                break;
+                            Statement parentStatement
+                                    = statement.parentStatement
+                                    = this.parentStatement;
+                            while (parentStatement != null) {
+                                parentStatement.needCache = null;
+                                parentStatement = parentStatement.getParentStatement();
                             }
+                            this.parentStatement = null;
+                            return;
                         }
-                        if (i < ((List) child).size()) {
-                            break;
-                        }
-                    } else if (child.getClass().isArray()) {
-                        int length = Array.getLength(child);
+                    } else if (child instanceof Statement[]) {
+                        Statement[] columnList = (Statement[]) child;
                         int i;
-                        for (i = 0; i < length; i++) {
-                            Object value = Array.get(child, i);
+                        for (i = 0; i < columnList.length; i++) {
+                            Statement value = columnList[i];
                             if (value != null && value == this) {
-                                Array.set(child, i, statement);
-                                break;
+                                columnList[i] = statement;
+                                Statement parentStatement
+                                        = statement.parentStatement
+                                        = this.parentStatement;
+                                while (parentStatement != null) {
+                                    parentStatement.needCache = null;
+                                    parentStatement = parentStatement.getParentStatement();
+                                }
+                                this.parentStatement = null;
+                                return;
                             }
-                        }
-                        if (i < length) {
-                            break;
                         }
                     }
                 }
@@ -100,18 +106,7 @@ public abstract class Statement {
                 throw new AntlrException("替换" + this.getClass().getName() + "为" + statement.getClass().getName() + "失败", e);
             }
         }
-        if (index < fieldList.length) {
-            Statement parentStatement
-                    = statement.parentStatement
-                    = this.parentStatement;
-            this.parentStatement = null;
-            while (parentStatement != null) {
-                parentStatement.needCache = null;
-                parentStatement = parentStatement.getParentStatement();
-            }
-        } else {
-            throw new AntlrException("不能替换" + this.getClass().getName() + "为" + statement.getClass().getName());
-        }
+        throw new AntlrException("不能替换" + this.getClass().getName() + "为" + statement.getClass().getName());
     }
 
 }

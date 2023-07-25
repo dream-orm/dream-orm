@@ -12,10 +12,7 @@ public class PackageStatement extends Statement {
     }
 
     public void setStatement(Statement statement) {
-        this.statement = statement;
-        if (statement != null) {
-            statement.parentStatement = this;
-        }
+        this.statement = wrapParent(statement);
     }
 
     public <T> void setValue(Class<T> type, T value) {

@@ -10,10 +10,7 @@ public class UpdateStatement extends Statement {
     }
 
     public void setTable(Statement table) {
-        this.table = table;
-        if (table != null) {
-            table.parentStatement = this;
-        }
+        this.table = wrapParent(table);
     }
 
     public Statement getConditionList() {
@@ -21,10 +18,7 @@ public class UpdateStatement extends Statement {
     }
 
     public void setConditionList(Statement conditionList) {
-        this.conditionList = conditionList;
-        if (conditionList != null) {
-            conditionList.parentStatement = this;
-        }
+        this.conditionList = wrapParent(conditionList);
     }
 
     public Statement getWhere() {
@@ -32,10 +26,7 @@ public class UpdateStatement extends Statement {
     }
 
     public void setWhere(Statement where) {
-        this.where = where;
-        if (where != null) {
-            where.parentStatement = this;
-        }
+        this.where = wrapParent(where);
     }
 
     @Override

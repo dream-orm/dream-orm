@@ -4,7 +4,6 @@ import com.moxa.dream.antlr.config.Constant;
 import com.moxa.dream.antlr.config.ExprInfo;
 import com.moxa.dream.antlr.config.ExprType;
 import com.moxa.dream.antlr.exception.AntlrException;
-import com.moxa.dream.antlr.expr.SqlExpr;
 import com.moxa.dream.antlr.factory.MyFunctionFactory;
 import com.moxa.dream.antlr.smt.MyFunctionStatement;
 import com.moxa.dream.antlr.util.ExprUtil;
@@ -15,7 +14,6 @@ import java.util.Stack;
 
 public class ExprReader extends StringReader {
 
-    private final Stack<SqlExpr> exprStack = new Stack();
     private final Stack<ExprInfo> exprInfoStack = new Stack<>();
     private final MyFunctionFactory myFunctionFactory;
     private ExprInfo lastInfo;
@@ -349,18 +347,6 @@ public class ExprReader extends StringReader {
 
     public Stack<ExprInfo> getExprInfoStack() {
         return exprInfoStack;
-    }
-
-    public void pop() {
-        exprStack.pop();
-    }
-
-
-    public boolean tryMark(SqlExpr abstractExpr) {
-        if (exprStack.isEmpty() || exprStack.peek() != abstractExpr) {
-            return exprStack.add(abstractExpr);
-        }
-        return false;
     }
 
     public void push(ExprInfo exprInfo) {

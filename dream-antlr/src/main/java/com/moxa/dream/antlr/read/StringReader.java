@@ -7,7 +7,6 @@ public class StringReader {
     private int mark = 0;
     private int start = 0;
     private int end = 0;
-    private boolean close = false;
 
     public StringReader(String value) {
         this.value = value == null ? "" : value;
@@ -53,14 +52,6 @@ public class StringReader {
 
     protected void reset() {
         next = mark;
-    }
-
-    public void close() {
-        close = true;
-    }
-
-    public boolean isClose() {
-        return close;
     }
 
     public int getStart() {

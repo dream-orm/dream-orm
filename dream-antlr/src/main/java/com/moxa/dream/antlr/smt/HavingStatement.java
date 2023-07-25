@@ -8,10 +8,7 @@ public class HavingStatement extends Statement {
     }
 
     public void setCondition(Statement condition) {
-        this.condition = condition;
-        if (condition != null) {
-            condition.parentStatement = this;
-        }
+        this.condition = wrapParent(condition);
     }
 
     @Override

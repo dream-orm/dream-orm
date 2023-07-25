@@ -4,10 +4,7 @@ public abstract class CastTypeStatement extends Statement {
     private final Statement statement;
 
     public CastTypeStatement(Statement statement) {
-        this.statement = statement;
-        if (statement != null) {
-            statement.parentStatement = this;
-        }
+        this.statement = wrapParent(statement);
     }
 
     @Override

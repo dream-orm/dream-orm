@@ -8,10 +8,7 @@ public class OrderStatement extends Statement {
     }
 
     public void setOrder(Statement order) {
-        this.statement = order;
-        if (statement != null) {
-            order.parentStatement = this;
-        }
+        this.statement = wrapParent(order);
     }
 
     @Override
@@ -23,11 +20,7 @@ public class OrderStatement extends Statement {
         private final Statement statement;
 
         public AscStatement(Statement statement) {
-            this.statement = statement;
-            if (statement != null) {
-                statement.parentStatement = this;
-            }
-
+            this.statement = wrapParent(statement);
         }
 
         public Statement getSort() {
@@ -44,10 +37,7 @@ public class OrderStatement extends Statement {
         private final Statement statement;
 
         public DescStatement(Statement statement) {
-            this.statement = statement;
-            if (statement != null) {
-                statement.parentStatement = this;
-            }
+            this.statement = wrapParent(statement);
         }
 
         public Statement getSort() {

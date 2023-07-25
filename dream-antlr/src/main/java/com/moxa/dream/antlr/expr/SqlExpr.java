@@ -28,10 +28,6 @@ public abstract class SqlExpr {
     }
 
     public Statement expr() throws AntlrException {
-        if (exprReader.isClose()) {
-            throw new AntlrException("SQL读入流已关闭");
-        }
-        tryMark();
         ExprInfo exprInfo = exprReader.getLastInfo();
         if (exprInfo == null) {
             exprInfo = push();
@@ -1230,7 +1226,6 @@ public abstract class SqlExpr {
             return exprSelf(exprInfo);
         } else if (acceptSet.contains(ExprType.NIL)) {
             Statement statement = nil();
-            exprReader.pop();
             return statement;
         } else {
             throw new AntlrException(ExprUtil.wrapper(exprReader));
@@ -1333,9 +1328,5 @@ public abstract class SqlExpr {
 
     public Set<ExprType> getAcceptSet() {
         return acceptSet;
-    }
-
-    private boolean tryMark() {
-        return exprReader.tryMark(this);
     }
 }

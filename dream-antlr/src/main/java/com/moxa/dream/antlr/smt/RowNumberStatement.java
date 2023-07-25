@@ -8,10 +8,7 @@ public class RowNumberStatement extends Statement {
     }
 
     public void setStatement(Statement statement) {
-        this.statement = statement;
-        if (statement != null) {
-            statement.parentStatement = this;
-        }
+        this.statement = wrapParent(statement);
     }
 
     @Override
@@ -28,10 +25,7 @@ public class RowNumberStatement extends Statement {
         }
 
         public void setPartitionStatement(Statement partitionStatement) {
-            this.partitionStatement = partitionStatement;
-            if (partitionStatement != null) {
-                partitionStatement.parentStatement = this;
-            }
+            this.partitionStatement = wrapParent(partitionStatement);
         }
 
         public Statement getOrderStatement() {
@@ -39,10 +33,7 @@ public class RowNumberStatement extends Statement {
         }
 
         public void setOrderStatement(Statement orderStatement) {
-            this.orderStatement = orderStatement;
-            if (orderStatement != null) {
-                orderStatement.parentStatement = this;
-            }
+            this.orderStatement = wrapParent(orderStatement);
         }
 
         @Override
@@ -58,10 +49,7 @@ public class RowNumberStatement extends Statement {
             }
 
             public void setStatement(Statement statement) {
-                this.statement = statement;
-                if (statement != null) {
-                    statement.parentStatement = this;
-                }
+                this.statement = wrapParent(statement);
             }
 
             @Override

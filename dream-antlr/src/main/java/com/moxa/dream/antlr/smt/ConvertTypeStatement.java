@@ -4,10 +4,7 @@ public abstract class ConvertTypeStatement extends Statement {
     private final Statement statement;
 
     public ConvertTypeStatement(Statement statement) {
-        this.statement = statement;
-        if (statement != null) {
-            statement.parentStatement = this;
-        }
+        this.statement = wrapParent(statement);
     }
 
     @Override
@@ -73,10 +70,7 @@ public abstract class ConvertTypeStatement extends Statement {
         }
 
         public void setParamStatement(Statement paramStatement) {
-            this.paramStatement = paramStatement;
-            if (paramStatement != null) {
-                paramStatement.parentStatement = this;
-            }
+            this.paramStatement = wrapParent(paramStatement);
         }
     }
 

@@ -16,10 +16,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setSelectStatement(SelectStatement selectStatement) {
-        this.selectStatement = selectStatement;
-        if (selectStatement != null) {
-            selectStatement.parentStatement = this;
-        }
+        this.selectStatement = wrapParent(selectStatement);
     }
 
     public FromStatement getFromStatement() {
@@ -27,10 +24,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setFromStatement(FromStatement fromStatement) {
-        this.fromStatement = fromStatement;
-        if (fromStatement != null) {
-            fromStatement.parentStatement = this;
-        }
+        this.fromStatement = wrapParent(fromStatement);
     }
 
     public WhereStatement getWhereStatement() {
@@ -38,10 +32,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setWhereStatement(WhereStatement whereStatement) {
-        this.whereStatement = whereStatement;
-        if (whereStatement != null) {
-            whereStatement.parentStatement = this;
-        }
+        this.whereStatement = wrapParent(whereStatement);
     }
 
     public GroupStatement getGroupStatement() {
@@ -49,10 +40,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setGroupStatement(GroupStatement groupStatement) {
-        this.groupStatement = groupStatement;
-        if (groupStatement != null) {
-            groupStatement.parentStatement = this;
-        }
+        this.groupStatement = wrapParent(groupStatement);
     }
 
     public HavingStatement getHavingStatement() {
@@ -60,10 +48,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setHavingStatement(HavingStatement havingStatement) {
-        this.havingStatement = havingStatement;
-        if (havingStatement != null) {
-            havingStatement.parentStatement = this;
-        }
+        this.havingStatement = wrapParent(havingStatement);
     }
 
     public OrderStatement getOrderStatement() {
@@ -71,10 +56,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setOrderStatement(OrderStatement orderStatement) {
-        this.orderStatement = orderStatement;
-        if (orderStatement != null) {
-            orderStatement.parentStatement = this;
-        }
+        this.orderStatement = wrapParent(orderStatement);
     }
 
     public LimitStatement getLimitStatement() {
@@ -82,10 +64,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setLimitStatement(LimitStatement limitStatement) {
-        this.limitStatement = limitStatement;
-        if (limitStatement != null) {
-            limitStatement.parentStatement = this;
-        }
+        this.limitStatement = wrapParent(limitStatement);
     }
 
     public UnionStatement getUnionStatement() {
@@ -93,10 +72,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setUnionStatement(UnionStatement unionStatement) {
-        this.unionStatement = unionStatement;
-        if (unionStatement != null) {
-            unionStatement.parentStatement = this;
-        }
+        this.unionStatement = wrapParent(unionStatement);
     }
 
     public ForUpdateStatement getForUpdateStatement() {
@@ -104,10 +80,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setForUpdateStatement(ForUpdateStatement forUpdateStatement) {
-        this.forUpdateStatement = forUpdateStatement;
-        if (forUpdateStatement != null) {
-            forUpdateStatement.parentStatement = this;
-        }
+        this.forUpdateStatement = wrapParent(forUpdateStatement);
     }
 
     @Override

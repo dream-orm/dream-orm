@@ -26,10 +26,7 @@ public class InvokerStatement extends Statement {
     }
 
     public void setParamStatement(Statement paramStatement) {
-        this.paramStatement = paramStatement;
-        if (paramStatement != null) {
-            paramStatement.parentStatement = this;
-        }
+        this.paramStatement = wrapParent(paramStatement);
     }
 
     @Override

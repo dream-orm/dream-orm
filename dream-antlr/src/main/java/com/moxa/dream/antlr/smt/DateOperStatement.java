@@ -9,10 +9,7 @@ public abstract class DateOperStatement extends Statement {
     }
 
     public void setDate(Statement date) {
-        this.date = date;
-        if (date != null) {
-            date.parentStatement = this;
-        }
+        this.date = wrapParent(date);
     }
 
     public Statement getQty() {
@@ -20,10 +17,7 @@ public abstract class DateOperStatement extends Statement {
     }
 
     public void setQty(Statement qty) {
-        this.qty = qty;
-        if (qty != null) {
-            qty.parentStatement = this;
-        }
+        this.qty = wrapParent(qty);
     }
 
     @Override

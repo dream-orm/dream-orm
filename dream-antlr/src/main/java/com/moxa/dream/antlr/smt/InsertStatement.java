@@ -10,10 +10,7 @@ public class InsertStatement extends Statement {
     }
 
     public void setTable(Statement table) {
-        this.table = table;
-        if (table != null) {
-            table.parentStatement = this;
-        }
+        this.table = wrapParent(table);
     }
 
     public Statement getParams() {
@@ -21,10 +18,7 @@ public class InsertStatement extends Statement {
     }
 
     public void setParams(Statement params) {
-        this.params = params;
-        if (params != null) {
-            params.parentStatement = this;
-        }
+        this.params = wrapParent(params);
     }
 
     public Statement getValues() {
@@ -32,10 +26,7 @@ public class InsertStatement extends Statement {
     }
 
     public void setValues(Statement values) {
-        this.values = values;
-        if (values != null) {
-            values.parentStatement = this;
-        }
+        this.values = wrapParent(values);
     }
 
     @Override
@@ -51,8 +42,7 @@ public class InsertStatement extends Statement {
         }
 
         public void setStatement(Statement statement) {
-            this.statement = statement;
-            this.statement.parentStatement = this;
+            this.statement = wrapParent(statement);
         }
 
         @Override

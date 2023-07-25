@@ -9,10 +9,7 @@ public abstract class JoinStatement extends Statement {
     }
 
     public void setJoinTable(Statement joinTable) {
-        this.joinTable = joinTable;
-        if (joinTable != null) {
-            joinTable.parentStatement = this;
-        }
+        this.joinTable = wrapParent(joinTable);
     }
 
     public Statement getOn() {
@@ -20,10 +17,7 @@ public abstract class JoinStatement extends Statement {
     }
 
     public void setOn(Statement on) {
-        this.on = on;
-        if (on != null) {
-            on.parentStatement = this;
-        }
+        this.on = wrapParent(on);
     }
 
     @Override

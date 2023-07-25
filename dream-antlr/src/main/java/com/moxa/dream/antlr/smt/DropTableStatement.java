@@ -8,10 +8,7 @@ public class DropTableStatement extends Statement {
     }
 
     public void setTable(Statement table) {
-        this.table = table;
-        if (table != null) {
-            table.parentStatement = this;
-        }
+        this.table = wrapParent(table);
     }
 
     @Override

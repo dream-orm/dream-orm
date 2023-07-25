@@ -10,10 +10,7 @@ public class ConditionStatement extends Statement {
     }
 
     public void setLeft(Statement left) {
-        this.left = left;
-        if (left != null) {
-            left.parentStatement = this;
-        }
+        this.left = wrapParent(left);
     }
 
     public OperStatement getOper() {
@@ -21,10 +18,7 @@ public class ConditionStatement extends Statement {
     }
 
     public void setOper(OperStatement oper) {
-        this.oper = oper;
-        if (oper != null) {
-            oper.parentStatement = this;
-        }
+        this.oper = wrapParent(oper);
     }
 
     public Statement getRight() {
@@ -32,10 +26,7 @@ public class ConditionStatement extends Statement {
     }
 
     public void setRight(Statement right) {
-        this.right = right;
-        if (right != null) {
-            right.parentStatement = this;
-        }
+        this.right = wrapParent(right);
     }
 
     @Override

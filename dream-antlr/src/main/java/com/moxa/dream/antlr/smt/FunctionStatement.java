@@ -19,10 +19,7 @@ public abstract class FunctionStatement extends Statement {
     }
 
     public void setParamsStatement(Statement paramsStatement) {
-        this.paramsStatement = paramsStatement;
-        if (paramsStatement != null) {
-            paramsStatement.parentStatement = this;
-        }
+        this.paramsStatement = wrapParent(paramsStatement);
     }
 
     @Override
@@ -73,7 +70,7 @@ public abstract class FunctionStatement extends Statement {
         }
 
         public void setOrder(Statement order) {
-            this.order = order;
+            this.order = wrapParent(order);
         }
 
         public Statement getSeparator() {
@@ -81,7 +78,7 @@ public abstract class FunctionStatement extends Statement {
         }
 
         public void setSeparator(Statement separator) {
-            this.separator = separator;
+            this.separator = wrapParent(separator);
         }
     }
 

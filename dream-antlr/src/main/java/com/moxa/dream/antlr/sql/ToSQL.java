@@ -589,7 +589,6 @@ public abstract class ToSQL {
             while (!handlerQueue.isEmpty()) {
                 sql = handlerQueue.poll().handlerAfter(statement, assist, sql);
             }
-            return sql;
         }
         after(statement, sql);
         return sql;
