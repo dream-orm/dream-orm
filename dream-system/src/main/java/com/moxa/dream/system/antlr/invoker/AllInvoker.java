@@ -136,13 +136,11 @@ public class AllInvoker extends AbstractInvoker {
                     String fieldTable = getTableName(ReflectUtil.getColType(genericType));
                     if (ObjectUtil.isNull(fieldTable)) {
                         if (rootTableInfo == null) {
-                            boolean find = false;
                             for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {
                                 alias = tableScanInfo.getAlias();
                                 TableInfo tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
                                 ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
                                 if (columnInfo != null) {
-                                    find = true;
                                     boolean add = true;
                                     for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
                                         if (columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
@@ -156,9 +154,6 @@ public class AllInvoker extends AbstractInvoker {
                                         break;
                                     }
                                 }
-                            }
-                            if (!find) {
-                                throw new AntlrException("类字段'" + colType.getName() + "." + fieldName + "'未能匹配数据库字段");
                             }
                         } else {
                             ColumnInfo columnInfo = rootTableInfo.getColumnInfo(fieldName);
@@ -193,11 +188,7 @@ public class AllInvoker extends AbstractInvoker {
         if (SystemUtil.ignoreField(field)) {
             return true;
         }
-        Ignore ignoreAnnotation = field.getAnnotation(Ignore.class);
-        if (ignoreAnnotation != null) {
-            return !ignoreAnnotation.query();
-        }
-        return false;
+        return field.isAnnotationPresent(Ignore.class);
     }
 
     protected String getTableName(Class<?> type) {

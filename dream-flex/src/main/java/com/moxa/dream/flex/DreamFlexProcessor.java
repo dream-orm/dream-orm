@@ -1,6 +1,7 @@
 package com.moxa.dream.flex;
 
 import com.moxa.dream.system.annotation.Column;
+import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.annotation.Table;
 import com.moxa.dream.system.annotation.View;
 
@@ -189,7 +190,12 @@ public class DreamFlexProcessor extends AbstractProcessor {
             View view = viewElement.getAnnotation(View.class);
             String viewStr = view.toString();
             String tableClassName = viewStr.substring(viewStr.lastIndexOf("=") + 1, viewStr.lastIndexOf(")"));
-            List<String> columnInfoList = columnInfoList((TypeElement) viewElement, fieldElement -> fieldElement.toString());
+            List<String> columnInfoList = columnInfoList((TypeElement) viewElement, fieldElement -> {
+                if (fieldElement.getAnnotation(Ignore.class) != null) {
+                    return null;
+                }
+                return fieldElement.toString();
+            });
             Set<String> columnSet = new HashSet<>(columnInfoList);
             Map<String, Set<String>> fieldMap = tableFieldMap.get(tableClassName);
             if (fieldMap == null) {

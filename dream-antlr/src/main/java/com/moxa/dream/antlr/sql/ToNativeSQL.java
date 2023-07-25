@@ -949,22 +949,22 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(JoinStatement.LeftJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " LEFT JOIN " + toStr(statement.getJoinTable(), assist, invokerList) + (statement.getOn() != null ? (" ON " + toStr(statement.getOn(), assist, invokerList)) : "");
+        return "LEFT JOIN " + toStr(statement.getJoinTable(), assist, invokerList) + (statement.getOn() != null ? (" ON " + toStr(statement.getOn(), assist, invokerList)) : "");
     }
 
     @Override
     protected String toString(JoinStatement.RightJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " RIGHT JOIN " + toStr(statement.getJoinTable(), assist, invokerList) + (statement.getOn() != null ? (" ON " + toStr(statement.getOn(), assist, invokerList)) : "");
+        return "RIGHT JOIN " + toStr(statement.getJoinTable(), assist, invokerList) + (statement.getOn() != null ? (" ON " + toStr(statement.getOn(), assist, invokerList)) : "");
     }
 
     @Override
     protected String toString(JoinStatement.InnerJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " INNER JOIN " + toStr(statement.getJoinTable(), assist, invokerList) + (statement.getOn() != null ? (" ON " + toStr(statement.getOn(), assist, invokerList)) : "");
+        return "INNER JOIN " + toStr(statement.getJoinTable(), assist, invokerList) + (statement.getOn() != null ? (" ON " + toStr(statement.getOn(), assist, invokerList)) : "");
     }
 
     @Override
     protected String toString(JoinStatement.CrossJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " CROSS JOIN " + toStr(statement.getJoinTable(), assist, invokerList) + (statement.getOn() != null ? (" ON " + toStr(statement.getOn(), assist, invokerList)) : "");
+        return "CROSS JOIN " + toStr(statement.getJoinTable(), assist, invokerList) + (statement.getOn() != null ? (" ON " + toStr(statement.getOn(), assist, invokerList)) : "");
     }
 
     @Override

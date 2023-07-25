@@ -170,14 +170,10 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     .table(tableName)
                     .columnLabel(columnLabel)
                     .columnInfo(columnInfo);
-            boolean success;
             try {
-                success = linkHandler(builder, mappedStatement, mappedResult, new LowHashSet(tableSet));
+                linkHandler(builder, mappedStatement, mappedResult, new LowHashSet(tableSet));
             } catch (TypeHandlerNotFoundException e) {
                 throw new DreamRunTimeException("映射" + mappedStatement.getId() + "失败，映射字段:" + columnLabel + "，表：" + tableName + "，" + e.getMessage(), e);
-            }
-            if (!success && !columnLabel.equals("rn")) {
-                throw new DreamRunTimeException("映射" + mappedStatement.getId() + "失败，映射字段:" + columnLabel + "，表：" + tableName);
             }
         }
         return mappedResult;
@@ -300,11 +296,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         if (SystemUtil.ignoreField(field)) {
             return true;
         }
-        Ignore ignoreAnnotation = field.getAnnotation(Ignore.class);
-        if (ignoreAnnotation != null) {
-            return !ignoreAnnotation.setter();
-        }
-        return false;
+        return field.isAnnotationPresent(Ignore.class);
     }
 
     protected String getTableName(Class<?> type) {
