@@ -30,9 +30,9 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AllInvoker extends AbstractInvoker {
+public class StarInvoker extends AbstractInvoker {
 
-    public static final String FUNCTION = "all";
+    public static final String FUNCTION = "*";
 
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {

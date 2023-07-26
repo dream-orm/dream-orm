@@ -328,7 +328,7 @@ public class ToNativeSQL extends ToSQL {
         int i;
         for (i = 0; i < columnList.length; i++) {
             String column = toStr(columnList[i], assist, invokerList);
-            if (column != null && column.length() > 0) {
+            if (column != null && !column.isEmpty()) {
                 stringBuilder.append(column + cut);
             }
         }

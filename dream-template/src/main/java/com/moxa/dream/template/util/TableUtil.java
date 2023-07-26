@@ -26,7 +26,7 @@ class TableUtil {
                 if (!ObjectUtil.isNull(fieldList)) {
                     for (Field field : fieldList) {
                         if (!SystemUtil.ignoreField(field)) {
-                            if(!field.isAnnotationPresent(Ignore.class)){
+                            if (!field.isAnnotationPresent(Ignore.class)) {
                                 getTableNameSet(ReflectUtil.getColType(field.getGenericType()), tableNameSet);
                             }
                         }

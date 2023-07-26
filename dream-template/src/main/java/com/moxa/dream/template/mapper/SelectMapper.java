@@ -2,7 +2,7 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.util.AntlrUtil;
-import com.moxa.dream.system.antlr.invoker.AllInvoker;
+import com.moxa.dream.system.antlr.invoker.StarInvoker;
 import com.moxa.dream.system.antlr.invoker.TableInvoker;
 import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
@@ -32,7 +32,7 @@ public abstract class SelectMapper extends ValidateMapper {
     }
 
     protected String getSelectColumn(Class<?> type) {
-        return AntlrUtil.invokerSQL(AllInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+        return AntlrUtil.invokerSQL(StarInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
     }
 
     protected abstract String getOther(Configuration configuration, TableInfo tableInfo, Class<?> type, Object arg);

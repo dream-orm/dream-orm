@@ -6,7 +6,7 @@ import com.moxa.dream.flex.config.SqlInfo;
 import com.moxa.dream.flex.test.table.table.UserTableDef;
 import org.junit.jupiter.api.Test;
 
-import static com.moxa.dream.flex.def.FunctionDef.select;
+import static com.moxa.dream.flex.def.FunctionDef.*;
 import static com.moxa.dream.flex.def.TableDef.table;
 import static com.moxa.dream.flex.test.table.table.BlogTableDef.blog;
 import static com.moxa.dream.flex.test.table.table.UserTableDef.user;
@@ -128,6 +128,32 @@ public class SimpleQueryTest {
                 .from(user)
                 .leftJoin(blog)
                 .on(user.id.eq(blog.user_id))
+                .toSQL(toSQL);
+        System.out.println(muser);
+    }
+    @Test
+    public void test10() {
+        SqlInfo muser = select(user.userView)
+                .from(user)
+                .where(exists(select(blog.user_id).from(blog).where(blog.user_id.eq(1))))
+                .toSQL(toSQL);
+        System.out.println(muser);
+    }
+
+    @Test
+    public void test11() {
+        SqlInfo muser = select(user.userView)
+                .from(user)
+                .where(notExists(select(blog.user_id).from(blog).where(blog.user_id.eq(1))))
+                .toSQL(toSQL);
+        System.out.println(muser);
+    }
+
+    @Test
+    public void test12() {
+        SqlInfo muser = select(user.userView)
+                .from(user)
+                .where(user.id.notLike(1).and(user.id.notLikeLeft(2)))
                 .toSQL(toSQL);
         System.out.println(muser);
     }

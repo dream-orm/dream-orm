@@ -11,7 +11,7 @@ import java.util.Collection;
 public class BlogActionProvider implements ActionProvider {
     @Override
     public String sql() {
-        return "select @all() from blog where user_id=@?(userId)";
+        return "select @*() from blog where user_id=@?(userId)";
     }
 
     @Override

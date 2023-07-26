@@ -187,15 +187,8 @@ public class ColumnDef {
         return new ConditionDef(conditionStatement);
     }
 
-    private ConditionDef not(ConditionDef conditionDef) {
-        ConditionStatement statement = conditionDef.getStatement();
-        Statement left = statement.getLeft();
-        statement.setLeft(null);
-        ConditionStatement conditionStatement = new ConditionStatement();
-        conditionStatement.setLeft(left);
-        conditionStatement.setOper(new OperStatement.NOTStatement());
-        conditionStatement.setRight(statement);
-        return new ConditionDef(conditionStatement);
+    protected ConditionDef not(ConditionDef conditionDef) {
+        return FunctionDef.not(conditionDef);
     }
 
     public ColumnDef add(ColumnDef columnDef) {

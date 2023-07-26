@@ -8,6 +8,6 @@ public class BlogMapperProvider {
         return new BlogActionProvider();
     }
 //    public String selectBlogByUserId2() {
-//        return "select @all() from blog where user_id=@?(userId)";
+//        return "select @*() from blog where user_id=@?(userId)";
 //    }
 }

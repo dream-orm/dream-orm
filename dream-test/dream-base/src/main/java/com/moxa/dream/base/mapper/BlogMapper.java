@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper(BlogMapperProvider.class)
 public interface BlogMapper {
-    @Sql("select @all() from blog where user_id=@?(userId)")
+    @Sql("select @*() from blog where user_id=@?(userId)")
     List<Blog> selectBlogByUserId(Integer userId);
 
     List<Blog> selectBlogByUserId2(Integer userId);
@@ -19,6 +19,6 @@ public interface BlogMapper {
         return selectBlogByUserId(userView.getId());
     }
 
-    @Sql("select @all() from blog where user_id=@?(userId) limit 1 for update")
+    @Sql("select @*() from blog where user_id=@?(userId) limit 1 for update")
     Blog selectForUpdate(Integer userId);
 }

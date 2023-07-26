@@ -691,4 +691,26 @@ public class FunctionDef {
         functionStatement.setParamsStatement(listColumnStatement);
         return new ColumnDef(functionStatement);
     }
+
+    public static ConditionDef exists(Query query) {
+        ConditionStatement conditionStatement = new ConditionStatement();
+        conditionStatement.setOper(new OperStatement.EXISTSStatement());
+        conditionStatement.setRight(new BraceStatement(query.getStatement()));
+        return new ConditionDef(conditionStatement);
+    }
+
+    public static ConditionDef notExists(Query query) {
+        return not(exists(query));
+    }
+
+    protected static ConditionDef not(ConditionDef conditionDef) {
+        ConditionStatement statement = conditionDef.getStatement();
+        Statement left = statement.getLeft();
+        statement.setLeft(null);
+        ConditionStatement conditionStatement = new ConditionStatement();
+        conditionStatement.setLeft(left);
+        conditionStatement.setOper(new OperStatement.NOTStatement());
+        conditionStatement.setRight(statement);
+        return new ConditionDef(conditionStatement);
+    }
 }

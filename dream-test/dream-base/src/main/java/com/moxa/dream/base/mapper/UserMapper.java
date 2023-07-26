@@ -34,7 +34,7 @@ public interface UserMapper {
             "\tLIMIT 1")
     Map findByName(String name);
 
-    @Sql("select @all(),'hello' name from user")
+    @Sql("select @*(),'hello' name from user")
     List<User> findAll();
 
     @Sql("select id, name, age,email from user")
@@ -44,7 +44,7 @@ public interface UserMapper {
     @PageQuery("page")
     List<User> findByPage(@Param("page") Page page);
 
-    @Sql("select @all() from @table(user,blog)")
+    @Sql("select @*() from @table(user,blog)")
     @PageQuery("page")
     List<UserView3> findByPage2(@Param("page") Page page);
 
@@ -70,16 +70,16 @@ public interface UserMapper {
     @Sql("insert into user(id,name,age,email)values(@?(item.id),@?(item.name),@?(item.age),@?(item.email))")
     Integer insert(@Param("item") User user);
 
-    @Sql("select @all() from user")
+    @Sql("select @*() from user")
     List<UserView> selectAll();
 
-    @Sql("select @all() from user")
+    @Sql("select @*() from user")
     List<UserView2> selectAll2();
 
-    @Sql("select @all() from @table(user,blog)")
+    @Sql("select @*() from @table(user,blog)")
     List<User> selectAll3();
 
-    @Sql("select @all() from user")
+    @Sql("select @*() from user")
     List<UserView4> findAll4();
 
     @Sql("truncate table user")

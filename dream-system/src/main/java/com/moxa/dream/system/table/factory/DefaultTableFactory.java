@@ -58,7 +58,7 @@ public class DefaultTableFactory implements TableFactory {
 
     protected String getTable(Class<?> tableClass) {
         Table tableAnnotation = tableClass.getDeclaredAnnotation(Table.class);
-        if (tableAnnotation == null || !tableAnnotation.mapping()) {
+        if (tableAnnotation == null) {
             return null;
         }
         String table = tableAnnotation.value();

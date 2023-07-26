@@ -17,8 +17,7 @@ public class ListColumnStatement extends Statement {
     public void add(Statement column) {
         if (column != null) {
             columnList = Arrays.copyOf(columnList, columnList.length + 1);
-            columnList[columnList.length - 1] = column;
-            column.parentStatement = this;
+            columnList[columnList.length - 1] = wrapParent(column);
         }
     }
 

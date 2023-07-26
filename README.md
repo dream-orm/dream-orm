@@ -2,8 +2,7 @@
 
 ## **简介**
 
-DREAM（ https://github.com/moxa-lzf/dream
-）是一个基于翻译的以技术为中心，辐射业务持久层框架，它非常轻量，不依赖第三方jar包、同时拥有极高的性能与灵活性，可以写一种MySQL语法在非MySQL数据库下执行，其内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成这种形式。
+DREAM（ https://github.com/moxa-lzf/dream ） 是一个基于翻译的以技术为中心，辐射业务持久层框架，它非常轻量，不依赖第三方jar包、同时拥有极高的性能与灵活性，可以写一种MySQL语法在非MySQL数据库下执行，其内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成这种形式。
 
 总而言之，DREAM不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装。
 
@@ -243,8 +242,8 @@ select u2.id,u2.name from (select id,name from user) u2 left join blog on u2.id=
 改写成流式
 
 ```java
-UserTableDef user2 = new UserTableDef("u2");
-select(user2.id, user2.name)
+UserTableDef u2 = new UserTableDef("u2");
+select(u2.id, u2.name)
     .from(table(select(user.id, user.name).from(user)).as("u2"))
     .leftJoin(blog)
     .on(user2.id.eq(blog.user_id))
@@ -259,7 +258,7 @@ select(user2.id, user2.name)
 ```java
 @Mapper(BlogMapperProvider.class)
 public interface BlogMapper {
-    @Sql("select @all() from blog where user_id=@?(userId)")
+    @Sql("select @*() from blog where user_id=@?(userId)")
     List<Blog> selectBlogByUserId(@Param("userId")Integer userId);
 
     List<Blog> selectBlogByUserId2(Integer userId);
@@ -307,7 +306,7 @@ public @interface Sql {
 ```java
 public class BlogMapperProvider {
     public String selectBlogByUserId2() {
-        return "select @all() from blog where user_id=@?(userId)";
+        return "select @*() from blog where user_id=@?(userId)";
     }
 }
 ```
@@ -546,7 +545,7 @@ PARAM:[hli, , 1]
 
 注：空字符串为空
 
-### **all**
+### *****
 
 #### **用法**
 
@@ -560,7 +559,7 @@ PARAM:[hli, , 1]
 
 @Mapper
 public interface UserMapper {
-    @Sql("select @all(),'hello' name from user")
+    @Sql("select @*(),'hello' name from user")
     List<User> findAll();
 }
 ```
@@ -609,7 +608,7 @@ User{id=5, name='hello', age=24, email='test5@baomidou.com'}
 
 ```java
 public interface UserMapper {
-    @Sql("select @all() from @table(user,blog)")
+    @Sql("select @*() from @table(user,blog)")
     List<User> selectAll3();
 }
 ```
@@ -645,15 +644,12 @@ public void test8(){
 @Target(ElementType.TYPE)
 public @interface Table {
     String value();
-
-    boolean mapping() default true;
 }
 ```
 
-| 注解属性    | 描述             |
-|---------|----------------|
-| value   | 指定绑定的数据表       |
-| mapping | 是否解析当前类与数据库表绑定 |
+| 注解属性 | 描述             |
+| -------- | ---------------- |
+| value    | 指定绑定的数据表 |
 
 #### **举例**
 
@@ -809,7 +805,7 @@ public @interface View {
 
 ```java
 
-@View("user")
+@View(User.class)
 public class UserView2 {
     private Integer id;
     private String name;
@@ -817,7 +813,7 @@ public class UserView2 {
 ```
 
 ```java
-  @Sql("select @all() from user")
+  @Sql("select @*() from user")
     List<UserView2> selectAll2();
 ```
 
@@ -1318,7 +1314,7 @@ public interface LogicHandler {
     }
 
     default String getDeletedValue() {
-        return "";
+        return "1";
     }
 
     String getLogicColumn();
@@ -1433,7 +1429,7 @@ public class SnowFlakeSequence extends AbstractSequence {
 
 1. 当SQL长度过长，达到几千行以上，翻译报java.lang.StackOverflowError，调大Xss参数
 
-#  联系方式
+# 联系方式
 
 微信群：<img src=".\wx.jpg" style="zoom:25%;" />QQ群：<img src=".\qq.jpg" style="zoom:25%;" />
 
