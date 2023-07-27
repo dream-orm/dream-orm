@@ -6,6 +6,7 @@ import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.mapper.MapperInvoke;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 public class ShareMapperInvoke implements MapperInvoke {
@@ -20,7 +21,16 @@ public class ShareMapperInvoke implements MapperInvoke {
         String dataSourceName = null;
         Share share = methodInfo.get(Share.class);
         if (share == null) {
-            share = type.getAnnotation(Share.class);
+            Method method = methodInfo.getMethod();
+            if (method != null) {
+                share = method.getAnnotation(Share.class);
+            }
+            if (share == null) {
+                share = type.getAnnotation(Share.class);
+            }
+            if (share != null) {
+                methodInfo.set(Share.class, share);
+            }
         }
         if (share != null) {
             dataSourceName = share.value();

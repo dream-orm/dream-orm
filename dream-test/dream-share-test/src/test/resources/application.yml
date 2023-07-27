@@ -4,11 +4,11 @@ dream:
       driverClassName: com.mysql.jdbc.Driver
       jdbcUrl: jdbc:mysql://192.168.0.3/d-open
       username: root
-      password: root
+      password: BMW#Halu@1234%
       keepaliveTime: 1000
       isReadOnly: false
     slave:
       driverClassName: com.mysql.jdbc.Driver
       jdbcUrl: jdbc:mysql://192.168.0.3/d-open-6c
       username: root
-      password: root
+      password: BMW#Halu@1234%
