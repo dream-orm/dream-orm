@@ -4,9 +4,9 @@ import com.moxa.dream.boot.autoconfigure.DreamProperties;
 import com.moxa.dream.mate.share.datasource.ShareDataSource;
 import com.moxa.dream.mate.share.session.ShareMapperInvokerFactory;
 import com.moxa.dream.system.mapper.MapperInvokeFactory;
-import com.moxa.dream.util.common.ObjectWrapper;
 import com.moxa.dream.util.exception.DreamRunTimeException;
 import com.moxa.dream.util.reflect.ReflectUtil;
+import org.springframework.cglib.beans.BeanMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportAware;
 import org.springframework.core.type.AnnotationMetadata;
@@ -27,9 +27,10 @@ public class DataSourceConfiguration implements ImportAware {
         }
         Map<String, DataSource> dataSourceMap = new HashMap<>(4);
         datasource.forEach((k, v) -> {
-            ObjectWrapper dataSourceWrapper = ObjectWrapper.wrapper(ReflectUtil.create(dataSourceType), false);
-            v.forEach((key, value) -> dataSourceWrapper.set(key, value));
-            dataSourceMap.put(k, (DataSource) dataSourceWrapper.getObject());
+            DataSource dataSource = ReflectUtil.create(dataSourceType);
+            BeanMap beanMap = BeanMap.create(dataSource);
+            beanMap.putAll(v);
+            dataSourceMap.put(k, dataSource);
         });
         return new ShareDataSource(dataSourceMap);
     }

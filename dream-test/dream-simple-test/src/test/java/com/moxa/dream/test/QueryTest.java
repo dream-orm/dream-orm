@@ -47,10 +47,10 @@ public class QueryTest {
 
     @Test
     public void test3() {
-        try{
+        try {
             Statement expr = new QueryExpr(new ExprReader("select 1 from a where exists(select 1)")).expr();
             System.out.println(expr);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         List<User> userList = userMapper.findAll();

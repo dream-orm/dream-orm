@@ -1,10 +1,9 @@
 package com.moxa.dream.template.session;
 
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.system.core.session.SessionFactory;
 
 public interface SessionHolder {
-    Session getSession(SessionFactory sessionFactory);
+    Session getSession();
 
     boolean isSessionTransactional(Session session);
 

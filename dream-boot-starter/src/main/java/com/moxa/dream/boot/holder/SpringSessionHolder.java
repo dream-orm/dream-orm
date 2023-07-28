@@ -9,9 +9,14 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 public class SpringSessionHolder implements SessionHolder {
+    private SessionFactory sessionFactory;
+
+    public SpringSessionHolder(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
-    public Session getSession(SessionFactory sessionFactory) {
+    public Session getSession() {
         SessionHolderSupport holder = (SessionHolderSupport) TransactionSynchronizationManager.getResource(this);
         Session session = sessionHolder(holder);
         if (session != null) {

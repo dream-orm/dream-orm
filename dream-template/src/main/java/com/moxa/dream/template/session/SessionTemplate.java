@@ -19,7 +19,6 @@ public class SessionTemplate implements Session {
     private final Session sessionProxy;
     private Configuration configuration;
     private MapperFactory mapperFactory;
-    private SessionFactory sessionFactory;
     private SessionHolder sessionHolder;
     private MapperInvokeFactory mapperInvokeFactory;
 
@@ -30,7 +29,6 @@ public class SessionTemplate implements Session {
     public SessionTemplate(SessionHolder sessionHolder,
                            SessionFactory sessionFactory,
                            MapperInvokeFactory mapperInvokeFactory) {
-        this.sessionFactory = sessionFactory;
         this.configuration = sessionFactory.getConfiguration();
         this.mapperFactory = configuration.getMapperFactory();
         this.sessionHolder = sessionHolder;
@@ -79,7 +77,7 @@ public class SessionTemplate implements Session {
     private class SessionInterceptor implements InvocationHandler {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            Session session = sessionHolder.getSession(SessionTemplate.this.sessionFactory);
+            Session session = sessionHolder.getSession();
             try {
                 Object result = method.invoke(session, args);
                 if (!sessionHolder.isSessionTransactional(session)) {

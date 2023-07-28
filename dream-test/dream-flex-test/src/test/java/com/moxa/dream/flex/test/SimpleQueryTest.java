@@ -131,6 +131,7 @@ public class SimpleQueryTest {
                 .toSQL(toSQL);
         System.out.println(muser);
     }
+
     @Test
     public void test10() {
         SqlInfo muser = select(user.userView)

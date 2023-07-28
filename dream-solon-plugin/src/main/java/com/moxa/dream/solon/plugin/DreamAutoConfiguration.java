@@ -1,17 +1,17 @@
-package com.moxa.dream.boot.autoconfigure;
+package com.moxa.dream.solon.plugin;
 
 import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.factory.MyFunctionFactory;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.sql.ToMYSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
-import com.moxa.dream.boot.build.DefaultSessionFactoryBuilder;
-import com.moxa.dream.boot.build.SessionFactoryBuilder;
-import com.moxa.dream.boot.factory.SpringDataSourceFactory;
-import com.moxa.dream.boot.factory.SpringTransactionFactory;
-import com.moxa.dream.boot.holder.SpringSessionHolder;
 import com.moxa.dream.flex.mapper.DefaultFlexMapper;
 import com.moxa.dream.flex.mapper.FlexMapper;
+import com.moxa.dream.solon.build.DefaultSessionFactoryBuilder;
+import com.moxa.dream.solon.build.SessionFactoryBuilder;
+import com.moxa.dream.solon.factory.SolonDataSourceFactory;
+import com.moxa.dream.solon.factory.SolonTransactionFactory;
+import com.moxa.dream.solon.holder.SolonSessionHolder;
 import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.CacheFactory;
@@ -47,44 +47,34 @@ import com.moxa.dream.template.session.SessionHolder;
 import com.moxa.dream.template.session.SessionTemplate;
 import com.moxa.dream.util.common.ObjectUtil;
 import com.moxa.dream.util.reflect.ReflectUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
+import org.noear.solon.annotation.Bean;
+import org.noear.solon.annotation.Condition;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-@EnableConfigurationProperties(DreamProperties.class)
-@org.springframework.context.annotation.Configuration
-@ConditionalOnSingleCandidate(DataSource.class)
-@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+@org.noear.solon.annotation.Configuration
+@Condition(onClass = DataSource.class)
 public class DreamAutoConfiguration {
 
+    @org.noear.solon.annotation.Inject("${dream}")
     private DreamProperties dreamProperties;
 
-    public DreamAutoConfiguration(DreamProperties dreamProperties) {
-        this.dreamProperties = dreamProperties;
-    }
-
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = SessionFactoryBuilder.class)
     public SessionFactoryBuilder sessionFactoryBuilder() {
         return new DefaultSessionFactoryBuilder();
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = SessionHolder.class)
     public SessionHolder sessionHolder(SessionFactory sessionFactory) {
-        return new SpringSessionHolder(sessionFactory);
+        return new SolonSessionHolder(sessionFactory);
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = ToSQL.class)
     public ToSQL toSQL() {
         ToSQL toSQL;
         String strToSQL = dreamProperties.getToSQL();
@@ -98,13 +88,19 @@ public class DreamAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = Cache.class)
     public Cache cache() {
         return new MemoryCache(100, 0.25);
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = Interceptor[].class)
+    public Interceptor[] interceptors() {
+        return new Interceptor[0];
+    }
+
+    @Bean
+    @Condition(onMissingBean = PluginFactory.class)
     public PluginFactory pluginFactory(Interceptor... interceptors) {
         PluginFactory pluginFactory = new ProxyPluginFactory();
         String[] strInterceptors = dreamProperties.getInterceptors();
@@ -122,8 +118,14 @@ public class DreamAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public CompileFactory compileFactory(@Autowired(required = false) MyFunctionFactory myFunctionFactory) {
+    @Condition(onMissingBean = MyFunctionFactory.class)
+    public MyFunctionFactory myFunctionFactory() {
+        return function -> null;
+    }
+
+    @Bean
+    @Condition(onMissingBean = CompileFactory.class)
+    public CompileFactory compileFactory(MyFunctionFactory myFunctionFactory) {
         DefaultCompileFactory defaultCompileFactory = new DefaultCompileFactory();
         String strMyFunctionFactory = dreamProperties.getMyFunctionFactory();
         if (!ObjectUtil.isNull(strMyFunctionFactory)) {
@@ -137,7 +139,13 @@ public class DreamAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = Inject[].class)
+    public Inject[] injects() {
+        return new Inject[0];
+    }
+
+    @Bean
+    @Condition(onMissingBean = InjectFactory.class)
     public InjectFactory injectFactory(Inject... injects) {
         InjectFactory injectFactory = new DefaultInjectFactory();
         String[] strInjects = dreamProperties.getInjects();
@@ -155,7 +163,13 @@ public class DreamAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = Invoker[].class)
+    public Invoker[] invokers() {
+        return new Invoker[0];
+    }
+
+    @Bean
+    @Condition(onMissingBean = InvokerFactory.class)
     public InvokerFactory invokerFactory(Invoker... invokers) {
         InvokerFactory invokerFactory = new DefaultInvokerFactory();
         String[] strInvokers = dreamProperties.getInvokers();
@@ -173,7 +187,7 @@ public class DreamAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = DialectFactory.class)
     public DialectFactory dialectFactory(ToSQL toSQL) {
         DefaultDialectFactory defaultDialectFactory = new DefaultDialectFactory();
         defaultDialectFactory.setToSQL(toSQL);
@@ -181,7 +195,7 @@ public class DreamAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = CacheFactory.class)
     public CacheFactory cacheFactory(Cache cache) {
         DefaultCacheFactory defaultCacheFactory = new DefaultCacheFactory();
         String strCache = dreamProperties.getCache();
@@ -194,7 +208,13 @@ public class DreamAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = TypeHandlerWrapper[].class)
+    public TypeHandlerWrapper[] typeHandlerWrappers() {
+        return new TypeHandlerWrapper[0];
+    }
+
+    @Bean
+    @Condition(onMissingBean = TypeHandlerFactory.class)
     public TypeHandlerFactory typeHandlerFactory(TypeHandlerWrapper... typeHandlerWrappers) {
         TypeHandlerFactory typeHandlerFactory = new DefaultTypeHandlerFactory();
         String[] strTypeHandlerWrappers = dreamProperties.getTypeHandlerWrappers();
@@ -212,7 +232,13 @@ public class DreamAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = Listener[].class)
+    public Listener[] listeners() {
+        return new Listener[0];
+    }
+
+    @Bean
+    @Condition(onMissingBean = ListenerFactory.class)
     public ListenerFactory listenerFactory(Listener... listeners) {
         ListenerFactory listenerFactory = new DefaultListenerFactory();
         String[] strListeners = dreamProperties.getListeners();
@@ -230,19 +256,19 @@ public class DreamAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = DataSourceFactory.class)
     public DataSourceFactory dataSourceFactory(DataSource dataSource) {
-        return new SpringDataSourceFactory(dataSource);
+        return new SolonDataSourceFactory(dataSource);
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = TransactionFactory.class)
     public TransactionFactory transactionFactory() {
-        return new SpringTransactionFactory();
+        return new SolonTransactionFactory();
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = SessionFactory.class)
     public SessionFactory sessionFactory(Configuration configuration,
                                          PluginFactory pluginFactory,
                                          InvokerFactory invokerFactory,
@@ -269,13 +295,13 @@ public class DreamAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = MapperInvokeFactory.class)
     public MapperInvokeFactory mapperInvokeFactory() {
         return new DefaultMapperInvokeFactory();
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = SessionTemplate.class)
     public SessionTemplate sessionTemplate(SessionHolder sessionHolder
             , SessionFactory sessionFactory
             , MapperInvokeFactory mapperInvokeFactory) {
@@ -283,20 +309,20 @@ public class DreamAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = Sequence.class)
     public Sequence sequence() {
         return new MySQLSequence();
     }
 
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = TemplateMapper.class)
     public TemplateMapper templateMapper(SessionTemplate sessionTemplate, Sequence sequence) {
         return new DefaultTemplateMapper(sessionTemplate, sequence);
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @Condition(onMissingBean = FlexMapper.class)
     public FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
         return new DefaultFlexMapper(sessionTemplate, toSQL);
     }
