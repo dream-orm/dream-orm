@@ -4,13 +4,6 @@ solon.app:
 
 solon.output.meta: 1
 
-solon.logging.logger:
-  "org.eclipse.jetty.*":
-    level: "WARN"
-  "com.zaxxer.hikari.*":
-    level: "WARN"
-
-
 test.db1:
   schema: solon
   jdbcUrl: jdbc:mysql://192.168.0.3:3306/solon?useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&rewriteBatchedStatements=true
@@ -19,6 +12,7 @@ test.db1:
   password: BMW#Halu@1234%
   url: ${test.db1.jdbcUrl}
 
+# 这是dream自定义动态数据源，在启动类加上@EnableShare才能开启
 dream:
   datasource:
     master:
