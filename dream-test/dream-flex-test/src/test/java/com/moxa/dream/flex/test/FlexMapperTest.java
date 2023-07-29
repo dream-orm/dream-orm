@@ -22,8 +22,9 @@ public class FlexMapperTest {
 
     @Test
     public void test0() {
-        FromDef fromDef = select(user.name).from(user);
+        FromDef fromDef = select(user.columns).from(user);
         Page<User> list = flexMapper.selectPage(fromDef, User.class, new Page(1, 1));
+        System.out.println(list);
 //            helloMapper.selectPage(new Page(1,1));
     }
 

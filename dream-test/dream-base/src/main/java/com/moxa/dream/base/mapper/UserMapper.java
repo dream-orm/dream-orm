@@ -52,8 +52,8 @@ public interface UserMapper {
     @Sql("select id, name, age,email from user where name = @rep(name)")
     User findByName2(String name);
 
-    @Sql("delete from user where id in (@foreach(list))")
-    int delete(List<Integer> idList);
+    @Sql("delete from user where id in (@foreach(list,@?(item.id)))")
+    int delete(@Param("list") List<User> userList);
 
     @Sql("update user set name=null where state = @?(state)")
     void updateCity(String state);
