@@ -4,11 +4,10 @@ import com.moxa.dream.drive.config.DefaultConfig;
 import com.moxa.dream.system.config.Configuration;
 import com.moxa.dream.system.mapper.DefaultMapperFactory;
 import com.moxa.dream.system.table.factory.DefaultTableFactory;
-import org.noear.solon.core.bean.InitializingBean;
 
 import java.util.List;
 
-public class ConfigurationBean{
+public class ConfigurationBean {
     private DefaultConfig defaultConfig;
 
     public ConfigurationBean(List<String> tablePackages, List<String> mapperPackages) {

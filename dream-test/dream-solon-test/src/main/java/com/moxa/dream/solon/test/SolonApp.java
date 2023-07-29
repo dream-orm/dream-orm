@@ -16,16 +16,16 @@ public class SolonApp {
     public static void main(String[] args) {
         Solon.start(SolonApp.class, args);
         UserMapper userMapper = Solon.context().getBean(UserMapper.class);
-        assert userMapper!=null;
+        assert userMapper != null;
         Map byName = userMapper.findByName("");
         userMapper.findByName("");
         BlogMapper blogMapper = Solon.context().getBean(BlogMapper.class);
-        assert blogMapper!=null;
+        assert blogMapper != null;
         List<Blog> blogs = blogMapper.selectBlogByUserId(1);
         TemplateMapper templateMapper = Solon.context().getBean(TemplateMapper.class);
-        assert templateMapper!=null;
+        assert templateMapper != null;
         FlexMapper flexMapper = Solon.context().getBean(FlexMapper.class);
-        assert flexMapper!=null;
+        assert flexMapper != null;
         List<User> userList = templateMapper.selectList(User.class, null);
         System.out.println("");
     }

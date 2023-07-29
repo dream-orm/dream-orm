@@ -24,17 +24,13 @@ public class DataSourceConfiguration {
     public DataSource dataSource() {
         EnableShare enableShare = Solon.app().source().getAnnotation(EnableShare.class);
         Class<? extends DataSource> dataSourceType = enableShare.value();
-        Map<String, Map<String, Object>> datasource = dreamProperties.getDatasource();
+        Map<String, Properties> datasource = dreamProperties.getDatasource();
         if (datasource == null || datasource.isEmpty()) {
             throw new DreamRunTimeException("数据源未配置");
         }
         Map<String, DataSource> dataSourceMap = new HashMap<>(4);
         datasource.forEach((k, v) -> {
-            Properties properties = new Properties();
-            v.forEach((key, value) -> {
-                properties.put(key, value);
-            });
-            Object value = ClassWrap.get(dataSourceType).newBy(properties);
+            Object value = ClassWrap.get(dataSourceType).newBy(v);
             dataSourceMap.put(k, (DataSource) value);
         });
         return new ShareDataSource(dataSourceMap);

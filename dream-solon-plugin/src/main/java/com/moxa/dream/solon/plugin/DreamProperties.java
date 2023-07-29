@@ -1,6 +1,7 @@
 package com.moxa.dream.solon.plugin;
 
 import java.util.Map;
+import java.util.Properties;
 
 public class DreamProperties {
 
@@ -19,7 +20,7 @@ public class DreamProperties {
     private String[] typeHandlerWrappers;
 
     private String[] listeners;
-    private Map<String, Map<String, Object>> datasource;
+    private Map<String, Properties> datasource;
 
     public String getToSQL() {
         return toSQL;
@@ -85,11 +86,11 @@ public class DreamProperties {
         this.listeners = listeners;
     }
 
-    public Map<String, Map<String, Object>> getDatasource() {
+    public Map<String, Properties> getDatasource() {
         return datasource;
     }
 
-    public void setDatasource(Map<String, Map<String, Object>> datasource) {
+    public void setDatasource(Map<String, Properties> datasource) {
         this.datasource = datasource;
     }
 }
