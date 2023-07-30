@@ -396,9 +396,9 @@ public @interface Sort {
 
 ## 链式操作
 
-对与工作经验多年的人来说，写SQL语句如家常便饭，SQL语法才是最强大的，但对与一些新手来说，写SQL语句很容易出错，而且即便错啦，也不知道哪里出错，因此提供好的提示，并实时知道哪里出错是十分必要的。
+在 dream中，内置了 `QueryDef` 和 `UpdateDef` 用于对数据进行链式查询操作和链式修改操作。
 
-硬解码SQL
+**查询SQL**
 
 ```sql
 select u2.id, u2.name
@@ -406,7 +406,7 @@ from (select id, name from user) u2
          left join blog on u2.id = blog.user_id
 ```
 
-改写成流式
+**链式**
 
 ```java
 UserTableDef u2=new UserTableDef("u2");
@@ -416,7 +416,17 @@ UserTableDef u2=new UserTableDef("u2");
         .on(user2.id.eq(blog.user_id))
 ```
 
-这里仅仅展示了其中的一个方面，流式已经基本上全面支持SQL写法，而且写法规范基本上和SQL语法保持一致
+**修改SQL**
+
+```sql
+UPDATE `user`  SET `user`.`age`=`user`.`age`+1  WHERE `user`.`id`=1
+```
+
+**链式**
+
+```
+update(user).set(user.age,user.age.add(1)).where(user.id.eq(1))
+```
 
 ## 自定义Mapper操作
 

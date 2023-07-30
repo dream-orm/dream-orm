@@ -32,4 +32,11 @@ public class UpdateTest {
         SqlInfo sqlInfo = printSqlTest.toSQL(update);
         System.out.println(sqlInfo);
     }
+
+    @Test
+    public void test3() {
+        Update update = update(user).set(user.age,user.age.add(1)).where(user.id.eq(1));
+        SqlInfo sqlInfo = printSqlTest.toSQL(update);
+        System.out.println(sqlInfo);
+    }
 }
