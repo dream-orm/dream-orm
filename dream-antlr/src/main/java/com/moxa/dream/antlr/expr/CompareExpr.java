@@ -9,6 +9,9 @@ import com.moxa.dream.antlr.smt.ConditionStatement;
 import com.moxa.dream.antlr.smt.OperStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 条件语法解析器
+ */
 public class CompareExpr extends TreeExpr {
     public static final ExprType[] COMPARE = {ExprType.LT, ExprType.GT, ExprType.LEQ, ExprType.NEQ, ExprType.EQ, ExprType.GEQ, ExprType.IS, ExprType.IN, ExprType.NOT, ExprType.EXISTS, ExprType.LIKE, ExprType.BETWEEN};
     public static final ExprType[] CONDITION = {ExprType.AND, ExprType.OR};

@@ -8,5 +8,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Share {
+    /**
+     * 选择使用的多数据源
+     *
+     * @return 数据源名称
+     */
     String value();
 }

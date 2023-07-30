@@ -12,6 +12,9 @@ import com.moxa.dream.antlr.util.AntlrUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 方言公共类
+ */
 public abstract class ToPubSQL extends ToNativeSQL {
 
     @Override

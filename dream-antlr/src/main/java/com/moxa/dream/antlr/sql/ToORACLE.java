@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * oracle方言
+ */
 public class ToORACLE extends ToPubSQL {
     private Map<String, String> replaceMap = new HashMap<>();
 

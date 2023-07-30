@@ -9,6 +9,9 @@ import com.moxa.dream.antlr.smt.*;
 
 import java.util.List;
 
+/**
+ * mssql方言
+ */
 public class ToMSSQL extends ToPubSQL {
 
     @Override

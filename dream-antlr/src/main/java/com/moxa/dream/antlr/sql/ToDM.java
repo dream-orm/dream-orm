@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 达梦方言
+ */
 public class ToDM extends ToPubSQL {
     private Map<String, String> replaceMap = new HashMap<>();
 

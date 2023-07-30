@@ -1,5 +1,6 @@
 package com.moxa.dream.share.service;
 
+import com.moxa.dream.mate.share.holder.DataSourceHolder;
 import com.moxa.dream.share.mapper.UserMapper;
 import com.moxa.dream.share.table.User;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -30,5 +31,10 @@ public class UserService {
         if (!userList1.isEmpty()) {
             throw new DreamRunTimeException("error2");
         }
+    }
+
+    public void share2() {
+        List<User> userList = DataSourceHolder.use("slave", () -> userMapper.findByName("321"));
+        System.out.println();
     }
 }

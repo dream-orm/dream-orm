@@ -8,6 +8,9 @@ import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.SelectStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 查询语法解析器
+ */
 public class SelectExpr extends HelperExpr {
     private final SelectStatement selectStatement = new SelectStatement();
 

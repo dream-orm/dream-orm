@@ -19,4 +19,9 @@ public class ShareTest {
         userService.share();
     }
 
+    @Test
+    public void test1() {
+        userService.share2();
+    }
+
 }

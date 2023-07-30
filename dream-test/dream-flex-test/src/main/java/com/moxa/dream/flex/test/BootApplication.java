@@ -49,7 +49,7 @@ public class BootApplication {
             }
 
             @Override
-            public String getPermission(MethodInfo methodInfo, TableInfo tableInfo, String alias) {
+            public String getPermission(String alias) {
                 return alias + ".dept_id=1";
             }
         })};

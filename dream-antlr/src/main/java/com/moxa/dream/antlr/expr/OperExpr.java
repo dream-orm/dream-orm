@@ -8,6 +8,9 @@ import com.moxa.dream.antlr.smt.BraceStatement;
 import com.moxa.dream.antlr.smt.OperStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 运算语法解析器
+ */
 public class OperExpr extends TreeExpr {
     public static final ExprType[] OPER = {ExprType.ADD, ExprType.SUB, ExprType.STAR, ExprType.DIVIDE, ExprType.MOD, ExprType.LLM, ExprType.RRM, ExprType.BITAND, ExprType.BITOR, ExprType.BITXOR};
     private CompareExpr compareExpr;

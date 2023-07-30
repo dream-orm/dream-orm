@@ -8,6 +8,9 @@ import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 
+/**
+ * 集合语法解析器
+ */
 public class ListColumnExpr extends HelperExpr {
     private final ExprType cut;
     private final ListColumnStatement listColumnStatement = new ListColumnStatement();

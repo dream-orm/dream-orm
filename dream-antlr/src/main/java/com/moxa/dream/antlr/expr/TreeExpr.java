@@ -5,6 +5,9 @@ import com.moxa.dream.antlr.smt.ConditionStatement;
 import com.moxa.dream.antlr.smt.OperStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 抽象树构建二叉树
+ */
 public abstract class TreeExpr extends HelperExpr {
     protected ConditionStatement cur = new ConditionStatement();
     protected ConditionStatement top = cur;

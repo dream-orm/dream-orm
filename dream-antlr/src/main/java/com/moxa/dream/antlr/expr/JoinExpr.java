@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.JoinStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 表连接语法解析器
+ */
 public class JoinExpr extends SqlExpr {
     private JoinStatement joinStatement;
     private ExprType[] ON = new ExprType[]{ExprType.ON};

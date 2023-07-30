@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.DropTableStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 删除表语法解析器
+ */
 public class DropTableExpr extends HelperExpr {
 
     private final DropTableStatement dropTableStatement = new DropTableStatement();

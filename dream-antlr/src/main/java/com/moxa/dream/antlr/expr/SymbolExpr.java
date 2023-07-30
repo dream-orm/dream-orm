@@ -9,6 +9,9 @@ import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 
+/**
+ * 字段语法解析器
+ */
 public class SymbolExpr extends SqlExpr {
     Statement statement = null;
 

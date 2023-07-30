@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.BraceStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 括号语法解析器
+ */
 public class BraceExpr extends HelperExpr {
     private final BraceStatement brace = new BraceStatement();
 

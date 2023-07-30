@@ -6,6 +6,9 @@ import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 
+/**
+ * 查询语法解析器
+ */
 public class QueryExpr extends SqlExpr {
     private final QueryStatement queryStatement = new QueryStatement();
 

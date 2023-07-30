@@ -8,6 +8,9 @@ import com.moxa.dream.antlr.smt.AliasStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 
+/**
+ * 别名语法解析器
+ */
 public class AliasColumnExpr extends HelperExpr {
     AliasStatement aliasStatement = new AliasStatement();
 

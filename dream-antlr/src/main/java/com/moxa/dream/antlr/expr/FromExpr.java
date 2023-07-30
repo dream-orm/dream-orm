@@ -8,6 +8,9 @@ import com.moxa.dream.antlr.smt.FromStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * from语法解析器
+ */
 public class FromExpr extends SqlExpr {
     private final FromStatement fromStatement = new FromStatement();
 

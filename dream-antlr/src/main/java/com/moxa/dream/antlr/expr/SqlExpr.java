@@ -11,6 +11,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * 翻译顶级抽象语法解析类
+ */
 public abstract class SqlExpr {
 
     protected Set<ExprType> acceptSet = new HashSet<>();
@@ -21,12 +24,24 @@ public abstract class SqlExpr {
         this.exprReader = exprReader;
     }
 
+    /**
+     * 读取下一个词的具体信息
+     *
+     * @return
+     * @throws AntlrException
+     */
     public ExprInfo push() throws AntlrException {
         ExprInfo exprInfo = exprReader.push();
         exprReader.push(exprInfo);
         return exprInfo;
     }
 
+    /**
+     * 根据当前词，选择对应的语法解析器
+     *
+     * @return
+     * @throws AntlrException
+     */
     public Statement expr() throws AntlrException {
         ExprInfo exprInfo = exprReader.getLastInfo();
         if (exprInfo == null) {

@@ -34,9 +34,4 @@ public abstract class AbstractPluginFactory implements PluginFactory {
 
 
     protected abstract Object plugin(Object origin, Object target, Interceptor interceptor);
-
-    @Override
-    public <T extends Interceptor> T getInterceptor(Class<T> interceptor) {
-        return (T) interceptorMap.get(interceptor);
-    }
 }

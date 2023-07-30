@@ -1,5 +1,7 @@
 package com.moxa.dream.mate.share.holder;
 
+import java.util.function.Supplier;
+
 public final class DataSourceHolder {
 
     private static final ThreadLocal<String> LOOKUP_KEY_HOLDER = new ThreadLocal<>();
@@ -19,5 +21,14 @@ public final class DataSourceHolder {
 
     public static void remove() {
         LOOKUP_KEY_HOLDER.remove();
+    }
+
+    public static <T> T use(String dataSourceName, Supplier<T> supplier) {
+        try {
+            set(dataSourceName);
+            return supplier.get();
+        } finally {
+            remove();
+        }
     }
 }

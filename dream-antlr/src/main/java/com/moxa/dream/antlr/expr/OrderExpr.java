@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.OrderStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 排序语法解析器
+ */
 public class OrderExpr extends SqlExpr {
     private final OrderStatement orderStatement = new OrderStatement();
 

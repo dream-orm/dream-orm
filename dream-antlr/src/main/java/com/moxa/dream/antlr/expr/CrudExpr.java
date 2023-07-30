@@ -6,6 +6,9 @@ import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 增删改查语法解析器
+ */
 public class CrudExpr extends SqlExpr {
     private Statement statement;
 

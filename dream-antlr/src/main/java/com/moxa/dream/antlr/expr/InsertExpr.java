@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.InsertStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 插入语法解析器
+ */
 public class InsertExpr extends HelperExpr {
     private final InsertStatement insertStatement = new InsertStatement();
 

@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.smt.*;
 
 import java.util.List;
 
+/**
+ * SQL原始字符串
+ */
 public class ToNativeSQL extends ToSQL {
     @Override
     public String getName() {

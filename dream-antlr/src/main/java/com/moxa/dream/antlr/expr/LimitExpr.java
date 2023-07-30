@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.LimitStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 分页语法解析器
+ */
 public class LimitExpr extends HelperExpr {
     private final LimitStatement limitStatement = new LimitStatement();
 

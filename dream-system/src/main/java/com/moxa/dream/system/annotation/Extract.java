@@ -8,10 +8,23 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * 注入java字段值后的操作
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Extract {
+    /**
+     * 操作的Extractor接口
+     *
+     * @return
+     */
     Class<? extends Extractor> value();
 
+    /**
+     * 插入的参数
+     *
+     * @return
+     */
     String[] args() default {};
 }

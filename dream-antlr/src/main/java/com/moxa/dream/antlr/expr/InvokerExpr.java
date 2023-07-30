@@ -8,6 +8,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.InvokerStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * @函数语法解析器
+ */
 public class InvokerExpr extends SqlExpr {
 
     private final InvokerStatement invokerStatement = new InvokerStatement();

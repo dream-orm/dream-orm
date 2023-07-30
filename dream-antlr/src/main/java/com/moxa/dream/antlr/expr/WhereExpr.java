@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.WhereStatement;
 
+/**
+ * 条件语法解析器
+ */
 public class WhereExpr extends SqlExpr {
     private final WhereStatement whereStatement = new WhereStatement();
 

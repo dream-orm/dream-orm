@@ -8,6 +8,9 @@ import com.moxa.dream.antlr.smt.ForUpdateNoWaitStatement;
 import com.moxa.dream.antlr.smt.ForUpdateStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * for update语法解析器
+ */
 public class ForUpdateExpr extends SqlExpr {
     ForUpdateStatement forUpdateStatement = new ForUpdateStatement();
 

@@ -6,6 +6,9 @@ import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 复杂SQL翻译抽象树的核心，代码虽短，但是心脏
+ */
 public abstract class HelperExpr extends SqlExpr {
     protected Helper helper;
     protected SqlExpr helpExpr;

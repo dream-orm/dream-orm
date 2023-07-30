@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.HavingStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 分组条件语法解析器
+ */
 public class HavingExpr extends SqlExpr {
     private final HavingStatement havingStatement = new HavingStatement();
 

@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.TruncateTableStatement;
 
+/**
+ * 清空表语法解析器
+ */
 public class TruncateTableExpr extends HelperExpr {
 
     private final TruncateTableStatement truncateTableStatement = new TruncateTableStatement();

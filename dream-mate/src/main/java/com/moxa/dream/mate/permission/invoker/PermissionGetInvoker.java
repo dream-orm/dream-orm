@@ -52,6 +52,6 @@ public class PermissionGetInvoker extends AbstractInvoker {
         String table = ((SymbolStatement.LetterStatement) columnList[0]).getValue();
         String alias = ((SymbolStatement.LetterStatement) columnList[1]).getValue();
         TableInfo tableInfo = tableFactory.getTableInfo(table);
-        return permissionHandler.getPermission(methodInfo, tableInfo, alias);
+        return permissionHandler.getPermission(alias);
     }
 }

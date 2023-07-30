@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * mysql方言
+ */
 public class ToMYSQL extends ToPubSQL {
     private Map<String, String> replaceMap = new HashMap<>();
 

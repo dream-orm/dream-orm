@@ -4,6 +4,9 @@ import com.moxa.dream.antlr.exception.AntlrException;
 
 import java.lang.reflect.Field;
 
+/**
+ * SQL语句对应的抽象树顶级类
+ */
 public abstract class Statement {
 
     protected Statement parentStatement;

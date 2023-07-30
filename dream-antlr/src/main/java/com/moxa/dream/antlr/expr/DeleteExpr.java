@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.DeleteStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 删除语法解析器
+ */
 public class DeleteExpr extends HelperExpr {
     private final DeleteStatement deleteStatement = new DeleteStatement();
 

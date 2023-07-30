@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.UpdateStatement;
 
+/**
+ * 更新语法解析器
+ */
 public class UpdateExpr extends HelperExpr {
     private final UpdateStatement updateStatement = new UpdateStatement();
 

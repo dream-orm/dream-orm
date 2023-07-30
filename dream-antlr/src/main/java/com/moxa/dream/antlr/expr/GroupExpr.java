@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.GroupStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 分组语法解析器
+ */
 public class GroupExpr extends SqlExpr {
     private final GroupStatement groupStatement = new GroupStatement();
 

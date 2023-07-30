@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+/**
+ * 方言顶级类
+ */
 public abstract class ToSQL {
 
     public abstract String getName();

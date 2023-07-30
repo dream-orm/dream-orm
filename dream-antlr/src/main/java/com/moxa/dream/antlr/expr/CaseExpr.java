@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.CaseStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * case语句语法解析器
+ */
 public class CaseExpr extends SqlExpr {
     private final CaseStatement caseStatement = new CaseStatement();
 

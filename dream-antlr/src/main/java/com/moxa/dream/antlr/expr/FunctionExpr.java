@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.*;
 
+/**
+ * 函数语法解析器
+ */
 public class FunctionExpr extends SqlExpr {
 
     private Statement functionStatement;

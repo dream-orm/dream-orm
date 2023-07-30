@@ -16,7 +16,6 @@ import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.moxa.dream.system.cache.Cache;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.cache.DefaultCacheFactory;
-import com.moxa.dream.system.cache.MemoryCache;
 import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.compile.DefaultCompileFactory;
 import com.moxa.dream.system.config.Configuration;
@@ -59,6 +58,9 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * Configuration对象配置类
+ */
 @EnableConfigurationProperties(DreamProperties.class)
 @org.springframework.context.annotation.Configuration
 @ConditionalOnSingleCandidate(DataSource.class)
@@ -71,18 +73,34 @@ public class DreamAutoConfiguration {
         this.dreamProperties = dreamProperties;
     }
 
+    /**
+     * SQL操作会话工厂创建类
+     *
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public SessionFactoryBuilder sessionFactoryBuilder() {
         return new DefaultSessionFactoryBuilder();
     }
 
+    /**
+     * SQL操作会话获取
+     *
+     * @param sessionFactory SQL操作会话创建工厂
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public SessionHolder sessionHolder(SessionFactory sessionFactory) {
         return new SpringSessionHolder(sessionFactory);
     }
 
+    /**
+     * 目标数据库方言
+     *
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public ToSQL toSQL() {
@@ -97,12 +115,12 @@ public class DreamAutoConfiguration {
         return toSQL;
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public Cache cache() {
-        return new MemoryCache(100, 0.25);
-    }
-
+    /**
+     * 插件工厂
+     *
+     * @param interceptors 插件处理类
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public PluginFactory pluginFactory(Interceptor... interceptors) {
@@ -121,6 +139,12 @@ public class DreamAutoConfiguration {
         return pluginFactory;
     }
 
+    /**
+     * 编译工厂
+     *
+     * @param myFunctionFactory 自定义函数工厂创建类
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public CompileFactory compileFactory(@Autowired(required = false) MyFunctionFactory myFunctionFactory) {
@@ -136,6 +160,12 @@ public class DreamAutoConfiguration {
         return defaultCompileFactory;
     }
 
+    /**
+     * 注入工厂
+     *
+     * @param injects 注入类
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public InjectFactory injectFactory(Inject... injects) {
@@ -154,6 +184,11 @@ public class DreamAutoConfiguration {
         return injectFactory;
     }
 
+    /**
+     * @param invokers @函数
+     * @return
+     * @函数工厂
+     */
     @Bean
     @ConditionalOnMissingBean
     public InvokerFactory invokerFactory(Invoker... invokers) {
@@ -172,6 +207,12 @@ public class DreamAutoConfiguration {
         return invokerFactory;
     }
 
+    /**
+     * 编译工厂
+     *
+     * @param toSQL 目标数据库方言
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public DialectFactory dialectFactory(ToSQL toSQL) {
@@ -180,19 +221,33 @@ public class DreamAutoConfiguration {
         return defaultDialectFactory;
     }
 
+    /**
+     * 缓存工厂
+     *
+     * @param cache 缓存器
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
-    public CacheFactory cacheFactory(Cache cache) {
+    public CacheFactory cacheFactory(@Autowired(required = false) Cache cache) {
         DefaultCacheFactory defaultCacheFactory = new DefaultCacheFactory();
         String strCache = dreamProperties.getCache();
         if (!ObjectUtil.isNull(strCache)) {
             Class<? extends Cache> cacheType = ReflectUtil.loadClass(strCache);
             cache = ReflectUtil.create(cacheType);
         }
-        defaultCacheFactory.setCache(cache);
+        if (cache != null) {
+            defaultCacheFactory.setCache(cache);
+        }
         return defaultCacheFactory;
     }
 
+    /**
+     * 类型选择器工厂
+     *
+     * @param typeHandlerWrappers 类型选择器包装类
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public TypeHandlerFactory typeHandlerFactory(TypeHandlerWrapper... typeHandlerWrappers) {
@@ -211,6 +266,12 @@ public class DreamAutoConfiguration {
         return typeHandlerFactory;
     }
 
+    /**
+     * 监听器工厂
+     *
+     * @param listeners 监听器
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public ListenerFactory listenerFactory(Listener... listeners) {
@@ -229,18 +290,46 @@ public class DreamAutoConfiguration {
         return listenerFactory;
     }
 
+    /**
+     * 数据源工厂
+     *
+     * @param dataSource 数据源
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public DataSourceFactory dataSourceFactory(DataSource dataSource) {
         return new SpringDataSourceFactory(dataSource);
     }
 
+    /**
+     * 事务工厂
+     *
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public TransactionFactory transactionFactory() {
         return new SpringTransactionFactory();
     }
 
+    /**
+     * 创建SQL会话创建类
+     *
+     * @param configuration         配置信息
+     * @param pluginFactory         插件工厂
+     * @param invokerFactory        @函数工厂
+     * @param dialectFactory        编译工厂
+     * @param cacheFactory          缓存工厂
+     * @param typeHandlerFactory    类型选择器工厂
+     * @param compileFactory        编译工厂
+     * @param injectFactory         注入工厂
+     * @param listenerFactory       监听工厂
+     * @param dataSourceFactory     数据源工厂
+     * @param transactionFactory    事务工厂
+     * @param sessionFactoryBuilder SQL操作会话工厂创建类
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public SessionFactory sessionFactory(Configuration configuration,
@@ -268,12 +357,25 @@ public class DreamAutoConfiguration {
         return sessionFactoryBuilder.build(configuration);
     }
 
+    /**
+     * MapperInvoke对象创建工厂
+     *
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public MapperInvokeFactory mapperInvokeFactory() {
         return new DefaultMapperInvokeFactory();
     }
 
+    /**
+     * SQL操作会话
+     *
+     * @param sessionHolder       SQL操作会话获取
+     * @param sessionFactory      SQL操作会话创建工厂
+     * @param mapperInvokeFactory MapperInvoke对象创建工厂
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public SessionTemplate sessionTemplate(SessionHolder sessionHolder
@@ -282,6 +384,11 @@ public class DreamAutoConfiguration {
         return new SessionTemplate(sessionHolder, sessionFactory, mapperInvokeFactory);
     }
 
+    /**
+     * 主键序列
+     *
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public Sequence sequence() {
@@ -289,12 +396,26 @@ public class DreamAutoConfiguration {
     }
 
 
+    /**
+     * 模板操作接口
+     *
+     * @param sessionTemplate SQL操作会话
+     * @param sequence        主键序列
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public TemplateMapper templateMapper(SessionTemplate sessionTemplate, Sequence sequence) {
         return new DefaultTemplateMapper(sessionTemplate, sequence);
     }
 
+    /**
+     * 链式操作接口
+     *
+     * @param sessionTemplate SQL操作会话
+     * @param toSQL           目标数据库方言
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {

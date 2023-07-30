@@ -8,6 +8,9 @@ import com.moxa.dream.antlr.smt.BraceStatement;
 import com.moxa.dream.antlr.smt.PackageStatement;
 import com.moxa.dream.antlr.smt.Statement;
 
+/**
+ * 语法编译器入口
+ */
 public class PackageExpr extends HelperExpr {
     private final PackageStatement statement = new PackageStatement();
 

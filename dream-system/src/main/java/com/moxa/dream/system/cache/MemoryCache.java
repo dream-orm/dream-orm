@@ -18,6 +18,10 @@ public class MemoryCache implements Cache {
     protected Map<String, Set<CacheKey>> tableMap = new ConcurrentHashMap<>(512);
     protected Map<CacheKey, Map<CacheKey, Object>> indexMap = new ConcurrentHashMap<>();
 
+    public MemoryCache() {
+        this(100, 0.25);
+    }
+
     public MemoryCache(int limit, double rate) {
         if (limit <= 0) {
             throw new DreamRunTimeException("参数limit必须大于0");

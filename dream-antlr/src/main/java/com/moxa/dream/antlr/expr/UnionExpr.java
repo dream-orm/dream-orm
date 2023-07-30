@@ -7,6 +7,9 @@ import com.moxa.dream.antlr.read.ExprReader;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.UnionStatement;
 
+/**
+ * 联合语法解析器
+ */
 public class UnionExpr extends HelperExpr {
     private final UnionStatement unionStatement = new UnionStatement();
 

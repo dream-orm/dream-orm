@@ -8,6 +8,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * 顶级Service接口
+ *
+ * @param <ListView> 列表页返回数据
+ * @param <EditView> 编辑页返回数据
+ */
 public interface IService<ListView, EditView> {
     IService<ListView, EditView> methodInfo(Consumer<MethodInfo> consumer);
 

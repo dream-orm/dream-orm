@@ -8,5 +8,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface Param {
+    /**
+     * 指定参数名称
+     *
+     * @return
+     */
     String value();
 }

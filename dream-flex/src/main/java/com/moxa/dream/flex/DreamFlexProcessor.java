@@ -20,6 +20,9 @@ import java.io.Writer;
 import java.util.*;
 import java.util.function.Function;
 
+/**
+ * 编译生成代码
+ */
 public class DreamFlexProcessor extends AbstractProcessor {
     private Types typeUtils;
     private Filer filer;
