@@ -123,7 +123,7 @@ public class DreamAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public PluginFactory pluginFactory(Interceptor... interceptors) {
+    public PluginFactory pluginFactory(@Autowired(required = false) Interceptor... interceptors) {
         PluginFactory pluginFactory = new ProxyPluginFactory();
         String[] strInterceptors = dreamProperties.getInterceptors();
         if (!ObjectUtil.isNull(strInterceptors)) {
@@ -168,7 +168,7 @@ public class DreamAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public InjectFactory injectFactory(Inject... injects) {
+    public InjectFactory injectFactory(@Autowired(required = false) Inject... injects) {
         InjectFactory injectFactory = new DefaultInjectFactory();
         String[] strInjects = dreamProperties.getInjects();
         if (!ObjectUtil.isNull(strInjects)) {
@@ -191,7 +191,7 @@ public class DreamAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public InvokerFactory invokerFactory(Invoker... invokers) {
+    public InvokerFactory invokerFactory(@Autowired(required = false) Invoker... invokers) {
         InvokerFactory invokerFactory = new DefaultInvokerFactory();
         String[] strInvokers = dreamProperties.getInvokers();
         if (!ObjectUtil.isNull(strInvokers)) {
@@ -250,7 +250,7 @@ public class DreamAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public TypeHandlerFactory typeHandlerFactory(TypeHandlerWrapper... typeHandlerWrappers) {
+    public TypeHandlerFactory typeHandlerFactory(@Autowired(required = false) TypeHandlerWrapper... typeHandlerWrappers) {
         TypeHandlerFactory typeHandlerFactory = new DefaultTypeHandlerFactory();
         String[] strTypeHandlerWrappers = dreamProperties.getTypeHandlerWrappers();
         if (!ObjectUtil.isNull(strTypeHandlerWrappers)) {
@@ -274,7 +274,7 @@ public class DreamAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public ListenerFactory listenerFactory(Listener... listeners) {
+    public ListenerFactory listenerFactory(@Autowired(required = false) Listener... listeners) {
         ListenerFactory listenerFactory = new DefaultListenerFactory();
         String[] strListeners = dreamProperties.getListeners();
         if (!ObjectUtil.isNull(strListeners)) {
