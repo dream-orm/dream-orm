@@ -1,9 +1,6 @@
-
 # dream简介
 
-
-
-DREAM（ https://github.com/moxa-lzf/dream ） 是一个基于翻译的以技术为中心，辐射业务持久层框架，它非常轻量，不依赖第三方jar包、同时拥有极高的性能与灵活性，可以写一种MySQL语法在非MySQL数据库下执行，其内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成java链式形式。
+DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术为中心，辐射业务持久层框架，它非常轻量，不依赖第三方jar包、同时拥有极高的性能与灵活性，可以写一种MySQL语法在非MySQL数据库下执行，其内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成java链式形式。
 
 总而言之，DREAM不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装。
 
@@ -44,6 +41,7 @@ springboot项目
 项目演示地址（ https://gitee.com/moxiaoai/dream/tree/master/dream-test/dream-simple-test ）
 
 ```xml
+
 <dependency>
     <groupId>com.moxa.dream</groupId>
     <artifactId>dream-boot-starter</artifactId>
@@ -56,6 +54,7 @@ solon项目
 项目演示地址（ https://gitee.com/moxiaoai/dream/tree/master/dream-test/dream-solon-test ）
 
 ```xml
+
 <dependency>
     <groupId>com.moxa.dream</groupId>
     <artifactId>dream-solon-plugin</artifactId>
@@ -66,6 +65,7 @@ solon项目
 **第二步：编写Table实体类**
 
 ```java
+
 @Table("user")
 public class User {
     @Id
@@ -91,6 +91,7 @@ public class User {
 不同于Table实体类，Table实体类等价于数据库表所有字段，而View实体类是指数据库表部分字段，因为一些业务场景，仅仅需要业务部分字段就够啦
 
 ```java
+
 @View(User.class)
 public class UserView2 {
     private Integer id;
@@ -101,10 +102,12 @@ public class UserView2 {
 **第四步：编译mapper接口（非必要）**
 
 ```java
+
 @Mapper
 public interface UserMapper {
     @Sql("select @*() from user")
     List<User> findAll();
+
     @Sql("select @*() from user")
     List<UserView2> selectAll2();
 }
@@ -114,10 +117,10 @@ public interface UserMapper {
 
 ```java
 @Bean
-public ConfigurationBean configurationBean() {
-    ConfigurationBean configurationBean = new ConfigurationBean(table实体类包名,mapper实体类包名);
-    return configurationBean;
-}
+public ConfigurationBean configurationBean(){
+        ConfigurationBean configurationBean=new ConfigurationBean(table实体类包名,mapper实体类包名);
+        return configurationBean;
+        }
 ```
 
 **第六步：数据查询**
@@ -129,7 +132,7 @@ TemplateMapper在springboot项目里使用@Autowired，solon使用@Inject注解�
 ```java
 @Autowired
 private TemplateMapper templateMapper;
-List<UserView2>list=templateMapper.selectList(UserView2.class,null);
+        List<UserView2>list=templateMapper.selectList(UserView2.class,null);
 ```
 
 **mapper接口查询：**
@@ -137,8 +140,8 @@ List<UserView2>list=templateMapper.selectList(UserView2.class,null);
 ```java
 @Autowired
 private UserMapper userMapper;
-List<User>list=userMapper.findAll();
-List<UserView2>=userMapper.selectAll2();
+        List<User>list=userMapper.findAll();
+        List<UserView2>=userMapper.selectAll2();
 ```
 
 **QueryDef查询**
@@ -148,8 +151,8 @@ FlexMapper在springboot项目里使用@Autowired，solon使用@Inject注解即�
 ```java
 @Autowired
 private FlexMapper flexMapper;
-FromDef fromDef = select(user.name).from(user);
-List<User> list = flexMapper.selectList(fromDef, User.class);
+        FromDef fromDef=select(user.name).from(user);
+        List<User> list=flexMapper.selectList(fromDef,User.class);
 ```
 
 ## dream配置
@@ -164,33 +167,33 @@ solon项目可以阅读com.moxa.dream.solon.plugin.DreamAutoConfiguration获取�
 
 ```java
 @Bean
-public ToSQL toSQL() {
-    ToSQL toSQL = new ToMYSQL();
-    return toSQL;
-}
+public ToSQL toSQL(){
+        ToSQL toSQL=new ToMYSQL();
+        return toSQL;
+        }
 ```
 
 **指定主键生成策略**
 
 ```java
 @Bean
-public Sequence sequence() {
-    return new MySQLSequence();
-}
+public Sequence sequence(){
+        return new MySQLSequence();
+        }
 ```
 
 **配置监听器，列如查看SQL执行日志**
 
 ```java
 @Bean
-public Listener[] listeners() {
-    return new Listener[]{new DebugListener()};
-}
+public Listener[]listeners(){
+        return new Listener[]{new DebugListener()};
+        }
 ```
 
 # 操作模式
 
-##  模板操作
+## 模板操作
 
 **基础操作**
 
@@ -398,17 +401,19 @@ public @interface Sort {
 硬解码SQL
 
 ```sql
-select u2.id,u2.name from (select id,name from user) u2 left join blog on u2.id=blog.user_id
+select u2.id, u2.name
+from (select id, name from user) u2
+         left join blog on u2.id = blog.user_id
 ```
 
 改写成流式
 
 ```java
-UserTableDef u2 = new UserTableDef("u2");
-select(u2.id, u2.name)
-    .from(table(select(user.id, user.name).from(user)).as("u2"))
-    .leftJoin(blog)
-    .on(user2.id.eq(blog.user_id))
+UserTableDef u2=new UserTableDef("u2");
+        select(u2.id,u2.name)
+        .from(table(select(user.id,user.name).from(user)).as("u2"))
+        .leftJoin(blog)
+        .on(user2.id.eq(blog.user_id))
 ```
 
 这里仅仅展示了其中的一个方面，流式已经基本上全面支持SQL写法，而且写法规范基本上和SQL语法保持一致
@@ -418,10 +423,11 @@ select(u2.id, u2.name)
 归根到底手写SQL才是最强大的
 
 ```java
+
 @Mapper(BlogMapperProvider.class)
 public interface BlogMapper {
     @Sql("select @*() from blog where user_id=@?(userId)")
-    List<Blog> selectBlogByUserId(@Param("userId")Integer userId);
+    List<Blog> selectBlogByUserId(@Param("userId") Integer userId);
 
     List<Blog> selectBlogByUserId2(Integer userId);
 
@@ -434,6 +440,7 @@ public interface BlogMapper {
 Param：指定参数名称
 
 ```java
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface Param {
@@ -452,7 +459,9 @@ public @interface Param {
 ```java
 public @interface Sql {
     String value();
+
     boolean cache() default true;
+
     int timeOut() default 0;
 }
 ```
@@ -486,27 +495,35 @@ public class BlogMapperProvider {
 ```java
 public interface ActionProvider {
     String sql();
+
     default Action[] initActionList() {
         return null;
     }
+
     default Action[] destroyActionList() {
         return null;
     }
+
     default Class<? extends Collection> rowType() {
         return null;
     }
+
     default Class<?> colType() {
         return null;
     }
+
     default Boolean cache() {
         return null;
     }
+
     default Integer timeOut() {
         return null;
     }
+
     default StatementHandler statementHandler() {
         return null;
     }
+
     default ResultSetHandler resultSetHandler() {
         return null;
     }
@@ -655,6 +672,7 @@ PARAM:[1, 2, 3, 4, 5, 6]
 **举例：删除用户数组**
 
 ```java
+
 @Mapper
 public interface UserMapper {
     @Sql("delete from user where id in (@foreach(list,@?(item.id)))")
@@ -665,6 +683,7 @@ public interface UserMapper {
 **测试**
 
 ```java
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BootApplication.class)
 public class DeleteTest {
@@ -673,10 +692,10 @@ public class DeleteTest {
 
     @Test
     public void deleteBatch() {
-        List<User> userList=new ArrayList<>();
-        User user=new User();
+        List<User> userList = new ArrayList<>();
+        User user = new User();
         user.setId(1);
-        User user2=new User();
+        User user2 = new User();
         user2.setId(2);
         userList.add(user);
         userList.add(user2);
@@ -692,8 +711,6 @@ public class DeleteTest {
 语句：DELETE FROM user  WHERE id IN (?,?)
 参数：[1, 2]
 ```
-
-
 
 ### non
 
@@ -1137,6 +1154,7 @@ TIME:36ms
 ```java
 public @interface Extract {
     Class<? extends Extractor> value();
+
     String[] args() default {};
 }
 ```
@@ -1151,6 +1169,7 @@ public interface Extractor {
     default void setArgs(String[] args) {
 
     }
+
     void extract(String property, Object value, ObjectFactory objectFactory);
 }
 ```
@@ -1250,9 +1269,9 @@ FROM (
 
 ```java
    @Bean
-    public Inject[] injects() {
+public Inject[]injects(){
         return new Inject[]{new BlockInject("META-INF/keyword.txt")};
-    }
+        }
 ```
 
 META-INF/keyword.txt记录了自定义关键字
@@ -1362,9 +1381,9 @@ dream的识别是高强度的，不会因为SQL复杂，漏加任何租户条件
 
 ```java
     @Bean
-    public Inject[] injects() {
-        return new Inject[]{new TenantInject(() -> 1)};
-    }
+public Inject[]injects(){
+        return new Inject[]{new TenantInject(()->1)};
+        }
 ```
 
 注：重写TenantHandler完成租户需求
@@ -1434,19 +1453,19 @@ u.dept_id=1是开发者自己注入的数据权限，不要担心，dream会解�
 
 ```java
     @Bean
-    public Inject[] injects() {
-        return new Inject[]{new PermissionInject(new PermissionHandler() {
-            @Override
-            public boolean isPermissionInject(MethodInfo methodInfo, TableInfo tableInfo) {
-                return tableInfo.getFieldName("dept_id") != null;
-            }
+public Inject[]injects(){
+        return new Inject[]{new PermissionInject(new PermissionHandler(){
+@Override
+public boolean isPermissionInject(MethodInfo methodInfo,TableInfo tableInfo){
+        return tableInfo.getFieldName("dept_id")!=null;
+        }
 
-            @Override
-            public String getPermission(MethodInfo methodInfo, TableInfo tableInfo, String alias) {
-                return alias + ".dept_id=1";
-            }
+@Override
+public String getPermission(MethodInfo methodInfo,TableInfo tableInfo,String alias){
+        return alias+".dept_id=1";
+        }
         })};
-    }
+        }
 ```
 
 ```java
@@ -1507,9 +1526,9 @@ FROM (
 
 ```java
     @Bean
-    public Inject[] injects() {
-        return new Inject[]{new LogicInject(() -> "del_flag")};
-    }
+public Inject[]injects(){
+        return new Inject[]{new LogicInject(()->"del_flag")};
+        }
 ```
 
 ```java
@@ -1544,14 +1563,14 @@ dream默认开启基于表的缓存，可重新声明自己的缓存工厂，代
 
 ```java
 @Bean
-public CacheFactory cacheFactory() {
-    return new DefaultCacheFactory() {
-        @Override
-        public Cache getCache() {
-            return null;
+public CacheFactory cacheFactory(){
+        return new DefaultCacheFactory(){
+@Override
+public Cache getCache(){
+        return null;
         }
-    };
-}
+        };
+        }
 ```
 
 既然有了缓存工厂，也可以自定义缓存策略
@@ -1581,9 +1600,9 @@ public interface Cache {
 
 ```java
     @Bean
-    public Sequence sequence() {
+public Sequence sequence(){
         return new SnowFlakeSequence();
-    }
+        }
 ```
 
 ```java
@@ -1644,5 +1663,5 @@ public class SnowFlakeSequence extends AbstractSequence {
 
 # 联系方式
 
-微信群：<img src=".\wx.jpg" style="zoom:25%;" />QQ群：<img src=".\qq.jpg" style="zoom:25%;" />
+微信群：<img src="./wx.jpg" style="zoom:25%;" />QQ群：<img src="./qq.jpg" style="zoom:25%;" />
 

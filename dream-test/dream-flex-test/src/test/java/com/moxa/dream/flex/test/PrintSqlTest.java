@@ -1,12 +1,16 @@
-package com.moxa.dream.flex.def;
+package com.moxa.dream.flex.test;
 
 import com.moxa.dream.antlr.config.Assist;
 import com.moxa.dream.antlr.exception.AntlrException;
 import com.moxa.dream.antlr.factory.AntlrInvokerFactory;
 import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.antlr.invoker.Invoker;
+import com.moxa.dream.antlr.smt.Statement;
+import com.moxa.dream.antlr.sql.ToMYSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.flex.config.SqlInfo;
+import com.moxa.dream.flex.def.Query;
+import com.moxa.dream.flex.def.Update;
 import com.moxa.dream.flex.invoker.FlexMarkInvoker;
 import com.moxa.dream.flex.invoker.FlexTableInvoker;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -14,13 +18,30 @@ import com.moxa.dream.util.exception.DreamRunTimeException;
 import java.util.List;
 import java.util.Set;
 
-public abstract class AbstractQuery implements Query {
-    @Override
-    public SqlInfo toSQL(ToSQL toSQL) {
+public class PrintSqlTest {
+    private ToSQL toSQL;
+
+    public PrintSqlTest() {
+        this(new ToMYSQL());
+    }
+
+    public PrintSqlTest(ToSQL toSQL) {
+        this.toSQL = toSQL;
+    }
+
+    public SqlInfo toSQL(Query query) {
+        return toSQL(query.getStatement());
+    }
+
+    public SqlInfo toSQL(Update update) {
+        return toSQL(update.getStatement());
+    }
+
+    protected SqlInfo toSQL(Statement statement) {
         Assist assist = getAssist();
         String sql;
         try {
-            sql = toSQL.toStr(getStatement(), assist, null);
+            sql = toSQL.toStr(statement, assist, null);
         } catch (AntlrException e) {
             throw new DreamRunTimeException(e);
         }

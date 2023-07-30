@@ -5,16 +5,8 @@ import com.moxa.dream.antlr.smt.QueryStatement;
 import com.moxa.dream.antlr.smt.SelectStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 
-public class QueryDef extends AbstractQuery {
-    protected QueryStatement statement;
-
-    public QueryDef() {
-        this(new QueryStatement());
-    }
-
-    public QueryDef(QueryStatement statement) {
-        this.statement = statement;
-    }
+public class QueryDef implements Query {
+    protected QueryStatement statement = new QueryStatement();
 
     public SelectDef select(ColumnDef... columnDefs) {
         SelectStatement selectStatement = new SelectStatement();

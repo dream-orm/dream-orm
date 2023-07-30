@@ -1,11 +1,11 @@
 package com.moxa.dream.flex.test;
 
 import com.moxa.dream.antlr.sql.ToMYSQL;
-import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.flex.config.DataType;
 import com.moxa.dream.flex.config.DateType;
 import com.moxa.dream.flex.config.SqlInfo;
 import com.moxa.dream.flex.def.ColumnDef;
+import com.moxa.dream.flex.def.Query;
 import com.moxa.dream.flex.def.SortDef;
 import org.junit.jupiter.api.Test;
 
@@ -13,11 +13,11 @@ import static com.moxa.dream.flex.def.FunctionDef.*;
 import static com.moxa.dream.flex.test.table.table.UserTableDef.user;
 
 public class FunctionQueryTest {
-    private ToSQL toSQL = new ToMYSQL();
+    private PrintSqlTest printSqlTest = new PrintSqlTest(new ToMYSQL());
 
     @Test
     public void testStr() {
-        SqlInfo muser = select(
+        Query query = select(
                 ascii(user.id),
                 len(user.name),
                 length(user.name),
@@ -35,13 +35,14 @@ public class FunctionQueryTest {
                 trim(user.name),
                 coalesce(user.name, user.age)
         )
-                .from(user.as("u")).toSQL(toSQL);
-        System.out.println(muser);
+                .from(user.as("u"));
+        SqlInfo sqlInfo = printSqlTest.toSQL(query);
+        System.out.println(sqlInfo);
     }
 
     @Test
     public void testNumber() {
-        SqlInfo muser = select(
+        Query query = select(
                 abs(user.id),
                 acos(user.name),
                 asin(user.name),
@@ -70,13 +71,14 @@ public class FunctionQueryTest {
                 tan(user.dept_id),
                 truncate(user.dept_id, column(2))
         )
-                .from(user.as("u")).toSQL(toSQL);
-        System.out.println(muser);
+                .from(user.as("u"));
+        SqlInfo sqlInfo = printSqlTest.toSQL(query);
+        System.out.println(sqlInfo);
     }
 
     @Test
     public void testDate() {
-        SqlInfo muser = select(
+        Query query = select(
                 curdate(),
                 datediff(now(), now()),
                 date_sub(now(), 1, DateType.HOUR),
@@ -95,13 +97,14 @@ public class FunctionQueryTest {
                 date_format(now(), "%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j"),
                 str_to_date(user.name, "%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j")
         )
-                .from(user.as("u")).toSQL(toSQL);
-        System.out.println(muser);
+                .from(user.as("u"));
+        SqlInfo sqlInfo = printSqlTest.toSQL(query);
+        System.out.println(sqlInfo);
     }
 
     @Test
     public void testOther() {
-        SqlInfo muser = select(
+        Query query = select(
                 convert(user.name, DataType.CHAR),
                 cast(user.name, DataType.SIGNED),
                 isnull(user.name),
@@ -109,17 +112,19 @@ public class FunctionQueryTest {
                 if_(user.name.eq(2), column(1), column(2)),
                 nullif(column(1), column(2))
         )
-                .from(user.as("u")).toSQL(toSQL);
-        System.out.println(muser);
+                .from(user.as("u"));
+        SqlInfo sqlInfo = printSqlTest.toSQL(query);
+        System.out.println(sqlInfo);
     }
 
     @Test
     public void testCaseWhen() {
-        SqlInfo muser = select(
+        Query query = select(
                 case_().when(user.name.eq(column("3"))).then(user.name).when(user.name.eq("4")).then(column("5")).else_(column(6)).end().as("aa"),
                 case_(user.name).when(column("a")).then(column("b")).when("a").then(4).else_("7").end().as("vv")
         )
-                .from(user.as("u")).toSQL(toSQL);
-        System.out.println(muser);
+                .from(user.as("u"));
+        SqlInfo sqlInfo = printSqlTest.toSQL(query);
+        System.out.println(sqlInfo);
     }
 }

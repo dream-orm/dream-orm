@@ -1,6 +1,7 @@
 package com.moxa.dream.flex.mapper;
 
 import com.moxa.dream.flex.def.Query;
+import com.moxa.dream.flex.def.Update;
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.system.inject.Inject;
 
@@ -17,4 +18,5 @@ public interface FlexMapper {
 
     <T> Page<T> selectPage(Query query, Class<T> type, Page page);
 
+    int update(Update update);
 }
