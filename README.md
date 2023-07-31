@@ -1,10 +1,63 @@
-# dream简介
+- [1. dream简介](#1-dream简介)
+  - [1.1. 特性](#11-特性)
+  - [1.2. 支持的数据库](#12-支持的数据库)
+  - [1.3. 系统架构](#13-系统架构)
+  - [1.4. 代码结构](#14-代码结构)
+- [2. 快速开始](#2-快速开始)
+  - [2.1. 整合springboot/solon](#21-整合springbootsolon)
+  - [2.2. dream配置](#22-dream配置)
+- [3. 操作模式](#3-操作模式)
+  - [3.1. 模板操作](#31-模板操作)
+  - [3.2. 链式操作](#32-链式操作)
+  - [3.3. 自定义Mapper操作](#33-自定义mapper操作)
+- [4. 基础开发](#4-基础开发)
+  - [4.1. 内置@函数](#41-内置函数)
+    - [4.1.1. ?](#411-)
+    - [4.1.2. rep](#412-rep)
+    - [4.1.3. foreach](#413-foreach)
+    - [4.1.4. non](#414-non)
+    - [4.1.5. not](#415-not)
+    - [4.1.6. \*\*\*\*\*](#416-)
+    - [4.1.7. table](#417-table)
+  - [4.2. 注解](#42-注解)
+    - [4.2.1. Table](#421-table)
+    - [4.2.2. Id](#422-id)
+    - [4.2.3. Column](#423-column)
+    - [4.2.4. Join](#424-join)
+    - [4.2.5. View](#425-view)
+    - [4.2.6. Ignore](#426-ignore)
+    - [4.2.7. PageQuery](#427-pagequery)
+    - [4.2.8. Extract](#428-extract)
+  - [4.3. 监听器](#43-监听器)
+  - [4.4. 插件](#44-插件)
+  - [4.5. IService](#45-iservice)
+- [5. 高级开发](#5-高级开发)
+    - [5.1. 关键字插件](#51-关键字插件)
+    - [5.2. 多数据源](#52-多数据源)
+    - [5.3. 多租户](#53-多租户)
+    - [5.4. 数据权限](#54-数据权限)
+    - [5.5. 逻辑删除](#55-逻辑删除)
+    - [5.6. 数据缓存](#56-数据缓存)
+    - [5.7. 主键策略](#57-主键策略)
+    - [5.8. 关联查询](#58-关联查询)
+    - [5.9. 数据填充](#59-数据填充)
+    - [5.10. 数据脱敏](#510-数据脱敏)
+    - [5.11. SQL审计](#511-sql审计)
+    - [5.12. SQL打印](#512-sql打印)
+    - [5.13. 字段权限](#513-字段权限)
+    - [5.14. 字段加密](#514-字段加密)
+    - [5.15. 字典回写](#515-字典回写)
+- [6. 问题](#6-问题)
+- [7. 联系方式](#7-联系方式)
+
+
+# 1. dream简介
 
 DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术为中心，辐射业务持久层框架，它非常轻量，不依赖第三方jar包、同时拥有极高的性能与灵活性，可以写一种MySQL语法在非MySQL数据库下执行，其内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成java链式形式。
 
 总而言之，DREAM不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装。
 
-## 特性
+## 1.1. 特性
 
 **跨平台**：支持mysql语法在非mysql环境下执行，并提供接口自定义翻译
 
@@ -16,21 +69,21 @@ DREAM（ https://github.com/moxa-lzf/dream ）是一个基于翻译的以技术�
 
 **强大**：嵌套映射、注解校验，数据权限，逻辑删除，多租户，多数据源，参数值注入与修改（可完成注入默认值、字段加密等），主键序列（可自定义）、查询字段值提取（可完成解密、查询字典和库表、脱密等）
 
-## 支持的数据库
+## 1.2. 支持的数据库
 
 DREAM支持MySQL、PGSQL、SQLSERVER、ORACLE、达梦，其他数据库语法和提供支持的数据库语法类似，对于特殊的数据库，开发者也可以自己写对应的SQL转换语句，把抽象树转换对应可执行的SQL即可
 
-## 系统架构
+## 1.3. 系统架构
 
 <img src="./system.png"  />
 
-## 代码结构
+## 1.4. 代码结构
 
 ![](./intro.png)
 
-# 快速开始
+# 2. 快速开始
 
-## 整合springboot/solon
+## 2.1. 整合springboot/solon
 
 整合springboot项目和solon项目配置是一样的。
 
@@ -155,7 +208,7 @@ private FlexMapper flexMapper;
         List<User> list=flexMapper.selectList(fromDef,User.class);
 ```
 
-## dream配置
+## 2.2. dream配置
 
 springboot项目可以阅读com.moxa.dream.boot.autoconfigure.DreamAutoConfiguration获取配置详情
 
@@ -191,9 +244,9 @@ public Listener[]listeners(){
         }
 ```
 
-# 操作模式
+# 3. 操作模式
 
-## 模板操作
+## 3.1. 模板操作
 
 **基础操作**
 
@@ -394,7 +447,7 @@ public @interface Sort {
 | value | 排序方式                    |
 | order | 指定多个排序字段时，显示优先级，越小优先级越高 |
 
-## 链式操作
+## 3.2. 链式操作
 
 在 dream中，内置了 `QueryDef` 和 `UpdateDef` 用于对数据进行链式查询操作和链式修改操作。
 
@@ -428,7 +481,7 @@ UPDATE `user`  SET `user`.`age`=`user`.`age`+1  WHERE `user`.`id`=1
 update(user).set(user.age,user.age.add(1)).where(user.id.eq(1))
 ```
 
-## 自定义Mapper操作
+## 3.3. 自定义Mapper操作
 
 归根到底手写SQL才是最强大的
 
@@ -552,11 +605,11 @@ public interface ActionProvider {
 | statementHandler  | 最终交互的数据库操作，默认即可  |
 | resultSetHandler  | 自定义结果集映射         |
 
-# 基础开发
+# 4. 基础开发
 
-## 内置@函数
+## 4.1. 内置@函数
 
-### ?
+### 4.1.1. ?
 
 **用法**
 
@@ -597,7 +650,7 @@ SQL:SELECT id,name,age,email FROM user WHERE name=?
 PARAM:[Jone]
 ```
 
-### **rep**
+### 4.1.2. rep
 
 **用法**
 
@@ -638,7 +691,7 @@ SQL:SELECT id,name,age,email FROM user WHERE name='Jone'
 PARAM:[]
 ```
 
-### foreach
+### 4.1.3. foreach
 
 **用法**
 
@@ -722,7 +775,7 @@ public class DeleteTest {
 参数：[1, 2]
 ```
 
-### non
+### 4.1.4. non
 
 **用法**
 
@@ -769,7 +822,7 @@ SQL:UPDATE user SET name=?,email=? WHERE id=?
 PARAM:[hli, , 1]
 ```
 
-### not
+### 4.1.5. not
 
 **用法**
 
@@ -777,7 +830,7 @@ PARAM:[hli, , 1]
 
 注：空字符串为空
 
-### *****
+### 4.1.6. *****
 
 **用法**
 
@@ -830,7 +883,7 @@ User{id=4, name='hello', age=21, email='test4@baomidou.com'}
 User{id=5, name='hello', age=24, email='test5@baomidou.com'}
 ```
 
-### table
+### 4.1.7. table
 
 **用法**
 
@@ -862,9 +915,9 @@ public void test8(){
 执行用时：17ms
 ```
 
-## 注解
+## 4.2. 注解
 
-### Table
+### 4.2.1. Table
 
 **用法**
 
@@ -892,7 +945,7 @@ public class User {
 }
 ```
 
-### Id
+### 4.2.2. Id
 
 **用法**
 
@@ -921,7 +974,7 @@ public class User {
 }
 ```
 
-### Column
+### 4.2.3. Column
 
 **用法**
 
@@ -961,7 +1014,7 @@ public class User {
 }
 ```
 
-### Join
+### 4.2.4. Join
 
 **用法**
 
@@ -1010,7 +1063,7 @@ public class User {
 
 **注：类Blog必须有注解Table**
 
-### View
+### 4.2.5. View
 
 **用法**
 
@@ -1069,7 +1122,7 @@ SQL:SELECT user.id,user.name FROM user
 **注：做到修改字段就可以间接修改SQL语句目的，存在情况，view字段与table字段一致，但不想查询，或者不想多表查询，可以使用Ignore忽略此字段
 **
 
-### Ignore
+### 4.2.6. Ignore
 
 **用法**
 
@@ -1099,7 +1152,7 @@ public class UserView {
 
 **注：email存在Ignore，email数据为空**
 
-### PageQuery
+### 4.2.7. PageQuery
 
 **用法**
 
@@ -1157,7 +1210,7 @@ TIME:36ms
 总数：5
 ```
 
-### Extract
+### 4.2.8. Extract
 
 用法：对查询的值做处理，列如，解密，字段脱敏，反查字典等操作
 
@@ -1190,7 +1243,7 @@ public interface Extractor {
 | value         | 数据库查询的值       |
 | objectFactory | 反射工厂，用来给字段填充值 |
 
-## 监听器
+## 4.3. 监听器
 
 **用法**
 
@@ -1212,7 +1265,7 @@ public interface Listener {
 | afterReturn | 返回结果为查询结果          |
 | exception   | 出现异常调用此处           |
 
-## 插件
+## 4.4. 插件
 
 **用法**
 
@@ -1231,13 +1284,13 @@ public interface Interceptor {
 | interceptor | 此处进行注入插件 |
 | methods     | 拦截感兴趣的方法 |
 
-## IService
+## 4.5. IService
 
 dream提供了一个名为 `IService` 的接口，及其默认实现类 `ServiceImpl` ，用于简化在 「Service」 层重复定义 「Mapper」 层的方法。
 
-# 高级开发
+# 5. 高级开发
 
-### 关键字插件
+### 5.1. 关键字插件
 
 数据库关键字，不是关键字可以不加特殊符号，关键字必须要加，dream提供方案，SQL语句可以不加特殊符号对关键字处理，一样可以正常执行
 
@@ -1286,7 +1339,7 @@ public Inject[]injects(){
 
 META-INF/keyword.txt记录了自定义关键字
 
-### 多数据源
+### 5.2. 多数据源
 
 **开启注解**
 
@@ -1348,7 +1401,7 @@ public interface UserMapper {
 }
 ```
 
-### 多租户
+### 5.3. 多租户
 
 考虑同一个库，同一个schema情况，将现有项目改写成多租户，实现成本是多少，可能会说成本太大啦，所有SQL基本上都要翻新，而dream却给了你0成本方案，既然无感知，成本自然为0
 
@@ -1420,7 +1473,7 @@ public interface TenantHandler {
 
 **注：一旦当前方法应用租户，租户将完全由系统接管，插入对租户字段赋值，更新赋值将失效**
 
-### 数据权限
+### 5.4. 数据权限
 
 采用mybatis方案进行数据权限隔离，会在where条件注入 ${权限条件}，是否可以不写${权限条件}，一样完成数据权限注入，这样实现才是真正意义上的权限SQL与业务SQL解耦
 
@@ -1492,7 +1545,7 @@ public interface PermissionHandler {
 | isPermissionInject | 是否对当前查询语句注入where条件，methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息                |
 | getPermission      | 插入的where条件，不能为空，methodInfo：记录了方法的一切信息tableInfo：记录了表的一切信息，alias：当前查询语句主表的别名 |
 
-### 逻辑删除
+### 5.5. 逻辑删除
 
 有些字段是需要进行逻辑删除的，有些字段不需要，区别在于表是否加了逻辑字段，假如：未来有个需求，这个表不需要逻辑删除，另一张表需要逻辑删除，代码修改必不可少，幸运的是有些框架提供了逻辑删除，自动将delete语句改成update语句，代码量基本上无改动，事实上，表与表之间关联条件以及where条件是否都加了逻辑条件，仍然需要一步一步改。
 
@@ -1567,7 +1620,7 @@ public interface LogicHandler {
 | getDeletedValue | 逻辑删除后的值                                          |
 | getLogicColumn  | 逻辑删除字段                                           |
 
-### 数据缓存
+### 5.6. 数据缓存
 
 dream默认开启基于表的缓存，可重新声明自己的缓存工厂，代替默认工厂即可，不同于其他框架缓存，设计的缓存是基于表的，如果是单系统，且数据修改完全来自框架，可默认开启缓存，对查询的任意SQL都会进行缓存，而且可以保证数据库和缓存一致。
 
@@ -1604,7 +1657,7 @@ public interface Cache {
 | remove | 删除数据                                                          |
 | clear  | 清空数据                                                          |
 
-### 主键策略
+### 5.7. 主键策略
 
 主键策略统一控制全局，自定义主键策略
 
@@ -1635,43 +1688,43 @@ public class SnowFlakeSequence extends AbstractSequence {
 
 开发者随意定义主键策略即可
 
-### 关联查询
+### 5.8. 关联查询
 
 分为一对一，和一对多，采用Extract实现
 
-### 数据填充
+### 5.9. 数据填充
 
 存入数据库，采用wrap实现，读取数据库采用Extract实现
 
-### 数据脱敏
+### 5.10. 数据脱敏
 
 存入数据库，采用wrap实现，读取数据库采用Extract实现
 
-### SQL审计
+### 5.11. SQL审计
 
 采用监听器自由实现
 
-### SQL打印
+### 5.12. SQL打印
 
 采用监听器自由实现
 
-### 字段权限
+### 5.13. 字段权限
 
 存入数据库，采用wrap实现，读取数据库采用Extract实现
 
-### 字段加密
+### 5.14. 字段加密
 
 存入数据库，采用wrap实现，读取数据库采用Extract实现
 
-### 字典回写
+### 5.15. 字典回写
 
 存入数据库，采用wrap实现，读取数据库采用Extract实现
 
-# 问题
+# 6. 问题
 
 1. 当SQL长度过长，达到几千行以上，翻译报java.lang.StackOverflowError，调大Xss参数
 
-# 联系方式
+# 7. 联系方式
 
 微信群：<img src="./wx.jpg" style="zoom:25%;" />QQ群：<img src="./qq.jpg" style="zoom:25%;" />
 
