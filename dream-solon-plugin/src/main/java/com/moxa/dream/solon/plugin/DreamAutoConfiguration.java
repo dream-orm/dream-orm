@@ -19,6 +19,7 @@ import com.moxa.dream.system.cache.DefaultCacheFactory;
 import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.compile.DefaultCompileFactory;
 import com.moxa.dream.system.config.Configuration;
+import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.core.listener.factory.DefaultListenerFactory;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
@@ -236,6 +237,12 @@ public class DreamAutoConfiguration {
         return defaultDialectFactory;
     }
 
+    @Bean
+    @Condition(onMissingBean = Cache.class)
+    public Cache cache() {
+        return new NoneCache();
+    }
+
     /**
      * 缓存工厂
      *
@@ -243,12 +250,17 @@ public class DreamAutoConfiguration {
      */
     @Bean
     @Condition(onMissingBean = CacheFactory.class)
-    public CacheFactory cacheFactory() {
+    public CacheFactory cacheFactory(Cache cache) {
+        if (cache != null && cache instanceof NoneCache) {
+            cache = null;
+        }
         DefaultCacheFactory defaultCacheFactory = new DefaultCacheFactory();
         String strCache = dreamProperties.getCache();
         if (!ObjectUtil.isNull(strCache)) {
             Class<? extends Cache> cacheType = ReflectUtil.loadClass(strCache);
-            Cache cache = ReflectUtil.create(cacheType);
+            cache = ReflectUtil.create(cacheType);
+        }
+        if (cache != null) {
             defaultCacheFactory.setCache(cache);
         }
         return defaultCacheFactory;
@@ -444,5 +456,28 @@ public class DreamAutoConfiguration {
     @Condition(onMissingBean = FlexMapper.class)
     public FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
         return new DefaultFlexMapper(sessionTemplate, toSQL);
+    }
+
+    final class NoneCache implements Cache {
+
+        @Override
+        public void put(MappedStatement mappedStatement, Object value) {
+            throw new UnsupportedOperationException("不支持的缓存操作");
+        }
+
+        @Override
+        public Object get(MappedStatement mappedStatement) {
+            throw new UnsupportedOperationException("不支持的缓存操作");
+        }
+
+        @Override
+        public void remove(MappedStatement mappedStatement) {
+            throw new UnsupportedOperationException("不支持的缓存操作");
+        }
+
+        @Override
+        public void clear() {
+            throw new UnsupportedOperationException("不支持的缓存操作");
+        }
     }
 }

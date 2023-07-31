@@ -43,7 +43,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 resultObjectFactory.set(null, result);
             }
         } else {
-            Map<CacheKey, Object> cacheMap = new HashMap<>(4);
+            Map<CacheKey, Object> cacheMap = new HashMap<>(32);
             while (resultSet.next()) {
                 ObjectFactory objectFactory = doNestedResult(resultSet, mappedStatement, mappedResult, cacheMap);
                 if (objectFactory != null) {
@@ -248,7 +248,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                                 Extract extractAnnotation = field.getDeclaredAnnotation(Extract.class);
                                 Class<? extends Extractor> extractorType = extractAnnotation.value();
                                 Extractor extractor = ReflectUtil.create(extractorType);
-                                extractor.setArgs(extractAnnotation.args());
+                                extractor.init(field);
                                 builder.extractor(extractor).field(field);
                             }
                             if (!ObjectUtil.isNull(curTableName)) {

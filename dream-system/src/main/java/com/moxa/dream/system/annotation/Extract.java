@@ -20,11 +20,4 @@ public @interface Extract {
      * @return
      */
     Class<? extends Extractor> value();
-
-    /**
-     * 插入的参数
-     *
-     * @return
-     */
-    String[] args() default {};
 }

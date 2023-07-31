@@ -18,7 +18,7 @@ public class UserService {
     @Transactional
     public void share() {
         User user = new User();
-        user.setId(2);
+        user.setId(5);
         user.setAge(11);
         user.setEmail("123");
         user.setName("321");

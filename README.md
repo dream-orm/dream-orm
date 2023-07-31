@@ -1217,19 +1217,16 @@ TIME:36ms
 ```java
 public @interface Extract {
     Class<? extends Extractor> value();
-
-    String[] args() default {};
 }
 ```
 
-| 属性名   | 描述       |
-|-------|----------|
-| value | 提取的具体操作类 |
-| args  | 自定义参数    |
+| 属性名 | 描述             |
+| ------ | ---------------- |
+| value  | 提取的具体操作类 |
 
 ```java
 public interface Extractor {
-    default void setArgs(String[] args) {
+    default void init(Field field) {
 
     }
 
@@ -1690,7 +1687,7 @@ public class SnowFlakeSequence extends AbstractSequence {
 
 ### 5.8. 关联查询
 
-分为一对一，和一对多，采用Extract实现
+分为一对一，和一对多，多对一，多对多，采用Extract自行开发封装实现
 
 ### 5.9. 数据填充
 

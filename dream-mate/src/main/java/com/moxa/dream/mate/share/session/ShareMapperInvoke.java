@@ -31,12 +31,8 @@ public class ShareMapperInvoke implements MapperInvoke {
             if (share != null) {
                 dataSourceName = share.value();
             }
-            DataSourceHolder.set(dataSourceName);
-            try {
-                return session.execute(methodInfo, argMap);
-            } finally {
-                DataSourceHolder.remove();
-            }
+            Object result = DataSourceHolder.use(dataSourceName, () -> session.execute(methodInfo, argMap));
+            return result;
         } else {
             return session.execute(methodInfo, argMap);
         }

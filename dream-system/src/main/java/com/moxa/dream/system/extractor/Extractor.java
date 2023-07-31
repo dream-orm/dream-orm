@@ -2,16 +2,17 @@ package com.moxa.dream.system.extractor;
 
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
 
+import java.lang.reflect.Field;
+
 /**
  * 注入java字段值后的操作类
  */
 public interface Extractor {
     /**
-     * 设置参数
-     *
-     * @param args 参数
+     * 初始化，可根据字段属性获取自定义注解参数，完成逻辑开发
+     * @param field 字段属性
      */
-    default void setArgs(String[] args) {
+    default void init(Field field){
 
     }
 
