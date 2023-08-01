@@ -16,7 +16,7 @@ public class TableDef {
         AliasStatement aliasStatement = new AliasStatement();
         aliasStatement.setColumn(new FlexTableInvokerStatement(table));
         if (alias != null && !alias.isEmpty()) {
-            aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
+            this.as(alias);
         }
         this.statement = aliasStatement;
     }
@@ -25,21 +25,19 @@ public class TableDef {
         this.statement = statement;
     }
 
-    public static TableDef table(Query query) {
+    public static AliasTableDef table(Query query) {
         BraceStatement braceStatement = new BraceStatement(query.getStatement());
         AliasStatement aliasStatement = new AliasStatement();
         aliasStatement.setColumn(braceStatement);
-        return new TableDef(aliasStatement);
+        return new AliasTableDef(aliasStatement);
     }
 
     public AliasStatement getStatement() {
         return statement;
     }
 
-    public TableDef as(String alias) {
-        AliasStatement aliasStatement = new AliasStatement();
-        aliasStatement.setColumn(this.statement.getColumn());
-        aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
-        return new TableDef(aliasStatement);
+    protected TableDef as(String alias) {
+        statement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
+        return this;
     }
 }

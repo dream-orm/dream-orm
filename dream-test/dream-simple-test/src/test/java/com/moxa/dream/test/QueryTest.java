@@ -43,6 +43,10 @@ public class QueryTest {
     @Test
     public void test2() {
         User user = userMapper.findByName2("'Jone'");
+        userMapper.findByName2("'Jone'");
+        templateMapper.deleteById(Blog.class,1111);
+        userMapper.findByName2("'Jone'");
+        System.out.println();
     }
 
     @Test

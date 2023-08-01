@@ -35,7 +35,7 @@ public class FunctionQueryTest {
                 trim(user.name),
                 coalesce(user.name, user.age)
         )
-                .from(user.as("u"));
+                .from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
@@ -71,7 +71,7 @@ public class FunctionQueryTest {
                 tan(user.dept_id),
                 truncate(user.dept_id, column(2))
         )
-                .from(user.as("u"));
+                .from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
@@ -97,7 +97,7 @@ public class FunctionQueryTest {
                 date_format(now(), "%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j"),
                 str_to_date(user.name, "%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j")
         )
-                .from(user.as("u"));
+                .from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
@@ -112,7 +112,7 @@ public class FunctionQueryTest {
                 if_(user.name.eq(2), column(1), column(2)),
                 nullif(column(1), column(2))
         )
-                .from(user.as("u"));
+                .from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
@@ -123,7 +123,7 @@ public class FunctionQueryTest {
                 case_().when(user.name.eq(column("3"))).then(user.name).when(user.name.eq("4")).then(column("5")).else_(column(6)).end().as("aa"),
                 case_(user.name).when(column("a")).then(column("b")).when("a").then(4).else_("7").end().as("vv")
         )
-                .from(user.as("u"));
+                .from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }

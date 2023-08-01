@@ -3,6 +3,8 @@ package com.moxa.dream;
 import com.moxa.dream.boot.bean.ConfigurationBean;
 import com.moxa.dream.drive.listener.DebugListener;
 import com.moxa.dream.system.cache.CacheFactory;
+import com.moxa.dream.system.cache.DefaultCacheFactory;
+import com.moxa.dream.system.cache.MemoryCache;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.table.TableInfo;
@@ -21,7 +23,9 @@ public class BootApplication {
 
     @Bean
     public CacheFactory cacheFactory() {
-        return () -> null;
+        DefaultCacheFactory defaultCacheFactory = new DefaultCacheFactory();
+        defaultCacheFactory.setCache(new MemoryCache());
+        return defaultCacheFactory;
     }
 
     @Bean

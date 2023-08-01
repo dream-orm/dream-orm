@@ -1,6 +1,7 @@
 package com.moxa.dream.base.view;
 
 import com.moxa.dream.base.RandomExtractor;
+import com.moxa.dream.base.table.Blog;
 import com.moxa.dream.base.table.User;
 import com.moxa.dream.system.annotation.Extract;
 import com.moxa.dream.system.annotation.View;
@@ -17,6 +18,7 @@ public class UserView4 {
     @Wrap(value = ZeroWrapper.class, type = WrapType.INSERT)
     private Integer delFlag;
 
+    private Blog blog;
     public Integer getId() {
         return id;
     }

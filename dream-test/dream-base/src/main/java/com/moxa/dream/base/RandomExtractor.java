@@ -10,5 +10,7 @@ public class RandomExtractor implements Extractor {
     @Override
     public void extract(String property, Object value, ObjectFactory objectFactory) {
         objectFactory.set(property, UUID.randomUUID().toString());
+
+        objectFactory.set("blog","数据库查询值");
     }
 }

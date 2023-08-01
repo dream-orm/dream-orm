@@ -14,10 +14,30 @@ import static com.moxa.dream.flex.test.table.table.UserTableDef.user;
 public class SimpleQueryTest {
     private PrintSqlTest printSqlTest = new PrintSqlTest(new ToMYSQL());
 
+
+    @Test
+    public void testColumn() {
+        Query query = select(user.id, user.name, user.email).from(user);
+        SqlInfo sqlInfo = printSqlTest.toSQL(query);
+        System.out.println(sqlInfo);
+    }
+    @Test
+    public void testView() {
+        Query query = select(user.userView).from(user);
+        SqlInfo sqlInfo = printSqlTest.toSQL(query);
+        System.out.println(sqlInfo);
+    }
+    @Test
+    public void testColumnAs() {
+        UserTableDef u=new UserTableDef("u");
+        Query query = select(u.id.as("key"), u.name, u.email).from(u);
+        SqlInfo sqlInfo = printSqlTest.toSQL(query);
+        System.out.println(sqlInfo);
+    }
     @Test
     public void test0() {
         Query query = select(user.id.add(0).divide(1).multiply(2).sub(4).as("id"), user.name.as("ne"), user.del_flag)
-                .from(user.as("u"))
+                .from(user)
                 .where(user.name.eq(1).and(user.name.eq(user.name).and(user.name.lt(2)).and(user.name.leq(2.5)).and(user.name.gt(3).and(user.name.geq(4)))));
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
@@ -26,7 +46,7 @@ public class SimpleQueryTest {
     @Test
     public void test1() {
         Query query = select(user.id.add(0).divide(1).multiply(2).sub(4).as("id"), user.name.as("ne"), user.del_flag)
-                .from(user.as("u"))
+                .from(user)
                 .where(user.name.in(1, 2, 3).and(user.name.notIn(1, 2, 3)).and(user.tenant_id.isNull().or(user.tenant_id.isNotNull())));
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
@@ -35,7 +55,7 @@ public class SimpleQueryTest {
     @Test
     public void test2() {
         Query query = select(user.id, user.name, user.del_flag)
-                .from(user.as("u"))
+                .from(user)
                 .leftJoin(blog)
                 .on(user.id.eq(blog.user_id));
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
@@ -45,7 +65,7 @@ public class SimpleQueryTest {
     @Test
     public void test3() {
         Query query = select(user.id.as("id"), user.name, user.del_flag)
-                .from(user.as("u"))
+                .from(user)
                 .innerJoin(blog)
                 .on(user.id.eq(blog.user_id))
                 .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1, 2, 3)));
@@ -56,7 +76,7 @@ public class SimpleQueryTest {
     @Test
     public void test4() {
         Query query = select(user.dept_id)
-                .from(user.as("u"))
+                .from(user)
                 .rightJoin(blog)
                 .on(user.id.eq(blog.user_id))
                 .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1, 2, 3)))
@@ -68,7 +88,7 @@ public class SimpleQueryTest {
     @Test
     public void test5() {
         Query query = select(user.dept_id)
-                .from(user.as("u"))
+                .from(user)
                 .leftJoin(blog)
                 .on(user.id.eq(blog.user_id))
                 .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1, 2, 3)))
@@ -81,7 +101,7 @@ public class SimpleQueryTest {
     @Test
     public void test6() {
         Query query = select(user.dept_id)
-                .from(user.as("u"))
+                .from(user)
                 .leftJoin(blog)
                 .on(user.id.eq(blog.user_id))
                 .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1, 2, 3)))
@@ -96,7 +116,7 @@ public class SimpleQueryTest {
     public void test7() {
         Integer[] a = {4, 5, 6};
         Query query = select(user.dept_id)
-                .from(user.as("u"))
+                .from(user)
                 .leftJoin(blog)
                 .on(user.id.eq(blog.user_id))
                 .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1, 2, 3)).and(user.tenant_id.in(a)))
