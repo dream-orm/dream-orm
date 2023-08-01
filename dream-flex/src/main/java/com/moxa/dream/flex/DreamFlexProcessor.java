@@ -94,10 +94,6 @@ public class DreamFlexProcessor extends AbstractProcessor {
         return supportedAnnotationTypes;
     }
 
-    private String getClassName(String str) {
-        return str.substring(str.lastIndexOf(".") + 1);
-    }
-
     public List<String> columnInfoList(TypeElement classElement, Function<Element, String> function) {
         List<String> columnInfoList = new ArrayList<>();
         for (Element fieldElement : classElement.getEnclosedElements()) {
@@ -192,7 +188,7 @@ public class DreamFlexProcessor extends AbstractProcessor {
             String className = getClassName(entityClass);
             View view = viewElement.getAnnotation(View.class);
             String viewStr = view.toString();
-            String tableClassName = viewStr.substring(viewStr.lastIndexOf("=") + 1, viewStr.lastIndexOf(")"));
+            String tableClassName = getTableClassName(viewStr);
             List<String> columnInfoList = columnInfoList((TypeElement) viewElement, fieldElement -> {
                 if (fieldElement.getAnnotation(Ignore.class) != null) {
                     return null;
@@ -209,5 +205,31 @@ public class DreamFlexProcessor extends AbstractProcessor {
             fieldMap.put(lowClassName, columnSet);
         }
         return tableFieldMap;
+    }
+
+    private String getClassName(String str) {
+        return str.substring(str.lastIndexOf(".") + 1);
+    }
+
+    private String getTableClassName(String viewStr) {
+        String paramStr = viewStr.substring(viewStr.lastIndexOf("(") + 1, viewStr.lastIndexOf(")"));
+        String[] params = paramStr.split(",");
+        String tableClassName = null;
+        for (String param : params) {
+            param=param.trim();
+            if (param.contains("=")) {
+                if (param.startsWith("value=")) {
+                    tableClassName = param.substring(6);
+                    break;
+                }
+            } else {
+                tableClassName = param;
+                break;
+            }
+        }
+        if (tableClassName != null && tableClassName.endsWith(".class")) {
+            tableClassName = tableClassName.substring(0, tableClassName.length() - 6);
+        }
+        return tableClassName;
     }
 }
