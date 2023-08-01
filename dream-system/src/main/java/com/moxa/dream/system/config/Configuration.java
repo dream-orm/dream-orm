@@ -4,6 +4,8 @@ import com.moxa.dream.antlr.factory.InvokerFactory;
 import com.moxa.dream.system.cache.CacheFactory;
 import com.moxa.dream.system.compile.CompileFactory;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
+import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
+import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
 import com.moxa.dream.system.inject.factory.InjectFactory;
@@ -26,6 +28,8 @@ public class Configuration {
     private ListenerFactory listenerFactory;
     private TransactionFactory transactionFactory;
     private DataSourceFactory dataSourceFactory;
+    private StatementHandler statementHandler;
+    private ResultSetHandler resultSetHandler;
 
 
     public void addMapper(Class type) {
@@ -126,5 +130,21 @@ public class Configuration {
 
     public void setDataSourceFactory(DataSourceFactory dataSourceFactory) {
         this.dataSourceFactory = dataSourceFactory;
+    }
+
+    public StatementHandler getStatementHandler() {
+        return statementHandler;
+    }
+
+    public void setStatementHandler(StatementHandler statementHandler) {
+        this.statementHandler = statementHandler;
+    }
+
+    public ResultSetHandler getResultSetHandler() {
+        return resultSetHandler;
+    }
+
+    public void setResultSetHandler(ResultSetHandler resultSetHandler) {
+        this.resultSetHandler = resultSetHandler;
     }
 }

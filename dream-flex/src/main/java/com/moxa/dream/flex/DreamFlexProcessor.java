@@ -216,7 +216,7 @@ public class DreamFlexProcessor extends AbstractProcessor {
         String[] params = paramStr.split(",");
         String tableClassName = null;
         for (String param : params) {
-            param=param.trim();
+            param = param.trim();
             if (param.contains("=")) {
                 if (param.startsWith("value=")) {
                     tableClassName = param.substring(6);

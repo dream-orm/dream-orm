@@ -1,9 +1,6 @@
 package com.moxa.dream.base.view;
 
-import com.moxa.dream.base.RandomExtractor;
-import com.moxa.dream.base.table.Blog;
 import com.moxa.dream.base.table.User;
-import com.moxa.dream.system.annotation.Extract;
 import com.moxa.dream.system.annotation.View;
 import com.moxa.dream.template.annotation.Wrap;
 import com.moxa.dream.template.annotation.WrapType;
@@ -12,13 +9,11 @@ import com.moxa.dream.template.wrap.ZeroWrapper;
 @View(User.class)
 public class UserView4 {
     private Integer id;
-    @Extract(RandomExtractor.class)
     private String name;
     private String email;
     @Wrap(value = ZeroWrapper.class, type = WrapType.INSERT)
     private Integer delFlag;
 
-    private Blog blog;
     public Integer getId() {
         return id;
     }

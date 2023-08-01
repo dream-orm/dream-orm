@@ -1,9 +1,6 @@
 package com.moxa.dream.test;
 
 import com.moxa.dream.BootApplication;
-import com.moxa.dream.antlr.expr.QueryExpr;
-import com.moxa.dream.antlr.read.ExprReader;
-import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.base.condition.UserCondition;
 import com.moxa.dream.base.condition.UserCondition2;
 import com.moxa.dream.base.mapper.BlogMapper;
@@ -44,19 +41,13 @@ public class QueryTest {
     public void test2() {
         User user = userMapper.findByName2("'Jone'");
         userMapper.findByName2("'Jone'");
-        templateMapper.deleteById(Blog.class,1111);
+        templateMapper.deleteById(Blog.class, 1111);
         userMapper.findByName2("'Jone'");
         System.out.println();
     }
 
     @Test
     public void test3() {
-        try {
-            Statement expr = new QueryExpr(new ExprReader("select 1 from a where exists(select 1)")).expr();
-            System.out.println(expr);
-        } catch (Exception e) {
-
-        }
         List<User> userList = userMapper.findAll();
         userList.forEach(System.out::println);
     }

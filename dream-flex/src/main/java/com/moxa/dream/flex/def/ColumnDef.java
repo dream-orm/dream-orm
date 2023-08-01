@@ -4,7 +4,6 @@ import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.flex.function.LazyFunctionStatement;
 import com.moxa.dream.flex.invoker.FlexMarkInvokerStatement;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -56,7 +55,7 @@ public class ColumnDef {
         return conditionDef(new OperStatement.EQStatement(), columnDef.getStatement());
     }
 
-    public ConditionDef eq(Serializable value) {
+    public ConditionDef eq(Object value) {
         return conditionDef(new OperStatement.EQStatement(), value);
     }
 
@@ -64,7 +63,7 @@ public class ColumnDef {
         return conditionDef(new OperStatement.NEQStatement(), columnDef.getStatement());
     }
 
-    public ConditionDef neq(Serializable value) {
+    public ConditionDef neq(Object value) {
         return conditionDef(new OperStatement.NEQStatement(), value);
     }
 
@@ -72,7 +71,7 @@ public class ColumnDef {
         return conditionDef(new OperStatement.LEQStatement(), columnDef.getStatement());
     }
 
-    public ConditionDef leq(Serializable value) {
+    public ConditionDef leq(Object value) {
         return conditionDef(new OperStatement.LEQStatement(), value);
     }
 
@@ -80,7 +79,7 @@ public class ColumnDef {
         return conditionDef(new OperStatement.LTStatement(), columnDef.getStatement());
     }
 
-    public ConditionDef lt(Serializable value) {
+    public ConditionDef lt(Object value) {
         return conditionDef(new OperStatement.LTStatement(), value);
     }
 
@@ -88,7 +87,7 @@ public class ColumnDef {
         return conditionDef(new OperStatement.GEQStatement(), columnDef.getStatement());
     }
 
-    public ConditionDef geq(Serializable value) {
+    public ConditionDef geq(Object value) {
         return conditionDef(new OperStatement.GEQStatement(), value);
     }
 
@@ -96,11 +95,11 @@ public class ColumnDef {
         return conditionDef(new OperStatement.GTStatement(), columnDef.getStatement());
     }
 
-    public ConditionDef gt(Serializable value) {
+    public ConditionDef gt(Object value) {
         return conditionDef(new OperStatement.GTStatement(), value);
     }
 
-    public ConditionDef in(Serializable... values) {
+    public ConditionDef in(Object... values) {
         return in(Arrays.asList(values));
     }
 
@@ -120,7 +119,7 @@ public class ColumnDef {
         return conditionDef(new OperStatement.INStatement(), braceStatement);
     }
 
-    public ConditionDef notIn(Serializable... values) {
+    public ConditionDef notIn(Object... values) {
         return not(in(Arrays.asList(values)));
     }
 
@@ -132,31 +131,31 @@ public class ColumnDef {
         return not(in(query));
     }
 
-    public ConditionDef like(Serializable value) {
+    public ConditionDef like(Object value) {
         return conditionDef(new OperStatement.LIKEStatement(), "%" + value + "%");
     }
 
-    public ConditionDef likeLeft(Serializable value) {
+    public ConditionDef likeLeft(Object value) {
         return conditionDef(new OperStatement.LIKEStatement(), "%" + value);
     }
 
-    public ConditionDef likeRight(Serializable value) {
+    public ConditionDef likeRight(Object value) {
         return conditionDef(new OperStatement.LIKEStatement(), value + "%");
     }
 
-    public ConditionDef notLike(Serializable value) {
+    public ConditionDef notLike(Object value) {
         return not(like(value));
     }
 
-    public ConditionDef notLikeLeft(Serializable value) {
+    public ConditionDef notLikeLeft(Object value) {
         return not(likeLeft(value));
     }
 
-    public ConditionDef notLikeRight(Serializable value) {
+    public ConditionDef notLikeRight(Object value) {
         return not(likeRight(value));
     }
 
-    public ConditionDef between(Serializable start, Serializable end) {
+    public ConditionDef between(Object start, Object end) {
         ConditionStatement conditionStatement = new ConditionStatement();
         conditionStatement.setLeft(this.getStatement());
         conditionStatement.setOper(new OperStatement.BETWEENStatement());
@@ -168,7 +167,7 @@ public class ColumnDef {
         return new ConditionDef(conditionStatement);
     }
 
-    public ConditionDef notBetween(Serializable start, Serializable end) {
+    public ConditionDef notBetween(Object start, Object end) {
         return not(between(start, end));
     }
 
@@ -223,7 +222,7 @@ public class ColumnDef {
         return divide(new ColumnDef(new SymbolStatement.LetterStatement(number.toString())));
     }
 
-    protected ConditionDef conditionDef(OperStatement operStatement, Serializable value) {
+    protected ConditionDef conditionDef(OperStatement operStatement, Object value) {
         return conditionDef(operStatement, new FlexMarkInvokerStatement(value));
     }
 

@@ -9,10 +9,11 @@ import com.moxa.dream.template.resulthandler.TreeResultSetHandler;
 import java.util.function.Consumer;
 
 public class SelectTreeMapper extends SelectListMapper {
-    private ResultSetHandler resultSetHandler = new TreeResultSetHandler();
+    private ResultSetHandler resultSetHandler;
 
     public SelectTreeMapper(Session session) {
         super(session);
+        resultSetHandler = new TreeResultSetHandler(session.getConfiguration().getResultSetHandler());
     }
 
     @Override

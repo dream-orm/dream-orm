@@ -4,7 +4,6 @@ import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.flex.config.DataType;
 import com.moxa.dream.flex.config.DateType;
 
-import java.io.Serializable;
 
 public class FunctionDef {
 
@@ -109,7 +108,7 @@ public class FunctionDef {
         return locate(columnDef, columnDef2, (ColumnDef) null);
     }
 
-    public static ColumnDef locate(ColumnDef columnDef, ColumnDef columnDef2, Serializable start) {
+    public static ColumnDef locate(ColumnDef columnDef, ColumnDef columnDef2, Object start) {
         ColumnDef startColumnDef = null;
         if (start != null) {
             startColumnDef = new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(start)));
@@ -137,7 +136,7 @@ public class FunctionDef {
         return functionDef(new FunctionStatement.UpperStatement(), columnDef);
     }
 
-    public static ColumnDef left(ColumnDef columnDef, Serializable length) {
+    public static ColumnDef left(ColumnDef columnDef, Object length) {
         return left(columnDef, new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(length))));
     }
 
@@ -145,7 +144,7 @@ public class FunctionDef {
         return functionDef(new FunctionStatement.LeftStatement(), columnDef, columnDef2);
     }
 
-    public static ColumnDef repeat(ColumnDef columnDef, Serializable time) {
+    public static ColumnDef repeat(ColumnDef columnDef, Object time) {
         return repeat(columnDef, new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(time))));
     }
 
@@ -153,7 +152,7 @@ public class FunctionDef {
         return functionDef(new FunctionStatement.RepeatStatement(), columnDef, columnDef2);
     }
 
-    public static ColumnDef right(ColumnDef columnDef, Serializable length) {
+    public static ColumnDef right(ColumnDef columnDef, Object length) {
         return right(columnDef, new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(length))));
     }
 
@@ -189,11 +188,11 @@ public class FunctionDef {
         return functionDef(new FunctionStatement.StrcmpStatement(), columnDef, columnDef2);
     }
 
-    public static ColumnDef substr(ColumnDef columnDef, Serializable pos) {
+    public static ColumnDef substr(ColumnDef columnDef, Object pos) {
         return substr(columnDef, pos, null);
     }
 
-    public static ColumnDef substr(ColumnDef columnDef, Serializable pos, Serializable len) {
+    public static ColumnDef substr(ColumnDef columnDef, Object pos, Object len) {
         ColumnDef columnDef3 = null;
         if (len != null) {
             columnDef3 = new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(len)));
@@ -237,11 +236,18 @@ public class FunctionDef {
         }
     }
 
+    public static ColumnDef count() {
+        return count(false, null);
+    }
+
     public static ColumnDef count(ColumnDef columnDef) {
         return count(false, columnDef);
     }
 
     public static ColumnDef count(boolean distinct, ColumnDef columnDef) {
+        if (columnDef == null) {
+            columnDef = column("*");
+        }
         if (distinct) {
             return functionDef(new FunctionStatement.CountStatement(), " ", new ColumnDef(new SymbolStatement.LetterStatement("DISTINCT")), columnDef);
         } else {
@@ -373,7 +379,7 @@ public class FunctionDef {
         return functionDef(new FunctionStatement.CotStatement(), columnDef);
     }
 
-    public static ColumnDef date_add(ColumnDef columnDef, Serializable number, DateType dateType) {
+    public static ColumnDef date_add(ColumnDef columnDef, Object number, DateType dateType) {
         DateOperStatement dateOperStatement = null;
         switch (dateType) {
             case SECOND:
@@ -408,7 +414,7 @@ public class FunctionDef {
         return new ColumnDef(dateOperStatement);
     }
 
-    public static ColumnDef date_sub(ColumnDef columnDef, Serializable number, DateType dateType) {
+    public static ColumnDef date_sub(ColumnDef columnDef, Object number, DateType dateType) {
         DateOperStatement dateOperStatement = null;
         switch (dateType) {
             case SECOND:
@@ -535,7 +541,7 @@ public class FunctionDef {
         return functionDef(new FunctionStatement.IfStatement(), new ColumnDef(conditionDef.getStatement()), columnDef, columnDef2);
     }
 
-    public static ColumnDef lpad(ColumnDef columnDef, Serializable length, String padStr) {
+    public static ColumnDef lpad(ColumnDef columnDef, Object length, String padStr) {
         return lpad(columnDef, new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(length))), new ColumnDef(new SymbolStatement.LetterStatement(padStr)));
     }
 
@@ -543,7 +549,7 @@ public class FunctionDef {
         return functionDef(new FunctionStatement.LpadStatement(), columnDef, columnDef2, columnDef3);
     }
 
-    public static ColumnDef rpad(ColumnDef columnDef, Serializable length, String padStr) {
+    public static ColumnDef rpad(ColumnDef columnDef, Object length, String padStr) {
         return rpad(columnDef, new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(length))), new ColumnDef(new SymbolStatement.LetterStatement(padStr)));
     }
 
@@ -615,7 +621,7 @@ public class FunctionDef {
         return new ColumnDef(castTypeStatement);
     }
 
-    public static ColumnDef space(Serializable length) {
+    public static ColumnDef space(Object length) {
         return space(new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(length))));
     }
 
@@ -679,7 +685,7 @@ public class FunctionDef {
         return new UpdateDef().update(tableDef);
     }
 
-    public static ColumnDef column(Serializable column) {
+    public static ColumnDef column(Object column) {
         return new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(column)));
     }
 

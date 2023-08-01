@@ -1,6 +1,5 @@
 package com.moxa.dream.system.core.resultsethandler;
 
-import com.moxa.dream.system.annotation.Extract;
 import com.moxa.dream.system.annotation.Ignore;
 import com.moxa.dream.system.cache.CacheKey;
 import com.moxa.dream.system.config.Configuration;
@@ -8,11 +7,11 @@ import com.moxa.dream.system.config.MappedColumn;
 import com.moxa.dream.system.config.MappedResult;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.session.Session;
-import com.moxa.dream.system.extractor.Extractor;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.system.table.factory.TableFactory;
 import com.moxa.dream.system.typehandler.TypeHandlerNotFoundException;
+import com.moxa.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 import com.moxa.dream.system.util.SystemUtil;
 import com.moxa.dream.util.common.LowHashSet;
@@ -31,6 +30,14 @@ import java.sql.Types;
 import java.util.*;
 
 public class DefaultResultSetHandler implements ResultSetHandler {
+    private ExtractorFactory extractorFactory;
+
+    public DefaultResultSetHandler() {
+    }
+
+    public DefaultResultSetHandler(ExtractorFactory extractorFactory) {
+        this.extractorFactory = extractorFactory;
+    }
 
     @Override
     public Object result(ResultSet resultSet, MappedStatement mappedStatement, Session session) throws SQLException {
@@ -229,6 +236,8 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
     protected boolean linkHandlerForClass(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) throws TypeHandlerNotFoundException {
+        Configuration configuration = mappedStatement.getConfiguration();
+        TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
         Class colType = mappedResult.getColType();
         String curTableName = getTableName(colType);
         List<Field> fieldList = ReflectUtil.findField(colType);
@@ -242,14 +251,13 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     if (mappingField) {
                         if (fieldName.equalsIgnoreCase(property)) {
                             builder.property(fieldName);
-                            TypeHandler typeHandler = mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(field.getType(), builder.getJdbcType());
-                            builder.typeHandler(typeHandler);
-                            if (field.isAnnotationPresent(Extract.class)) {
-                                Extract extractAnnotation = field.getDeclaredAnnotation(Extract.class);
-                                Class<? extends Extractor> extractorType = extractAnnotation.value();
-                                Extractor extractor = ReflectUtil.create(extractorType);
-                                extractor.init(field);
-                                builder.extractor(extractor).field(field);
+                            TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), builder.getJdbcType());
+                            builder.field(field).typeHandler(typeHandler);
+                            if (extractorFactory != null) {
+                                Extractor extractor = extractorFactory.getExtractor(colType, field);
+                                if (extractor != null) {
+                                    builder.extractor(extractor);
+                                }
                             }
                             if (!ObjectUtil.isNull(curTableName)) {
                                 mappedResult.add(builder.build());

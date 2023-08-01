@@ -10,6 +10,7 @@ import javax.sql.DataSource;
 public interface TransactionFactory {
     /**
      * 根据数据源常见事务管理器
+     *
      * @param dataSource 数据源
      * @return
      */

@@ -5,7 +5,6 @@ import com.moxa.dream.antlr.smt.ListColumnStatement;
 import com.moxa.dream.antlr.smt.Statement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 
-import java.io.Serializable;
 
 public class CaseConditionDef extends ColumnDef {
     public CaseConditionDef(Statement statement) {
@@ -25,7 +24,7 @@ public class CaseConditionDef extends ColumnDef {
             return new Builder.Then(this);
         }
 
-        public Builder else_(Serializable elseValue) {
+        public Builder else_(Object elseValue) {
             return else_(new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(elseValue))));
         }
 
@@ -47,7 +46,7 @@ public class CaseConditionDef extends ColumnDef {
                 this.builder = builder;
             }
 
-            public Builder then(Serializable column) {
+            public Builder then(Object column) {
                 if (column instanceof Number) {
                     return then(new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(column))));
                 } else {

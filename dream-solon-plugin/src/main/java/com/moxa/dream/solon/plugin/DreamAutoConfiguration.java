@@ -23,7 +23,11 @@ import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.listener.Listener;
 import com.moxa.dream.system.core.listener.factory.DefaultListenerFactory;
 import com.moxa.dream.system.core.listener.factory.ListenerFactory;
+import com.moxa.dream.system.core.resultsethandler.DefaultResultSetHandler;
+import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.core.session.SessionFactory;
+import com.moxa.dream.system.core.statementhandler.PrepareStatementHandler;
+import com.moxa.dream.system.core.statementhandler.StatementHandler;
 import com.moxa.dream.system.datasource.DataSourceFactory;
 import com.moxa.dream.system.dialect.DefaultDialectFactory;
 import com.moxa.dream.system.dialect.DialectFactory;
@@ -63,6 +67,28 @@ public class DreamAutoConfiguration {
 
     @org.noear.solon.annotation.Inject("${dream}")
     private DreamProperties dreamProperties;
+
+    /**
+     * 创建SQL执行器
+     *
+     * @return SQL执行器
+     */
+    @Bean
+    @Condition(onMissingBean = StatementHandler.class)
+    public StatementHandler statementHandler() {
+        return new PrepareStatementHandler();
+    }
+
+    /**
+     * 创建数据映射器
+     *
+     * @return 数据映射器
+     */
+    @Bean
+    @Condition(onMissingBean = ResultSetHandler.class)
+    public ResultSetHandler resultSetHandler() {
+        return new DefaultResultSetHandler();
+    }
 
     /**
      * SQL操作会话工厂创建类
@@ -380,6 +406,8 @@ public class DreamAutoConfiguration {
                                          ListenerFactory listenerFactory,
                                          DataSourceFactory dataSourceFactory,
                                          TransactionFactory transactionFactory,
+                                         StatementHandler statementHandler,
+                                         ResultSetHandler resultSetHandler,
                                          SessionFactoryBuilder sessionFactoryBuilder) {
         configuration.setPluginFactory(pluginFactory);
         configuration.setInvokerFactory(pluginFactory.plugin(invokerFactory));
@@ -391,6 +419,8 @@ public class DreamAutoConfiguration {
         configuration.setListenerFactory(pluginFactory.plugin(listenerFactory));
         configuration.setDataSourceFactory(pluginFactory.plugin(dataSourceFactory));
         configuration.setTransactionFactory(pluginFactory.plugin(transactionFactory));
+        configuration.setStatementHandler(pluginFactory.plugin(statementHandler));
+        configuration.setResultSetHandler(pluginFactory.plugin(resultSetHandler));
         return sessionFactoryBuilder.build(configuration);
     }
 

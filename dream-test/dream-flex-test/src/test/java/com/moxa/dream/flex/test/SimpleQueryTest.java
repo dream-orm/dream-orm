@@ -7,171 +7,139 @@ import com.moxa.dream.flex.test.table.table.UserTableDef;
 import org.junit.jupiter.api.Test;
 
 import static com.moxa.dream.flex.def.FunctionDef.*;
-import static com.moxa.dream.flex.def.TableDef.table;
 import static com.moxa.dream.flex.test.table.table.BlogTableDef.blog;
 import static com.moxa.dream.flex.test.table.table.UserTableDef.user;
 
 public class SimpleQueryTest {
     private PrintSqlTest printSqlTest = new PrintSqlTest(new ToMYSQL());
 
-
+    /**
+     * 测试普通查询
+     */
     @Test
     public void testColumn() {
         Query query = select(user.id, user.name, user.email).from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
+
+    /**
+     * 测试采用view类查询
+     */
     @Test
     public void testView() {
         Query query = select(user.userView).from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
+
+    /**
+     * 测试别名
+     */
     @Test
     public void testColumnAs() {
-        UserTableDef u=new UserTableDef("u");
+        UserTableDef u = new UserTableDef("u");
         Query query = select(u.id.as("key"), u.name, u.email).from(u);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
+
+    /**
+     * 测试关联多表
+     */
     @Test
-    public void test0() {
-        Query query = select(user.id.add(0).divide(1).multiply(2).sub(4).as("id"), user.name.as("ne"), user.del_flag)
-                .from(user)
-                .where(user.name.eq(1).and(user.name.eq(user.name).and(user.name.lt(2)).and(user.name.leq(2.5)).and(user.name.gt(3).and(user.name.geq(4)))));
+    public void testManyTable() {
+        Query query = select(user.id, user.name, user.email).from(user).leftJoin(blog).on(user.id.eq(blog.id));
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
 
+    /**
+     * 测试列计算
+     */
     @Test
-    public void test1() {
-        Query query = select(user.id.add(0).divide(1).multiply(2).sub(4).as("id"), user.name.as("ne"), user.del_flag)
-                .from(user)
-                .where(user.name.in(1, 2, 3).and(user.name.notIn(1, 2, 3)).and(user.tenant_id.isNull().or(user.tenant_id.isNotNull())));
+    public void testRowCalc() {
+        Query query = select(user.id.add(12), user.name, user.email).from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
 
+    /**
+     * 测试case
+     */
     @Test
-    public void test2() {
-        Query query = select(user.id, user.name, user.del_flag)
-                .from(user)
-                .leftJoin(blog)
-                .on(user.id.eq(blog.user_id));
+    public void testCase() {
+        Query query = select(user.id, case_(user.id).when(1).then("admin").when(2).then("guest").end()).from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
 
+    /**
+     * 测试where
+     */
     @Test
-    public void test3() {
-        Query query = select(user.id.as("id"), user.name, user.del_flag)
-                .from(user)
-                .innerJoin(blog)
-                .on(user.id.eq(blog.user_id))
-                .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1, 2, 3)));
+    public void testWhere() {
+        Query query = select(user.id, user.name, user.email).from(user).where(user.name.like("admin").and(user.id.eq(2).or(user.id.eq(3))));
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
 
+    /**
+     * 测试where select
+     */
     @Test
-    public void test4() {
-        Query query = select(user.dept_id)
-                .from(user)
-                .rightJoin(blog)
-                .on(user.id.eq(blog.user_id))
-                .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1, 2, 3)))
-                .groupBy(user.dept_id).forUpdate();
+    public void testWhereSelect() {
+        Query query = select(user.id, user.name, user.email).from(user).where(user.id.in(select(blog.user_id).from(blog)));
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
 
+    /**
+     * 测试groupBy和函数
+     */
     @Test
-    public void test5() {
-        Query query = select(user.dept_id)
-                .from(user)
-                .leftJoin(blog)
-                .on(user.id.eq(blog.user_id))
-                .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1, 2, 3)))
-                .groupBy(user.dept_id)
-                .having(user.del_flag.eq(0)).forUpdateNoWait();
+    public void testGroupBy() {
+        Query query = select(user.id, count()).from(user).groupBy(user.id);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
 
+    /**
+     * 测试orderBy
+     */
     @Test
-    public void test6() {
-        Query query = select(user.dept_id)
-                .from(user)
-                .leftJoin(blog)
-                .on(user.id.eq(blog.user_id))
-                .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1, 2, 3)))
-                .groupBy(user.dept_id)
-                .having(user.del_flag.eq(0))
-                .orderBy(user.del_flag.desc());
+    public void testOrderBy() {
+        Query query = select(user.id, user.name, user.email).from(user).orderBy(user.id.asc());
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
 
+    /**
+     * 测试分页
+     */
     @Test
-    public void test7() {
-        Integer[] a = {4, 5, 6};
-        Query query = select(user.dept_id)
-                .from(user)
-                .leftJoin(blog)
-                .on(user.id.eq(blog.user_id))
-                .where(user.id.eq(1).and(user.name.like("12")).and(user.tenant_id.notIn(1, 2, 3)).and(user.tenant_id.in(a)))
-                .groupBy(user.dept_id)
-                .having(user.del_flag.eq(0))
-                .orderBy(user.del_flag.desc())
-                .limit(2, 3);
+    public void testLimit() {
+        Query query = select(user.id, user.name, user.email).from(user).limit(1, 1);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
 
+    /**
+     * 测试union
+     */
     @Test
-    public void test8() {
-        UserTableDef user2 = new UserTableDef("u2");
-        Query query = select(user2.id, user2.name, user2.del_flag)
-                .from(table(select(user.id, user.name, user.del_flag).from(user)).as("u2"))
-                .leftJoin(blog)
-                .on(user2.id.eq(blog.user_id));
+    public void testUnion() {
+        Query query = select(user.id, user.name).from(user).union(select(blog.id, blog.name).from(blog));
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }
 
+    /**
+     * 测试forUpdate
+     */
     @Test
-    public void test9() {
-        Query query = select(user.userView)
-                .from(user)
-                .leftJoin(blog)
-                .on(user.id.eq(blog.user_id));
-        SqlInfo sqlInfo = printSqlTest.toSQL(query);
-        System.out.println(sqlInfo);
-    }
-
-    @Test
-    public void test10() {
-        Query query = select(user.userView)
-                .from(user)
-                .where(exists(select(blog.user_id).from(blog).where(blog.user_id.eq(1))));
-        SqlInfo sqlInfo = printSqlTest.toSQL(query);
-        System.out.println(sqlInfo);
-    }
-
-    @Test
-    public void test11() {
-        Query query = select(user.userView)
-                .from(user)
-                .where(notExists(select(blog.user_id).from(blog).where(blog.user_id.eq(1))));
-        SqlInfo sqlInfo = printSqlTest.toSQL(query);
-        System.out.println(sqlInfo);
-    }
-
-    @Test
-    public void test12() {
-        Query query = select(user.userView)
-                .from(user)
-                .where(user.id.notLike(1).and(user.id.notLikeLeft(2)));
+    public void testForUpdate() {
+        Query query = select(user.id, user.name).from(user).forUpdate();
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }

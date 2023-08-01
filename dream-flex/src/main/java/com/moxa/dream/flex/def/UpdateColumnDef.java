@@ -3,7 +3,6 @@ package com.moxa.dream.flex.def;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.flex.invoker.FlexMarkInvokerStatement;
 
-import java.io.Serializable;
 
 public class UpdateColumnDef {
     private UpdateStatement statement;
@@ -27,7 +26,7 @@ public class UpdateColumnDef {
         return this;
     }
 
-    public UpdateColumnDef set(ColumnDef columnDef, Serializable value) {
+    public UpdateColumnDef set(ColumnDef columnDef, Object value) {
         set(columnDef, new ColumnDef(new FlexMarkInvokerStatement(value)));
         return this;
     }

@@ -7,6 +7,8 @@ import com.moxa.dream.system.cache.DefaultCacheFactory;
 import com.moxa.dream.system.cache.MemoryCache;
 import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.core.listener.Listener;
+import com.moxa.dream.system.core.resultsethandler.DefaultResultSetHandler;
+import com.moxa.dream.system.core.resultsethandler.ResultSetHandler;
 import com.moxa.dream.system.table.TableInfo;
 import com.moxa.dream.template.sequence.Sequence;
 import org.springframework.boot.SpringApplication;
@@ -31,6 +33,11 @@ public class BootApplication {
     @Bean
     public Listener listeners() {
         return new DebugListener();
+    }
+
+    @Bean
+    public ResultSetHandler resultSetHandler() {
+        return new DefaultResultSetHandler(new MyExtractorFactory());
     }
 
     @Bean
