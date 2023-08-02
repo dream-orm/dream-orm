@@ -54,7 +54,8 @@ public class QueryTest {
 
     @Test
     public void test4() {
-        userMapper.findByAll();
+        List<Object> byAll = userMapper.findByAll();
+        System.out.println();
     }
 
     @Test

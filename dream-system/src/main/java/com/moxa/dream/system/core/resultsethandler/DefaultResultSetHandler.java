@@ -164,14 +164,15 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             String columnLabel = metaData.getColumnLabel(i);
             String tableName = metaData.getTableName(i);
             ColumnInfo columnInfo = null;
-            if (ObjectUtil.isNull(tableName)) {
-                columnLabel = SystemUtil.underlineToCamel(columnLabel);
-            } else {
+            if (!ObjectUtil.isNull(tableName)) {
                 columnInfo = getColumnInfo(mappedStatement, tableName, columnLabel);
-                if (columnInfo != null && columnInfo.getJdbcType() != Types.NULL && columnInfo.getJdbcType() != jdbcType) {
-                    jdbcType = columnInfo.getJdbcType();
-                }
             }
+            if (columnInfo == null) {
+                columnLabel = SystemUtil.underlineToCamel(columnLabel);
+            } else if (columnInfo.getJdbcType() != Types.NULL && columnInfo.getJdbcType() != jdbcType) {
+                jdbcType = columnInfo.getJdbcType();
+            }
+
             MappedColumn.Builder builder = new MappedColumn
                     .Builder()
                     .index(i)
@@ -223,6 +224,12 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 .getTypeHandlerFactory()
                 .getTypeHandler(mappedResult.getColType()
                         , builder.getJdbcType()));
+        if (extractorFactory != null) {
+            Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), null);
+            if (extractor != null) {
+                builder.extractor(extractor);
+            }
+        }
         mappedResult.add(builder.build());
         return true;
     }
@@ -233,6 +240,12 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 .getTypeHandlerFactory()
                 .getTypeHandler(Object.class
                         , builder.getJdbcType()));
+        if (extractorFactory != null) {
+            Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), null);
+            if (extractor != null) {
+                builder.extractor(extractor);
+            }
+        }
         mappedResult.add(builder.build());
         return true;
     }
@@ -256,7 +269,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                             TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), builder.getJdbcType());
                             builder.field(field).typeHandler(typeHandler);
                             if (extractorFactory != null) {
-                                Extractor extractor = extractorFactory.getExtractor(colType, field);
+                                Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), field);
                                 if (extractor != null) {
                                     builder.extractor(extractor);
                                 }

@@ -82,7 +82,7 @@ public class StarInvoker extends AbstractInvoker {
     }
 
     protected void getQuery(TableFactory tableFactory, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) throws AntlrException {
-        if (Map.class.isAssignableFrom(colType)) {
+        if (Map.class.isAssignableFrom(colType) || colType == Object.class) {
             getQueryFromMap(tableFactory, tableScanInfoMap, queryColumnInfoList, queryColumnList);
         } else {
             String table = getTableName(colType);

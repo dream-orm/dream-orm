@@ -130,5 +130,9 @@ public class MappedColumn {
         public String getTable() {
             return mappedColumn.getTable();
         }
+
+        public ColumnInfo getColumnInfo() {
+            return mappedColumn.getColumnInfo();
+        }
     }
 }
