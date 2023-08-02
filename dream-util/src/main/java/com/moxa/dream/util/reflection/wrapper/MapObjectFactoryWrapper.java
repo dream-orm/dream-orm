@@ -7,9 +7,11 @@ import com.moxa.dream.util.reflection.factory.ObjectFactory;
 
 import java.util.Map;
 
-public class MapObjectFactoryWrapper extends BeanObjectFactoryWrapper {
-    public MapObjectFactoryWrapper(Class type) {
-        super(type);
+public class MapObjectFactoryWrapper implements ObjectFactoryWrapper {
+    private Class<? extends Map> type;
+
+    public MapObjectFactoryWrapper(Class<? extends Map> type) {
+        this.type = type;
     }
 
     @Override

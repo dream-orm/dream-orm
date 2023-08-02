@@ -183,7 +183,7 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
         public void setField(Field field) {
             if (field != null) {
                 int modifiers = field.getModifiers();
-                if(!Modifier.isFinal(modifiers)&&!Modifier.isTransient(modifiers)){
+                if (!Modifier.isFinal(modifiers)) {
                     field.setAccessible(true);
                 }
                 this.field = field;

@@ -1,31 +1,45 @@
 package com.moxa.dream.util.reflection.factory;
 
 import com.moxa.dream.util.exception.DreamRunTimeException;
-import com.moxa.dream.util.reflection.wrapper.BeanObjectFactoryWrapper;
+import com.moxa.dream.util.reflection.wrapper.CollectionObjectFactoryWrapper;
 
 import java.util.Collection;
 import java.util.List;
 
-public class CollectionObjectFactory extends BeanObjectFactory {
+public class CollectionObjectFactory implements ObjectFactory {
+
+    protected CollectionObjectFactoryWrapper factoryWrapper;
+    Collection result;
+
     public CollectionObjectFactory(Collection target) {
         this(target, null);
     }
 
-    public CollectionObjectFactory(Collection target, BeanObjectFactoryWrapper factoryWrapper) {
-        super(target, factoryWrapper);
+    public CollectionObjectFactory(Collection target, CollectionObjectFactoryWrapper factoryWrapper) {
+        this.result = target;
+        this.factoryWrapper = factoryWrapper;
     }
 
     @Override
     public void set(String property, Object value) {
         if (property == null) {
-            ((Collection) result).add(value);
+            result.add(value);
         } else {
-            super.set(property, value);
+            throw new DreamRunTimeException(result.getClass().getName() + "不支持修改属性值");
         }
     }
 
     @Override
-    protected Object get(Object result, String property) {
+    public Object get(String property) {
+        return get(result, property);
+    }
+
+    @Override
+    public Object getObject() {
+        return result;
+    }
+
+    protected Object get(Collection result, String property) {
         if (property == null) {
             return result;
         } else if (Character.isDigit(property.charAt(0))) {
@@ -40,7 +54,7 @@ public class CollectionObjectFactory extends BeanObjectFactory {
                 return null;
             }
         } else {
-            return super.get(result, property);
+            throw new DreamRunTimeException(result.getClass().getName() + "不支持获取属性值");
         }
     }
 }
