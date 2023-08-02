@@ -225,7 +225,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 .getTypeHandler(mappedResult.getColType()
                         , builder.getJdbcType()));
         if (extractorFactory != null) {
-            Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), null);
+            Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), null, builder.getProperty());
             if (extractor != null) {
                 builder.extractor(extractor);
             }
@@ -241,7 +241,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 .getTypeHandler(Object.class
                         , builder.getJdbcType()));
         if (extractorFactory != null) {
-            Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), null);
+            Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), null, builder.getProperty());
             if (extractor != null) {
                 builder.extractor(extractor);
             }
@@ -269,7 +269,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                             TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), builder.getJdbcType());
                             builder.field(field).typeHandler(typeHandler);
                             if (extractorFactory != null) {
-                                Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), field);
+                                Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), field, builder.getProperty());
                                 if (extractor != null) {
                                     builder.extractor(extractor);
                                 }

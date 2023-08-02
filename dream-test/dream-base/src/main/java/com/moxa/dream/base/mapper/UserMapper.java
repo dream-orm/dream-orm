@@ -37,7 +37,7 @@ public interface UserMapper {
     @Sql("select @*(),'hello' name from user")
     List<User> findAll();
 
-    @Sql("select @*() from user")
+    @Sql("select '1123' aaa,@*() from user")
     List<Object> findByAll();
 
     @Sql("select id, name, age,email from user order by id")

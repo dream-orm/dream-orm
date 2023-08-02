@@ -10,13 +10,9 @@ import java.lang.reflect.Field;
 public class MyExtractorFactory implements ExtractorFactory {
 
     @Override
-    public Extractor getExtractor(ColumnInfo columnInfo, Field field) {
-        if(columnInfo!=null){
-        }
-        if(field!=null) {
-            if ("name".equals(field.getName())) {
-                return new RandomExtractor();
-            }
+    public Extractor getExtractor(ColumnInfo columnInfo, Field field, String property) {
+        if("name".equals(property)){
+            return new RandomExtractor();
         }
         return null;
     }
