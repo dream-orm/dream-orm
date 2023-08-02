@@ -14,8 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
 
 public class JdbcExecutor implements Executor {
     protected Transaction transaction;
@@ -99,11 +97,8 @@ public class JdbcExecutor implements Executor {
     }
 
     protected Object batch(Statement statement, BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
-        List<Object> resultList = new ArrayList<>();
-        while (batchMappedStatement.hasNext()) {
-            resultList.add(statementHandler(batchMappedStatement.next()).batch(statement, batchMappedStatement));
-        }
-        return resultList;
+        Object result = statementHandler(batchMappedStatement).batch(statement, batchMappedStatement);
+        return result;
     }
 
     protected Object execute(MappedStatement mappedStatement, Function<Statement, Object> function) throws SQLException {

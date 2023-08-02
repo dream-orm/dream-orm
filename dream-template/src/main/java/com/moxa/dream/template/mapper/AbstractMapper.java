@@ -18,7 +18,6 @@ import com.moxa.dream.util.exception.DreamRunTimeException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 
 public abstract class AbstractMapper {
@@ -32,7 +31,7 @@ public abstract class AbstractMapper {
         this.dialectFactory = session.getConfiguration().getDialectFactory();
     }
 
-    public Object execute(Class<?> type, Object arg, Consumer<MethodInfo> methodInfoConsumer, Consumer<MappedStatement> mappedStatementConsumer) {
+    public Object execute(Class<?> type, Object arg) {
         String key = getKey(type, arg);
         MethodInfo methodInfo = methodInfoMap.get(key);
         if (methodInfo == null) {
@@ -54,34 +53,28 @@ public abstract class AbstractMapper {
                     if (!ObjectUtil.isNull(id)) {
                         methodInfo.setId(id);
                     }
-                    if (methodInfoConsumer != null) {
-                        methodInfoConsumer.accept(methodInfo);
-                    }
                     methodInfoMap.put(key, methodInfo);
                 }
             }
         }
-        return execute(methodInfo, arg, mappedStatementConsumer);
+        return execute(methodInfo, arg);
     }
 
     protected String getKey(Class<?> type, Object arg) {
         return arg == null ? type.getName() : type.getName() + ":" + arg.getClass().getName();
     }
 
-    protected Object execute(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
+    protected Object execute(MethodInfo methodInfo, Object arg) {
         MappedStatement mappedStatement;
         try {
             mappedStatement = dialectFactory.compile(methodInfo, wrapArg(arg));
         } catch (Exception e) {
             throw new DreamRunTimeException(e);
         }
-        return execute(mappedStatement, mappedStatementConsumer);
+        return execute(mappedStatement);
     }
 
-    protected Object execute(MappedStatement mappedStatement, Consumer<MappedStatement> mappedStatementConsumer) {
-        if (mappedStatementConsumer != null) {
-            mappedStatementConsumer.accept(mappedStatement);
-        }
+    protected Object execute(MappedStatement mappedStatement) {
         return session.execute(mappedStatement);
     }
 

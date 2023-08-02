@@ -50,9 +50,9 @@ public class InsertTest {
     @Test
     public void testInsertBatch() {
         List<User> userList = new ArrayList<>();
-        for (int k = 0; k < 100; k++) {
+        for (int k = 0; k < 1500; k++) {
             User user = new User();
-            user.setId(10 + k + 10);
+            user.setId(10000 + k);
             user.setName("name");
             user.setAge(11);
             user.setEmail("email");

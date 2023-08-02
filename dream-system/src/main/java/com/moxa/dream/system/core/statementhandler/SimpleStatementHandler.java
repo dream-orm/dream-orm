@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SimpleStatementHandler implements StatementHandler<Statement> {
     @Override
@@ -34,11 +36,16 @@ public class SimpleStatementHandler implements StatementHandler<Statement> {
 
     @Override
     public Object batch(Statement statement, BatchMappedStatement batchMappedStatement) throws SQLException {
-        for (MappedStatement mappedStatement : batchMappedStatement.getMappedStatementList()) {
-            statement.addBatch(mappedStatement.getSql());
+        List<Object> resultList = new ArrayList<>();
+        while (batchMappedStatement.hasNext()) {
+            BatchMappedStatement nextBatchMappedStatement = batchMappedStatement.next();
+            for (MappedStatement mappedStatement : nextBatchMappedStatement.getMappedStatementList()) {
+                statement.addBatch(mappedStatement.getSql());
+            }
+            int[] result = statement.executeBatch();
+            statement.clearBatch();
+            resultList.add(result);
         }
-        int[] result = statement.executeBatch();
-        statement.clearBatch();
-        return result;
+        return resultList;
     }
 }

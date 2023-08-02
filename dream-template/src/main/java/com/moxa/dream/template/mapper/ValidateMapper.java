@@ -2,7 +2,6 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public abstract class ValidateMapper extends AbstractMapper {
     public ValidateMapper(Session session) {
@@ -81,7 +79,7 @@ public abstract class ValidateMapper extends AbstractMapper {
     }
 
     @Override
-    protected Object execute(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
+    protected Object execute(MethodInfo methodInfo, Object arg) {
         if (arg != null) {
             ValidatePackageList validatePackageList = methodInfo.get(ValidatePackageList.class);
             if (validatePackageList != null) {
@@ -96,11 +94,11 @@ public abstract class ValidateMapper extends AbstractMapper {
                 }
             }
         }
-        return executeValidate(methodInfo, arg, mappedStatementConsumer);
+        return executeValidate(methodInfo, arg);
     }
 
-    protected Object executeValidate(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
-        return super.execute(methodInfo, arg, mappedStatementConsumer);
+    protected Object executeValidate(MethodInfo methodInfo, Object arg) {
+        return super.execute(methodInfo, arg);
     }
 
     protected void validate(Object arg, ValidatePackageList validatePackageList) {

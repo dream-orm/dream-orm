@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PrepareStatementHandler implements StatementHandler<PreparedStatement> {
@@ -56,12 +57,17 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
 
     @Override
     public Object batch(PreparedStatement statement, BatchMappedStatement batchMappedStatement) throws SQLException {
-        for (MappedStatement mappedStatement : batchMappedStatement.getMappedStatementList()) {
-            doParameter(statement, mappedStatement);
-            statement.addBatch();
+        List<Object> resultList = new ArrayList<>();
+        while (batchMappedStatement.hasNext()) {
+            BatchMappedStatement nextBatchMappedStatement = batchMappedStatement.next();
+            for (MappedStatement mappedStatement : nextBatchMappedStatement.getMappedStatementList()) {
+                doParameter(statement, mappedStatement);
+                statement.addBatch();
+            }
+            int[] result = statement.executeBatch();
+            statement.clearBatch();
+            resultList.add(result);
         }
-        int[] result = statement.executeBatch();
-        statement.clearBatch();
-        return result;
+        return resultList;
     }
 }

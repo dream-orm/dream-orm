@@ -1,22 +1,15 @@
 package com.moxa.dream.template.mapper;
 
-import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.template.resulthandler.Tree;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * 模板操作接口
  */
 public interface TemplateMapper {
-    TemplateMapper methodInfo(Consumer<MethodInfo> consumer);
-
-    TemplateMapper mappedStatement(Consumer<MappedStatement> consumer);
-
     /**
      * 根据主键查询
      *

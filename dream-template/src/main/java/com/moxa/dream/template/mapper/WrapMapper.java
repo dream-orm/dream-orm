@@ -2,7 +2,6 @@ package com.moxa.dream.template.mapper;
 
 import com.moxa.dream.system.config.Command;
 import com.moxa.dream.system.config.Configuration;
-import com.moxa.dream.system.config.MappedStatement;
 import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.core.session.Session;
 import com.moxa.dream.system.table.TableInfo;
@@ -15,7 +14,6 @@ import com.moxa.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.function.Consumer;
 
 public abstract class WrapMapper extends ValidateMapper {
 
@@ -53,7 +51,7 @@ public abstract class WrapMapper extends ValidateMapper {
     protected abstract MethodInfo getWrapMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg);
 
     @Override
-    protected Object execute(MethodInfo methodInfo, Object arg, Consumer<MappedStatement> mappedStatementConsumer) {
+    protected Object execute(MethodInfo methodInfo, Object arg) {
         WrapObjectMap wrapObjectMap = methodInfo.get(WrapObjectMap.class);
         Command command = getCommand();
         if (command == Command.BATCH) {
@@ -68,7 +66,7 @@ public abstract class WrapMapper extends ValidateMapper {
                 wrap(wrapObjectMap, arg);
             }
         }
-        return super.execute(methodInfo, arg, mappedStatementConsumer);
+        return super.execute(methodInfo, arg);
     }
 
     protected void wrap(WrapObjectMap wrapObjectMap, Object arg) {

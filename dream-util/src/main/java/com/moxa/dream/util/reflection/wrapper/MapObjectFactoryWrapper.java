@@ -17,7 +17,7 @@ public class MapObjectFactoryWrapper implements ObjectFactoryWrapper {
     @Override
     public ObjectFactory newObjectFactory(Object target) {
         if (target == null) {
-            return new MapObjectFactory((Map<String, Object>) ReflectUtil.create(type));
+            return new MapObjectFactory(ReflectUtil.create(type));
         } else {
             return new MapObjectFactory((Map) target);
         }

@@ -1,7 +1,5 @@
 package com.moxa.dream.template.service;
 
-import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.Page;
 import com.moxa.dream.template.mapper.TemplateMapper;
 import com.moxa.dream.util.exception.DreamRunTimeException;
@@ -10,7 +8,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 
 public abstract class ServiceImpl<ListView, EditView> implements IService<ListView, EditView> {
     protected TemplateMapper templateMapper;
@@ -34,16 +31,6 @@ public abstract class ServiceImpl<ListView, EditView> implements IService<ListVi
         } else {
             throw new DreamRunTimeException(this.getClass() + "未发现范型");
         }
-    }
-
-    @Override
-    public IService<ListView, EditView> methodInfo(Consumer<MethodInfo> consumer) {
-        return new TutorServiceImpl<ListView, EditView>(templateMapper, listViewType, editViewType).methodInfo(consumer);
-    }
-
-    @Override
-    public IService<ListView, EditView> mappedStatement(Consumer<MappedStatement> consumer) {
-        return new TutorServiceImpl<ListView, EditView>(templateMapper, listViewType, editViewType).mappedStatement(consumer);
     }
 
     @Override

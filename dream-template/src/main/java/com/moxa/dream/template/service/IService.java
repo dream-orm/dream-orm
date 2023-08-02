@@ -1,12 +1,9 @@
 package com.moxa.dream.template.service;
 
-import com.moxa.dream.system.config.MappedStatement;
-import com.moxa.dream.system.config.MethodInfo;
 import com.moxa.dream.system.config.Page;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * 顶级Service接口
@@ -15,9 +12,6 @@ import java.util.function.Consumer;
  * @param <EditView> 编辑页返回数据
  */
 public interface IService<ListView, EditView> {
-    IService<ListView, EditView> methodInfo(Consumer<MethodInfo> consumer);
-
-    IService<ListView, EditView> mappedStatement(Consumer<MappedStatement> consumer);
 
     EditView selectById(Object id);
 
