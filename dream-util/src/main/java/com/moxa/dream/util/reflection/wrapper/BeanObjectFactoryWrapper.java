@@ -8,6 +8,7 @@ import com.moxa.dream.util.reflection.factory.ObjectFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.List;
@@ -181,7 +182,10 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
 
         public void setField(Field field) {
             if (field != null) {
-                field.setAccessible(true);
+                int modifiers = field.getModifiers();
+                if(!Modifier.isFinal(modifiers)&&!Modifier.isTransient(modifiers)){
+                    field.setAccessible(true);
+                }
                 this.field = field;
             }
         }

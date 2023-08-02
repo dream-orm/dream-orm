@@ -1,6 +1,6 @@
 package com.moxa.dream.base;
 
-import com.moxa.dream.system.core.resultsethandler.Extractor;
+import com.moxa.dream.system.core.resultsethandler.extract.Extractor;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
 
 import java.util.UUID;

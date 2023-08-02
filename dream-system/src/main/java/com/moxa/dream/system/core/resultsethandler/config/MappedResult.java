@@ -1,4 +1,4 @@
-package com.moxa.dream.system.config;
+package com.moxa.dream.system.core.resultsethandler.config;
 
 import com.moxa.dream.util.common.NonCollection;
 import com.moxa.dream.util.reflection.factory.ObjectFactory;

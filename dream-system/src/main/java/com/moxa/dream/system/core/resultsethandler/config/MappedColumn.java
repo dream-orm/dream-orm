@@ -1,6 +1,6 @@
-package com.moxa.dream.system.config;
+package com.moxa.dream.system.core.resultsethandler.config;
 
-import com.moxa.dream.system.core.resultsethandler.Extractor;
+import com.moxa.dream.system.core.resultsethandler.extract.Extractor;
 import com.moxa.dream.system.table.ColumnInfo;
 import com.moxa.dream.system.typehandler.handler.TypeHandler;
 

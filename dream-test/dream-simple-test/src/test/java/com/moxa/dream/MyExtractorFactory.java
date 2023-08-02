@@ -1,8 +1,8 @@
 package com.moxa.dream;
 
 import com.moxa.dream.base.RandomExtractor;
-import com.moxa.dream.system.core.resultsethandler.Extractor;
-import com.moxa.dream.system.core.resultsethandler.ExtractorFactory;
+import com.moxa.dream.system.core.resultsethandler.extract.Extractor;
+import com.moxa.dream.system.core.resultsethandler.extract.ExtractorFactory;
 
 import java.lang.reflect.Field;
 

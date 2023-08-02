@@ -1,4 +1,4 @@
-package com.moxa.dream.system.core.resultsethandler;
+package com.moxa.dream.system.core.resultsethandler.extract;
 
 import com.moxa.dream.util.reflection.factory.ObjectFactory;
 
