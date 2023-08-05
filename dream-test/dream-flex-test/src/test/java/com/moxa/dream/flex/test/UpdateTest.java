@@ -14,7 +14,7 @@ public class UpdateTest {
 
     @Test
     public void test0() {
-        Update update = update(user).set(user.name, concat(user.name, column("111"))).where(user.id.eq(1));
+        Update update = update(user).set(user.name, concat(user.name, col("111"))).where(user.id.eq(1));
         SqlInfo sqlInfo = printSqlTest.toSQL(update);
         System.out.println(sqlInfo);
     }

@@ -25,13 +25,6 @@ public class TableDef {
         this.statement = statement;
     }
 
-    public static AliasTableDef table(Query query) {
-        BraceStatement braceStatement = new BraceStatement(query.getStatement());
-        AliasStatement aliasStatement = new AliasStatement();
-        aliasStatement.setColumn(braceStatement);
-        return new AliasTableDef(aliasStatement);
-    }
-
     public AliasStatement getStatement() {
         return statement;
     }

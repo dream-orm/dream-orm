@@ -246,7 +246,7 @@ public class FunctionDef {
 
     public static ColumnDef count(boolean distinct, ColumnDef columnDef) {
         if (columnDef == null) {
-            columnDef = column("*");
+            columnDef = col("*");
         }
         if (distinct) {
             return functionDef(new FunctionStatement.CountStatement(), " ", new ColumnDef(new SymbolStatement.LetterStatement("DISTINCT")), columnDef);
@@ -685,8 +685,47 @@ public class FunctionDef {
         return new UpdateDef().update(tableDef);
     }
 
-    public static ColumnDef column(Object column) {
+    public static ColumnDef col(Object column) {
         return new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(column)));
+    }
+
+    public static ColumnDef[] cols(Object[] columns) {
+        ColumnDef[] columnDefs = new ColumnDef[columns.length];
+        for (int i = 0; i < columns.length; i++) {
+            columnDefs[i] = col(columns[i]);
+        }
+        return columnDefs;
+    }
+
+    public static ColumnDef column(Object column) {
+        return new ColumnDef(new SymbolStatement.SingleMarkStatement(String.valueOf(column)));
+    }
+
+    public static ColumnDef[] columns(Object[] columns) {
+        ColumnDef[] columnDefs = new ColumnDef[columns.length];
+        for (int i = 0; i < columns.length; i++) {
+            columnDefs[i] = column(columns[i]);
+        }
+        return columnDefs;
+    }
+
+    public static AliasTableDef tab(String table) {
+        AliasStatement aliasStatement = new AliasStatement();
+        aliasStatement.setColumn(new SymbolStatement.LetterStatement(table));
+        return new AliasTableDef(aliasStatement);
+    }
+
+    public static AliasTableDef table(String table) {
+        AliasStatement aliasStatement = new AliasStatement();
+        aliasStatement.setColumn(new SymbolStatement.SingleMarkStatement(table));
+        return new AliasTableDef(aliasStatement);
+    }
+
+    public static AliasTableDef table(Query query) {
+        BraceStatement braceStatement = new BraceStatement(query.getStatement());
+        AliasStatement aliasStatement = new AliasStatement();
+        aliasStatement.setColumn(braceStatement);
+        return new AliasTableDef(aliasStatement);
     }
 
     private static ColumnDef functionDef(FunctionStatement functionStatement, ColumnDef... columnDefs) {

@@ -53,23 +53,23 @@ public class FunctionQueryTest {
                 floor(user.name),
                 ln(user.name),
                 log(user.name),
-                log(column("2"), user.name),
+                log(col("2"), user.name),
                 log2(user.name),
                 log10(user.name),
                 max(user.name),
                 min(user.name),
-                mod(user.name, column(4)),
+                mod(user.name, col(4)),
                 pi(),
-                pow(column(2), column(4)),
-                power(column(2), column(4)),
+                pow(col(2), col(4)),
+                power(col(2), col(4)),
                 rand(),
-                round(column(23), column(2)),
+                round(col(23), col(2)),
                 sign(user.dept_id),
                 sin(user.dept_id),
                 sqrt(user.dept_id),
                 sum(true, user.dept_id),
                 tan(user.dept_id),
-                truncate(user.dept_id, column(2))
+                truncate(user.dept_id, col(2))
         )
                 .from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
@@ -108,9 +108,9 @@ public class FunctionQueryTest {
                 convert(user.name, DataType.CHAR),
                 cast(user.name, DataType.SIGNED),
                 isnull(user.name),
-                ifnull(user.name, column(3)),
-                if_(user.name.eq(2), column(1), column(2)),
-                nullif(column(1), column(2))
+                ifnull(user.name, col(3)),
+                if_(user.name.eq(2), col(1), col(2)),
+                nullif(col(1), col(2))
         )
                 .from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
@@ -120,8 +120,8 @@ public class FunctionQueryTest {
     @Test
     public void testCaseWhen() {
         Query query = select(
-                case_().when(user.name.eq(column("3"))).then(user.name).when(user.name.eq("4")).then(column("5")).else_(column(6)).end().as("aa"),
-                case_(user.name).when(column("a")).then(column("b")).when("a").then(4).else_("7").end().as("vv")
+                case_().when(user.name.eq(col("3"))).then(user.name).when(user.name.eq("4")).then(col("5")).else_(col(6)).end().as("aa"),
+                case_(user.name).when(col("a")).then(col("b")).when("a").then(4).else_("7").end().as("vv")
         )
                 .from(user);
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
