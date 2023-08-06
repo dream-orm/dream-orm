@@ -7,6 +7,7 @@ import com.moxa.dream.flex.invoker.FlexMarkInvokerStatement;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 public class ColumnDef {
     private Statement statement;
@@ -51,56 +52,60 @@ public class ColumnDef {
         return columnDef;
     }
 
-    public ConditionDef eq(ColumnDef columnDef) {
-        return conditionDef(new OperStatement.EQStatement(), columnDef.getStatement());
-    }
-
     public ConditionDef eq(Object value) {
         return conditionDef(new OperStatement.EQStatement(), value);
     }
 
-    public ConditionDef neq(ColumnDef columnDef) {
-        return conditionDef(new OperStatement.NEQStatement(), columnDef.getStatement());
+    public <T> ConditionDef eq(T value, Predicate<T> fn) {
+        return eq(value).when(fn.test(value));
     }
 
     public ConditionDef neq(Object value) {
         return conditionDef(new OperStatement.NEQStatement(), value);
     }
 
-    public ConditionDef leq(ColumnDef columnDef) {
-        return conditionDef(new OperStatement.LEQStatement(), columnDef.getStatement());
+    public <T> ConditionDef neq(T value, Predicate<T> fn) {
+        return neq(value).when(fn.test(value));
     }
 
     public ConditionDef leq(Object value) {
         return conditionDef(new OperStatement.LEQStatement(), value);
     }
 
-    public ConditionDef lt(ColumnDef columnDef) {
-        return conditionDef(new OperStatement.LTStatement(), columnDef.getStatement());
+    public <T> ConditionDef leq(T value, Predicate<T> fn) {
+        return leq(value).when(fn.test(value));
     }
 
     public ConditionDef lt(Object value) {
         return conditionDef(new OperStatement.LTStatement(), value);
     }
 
-    public ConditionDef geq(ColumnDef columnDef) {
-        return conditionDef(new OperStatement.GEQStatement(), columnDef.getStatement());
+    public <T> ConditionDef lt(T value, Predicate<T> fn) {
+        return lt(value).when(fn.test(value));
     }
 
     public ConditionDef geq(Object value) {
         return conditionDef(new OperStatement.GEQStatement(), value);
     }
 
-    public ConditionDef gt(ColumnDef columnDef) {
-        return conditionDef(new OperStatement.GTStatement(), columnDef.getStatement());
+    public <T> ConditionDef geq(T value, Predicate<T> fn) {
+        return geq(value).when(fn.test(value));
     }
 
     public ConditionDef gt(Object value) {
         return conditionDef(new OperStatement.GTStatement(), value);
     }
 
+    public <T> ConditionDef gt(T value, Predicate<T> fn) {
+        return gt(value).when(fn.test(value));
+    }
+
     public ConditionDef in(Object... values) {
         return in(Arrays.asList(values));
+    }
+
+    public ConditionDef in(Object[] values, Predicate<Object[]> fn) {
+        return in(values).when(fn.test(values));
     }
 
     public ConditionDef in(Collection<?> values) {
@@ -114,6 +119,10 @@ public class ColumnDef {
         return conditionDef(new OperStatement.INStatement(), braceStatement);
     }
 
+    public ConditionDef in(Collection<?> values, Predicate<Collection<?>> fn) {
+        return in(values).when(fn.test(values));
+    }
+
     public ConditionDef in(Query query) {
         BraceStatement braceStatement = new BraceStatement(query.getStatement());
         return conditionDef(new OperStatement.INStatement(), braceStatement);
@@ -123,8 +132,16 @@ public class ColumnDef {
         return not(in(Arrays.asList(values)));
     }
 
+    public ConditionDef notIn(Object[] values, Predicate<Object[]> fn) {
+        return notIn(values).when(fn.test(values));
+    }
+
     public ConditionDef notIn(Collection<?> values) {
         return not(in(values));
+    }
+
+    public ConditionDef notIn(Collection<?> values, Predicate<Collection<?>> fn) {
+        return not(in(values)).when(fn.test(values));
     }
 
     public ConditionDef notIn(Query query) {
@@ -141,6 +158,10 @@ public class ColumnDef {
         return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
     }
 
+    public <T> ConditionDef like(T value, Predicate<T> fn) {
+        return like(value).when(fn.test(value));
+    }
+
     public ConditionDef likeLeft(Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
@@ -148,6 +169,10 @@ public class ColumnDef {
         listColumnStatement.add(new FlexMarkInvokerStatement(value));
         concatStatement.setParamsStatement(listColumnStatement);
         return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
+    }
+
+    public <T> ConditionDef likeLeft(T value, Predicate<T> fn) {
+        return likeLeft(value).when(fn.test(value));
     }
 
     public ConditionDef likeRight(Object value) {
@@ -159,16 +184,32 @@ public class ColumnDef {
         return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
     }
 
+    public <T> ConditionDef likeRight(T value, Predicate<T> fn) {
+        return likeRight(value).when(fn.test(value));
+    }
+
     public ConditionDef notLike(Object value) {
         return not(like(value));
+    }
+
+    public <T> ConditionDef notLike(T value, Predicate<T> fn) {
+        return notLike(value).when(fn.test(value));
     }
 
     public ConditionDef notLikeLeft(Object value) {
         return not(likeLeft(value));
     }
 
+    public <T> ConditionDef notLikeLeft(T value, Predicate<T> fn) {
+        return notLikeLeft(value).when(fn.test(value));
+    }
+
     public ConditionDef notLikeRight(Object value) {
         return not(likeRight(value));
+    }
+
+    public <T> ConditionDef notLikeRight(T value, Predicate<T> fn) {
+        return notLikeRight(value).when(fn.test(value));
     }
 
     public ConditionDef between(Object start, Object end) {
@@ -183,8 +224,16 @@ public class ColumnDef {
         return new ConditionDef(conditionStatement);
     }
 
+    public ConditionDef between(Object start, Object end, Predicate<Object[]> fn) {
+        return between(start, end).when(fn.test(new Object[]{start, end}));
+    }
+
     public ConditionDef notBetween(Object start, Object end) {
         return not(between(start, end));
+    }
+
+    public ConditionDef notBetween(Object start, Object end, Predicate<Object[]> fn) {
+        return notBetween(start, end).when(fn.test(new Object[]{start, end}));
     }
 
     public ConditionDef isNull() {

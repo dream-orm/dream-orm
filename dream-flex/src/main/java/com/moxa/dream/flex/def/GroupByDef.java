@@ -3,7 +3,6 @@ package com.moxa.dream.flex.def;
 import com.moxa.dream.antlr.smt.ConditionStatement;
 import com.moxa.dream.antlr.smt.HavingStatement;
 import com.moxa.dream.antlr.smt.QueryStatement;
-import com.moxa.dream.antlr.smt.WhereStatement;
 
 public class GroupByDef extends HavingDef {
 

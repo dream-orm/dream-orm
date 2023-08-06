@@ -8,6 +8,7 @@ import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.flex.config.SqlInfo;
 import com.moxa.dream.flex.def.Delete;
+import com.moxa.dream.flex.def.Insert;
 import com.moxa.dream.flex.def.Query;
 import com.moxa.dream.flex.def.Update;
 import com.moxa.dream.flex.inject.FlexInject;
@@ -88,6 +89,12 @@ public class DefaultFlexMapper implements FlexMapper {
     @Override
     public int delete(Delete delete) {
         MappedStatement mappedStatement = getMappedStatement(Command.DELETE, delete.getStatement(), NonCollection.class, Integer.class);
+        return (int) session.execute(mappedStatement);
+    }
+
+    @Override
+    public int insert(Insert insert) {
+        MappedStatement mappedStatement = getMappedStatement(Command.INSERT, insert.getStatement(), NonCollection.class, Integer.class);
         return (int) session.execute(mappedStatement);
     }
 

@@ -104,12 +104,15 @@ public class SimpleQueryTest {
         System.out.println(sqlInfo);
     }
 
+    /**
+     * 测试where dynamic
+     */
     @Test
     public void testWhereDynamic() {
         Query query = select(user.id, user.name, user.email).from(user)
-                .where(user.name.like("a").when(false)
+                .where(user.name.like("a").when(true)
                         .and(user.name.likeLeft(null).when(false))
-                        .and(user.name.likeRight("c").when(false)));
+                        .and(user.name.likeRight("c", c -> c != null)));
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }

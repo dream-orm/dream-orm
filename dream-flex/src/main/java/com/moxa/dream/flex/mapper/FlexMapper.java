@@ -1,6 +1,7 @@
 package com.moxa.dream.flex.mapper;
 
 import com.moxa.dream.flex.def.Delete;
+import com.moxa.dream.flex.def.Insert;
 import com.moxa.dream.flex.def.Query;
 import com.moxa.dream.flex.def.Update;
 import com.moxa.dream.system.config.Page;
@@ -62,4 +63,12 @@ public interface FlexMapper {
      * @return 删除数量
      */
     int delete(Delete delete);
+
+    /**
+     * 插入操作
+     *
+     * @param insert 插入定义器
+     * @return 插入数量
+     */
+    int insert(Insert insert);
 }
