@@ -685,6 +685,14 @@ public class FunctionDef {
         return new UpdateDef().update(tableDef);
     }
 
+    public static DeleteTableDef delete(TableDef tableDef) {
+        return new DeleteDef().delete(tableDef);
+    }
+
+    public static InsertIntoTableDef insertInto(TableDef tableDef) {
+        return new InsertDef().insertInto(tableDef);
+    }
+
     public static ColumnDef col(Object column) {
         return new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(column)));
     }

@@ -1,7 +1,6 @@
 package com.moxa.dream.flex.def;
 
 import com.moxa.dream.antlr.smt.AliasStatement;
-import com.moxa.dream.antlr.smt.BraceStatement;
 import com.moxa.dream.antlr.smt.SymbolStatement;
 import com.moxa.dream.flex.invoker.FlexTableInvokerStatement;
 

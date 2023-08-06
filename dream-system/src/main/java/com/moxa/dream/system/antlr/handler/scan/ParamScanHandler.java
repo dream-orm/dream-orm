@@ -128,8 +128,8 @@ public class ParamScanHandler extends AbstractHandler {
         protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
             InsertStatement insertStatement = (InsertStatement) statement;
             table = ((SymbolStatement) insertStatement.getTable()).getValue();
-            if (insertStatement.getParams() != null) {
-                List<String> columnList = Arrays.stream(((ListColumnStatement) ((BraceStatement) insertStatement.getParams()).getStatement()).getColumnList())
+            if (insertStatement.getColumns() != null) {
+                List<String> columnList = Arrays.stream(((ListColumnStatement) ((BraceStatement) insertStatement.getColumns()).getStatement()).getColumnList())
                         .map(column -> ((SymbolStatement) column).getValue())
                         .collect(Collectors.toList());
                 if (!ObjectUtil.isNull(paramList)) {

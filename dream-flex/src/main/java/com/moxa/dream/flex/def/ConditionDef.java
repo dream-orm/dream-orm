@@ -20,7 +20,23 @@ public class ConditionDef {
         return conditionDef(conditionDef, new OperStatement.ORStatement());
     }
 
+    public ConditionDef when(boolean effective) {
+        if (!effective) {
+            this.statement = null;
+        }
+        return this;
+    }
+
     protected ConditionDef conditionDef(ConditionDef conditionDef, OperStatement operStatement) {
+        if (this.statement == null && conditionDef.statement == null) {
+            return new ConditionDef(null);
+        }
+        if (this.statement == null) {
+            return conditionDef;
+        }
+        if (conditionDef.statement == null) {
+            return this;
+        }
         ConditionStatement conditionStatement = new ConditionStatement();
         conditionStatement.setLeft(getWrapStatement(this.statement, operStatement));
         conditionStatement.setOper(operStatement);

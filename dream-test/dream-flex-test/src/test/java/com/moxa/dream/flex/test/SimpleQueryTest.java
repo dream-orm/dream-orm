@@ -95,11 +95,41 @@ public class SimpleQueryTest {
     }
 
     /**
+     * 测试where like
+     */
+    @Test
+    public void testWhereLike() {
+        Query query = select(user.id, user.name, user.email).from(user).where(user.name.like("a").and(user.name.likeLeft("b").and(user.name.likeRight("c"))));
+        SqlInfo sqlInfo = printSqlTest.toSQL(query);
+        System.out.println(sqlInfo);
+    }
+
+    @Test
+    public void testWhereDynamic() {
+        Query query = select(user.id, user.name, user.email).from(user)
+                .where(user.name.like("a").when(false)
+                        .and(user.name.likeLeft(null).when(false))
+                        .and(user.name.likeRight("c").when(false)));
+        SqlInfo sqlInfo = printSqlTest.toSQL(query);
+        System.out.println(sqlInfo);
+    }
+
+    /**
      * 测试groupBy和函数
      */
     @Test
     public void testGroupBy() {
         Query query = select(user.id, count()).from(user).groupBy(user.id);
+        SqlInfo sqlInfo = printSqlTest.toSQL(query);
+        System.out.println(sqlInfo);
+    }
+
+    /**
+     * 测试having函数
+     */
+    @Test
+    public void testHaving() {
+        Query query = select(user.id, count()).from(user).groupBy(user.id).having(user.id.eq(1).when(false));
         SqlInfo sqlInfo = printSqlTest.toSQL(query);
         System.out.println(sqlInfo);
     }

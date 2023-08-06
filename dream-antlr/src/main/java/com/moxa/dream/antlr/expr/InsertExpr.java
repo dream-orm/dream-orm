@@ -41,7 +41,7 @@ public class InsertExpr extends HelperExpr {
     protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
         BraceExpr braceExpr = new BraceExpr(exprReader);
         Statement statement = braceExpr.expr();
-        insertStatement.setParams(statement);
+        insertStatement.setColumns(statement);
         setExprTypes(ExprType.VALUES, ExprType.SELECT);
         return expr();
     }

@@ -132,15 +132,31 @@ public class ColumnDef {
     }
 
     public ConditionDef like(Object value) {
-        return conditionDef(new OperStatement.LIKEStatement(), "%" + value + "%");
+        FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
+        listColumnStatement.add(new FlexMarkInvokerStatement(value));
+        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
+        concatStatement.setParamsStatement(listColumnStatement);
+        return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
     }
 
     public ConditionDef likeLeft(Object value) {
-        return conditionDef(new OperStatement.LIKEStatement(), "%" + value);
+        FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
+        listColumnStatement.add(new FlexMarkInvokerStatement(value));
+        concatStatement.setParamsStatement(listColumnStatement);
+        return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
     }
 
     public ConditionDef likeRight(Object value) {
-        return conditionDef(new OperStatement.LIKEStatement(), value + "%");
+        FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.add(new FlexMarkInvokerStatement(value));
+        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
+        concatStatement.setParamsStatement(listColumnStatement);
+        return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
     }
 
     public ConditionDef notLike(Object value) {

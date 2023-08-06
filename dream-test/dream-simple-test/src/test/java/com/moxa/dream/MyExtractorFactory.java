@@ -11,7 +11,7 @@ public class MyExtractorFactory implements ExtractorFactory {
 
     @Override
     public Extractor getExtractor(ColumnInfo columnInfo, Field field, String property) {
-        if("name".equals(property)){
+        if ("name".equals(property)) {
             return new RandomExtractor();
         }
         return null;

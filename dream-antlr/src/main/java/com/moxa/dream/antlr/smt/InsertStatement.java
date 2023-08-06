@@ -2,7 +2,7 @@ package com.moxa.dream.antlr.smt;
 
 public class InsertStatement extends Statement {
     private Statement table;
-    private Statement params;
+    private Statement columns;
     private Statement values;
 
     public Statement getTable() {
@@ -13,12 +13,12 @@ public class InsertStatement extends Statement {
         this.table = wrapParent(table);
     }
 
-    public Statement getParams() {
-        return params;
+    public Statement getColumns() {
+        return columns;
     }
 
-    public void setParams(Statement params) {
-        this.params = wrapParent(params);
+    public void setColumns(Statement columns) {
+        this.columns = wrapParent(columns);
     }
 
     public Statement getValues() {
@@ -31,7 +31,7 @@ public class InsertStatement extends Statement {
 
     @Override
     protected Boolean isNeedInnerCache() {
-        return isNeedInnerCache(table, params, values);
+        return isNeedInnerCache(table, columns, values);
     }
 
     public static class ValuesStatement extends Statement {

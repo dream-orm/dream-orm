@@ -7,6 +7,7 @@ import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.antlr.sql.ToSQL;
 import com.moxa.dream.flex.config.SqlInfo;
+import com.moxa.dream.flex.def.Delete;
 import com.moxa.dream.flex.def.Query;
 import com.moxa.dream.flex.def.Update;
 import com.moxa.dream.flex.inject.FlexInject;
@@ -57,13 +58,13 @@ public class DefaultFlexMapper implements FlexMapper {
 
     @Override
     public <T> T selectOne(Query query, Class<T> type) {
-        MappedStatement mappedStatement = getMappedStatement(query.getStatement(), NonCollection.class, type);
+        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, query.getStatement(), NonCollection.class, type);
         return (T) session.execute(mappedStatement);
     }
 
     @Override
     public <T> List<T> selectList(Query query, Class<T> type) {
-        MappedStatement mappedStatement = getMappedStatement(query.getStatement(), List.class, type);
+        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, query.getStatement(), List.class, type);
         return (List<T>) session.execute(mappedStatement);
     }
 
@@ -71,8 +72,8 @@ public class DefaultFlexMapper implements FlexMapper {
     public <T> Page<T> selectPage(Query query, Class<T> type, Page page) {
         QueryStatement statement = query.getStatement();
         QueryStatement queryStatement = pageQueryStatement(statement, page.getStartRow(), page.getPageSize());
-        MappedStatement mappedStatement = getMappedStatement(queryStatement, Collection.class, type);
-        MappedStatement countMappedStatement = getMappedStatement(countQueryStatement(queryStatement), NonCollection.class, Long.class);
+        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, queryStatement, Collection.class, type);
+        MappedStatement countMappedStatement = getMappedStatement(Command.QUERY, countQueryStatement(queryStatement), NonCollection.class, Long.class);
         page.setTotal((long) session.execute(countMappedStatement));
         page.setRows((Collection) session.execute(mappedStatement));
         return page;
@@ -80,7 +81,13 @@ public class DefaultFlexMapper implements FlexMapper {
 
     @Override
     public int update(Update update) {
-        MappedStatement mappedStatement = getMappedStatement(update.getStatement(), NonCollection.class, Integer.class);
+        MappedStatement mappedStatement = getMappedStatement(Command.UPDATE, update.getStatement(), NonCollection.class, Integer.class);
+        return (int) session.execute(mappedStatement);
+    }
+
+    @Override
+    public int delete(Delete delete) {
+        MappedStatement mappedStatement = getMappedStatement(Command.DELETE, delete.getStatement(), NonCollection.class, Integer.class);
         return (int) session.execute(mappedStatement);
     }
 
@@ -155,7 +162,7 @@ public class DefaultFlexMapper implements FlexMapper {
         return methodInfo;
     }
 
-    private MappedStatement getMappedStatement(Statement statement, Class<? extends Collection> rowType, Class<?> colType) {
+    private MappedStatement getMappedStatement(Command command, Statement statement, Class<? extends Collection> rowType, Class<?> colType) {
         MethodInfo methodInfo = getMethodInfo(statement, rowType, colType);
         SqlInfo sqlInfo = toSQL(methodInfo);
         List<Object> paramList = sqlInfo.getParamList();
@@ -182,7 +189,7 @@ public class DefaultFlexMapper implements FlexMapper {
         methodInfo.setMethodKey(methodKey);
         CacheKey uniqueKey = methodKey.clone();
         uniqueKey.update(sqlInfo.getParamList().toArray());
-        MappedSql mappedSql = new MappedSql(Command.QUERY.name(), sql, sqlInfo.getTableSet());
+        MappedSql mappedSql = new MappedSql(command.name(), sql, sqlInfo.getTableSet());
         MappedStatement mappedStatement = new MappedStatement
                 .Builder()
                 .mappedParamList(mappedParamList)

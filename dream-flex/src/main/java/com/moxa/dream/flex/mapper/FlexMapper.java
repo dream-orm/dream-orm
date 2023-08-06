@@ -1,5 +1,6 @@
 package com.moxa.dream.flex.mapper;
 
+import com.moxa.dream.flex.def.Delete;
 import com.moxa.dream.flex.def.Query;
 import com.moxa.dream.flex.def.Update;
 import com.moxa.dream.system.config.Page;
@@ -21,7 +22,7 @@ public interface FlexMapper {
      * @param query 查询定义器
      * @param type  返回类型
      * @param <T>
-     * @return
+     * @return 单条数据
      */
     <T> T selectOne(Query query, Class<T> type);
 
@@ -31,7 +32,7 @@ public interface FlexMapper {
      * @param query 查询定义器
      * @param type  返回类型
      * @param <T>
-     * @return
+     * @return 集合数据
      */
     <T> List<T> selectList(Query query, Class<T> type);
 
@@ -42,7 +43,7 @@ public interface FlexMapper {
      * @param type  返回类型
      * @param page  分页
      * @param <T>
-     * @return
+     * @return 分页数据
      */
     <T> Page<T> selectPage(Query query, Class<T> type, Page page);
 
@@ -50,7 +51,15 @@ public interface FlexMapper {
      * 更新操作
      *
      * @param update 更新定义器
-     * @return
+     * @return 更新数量
      */
     int update(Update update);
+
+    /**
+     * 删除操作
+     *
+     * @param delete 删除定义器
+     * @return 删除数量
+     */
+    int delete(Delete delete);
 }
