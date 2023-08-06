@@ -10,7 +10,7 @@ public interface FromDef<From extends FromDef, Where extends WhereDef> extends W
     }
 
     default JoinDef rightJoin(TableDef tableDef) {
-        return new JoinDef(this,statement(), new JoinStatement.RightJoinStatement(), tableDef.getStatement());
+        return new JoinDef(this, statement(), new JoinStatement.RightJoinStatement(), tableDef.getStatement());
     }
 
     default JoinDef innerJoin(TableDef tableDef) {
@@ -37,6 +37,6 @@ public interface FromDef<From extends FromDef, Where extends WhereDef> extends W
             whereStatement.setCondition(conditionDef.getStatement());
             statement().setWhereStatement(whereStatement);
         }
-        return (Where) queryCreatorFactory().newWhereDef(statement());
+        return (Where) creatorFactory().newWhereDef(statement());
     }
 }

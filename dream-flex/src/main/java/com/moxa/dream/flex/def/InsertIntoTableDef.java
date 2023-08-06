@@ -1,27 +1,22 @@
 package com.moxa.dream.flex.def;
 
 import com.moxa.dream.antlr.smt.BraceStatement;
-import com.moxa.dream.antlr.smt.InsertStatement;
 import com.moxa.dream.antlr.smt.ListColumnStatement;
+import com.moxa.dream.antlr.smt.Statement;
 
 
-public class InsertIntoTableDef {
-    private InsertStatement statement;
-
-    protected InsertIntoTableDef(InsertStatement statement) {
-        this.statement = statement;
-    }
-
-    public InsertIntoColumnsDef columns(ColumnDef... columnDefs) {
+public interface InsertIntoTableDef<T extends InsertIntoColumnsDef> extends Insert {
+    default T columns(ColumnDef... columnDefs) {
         ListColumnStatement paramsListStatement = new ListColumnStatement(",");
         for (ColumnDef columnDef : columnDefs) {
-            paramsListStatement.add(columnDef.getStatement());
+            Statement statement = columnDef.getStatement();
+            if (statement instanceof ListColumnStatement) {
+                Statement[] columnList = ((ListColumnStatement) statement).getColumnList();
+                statement = columnList[columnList.length - 1];
+            }
+            paramsListStatement.add(statement);
         }
-        statement.setColumns(new BraceStatement(paramsListStatement));
-        return new InsertIntoColumnsDef(statement);
-    }
-
-    public InsertIntoValueDef value(ColumnDef columnDef, Object value) {
-        return new InsertIntoValueDef(statement).value(columnDef, value);
+        statement().setColumns(new BraceStatement(paramsListStatement));
+        return (T) creatorFactory().newInsertIntoColumnsDef(statement());
     }
 }

@@ -3,7 +3,10 @@ package com.moxa.dream.flex.def;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.flex.config.DataType;
 import com.moxa.dream.flex.config.DateType;
-import com.moxa.dream.flex.def.defaults.DefaultQueryCreatorFactory;
+import com.moxa.dream.flex.factory.DefaultDeleteCreatorFactory;
+import com.moxa.dream.flex.factory.DefaultInsertCreatorFactory;
+import com.moxa.dream.flex.factory.DefaultQueryCreatorFactory;
+import com.moxa.dream.flex.factory.DefaultUpdateCreatorFactory;
 
 
 public class FunctionDef {
@@ -683,15 +686,15 @@ public class FunctionDef {
     }
 
     public static UpdateColumnDef update(TableDef tableDef) {
-        return new UpdateDef().update(tableDef);
+        return new DefaultUpdateCreatorFactory().newUpdateDef().update(tableDef);
     }
 
     public static DeleteTableDef delete(TableDef tableDef) {
-        return new DeleteDef().delete(tableDef);
+        return new DefaultDeleteCreatorFactory().newDeleteDef().delete(tableDef);
     }
 
     public static InsertIntoTableDef insertInto(TableDef tableDef) {
-        return new InsertDef().insertInto(tableDef);
+        return new DefaultInsertCreatorFactory().newInsertDef().insertInto(tableDef);
     }
 
     public static ColumnDef col(Object column) {

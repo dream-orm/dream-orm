@@ -458,6 +458,7 @@ public class DreamAutoConfiguration {
 
     /**
      * 链式操作接口包装版
+     *
      * @param flexMapper 链式操作接口
      * @return
      */

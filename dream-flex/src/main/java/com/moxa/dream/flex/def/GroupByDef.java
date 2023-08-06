@@ -6,13 +6,12 @@ import com.moxa.dream.antlr.smt.HavingStatement;
 public interface GroupByDef<T extends HavingDef> extends HavingDef {
 
     default T having(ConditionDef conditionDef) {
-        QueryCreatorFactory queryCreatorFactory = queryCreatorFactory();
         ConditionStatement conditionStatement = conditionDef.getStatement();
         if (conditionStatement != null) {
             HavingStatement havingStatement = new HavingStatement();
             havingStatement.setCondition(conditionDef.getStatement());
             statement().setHavingStatement(havingStatement);
         }
-        return (T) queryCreatorFactory.newHavingDef(statement());
+        return (T) creatorFactory().newHavingDef(statement());
     }
 }

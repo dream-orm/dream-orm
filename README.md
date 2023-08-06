@@ -472,7 +472,9 @@ UserTableDef u2=new UserTableDef("u2");
 **修改SQL**
 
 ```sql
-UPDATE `user`  SET `user`.`age`=`user`.`age`+1  WHERE `user`.`id`=1
+UPDATE `user`
+SET `user`.`age`=`user`.`age` + 1
+WHERE `user`.`id` = 1
 ```
 
 **链式**

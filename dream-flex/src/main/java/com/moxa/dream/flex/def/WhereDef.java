@@ -12,8 +12,7 @@ public interface WhereDef<T extends GroupByDef> extends GroupByDef {
             listColumnStatement.add(columnDef.getStatement());
         }
         groupStatement.setGroup(listColumnStatement);
-        QueryCreatorFactory queryCreatorFactory = queryCreatorFactory();
         statement().setGroupStatement(groupStatement);
-        return (T) queryCreatorFactory.newGroupByDef(statement());
+        return (T) creatorFactory().newGroupByDef(statement());
     }
 }

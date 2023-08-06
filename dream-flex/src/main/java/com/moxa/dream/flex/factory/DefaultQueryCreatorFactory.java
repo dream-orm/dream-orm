@@ -1,7 +1,8 @@
-package com.moxa.dream.flex.def.defaults;
+package com.moxa.dream.flex.factory;
 
 import com.moxa.dream.antlr.smt.QueryStatement;
 import com.moxa.dream.flex.def.*;
+import com.moxa.dream.flex.def.defaults.*;
 
 public class DefaultQueryCreatorFactory implements QueryCreatorFactory {
     @Override
@@ -11,46 +12,46 @@ public class DefaultQueryCreatorFactory implements QueryCreatorFactory {
 
     @Override
     public SelectDef newSelectDef(QueryStatement statement) {
-        return new DefaultSelectDef(statement,this);
+        return new DefaultSelectDef(statement, this);
     }
 
     @Override
     public FromDef newFromDef(QueryStatement statement) {
-        return new DefaultFromDef(statement,this);
+        return new DefaultFromDef(statement, this);
     }
 
     @Override
     public WhereDef newWhereDef(QueryStatement statement) {
-        return new DefaultWhereDef(statement,this);
+        return new DefaultWhereDef(statement, this);
     }
 
     @Override
     public GroupByDef newGroupByDef(QueryStatement statement) {
-        return new DefaultGroupByDef(statement,this);
+        return new DefaultGroupByDef(statement, this);
     }
 
     @Override
     public HavingDef newHavingDef(QueryStatement statement) {
-        return new DefaultHavingDef(statement,this);
+        return new DefaultHavingDef(statement, this);
     }
 
     @Override
     public OrderByDef newOrderByDef(QueryStatement statement) {
-        return new DefaultHavingDef(statement,this);
+        return new DefaultHavingDef(statement, this);
     }
 
     @Override
     public LimitDef newLimitDef(QueryStatement statement) {
-        return new DefaultLimitDef(statement,this);
+        return new DefaultLimitDef(statement, this);
     }
 
     @Override
     public UnionDef newUnionDef(QueryStatement statement) {
-        return new DefaultUnionDef(statement,this);
+        return new DefaultUnionDef(statement, this);
     }
 
     @Override
     public ForUpdateDef newForUpdateDef(QueryStatement statement) {
-        return new DefaultForUpdateDef(statement,this);
+        return new DefaultForUpdateDef(statement, this);
     }
 }

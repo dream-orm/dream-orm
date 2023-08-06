@@ -82,19 +82,19 @@ public class DefaultFlexMapper implements FlexMapper {
 
     @Override
     public int update(Update update) {
-        MappedStatement mappedStatement = getMappedStatement(Command.UPDATE, update.getStatement(), NonCollection.class, Integer.class);
+        MappedStatement mappedStatement = getMappedStatement(Command.UPDATE, update.statement(), NonCollection.class, Integer.class);
         return (int) session.execute(mappedStatement);
     }
 
     @Override
     public int delete(Delete delete) {
-        MappedStatement mappedStatement = getMappedStatement(Command.DELETE, delete.getStatement(), NonCollection.class, Integer.class);
+        MappedStatement mappedStatement = getMappedStatement(Command.DELETE, delete.statement(), NonCollection.class, Integer.class);
         return (int) session.execute(mappedStatement);
     }
 
     @Override
     public int insert(Insert insert) {
-        MappedStatement mappedStatement = getMappedStatement(Command.INSERT, insert.getStatement(), NonCollection.class, Integer.class);
+        MappedStatement mappedStatement = getMappedStatement(Command.INSERT, insert.statement(), NonCollection.class, Integer.class);
         return (int) session.execute(mappedStatement);
     }
 

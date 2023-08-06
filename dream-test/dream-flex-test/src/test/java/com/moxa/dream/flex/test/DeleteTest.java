@@ -15,14 +15,14 @@ public class DeleteTest {
     @Test
     public void test0() {
         Delete delete = delete(user).where(user.id.eq(1));
-        SqlInfo sqlInfo = printSqlTest.toSQL(delete.getStatement());
+        SqlInfo sqlInfo = printSqlTest.toSQL(delete.statement());
         System.out.println(sqlInfo);
     }
 
     @Test
     public void test1() {
         Delete delete = delete(user).where(user.id.eq(1).and(user.name.like(11)));
-        SqlInfo sqlInfo = printSqlTest.toSQL(delete.getStatement());
+        SqlInfo sqlInfo = printSqlTest.toSQL(delete.statement());
         System.out.println(sqlInfo);
     }
 }

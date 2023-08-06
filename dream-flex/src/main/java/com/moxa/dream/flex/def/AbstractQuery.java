@@ -1,14 +1,15 @@
 package com.moxa.dream.flex.def;
 
 import com.moxa.dream.antlr.smt.QueryStatement;
+import com.moxa.dream.flex.factory.QueryCreatorFactory;
 
 public abstract class AbstractQuery implements Query {
     private QueryStatement statement;
-    private QueryCreatorFactory queryCreatorFactory;
+    private QueryCreatorFactory creatorFactory;
 
-    public AbstractQuery(QueryStatement statement, QueryCreatorFactory queryCreatorFactory) {
+    public AbstractQuery(QueryStatement statement, QueryCreatorFactory creatorFactory) {
         this.statement = statement;
-        this.queryCreatorFactory = queryCreatorFactory;
+        this.creatorFactory = creatorFactory;
     }
 
     @Override
@@ -17,7 +18,7 @@ public abstract class AbstractQuery implements Query {
     }
 
     @Override
-    public QueryCreatorFactory queryCreatorFactory() {
-        return queryCreatorFactory;
+    public QueryCreatorFactory creatorFactory() {
+        return creatorFactory;
     }
 }

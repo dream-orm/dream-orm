@@ -34,7 +34,7 @@ public class PrintSqlTest {
     }
 
     public SqlInfo toSQL(Update update) {
-        return toSQL(update.getStatement());
+        return toSQL(update.statement());
     }
 
     protected SqlInfo toSQL(Statement statement) {

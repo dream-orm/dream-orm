@@ -1,12 +1,9 @@
 package com.moxa.dream.flex.def;
 
-import com.moxa.dream.antlr.smt.UpdateStatement;
+public interface UpdateDef<T extends UpdateColumnDef> extends Update {
 
-public class UpdateDef {
-    protected UpdateStatement statement = new UpdateStatement();
-
-    UpdateColumnDef update(TableDef tableDef) {
-        statement.setTable(tableDef.getStatement());
-        return new UpdateColumnDef(statement);
+    default T update(TableDef tableDef) {
+        statement().setTable(tableDef.getStatement());
+        return (T) creatorFactory().newUpdateColumnDef(statement());
     }
 }

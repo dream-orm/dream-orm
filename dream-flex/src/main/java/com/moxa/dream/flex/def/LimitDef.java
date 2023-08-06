@@ -9,7 +9,7 @@ public interface LimitDef<T extends UnionDef> extends UnionDef {
         unionStatement.setAll(false);
         unionStatement.setStatement(query.statement());
         statement().setUnionStatement(unionStatement);
-        return (T) queryCreatorFactory().newUnionDef(statement());
+        return (T) creatorFactory().newUnionDef(statement());
     }
 
     default T unionAll(Query query) {
@@ -17,6 +17,6 @@ public interface LimitDef<T extends UnionDef> extends UnionDef {
         unionStatement.setAll(true);
         unionStatement.setStatement(query.statement());
         statement().setUnionStatement(unionStatement);
-        return (T) queryCreatorFactory().newUnionDef(statement());
+        return (T) creatorFactory().newUnionDef(statement());
     }
 }

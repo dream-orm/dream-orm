@@ -3,7 +3,7 @@ package com.moxa.dream.chain.def;
 import com.moxa.dream.antlr.smt.QueryStatement;
 import com.moxa.dream.flex.def.AbstractQuery;
 import com.moxa.dream.flex.def.Query;
-import com.moxa.dream.flex.def.QueryCreatorFactory;
+import com.moxa.dream.flex.factory.QueryCreatorFactory;
 import com.moxa.dream.flex.mapper.FlexMapper;
 import com.moxa.dream.system.config.Page;
 

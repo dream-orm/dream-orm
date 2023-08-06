@@ -18,6 +18,6 @@ public interface QueryDef<T extends SelectDef> extends Query {
         }
         selectStatement.setSelectList(listColumnStatement);
         statement().setSelectStatement(selectStatement);
-        return (T) queryCreatorFactory().newSelectDef(statement());
+        return (T) creatorFactory().newSelectDef(statement());
     }
 }

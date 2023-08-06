@@ -1,12 +1,9 @@
 package com.moxa.dream.flex.def;
 
-import com.moxa.dream.antlr.smt.DeleteStatement;
+public interface DeleteDef<T extends DeleteTableDef> extends Delete {
 
-public class DeleteDef {
-    protected DeleteStatement statement = new DeleteStatement();
-
-    DeleteTableDef delete(TableDef tableDef) {
-        statement.setTable(tableDef.getStatement());
-        return new DeleteTableDef(statement);
+    default T delete(TableDef tableDef) {
+        statement().setTable(tableDef.getStatement());
+        return (T) creatorFactory().newDeleteTableDef(statement());
     }
 }

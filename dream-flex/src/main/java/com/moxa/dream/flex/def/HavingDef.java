@@ -8,6 +8,6 @@ public interface HavingDef<T extends OrderByDef> extends OrderByDef {
         OrderStatement orderStatement = new OrderStatement();
         orderStatement.setOrder(sortDef.getStatement());
         statement().setOrderStatement(orderStatement);
-        return (T) queryCreatorFactory().newOrderByDef(statement());
+        return (T) creatorFactory().newOrderByDef(statement());
     }
 }

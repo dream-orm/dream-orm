@@ -1,6 +1,7 @@
-package com.moxa.dream.flex.def;
+package com.moxa.dream.flex.factory;
 
 import com.moxa.dream.antlr.smt.QueryStatement;
+import com.moxa.dream.flex.def.*;
 
 public interface QueryCreatorFactory
         <Query extends QueryDef<Select>,
@@ -16,21 +17,21 @@ public interface QueryCreatorFactory
 
     Query newQueryDef();
 
-    Select newSelectDef(QueryStatement queryStatement);
+    Select newSelectDef(QueryStatement statement);
 
-    From newFromDef(QueryStatement queryStatement);
+    From newFromDef(QueryStatement statement);
 
-    Where newWhereDef(QueryStatement queryStatement);
+    Where newWhereDef(QueryStatement statement);
 
-    GroupBy newGroupByDef(QueryStatement queryStatement);
+    GroupBy newGroupByDef(QueryStatement statement);
 
-    Having newHavingDef(QueryStatement queryStatement);
+    Having newHavingDef(QueryStatement statement);
 
-    OrderBy newOrderByDef(QueryStatement queryStatement);
+    OrderBy newOrderByDef(QueryStatement statement);
 
-    Limit newLimitDef(QueryStatement queryStatement);
+    Limit newLimitDef(QueryStatement statement);
 
-    Union newUnionDef(QueryStatement queryStatement);
+    Union newUnionDef(QueryStatement statement);
 
-    ForUpdate newForUpdateDef(QueryStatement queryStatement);
+    ForUpdate newForUpdateDef(QueryStatement statement);
 }

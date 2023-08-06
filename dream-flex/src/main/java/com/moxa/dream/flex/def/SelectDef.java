@@ -7,6 +7,6 @@ public interface SelectDef<T extends FromDef> extends Query {
         FromStatement fromStatement = new FromStatement();
         fromStatement.setMainTable(tableDef.getStatement());
         statement().setFromStatement(fromStatement);
-        return (T) queryCreatorFactory().newFromDef(statement());
+        return (T) creatorFactory().newFromDef(statement());
     }
 }

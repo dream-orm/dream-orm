@@ -7,15 +7,13 @@ public interface UnionDef<T extends ForUpdateDef> extends ForUpdateDef {
 
     default T forUpdate() {
         ForUpdateStatement forUpdateStatement = new ForUpdateStatement();
-        QueryCreatorFactory queryCreatorFactory = queryCreatorFactory();
         statement().setForUpdateStatement(forUpdateStatement);
-        return (T) queryCreatorFactory.newForUpdateDef(statement());
+        return (T) creatorFactory().newForUpdateDef(statement());
     }
 
     default T forUpdateNoWait() {
         ForUpdateStatement forUpdateStatement = new ForUpdateNoWaitStatement();
-        QueryCreatorFactory queryCreatorFactory = queryCreatorFactory();
         statement().setForUpdateStatement(forUpdateStatement);
-        return (T) queryCreatorFactory.newForUpdateDef(statement());
+        return (T) creatorFactory().newForUpdateDef(statement());
     }
 }
