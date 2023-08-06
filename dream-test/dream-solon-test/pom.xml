@@ -10,7 +10,7 @@
         <relativePath/>
     </parent>
     <artifactId>dream-solon-test</artifactId>
-    <groupId>com.moxa.dream</groupId>
+    <groupId>com.dream-orm</groupId>
     <version>1.0.0</version>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -18,7 +18,7 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.moxa.dream</groupId>
+            <groupId>com.dream-orm</groupId>
             <artifactId>dream-solon-plugin</artifactId>
             <version>1.0.0</version>
         </dependency>

@@ -1,7 +1,7 @@
-package com.moxa.test;
+package com.dream.test;
 
-import com.moxa.dream.util.common.ObjectWrapper;
-import com.moxa.dream.util.exception.DreamRunTimeException;
+import com.dream.util.common.ObjectWrapper;
+import com.dream.util.exception.DreamRunTimeException;
 import org.junit.Test;
 
 import java.util.ArrayList;

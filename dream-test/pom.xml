@@ -9,7 +9,7 @@
         <version>2.6.3</version>
         <relativePath/>
     </parent>
-    <groupId>com.moxa</groupId>
+    <groupId>com.dream</groupId>
     <artifactId>dream-test</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
@@ -25,6 +25,7 @@
         <module>dream-util-test</module>
         <module>dream-benchmark-test</module>
         <module>dream-flex-test</module>
+        <module>dream-chain-test</module>
     </modules>
 
     <properties>

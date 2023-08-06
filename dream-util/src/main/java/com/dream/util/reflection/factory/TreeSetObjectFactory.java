@@ -1,0 +1,15 @@
+package com.dream.util.reflection.factory;
+
+import java.util.TreeSet;
+
+public class TreeSetObjectFactory extends CollectionObjectFactory {
+
+    public TreeSetObjectFactory() {
+        this(new TreeSet());
+    }
+
+    public TreeSetObjectFactory(TreeSet target) {
+        super(target);
+    }
+
+}

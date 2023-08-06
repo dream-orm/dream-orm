@@ -1,0 +1,26 @@
+package com.dream.template.mapper;
+
+import com.dream.system.config.Configuration;
+import com.dream.system.core.session.Session;
+import com.dream.system.table.TableInfo;
+
+import java.util.Collection;
+import java.util.List;
+
+public class SelectByIdsMapper extends SelectMapper {
+
+    public SelectByIdsMapper(Session session) {
+        super(session);
+    }
+
+    @Override
+    protected String getOther(Configuration configuration, TableInfo tableInfo, Class<?> type, Object arg) {
+        return super.getIdsWhere(tableInfo);
+    }
+
+    @Override
+    protected Class<? extends Collection> getRowType() {
+        return List.class;
+    }
+
+}

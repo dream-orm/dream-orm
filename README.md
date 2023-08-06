@@ -772,7 +772,7 @@ public class DeleteTest {
 **控制台输出**
 
 ```tex
-方法：com.moxa.dream.base.mapper.UserMapper.delete
+方法：mapper.com.dream.base.UserMapper.delete
 语句：DELETE FROM user  WHERE id IN (?,?)
 参数：[1, 2]
 ```

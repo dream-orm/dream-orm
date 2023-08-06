@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>dream-parent</artifactId>
-        <groupId>com.moxa.dream</groupId>
+        <groupId>com.dream-orm</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -12,37 +12,37 @@
     <artifactId>dream-drive</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.moxa.dream</groupId>
+            <groupId>com.dream-orm</groupId>
             <artifactId>dream-antlr</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.moxa.dream</groupId>
+            <groupId>com.dream-orm</groupId>
             <artifactId>dream-util</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.moxa.dream</groupId>
+            <groupId>com.dream-orm</groupId>
             <artifactId>dream-system</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.moxa.dream</groupId>
+            <groupId>com.dream-orm</groupId>
             <artifactId>dream-template</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.moxa.dream</groupId>
+            <groupId>com.dream-orm</groupId>
             <artifactId>dream-flex</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.moxa.dream</groupId>
+            <groupId>com.dream-orm</groupId>
             <artifactId>dream-chain</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.moxa.dream</groupId>
+            <groupId>com.dream-orm</groupId>
             <artifactId>dream-mate</artifactId>
             <version>1.0.0</version>
         </dependency>

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.moxa.dream.boot.autoconfigure.DreamAutoConfiguration
+com.dream.boot.autoconfigure.DreamAutoConfiguration
