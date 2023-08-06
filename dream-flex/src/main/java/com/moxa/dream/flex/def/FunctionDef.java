@@ -3,6 +3,7 @@ package com.moxa.dream.flex.def;
 import com.moxa.dream.antlr.smt.*;
 import com.moxa.dream.flex.config.DataType;
 import com.moxa.dream.flex.config.DateType;
+import com.moxa.dream.flex.def.defaults.DefaultQueryCreatorFactory;
 
 
 public class FunctionDef {
@@ -678,7 +679,7 @@ public class FunctionDef {
     }
 
     public static SelectDef select(ColumnDef... columnDefs) {
-        return new QueryDef().select(columnDefs);
+        return new DefaultQueryCreatorFactory().newQueryDef().select(columnDefs);
     }
 
     public static UpdateColumnDef update(TableDef tableDef) {
@@ -730,7 +731,7 @@ public class FunctionDef {
     }
 
     public static AliasTableDef table(Query query) {
-        BraceStatement braceStatement = new BraceStatement(query.getStatement());
+        BraceStatement braceStatement = new BraceStatement(query.statement());
         AliasStatement aliasStatement = new AliasStatement();
         aliasStatement.setColumn(braceStatement);
         return new AliasTableDef(aliasStatement);
@@ -752,7 +753,7 @@ public class FunctionDef {
     public static ConditionDef exists(Query query) {
         ConditionStatement conditionStatement = new ConditionStatement();
         conditionStatement.setOper(new OperStatement.EXISTSStatement());
-        conditionStatement.setRight(new BraceStatement(query.getStatement()));
+        conditionStatement.setRight(new BraceStatement(query.statement()));
         return new ConditionDef(conditionStatement);
     }
 

@@ -1,30 +1,25 @@
 package com.moxa.dream.flex.def;
 
 import com.moxa.dream.antlr.smt.LimitStatement;
-import com.moxa.dream.antlr.smt.QueryStatement;
 import com.moxa.dream.flex.invoker.FlexMarkInvokerStatement;
 
-public class OrderByDef extends LimitDef {
+public interface OrderByDef<T extends LimitDef> extends LimitDef {
 
-    protected OrderByDef(QueryStatement statement) {
-        super(statement);
-    }
-
-    public LimitDef limit(Integer offset, Integer rows) {
+    default T limit(Integer offset, Integer rows) {
         LimitStatement limitStatement = new LimitStatement();
         limitStatement.setOffset(false);
         limitStatement.setFirst(new FlexMarkInvokerStatement(offset));
         limitStatement.setSecond(new FlexMarkInvokerStatement(rows));
-        statement.setLimitStatement(limitStatement);
-        return new LimitDef(statement);
+        statement().setLimitStatement(limitStatement);
+        return (T) queryCreatorFactory().newLimitDef(statement());
     }
 
-    public LimitDef offset(Integer offset, Integer rows) {
+    default T offset(Integer offset, Integer rows) {
         LimitStatement limitStatement = new LimitStatement();
         limitStatement.setOffset(true);
         limitStatement.setFirst(new FlexMarkInvokerStatement(rows));
         limitStatement.setSecond(new FlexMarkInvokerStatement(offset));
-        statement.setLimitStatement(limitStatement);
-        return new LimitDef(statement);
+        statement().setLimitStatement(limitStatement);
+        return (T) queryCreatorFactory().newLimitDef(statement());
     }
 }

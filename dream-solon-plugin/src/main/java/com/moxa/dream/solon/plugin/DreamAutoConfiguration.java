@@ -5,6 +5,8 @@ import com.moxa.dream.antlr.factory.MyFunctionFactory;
 import com.moxa.dream.antlr.invoker.Invoker;
 import com.moxa.dream.antlr.sql.ToMYSQL;
 import com.moxa.dream.antlr.sql.ToSQL;
+import com.moxa.dream.chain.mapper.DefaultFlexChainMapper;
+import com.moxa.dream.chain.mapper.FlexChainMapper;
 import com.moxa.dream.flex.mapper.DefaultFlexMapper;
 import com.moxa.dream.flex.mapper.FlexMapper;
 import com.moxa.dream.solon.build.DefaultSessionFactoryBuilder;
@@ -486,6 +488,17 @@ public class DreamAutoConfiguration {
     @Condition(onMissingBean = FlexMapper.class)
     public FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
         return new DefaultFlexMapper(sessionTemplate, toSQL);
+    }
+
+    /**
+     * 链式操作接口包装版
+     * @param flexMapper 链式操作接口
+     * @return
+     */
+    @Bean
+    @Condition(onMissingBean = FlexChainMapper.class)
+    public FlexChainMapper flexChainMapper(FlexMapper flexMapper) {
+        return new DefaultFlexChainMapper(flexMapper);
     }
 
     final class NoneCache implements Cache {

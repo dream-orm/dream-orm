@@ -10,6 +10,8 @@ import com.moxa.dream.boot.build.SessionFactoryBuilder;
 import com.moxa.dream.boot.factory.SpringDataSourceFactory;
 import com.moxa.dream.boot.factory.SpringTransactionFactory;
 import com.moxa.dream.boot.holder.SpringSessionHolder;
+import com.moxa.dream.chain.mapper.DefaultFlexChainMapper;
+import com.moxa.dream.chain.mapper.FlexChainMapper;
 import com.moxa.dream.flex.mapper.DefaultFlexMapper;
 import com.moxa.dream.flex.mapper.FlexMapper;
 import com.moxa.dream.system.antlr.factory.DefaultInvokerFactory;
@@ -452,5 +454,16 @@ public class DreamAutoConfiguration {
     @ConditionalOnMissingBean
     public FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
         return new DefaultFlexMapper(sessionTemplate, toSQL);
+    }
+
+    /**
+     * 链式操作接口包装版
+     * @param flexMapper 链式操作接口
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public FlexChainMapper flexChainMapper(FlexMapper flexMapper) {
+        return new DefaultFlexChainMapper(flexMapper);
     }
 }

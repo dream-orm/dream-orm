@@ -25,7 +25,7 @@ public class InsertIntoColumnsDef {
     }
 
     public InsertIntoValuesDef values(Query query) {
-        statement.setValues(query.getStatement());
+        statement.setValues(query.statement());
         return new InsertIntoValuesDef(statement);
     }
 }

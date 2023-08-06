@@ -32,7 +32,7 @@ public class UpdateColumnDef {
     }
 
     public UpdateColumnDef set(ColumnDef columnDef, Query query) {
-        BraceStatement braceStatement = new BraceStatement(query.getStatement());
+        BraceStatement braceStatement = new BraceStatement(query.statement());
         set(columnDef, new ColumnDef(braceStatement));
         return this;
     }

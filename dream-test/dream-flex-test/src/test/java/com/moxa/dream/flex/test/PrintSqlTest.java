@@ -30,7 +30,7 @@ public class PrintSqlTest {
     }
 
     public SqlInfo toSQL(Query query) {
-        return toSQL(query.getStatement());
+        return toSQL(query.statement());
     }
 
     public SqlInfo toSQL(Update update) {

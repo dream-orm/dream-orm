@@ -16,6 +16,7 @@
         <module>dream-template</module>
         <module>dream-mate</module>
         <module>dream-flex</module>
+        <module>dream-chain</module>
         <module>dream-boot-starter</module>
         <module>dream-solon-plugin</module>
     </modules>

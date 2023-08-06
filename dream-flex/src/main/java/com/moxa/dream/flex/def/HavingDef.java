@@ -1,18 +1,13 @@
 package com.moxa.dream.flex.def;
 
 import com.moxa.dream.antlr.smt.OrderStatement;
-import com.moxa.dream.antlr.smt.QueryStatement;
 
-public class HavingDef extends OrderByDef {
+public interface HavingDef<T extends OrderByDef> extends OrderByDef {
 
-    protected HavingDef(QueryStatement statement) {
-        super(statement);
-    }
-
-    public OrderByDef orderBy(SortDef sortDef) {
+    default T orderBy(SortDef sortDef) {
         OrderStatement orderStatement = new OrderStatement();
         orderStatement.setOrder(sortDef.getStatement());
-        statement.setOrderStatement(orderStatement);
-        return new OrderByDef(statement);
+        statement().setOrderStatement(orderStatement);
+        return (T) queryCreatorFactory().newOrderByDef(statement());
     }
 }

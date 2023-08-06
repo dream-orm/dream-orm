@@ -124,7 +124,7 @@ public class ColumnDef {
     }
 
     public ConditionDef in(Query query) {
-        BraceStatement braceStatement = new BraceStatement(query.getStatement());
+        BraceStatement braceStatement = new BraceStatement(query.statement());
         return conditionDef(new OperStatement.INStatement(), braceStatement);
     }
 

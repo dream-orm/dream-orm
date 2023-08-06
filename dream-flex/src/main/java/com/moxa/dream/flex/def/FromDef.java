@@ -2,50 +2,41 @@ package com.moxa.dream.flex.def;
 
 import com.moxa.dream.antlr.smt.*;
 
-public class FromDef extends WhereDef {
+public interface FromDef<From extends FromDef, Where extends WhereDef> extends WhereDef {
 
-    private ListColumnStatement listColumnStatement = new ListColumnStatement(" ");
 
-    protected FromDef(QueryStatement statement) {
-        super(statement);
+    default JoinDef leftJoin(TableDef tableDef) {
+        return new JoinDef(this, statement(), new JoinStatement.LeftJoinStatement(), tableDef.getStatement());
     }
 
-    public JoinDef leftJoin(TableDef tableDef) {
-        return join(new JoinStatement.LeftJoinStatement(), tableDef.getStatement());
+    default JoinDef rightJoin(TableDef tableDef) {
+        return new JoinDef(this,statement(), new JoinStatement.RightJoinStatement(), tableDef.getStatement());
     }
 
-    public JoinDef rightJoin(TableDef tableDef) {
-        return join(new JoinStatement.RightJoinStatement(), tableDef.getStatement());
+    default JoinDef innerJoin(TableDef tableDef) {
+        return new JoinDef(this, statement(), new JoinStatement.InnerJoinStatement(), tableDef.getStatement());
     }
 
-    public JoinDef innerJoin(TableDef tableDef) {
-        return join(new JoinStatement.InnerJoinStatement(), tableDef.getStatement());
+    default From crossJoin(TableDef tableDef) {
+        JoinStatement.CrossJoinStatement joinStatement = new JoinStatement.CrossJoinStatement();
+        joinStatement.setJoinTable(tableDef.getStatement());
+        FromStatement fromStatement = statement().getFromStatement();
+        Statement joinList = fromStatement.getJoinList();
+        if (joinList == null) {
+            joinList = new ListColumnStatement(" ");
+            fromStatement.setJoinList(joinList);
+        }
+        ((ListColumnStatement) joinList).add(joinStatement);
+        return (From) this;
     }
 
-    public FromDef crossJoin(TableDef tableDef) {
-        JoinStatement.CrossJoinStatement crossJoinStatement = new JoinStatement.CrossJoinStatement();
-        crossJoinStatement.setJoinTable(tableDef.getStatement());
-        listColumnStatement.add(crossJoinStatement);
-        FromStatement fromStatement = statement.getFromStatement();
-        fromStatement.setJoinList(listColumnStatement);
-        return this;
-    }
-
-    private JoinDef join(JoinStatement joinStatement, Statement joinTableStatement) {
-        joinStatement.setJoinTable(joinTableStatement);
-        FromStatement fromStatement = statement.getFromStatement();
-        listColumnStatement.add(joinStatement);
-        fromStatement.setJoinList(listColumnStatement);
-        return new JoinDef(this, joinStatement);
-    }
-
-    public WhereDef where(ConditionDef conditionDef) {
+    default Where where(ConditionDef conditionDef) {
         ConditionStatement conditionStatement = conditionDef.getStatement();
         if (conditionStatement != null) {
             WhereStatement whereStatement = new WhereStatement();
             whereStatement.setCondition(conditionDef.getStatement());
-            statement.setWhereStatement(whereStatement);
+            statement().setWhereStatement(whereStatement);
         }
-        return new WhereDef(statement);
+        return (Where) queryCreatorFactory().newWhereDef(statement());
     }
 }

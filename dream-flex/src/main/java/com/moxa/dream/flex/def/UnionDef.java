@@ -2,23 +2,20 @@ package com.moxa.dream.flex.def;
 
 import com.moxa.dream.antlr.smt.ForUpdateNoWaitStatement;
 import com.moxa.dream.antlr.smt.ForUpdateStatement;
-import com.moxa.dream.antlr.smt.QueryStatement;
 
-public class UnionDef extends ForUpdateDef {
+public interface UnionDef<T extends ForUpdateDef> extends ForUpdateDef {
 
-    protected UnionDef(QueryStatement statement) {
-        super(statement);
-    }
-
-    public ForUpdateDef forUpdate() {
+    default T forUpdate() {
         ForUpdateStatement forUpdateStatement = new ForUpdateStatement();
-        statement.setForUpdateStatement(forUpdateStatement);
-        return new ForUpdateDef(statement);
+        QueryCreatorFactory queryCreatorFactory = queryCreatorFactory();
+        statement().setForUpdateStatement(forUpdateStatement);
+        return (T) queryCreatorFactory.newForUpdateDef(statement());
     }
 
-    public ForUpdateDef forUpdateNoWait() {
+    default T forUpdateNoWait() {
         ForUpdateStatement forUpdateStatement = new ForUpdateNoWaitStatement();
-        statement.setForUpdateStatement(forUpdateStatement);
-        return new ForUpdateDef(statement);
+        QueryCreatorFactory queryCreatorFactory = queryCreatorFactory();
+        statement().setForUpdateStatement(forUpdateStatement);
+        return (T) queryCreatorFactory.newForUpdateDef(statement());
     }
 }

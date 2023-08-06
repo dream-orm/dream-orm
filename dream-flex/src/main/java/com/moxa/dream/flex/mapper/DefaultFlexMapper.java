@@ -59,19 +59,19 @@ public class DefaultFlexMapper implements FlexMapper {
 
     @Override
     public <T> T selectOne(Query query, Class<T> type) {
-        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, query.getStatement(), NonCollection.class, type);
+        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, query.statement(), NonCollection.class, type);
         return (T) session.execute(mappedStatement);
     }
 
     @Override
     public <T> List<T> selectList(Query query, Class<T> type) {
-        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, query.getStatement(), List.class, type);
+        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, query.statement(), List.class, type);
         return (List<T>) session.execute(mappedStatement);
     }
 
     @Override
     public <T> Page<T> selectPage(Query query, Class<T> type, Page page) {
-        QueryStatement statement = query.getStatement();
+        QueryStatement statement = query.statement();
         QueryStatement queryStatement = pageQueryStatement(statement, page.getStartRow(), page.getPageSize());
         MappedStatement mappedStatement = getMappedStatement(Command.QUERY, queryStatement, Collection.class, type);
         MappedStatement countMappedStatement = getMappedStatement(Command.QUERY, countQueryStatement(queryStatement), NonCollection.class, Long.class);
