@@ -8,11 +8,6 @@
         <version>1.0.0</version>
     </parent>
     <artifactId>dream-boot-starter</artifactId>
-    <name>dream-boot-starter</name>
-    <description>dream-boot-starter</description>
-    <properties>
-        <java.version>8</java.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>com.dream-orm</groupId>
@@ -25,34 +20,4 @@
             <version>${spring-boot.version}</version>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>inner-nexus-release</name>
-            <url>http://192.168.0.243:8081/nexus/content/repositories/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>inner-nexus-snapshot</name>
-            <url>http://192.168.0.243:8081/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
