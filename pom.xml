@@ -5,9 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.dream-orm</groupId>
-    <artifactId>dream-parent</artifactId>
+    <artifactId>dream-orm</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
+    <name>dream-orm</name>
     <description>dream-orm is a translation based orm framework</description>
     <url>https://github.com/moxa-lzf/dream</url>
     <issueManagement>
@@ -36,16 +37,16 @@
         <developerConnection>scm:git:https://github.com/moxa-lzf/dream.git</developerConnection>
     </scm>
     <modules>
-        <module>dream-antlr</module>
-        <module>dream-util</module>
-        <module>dream-system</module>
-        <module>dream-drive</module>
-        <module>dream-template</module>
-        <module>dream-mate</module>
-        <module>dream-flex</module>
-        <module>dream-chain</module>
-        <module>dream-boot-starter</module>
-        <module>dream-solon-plugin</module>
+        <module>dream-orm-antlr</module>
+        <module>dream-orm-util</module>
+        <module>dream-orm-system</module>
+        <module>dream-orm-drive</module>
+        <module>dream-orm-template</module>
+        <module>dream-orm-mate</module>
+        <module>dream-orm-flex</module>
+        <module>dream-orm-chain</module>
+        <module>dream-orm-spring-boot-starter</module>
+        <module>dream-orm-solon-plugin</module>
     </modules>
 
     <properties>
