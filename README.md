@@ -52,10 +52,9 @@
 
 # 1. dream简介
 
-DREAM（ https://github.com/moxa-lzf/dream
-）是一个基于翻译的以技术为中心，辐射业务持久层框架，它非常轻量，不依赖第三方jar包、同时拥有极高的性能与灵活性，可以写一种MySQL语法在非MySQL数据库下执行，其内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成java链式形式。
+dream-orm（ https://github.com/moxa-lzf/dream-orm ）是一个基于翻译的以技术为中心，辐射业务持久层框架，它非常轻量，不依赖第三方jar包、同时拥有极高的性能与灵活性，可以写一种MySQL语法在非MySQL数据库下执行，其内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成java链式形式。
 
-总而言之，DREAM不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装。
+总而言之，dream-orm不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装。
 
 ## 1.1. 特性
 
@@ -71,7 +70,7 @@ DREAM（ https://github.com/moxa-lzf/dream
 
 ## 1.2. 支持的数据库
 
-DREAM支持MySQL、PGSQL、SQLSERVER、ORACLE、达梦，其他数据库语法和提供支持的数据库语法类似，对于特殊的数据库，开发者也可以自己写对应的SQL转换语句，把抽象树转换对应可执行的SQL即可
+dream-orm支持MySQL、PGSQL、SQLSERVER、ORACLE、达梦，其他数据库语法和提供支持的数据库语法类似，对于特殊的数据库，开发者也可以自己写对应的SQL转换语句，把抽象树转换对应可执行的SQL即可
 
 ## 1.3. 系统架构
 
@@ -91,26 +90,24 @@ DREAM支持MySQL、PGSQL、SQLSERVER、ORACLE、达梦，其他数据库语法�
 
 springboot项目
 
-项目演示地址（ https://gitee.com/moxiaoai/dream/tree/master/dream-test/dream-simple-test ）
+项目演示地址（ https://gitee.com/moxiaoai/dream-orm/tree/master/dream-test/dream-orm-simple-test ）
 
 ```xml
-
 <dependency>
-    <groupId>com.moxa.dream</groupId>
-    <artifactId>dream-boot-starter</artifactId>
+    <groupId>com.dream-orm</groupId>
+    <artifactId>dream-orm-spring-boot-starter</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
 
 solon项目
 
-项目演示地址（ https://gitee.com/moxiaoai/dream/tree/master/dream-test/dream-solon-test ）
+项目演示地址（ https://gitee.com/moxiaoai/dream-orm/tree/master/dream-test/dream-orm-solon-test ）
 
 ```xml
-
 <dependency>
-    <groupId>com.moxa.dream</groupId>
-    <artifactId>dream-solon-plugin</artifactId>
+    <groupId>com.dream-orm</groupId>
+    <artifactId>dream-orm-solon-plugin</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
@@ -208,6 +205,14 @@ private FlexMapper flexMapper;
         List<User> list=flexMapper.selectList(fromDef,User.class);
 ```
 
+**链式查询**
+
+```java
+@Autowired
+private FlexChainMapper flexChainMapper;
+List<User> userList = flexChainMapper.select(user.name).from(user).list(User.class);
+```
+
 ## 2.2. dream配置
 
 springboot项目可以阅读com.moxa.dream.boot.autoconfigure.DreamAutoConfiguration获取配置详情
@@ -250,7 +255,7 @@ public Listener[]listeners(){
 
 **基础操作**
 
-dream提供实例的TemplateMapper完成基础操作
+dream-orm提供实例的TemplateMapper完成基础操作
 
 | 方法名                                                          | 描述                      |
 |--------------------------------------------------------------|-------------------------|
@@ -447,9 +452,9 @@ public @interface Sort {
 | value | 排序方式                    |
 | order | 指定多个排序字段时，显示优先级，越小优先级越高 |
 
-## 3.2. 链式操作
+## 3.2. 链式以及强化操作
 
-在 dream中，内置了 `QueryDef` 和 `UpdateDef` 用于对数据进行链式查询操作和链式修改操作。
+在 dream中，内置了 `QueryDef` 、`UpdateDef`、`deleteDef`、insertDef 用于对数据进行查询、修改、删除和插入操作，也可以基于链式的强化操作进行操作。
 
 **查询SQL**
 
@@ -481,6 +486,30 @@ WHERE `user`.`id` = 1
 
 ```
 update(user).set(user.age,user.age.add(1)).where(user.id.eq(1))
+```
+
+**删除SQL**
+
+```sql
+DELETE FROM `user`   WHERE `user`.`id`=1
+```
+
+**链式**
+
+```
+delete(user).where(user.id.eq(1))
+```
+
+**插入SQL**
+
+```
+INSERT INTO `user` (`id`,`name`)VALUES(1,'name')
+```
+
+**链式**
+
+```
+insertInto(user).columns(user.id, user.name).values(1, "name")
 ```
 
 ## 3.3. 自定义Mapper操作
