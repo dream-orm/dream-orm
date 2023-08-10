@@ -100,7 +100,17 @@ public class SimpleSqlTest extends AbstractSqlTest {
     }
 
     @Test
-    public void testDrop() {
+    public void testDropTable() {
         testSqlForMany("drop table `aaa`", null, null);
+    }
+
+    @Test
+    public void testDropDatabase() {
+        testSqlForMany("drop database `aaa`", null, null);
+    }
+
+    @Test
+    public void testCreateDatabase() {
+        testSqlForMany("create table", null, null);
     }
 }

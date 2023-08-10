@@ -40,6 +40,8 @@ public class JdbcExecutor implements Executor {
                     break;
                 case UPDATE:
                 case DELETE:
+                case CREATE:
+                case ALTER:
                 case TRUNCATE:
                 case DROP:
                     result = update(statement, mappedStatement, session);

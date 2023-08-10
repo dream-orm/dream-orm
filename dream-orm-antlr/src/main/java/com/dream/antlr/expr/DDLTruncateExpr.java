@@ -10,15 +10,15 @@ import com.dream.antlr.smt.TruncateTableStatement;
 /**
  * 清空表语法解析器
  */
-public class TruncateTableExpr extends HelperExpr {
+public class DDLTruncateExpr extends HelperExpr {
 
     private final TruncateTableStatement truncateTableStatement = new TruncateTableStatement();
 
-    public TruncateTableExpr(ExprReader exprReader) {
+    public DDLTruncateExpr(ExprReader exprReader) {
         this(exprReader, () -> new SymbolExpr(exprReader));
     }
 
-    public TruncateTableExpr(ExprReader exprReader, Helper helper) {
+    public DDLTruncateExpr(ExprReader exprReader, Helper helper) {
         super(exprReader, helper);
         setExprTypes(ExprType.TRUNCATE);
     }

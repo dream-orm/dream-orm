@@ -161,6 +161,8 @@ public class ExprUtil {
                 return ExprType.LPAD;
             case 2521825://RPAD
                 return ExprType.RPAD;
+            case -1722875525://DATABASE
+                return ExprType.DATABASE;
             case 79578030://TABLE
                 return ExprType.TABLE;
             case 2107119://DROP
@@ -227,6 +229,10 @@ public class ExprUtil {
                 return ExprType.SUM;
             case 82817://TAN
                 return ExprType.TAN;
+            case 1996002556://CREATE
+                return ExprType.CREATE;
+            case 62375926://ALTER
+                return ExprType.ALTER;
             case -1659355802://TRUNCATE
                 return ExprType.TRUNCATE;
             case -1718300145://DATE_SUB

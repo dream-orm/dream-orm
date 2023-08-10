@@ -1006,7 +1006,12 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
-    protected String toString(DropTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DROP TABLE " + toStr(statement.getTable(), assist, invokerList);
+    protected String toString(DDLDropStatement.DDLDropDatabaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DROP DATABASE " + toStr(statement.getStatement(), assist, invokerList);
+    }
+
+    @Override
+    protected String toString(DDLDropStatement.DDLDropTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DROP TABLE " + toStr(statement.getStatement(), assist, invokerList);
     }
 }

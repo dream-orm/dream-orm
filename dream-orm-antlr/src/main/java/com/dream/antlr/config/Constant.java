@@ -180,6 +180,8 @@ public final class Constant {
             ExprType.SEPARATOR,
             ExprType.AS,
             ExprType.TABLE,
+            ExprType.DATABASE,
+            ExprType.ALTER,
             ExprType.TRUNCATE,
             ExprType.DROP
     };

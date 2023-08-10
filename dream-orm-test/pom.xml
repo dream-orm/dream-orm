@@ -30,5 +30,6 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <dream-orm.version>1.0.1</dream-orm.version>
     </properties>
 </project>

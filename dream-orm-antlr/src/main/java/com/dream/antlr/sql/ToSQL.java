@@ -582,8 +582,11 @@ public abstract class ToSQL {
             case -710422425://TruncateTableStatement
                 sql = toString((TruncateTableStatement) statement, assist, invokerList);
                 break;
-            case -609362384://DropTableStatement
-                sql = toString((DropTableStatement) statement, assist, invokerList);
+            case -371130727://DDLDropDatabaseStatement
+                sql = toString((DDLDropStatement.DDLDropDatabaseStatement) statement, assist, invokerList);
+                break;
+            case -907998468://DDLDropTableStatement
+                sql = toString((DDLDropStatement.DDLDropTableStatement) statement, assist, invokerList);
                 break;
             default:
                 throw new AntlrException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
@@ -953,6 +956,8 @@ public abstract class ToSQL {
 
     protected abstract String toString(TruncateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(DropTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+    protected abstract String toString(DDLDropStatement.DDLDropDatabaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(DDLDropStatement.DDLDropTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
 }

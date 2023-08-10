@@ -180,6 +180,9 @@ public abstract class SqlExpr {
             case RPAD:
                 statement = exprRpad(exprInfo);
                 break;
+            case DATABASE:
+                statement = exprDatabase(exprInfo);
+                break;
             case TABLE:
                 statement = exprTable(exprInfo);
                 break;
@@ -269,6 +272,12 @@ public abstract class SqlExpr {
                 break;
             case TAN:
                 statement = exprTan(exprInfo);
+                break;
+            case CREATE:
+                statement = exprCreate(exprInfo);
+                break;
+            case ALTER:
+                statement = exprAlter(exprInfo);
                 break;
             case TRUNCATE:
                 statement = exprTruncate(exprInfo);
@@ -643,6 +652,10 @@ public abstract class SqlExpr {
         return exprFunction(exprInfo);
     }
 
+    protected Statement exprDatabase(ExprInfo exprInfo) throws AntlrException {
+        return exprKeyWord(exprInfo);
+    }
+
     protected Statement exprTable(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
@@ -941,6 +954,14 @@ public abstract class SqlExpr {
 
     protected Statement exprOrder(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
+    }
+
+    protected Statement exprCreate(ExprInfo exprInfo) throws AntlrException {
+        return exprKeyWord(exprInfo);
+    }
+
+    protected Statement exprAlter(ExprInfo exprInfo) throws AntlrException {
+        return exprKeyWord(exprInfo);
     }
 
     protected Statement exprTruncate(ExprInfo exprInfo) throws AntlrException {

@@ -4,21 +4,21 @@ import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.read.ExprReader;
-import com.dream.antlr.smt.DropTableStatement;
+import com.dream.antlr.smt.DDLDropStatement;
 import com.dream.antlr.smt.Statement;
 
 /**
  * 删除表语法解析器
  */
-public class DropTableExpr extends HelperExpr {
+public class DDLDropExpr extends HelperExpr {
 
-    private final DropTableStatement dropTableStatement = new DropTableStatement();
+    private DDLDropStatement ddlDropStatement;
 
-    public DropTableExpr(ExprReader exprReader) {
+    public DDLDropExpr(ExprReader exprReader) {
         this(exprReader, () -> new SymbolExpr(exprReader));
     }
 
-    public DropTableExpr(ExprReader exprReader, Helper helper) {
+    public DDLDropExpr(ExprReader exprReader, Helper helper) {
         super(exprReader, helper);
         setExprTypes(ExprType.DROP);
     }
@@ -26,12 +26,21 @@ public class DropTableExpr extends HelperExpr {
     @Override
     protected Statement exprDrop(ExprInfo exprInfo) throws AntlrException {
         push();
-        setExprTypes(ExprType.TABLE);
+        setExprTypes(ExprType.DATABASE, ExprType.TABLE);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprDatabase(ExprInfo exprInfo) throws AntlrException {
+        ddlDropStatement = new DDLDropStatement.DDLDropDatabaseStatement();
+        push();
+        setExprTypes(ExprType.HELP);
         return expr();
     }
 
     @Override
     protected Statement exprTable(ExprInfo exprInfo) throws AntlrException {
+        ddlDropStatement = new DDLDropStatement.DDLDropTableStatement();
         push();
         setExprTypes(ExprType.HELP);
         return expr();
@@ -40,13 +49,13 @@ public class DropTableExpr extends HelperExpr {
 
     @Override
     protected Statement exprHelp(Statement statement) throws AntlrException {
-        dropTableStatement.setTable(statement);
+        ddlDropStatement.setStatement(statement);
         setExprTypes(ExprType.NIL);
         return expr();
     }
 
     @Override
     protected Statement nil() {
-        return dropTableStatement;
+        return ddlDropStatement;
     }
 }
