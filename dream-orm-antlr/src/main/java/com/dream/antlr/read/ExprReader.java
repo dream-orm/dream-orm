@@ -245,7 +245,7 @@ public class ExprReader extends StringReader {
         if (ExprType.LETTER != exprType && !ExprUtil.isLBrace(c) && !Arrays.asList(Constant.KEYWORD).contains(exprType)) {
             exprType = ExprType.LETTER;
         }
-        if (ExprUtil.isLBrace(c) && myFunctionFactory != null) {
+        if (ExprType.LETTER == exprType && ExprUtil.isLBrace(c) && myFunctionFactory != null) {
             MyFunctionStatement myFunctionStatement = myFunctionFactory.create(info);
             if (myFunctionStatement != null) {
                 myFunctionStatement.setFunctionName(info.toUpperCase(Locale.ENGLISH));
