@@ -109,7 +109,7 @@ public abstract class ToPubSQL extends ToNativeSQL {
         }
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.setColumnList(columnDefineList.toArray(new Statement[columnDefineList.size()]));
-        return "CREATE TABLE " + toStr(statement.getStatement(), assist, invokerList) + "(" +
+        return "CREATE TABLE " +(statement.isExistCreate() ? "" : "IF NOT EXISTS ")+ toStr(statement.getStatement(), assist, invokerList) + "(" +
                 toStr(listColumnStatement, assist, invokerList)
                 + ");" + builder;
     }
