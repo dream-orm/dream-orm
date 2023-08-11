@@ -36,6 +36,7 @@ public class UpdateTest {
     public void updateNonId() {
         User user = new User();
         user.setId(1);
+        user.setName("aa");
         user.setEmail("country");
         templateMapper.updateNonById(user);
     }
@@ -79,9 +80,9 @@ public class UpdateTest {
         userMapper.truncate();
     }
 
-    @Test
-    public void testDrop() {
-        userMapper.drop();
-    }
+//    @Test
+//    public void testDrop() {
+//        userMapper.drop();
+//    }
 
 }

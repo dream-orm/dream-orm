@@ -582,6 +582,15 @@ public abstract class ToSQL {
             case -710422425://TruncateTableStatement
                 sql = toString((TruncateTableStatement) statement, assist, invokerList);
                 break;
+            case -973744311://DDLCreateTableStatement
+                sql = toString((DDLCreateStatement.DDLCreateTableStatement) statement, assist, invokerList);
+                break;
+            case -1320247470://DDLColumnDefineStatement
+                sql = toString((DDLDefineStatement.DDLColumnDefineStatement) statement, assist, invokerList);
+                break;
+            case -1524013877://DDLPrimaryKeyDefineStatement
+                sql = toString((DDLDefineStatement.DDLPrimaryKeyDefineStatement) statement, assist, invokerList);
+                break;
             case -371130727://DDLDropDatabaseStatement
                 sql = toString((DDLDropStatement.DDLDropDatabaseStatement) statement, assist, invokerList);
                 break;
@@ -955,6 +964,12 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.ReturnParameterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(TruncateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(DDLCreateStatement.DDLCreateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(DDLDefineStatement.DDLColumnDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(DDLDefineStatement.DDLPrimaryKeyDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(DDLDropStatement.DDLDropDatabaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

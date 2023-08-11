@@ -49,12 +49,9 @@ public class PackageExpr extends HelperExpr {
 
     @Override
     protected Statement exprCreate(ExprInfo exprInfo) throws AntlrException {
-        return super.exprCreate(exprInfo);
-    }
-
-    @Override
-    protected Statement exprAlter(ExprInfo exprInfo) throws AntlrException {
-        return super.exprAlter(exprInfo);
+        statement.setStatement(new DDLCreateExpr(exprReader).expr());
+        setExprTypes(ExprType.ACC);
+        return expr();
     }
 
     @Override

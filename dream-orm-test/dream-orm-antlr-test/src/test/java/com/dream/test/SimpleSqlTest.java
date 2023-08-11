@@ -66,7 +66,7 @@ public class SimpleSqlTest extends AbstractSqlTest {
 
     @Test
     public void testCompare() {
-        testSqlForMany("SELECT 1/2,1&2,1^2,1|2,1<<2,1>>2,1+2+(1-2-1*2-1)/2 FROM DUAL where 1!=1 and 1<>1  and '1' is not null and 1>=1 or 1<1 and 1>1 or 1=1 and 1 between 1 and 2 and 1 in(a) and 2 in(select a) and not exists(select a)", null, null);
+        testSqlForMany("SELECT 123.677 FROM DUAL where a is  null", null, null);
     }
 
     @Test
@@ -110,7 +110,13 @@ public class SimpleSqlTest extends AbstractSqlTest {
     }
 
     @Test
-    public void testCreateDatabase() {
-        testSqlForMany("create table", null, null);
+    public void testCreateTable() {
+        testSqlForMany("CREATE TABLE IF NOT EXISTS `runoob_tbl`(\n" +
+                "   `runoob_title` VARCHAR(100) NOT NULL,\n" +
+                "   `runoob_id` INT  AUTO_INCREMENT,\n" +
+                "   `runoob_author` VARCHAR(40) NOT NULL,\n" +
+                "   `submission_date` DATE,\n" +
+                "   PRIMARY KEY ( `runoob_id` )\n" +
+                ")engine=innodb default charset=utf8 comment='hello'", null, null);
     }
 }

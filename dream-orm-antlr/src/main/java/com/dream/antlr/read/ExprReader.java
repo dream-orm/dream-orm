@@ -1,6 +1,5 @@
 package com.dream.antlr.read;
 
-import com.dream.antlr.config.Constant;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
@@ -8,7 +7,6 @@ import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.util.ExprUtil;
 
-import java.util.Arrays;
 import java.util.Stack;
 
 public class ExprReader extends StringReader {
@@ -241,9 +239,6 @@ public class ExprReader extends StringReader {
         int len = read(chars, 0, count);
         String info = new String(chars, 0, len);
         ExprType exprType = ExprUtil.getExprTypeInLetter(info);
-        if (ExprType.LETTER != exprType && !ExprUtil.isLBrace(c) && !Arrays.asList(Constant.KEYWORD).contains(exprType)) {
-            exprType = ExprType.LETTER;
-        }
         if (ExprType.LETTER == exprType && ExprUtil.isLBrace(c) && myFunctionFactory != null) {
             MyFunctionStatement myFunctionStatement = myFunctionFactory.create(info);
             if (myFunctionStatement != null) {
@@ -306,41 +301,14 @@ public class ExprReader extends StringReader {
         mark();
         int c;
         int count = 0;
-        ExprType exprType = ExprType.INT;
         while ((c = read()) != -1 && (ExprUtil.isNumber(c) || ExprUtil.isDot(c))) {
-            if (ExprUtil.isDot(c)) {
-                if (exprType == ExprType.INT) {
-                    exprType = ExprType.DOUBLE;
-                } else {
-                    throw new AntlrException("数字格式不正确");
-                }
-            }
             count++;
-        }
-        if (ExprUtil.isF(c)) {
-            skip(1);
-            if (exprType == ExprType.INT || exprType == ExprType.DOUBLE) {
-                exprType = ExprType.FLOAT;
-            }
-            throw new AntlrException("数字格式不正确");
-        } else if (ExprUtil.isL(c)) {
-            skip(1);
-            if (exprType == ExprType.INT) {
-                exprType = ExprType.LONG;
-            }
-            throw new AntlrException("数字格式不正确");
-        } else if (ExprUtil.isD(c)) {
-            skip(1);
-            if (exprType == ExprType.INT) {
-                exprType = ExprType.DOUBLE;
-            }
-            throw new AntlrException("数字格式不正确");
         }
         reset();
         char[] chars = new char[count];
         int len = read(chars, 0, count);
         String info = new String(chars, 0, len);
-        return new ExprInfo(exprType, info, getStart(), getEnd());
+        return new ExprInfo(ExprType.LETTER, info, getStart(), getEnd());
 
     }
 

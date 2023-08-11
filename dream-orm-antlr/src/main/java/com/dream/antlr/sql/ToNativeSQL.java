@@ -1,6 +1,7 @@
 package com.dream.antlr.sql;
 
 import com.dream.antlr.config.Assist;
+import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
@@ -1003,6 +1004,75 @@ public class ToNativeSQL extends ToSQL {
     @Override
     protected String toString(TruncateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "TRUNCATE TABLE " + toStr(statement.getTable(), assist, invokerList);
+    }
+
+    @Override
+    protected String toString(DDLCreateStatement.DDLCreateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement engine = statement.getEngine();
+        Statement defaultCharset = statement.getDefaultCharset();
+        Statement comment = statement.getComment();
+        StringBuilder builder = new StringBuilder();
+        if (engine != null) {
+            builder.append(" ENGINE=" + toStr(engine, assist, invokerList));
+        }
+        if (defaultCharset != null) {
+            builder.append(" DEFAULT CHARSET=" + toStr(defaultCharset, assist, invokerList));
+        }
+        if (comment != null) {
+            builder.append(" COMMENT=" + toStr(comment, assist, invokerList));
+        }
+        List<DDLDefineStatement> columnDefineList = statement.getColumnDefineList();
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.setColumnList(columnDefineList.toArray(new Statement[columnDefineList.size()]));
+        return "CREATE TABLE " + toStr(statement.getStatement(), assist, invokerList) + "(" +
+                toStr(listColumnStatement, assist, invokerList)
+                + ")" + builder;
+    }
+
+    @Override
+    protected String toString(DDLDefineStatement.DDLColumnDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement column = statement.getColumn();
+        ExprType columnType = statement.getColumnType();
+        ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
+        Statement comment = statement.getComment();
+        Statement defaultValue = statement.getDefaultValue();
+        boolean autoIncrement = statement.isAutoIncrement();
+        boolean nullFlag = statement.isNullFlag();
+        boolean primaryKey = statement.isPrimaryKey();
+        StringBuilder builder = new StringBuilder();
+        if (columnTypeParamList != null) {
+            builder.append("(" + toStr(columnTypeParamList, assist, invokerList) + ")");
+        }
+        if (!nullFlag) {
+            builder.append(" NOT NULL");
+        }
+        if (autoIncrement) {
+            builder.append(" AUTO_INCREMENT");
+        }
+        if (primaryKey) {
+            builder.append(" PRIMARY KEY");
+        }
+        if (defaultValue != null) {
+            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
+        }
+        if (comment != null) {
+            builder.append(" COMMENT " + toStr(comment, assist, invokerList));
+        }
+        return toStr(column, assist, invokerList) + " " + columnType.name() + builder;
+    }
+
+    @Override
+    protected String toString(DDLDefineStatement.DDLPrimaryKeyDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        StringBuilder builder = new StringBuilder();
+        Statement constraint = statement.getConstraint();
+        if (constraint != null) {
+            builder.append("CONSTRAINT " + toStr(constraint, assist, invokerList) + " ");
+        }
+        List<Statement> primaryKeys = statement.getPrimaryKeys();
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.setColumnList(primaryKeys.toArray(new Statement[primaryKeys.size()]));
+        builder.append("PRIMARY KEY(" + toStr(listColumnStatement, assist, invokerList) + ")");
+        return builder.toString();
     }
 
     @Override

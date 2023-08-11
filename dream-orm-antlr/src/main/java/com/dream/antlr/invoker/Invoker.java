@@ -9,7 +9,7 @@ import com.dream.antlr.sql.ToSQL;
 import java.util.List;
 
 public interface Invoker {
-    String DEFAULT_NAMESPACE = "default";
+    String DEFAULT_NAMESPACE = "dream";
 
     /**
      * @param assist 翻译辅助工具
