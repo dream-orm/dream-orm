@@ -1,4 +1,4 @@
-package com.dream.base.provider;
+package com.dream.test.base.provider;
 
 
 import com.dream.system.provider.ActionProvider;

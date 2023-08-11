@@ -1,7 +1,7 @@
 package com.dream.test;
 
-import com.dream.base.table.User;
 import com.dream.template.mapper.TemplateMapper;
+import com.dream.test.base.table.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

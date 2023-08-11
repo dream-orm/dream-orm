@@ -9,7 +9,6 @@ import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.util.ExprUtil;
 
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.Stack;
 
 public class ExprReader extends StringReader {
@@ -248,7 +247,7 @@ public class ExprReader extends StringReader {
         if (ExprType.LETTER == exprType && ExprUtil.isLBrace(c) && myFunctionFactory != null) {
             MyFunctionStatement myFunctionStatement = myFunctionFactory.create(info);
             if (myFunctionStatement != null) {
-                myFunctionStatement.setFunctionName(info.toUpperCase(Locale.ENGLISH));
+                myFunctionStatement.setFunctionName(info);
                 return new ExprInfo(ExprType.MY_FUNCTION, myFunctionStatement, getStart(), getEnd());
             }
         }

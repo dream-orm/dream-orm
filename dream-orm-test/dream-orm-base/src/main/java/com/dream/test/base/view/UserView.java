@@ -1,9 +1,9 @@
-package com.dream.base.view;
+package com.dream.test.base.view;
 
-import com.dream.base.table.Blog;
-import com.dream.base.table.User;
 import com.dream.system.annotation.Ignore;
 import com.dream.system.annotation.View;
+import com.dream.test.base.table.Blog;
+import com.dream.test.base.table.User;
 
 import java.util.List;
 

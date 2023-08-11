@@ -1,4 +1,4 @@
-package com.dream.base.condition;
+package com.dream.test.base.condition;
 
 import com.dream.template.annotation.Conditional;
 import com.dream.template.condition.InCondition;

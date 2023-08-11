@@ -40,7 +40,7 @@ public class BootApplication {
 
     @Bean
     public ConfigurationBean configurationBean() {
-        ConfigurationBean configurationBean = new ConfigurationBean(Arrays.asList("com.dream.base"), Arrays.asList("com.dream.base"));
+        ConfigurationBean configurationBean = new ConfigurationBean(Arrays.asList("com.dream.test.base"), Arrays.asList("com.dream.test.base"));
         return configurationBean;
     }
 }

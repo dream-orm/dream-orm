@@ -1,4 +1,4 @@
-package com.dream.base.table;
+package com.dream.test.base.table;
 
 import com.dream.system.annotation.Column;
 import com.dream.system.annotation.Id;

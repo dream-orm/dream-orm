@@ -1,15 +1,15 @@
-package com.dream.base.mapper;
+package com.dream.test.base.mapper;
 
-import com.dream.base.table.User;
-import com.dream.base.view.UserView;
-import com.dream.base.view.UserView2;
-import com.dream.base.view.UserView3;
-import com.dream.base.view.UserView4;
 import com.dream.system.annotation.Mapper;
 import com.dream.system.annotation.PageQuery;
 import com.dream.system.annotation.Param;
 import com.dream.system.annotation.Sql;
 import com.dream.system.config.Page;
+import com.dream.test.base.table.User;
+import com.dream.test.base.view.UserView;
+import com.dream.test.base.view.UserView2;
+import com.dream.test.base.view.UserView3;
+import com.dream.test.base.view.UserView4;
 
 import java.util.List;
 import java.util.Map;

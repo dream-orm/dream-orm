@@ -6,6 +6,7 @@ import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.InvokerStatement;
+import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.smt.Statement;
 
 /**
@@ -23,13 +24,28 @@ public class InvokerExpr extends SqlExpr {
     @Override
     protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
         push();
-        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.KEYWORD).addExprTypes(ExprType.MARK, ExprType.STAR).addExprTypes(ExprType.LETTER);
+        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.KEYWORD).addExprTypes(ExprType.MARK, ExprType.STAR, ExprType.LETTER, ExprType.MY_FUNCTION);
         return expr();
     }
 
     @Override
     protected Statement exprFunction(ExprInfo exprInfo) throws AntlrException {
         return exprName(exprInfo);
+    }
+
+    @Override
+    protected Statement exprMyFunction(ExprInfo exprInfo) throws AntlrException {
+        push();
+        MyFunctionStatement myFunctionStatement = (MyFunctionStatement) exprInfo.getObjInfo();
+        String functionName = myFunctionStatement.getFunctionName();
+        if (invokerStatement.getFunction() == null) {
+            invokerStatement.setFunction(functionName);
+            setExprTypes(ExprType.COLON, ExprType.LBRACE);
+        } else {
+            invokerStatement.setNamespace(functionName);
+            setExprTypes(ExprType.LBRACE);
+        }
+        return expr();
     }
 
     @Override
@@ -67,7 +83,7 @@ public class InvokerExpr extends SqlExpr {
     @Override
     protected Statement exprColon(ExprInfo exprInfo) throws AntlrException {
         push();
-        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.KEYWORD).addExprTypes(ExprType.LETTER);
+        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.KEYWORD).addExprTypes(ExprType.LETTER, ExprType.MY_FUNCTION);
         return expr();
     }
 

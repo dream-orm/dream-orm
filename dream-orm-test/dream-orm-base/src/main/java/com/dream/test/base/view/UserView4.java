@@ -1,10 +1,10 @@
-package com.dream.base.view;
+package com.dream.test.base.view;
 
-import com.dream.base.table.User;
 import com.dream.system.annotation.View;
 import com.dream.template.annotation.Wrap;
 import com.dream.template.annotation.WrapType;
 import com.dream.template.wrap.ZeroWrapper;
+import com.dream.test.base.table.User;
 
 @View(User.class)
 public class UserView4 {

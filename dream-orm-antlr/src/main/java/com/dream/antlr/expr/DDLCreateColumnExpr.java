@@ -14,14 +14,14 @@ public class DDLCreateColumnExpr extends HelperExpr {
         this(exprReader, () -> new SymbolExpr(exprReader));
     }
 
-    @Override
-    protected Statement nil() {
-        return null;
-    }
-
     public DDLCreateColumnExpr(ExprReader exprReader, Helper helper) {
         super(exprReader, helper);
         setExprTypes(ExprType.CREATE);
+    }
+
+    @Override
+    protected Statement nil() {
+        return null;
     }
 
     @Override

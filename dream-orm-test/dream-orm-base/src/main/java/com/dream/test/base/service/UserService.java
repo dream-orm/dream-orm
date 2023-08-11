@@ -1,8 +1,8 @@
-package com.dream.base.service;
+package com.dream.test.base.service;
 
-import com.dream.base.mapper.UserMapper;
-import com.dream.base.table.User;
 import com.dream.template.mapper.TemplateMapper;
+import com.dream.test.base.mapper.UserMapper;
+import com.dream.test.base.table.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

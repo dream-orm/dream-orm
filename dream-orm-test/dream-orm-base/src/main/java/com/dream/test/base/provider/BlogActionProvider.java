@@ -1,4 +1,4 @@
-package com.dream.base.provider;
+package com.dream.test.base.provider;
 
 import com.dream.system.core.action.Action;
 import com.dream.system.core.resultsethandler.ResultSetHandler;

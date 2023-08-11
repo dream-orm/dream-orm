@@ -1,10 +1,10 @@
-package com.dream.base.mapper;
+package com.dream.test.base.mapper;
 
-import com.dream.base.provider.BlogMapperProvider;
-import com.dream.base.table.Blog;
-import com.dream.base.view.UserView;
 import com.dream.system.annotation.Mapper;
 import com.dream.system.annotation.Sql;
+import com.dream.test.base.provider.BlogMapperProvider;
+import com.dream.test.base.table.Blog;
+import com.dream.test.base.view.UserView;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
-package com.dream.base.view;
+package com.dream.test.base.view;
 
-import com.dream.base.table.Blog;
 import com.dream.system.annotation.View;
+import com.dream.test.base.table.Blog;
 
 @View(Blog.class)
 public class BlogView {

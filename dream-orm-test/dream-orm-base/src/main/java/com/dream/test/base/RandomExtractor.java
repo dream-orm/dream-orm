@@ -1,4 +1,4 @@
-package com.dream.base;
+package com.dream.test.base;
 
 import com.dream.system.core.resultsethandler.extract.Extractor;
 import com.dream.util.reflection.factory.ObjectFactory;

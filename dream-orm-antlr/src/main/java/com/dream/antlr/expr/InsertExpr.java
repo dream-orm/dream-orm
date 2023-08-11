@@ -5,7 +5,9 @@ import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.InsertStatement;
+import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.smt.Statement;
+import com.dream.antlr.smt.SymbolStatement;
 
 /**
  * 插入语法解析器
@@ -32,7 +34,7 @@ public class InsertExpr extends HelperExpr {
     @Override
     protected Statement exprInto(ExprInfo exprInfo) throws AntlrException {
         push();
-        setExprTypes(ExprType.HELP);
+        setExprTypes(ExprType.HELP).addExprTypes(ExprType.MY_FUNCTION);
         return expr();
     }
 
@@ -68,9 +70,19 @@ public class InsertExpr extends HelperExpr {
         return insertStatement;
     }
 
+
     @Override
     protected Statement exprHelp(Statement statement) throws AntlrException {
         insertStatement.setTable(statement);
+        setExprTypes(ExprType.LBRACE, ExprType.VALUES, ExprType.SELECT);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprMyFunction(ExprInfo exprInfo) throws AntlrException {
+        push();
+        MyFunctionStatement myFunctionStatement = (MyFunctionStatement) exprInfo.getObjInfo();
+        insertStatement.setTable(new SymbolStatement.LetterStatement(myFunctionStatement.getFunctionName()));
         setExprTypes(ExprType.LBRACE, ExprType.VALUES, ExprType.SELECT);
         return expr();
     }
