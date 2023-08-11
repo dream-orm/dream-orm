@@ -16,6 +16,8 @@ import com.dream.util.common.ObjectUtil;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class UpdateMapper extends WrapMapper {
     private final int CODE = 2;
@@ -31,8 +33,13 @@ public abstract class UpdateMapper extends WrapMapper {
         String table = tableInfo.getTable();
         List<String> setList = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {
+            List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
+            Set<String> primKeyNameSet = null;
+            if (primKeys != null && !primKeys.isEmpty()) {
+                primKeyNameSet = primKeys.stream().map(primKey -> primKey.getName()).collect(Collectors.toSet());
+            }
             for (Field field : fieldList) {
-                if (!tableInfo.getPrimColumnInfo().getName().equals(field.getName())) {
+                if (primKeyNameSet == null || !primKeyNameSet.contains(field.getName())) {
                     String name = field.getName();
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {

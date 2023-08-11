@@ -22,6 +22,7 @@
         <module>dream-orm-keyword-test</module>
         <module>dream-orm-permission-test</module>
         <module>dream-orm-logic-test</module>
+        <module>dream-orm-sequence-test</module>
         <module>dream-orm-util-test</module>
         <module>dream-orm-flex-test</module>
         <module>dream-orm-chain-test</module>
