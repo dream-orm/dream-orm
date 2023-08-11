@@ -1024,7 +1024,8 @@ public class ToNativeSQL extends ToSQL {
         List<DDLDefineStatement> columnDefineList = statement.getColumnDefineList();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.setColumnList(columnDefineList.toArray(new Statement[columnDefineList.size()]));
-        return "CREATE TABLE " + toStr(statement.getStatement(), assist, invokerList) + "(" +
+        boolean existCreate = statement.isExistCreate();
+        return "CREATE TABLE " + (existCreate ? "" : "IF NOT EXISTS ") + toStr(statement.getStatement(), assist, invokerList) + "(" +
                 toStr(listColumnStatement, assist, invokerList)
                 + ")" + builder;
     }

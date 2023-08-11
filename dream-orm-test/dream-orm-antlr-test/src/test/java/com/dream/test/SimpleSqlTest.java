@@ -112,8 +112,8 @@ public class SimpleSqlTest extends AbstractSqlTest {
     @Test
     public void testCreateTable() {
         testSqlForMany("CREATE TABLE IF NOT EXISTS `runoob_tbl`(\n" +
-                "   `runoob_title` VARCHAR(100) NOT NULL,\n" +
-                "   `runoob_id` INT  AUTO_INCREMENT,\n" +
+                "   `runoob_title` VARCHAR(100) NOT NULL comment '111',\n" +
+                "   `runoob_id` INT(11)  AUTO_INCREMENT,\n" +
                 "   `runoob_author` VARCHAR(40) NOT NULL,\n" +
                 "   `submission_date` DATE,\n" +
                 "   PRIMARY KEY ( `runoob_id` )\n" +
