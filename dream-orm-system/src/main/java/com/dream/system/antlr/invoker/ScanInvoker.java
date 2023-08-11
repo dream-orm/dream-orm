@@ -30,7 +30,9 @@ public class ScanInvoker extends AbstractInvoker {
 
     private final DeleteScanHandler deleteScanHandler;
 
-    private final TruncateTableScanHandler truncateTableScanHandler;
+    private final DDLCreateScanHandler ddlCreateScanHandler;
+    private final DDLAlterScanHandler ddlAlterScanHandler;
+    private final DDLTruncateScanHandler ddlTruncateScanHandler;
 
     private final DDLDropScanHandler ddlDropScanHandler;
 
@@ -45,7 +47,9 @@ public class ScanInvoker extends AbstractInvoker {
         insertScanHandler = new InsertScanHandler(scanInfo);
         updateScanHandler = new UpdateScanHandler(scanInfo);
         deleteScanHandler = new DeleteScanHandler(scanInfo);
-        truncateTableScanHandler = new TruncateTableScanHandler(scanInfo);
+        ddlCreateScanHandler = new DDLCreateScanHandler(scanInfo);
+        ddlAlterScanHandler = new DDLAlterScanHandler(scanInfo);
+        ddlTruncateScanHandler = new DDLTruncateScanHandler(scanInfo);
         ddlDropScanHandler = new DDLDropScanHandler(scanInfo);
         paramScanHandler = new ParamScanHandler(scanInfo);
         invokerScanHandler = new InvokerScanHandler(scanInfo);
@@ -92,7 +96,7 @@ public class ScanInvoker extends AbstractInvoker {
 
     @Override
     public Handler[] handler() {
-        return new Handler[]{queryScanHandler, insertScanHandler, updateScanHandler, deleteScanHandler, truncateTableScanHandler, ddlDropScanHandler, paramScanHandler, invokerScanHandler};
+        return new Handler[]{queryScanHandler, insertScanHandler, updateScanHandler, deleteScanHandler, ddlCreateScanHandler, ddlAlterScanHandler, ddlTruncateScanHandler, ddlDropScanHandler, paramScanHandler, invokerScanHandler};
     }
 
     public ScanInfo getScanInfo() {

@@ -34,7 +34,7 @@ public class InsertExpr extends HelperExpr {
     @Override
     protected Statement exprInto(ExprInfo exprInfo) throws AntlrException {
         push();
-        setExprTypes(ExprType.HELP).addExprTypes(ExprType.MY_FUNCTION);
+        setExprTypes(ExprType.HELP);
         return expr();
     }
 

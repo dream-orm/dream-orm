@@ -5,6 +5,7 @@ import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.SymbolStatement;
 
@@ -20,6 +21,7 @@ public class SymbolExpr extends SqlExpr {
                 ExprType.JAVA_STR,
                 ExprType.MARK,
                 ExprType.SINGLE_MARK,
+                ExprType.MY_FUNCTION,
                 ExprType.LETTER,
                 ExprType.STAR,
                 ExprType.NULL);
@@ -42,6 +44,15 @@ public class SymbolExpr extends SqlExpr {
     protected Statement exprNull(ExprInfo exprInfo) throws AntlrException {
         push();
         statement = new SymbolStatement.LetterStatement("NULL");
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprMyFunction(ExprInfo exprInfo) throws AntlrException {
+        push();
+        MyFunctionStatement myFunctionStatement = (MyFunctionStatement) exprInfo.getObjInfo();
+        statement = new SymbolStatement.LetterStatement(myFunctionStatement.getFunctionName());
         setExprTypes(ExprType.NIL);
         return expr();
     }

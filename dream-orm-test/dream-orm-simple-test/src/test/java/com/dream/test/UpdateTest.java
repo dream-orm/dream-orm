@@ -74,6 +74,15 @@ public class UpdateTest {
         templateMapper.batchUpdateById(userView4List);
     }
 
+    @Test
+    public void testCreate() {
+        userMapper.create();
+    }
+
+    @Test
+    public void testAlter() {
+        userMapper.alter();
+    }
 
     @Test
     public void testTruncate() {

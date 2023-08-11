@@ -70,7 +70,7 @@ public class DDLAlterModifyExpr extends HelperExpr {
             );
         } else {
             ddlAlterModifyStatement.setDefaultValue(statement);
-            setExprTypes(ExprType.NOT, ExprType.NIL);
+            setExprTypes(ExprType.NOT, ExprType.NULL, ExprType.NIL);
         }
         return expr();
     }

@@ -157,7 +157,7 @@ public class DDLAlterAddExpr extends HelperExpr {
         braceExpr.addExprTypes(ExprType.NIL);
         BraceStatement braceStatement = (BraceStatement) braceExpr.expr();
         ddlAlterAddStatement.setColumnTypeParamList((ListColumnStatement) braceStatement.getStatement());
-        setExprTypes(ExprType.DEFAULT, ExprType.NOT, ExprType.NULL);
+        setExprTypes(ExprType.DEFAULT, ExprType.NOT, ExprType.NULL, ExprType.NIL);
         return expr();
     }
 

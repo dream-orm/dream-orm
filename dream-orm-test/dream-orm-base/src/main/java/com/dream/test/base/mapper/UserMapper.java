@@ -82,6 +82,12 @@ public interface UserMapper {
     @Sql("select @*() from user")
     List<UserView4> findAll4();
 
+    @Sql("create table a(id int primary key)")
+    int create();
+
+    @Sql("alter table user add column idd int(11)")
+    int alter();
+
     @Sql("truncate table user")
     int truncate();
 
