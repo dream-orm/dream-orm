@@ -582,6 +582,9 @@ public abstract class ToSQL {
             case -710422425://TruncateTableStatement
                 sql = toString((TruncateTableStatement) statement, assist, invokerList);
                 break;
+            case -500452564://DDLCreateDatabaseStatement
+                sql = toString((DDLCreateStatement.DDLCreateDatabaseStatement) statement, assist, invokerList);
+                break;
             case -973744311://DDLCreateTableStatement
                 sql = toString((DDLCreateStatement.DDLCreateTableStatement) statement, assist, invokerList);
                 break;
@@ -964,6 +967,8 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.ReturnParameterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(TruncateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(DDLCreateStatement.DDLCreateDatabaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(DDLCreateStatement.DDLCreateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

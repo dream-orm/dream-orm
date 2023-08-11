@@ -1007,6 +1007,12 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(DDLCreateStatement.DDLCreateDatabaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        boolean existCreate = statement.isExistCreate();
+        return "CREATE TABLE " + (existCreate ? "" : "IF NOT EXISTS ") + toStr(statement.getStatement(), assist, invokerList);
+    }
+
+    @Override
     protected String toString(DDLCreateStatement.DDLCreateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement engine = statement.getEngine();
         Statement defaultCharset = statement.getDefaultCharset();

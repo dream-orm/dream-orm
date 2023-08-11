@@ -108,7 +108,10 @@ public class SimpleSqlTest extends AbstractSqlTest {
     public void testDropDatabase() {
         testSqlForMany("drop database `aaa`", null, null);
     }
-
+    @Test
+    public void testCreateDatabase() {
+        testSqlForMany("CREATE database demo", null, null);
+    }
     @Test
     public void testCreateTable() {
         testSqlForMany("CREATE TABLE IF NOT EXISTS `runoob_tbl`(\n" +
