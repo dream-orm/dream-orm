@@ -169,6 +169,14 @@ public class ExprUtil {
                 return ExprType.TABLE;
             case 2107119://DROP
                 return ExprType.DROP;
+            case 1993459542://COLUMN
+                return ExprType.COLUMN;
+            case -2015466310://MODIFY
+                return ExprType.MODIFY;
+            case -1881265346://RENAME
+                return ExprType.RENAME;
+            case 2683://TO
+                return ExprType.TO;
             case 64594://ABS
                 return ExprType.ABS;
             case 65202://AVG
@@ -359,6 +367,8 @@ public class ExprUtil {
                 return ExprType.ALL;
             case 64951://AND
                 return ExprType.AND;
+            case 64641://ADD
+                return ExprType.ADD;
             case 2531://OR
                 return ExprType.OR;
             case 2038860142://ROW_NUMBER

@@ -55,6 +55,13 @@ public class PackageExpr extends HelperExpr {
     }
 
     @Override
+    protected Statement exprAlter(ExprInfo exprInfo) throws AntlrException {
+        statement.setStatement(new DDLAlterExpr(exprReader).expr());
+        setExprTypes(ExprType.ACC);
+        return expr();
+    }
+
+    @Override
     protected Statement exprTruncate(ExprInfo exprInfo) throws AntlrException {
         statement.setStatement(new DDLTruncateExpr(exprReader).expr());
         setExprTypes(ExprType.ACC);

@@ -600,6 +600,18 @@ public abstract class ToSQL {
             case -907998468://DDLDropTableStatement
                 sql = toString((DDLDropStatement.DDLDropTableStatement) statement, assist, invokerList);
                 break;
+            case 655343303://DDLAlterRenameStatement
+                sql = toString((DDLAlterStatement.DDLAlterRenameStatement) statement, assist, invokerList);
+                break;
+            case 1337074614://DDLAlterDropStatement
+                sql = toString((DDLAlterStatement.DDLAlterDropStatement) statement, assist, invokerList);
+                break;
+            case -1211571560://DDLAlterAddStatement
+                sql = toString((DDLAlterStatement.DDLAlterAddStatement) statement, assist, invokerList);
+                break;
+            case 677079243://DDLAlterModifyStatement
+                sql = toString((DDLAlterStatement.DDLAlterModifyStatement) statement, assist, invokerList);
+                break;
             default:
                 throw new AntlrException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
         }
@@ -979,5 +991,13 @@ public abstract class ToSQL {
     protected abstract String toString(DDLDropStatement.DDLDropDatabaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(DDLDropStatement.DDLDropTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(DDLAlterStatement.DDLAlterRenameStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(DDLAlterStatement.DDLAlterDropStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(DDLAlterStatement.DDLAlterAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(DDLAlterStatement.DDLAlterModifyStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
 }

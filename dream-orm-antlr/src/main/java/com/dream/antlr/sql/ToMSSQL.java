@@ -491,4 +491,21 @@ public class ToMSSQL extends ToPubSQL {
         }
         return toStr(column, assist, invokerList) + " " + columnTypeName + builder;
     }
+
+    @Override
+    protected String toString(DDLAlterStatement.DDLAlterModifyStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
+        StringBuilder builder = new StringBuilder();
+        if (columnTypeParamList != null) {
+            builder.append("(" + toStr(columnTypeParamList, assist, invokerList) + ")");
+        }
+        Statement defaultValue = statement.getDefaultValue();
+        if (!statement.isNullFlag()) {
+            builder.append(" NOT NULL");
+        }
+        if (defaultValue != null) {
+            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
+        }
+        return "ALTER TABLE " + toStr(statement.getTable(), assist, invokerList) + " ALTER COLUMN " + toStr(statement.getColumn(), assist, invokerList) + " " + statement.getColumnType().name() + builder;
+    }
 }

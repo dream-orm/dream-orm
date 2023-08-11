@@ -1091,4 +1091,48 @@ public class ToNativeSQL extends ToSQL {
     protected String toString(DDLDropStatement.DDLDropTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "DROP TABLE " + toStr(statement.getStatement(), assist, invokerList);
     }
+
+    @Override
+    protected String toString(DDLAlterStatement.DDLAlterRenameStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "ALTER TABLE " + toStr(statement.getTable(), assist, invokerList) + " RENAME TO " + toStr(statement.getNewTable(), assist, invokerList);
+    }
+
+    @Override
+    protected String toString(DDLAlterStatement.DDLAlterDropStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "ALTER TABLE " + toStr(statement.getTable(), assist, invokerList) + " DROP COLUMN " + toStr(statement.getColumn(), assist, invokerList);
+    }
+
+    @Override
+    protected String toString(DDLAlterStatement.DDLAlterAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
+        StringBuilder builder = new StringBuilder();
+        if (columnTypeParamList != null) {
+            builder.append("(" + toStr(columnTypeParamList, assist, invokerList) + ")");
+        }
+        Statement defaultValue = statement.getDefaultValue();
+        if (!statement.isNullFlag()) {
+            builder.append(" NOT NULL");
+        }
+        if (defaultValue != null) {
+            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
+        }
+        return "ALTER TABLE " + toStr(statement.getTable(), assist, invokerList) + " ADD COLUMN " + toStr(statement.getColumn(), assist, invokerList) + " " + statement.getColumnType().name() + builder;
+    }
+
+    @Override
+    protected String toString(DDLAlterStatement.DDLAlterModifyStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
+        StringBuilder builder = new StringBuilder();
+        if (columnTypeParamList != null) {
+            builder.append("(" + toStr(columnTypeParamList, assist, invokerList) + ")");
+        }
+        Statement defaultValue = statement.getDefaultValue();
+        if (!statement.isNullFlag()) {
+            builder.append(" NOT NULL");
+        }
+        if (defaultValue != null) {
+            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
+        }
+        return "ALTER TABLE " + toStr(statement.getTable(), assist, invokerList) + " MODIFY COLUMN " + toStr(statement.getColumn(), assist, invokerList) + " " + statement.getColumnType().name() + builder;
+    }
 }

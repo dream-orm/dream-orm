@@ -297,6 +297,18 @@ public abstract class SqlExpr {
             case DROP:
                 statement = exprDrop(exprInfo);
                 break;
+            case COLUMN:
+                statement = exprColumn(exprInfo);
+                break;
+            case RENAME:
+                statement = exprRename(exprInfo);
+                break;
+            case TO:
+                statement = exprTo(exprInfo);
+                break;
+            case MODIFY:
+                statement = exprModify(exprInfo);
+                break;
             case ORDER:
                 statement = exprOrder(exprInfo);
                 break;
@@ -1069,6 +1081,22 @@ public abstract class SqlExpr {
 
     protected Statement exprDrop(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
+    }
+
+    protected Statement exprColumn(ExprInfo exprInfo) throws AntlrException {
+        return exprNil(exprInfo);
+    }
+
+    protected Statement exprRename(ExprInfo exprInfo) throws AntlrException {
+        return exprNil(exprInfo);
+    }
+
+    protected Statement exprTo(ExprInfo exprInfo) throws AntlrException {
+        return exprNil(exprInfo);
+    }
+
+    protected Statement exprModify(ExprInfo exprInfo) throws AntlrException {
+        return exprNil(exprInfo);
     }
 
     protected Statement exprTan(ExprInfo exprInfo) throws AntlrException {
