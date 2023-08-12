@@ -192,6 +192,8 @@ public enum ExprType {
     DEFAULT,
     CONSTRAINT,
     PRIMARY,
+    FOREIGN,
+    REFERENCES,
     ENGINE,
     CHARSET,
     KEY,

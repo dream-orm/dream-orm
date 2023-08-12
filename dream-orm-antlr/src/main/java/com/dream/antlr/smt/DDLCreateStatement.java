@@ -1,7 +1,5 @@
 package com.dream.antlr.smt;
 
-import java.util.List;
-
 public abstract class DDLCreateStatement extends Statement {
     private Statement statement;
     private boolean existCreate = true;
@@ -32,17 +30,17 @@ public abstract class DDLCreateStatement extends Statement {
     }
 
     public static class DDLCreateTableStatement extends DDLCreateStatement {
-        private List<DDLDefineStatement> columnDefineList;
+        private ListColumnStatement columnDefineList;
         private Statement engine;
         private Statement comment;
         private Statement defaultCharset;
 
-        public List<DDLDefineStatement> getColumnDefineList() {
+        public ListColumnStatement getColumnDefineList() {
             return columnDefineList;
         }
 
-        public void setColumnDefineList(List<DDLDefineStatement> columnDefineList) {
-            this.columnDefineList = columnDefineList;
+        public void setColumnDefineList(ListColumnStatement columnDefineList) {
+            this.columnDefineList = wrapParent(columnDefineList);
         }
 
         public Statement getEngine() {
@@ -50,7 +48,7 @@ public abstract class DDLCreateStatement extends Statement {
         }
 
         public void setEngine(Statement engine) {
-            this.engine = engine;
+            this.engine = wrapParent(engine);
         }
 
         public Statement getComment() {
@@ -58,7 +56,7 @@ public abstract class DDLCreateStatement extends Statement {
         }
 
         public void setComment(Statement comment) {
-            this.comment = comment;
+            this.comment = wrapParent(comment);
         }
 
         public Statement getDefaultCharset() {
@@ -66,7 +64,7 @@ public abstract class DDLCreateStatement extends Statement {
         }
 
         public void setDefaultCharset(Statement defaultCharset) {
-            this.defaultCharset = defaultCharset;
+            this.defaultCharset = wrapParent(defaultCharset);
         }
     }
 }

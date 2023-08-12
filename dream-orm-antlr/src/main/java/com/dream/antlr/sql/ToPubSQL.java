@@ -97,8 +97,8 @@ public abstract class ToPubSQL extends ToNativeSQL {
         if (comment != null) {
             builder.append("COMMENT ON TABLE " + table + " is " + toStr(comment, assist, invokerList) + ";");
         }
-        List<DDLDefineStatement> columnDefineList = statement.getColumnDefineList();
-        for (DDLDefineStatement ddlDefineStatement : columnDefineList) {
+        ListColumnStatement columnDefineList = statement.getColumnDefineList();
+        for (Statement ddlDefineStatement : columnDefineList.getColumnList()) {
             if (ddlDefineStatement instanceof DDLDefineStatement.DDLColumnDefineStatement) {
                 DDLDefineStatement.DDLColumnDefineStatement ddlColumnDefineStatement = (DDLDefineStatement.DDLColumnDefineStatement) ddlDefineStatement;
                 Statement columnComment = ddlColumnDefineStatement.getComment();
@@ -107,10 +107,8 @@ public abstract class ToPubSQL extends ToNativeSQL {
                 }
             }
         }
-        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.setColumnList(columnDefineList.toArray(new Statement[columnDefineList.size()]));
         return "CREATE TABLE " + (statement.isExistCreate() ? "" : "IF NOT EXISTS ") + toStr(statement.getStatement(), assist, invokerList) + "(" +
-                toStr(listColumnStatement, assist, invokerList)
+                toStr(columnDefineList, assist, invokerList)
                 + ");" + builder;
     }
 }

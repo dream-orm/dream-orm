@@ -442,8 +442,9 @@ public class ToMSSQL extends ToPubSQL {
                     "@level0name = N'dbo', @level1type = N'TABLE'," +
                     "@level1name = N'" + table + "';");
         }
-        List<DDLDefineStatement> columnDefineList = statement.getColumnDefineList();
-        for (DDLDefineStatement ddlDefineStatement : columnDefineList) {
+        ListColumnStatement columnDefineList = statement.getColumnDefineList();
+        Statement[] columnList = columnDefineList.getColumnList();
+        for (Statement ddlDefineStatement : columnList) {
             if (ddlDefineStatement instanceof DDLDefineStatement.DDLColumnDefineStatement) {
                 DDLDefineStatement.DDLColumnDefineStatement ddlColumnDefineStatement = (DDLDefineStatement.DDLColumnDefineStatement) ddlDefineStatement;
                 Statement columnComment = ddlColumnDefineStatement.getComment();
@@ -456,10 +457,8 @@ public class ToMSSQL extends ToPubSQL {
                 }
             }
         }
-        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.setColumnList(columnDefineList.toArray(new Statement[columnDefineList.size()]));
         return "CREATE TABLE " + toStr(statement.getStatement(), assist, invokerList) + "(" +
-                toStr(listColumnStatement, assist, invokerList)
+                toStr(columnDefineList, assist, invokerList)
                 + ");" + builder;
     }
 

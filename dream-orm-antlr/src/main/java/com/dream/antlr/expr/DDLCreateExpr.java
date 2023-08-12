@@ -5,12 +5,8 @@ import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.DDLCreateStatement;
-import com.dream.antlr.smt.DDLDefineStatement;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.Statement;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 创建语法解析器
@@ -97,12 +93,7 @@ public class DDLCreateExpr extends HelperExpr {
         push();
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new DDLDefineExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
         ListColumnStatement listColumnStatement = (ListColumnStatement) listColumnExpr.expr();
-        Statement[] columnList = listColumnStatement.getColumnList();
-        List<DDLDefineStatement> ddlDefineStatementList = new ArrayList<>(columnList.length);
-        for (Statement statement : columnList) {
-            ddlDefineStatementList.add((DDLDefineStatement) statement);
-        }
-        ((DDLCreateStatement.DDLCreateTableStatement) ddlCreateStatement).setColumnDefineList(ddlDefineStatementList);
+        ((DDLCreateStatement.DDLCreateTableStatement) ddlCreateStatement).setColumnDefineList(listColumnStatement);
         setExprTypes(ExprType.RBRACE);
         return expr();
     }

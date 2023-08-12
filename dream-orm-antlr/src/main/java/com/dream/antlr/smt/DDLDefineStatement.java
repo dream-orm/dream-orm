@@ -2,8 +2,6 @@ package com.dream.antlr.smt;
 
 import com.dream.antlr.config.ExprType;
 
-import java.util.List;
-
 public abstract class DDLDefineStatement extends Statement {
     @Override
     protected Boolean isNeedInnerCache() {
@@ -12,7 +10,7 @@ public abstract class DDLDefineStatement extends Statement {
 
     public static class DDLPrimaryKeyDefineStatement extends DDLDefineStatement {
         private Statement constraint;
-        private List<Statement> primaryKeys;
+        private ListColumnStatement primaryKeys;
 
         public Statement getConstraint() {
             return constraint;
@@ -22,12 +20,51 @@ public abstract class DDLDefineStatement extends Statement {
             this.constraint = constraint;
         }
 
-        public List<Statement> getPrimaryKeys() {
+        public ListColumnStatement getPrimaryKeys() {
             return primaryKeys;
         }
 
-        public void setPrimaryKeys(List<Statement> primaryKeys) {
+        public void setPrimaryKeys(ListColumnStatement primaryKeys) {
             this.primaryKeys = primaryKeys;
+        }
+    }
+
+    public static class DDLForeignKeyDefineStatement extends DDLDefineStatement {
+        private Statement constraint;
+        private Statement foreignKey;
+        private Statement foreignTable;
+        private Statement foreignColumn;
+
+        public Statement getConstraint() {
+            return constraint;
+        }
+
+        public void setConstraint(Statement constraint) {
+            this.constraint = wrapParent(constraint);
+        }
+
+        public Statement getForeignKey() {
+            return foreignKey;
+        }
+
+        public void setForeignKey(Statement foreignKey) {
+            this.foreignKey = wrapParent(foreignKey);
+        }
+
+        public Statement getForeignTable() {
+            return foreignTable;
+        }
+
+        public void setForeignTable(Statement foreignTable) {
+            this.foreignTable = wrapParent(foreignTable);
+        }
+
+        public Statement getForeignColumn() {
+            return foreignColumn;
+        }
+
+        public void setForeignColumn(Statement foreignColumn) {
+            this.foreignColumn = wrapParent(foreignColumn);
         }
     }
 
@@ -46,7 +83,7 @@ public abstract class DDLDefineStatement extends Statement {
         }
 
         public void setColumn(Statement column) {
-            this.column = column;
+            this.column = wrapParent(column);
         }
 
         public ExprType getColumnType() {
@@ -62,7 +99,7 @@ public abstract class DDLDefineStatement extends Statement {
         }
 
         public void setColumnTypeParamList(ListColumnStatement columnTypeParamList) {
-            this.columnTypeParamList = columnTypeParamList;
+            this.columnTypeParamList = wrapParent(columnTypeParamList);
         }
 
         public Statement getDefaultValue() {
@@ -70,7 +107,7 @@ public abstract class DDLDefineStatement extends Statement {
         }
 
         public void setDefaultValue(Statement defaultValue) {
-            this.defaultValue = defaultValue;
+            this.defaultValue = wrapParent(defaultValue);
         }
 
         public Statement getComment() {
@@ -78,7 +115,7 @@ public abstract class DDLDefineStatement extends Statement {
         }
 
         public void setComment(Statement comment) {
-            this.comment = comment;
+            this.comment = wrapParent(comment);
         }
 
         public boolean isNullFlag() {

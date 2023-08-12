@@ -11,7 +11,7 @@ public abstract class DDLAlterStatement extends Statement {
     }
 
     public void setTable(Statement table) {
-        this.table = table;
+        this.table = wrapParent(table);
     }
 
     @Override
@@ -27,7 +27,7 @@ public abstract class DDLAlterStatement extends Statement {
         }
 
         public void setNewTable(Statement newTable) {
-            this.newTable = newTable;
+            this.newTable = wrapParent(newTable);
         }
     }
 
@@ -43,7 +43,7 @@ public abstract class DDLAlterStatement extends Statement {
         }
 
         public void setColumn(Statement column) {
-            this.column = column;
+            this.column = wrapParent(column);
         }
 
         public ExprType getColumnType() {
@@ -59,7 +59,7 @@ public abstract class DDLAlterStatement extends Statement {
         }
 
         public void setColumnTypeParamList(ListColumnStatement columnTypeParamList) {
-            this.columnTypeParamList = columnTypeParamList;
+            this.columnTypeParamList = wrapParent(columnTypeParamList);
         }
 
         public Statement getDefaultValue() {
@@ -67,7 +67,7 @@ public abstract class DDLAlterStatement extends Statement {
         }
 
         public void setDefaultValue(Statement defaultValue) {
-            this.defaultValue = defaultValue;
+            this.defaultValue = wrapParent(defaultValue);
         }
 
         public boolean isNullFlag() {
@@ -87,7 +87,7 @@ public abstract class DDLAlterStatement extends Statement {
         }
 
         public void setColumn(Statement column) {
-            this.column = column;
+            this.column = wrapParent(column);
         }
     }
 
@@ -103,7 +103,7 @@ public abstract class DDLAlterStatement extends Statement {
         }
 
         public void setColumn(Statement column) {
-            this.column = column;
+            this.column = wrapParent(column);
         }
 
         public ExprType getColumnType() {
@@ -119,7 +119,7 @@ public abstract class DDLAlterStatement extends Statement {
         }
 
         public void setColumnTypeParamList(ListColumnStatement columnTypeParamList) {
-            this.columnTypeParamList = columnTypeParamList;
+            this.columnTypeParamList = wrapParent(columnTypeParamList);
         }
 
         public Statement getDefaultValue() {
@@ -127,7 +127,7 @@ public abstract class DDLAlterStatement extends Statement {
         }
 
         public void setDefaultValue(Statement defaultValue) {
-            this.defaultValue = defaultValue;
+            this.defaultValue = wrapParent(defaultValue);
         }
 
         public boolean isNullFlag() {

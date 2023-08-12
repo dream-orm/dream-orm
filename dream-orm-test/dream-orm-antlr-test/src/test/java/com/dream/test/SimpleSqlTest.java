@@ -126,6 +126,18 @@ public class SimpleSqlTest extends AbstractSqlTest {
     }
 
     @Test
+    public void testCreateTable2() {
+        testSqlForMany("CREATE TABLE Orders (\n" +
+                "    OrderID int NOT NULL,\n" +
+                "    OrderNumber int NOT NULL,\n" +
+                "    PersonID int,\n" +
+                "  CONSTRAINT PK_OrderID  PRIMARY KEY (OrderID),\n" +
+                "    CONSTRAINT FK_PersonOrder FOREIGN KEY (PersonID)\n" +
+                "    REFERENCES Persons(PersonID)\n" +
+                ")", null, null);
+    }
+
+    @Test
     public void testAlterRename1() {
         testSqlForMany("alter table a rename b", null, null);
     }

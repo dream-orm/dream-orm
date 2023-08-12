@@ -40,14 +40,14 @@ public class DreamFlexProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (!roundEnv.processingOver()) {
             Set<? extends Element> flexAptElements = roundEnv.getElementsAnnotatedWith(FlexAPT.class);
-            if(flexAptElements==null||flexAptElements.isEmpty()){
+            if (flexAptElements == null || flexAptElements.isEmpty()) {
                 return true;
-            }else if(flexAptElements.size()>1){
-                throw new DreamRunTimeException("注解"+FlexAPT.class.getName()+"存在多个");
+            } else if (flexAptElements.size() > 1) {
+                throw new DreamRunTimeException("注解" + FlexAPT.class.getName() + "存在多个");
             }
             Element flexAPTElement = flexAptElements.iterator().next();
             FlexAPT flexAPT = flexAPTElement.getAnnotation(FlexAPT.class);
-            if(flexAPT.enable()){
+            if (flexAPT.enable()) {
                 String classSuffix = flexAPT.classSuffix();
                 String dir = flexAPT.dir();
                 Set<? extends Element> tableElements = roundEnv.getElementsAnnotatedWith(Table.class);
@@ -55,7 +55,7 @@ public class DreamFlexProcessor extends AbstractProcessor {
                 for (Element tableElement : tableElements) {
                     String entityClass = tableElement.toString();
                     String className = getClassName(entityClass);
-                    String tableDefPackage = buildTableDefPackage(entityClass,dir);
+                    String tableDefPackage = buildTableDefPackage(entityClass, dir);
                     String tableDefClassName = className.concat(classSuffix);
                     Table table = tableElement.getAnnotation(Table.class);
                     String tableName = table.value();
@@ -125,11 +125,11 @@ public class DreamFlexProcessor extends AbstractProcessor {
         return columnInfoList;
     }
 
-    private String buildTableDefPackage(String entityClass,String dir) {
-        Deque<String>deque=new ArrayDeque<>();
-        if(dir.startsWith("/")){
-            dir=dir.substring(1);
-        }else {
+    private String buildTableDefPackage(String entityClass, String dir) {
+        Deque<String> deque = new ArrayDeque<>();
+        if (dir.startsWith("/")) {
+            dir = dir.substring(1);
+        } else {
             String[] strs = entityClass.split("\\.");
             for (int i = 0; i < strs.length; i++) {
                 if (!strs[i].isEmpty()) {
@@ -138,18 +138,18 @@ public class DreamFlexProcessor extends AbstractProcessor {
             }
         }
         String[] parentFiles = dir.split("\\.\\./");
-        for(String parentFile:parentFiles){
-            if(!parentFile.isEmpty()){
+        for (String parentFile : parentFiles) {
+            if (!parentFile.isEmpty()) {
                 deque.pollLast();
                 String[] files = parentFile.split("\\./");
-                for(String file:files){
-                    if(!file.isEmpty()){
-                        deque.addLast(file.replace("/","."));
+                for (String file : files) {
+                    if (!file.isEmpty()) {
+                        deque.addLast(file.replace("/", "."));
                     }
                 }
             }
         }
-        return String.join(".",deque);
+        return String.join(".", deque);
     }
 
     private String buildTableDef(String table, String tableDefPackage, String tableDefClassName, List<String> columnList, Map<String, List<String>> columnMap) {

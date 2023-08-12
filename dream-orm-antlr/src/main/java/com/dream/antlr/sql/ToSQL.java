@@ -594,6 +594,9 @@ public abstract class ToSQL {
             case -1524013877://DDLPrimaryKeyDefineStatement
                 sql = toString((DDLDefineStatement.DDLPrimaryKeyDefineStatement) statement, assist, invokerList);
                 break;
+            case -1991014627://DDLForeignKeyDefineStatement
+                sql = toString((DDLDefineStatement.DDLForeignKeyDefineStatement) statement, assist, invokerList);
+                break;
             case -371130727://DDLDropDatabaseStatement
                 sql = toString((DDLDropStatement.DDLDropDatabaseStatement) statement, assist, invokerList);
                 break;
@@ -987,6 +990,8 @@ public abstract class ToSQL {
     protected abstract String toString(DDLDefineStatement.DDLColumnDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(DDLDefineStatement.DDLPrimaryKeyDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(DDLDefineStatement.DDLForeignKeyDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(DDLDropStatement.DDLDropDatabaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

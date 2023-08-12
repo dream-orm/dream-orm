@@ -1027,12 +1027,10 @@ public class ToNativeSQL extends ToSQL {
         if (comment != null) {
             builder.append(" COMMENT=" + toStr(comment, assist, invokerList));
         }
-        List<DDLDefineStatement> columnDefineList = statement.getColumnDefineList();
-        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.setColumnList(columnDefineList.toArray(new Statement[columnDefineList.size()]));
+        ListColumnStatement columnDefineList = statement.getColumnDefineList();
         boolean existCreate = statement.isExistCreate();
         return "CREATE TABLE " + (existCreate ? "" : "IF NOT EXISTS ") + toStr(statement.getStatement(), assist, invokerList) + "(" +
-                toStr(listColumnStatement, assist, invokerList)
+                toStr(columnDefineList, assist, invokerList)
                 + ")" + builder;
     }
 
@@ -1075,10 +1073,23 @@ public class ToNativeSQL extends ToSQL {
         if (constraint != null) {
             builder.append("CONSTRAINT " + toStr(constraint, assist, invokerList) + " ");
         }
-        List<Statement> primaryKeys = statement.getPrimaryKeys();
-        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.setColumnList(primaryKeys.toArray(new Statement[primaryKeys.size()]));
-        builder.append("PRIMARY KEY(" + toStr(listColumnStatement, assist, invokerList) + ")");
+        ListColumnStatement primaryKeys = statement.getPrimaryKeys();
+        builder.append("PRIMARY KEY(" + toStr(primaryKeys, assist, invokerList) + ")");
+        return builder.toString();
+    }
+
+    @Override
+    protected String toString(DDLDefineStatement.DDLForeignKeyDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        StringBuilder builder = new StringBuilder();
+        Statement constraint = statement.getConstraint();
+        if (constraint != null) {
+            builder.append("CONSTRAINT " + toStr(constraint, assist, invokerList) + " ");
+        }
+        Statement foreignKey = statement.getForeignKey();
+        Statement foreignTable = statement.getForeignTable();
+        Statement foreignColumn = statement.getForeignColumn();
+        builder.append("FOREIGN KEY(" + toStr(foreignKey, assist, invokerList) + ")");
+        builder.append(" REFERENCES " + toStr(foreignTable, assist, invokerList) + "(" + toStr(foreignColumn, assist, invokerList) + ")");
         return builder.toString();
     }
 

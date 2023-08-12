@@ -637,6 +637,12 @@ public abstract class SqlExpr {
             case PRIMARY:
                 statement = exprPrimary(exprInfo);
                 break;
+            case FOREIGN:
+                statement = exprForeign(exprInfo);
+                break;
+            case REFERENCES:
+                statement = exprReferences(exprInfo);
+                break;
             case KEY:
                 statement = exprKey(exprInfo);
                 break;
@@ -700,6 +706,14 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprPrimary(ExprInfo exprInfo) throws AntlrException {
+        return exprNil(exprInfo);
+    }
+
+    protected Statement exprForeign(ExprInfo exprInfo) throws AntlrException {
+        return exprNil(exprInfo);
+    }
+
+    protected Statement exprReferences(ExprInfo exprInfo) throws AntlrException {
         return exprNil(exprInfo);
     }
 

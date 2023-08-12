@@ -27,18 +27,6 @@ public class ExprUtil {
         return 48 <= c && c <= 57;
     }
 
-    public static boolean isF(int c) {
-        return 48 == 70 || c == 102;
-    }
-
-    public static boolean isD(int c) {
-        return 68 == c || c == 100;
-    }
-
-    public static boolean isL(int c) {
-        return 76 == c || c == 108;
-    }
-
     public static boolean isDot(int c) {
         return c == 46;
     }
@@ -391,6 +379,10 @@ public class ExprUtil {
                 return ExprType.CONSTRAINT;
             case 403216866://PRIMARY
                 return ExprType.PRIMARY;
+            case 40307892://FOREIGN
+                return ExprType.FOREIGN;
+            case 1870042760://REFERENCES
+                return ExprType.REFERENCES;
             case 74303://KEY
                 return ExprType.KEY;
             case 2049633858://ENGINE
