@@ -55,11 +55,17 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
 
     public void set(Object result, String property, Object value) {
         PropertySetterCaller setterCaller = setterMap.get(property);
+        if(setterCaller==null){
+            throw new DreamRunTimeException(result.getClass().getName()+"没有属性"+property+" setter方法");
+        }
         setterCaller.call(result, value);
     }
 
     public Object get(Object result, String property) {
         PropertyGetter propertyGetter = getterMap.get(property);
+        if(propertyGetter==null){
+            throw new DreamRunTimeException(result.getClass().getName()+"没有属性"+property+" getter方法");
+        }
         return propertyGetter.apply(result);
     }
 
