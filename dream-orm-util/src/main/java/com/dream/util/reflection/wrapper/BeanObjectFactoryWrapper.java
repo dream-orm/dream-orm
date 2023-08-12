@@ -1,204 +1,180 @@
 package com.dream.util.reflection.wrapper;
 
-import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
-import com.dream.util.reflect.ReflectUtil;
 import com.dream.util.reflection.factory.BeanObjectFactory;
 import com.dream.util.reflection.factory.ObjectFactory;
 
-import java.lang.reflect.Field;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.io.Serializable;
+import java.lang.invoke.*;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Parameter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
-    protected Class type;
-    Map<String, PropertyInfo> propertyInfoMap = new HashMap<>(16);
+    public static final Integer FLAG_SERIALIZABLE = 1;
+    private Supplier<Object> objectSupplier;
+    private Map<String, PropertyGetter> getterMap = new HashMap<>(8);
+    private Map<String, PropertySetterCaller> setterMap = new HashMap<>(8);
 
     public BeanObjectFactoryWrapper(Class type) {
-        this.type = type;
-        List<Method> methodList = ReflectUtil.findMethod(type);
-        List<Field> fieldList = ReflectUtil.findField(type);
-        for (Field field : fieldList) {
-            PropertyInfo propertyInfo = getPropertyInfo(methodList, field);
-            propertyInfoMap.put(field.getName(), propertyInfo);
-        }
+        this.objectSupplier = this.constructorCreator(type);
+        this.lambdaProperty(type);
+    }
 
+    protected Supplier<Object> constructorCreator(Class type) {
+        try {
+            MethodType constructorType = MethodType.methodType(void.class);
+            MethodHandles.Lookup caller = MethodHandles.lookup();
+            MethodHandle constructorHandle = caller.findConstructor(type, constructorType);
+
+            CallSite site = LambdaMetafactory.altMetafactory(caller,
+                    "get",
+                    MethodType.methodType(Supplier.class),
+                    constructorHandle.type().generic(),
+                    constructorHandle,
+                    constructorHandle.type(), FLAG_SERIALIZABLE);
+            return (Supplier<Object>) site.getTarget().invokeExact();
+        } catch (Throwable e) {
+            throw new DreamRunTimeException(e.getMessage(), e);
+        }
     }
 
     @Override
     public ObjectFactory newObjectFactory(Object target) {
         if (target == null) {
-            return new BeanObjectFactory(ReflectUtil.create(type), this);
+            return new BeanObjectFactory(objectSupplier.get(), this);
         } else {
             return new BeanObjectFactory(target, this);
         }
     }
 
-    protected PropertyInfo getPropertyInfo(List<Method> methodList, Field field) {
-        PropertyInfo propertyInfo = new PropertyInfo();
-        String fieldName = field.getName();
-        propertyInfo.setLabel(fieldName);
-        propertyInfo.setField(field);
-        Class fieldType = field.getType();
-        if (!ObjectUtil.isNull(methodList)) {
-            for (Method method : methodList) {
-                String name = method.getName();
-                if (name.startsWith("set")) {
-                    if (name.length() > 3) {
-                        name = toLow(name.substring(3));
-                        if (fieldName.equals(name) && propertyInfo.getWriteMethod() == null) {
-                            Parameter[] parameters = method.getParameters();
-                            if (parameters.length == 1) {
-                                if (fieldType == parameters[0].getType()) {
-                                    propertyInfo.setWriteMethod(method);
-                                }
-                            }
-                        }
-                    }
-                } else if (name.startsWith("get")) {
-                    if (name.length() > 3) {
-                        name = toLow(name.substring(3));
-                        if (fieldName.equals(name) && propertyInfo.getReadMethod() == null) {
-                            Parameter[] parameters = method.getParameters();
-                            if (parameters.length == 0) {
-                                propertyInfo.setReadMethod(method);
-                            }
-                        }
-                    }
-                } else if (name.startsWith("is") && (fieldType == boolean.class || fieldType == Boolean.class)) {
-                    if (name.length() > 2) {
-                        name = toLow(name.substring(2));
-                        if (fieldName.equals(name) && propertyInfo.getReadMethod() == null) {
-                            Parameter[] parameters = method.getParameters();
-                            if (parameters.length == 0) {
-                                propertyInfo.setReadMethod(method);
-                            }
-                        }
-                    }
-                }
-                if (propertyInfo.getReadMethod() != null && propertyInfo.getWriteMethod() != null) {
-                    break;
-                }
-            }
-        }
-        return propertyInfo;
-    }
-
-    protected String toLow(String name) {
-        return Character.toLowerCase(name.charAt(0)) + name.substring(1);
-    }
-
     public void set(Object result, String property, Object value) {
-        PropertyInfo propertyInfo = propertyInfoMap.get(property);
-        if (propertyInfo == null) {
-            throw new DreamRunTimeException(type.getName() + "不存在属性" + property);
-        }
-        Method writeMethod = propertyInfo.getWriteMethod();
-        if (writeMethod != null) {
-            try {
-                writeMethod.invoke(result, value);
-            } catch (Exception e) {
-                throw new DreamRunTimeException(e);
-            }
-        } else {
-            Field field = propertyInfo.getField();
-            try {
-                field.set(result, value);
-            } catch (Exception e) {
-                throw new DreamRunTimeException(e);
-            }
-        }
+        PropertySetterCaller setterCaller = setterMap.get(property);
+        setterCaller.call(result, value);
     }
 
     public Object get(Object result, String property) {
-        property = unWrap(property);
-        PropertyInfo propertyInfo = propertyInfoMap.get(property);
-        if (propertyInfo == null) {
-            throw new DreamRunTimeException(type.getName() + "不存在属性" + property);
-        }
-        Method readMethod = propertyInfo.getReadMethod();
-        if (readMethod != null) {
-            try {
-                return readMethod.invoke(result);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        Field field = propertyInfo.getField();
+        PropertyGetter propertyGetter = getterMap.get(property);
+        return propertyGetter.apply(result);
+    }
+
+    private void lambdaProperty(Class type) {
+        BeanInfo beanInfo = null;
         try {
-            return field.get(result);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            beanInfo = Introspector.getBeanInfo(type, Object.class);
+        } catch (IntrospectionException e) {
+            throw new DreamRunTimeException(e.getMessage(), e);
+        }
+        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+        for (PropertyDescriptor descriptor : propertyDescriptors) {
+            PropertyGetter<Object, ?> propertyGetter = lambdaPropertyGetter(type, descriptor);
+            if (propertyGetter != null) {
+                getterMap.put(descriptor.getName(), propertyGetter);
+            }
+            PropertySetterCaller<Object> propertySetterCaller = lambdaPropertySetter(type, descriptor);
+            if (propertySetterCaller != null) {
+                setterMap.put(descriptor.getName(), propertySetterCaller);
+            }
         }
     }
 
-    protected String unWrap(String property) {
-        if (property == null) {
+    private PropertyGetter<Object, ?> lambdaPropertyGetter(Class type, PropertyDescriptor descriptor) {
+        Method readMethod = descriptor.getReadMethod();
+        if (readMethod != null) {
+            Class<?> propertyType = descriptor.getPropertyType();
+            String getFunName = readMethod.getName();
+            final MethodHandles.Lookup caller = MethodHandles.lookup();
+            MethodType methodType = MethodType.methodType(propertyType, type);
+            final CallSite site;
+
+            try {
+                site = LambdaMetafactory.altMetafactory(caller,
+                        "apply",
+                        MethodType.methodType(PropertyGetter.class),
+                        methodType.erase().generic(),
+                        caller.findVirtual(type, getFunName, MethodType.methodType(propertyType)),
+                        methodType, FLAG_SERIALIZABLE);
+                return (PropertyGetter<Object, ?>) site.getTarget().invokeExact();
+            } catch (Throwable e) {
+                throw new DreamRunTimeException(e.getMessage(), e);
+            }
+        } else {
             return null;
         }
-        char startChar = property.charAt(0);
-        switch (startChar) {
-            case '\'':
-            case '\"':
-            case '`':
-                if (property.charAt(property.length() - 1) == startChar) {
-                    return property.substring(1, property.length() - 1);
-                }
-                return property;
+    }
+
+    private PropertySetterCaller<Object> lambdaPropertySetter(Class type, PropertyDescriptor descriptor) {
+        Method writeMethod = descriptor.getWriteMethod();
+        if (writeMethod != null) {
+            Class<?> propertyType = descriptor.getPropertyType();
+            MethodHandles.Lookup caller = MethodHandles.lookup();
+            MethodType setter = MethodType.methodType(writeMethod.getReturnType(), propertyType);
+
+            Class<?> lambdaPropertyType = getObjectTypeWhenPrimitive(propertyType);
+            String getFunName = writeMethod.getName();
+            try {
+                MethodType instantiatedMethodType = MethodType.methodType(void.class, type, lambdaPropertyType);
+                MethodHandle target = caller.findVirtual(type, getFunName, setter);
+                MethodType samMethodType = MethodType.methodType(void.class, Object.class, Object.class);
+                CallSite site = LambdaMetafactory.metafactory(
+                        caller,
+                        "apply",
+                        MethodType.methodType(PropertySetter.class),
+                        samMethodType,
+                        target,
+                        instantiatedMethodType
+                );
+
+                PropertySetter<Object, Object> objectPropertyVoidSetter = (PropertySetter<Object, Object>) site.getTarget().invokeExact();
+                return objectPropertyVoidSetter::apply;
+            } catch (Throwable e) {
+                throw new DreamRunTimeException(e.getMessage(), e);
+            }
+        } else {
+            return null;
+        }
+    }
+
+    private Class<?> getObjectTypeWhenPrimitive(Class<?> propertyType) {
+        switch (propertyType.getName()) {
+            case "boolean":
+                return Boolean.class;
+            case "byte":
+                return Byte.class;
+            case "short":
+                return Short.class;
+            case "int":
+                return Integer.class;
+            case "long":
+                return Long.class;
+            case "float":
+                return Float.class;
+            case "double":
+                return Double.class;
+            case "char":
+                return Character.class;
             default:
-                return property;
+                return propertyType;
         }
     }
 
-    class PropertyInfo {
-        private String label;
-        private Field field;
-        private Method writeMethod;
-        private Method readMethod;
-
-        public Method getReadMethod() {
-            return readMethod;
-        }
-
-        public void setReadMethod(Method readMethod) {
-            this.readMethod = readMethod;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-
-        public void setLabel(String label) {
-            this.label = label;
-        }
-
-        public Field getField() {
-            return field;
-        }
-
-        public void setField(Field field) {
-            if (field != null) {
-                int modifiers = field.getModifiers();
-                if (!Modifier.isFinal(modifiers)) {
-                    field.setAccessible(true);
-                }
-                this.field = field;
-            }
-        }
-
-        public Method getWriteMethod() {
-            return writeMethod;
-        }
-
-        public void setWriteMethod(Method writeMethod) {
-            if (writeMethod != null) {
-                writeMethod.setAccessible(true);
-                this.writeMethod = writeMethod;
-            }
-        }
+    @FunctionalInterface
+    interface PropertySetter<T1, T2> extends Serializable {
+        void apply(T1 t, T2 value);
     }
+
+    @FunctionalInterface
+    public interface PropertyGetter<T, R> extends Serializable {
+        R apply(T t);
+    }
+
+    public interface PropertySetterCaller<T> {
+        void call(T t, Object value);
+    }
+
 }

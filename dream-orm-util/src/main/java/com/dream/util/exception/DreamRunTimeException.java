@@ -9,7 +9,7 @@ public class DreamRunTimeException extends RuntimeException {
         super(e);
     }
 
-    public DreamRunTimeException(String msg, Exception e) {
+    public DreamRunTimeException(String msg, Throwable e) {
         super(msg, e);
     }
 }

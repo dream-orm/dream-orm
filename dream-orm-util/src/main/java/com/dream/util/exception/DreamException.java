@@ -5,7 +5,7 @@ public class DreamException extends Exception {
         super(msg);
     }
 
-    public DreamException(String msg, Exception e) {
+    public DreamException(String msg, Throwable e) {
         super(msg, e);
     }
 }
