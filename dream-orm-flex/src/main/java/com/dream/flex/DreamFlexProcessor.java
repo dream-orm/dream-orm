@@ -1,9 +1,11 @@
 package com.dream.flex;
 
+import com.dream.flex.annotation.FlexAPT;
 import com.dream.system.annotation.Column;
 import com.dream.system.annotation.Ignore;
 import com.dream.system.annotation.Table;
 import com.dream.system.annotation.View;
+import com.dream.util.exception.DreamRunTimeException;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -37,44 +39,56 @@ public class DreamFlexProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (!roundEnv.processingOver()) {
-            Set<? extends Element> tableElements = roundEnv.getElementsAnnotatedWith(Table.class);
-            Map<String, Map<String, Set<String>>> tableFieldMap = tableFieldMap(roundEnv);
-            for (Element tableElement : tableElements) {
-                String entityClass = tableElement.toString();
-                String className = getClassName(entityClass);
-                String tableDefPackage = buildTableDefPackage(entityClass);
-                String tableDefClassName = className.concat("TableDef");
-                Table table = tableElement.getAnnotation(Table.class);
-                String tableName = table.value();
-                Map<String, Set<String>> fieldMap = tableFieldMap.get(entityClass);
-                Map<String, List<String>> columnMap = new HashMap<>();
-                List<String> columnList = columnInfoList((TypeElement) tableElement, fieldElement -> {
-                    Column column = fieldElement.getAnnotation(Column.class);
-                    if (column != null) {
-                        String columnName = column.value();
-                        if (fieldMap != null && !fieldMap.isEmpty()) {
-                            String fieldName = fieldElement.toString();
-                            fieldMap.forEach((k, v) -> {
-                                if (v.contains(fieldName)) {
-                                    List<String> columns = columnMap.get(k);
-                                    if (columns == null) {
-                                        columns = new ArrayList<>();
-                                        columnMap.put(k, columns);
+            Set<? extends Element> flexAptElements = roundEnv.getElementsAnnotatedWith(FlexAPT.class);
+            if(flexAptElements==null||flexAptElements.isEmpty()){
+                return true;
+            }else if(flexAptElements.size()>1){
+                throw new DreamRunTimeException("注解"+FlexAPT.class.getName()+"存在多个");
+            }
+            Element flexAPTElement = flexAptElements.iterator().next();
+            FlexAPT flexAPT = flexAPTElement.getAnnotation(FlexAPT.class);
+            if(flexAPT.enable()){
+                String classSuffix = flexAPT.classSuffix();
+                String dir = flexAPT.dir();
+                Set<? extends Element> tableElements = roundEnv.getElementsAnnotatedWith(Table.class);
+                Map<String, Map<String, Set<String>>> tableFieldMap = tableFieldMap(roundEnv);
+                for (Element tableElement : tableElements) {
+                    String entityClass = tableElement.toString();
+                    String className = getClassName(entityClass);
+                    String tableDefPackage = buildTableDefPackage(entityClass,dir);
+                    String tableDefClassName = className.concat(classSuffix);
+                    Table table = tableElement.getAnnotation(Table.class);
+                    String tableName = table.value();
+                    Map<String, Set<String>> fieldMap = tableFieldMap.get(entityClass);
+                    Map<String, List<String>> columnMap = new HashMap<>();
+                    List<String> columnList = columnInfoList((TypeElement) tableElement, fieldElement -> {
+                        Column column = fieldElement.getAnnotation(Column.class);
+                        if (column != null) {
+                            String columnName = column.value();
+                            if (fieldMap != null && !fieldMap.isEmpty()) {
+                                String fieldName = fieldElement.toString();
+                                fieldMap.forEach((k, v) -> {
+                                    if (v.contains(fieldName)) {
+                                        List<String> columns = columnMap.get(k);
+                                        if (columns == null) {
+                                            columns = new ArrayList<>();
+                                            columnMap.put(k, columns);
+                                        }
+                                        columns.add(columnName);
                                     }
-                                    columns.add(columnName);
-                                }
-                            });
+                                });
+                            }
+                            return columnName;
+                        } else {
+                            return null;
                         }
-                        return columnName;
-                    } else {
-                        return null;
+                    });
+                    String content = buildTableDef(tableName, tableDefPackage, tableDefClassName, columnList, columnMap);
+                    try {
+                        processGenClass(tableDefPackage, tableDefClassName, content);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                });
-                String content = buildTableDef(tableName, tableDefPackage, tableDefClassName, columnList, columnMap);
-                try {
-                    processGenClass(tableDefPackage, tableDefClassName, content);
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
             return true;
@@ -111,14 +125,31 @@ public class DreamFlexProcessor extends AbstractProcessor {
         return columnInfoList;
     }
 
-    private String buildTableDefPackage(String entityClass) {
-        StringBuilder packageBuilder = new StringBuilder();
-        if (!entityClass.contains(".")) {
-            packageBuilder.append("table");
-        } else {
-            packageBuilder.append(entityClass, 0, entityClass.lastIndexOf(".")).append(".table");
+    private String buildTableDefPackage(String entityClass,String dir) {
+        Deque<String>deque=new ArrayDeque<>();
+        if(dir.startsWith("/")){
+            dir=dir.substring(1);
+        }else {
+            String[] strs = entityClass.split("\\.");
+            for (int i = 0; i < strs.length; i++) {
+                if (!strs[i].isEmpty()) {
+                    deque.add(strs[i]);
+                }
+            }
         }
-        return packageBuilder.toString();
+        String[] parentFiles = dir.split("\\.\\./");
+        for(String parentFile:parentFiles){
+            if(!parentFile.isEmpty()){
+                deque.pollLast();
+                String[] files = parentFile.split("\\./");
+                for(String file:files){
+                    if(!file.isEmpty()){
+                        deque.addLast(file.replace("/","."));
+                    }
+                }
+            }
+        }
+        return String.join(".",deque);
     }
 
     private String buildTableDef(String table, String tableDefPackage, String tableDefClassName, List<String> columnList, Map<String, List<String>> columnMap) {

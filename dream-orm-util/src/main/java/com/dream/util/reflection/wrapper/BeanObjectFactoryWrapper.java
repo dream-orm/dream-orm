@@ -31,7 +31,6 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
             MethodType constructorType = MethodType.methodType(void.class);
             MethodHandles.Lookup caller = MethodHandles.lookup();
             MethodHandle constructorHandle = caller.findConstructor(type, constructorType);
-
             CallSite site = LambdaMetafactory.altMetafactory(caller,
                     "get",
                     MethodType.methodType(Supplier.class),
@@ -55,22 +54,22 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
 
     public void set(Object result, String property, Object value) {
         PropertySetterCaller setterCaller = setterMap.get(property);
-        if(setterCaller==null){
-            throw new DreamRunTimeException(result.getClass().getName()+"没有属性"+property+" setter方法");
+        if (setterCaller == null) {
+            throw new DreamRunTimeException(result.getClass().getName() + "没有属性" + property + " setter方法");
         }
         setterCaller.call(result, value);
     }
 
     public Object get(Object result, String property) {
         PropertyGetter propertyGetter = getterMap.get(property);
-        if(propertyGetter==null){
-            throw new DreamRunTimeException(result.getClass().getName()+"没有属性"+property+" getter方法");
+        if (propertyGetter == null) {
+            throw new DreamRunTimeException(result.getClass().getName() + "没有属性" + property + " getter方法");
         }
         return propertyGetter.apply(result);
     }
 
     private void lambdaProperty(Class type) {
-        BeanInfo beanInfo = null;
+        BeanInfo beanInfo;
         try {
             beanInfo = Introspector.getBeanInfo(type, Object.class);
         } catch (IntrospectionException e) {
@@ -96,10 +95,8 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
             String getFunName = readMethod.getName();
             final MethodHandles.Lookup caller = MethodHandles.lookup();
             MethodType methodType = MethodType.methodType(propertyType, type);
-            final CallSite site;
-
             try {
-                site = LambdaMetafactory.altMetafactory(caller,
+                CallSite site = LambdaMetafactory.altMetafactory(caller,
                         "apply",
                         MethodType.methodType(PropertyGetter.class),
                         methodType.erase().generic(),
@@ -135,7 +132,6 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
                         target,
                         instantiatedMethodType
                 );
-
                 PropertySetter<Object, Object> objectPropertyVoidSetter = (PropertySetter<Object, Object>) site.getTarget().invokeExact();
                 return objectPropertyVoidSetter::apply;
             } catch (Throwable e) {
@@ -147,26 +143,29 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
     }
 
     private Class<?> getObjectTypeWhenPrimitive(Class<?> propertyType) {
-        switch (propertyType.getName()) {
-            case "boolean":
-                return Boolean.class;
-            case "byte":
-                return Byte.class;
-            case "short":
-                return Short.class;
-            case "int":
-                return Integer.class;
-            case "long":
-                return Long.class;
-            case "float":
-                return Float.class;
-            case "double":
-                return Double.class;
-            case "char":
-                return Character.class;
-            default:
-                return propertyType;
+        if (propertyType.isPrimitive()) {
+            switch (propertyType.getName()) {
+                case "boolean":
+                    return Boolean.class;
+                case "byte":
+                    return Byte.class;
+                case "short":
+                    return Short.class;
+                case "int":
+                    return Integer.class;
+                case "long":
+                    return Long.class;
+                case "float":
+                    return Float.class;
+                case "double":
+                    return Double.class;
+                case "char":
+                    return Character.class;
+                default:
+                    return propertyType;
+            }
         }
+        return propertyType;
     }
 
     @FunctionalInterface

@@ -31,7 +31,9 @@ public class ScanInvoker extends AbstractInvoker {
     private final DeleteScanHandler deleteScanHandler;
 
     private final DDLCreateScanHandler ddlCreateScanHandler;
+
     private final DDLAlterScanHandler ddlAlterScanHandler;
+
     private final DDLTruncateScanHandler ddlTruncateScanHandler;
 
     private final DDLDropScanHandler ddlDropScanHandler;

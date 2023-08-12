@@ -2,6 +2,7 @@ package com.dream.test;
 
 import com.dream.boot.bean.ConfigurationBean;
 import com.dream.drive.listener.DebugListener;
+import com.dream.flex.annotation.FlexAPT;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.mate.permission.inject.PermissionHandler;
 import com.dream.mate.permission.inject.PermissionInject;
@@ -19,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
 
+@FlexAPT
 @SpringBootApplication
 public class BootApplication {
     public static void main(String[] args) {

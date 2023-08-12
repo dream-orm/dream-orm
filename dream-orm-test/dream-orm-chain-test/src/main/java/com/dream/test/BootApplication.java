@@ -2,6 +2,7 @@ package com.dream.test;
 
 import com.dream.boot.bean.ConfigurationBean;
 import com.dream.drive.listener.DebugListener;
+import com.dream.flex.annotation.FlexAPT;
 import com.dream.system.cache.Cache;
 import com.dream.system.cache.CacheFactory;
 import com.dream.system.cache.DefaultCacheFactory;
@@ -11,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
-
+@FlexAPT
 @SpringBootApplication
 public class BootApplication {
     public static void main(String[] args) {
