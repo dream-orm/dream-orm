@@ -22,6 +22,7 @@
         <module>dream-orm-keyword-test</module>
         <module>dream-orm-permission-test</module>
         <module>dream-orm-logic-test</module>
+        <module>dream-orm-sequence-test</module>
         <module>dream-orm-util-test</module>
         <module>dream-orm-flex-test</module>
         <module>dream-orm-chain-test</module>
@@ -30,5 +31,6 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <dream-orm.version>1.0.1</dream-orm.version>
     </properties>
 </project>

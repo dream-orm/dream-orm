@@ -20,3 +20,12 @@ VALUES (1, 'java', '2022-07-01', 1),
        (4, 'go核心技术', '2022-07-02', 2),
        (5, 'web', '2022-07-01', 2),
        (5, 'web核心技术', '2022-07-02', 2);
+
+DELETE
+FROM sys_user;
+INSERT INTO sys_user (id, id2, name, age, email, tenant_id, dept_id, del_flag)
+VALUES (1, 1, 'Jone', 18, 'test1', 1, 1, 0),
+       (2, 1, 'Jack', 20, 'test2', 1, 1, 0),
+       (1, 2, 'Tom', 28, 'test3', 1, 1, 0),
+       (1, 3, 'Sandy', 21, 'test4', 2, 2, 0),
+       (3, 1, 'Billie', 24, 'test5', 2, 2, 0);

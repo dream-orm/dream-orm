@@ -8,6 +8,8 @@
 
 ### dream-permission-test:测试查询权限插件
 
+### dream-sequence-test:测试联合主键
+
 ### dream-share-test:测试多数据源插件
 
 ### dream-tenant-test:测试多租户插件

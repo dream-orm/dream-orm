@@ -1,16 +1,16 @@
 package com.dream.test;
 
-import com.dream.base.condition.UserCondition;
-import com.dream.base.condition.UserCondition2;
-import com.dream.base.mapper.BlogMapper;
-import com.dream.base.mapper.UserMapper;
-import com.dream.base.table.Blog;
-import com.dream.base.table.User;
-import com.dream.base.view.UserView;
-import com.dream.base.view.UserView2;
-import com.dream.base.view.UserView3;
 import com.dream.system.config.Page;
 import com.dream.template.mapper.TemplateMapper;
+import com.dream.test.base.condition.UserCondition;
+import com.dream.test.base.condition.UserCondition2;
+import com.dream.test.base.mapper.BlogMapper;
+import com.dream.test.base.mapper.UserMapper;
+import com.dream.test.base.table.Blog;
+import com.dream.test.base.table.User;
+import com.dream.test.base.view.UserView;
+import com.dream.test.base.view.UserView2;
+import com.dream.test.base.view.UserView3;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

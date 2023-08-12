@@ -5,6 +5,8 @@ public enum Command {
     UPDATE,
     INSERT,
     DELETE,
+    CREATE,
+    ALTER,
     TRUNCATE,
     DROP,
     BATCH,

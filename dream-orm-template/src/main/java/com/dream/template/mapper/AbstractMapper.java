@@ -17,6 +17,7 @@ import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -103,10 +104,14 @@ public abstract class AbstractMapper {
     }
 
     protected String getIdWhere(TableInfo tableInfo, boolean appendField) {
-        ColumnInfo columnInfo = tableInfo.getPrimColumnInfo();
-        if (columnInfo == null) {
+        List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
+        if (primKeys == null || primKeys.isEmpty()) {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'未注册主键");
         }
+        if (primKeys.size() > 1) {
+            throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'存在多个主键");
+        }
+        ColumnInfo columnInfo = primKeys.get(0);
         String param = DREAM_TEMPLATE_PARAM;
         if (appendField) {
             param = param + "." + columnInfo.getName();
@@ -115,10 +120,14 @@ public abstract class AbstractMapper {
     }
 
     protected String getIdsWhere(TableInfo tableInfo) {
-        ColumnInfo columnInfo = tableInfo.getPrimColumnInfo();
-        if (columnInfo == null) {
+        List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
+        if (primKeys == null || primKeys.isEmpty()) {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'未注册主键");
         }
+        if (primKeys.size() > 1) {
+            throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'存在多个主键");
+        }
+        ColumnInfo columnInfo = primKeys.get(0);
         return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, DREAM_TEMPLATE_PARAM) + ")";
     }
 

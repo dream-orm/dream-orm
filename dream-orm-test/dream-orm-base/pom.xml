@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-spring-boot-starter</artifactId>
-            <version>1.0.0</version>
+            <version>${dream-orm.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,6 +1,7 @@
 package com.dream.antlr.sql;
 
 import com.dream.antlr.config.Assist;
+import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
@@ -413,4 +414,38 @@ public class ToPGSQL extends ToPubSQL {
         ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
         return toStr(conditionStatement.getLeft(), assist, invokerList) + "#" + toStr(conditionStatement.getRight(), assist, invokerList);
     }
+
+    @Override
+    protected String toString(DDLCreateStatement.DDLCreateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return toStringForCreateTable(statement, assist, invokerList);
+    }
+
+    @Override
+    protected String toString(DDLDefineStatement.DDLColumnDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement column = statement.getColumn();
+        ExprType columnType = statement.getColumnType();
+        ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
+        Statement defaultValue = statement.getDefaultValue();
+        String columnTypeName = columnType.name();
+        boolean autoIncrement = statement.isAutoIncrement();
+        boolean nullFlag = statement.isNullFlag();
+        boolean primaryKey = statement.isPrimaryKey();
+        StringBuilder builder = new StringBuilder();
+        if (autoIncrement) {
+            columnTypeName = "serial";
+        } else if (columnTypeParamList != null) {
+            builder.append("(" + toStr(columnTypeParamList, assist, invokerList) + ")");
+        }
+        if (!nullFlag) {
+            builder.append(" NOT NULL");
+        }
+        if (primaryKey) {
+            builder.append(" PRIMARY KEY");
+        }
+        if (defaultValue != null) {
+            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
+        }
+        return toStr(column, assist, invokerList) + " " + columnTypeName + builder;
+    }
+
 }

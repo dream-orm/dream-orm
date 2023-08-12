@@ -1,5 +1,6 @@
 package com.dream.solon.plugin;
 
+import com.dream.antlr.factory.DefaultMyFunctionFactory;
 import com.dream.antlr.factory.InvokerFactory;
 import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.invoker.Invoker;
@@ -164,11 +165,23 @@ public class DreamAutoConfiguration {
         return pluginFactory;
     }
 
-
+    /**
+     * 自定义函数
+     *
+     * @return 自定义函数
+     */
     @Bean
     @Condition(onMissingBean = MyFunctionFactory.class)
     public MyFunctionFactory myFunctionFactory() {
-        return function -> null;
+        String strMyFunctionFactory = dreamProperties.getMyFunctionFactory();
+        MyFunctionFactory myFunctionFactory;
+        if (!ObjectUtil.isNull(strMyFunctionFactory)) {
+            Class<? extends MyFunctionFactory> myFunctionFactoryType = ReflectUtil.loadClass(strMyFunctionFactory);
+            myFunctionFactory = ReflectUtil.create(myFunctionFactoryType);
+        } else {
+            myFunctionFactory = new DefaultMyFunctionFactory();
+        }
+        return myFunctionFactory;
     }
 
     /**
@@ -181,14 +194,7 @@ public class DreamAutoConfiguration {
     @Condition(onMissingBean = CompileFactory.class)
     public CompileFactory compileFactory(MyFunctionFactory myFunctionFactory) {
         DefaultCompileFactory defaultCompileFactory = new DefaultCompileFactory();
-        String strMyFunctionFactory = dreamProperties.getMyFunctionFactory();
-        if (!ObjectUtil.isNull(strMyFunctionFactory)) {
-            Class<? extends MyFunctionFactory> myFunctionFactoryType = ReflectUtil.loadClass(strMyFunctionFactory);
-            myFunctionFactory = ReflectUtil.create(myFunctionFactoryType);
-        }
-        if (myFunctionFactory != null) {
-            defaultCompileFactory.setMyFunctionFactory(myFunctionFactory);
-        }
+        defaultCompileFactory.setMyFunctionFactory(myFunctionFactory);
         return defaultCompileFactory;
     }
 

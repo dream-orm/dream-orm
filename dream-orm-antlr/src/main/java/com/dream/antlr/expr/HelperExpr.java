@@ -42,7 +42,7 @@ public abstract class HelperExpr extends SqlExpr {
     }
 
     @Override
-    public Statement exprDefault(ExprInfo exprInfo) throws AntlrException {
+    public Statement exprNil(ExprInfo exprInfo) throws AntlrException {
         if (accept0) {
             return exprSelf(exprInfo);
         }
@@ -51,7 +51,7 @@ public abstract class HelperExpr extends SqlExpr {
             helpExpr = helper.helper();
             return exprHelp(statement);
         } else {
-            return super.exprDefault(exprInfo);
+            return super.exprNil(exprInfo);
         }
     }
 

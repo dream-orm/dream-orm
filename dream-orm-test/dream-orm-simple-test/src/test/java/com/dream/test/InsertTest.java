@@ -1,11 +1,11 @@
 package com.dream.test;
 
 
-import com.dream.base.mapper.UserMapper;
-import com.dream.base.service.UserService;
-import com.dream.base.table.User;
-import com.dream.base.view.UserView4;
 import com.dream.template.mapper.TemplateMapper;
+import com.dream.test.base.mapper.UserMapper;
+import com.dream.test.base.service.UserService;
+import com.dream.test.base.table.User;
+import com.dream.test.base.view.UserView4;
 import com.dream.util.exception.DreamRunTimeException;
 import org.junit.Test;
 import org.junit.runner.RunWith;

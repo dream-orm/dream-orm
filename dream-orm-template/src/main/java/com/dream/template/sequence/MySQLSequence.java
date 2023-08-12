@@ -1,5 +1,6 @@
 package com.dream.template.sequence;
 
+import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
 
 public class MySQLSequence extends AbstractSequence {
@@ -14,7 +15,7 @@ public class MySQLSequence extends AbstractSequence {
     }
 
     @Override
-    protected Object sequence(TableInfo tableInfo) {
+    protected Object sequence(ColumnInfo columnInfo) {
         return null;
     }
 }

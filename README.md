@@ -52,9 +52,14 @@
 
 # 1. dream简介
 
-dream-orm（ https://github.com/moxa-lzf/dream-orm ）是一个基于翻译的以技术为中心，辐射业务持久层框架，它非常轻量，不依赖第三方jar包、同时拥有极高的性能与灵活性，可以写一种MySQL语法在非MySQL数据库下执行，其内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成java链式形式。
+dream-orm是一个自主研发类似mybatis的持久层框架。
 
-总而言之，dream-orm不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装。
+轻便，它非常轻量，不依赖第三方jar包
+灵巧，拥有极高的性能与灵活性，在满足类Mybatis框架功能上，它还首创SQL方言翻译，通过SQL方言转换技术（几乎无性能损耗）只要你会MySQL的SQL写法，那么你可以无缝移植到非MySQL数据库。
+
+极速开发，内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成java链式形式。
+
+dream-orm不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装
 
 ## 1.1. 特性
 
@@ -93,6 +98,7 @@ springboot项目
 项目演示地址（ https://gitee.com/moxiaoai/dream-orm/tree/master/dream-test/dream-orm-simple-test ）
 
 ```xml
+
 <dependency>
     <groupId>com.dream-orm</groupId>
     <artifactId>dream-orm-spring-boot-starter</artifactId>
@@ -105,6 +111,7 @@ solon项目
 项目演示地址（ https://gitee.com/moxiaoai/dream-orm/tree/master/dream-test/dream-orm-solon-test ）
 
 ```xml
+
 <dependency>
     <groupId>com.dream-orm</groupId>
     <artifactId>dream-orm-solon-plugin</artifactId>
@@ -210,7 +217,7 @@ private FlexMapper flexMapper;
 ```java
 @Autowired
 private FlexChainMapper flexChainMapper;
-List<User> userList = flexChainMapper.select(user.name).from(user).list(User.class);
+        List<User> userList=flexChainMapper.select(user.name).from(user).list(User.class);
 ```
 
 ## 2.2. dream配置

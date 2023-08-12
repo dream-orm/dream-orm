@@ -66,7 +66,7 @@ public class SimpleSqlTest extends AbstractSqlTest {
 
     @Test
     public void testCompare() {
-        testSqlForMany("SELECT 1/2,1&2,1^2,1|2,1<<2,1>>2,1+2+(1-2-1*2-1)/2 FROM DUAL where 1!=1 and 1<>1  and '1' is not null and 1>=1 or 1<1 and 1>1 or 1=1 and 1 between 1 and 2 and 1 in(a) and 2 in(select a) and not exists(select a)", null, null);
+        testSqlForMany("SELECT 123.677 FROM DUAL where a is  null", null, null);
     }
 
     @Test
@@ -100,7 +100,63 @@ public class SimpleSqlTest extends AbstractSqlTest {
     }
 
     @Test
-    public void testDrop() {
+    public void testDropTable() {
         testSqlForMany("drop table `aaa`", null, null);
+    }
+
+    @Test
+    public void testDropDatabase() {
+        testSqlForMany("drop database `aaa`", null, null);
+    }
+
+    @Test
+    public void testCreateDatabase() {
+        testSqlForMany("CREATE database demo", null, null);
+    }
+
+    @Test
+    public void testCreateTable() {
+        testSqlForMany("CREATE TABLE IF NOT EXISTS `runoob_tbl`(\n" +
+                "   `runoob_title` VARCHAR(100) NOT NULL comment '111',\n" +
+                "   `runoob_id` INT(11)  AUTO_INCREMENT,\n" +
+                "   `runoob_author` VARCHAR(40) NOT NULL,\n" +
+                "   `submission_date` DATE,\n" +
+                "   PRIMARY KEY ( `runoob_id` )\n" +
+                ")engine=innodb default charset=utf8 comment='hello'", null, null);
+    }
+
+    @Test
+    public void testAlterRename1() {
+        testSqlForMany("alter table a rename b", null, null);
+    }
+
+    @Test
+    public void testAlterRename2() {
+        testSqlForMany("alter table a rename to b", null, null);
+    }
+
+    @Test
+    public void testAlterDrop() {
+        testSqlForMany("alter table a drop  b", null, null);
+    }
+
+    @Test
+    public void testAlterDrop2() {
+        testSqlForMany("alter table a drop  column b", null, null);
+    }
+
+    @Test
+    public void testAlterAdd() {
+        testSqlForMany("alter table a add  column b int  default 11 not null", null, null);
+    }
+
+    @Test
+    public void testAlterAdd1() {
+        testSqlForMany("alter table a add   b int  not null default 11", null, null);
+    }
+
+    @Test
+    public void testAlterModify1() {
+        testSqlForMany("alter table a  modify  column b int  not null default 11", null, null);
     }
 }

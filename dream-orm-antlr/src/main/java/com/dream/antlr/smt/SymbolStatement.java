@@ -79,33 +79,4 @@ public abstract class SymbolStatement extends Statement {
             return "`" + getValue() + "`";
         }
     }
-
-    public static class IntStatement extends SymbolStatement {
-
-        public IntStatement(String symbol) {
-            super(symbol);
-        }
-
-    }
-
-    public static class LongStatement extends SymbolStatement {
-
-        public LongStatement(String symbol) {
-            super(symbol);
-        }
-    }
-
-    public static class FloatStatement extends SymbolStatement {
-
-        public FloatStatement(String symbol) {
-            super(symbol);
-        }
-    }
-
-    public static class DoubleStatement extends SymbolStatement {
-
-        public DoubleStatement(String symbol) {
-            super(symbol);
-        }
-    }
 }

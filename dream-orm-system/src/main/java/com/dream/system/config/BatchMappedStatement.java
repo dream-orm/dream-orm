@@ -60,6 +60,9 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
         return mappedStatementList.subList(fromIndex, toIndex);
     }
 
+    public List<MappedStatement> getAllMappedStatementList() {
+        return mappedStatementList;
+    }
 
     @Override
     public Command getCommand() {

@@ -14,6 +14,7 @@ import com.dream.util.reflect.ReflectUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class DefaultTableFactory implements TableFactory {
         Map<String, String> fieldMap = new LowHashMap<>();
         Map<String, ColumnInfo> columnInfoMap = new HashMap<>(8);
         List<Field> fieldList = ReflectUtil.findField(tableClass);
-        ColumnInfo primColumnInfo = null;
+        List<ColumnInfo> primKeys = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
                 String name = field.getName();
@@ -40,10 +41,7 @@ public class DefaultTableFactory implements TableFactory {
                     fieldMap.put(name, name);
                     columnInfoMap.put(name, columnInfo);
                     if (columnInfo.isPrimary()) {
-                        if (primColumnInfo != null) {
-                            throw new DreamRunTimeException("类'" + tableClass.getName() + "只能存在一个主键");
-                        }
-                        primColumnInfo = columnInfo;
+                        primKeys.add(columnInfo);
                     }
                 } else {
                     JoinInfo joinInfo = getJoinInfo(table, field);
@@ -53,7 +51,7 @@ public class DefaultTableFactory implements TableFactory {
                 }
             }
         }
-        return new TableInfo(table, primColumnInfo, columnInfoMap, joinInfoMap, fieldMap);
+        return new TableInfo(table, primKeys, columnInfoMap, joinInfoMap, fieldMap);
     }
 
     protected String getTable(Class<?> tableClass) {

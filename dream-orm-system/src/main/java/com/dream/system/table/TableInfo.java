@@ -1,6 +1,7 @@
 package com.dream.system.table;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class TableInfo {
@@ -8,11 +9,11 @@ public class TableInfo {
     private final Map<String, ColumnInfo> columnInfoMap;
     private final Map<String, JoinInfo> joinInfoMap;
     private final Map<String, String> fieldMap;
-    private final ColumnInfo primColumnInfo;
+    private final List<ColumnInfo> primKeys;
 
-    public TableInfo(String table, ColumnInfo primColumnInfo, Map<String, ColumnInfo> columnInfoMap, Map<String, JoinInfo> joinInfoMap, Map<String, String> fieldMap) {
+    public TableInfo(String table, List<ColumnInfo> primKeys, Map<String, ColumnInfo> columnInfoMap, Map<String, JoinInfo> joinInfoMap, Map<String, String> fieldMap) {
         this.table = table;
-        this.primColumnInfo = primColumnInfo;
+        this.primKeys = primKeys;
         this.columnInfoMap = columnInfoMap;
         this.joinInfoMap = joinInfoMap;
         this.fieldMap = fieldMap;
@@ -34,8 +35,8 @@ public class TableInfo {
         return table;
     }
 
-    public ColumnInfo getPrimColumnInfo() {
-        return primColumnInfo;
+    public List<ColumnInfo> getPrimKeys() {
+        return primKeys;
     }
 
     public JoinInfo getJoinInfo(String joinTable) {

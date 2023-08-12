@@ -1,6 +1,7 @@
 package com.dream.antlr.sql;
 
 import com.dream.antlr.config.Assist;
+import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.expr.BraceExpr;
 import com.dream.antlr.invoker.Invoker;
@@ -428,5 +429,83 @@ public class ToMSSQL extends ToPubSQL {
         String left = toStr(conditionStatement.getLeft(), assist, invokerList);
         String right = toStr(conditionStatement.getRight(), assist, invokerList);
         return left + "/POWER(2," + right + ")";
+    }
+
+    @Override
+    protected String toString(DDLCreateStatement.DDLCreateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        String table = ((SymbolStatement) statement.getStatement()).getValue();
+        Statement comment = statement.getComment();
+        StringBuilder builder = new StringBuilder();
+        if (comment != null) {
+            builder.append("EXEC sys.sp_addextendedproperty @name = N'MS_Description'," +
+                    "@value = N" + toStr(comment, assist, invokerList) + ", @level0type = N'SCHEMA'," +
+                    "@level0name = N'dbo', @level1type = N'TABLE'," +
+                    "@level1name = N'" + table + "';");
+        }
+        List<DDLDefineStatement> columnDefineList = statement.getColumnDefineList();
+        for (DDLDefineStatement ddlDefineStatement : columnDefineList) {
+            if (ddlDefineStatement instanceof DDLDefineStatement.DDLColumnDefineStatement) {
+                DDLDefineStatement.DDLColumnDefineStatement ddlColumnDefineStatement = (DDLDefineStatement.DDLColumnDefineStatement) ddlDefineStatement;
+                Statement columnComment = ddlColumnDefineStatement.getComment();
+                if (columnComment != null) {
+                    builder.append("EXEC sys.sp_addextendedproperty @name = N'MS_Description'," +
+                            "@value = N" + toStr(columnComment, assist, invokerList) + ", @level0type = N'SCHEMA'," +
+                            "@level0name = N'dbo', @level1type = N'TABLE'," +
+                            "@level1name = N'" + table + "', @level2type = N'COLUMN'," +
+                            "@level2name = N'" + ((SymbolStatement) ddlColumnDefineStatement.getColumn()).getValue() + "';");
+                }
+            }
+        }
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.setColumnList(columnDefineList.toArray(new Statement[columnDefineList.size()]));
+        return "CREATE TABLE " + toStr(statement.getStatement(), assist, invokerList) + "(" +
+                toStr(listColumnStatement, assist, invokerList)
+                + ");" + builder;
+    }
+
+    @Override
+    protected String toString(DDLDefineStatement.DDLColumnDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement column = statement.getColumn();
+        ExprType columnType = statement.getColumnType();
+        ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
+        Statement defaultValue = statement.getDefaultValue();
+        String columnTypeName = columnType.name();
+        boolean autoIncrement = statement.isAutoIncrement();
+        boolean nullFlag = statement.isNullFlag();
+        boolean primaryKey = statement.isPrimaryKey();
+        StringBuilder builder = new StringBuilder();
+        if (columnTypeParamList != null) {
+            builder.append("(" + toStr(columnTypeParamList, assist, invokerList) + ")");
+        }
+        if (autoIncrement) {
+            builder.append(" IDENTITY(1,1)");
+        }
+        if (!nullFlag) {
+            builder.append(" NOT NULL");
+        }
+        if (primaryKey) {
+            builder.append(" PRIMARY KEY");
+        }
+        if (defaultValue != null) {
+            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
+        }
+        return toStr(column, assist, invokerList) + " " + columnTypeName + builder;
+    }
+
+    @Override
+    protected String toString(DDLAlterStatement.DDLAlterModifyStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
+        StringBuilder builder = new StringBuilder();
+        if (columnTypeParamList != null) {
+            builder.append("(" + toStr(columnTypeParamList, assist, invokerList) + ")");
+        }
+        Statement defaultValue = statement.getDefaultValue();
+        if (!statement.isNullFlag()) {
+            builder.append(" NOT NULL");
+        }
+        if (defaultValue != null) {
+            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
+        }
+        return "ALTER TABLE " + toStr(statement.getTable(), assist, invokerList) + " ALTER COLUMN " + toStr(statement.getColumn(), assist, invokerList) + " " + statement.getColumnType().name() + builder;
     }
 }

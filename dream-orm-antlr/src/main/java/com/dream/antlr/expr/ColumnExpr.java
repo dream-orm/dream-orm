@@ -10,12 +10,16 @@ import com.dream.antlr.smt.Statement;
 /**
  * 字段语法解析器
  */
-public class ColumnExpr extends SqlExpr {
+public class ColumnExpr extends HelperExpr {
     private Statement statement;
 
     public ColumnExpr(ExprReader exprReader) {
-        super(exprReader);
-        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.SYMBOL).addExprTypes(ExprType.STAR, ExprType.CASE, ExprType.LBRACE, ExprType.INVOKER);
+        this(exprReader, () -> new SymbolExpr(exprReader));
+    }
+
+    public ColumnExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
+        setExprTypes(Constant.FUNCTION).addExprTypes(ExprType.CASE, ExprType.LBRACE, ExprType.HELP, ExprType.INVOKER);
     }
 
     @Override
@@ -72,4 +76,10 @@ public class ColumnExpr extends SqlExpr {
         return statement;
     }
 
+    @Override
+    protected Statement exprHelp(Statement statement) throws AntlrException {
+        this.statement = statement;
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
 }

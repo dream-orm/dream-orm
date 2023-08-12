@@ -20,7 +20,7 @@ public class PackageExpr extends HelperExpr {
 
     public PackageExpr(ExprReader exprReader, Helper helper) {
         super(exprReader, helper);
-        setExprTypes(ExprType.LBRACE, ExprType.INVOKER, ExprType.TRUNCATE, ExprType.DROP, ExprType.HELP, ExprType.ACC);
+        setExprTypes(ExprType.LBRACE, ExprType.INVOKER, ExprType.CREATE, ExprType.ALTER, ExprType.TRUNCATE, ExprType.DROP, ExprType.HELP, ExprType.ACC);
     }
 
     @Override
@@ -48,15 +48,29 @@ public class PackageExpr extends HelperExpr {
     }
 
     @Override
+    protected Statement exprCreate(ExprInfo exprInfo) throws AntlrException {
+        statement.setStatement(new DDLCreateExpr(exprReader).expr());
+        setExprTypes(ExprType.ACC);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprAlter(ExprInfo exprInfo) throws AntlrException {
+        statement.setStatement(new DDLAlterExpr(exprReader).expr());
+        setExprTypes(ExprType.ACC);
+        return expr();
+    }
+
+    @Override
     protected Statement exprTruncate(ExprInfo exprInfo) throws AntlrException {
-        statement.setStatement(new TruncateTableExpr(exprReader).expr());
+        statement.setStatement(new DDLTruncateExpr(exprReader).expr());
         setExprTypes(ExprType.ACC);
         return expr();
     }
 
     @Override
     protected Statement exprDrop(ExprInfo exprInfo) throws AntlrException {
-        statement.setStatement(new DropTableExpr(exprReader).expr());
+        statement.setStatement(new DDLDropExpr(exprReader).expr());
         setExprTypes(ExprType.ACC);
         return expr();
     }

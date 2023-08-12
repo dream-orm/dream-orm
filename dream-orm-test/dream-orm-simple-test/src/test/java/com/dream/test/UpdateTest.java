@@ -1,9 +1,9 @@
 package com.dream.test;
 
-import com.dream.base.mapper.UserMapper;
-import com.dream.base.table.User;
-import com.dream.base.view.UserView4;
 import com.dream.template.mapper.TemplateMapper;
+import com.dream.test.base.mapper.UserMapper;
+import com.dream.test.base.table.User;
+import com.dream.test.base.view.UserView4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +36,7 @@ public class UpdateTest {
     public void updateNonId() {
         User user = new User();
         user.setId(1);
+        user.setName("aa");
         user.setEmail("country");
         templateMapper.updateNonById(user);
     }
@@ -73,15 +74,24 @@ public class UpdateTest {
         templateMapper.batchUpdateById(userView4List);
     }
 
+    @Test
+    public void testCreate() {
+        userMapper.create();
+    }
+
+    @Test
+    public void testAlter() {
+        userMapper.alter();
+    }
 
     @Test
     public void testTruncate() {
         userMapper.truncate();
     }
 
-    @Test
-    public void testDrop() {
-        userMapper.drop();
-    }
+//    @Test
+//    public void testDrop() {
+//        userMapper.drop();
+//    }
 
 }

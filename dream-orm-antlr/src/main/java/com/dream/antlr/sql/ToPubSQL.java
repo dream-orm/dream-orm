@@ -89,4 +89,28 @@ public abstract class ToPubSQL extends ToNativeSQL {
         }
         return super.toString(statement, assist, invokerList);
     }
+
+    protected String toStringForCreateTable(DDLCreateStatement.DDLCreateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        String table = toStr(statement.getStatement(), assist, invokerList);
+        Statement comment = statement.getComment();
+        StringBuilder builder = new StringBuilder();
+        if (comment != null) {
+            builder.append("COMMENT ON TABLE " + table + " is " + toStr(comment, assist, invokerList) + ";");
+        }
+        List<DDLDefineStatement> columnDefineList = statement.getColumnDefineList();
+        for (DDLDefineStatement ddlDefineStatement : columnDefineList) {
+            if (ddlDefineStatement instanceof DDLDefineStatement.DDLColumnDefineStatement) {
+                DDLDefineStatement.DDLColumnDefineStatement ddlColumnDefineStatement = (DDLDefineStatement.DDLColumnDefineStatement) ddlDefineStatement;
+                Statement columnComment = ddlColumnDefineStatement.getComment();
+                if (columnComment != null) {
+                    builder.append("COMMENT ON COLUMN " + table + "." + toStr(ddlColumnDefineStatement.getColumn(), assist, invokerList) + " is " + toStr(columnComment, assist, invokerList) + ";");
+                }
+            }
+        }
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.setColumnList(columnDefineList.toArray(new Statement[columnDefineList.size()]));
+        return "CREATE TABLE " + (statement.isExistCreate() ? "" : "IF NOT EXISTS ") + toStr(statement.getStatement(), assist, invokerList) + "(" +
+                toStr(listColumnStatement, assist, invokerList)
+                + ");" + builder;
+    }
 }

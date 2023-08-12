@@ -1,11 +1,11 @@
 package com.dream.antlr.expr;
 
-import com.dream.antlr.config.Constant;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.SymbolStatement;
 
@@ -17,7 +17,14 @@ public class SymbolExpr extends SqlExpr {
 
     public SymbolExpr(ExprReader exprReader) {
         super(exprReader);
-        setExprTypes(Constant.SYMBOL).addExprTypes(ExprType.STAR);
+        setExprTypes(ExprType.STR,
+                ExprType.JAVA_STR,
+                ExprType.MARK,
+                ExprType.SINGLE_MARK,
+                ExprType.MY_FUNCTION,
+                ExprType.LETTER,
+                ExprType.STAR,
+                ExprType.NULL);
     }
 
     @Override
@@ -34,33 +41,18 @@ public class SymbolExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprInt(ExprInfo exprInfo) throws AntlrException {
+    protected Statement exprNull(ExprInfo exprInfo) throws AntlrException {
         push();
-        statement = new SymbolStatement.IntStatement(exprInfo.getInfo());
+        statement = new SymbolStatement.LetterStatement("NULL");
         setExprTypes(ExprType.NIL);
         return expr();
     }
 
     @Override
-    protected Statement exprLong(ExprInfo exprInfo) throws AntlrException {
+    protected Statement exprMyFunction(ExprInfo exprInfo) throws AntlrException {
         push();
-        statement = new SymbolStatement.LongStatement(exprInfo.getInfo());
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprFloat(ExprInfo exprInfo) throws AntlrException {
-        push();
-        statement = new SymbolStatement.FloatStatement(exprInfo.getInfo());
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprDouble(ExprInfo exprInfo) throws AntlrException {
-        push();
-        statement = new SymbolStatement.DoubleStatement(exprInfo.getInfo());
+        MyFunctionStatement myFunctionStatement = (MyFunctionStatement) exprInfo.getObjInfo();
+        statement = new SymbolStatement.LetterStatement(myFunctionStatement.getFunctionName());
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -152,14 +144,6 @@ public class SymbolExpr extends SqlExpr {
         protected Statement exprSingleMark(ExprInfo exprInfo) throws AntlrException {
             push();
             statement = new SymbolStatement.SingleMarkStatement(exprInfo.getInfo());
-            setExprTypes(ExprType.NIL);
-            return expr();
-        }
-
-        @Override
-        protected Statement exprInt(ExprInfo exprInfo) throws AntlrException {
-            push();
-            statement = new SymbolStatement.IntStatement(exprInfo.getInfo());
             setExprTypes(ExprType.NIL);
             return expr();
         }

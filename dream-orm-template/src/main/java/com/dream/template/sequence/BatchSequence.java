@@ -42,7 +42,7 @@ public class BatchSequence implements Sequence {
         @Override
         public void sequence(TableInfo tableInfo, MappedStatement mappedStatement, Object arg) {
             BatchMappedStatement batchMappedStatement = (BatchMappedStatement) mappedStatement;
-            List<MappedStatement> mappedStatementList = batchMappedStatement.getMappedStatementList();
+            List<MappedStatement> mappedStatementList = batchMappedStatement.getAllMappedStatementList();
             for (MappedStatement ms : mappedStatementList) {
                 sequence.sequence(tableInfo, ms, arg);
             }

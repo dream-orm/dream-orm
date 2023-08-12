@@ -103,19 +103,9 @@ public final class Constant {
             ExprType.TO_TIMESTAMP,
     };
 
-    public static final ExprType[] SYMBOL = {
-            ExprType.INT,
-            ExprType.LONG,
-            ExprType.FLOAT,
-            ExprType.DOUBLE,
-            ExprType.STR,
-            ExprType.JAVA_STR,
-            ExprType.MARK,
-            ExprType.SINGLE_MARK,
-            ExprType.LETTER,
-    };
     public static final ExprType[] KEYWORD = {
             ExprType.CHAR,
+            ExprType.VARCHAR,
             ExprType.UNION,
             ExprType.FOR,
             ExprType.NOWAIT,
@@ -180,6 +170,9 @@ public final class Constant {
             ExprType.SEPARATOR,
             ExprType.AS,
             ExprType.TABLE,
+            ExprType.DATABASE,
+            ExprType.CREATE,
+            ExprType.ALTER,
             ExprType.TRUNCATE,
             ExprType.DROP
     };
