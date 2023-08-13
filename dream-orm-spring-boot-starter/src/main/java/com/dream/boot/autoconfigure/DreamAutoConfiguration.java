@@ -15,6 +15,8 @@ import com.dream.chain.mapper.DefaultFlexChainMapper;
 import com.dream.chain.mapper.FlexChainMapper;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
+import com.dream.jdbc.mapper.DefaultJdbcMapper;
+import com.dream.jdbc.mapper.JdbcMapper;
 import com.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.dream.system.cache.Cache;
 import com.dream.system.cache.CacheFactory;
@@ -479,5 +481,17 @@ public class DreamAutoConfiguration {
     @ConditionalOnMissingBean
     public FlexChainMapper flexChainMapper(FlexMapper flexMapper) {
         return new DefaultFlexChainMapper(flexMapper);
+    }
+
+    /**
+     * 不翻译操作接口
+     *
+     * @param sessionTemplate SQL操作会话
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public JdbcMapper jdbcMapper(SessionTemplate sessionTemplate) {
+        return new DefaultJdbcMapper(sessionTemplate);
     }
 }

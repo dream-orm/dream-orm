@@ -26,6 +26,7 @@
         <module>dream-orm-util-test</module>
         <module>dream-orm-flex-test</module>
         <module>dream-orm-chain-test</module>
+        <module>dream-orm-jdbc-test</module>
     </modules>
 
     <properties>

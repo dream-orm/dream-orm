@@ -10,6 +10,8 @@ import com.dream.chain.mapper.DefaultFlexChainMapper;
 import com.dream.chain.mapper.FlexChainMapper;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
+import com.dream.jdbc.mapper.DefaultJdbcMapper;
+import com.dream.jdbc.mapper.JdbcMapper;
 import com.dream.solon.build.DefaultSessionFactoryBuilder;
 import com.dream.solon.build.SessionFactoryBuilder;
 import com.dream.solon.factory.SolonDataSourceFactory;
@@ -506,6 +508,18 @@ public class DreamAutoConfiguration {
     @Condition(onMissingBean = FlexChainMapper.class)
     public FlexChainMapper flexChainMapper(FlexMapper flexMapper) {
         return new DefaultFlexChainMapper(flexMapper);
+    }
+
+    /**
+     * 不翻译操作接口
+     *
+     * @param sessionTemplate SQL操作会话
+     * @return
+     */
+    @Bean
+    @Condition(onMissingBean = JdbcMapper.class)
+    public JdbcMapper jdbcMapper(SessionTemplate sessionTemplate) {
+        return new DefaultJdbcMapper(sessionTemplate);
     }
 
     final class NoneCache implements Cache {

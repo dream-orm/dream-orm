@@ -196,7 +196,7 @@ public class DefaultFlexMapper implements FlexMapper {
         methodInfo.setMethodKey(methodKey);
         CacheKey uniqueKey = methodKey.clone();
         uniqueKey.update(sqlInfo.getParamList().toArray());
-        MappedSql mappedSql = new MappedSql(command.name(), sql, sqlInfo.getTableSet());
+        MappedSql mappedSql = new MappedSql(com.dream.system.config.Command.valueOf(command.name()), sql, sqlInfo.getTableSet());
         MappedStatement mappedStatement = new MappedStatement
                 .Builder()
                 .mappedParamList(mappedParamList)

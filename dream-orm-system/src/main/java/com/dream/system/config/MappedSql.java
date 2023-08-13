@@ -7,8 +7,8 @@ public class MappedSql {
     private final String sql;
     private final Set<String> tableSet;
 
-    public MappedSql(String command, String sql, Set<String> tableSet) {
-        this.command = Enum.valueOf(Command.class, command);
+    public MappedSql(Command command, String sql, Set<String> tableSet) {
+        this.command = command;
         this.sql = sql;
         this.tableSet = tableSet;
     }

@@ -33,6 +33,11 @@
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
+            <artifactId>dream-orm-mate</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-flex</artifactId>
             <version>1.0.1</version>
         </dependency>
@@ -43,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
-            <artifactId>dream-orm-mate</artifactId>
+            <artifactId>dream-orm-jdbc</artifactId>
             <version>1.0.1</version>
         </dependency>
     </dependencies>

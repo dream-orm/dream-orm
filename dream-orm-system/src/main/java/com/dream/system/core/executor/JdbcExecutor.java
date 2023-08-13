@@ -1,6 +1,5 @@
 package com.dream.system.core.executor;
 
-import com.dream.system.config.BatchMappedStatement;
 import com.dream.system.config.Command;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
@@ -50,8 +49,7 @@ public class JdbcExecutor implements Executor {
                     result = insert(statement, mappedStatement, session);
                     break;
                 case BATCH:
-                    BatchMappedStatement batchMappedStatement = (BatchMappedStatement) mappedStatement;
-                    result = batch(statement, batchMappedStatement, session);
+                    result = batch(statement, mappedStatement, session);
                     break;
                 default:
                     result = executeNone(mappedStatement);
@@ -98,8 +96,8 @@ public class JdbcExecutor implements Executor {
         return result;
     }
 
-    protected Object batch(Statement statement, BatchMappedStatement batchMappedStatement, Session session) throws SQLException {
-        Object result = statementHandler(batchMappedStatement).batch(statement, batchMappedStatement);
+    protected Object batch(Statement statement, MappedStatement mappedStatement, Session session) throws SQLException {
+        Object result = statementHandler(mappedStatement).batch(statement, mappedStatement);
         return result;
     }
 

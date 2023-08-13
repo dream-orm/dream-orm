@@ -47,6 +47,7 @@
         <module>dream-orm-chain</module>
         <module>dream-orm-spring-boot-starter</module>
         <module>dream-orm-solon-plugin</module>
+        <module>dream-orm-jdbc</module>
     </modules>
 
     <properties>

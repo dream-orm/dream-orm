@@ -35,12 +35,13 @@ public class SimpleStatementHandler implements StatementHandler<Statement> {
     }
 
     @Override
-    public Object batch(Statement statement, BatchMappedStatement batchMappedStatement) throws SQLException {
+    public Object batch(Statement statement, MappedStatement mappedStatement) throws SQLException {
+        BatchMappedStatement batchMappedStatement = (BatchMappedStatement) mappedStatement;
         List<Object> resultList = new ArrayList<>();
         while (batchMappedStatement.hasNext()) {
             BatchMappedStatement nextBatchMappedStatement = batchMappedStatement.next();
-            for (MappedStatement mappedStatement : nextBatchMappedStatement.getMappedStatementList()) {
-                statement.addBatch(mappedStatement.getSql());
+            for (MappedStatement ms : nextBatchMappedStatement.getMappedStatementList()) {
+                statement.addBatch(ms.getSql());
             }
             int[] result = statement.executeBatch();
             statement.clearBatch();

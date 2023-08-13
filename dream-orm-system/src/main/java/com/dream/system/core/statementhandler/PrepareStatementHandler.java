@@ -56,12 +56,13 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
     }
 
     @Override
-    public Object batch(PreparedStatement statement, BatchMappedStatement batchMappedStatement) throws SQLException {
+    public Object batch(PreparedStatement statement, MappedStatement mappedStatement) throws SQLException {
+        BatchMappedStatement batchMappedStatement = (BatchMappedStatement) mappedStatement;
         List<Object> resultList = new ArrayList<>();
         while (batchMappedStatement.hasNext()) {
             BatchMappedStatement nextBatchMappedStatement = batchMappedStatement.next();
-            for (MappedStatement mappedStatement : nextBatchMappedStatement.getMappedStatementList()) {
-                doParameter(statement, mappedStatement);
+            for (MappedStatement ms : nextBatchMappedStatement.getMappedStatementList()) {
+                doParameter(statement, ms);
                 statement.addBatch();
             }
             int[] result = statement.executeBatch();
