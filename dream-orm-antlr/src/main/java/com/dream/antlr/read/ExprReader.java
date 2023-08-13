@@ -2,7 +2,6 @@ package com.dream.antlr.read;
 
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
-import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.util.ExprUtil;
@@ -29,7 +28,7 @@ public class ExprReader extends StringReader {
         return this.value;
     }
 
-    public ExprInfo push() throws AntlrException {
+    public ExprInfo push(){
         mark();
         int c = read();
         switch (c) {
@@ -297,7 +296,7 @@ public class ExprReader extends StringReader {
         return new ExprInfo(ExprType.SINGLE_MARK, info, getStart(), getEnd());
     }
 
-    private ExprInfo pushNumber() throws AntlrException {
+    private ExprInfo pushNumber() {
         mark();
         int c;
         int count = 0;

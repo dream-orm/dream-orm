@@ -5,6 +5,7 @@ import com.dream.drive.listener.DebugListener;
 import com.dream.system.cache.Cache;
 import com.dream.system.cache.CacheFactory;
 import com.dream.system.cache.DefaultCacheFactory;
+import com.dream.system.cache.MemoryCache;
 import com.dream.system.core.listener.Listener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,15 +19,15 @@ public class BootApplication {
         SpringApplication.run(BootApplication.class, args);
     }
 
-    @Bean
-    public CacheFactory cacheFactory() {
-        return new DefaultCacheFactory() {
-            @Override
-            public Cache getCache() {
-                return null;
-            }
-        };
-    }
+//    @Bean
+//    public CacheFactory cacheFactory() {
+//        return new DefaultCacheFactory() {
+//            @Override
+//            public Cache getCache() {
+//                return new MemoryCache();
+//            }
+//        };
+//    }
 
     @Bean
     public Listener[] listeners() {

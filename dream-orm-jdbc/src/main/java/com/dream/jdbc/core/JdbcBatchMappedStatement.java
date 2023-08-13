@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcBatchMappedStatement extends BatchMappedStatement {
-    protected MappedSql mappedSql;
 
     public JdbcBatchMappedStatement(MethodInfo methodInfo, List<?> argList, MappedSql mappedSql) {
         super(methodInfo, argList);
