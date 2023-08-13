@@ -8,11 +8,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BatchMappedStatement extends MappedStatement implements Iterator<BatchMappedStatement> {
-    List<?> argList;
-    int batchSize = 1000;
-    List<MappedStatement> mappedStatementList;
-    int fromIndex;
-    int toIndex;
+    protected List<?> argList;
+    protected int batchSize = 1000;
+    protected List<MappedStatement> mappedStatementList;
+    protected int fromIndex;
+    protected int toIndex;
 
     public BatchMappedStatement(MethodInfo methodInfo, List<?> argList) {
         this.methodInfo = methodInfo;

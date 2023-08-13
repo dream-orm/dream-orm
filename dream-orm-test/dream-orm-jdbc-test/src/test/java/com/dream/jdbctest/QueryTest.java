@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class QueryTest {
 
     @Test
     public void test() {
-        List<Map> ts = jdbcMapper.queryForList("select * from user",  Map.class);
+        List<Map> ts = jdbcMapper.queryForList("select * from user", Map.class);
     }
 
     @Test
@@ -47,16 +46,17 @@ public class QueryTest {
 
     @Test
     public void test6() {
-        List<User>userList=new ArrayList<>();
-        User user=new User();
+        List<User> userList = new ArrayList<>();
+        User user = new User();
         user.setName("a");
         user.setAge(12);
         userList.add(user);
         userList.add(user);
-        int[] ints = jdbcMapper.batchExecute("insert into user(name,age)values(?,?)", userList, (ps, ms, u) -> {
+        List<Object> objectList = jdbcMapper.batchExecute("insert into user(name,age)values(?,?)", userList, (ps, ms) -> {
+            User u = (User) ms.getArg();
             ps.setString(1, u.getName());
             ps.setInt(2, u.getAge());
         });
-        System.out.println(ints);
+        System.out.println(objectList);
     }
 }

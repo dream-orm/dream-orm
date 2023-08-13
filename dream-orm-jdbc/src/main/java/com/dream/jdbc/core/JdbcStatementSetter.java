@@ -1,6 +1,6 @@
 package com.dream.jdbc.core;
 
-import com.dream.system.config.Configuration;
+import com.dream.system.config.MappedStatement;
 import com.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.dream.system.typehandler.handler.TypeHandler;
@@ -18,11 +18,11 @@ public class JdbcStatementSetter implements StatementSetter {
     }
 
     @Override
-    public void setter(PreparedStatement ps, Configuration configuration, Object arg) throws SQLException {
-        TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
+    public void setter(PreparedStatement ps, MappedStatement mappedStatement) throws SQLException {
+        TypeHandlerFactory typeHandlerFactory = mappedStatement.getConfiguration().getTypeHandlerFactory();
         if (args != null && args.length > 0) {
             for (int i = 0; i < args.length; i++) {
-                arg = args[i];
+                Object arg = args[i];
                 if (arg == null) {
                     ps.setNull(i + 1, Types.NULL);
                 } else {

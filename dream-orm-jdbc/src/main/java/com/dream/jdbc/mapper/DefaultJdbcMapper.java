@@ -1,5 +1,6 @@
 package com.dream.jdbc.mapper;
 
+import com.dream.jdbc.core.JdbcBatchMappedStatement;
 import com.dream.jdbc.core.JdbcResultSetHandler;
 import com.dream.jdbc.core.JdbcStatementHandler;
 import com.dream.jdbc.core.StatementSetter;
@@ -32,7 +33,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
     }
 
     @Override
-    public <T> int[] batchExecute(String sql, List<T> argList, StatementSetter<T> statementSetter) {
+    public <T> List<Object> batchExecute(String sql, List<T> argList, StatementSetter statementSetter, int batchSize) {
         JdbcStatementHandler jdbcStatementHandler = new JdbcStatementHandler(statementSetter);
         MethodInfo methodInfo = new MethodInfo();
         methodInfo.setCache(false);
@@ -40,11 +41,8 @@ public class DefaultJdbcMapper implements JdbcMapper {
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
         MappedSql mappedSql = new MappedSql(Command.BATCH, sql, null);
-        MappedStatement mappedStatement = new MappedStatement.Builder()
-                .methodInfo(methodInfo)
-                .mappedSql(mappedSql)
-                .arg(argList).build();
-        return (int[]) session.execute(mappedStatement);
+        JdbcBatchMappedStatement jdbcBatchMappedStatement = new JdbcBatchMappedStatement(methodInfo, argList, mappedSql);
+        return (List<Object>) session.execute(jdbcBatchMappedStatement);
     }
 
     @Override

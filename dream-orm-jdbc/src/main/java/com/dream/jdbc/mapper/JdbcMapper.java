@@ -19,7 +19,11 @@ public interface JdbcMapper {
 
     int execute(String sql, StatementSetter statementSetter);
 
-    <T> int[] batchExecute(String sql, List<T> argList, StatementSetter<T> statementSetter);
+    default <T> List<Object> batchExecute(String sql, List<T> argList, StatementSetter statementSetter) {
+        return batchExecute(sql, argList, statementSetter, 1000);
+    }
+
+    <T> List<Object> batchExecute(String sql, List<T> argList, StatementSetter statementSetter, int batchSize);
 
     default <T> T queryForObject(String sql, Class<T> type, Object... args) {
         return getOne(queryForList(sql, type, args));
