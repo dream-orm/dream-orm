@@ -28,7 +28,7 @@ public class ExprReader extends StringReader {
         return this.value;
     }
 
-    public ExprInfo push(){
+    public ExprInfo push() {
         mark();
         int c = read();
         switch (c) {

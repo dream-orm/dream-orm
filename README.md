@@ -58,7 +58,7 @@ dream-orm是一个自主研发类似mybatis的持久层框架。
 
 极速开发，内置的QueryDef不仅帮助开发者极大减少SQL编写的工作同时，减少出错的可能性，而且基本上支持MySQL所有函数，支持常见的SQL语句改写成java链式形式。
 
-dream-orm不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装
+dream-orm不仅能够极大的提高开发效率与开发体验，让开发者有更多的时间专注于自己的事，而且还能根据业务进行函数化封装。
 
 ## 1.1. 特性
 
@@ -497,7 +497,9 @@ update(user).set(user.age,user.age.add(1)).where(user.id.eq(1))
 **删除SQL**
 
 ```sql
-DELETE FROM `user`   WHERE `user`.`id`=1
+DELETE
+FROM `user`
+WHERE `user`.`id` = 1
 ```
 
 **链式**

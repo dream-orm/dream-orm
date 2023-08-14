@@ -2,10 +2,6 @@ package com.dream.jdbctest;
 
 import com.dream.boot.bean.ConfigurationBean;
 import com.dream.drive.listener.DebugListener;
-import com.dream.system.cache.Cache;
-import com.dream.system.cache.CacheFactory;
-import com.dream.system.cache.DefaultCacheFactory;
-import com.dream.system.cache.MemoryCache;
 import com.dream.system.core.listener.Listener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
