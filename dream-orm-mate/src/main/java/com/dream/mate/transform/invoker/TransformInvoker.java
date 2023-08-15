@@ -9,27 +9,18 @@ import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToSQL;
-import com.dream.mate.tenant.inject.TenantInject;
 import com.dream.mate.transform.handler.LetterHandler;
 import com.dream.mate.transform.inject.TransformHandler;
 import com.dream.mate.transform.inject.TransformInject;
 import com.dream.system.config.Configuration;
-import com.dream.system.config.MethodInfo;
 import com.dream.system.inject.factory.InjectFactory;
-import com.dream.util.common.LowHashSet;
-import com.dream.util.exception.DreamRunTimeException;
-import com.dream.util.resource.ResourceUtil;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 public class TransformInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_block";
     private TransformHandler transformHandler;
+
     @Override
     public void init(Assist assist) {
         Configuration configuration = assist.getCustom(Configuration.class);
@@ -51,8 +42,8 @@ public class TransformInvoker extends AbstractInvoker {
         return new Handler[]{new LetterHandler(this)};
     }
 
-    public boolean intercept(String column,List<Invoker> invokerList) {
-        return transformHandler.intercept(column,invokerList);
+    public boolean intercept(String column, List<Invoker> invokerList) {
+        return transformHandler.intercept(column, invokerList);
     }
 
     @Override

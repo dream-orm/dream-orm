@@ -22,7 +22,7 @@ public class LetterHandler extends AbstractHandler {
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
         SymbolStatement.LetterStatement letterStatement = (SymbolStatement.LetterStatement) statement;
         String column = letterStatement.getValue();
-        if (transformInvoker.intercept(column,invokerList)) {
+        if (transformInvoker.intercept(column, invokerList)) {
             SymbolStatement.SingleMarkStatement singleMarkStatement = new SymbolStatement.SingleMarkStatement(column);
             letterStatement.replaceWith(singleMarkStatement);
             return singleMarkStatement;

@@ -13,12 +13,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class HelloWorldTemplateTest {
     @Autowired
     private TemplateMapper templateMapper;
+
     /**
      * 测试主键查询
      */
     @Test
     public void testSelectById() {
         AccountView accountView = templateMapper.selectById(AccountView.class, 1);
-        System.out.println("查询结果："+accountView);
+        System.out.println("查询结果：" + accountView);
     }
 }
