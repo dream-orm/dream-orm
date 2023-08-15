@@ -3,12 +3,13 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
+        <artifactId>dream-orm-test</artifactId>
         <groupId>com.dream-orm</groupId>
-        <artifactId>dream-orm</artifactId>
-        <version>1.1.1</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>dream-orm-solon-plugin</artifactId>
+
+    <artifactId>dream-orm-hello-world</artifactId>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -16,13 +17,22 @@
     <dependencies>
         <dependency>
             <groupId>com.dream-orm</groupId>
-            <artifactId>dream-orm-drive</artifactId>
-            <version>1.1.1</version>
+            <artifactId>dream-orm-spring-boot-starter</artifactId>
+            <version>${dream-orm.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon.data</artifactId>
-            <version>${solon.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

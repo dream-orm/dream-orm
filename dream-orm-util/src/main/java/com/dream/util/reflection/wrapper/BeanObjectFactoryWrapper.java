@@ -4,10 +4,6 @@ import com.dream.util.exception.DreamRunTimeException;
 import com.dream.util.reflection.factory.BeanObjectFactory;
 import com.dream.util.reflection.factory.ObjectFactory;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.invoke.*;
 import java.lang.reflect.Method;
@@ -69,76 +65,67 @@ public class BeanObjectFactoryWrapper implements ObjectFactoryWrapper {
     }
 
     private void lambdaProperty(Class type) {
-        BeanInfo beanInfo;
+        Method[] methods = type.getMethods();
+        for (Method method : methods) {
+            String name = method.getName();
+            if (name.startsWith("set") && method.getParameterCount() == 1) {
+                String property = Character.toLowerCase(name.charAt(3)) + name.substring(4);
+                PropertySetterCaller<Object> propertySetterCaller = lambdaPropertySetter(type, method);
+                setterMap.put(property, propertySetterCaller);
+            } else if (name.startsWith("get") && method.getParameterCount() == 0) {
+                String property = Character.toLowerCase(name.charAt(3)) + name.substring(4);
+                PropertyGetter<Object, ?> propertyGetter = lambdaPropertyGetter(type, method);
+                getterMap.put(property, propertyGetter);
+            } else if (name.startsWith("is") && method.getParameterCount() == 0) {
+                String property = Character.toLowerCase(name.charAt(2)) + name.substring(3);
+                PropertyGetter<Object, ?> propertyGetter = lambdaPropertyGetter(type, method);
+                getterMap.put(property, propertyGetter);
+            }
+        }
+    }
+
+    private PropertyGetter<Object, ?> lambdaPropertyGetter(Class type, Method readMethod) {
+        Class<?> returnType = readMethod.getReturnType();
+        String getFunName = readMethod.getName();
+        final MethodHandles.Lookup caller = MethodHandles.lookup();
+        MethodType methodType = MethodType.methodType(returnType, type);
         try {
-            beanInfo = Introspector.getBeanInfo(type, Object.class);
-        } catch (IntrospectionException e) {
+            CallSite site = LambdaMetafactory.altMetafactory(caller,
+                    "apply",
+                    MethodType.methodType(PropertyGetter.class),
+                    methodType.erase().generic(),
+                    caller.findVirtual(type, getFunName, MethodType.methodType(returnType)),
+                    methodType, FLAG_SERIALIZABLE);
+            return (PropertyGetter<Object, ?>) site.getTarget().invokeExact();
+        } catch (Throwable e) {
             throw new DreamRunTimeException(e.getMessage(), e);
         }
-        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-        for (PropertyDescriptor descriptor : propertyDescriptors) {
-            PropertyGetter<Object, ?> propertyGetter = lambdaPropertyGetter(type, descriptor);
-            if (propertyGetter != null) {
-                getterMap.put(descriptor.getName(), propertyGetter);
-            }
-            PropertySetterCaller<Object> propertySetterCaller = lambdaPropertySetter(type, descriptor);
-            if (propertySetterCaller != null) {
-                setterMap.put(descriptor.getName(), propertySetterCaller);
-            }
-        }
+
     }
 
-    private PropertyGetter<Object, ?> lambdaPropertyGetter(Class type, PropertyDescriptor descriptor) {
-        Method readMethod = descriptor.getReadMethod();
-        if (readMethod != null) {
-            Class<?> propertyType = descriptor.getPropertyType();
-            String getFunName = readMethod.getName();
-            final MethodHandles.Lookup caller = MethodHandles.lookup();
-            MethodType methodType = MethodType.methodType(propertyType, type);
-            try {
-                CallSite site = LambdaMetafactory.altMetafactory(caller,
-                        "apply",
-                        MethodType.methodType(PropertyGetter.class),
-                        methodType.erase().generic(),
-                        caller.findVirtual(type, getFunName, MethodType.methodType(propertyType)),
-                        methodType, FLAG_SERIALIZABLE);
-                return (PropertyGetter<Object, ?>) site.getTarget().invokeExact();
-            } catch (Throwable e) {
-                throw new DreamRunTimeException(e.getMessage(), e);
-            }
-        } else {
-            return null;
-        }
-    }
+    private PropertySetterCaller<Object> lambdaPropertySetter(Class type, Method writeMethod) {
+        Class<?> propertyType = writeMethod.getParameterTypes()[0];
+        MethodHandles.Lookup caller = MethodHandles.lookup();
+        MethodType setter = MethodType.methodType(writeMethod.getReturnType(), propertyType);
 
-    private PropertySetterCaller<Object> lambdaPropertySetter(Class type, PropertyDescriptor descriptor) {
-        Method writeMethod = descriptor.getWriteMethod();
-        if (writeMethod != null) {
-            Class<?> propertyType = descriptor.getPropertyType();
-            MethodHandles.Lookup caller = MethodHandles.lookup();
-            MethodType setter = MethodType.methodType(writeMethod.getReturnType(), propertyType);
-
-            Class<?> lambdaPropertyType = getObjectTypeWhenPrimitive(propertyType);
-            String getFunName = writeMethod.getName();
-            try {
-                MethodType instantiatedMethodType = MethodType.methodType(void.class, type, lambdaPropertyType);
-                MethodHandle target = caller.findVirtual(type, getFunName, setter);
-                MethodType samMethodType = MethodType.methodType(void.class, Object.class, Object.class);
-                CallSite site = LambdaMetafactory.metafactory(
-                        caller,
-                        "apply",
-                        MethodType.methodType(PropertySetter.class),
-                        samMethodType,
-                        target,
-                        instantiatedMethodType
-                );
-                PropertySetter<Object, Object> objectPropertyVoidSetter = (PropertySetter<Object, Object>) site.getTarget().invokeExact();
-                return objectPropertyVoidSetter::apply;
-            } catch (Throwable e) {
-                throw new DreamRunTimeException(e.getMessage(), e);
-            }
-        } else {
-            return null;
+        Class<?> lambdaPropertyType = getObjectTypeWhenPrimitive(propertyType);
+        String getFunName = writeMethod.getName();
+        try {
+            MethodType instantiatedMethodType = MethodType.methodType(void.class, type, lambdaPropertyType);
+            MethodHandle target = caller.findVirtual(type, getFunName, setter);
+            MethodType samMethodType = MethodType.methodType(void.class, Object.class, Object.class);
+            CallSite site = LambdaMetafactory.metafactory(
+                    caller,
+                    "apply",
+                    MethodType.methodType(PropertySetter.class),
+                    samMethodType,
+                    target,
+                    instantiatedMethodType
+            );
+            PropertySetter<Object, Object> objectPropertyVoidSetter = (PropertySetter<Object, Object>) site.getTarget().invokeExact();
+            return objectPropertyVoidSetter::apply;
+        } catch (Throwable e) {
+            throw new DreamRunTimeException(e.getMessage(), e);
         }
     }
 

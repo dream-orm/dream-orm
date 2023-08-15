@@ -2,7 +2,8 @@ package com.dream.test;
 
 import com.dream.boot.bean.ConfigurationBean;
 import com.dream.drive.listener.DebugListener;
-import com.dream.mate.block.inject.BlockInject;
+import com.dream.mate.transform.inject.InterceptTransformHandler;
+import com.dream.mate.transform.inject.TransformInject;
 import com.dream.system.cache.Cache;
 import com.dream.system.cache.CacheFactory;
 import com.dream.system.cache.DefaultCacheFactory;
@@ -42,7 +43,7 @@ public class BootApplication {
 
     @Bean
     public Inject[] injects() {
-        return new Inject[]{new BlockInject("META-INF/keyword.txt")};
+        return new Inject[]{new TransformInject(new InterceptTransformHandler("META-INF/keyword.txt"))};
     }
 
     @Bean

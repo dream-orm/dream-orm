@@ -1,15 +1,9 @@
-package com.dream.mate.block.invoker;
+package com.dream.mate.transform.inject;
 
-import com.dream.antlr.config.Assist;
-import com.dream.antlr.exception.AntlrException;
-import com.dream.antlr.handler.Handler;
-import com.dream.antlr.invoker.AbstractInvoker;
 import com.dream.antlr.invoker.Invoker;
-import com.dream.antlr.smt.InvokerStatement;
-import com.dream.antlr.smt.ListColumnStatement;
-import com.dream.antlr.smt.Statement;
-import com.dream.antlr.sql.ToSQL;
-import com.dream.mate.block.handler.BlockHandler;
+import com.dream.system.antlr.invoker.ForEachInvoker;
+import com.dream.system.antlr.invoker.MarkInvoker;
+import com.dream.system.antlr.invoker.RepInvoker;
 import com.dream.util.common.LowHashSet;
 import com.dream.util.exception.DreamRunTimeException;
 import com.dream.util.resource.ResourceUtil;
@@ -21,11 +15,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-public class BlockInvoker extends AbstractInvoker {
-    public static final String FUNCTION = "dream_mate_block";
+public class InterceptTransformHandler implements TransformHandler {
     private Set<String> filterSet;
 
-    public BlockInvoker(String resource) {
+    public InterceptTransformHandler(String resource) {
         InputStream inputStream = ResourceUtil.getResourceAsStream(resource);
         Set<String> filterSet = new LowHashSet();
         if (inputStream != null) {
@@ -56,39 +49,21 @@ public class BlockInvoker extends AbstractInvoker {
         this.filterSet = filterSet;
     }
 
-    public BlockInvoker(Set<String> filterSet) {
+    public InterceptTransformHandler(Set<String> filterSet) {
         this.filterSet = filterSet;
     }
 
     @Override
-    protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
-        Statement statement = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList()[0];
-        String sql = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
-        invokerStatement.replaceWith(statement);
-        return sql;
-    }
-
-    @Override
-    protected Handler[] handler() {
-        return new Handler[]{new BlockHandler(this)};
-    }
-
-    public boolean filter(String column) {
-        return filterSet.contains(column);
-    }
-
-    @Override
-    public Invoker newInstance() {
-        return this;
-    }
-
-    @Override
-    public String function() {
-        return FUNCTION;
-    }
-
-    public Set<String> getFilterSet() {
-        return filterSet;
+    public boolean intercept(String column, List<Invoker> invokerList) {
+        if (filterSet.contains(column)) {
+            for (int i = invokerList.size() - 1; i >= 0; i--) {
+                Invoker invoker = invokerList.get(i);
+                if (invoker instanceof MarkInvoker || invoker instanceof RepInvoker || invoker instanceof ForEachInvoker) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }
-

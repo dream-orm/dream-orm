@@ -2,12 +2,8 @@ package com.dream.antlr.sql;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
-import com.dream.antlr.expr.BraceExpr;
-import com.dream.antlr.expr.QueryExpr;
 import com.dream.antlr.invoker.Invoker;
-import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.*;
-import com.dream.antlr.util.AntlrUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +51,7 @@ public abstract class ToPubSQL extends ToNativeSQL {
                 statement.setOrderStatement(null);
             } else {
                 orderStatement = new OrderStatement();
-                orderStatement.setOrder(new BraceExpr(new ExprReader("(select 0)")).expr());
+                orderStatement.setOrder(new BraceStatement(new SymbolStatement.LetterStatement("(select 0)")));
             }
             RowNumberStatement rowNumberStatement = new RowNumberStatement();
             RowNumberStatement.OverStatement overStatement = new RowNumberStatement.OverStatement();
@@ -71,21 +67,48 @@ public abstract class ToPubSQL extends ToNativeSQL {
             System.arraycopy(columnList, 0, newColumnList, 1, columnList.length);
             selectList.setColumnList(newColumnList);
 
-            ToSQL toNativeSQL = new ToNativeSQL();
-            String minValue;
-            String maxValue;
-            String querySql = toNativeSQL.toStr(statement, null, null);
-            String sql;
+            QueryStatement queryStatement = new QueryStatement();
+            SelectStatement selectStatement = new SelectStatement();
+            ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+            listColumnStatement.add(new SymbolStatement.LetterStatement("t_tmp.*"));
+            selectStatement.setSelectList(listColumnStatement);
+            queryStatement.setSelectStatement(selectStatement);
+            AliasStatement tableAliasStatement = new AliasStatement();
+            tableAliasStatement.setColumn(new BraceStatement(statement));
+            tableAliasStatement.setAlias(new SymbolStatement.LetterStatement("t_tmp"));
+            FromStatement fromStatement = new FromStatement();
+            fromStatement.setMainTable(tableAliasStatement);
+            queryStatement.setFromStatement(fromStatement);
+            ConditionStatement conditionStatement;
             if (second == null) {
-                maxValue = toNativeSQL.toStr(first, null, null);
-                sql = "select t_tmp.* from (" + querySql + ")t_tmp where rn <=" + maxValue;
+                conditionStatement = new ConditionStatement();
+                conditionStatement.setLeft(new SymbolStatement.LetterStatement("rn"));
+                conditionStatement.setOper(new OperStatement.LEQStatement());
+                conditionStatement.setRight(first);
             } else {
-                maxValue = toNativeSQL.toStr(second, null, null);
-                minValue = toNativeSQL.toStr(first, null, null);
-                sql = "select t_tmp.* from (" + querySql + ")t_tmp where rn > " + minValue + " and rn<=" + minValue + "+" + maxValue;
+                ConditionStatement leftConditionStatement = new ConditionStatement();
+                leftConditionStatement.setLeft(new SymbolStatement.LetterStatement("rn"));
+                leftConditionStatement.setOper(new OperStatement.GTStatement());
+                leftConditionStatement.setRight(first);
+
+                ConditionStatement rightConditionStatement = new ConditionStatement();
+                rightConditionStatement.setLeft(new SymbolStatement.LetterStatement("rn"));
+                rightConditionStatement.setOper(new OperStatement.LEQStatement());
+                ConditionStatement plusConditionStatement = new ConditionStatement();
+                plusConditionStatement.setLeft(first);
+                plusConditionStatement.setOper(new OperStatement.ADDStatement());
+                plusConditionStatement.setRight(second);
+                rightConditionStatement.setRight(plusConditionStatement);
+
+                conditionStatement = new ConditionStatement();
+                conditionStatement.setLeft(leftConditionStatement);
+                conditionStatement.setOper(new OperStatement.ANDStatement());
+                conditionStatement.setRight(rightConditionStatement);
             }
-            QueryStatement queryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-            AntlrUtil.copy(statement, queryStatement);
+            WhereStatement whereStatement = new WhereStatement();
+            whereStatement.setCondition(conditionStatement);
+            queryStatement.setWhereStatement(whereStatement);
+            statement = queryStatement;
         }
         return super.toString(statement, assist, invokerList);
     }

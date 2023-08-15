@@ -7,13 +7,13 @@
     <groupId>com.dream-orm</groupId>
     <artifactId>dream-orm</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <name>dream-orm</name>
     <description>dream-orm is a translation based orm framework</description>
-    <url>https://github.com/moxa-lzf/dream</url>
+    <url>https://github.com/dream-orm/dream-orm</url>
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/moxa-lzf/dream/issues</url>
+        <url>https://github.com/dream-orm/dream-orm/issues</url>
     </issueManagement>
     <licenses>
         <license>
@@ -32,9 +32,9 @@
         </developer>
     </developers>
     <scm>
-        <url>https://github.com/moxa-lzf/dream</url>
-        <connection>scm:git:https://github.com/moxa-lzf/dream.git</connection>
-        <developerConnection>scm:git:https://github.com/moxa-lzf/dream.git</developerConnection>
+        <url>https://github.com/dream-orm/dream-orm</url>
+        <connection>scm:git:https://github.com/dream-orm/dream-orm.git</connection>
+        <developerConnection>scm:git:https://github.com/dream-orm/dream-orm.git</developerConnection>
     </scm>
     <modules>
         <module>dream-orm-antlr</module>
