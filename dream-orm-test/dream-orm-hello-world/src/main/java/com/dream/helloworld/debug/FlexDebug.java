@@ -9,6 +9,8 @@ import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToMYSQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.config.SqlInfo;
+import com.dream.flex.def.Delete;
+import com.dream.flex.def.Insert;
 import com.dream.flex.def.Query;
 import com.dream.flex.def.Update;
 import com.dream.flex.invoker.FlexMarkInvoker;
@@ -33,6 +35,13 @@ public class FlexDebug {
         return toSQL(query.statement());
     }
 
+    public SqlInfo toSQL(Insert insert) {
+        return toSQL(insert.statement());
+    }
+
+    public SqlInfo toSQL(Delete delete) {
+        return toSQL(delete.statement());
+    }
     public SqlInfo toSQL(Update update) {
         return toSQL(update.statement());
     }

@@ -15,6 +15,9 @@ import java.util.Set;
  * 链式操作类
  */
 public interface FlexMapper {
+    /**
+     * 白名单，列如开启插件后，链式并不默认添加，需要在白名单额外增加
+     */
     Set<Class<? extends Inject>> WHITE_SET = new HashSet<>();
 
     /**
