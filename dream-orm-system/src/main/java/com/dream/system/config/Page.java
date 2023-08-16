@@ -14,9 +14,14 @@ public class Page<E> {
     }
 
     public Page(int pageNum, int pageSize) {
+        this(pageNum, pageSize, 0);
+    }
+
+    public Page(int pageNum, int pageSize, long total) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
         this.startRow = (pageNum - 1) * pageSize;
+        this.total = total;
     }
 
     public long getTotal() {

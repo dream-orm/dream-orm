@@ -9,7 +9,7 @@ import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToSQL;
-import com.dream.system.antlr.handler.PageHandler;
+import com.dream.system.antlr.handler.page.PageHandler;
 import com.dream.system.config.MethodInfo;
 
 import java.util.List;

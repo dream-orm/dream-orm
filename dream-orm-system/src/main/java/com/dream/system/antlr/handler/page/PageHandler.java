@@ -1,4 +1,4 @@
-package com.dream.system.antlr.handler;
+package com.dream.system.antlr.handler.page;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
@@ -10,12 +10,8 @@ import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToNativeSQL;
 import com.dream.antlr.sql.ToSQL;
-import com.dream.system.annotation.PageQuery;
 import com.dream.system.config.MethodInfo;
-import com.dream.system.core.action.SqlAction;
-import com.dream.util.common.NonCollection;
 import com.dream.util.common.ObjectUtil;
-import com.dream.util.common.ObjectWrapper;
 import com.dream.util.reflect.ReflectUtil;
 
 import java.util.List;
@@ -63,17 +59,8 @@ public class PageHandler extends AbstractHandler {
         if (ObjectUtil.isNull(countSql)) {
             countSql = "select count(1) from (" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp";
         }
-        SqlAction sqlAction = new SqlAction(methodInfo, countSql, NonCollection.class, Long.class, (arg, result) -> {
-            ObjectWrapper wrapper = ObjectWrapper.wrapper(arg);
-            PageQuery pageQuery = methodInfo.get(PageQuery.class);
-            String value = pageQuery.value();
-            String property = "total";
-            if (!ObjectUtil.isNull(value)) {
-                property = value + "." + property;
-            }
-            wrapper.set(property, result);
-        });
-        methodInfo.addInitAction(sqlAction);
+        PageAction pageAction = new PageAction(methodInfo, countSql);
+        methodInfo.addInitAction(pageAction);
     }
 
     void handlerPage(QueryStatement queryStatement) throws AntlrException {
