@@ -8,7 +8,7 @@ public interface Wrapper {
      * 返回修改后的参数
      *
      * @param value 修改前参数
-     * @return
+     * @return 修改后的参数
      */
     Object wrap(Object value);
 }

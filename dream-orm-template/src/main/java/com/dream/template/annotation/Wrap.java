@@ -10,7 +10,17 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Wrap {
+    /**
+     * 参数修改类
+     *
+     * @return 参数修改类
+     */
     Class<? extends Wrapper> value();
 
+    /**
+     * 参数修改时机：插入、更新、插入或更新，默认插入或更新
+     *
+     * @return 参数修改时机
+     */
     WrapType type() default WrapType.INSERT_UPDATE;
 }

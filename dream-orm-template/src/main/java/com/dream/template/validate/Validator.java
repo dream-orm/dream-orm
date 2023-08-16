@@ -27,10 +27,11 @@ public interface Validator<T> {
     }
 
     /**
-     * 校验参数，不通过自定义异常即可
+     * 校验参数，不通过则返回非空字符串即可
      *
      * @param value    参数值
      * @param paramMap 自定义参数
+     * @return 错误信息
      */
-    void validate(T value, Map<String, Object> paramMap);
+    String validate(T value, Map<String, Object> paramMap);
 }

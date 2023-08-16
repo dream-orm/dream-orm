@@ -6,6 +6,7 @@ import com.dream.system.config.MethodInfo;
 import com.dream.system.core.session.Session;
 import com.dream.system.table.TableInfo;
 import com.dream.template.annotation.Validated;
+import com.dream.template.validate.ValidatedRunTimeException;
 import com.dream.template.validate.Validator;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.common.ObjectWrapper;
@@ -127,7 +128,10 @@ public abstract class ValidateMapper extends AbstractMapper {
         }
 
         public void validate(ObjectWrapper wrapper) {
-            validator.validate(wrapper.get(name), paramMap);
+            String validateMsg = validator.validate(wrapper.get(name), paramMap);
+            if (validateMsg != null && !validateMsg.isEmpty()) {
+                throw new ValidatedRunTimeException(validateMsg);
+            }
         }
     }
 }

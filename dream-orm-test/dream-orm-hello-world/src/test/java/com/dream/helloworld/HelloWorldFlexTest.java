@@ -27,4 +27,6 @@ public class HelloWorldFlexTest {
         AccountView accountView = flexMapper.selectOne(query, AccountView.class);
         System.out.println("查询结果：" + accountView);
     }
+
+
 }

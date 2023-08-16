@@ -25,7 +25,11 @@ public class CaseConditionDef extends ColumnDef {
         }
 
         public Builder else_(Object elseValue) {
-            return else_(new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(elseValue))));
+            if (elseValue instanceof Number) {
+                return else_(new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(elseValue))));
+            } else {
+                return else_(new ColumnDef(new SymbolStatement.StrStatement(String.valueOf(elseValue))));
+            }
         }
 
         public Builder else_(ColumnDef columnDef) {

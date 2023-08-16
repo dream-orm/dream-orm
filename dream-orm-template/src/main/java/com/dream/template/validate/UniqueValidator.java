@@ -41,10 +41,11 @@ public class UniqueValidator implements Validator<Object> {
     }
 
     @Override
-    public void validate(Object value, Map<String, Object> paramMap) {
+    public String validate(Object value, Map<String, Object> paramMap) {
         Object result = session.execute(methodInfo, new ObjectMap(value));
         if (result != null) {
-            throw new ValidateDreamRunTimeException((String) paramMap.get("msg"));
+            return (String) paramMap.get("msg");
         }
+        return null;
     }
 }

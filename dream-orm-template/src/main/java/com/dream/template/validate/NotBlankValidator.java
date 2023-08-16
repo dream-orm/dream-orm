@@ -5,9 +5,10 @@ import java.util.Map;
 
 public class NotBlankValidator implements Validator<String> {
     @Override
-    public void validate(String value, Map<String, Object> paramMap) {
+    public String validate(String value, Map<String, Object> paramMap) {
         if (value == null || value.trim().length() == 0) {
-            throw new ValidateDreamRunTimeException((String) paramMap.get("msg"));
+            return (String) paramMap.get("msg");
         }
+        return null;
     }
 }

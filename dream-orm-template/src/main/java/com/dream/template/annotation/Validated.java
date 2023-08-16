@@ -10,5 +10,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface Validated {
+    /**
+     * 校验的注解类
+     * @return 校验的注解类
+     */
     Class<? extends Validator> value();
 }

@@ -5,9 +5,10 @@ import java.util.Map;
 
 public class AssertTrueValidator implements Validator<Boolean> {
     @Override
-    public void validate(Boolean value, Map<String, Object> paramMap) {
+    public String validate(Boolean value, Map<String, Object> paramMap) {
         if (value != null && !value) {
-            throw new ValidateDreamRunTimeException((String) paramMap.get("msg"));
+            return (String) paramMap.get("msg");
         }
+        return null;
     }
 }

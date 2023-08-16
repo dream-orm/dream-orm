@@ -56,6 +56,10 @@ public class ColumnDef {
         return conditionDef(new OperStatement.EQStatement(), value);
     }
 
+    public ConditionDef eq(ColumnDef columnDef) {
+        return conditionDef(new OperStatement.EQStatement(), columnDef.getStatement());
+    }
+
     public <T> ConditionDef eq(T value, Predicate<T> fn) {
         return eq(value).when(fn.test(value));
     }
