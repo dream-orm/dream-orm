@@ -16,6 +16,7 @@ import java.util.Map;
 public class PageAction implements Action {
     private MethodInfo methodInfo;
     private String property;
+
     public PageAction(MethodInfo methodInfo, String sql) {
         PageQuery pageQuery = methodInfo.get(PageQuery.class);
         String value = pageQuery.value();
@@ -23,7 +24,7 @@ public class PageAction implements Action {
         if (!ObjectUtil.isNull(value)) {
             property = value + "." + property;
         }
-        this.property=property;
+        this.property = property;
         this.methodInfo = new MethodInfo()
                 .setId(methodInfo.getId() + "#count")
                 .setConfiguration(methodInfo.getConfiguration())

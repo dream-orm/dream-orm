@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
 public @interface Validated {
     /**
      * 校验的注解类
+     *
      * @return 校验的注解类
      */
     Class<? extends Validator> value();

@@ -1,9 +1,0 @@
-com\dream\helloworld\table\Account.class
-com\dream\helloworld\HelloWorldApplication.class
-com\dream\helloworld\table\table\AccountTableDef.class
-com\dream\helloworld\condition\AccountCondition.class
-com\dream\helloworld\view\WrapAccountView.class
-com\dream\helloworld\condition\OrderAccountCondition.class
-com\dream\helloworld\mapper\AccountMapper.class
-com\dream\helloworld\view\AccountView.class
-com\dream\helloworld\view\ValidatedAccountView.class

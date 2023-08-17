@@ -12,43 +12,141 @@ import com.dream.util.reflect.ReflectUtil;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 不翻译直接执行SQL接口
+ */
 public interface JdbcMapper {
+    /**
+     * SQL操作
+     *
+     * @param sql  原始SQL
+     * @param args 参数
+     * @return 操作条数
+     */
     default int execute(String sql, Object... args) {
         return execute(sql, new JdbcStatementSetter(args));
     }
 
+    /**
+     * SQL操作
+     *
+     * @param sql             原始SQL
+     * @param statementSetter 自定义参数设置
+     * @return 操作条数
+     */
     int execute(String sql, StatementSetter statementSetter);
 
+    /**
+     * 批量操作
+     *
+     * @param sql             原始SQL
+     * @param argList         集合数据
+     * @param statementSetter 自定义参数设置
+     * @param <T>
+     * @return 操作条数
+     */
     default <T> List<Object> batchExecute(String sql, List<T> argList, StatementSetter statementSetter) {
         return batchExecute(sql, argList, statementSetter, 1000);
     }
 
+    /**
+     * 批量操作
+     *
+     * @param sql             原始SQL
+     * @param argList         集合数据
+     * @param statementSetter 自定义参数设置
+     * @param batchSize       批量大小
+     * @param <T>
+     * @return
+     */
     <T> List<Object> batchExecute(String sql, List<T> argList, StatementSetter statementSetter, int batchSize);
 
+    /**
+     * 查询操作
+     *
+     * @param sql  原始SQL
+     * @param type 返回类型
+     * @param args 参数
+     * @param <T>
+     * @return 查询的数据
+     */
     default <T> T queryForObject(String sql, Class<T> type, Object... args) {
         return getOne(queryForList(sql, type, args));
     }
 
+    /**
+     * 查询操作
+     *
+     * @param sql             原始SQL
+     * @param statementSetter 自定义参数设置
+     * @param type            返回类型
+     * @param <T>
+     * @return 查询的数据
+     */
     default <T> T queryForObject(String sql, StatementSetter statementSetter, Class<T> type) {
         return getOne(queryForList(sql, statementSetter, type));
     }
 
+    /**
+     * 查询操作
+     *
+     * @param sql        原始SQL
+     * @param rowMapping 自定义映射
+     * @param <T>
+     * @return 查询的数据
+     */
     default <T> T queryForObject(String sql, RowMapping<T> rowMapping) {
         return getOne(queryForList(sql, rowMapping));
     }
 
+    /**
+     * 查询操作
+     *
+     * @param sql        原始SQL
+     * @param rowMapping 自定义映射
+     * @param args       参数
+     * @param <T>
+     * @return 查询的数据
+     */
     default <T> T queryForObject(String sql, RowMapping<T> rowMapping, Object... args) {
         return getOne(queryForList(sql, new JdbcStatementSetter(args), rowMapping));
     }
 
+    /**
+     * 查询操作
+     *
+     * @param sql             原始SQL
+     * @param statementSetter 自定义参数设置
+     * @param rowMapping      自定义映射
+     * @param <T>
+     * @return 查询的数据
+     */
     default <T> T queryForObject(String sql, StatementSetter statementSetter, RowMapping<T> rowMapping) {
         return getOne(queryForList(sql, statementSetter, rowMapping));
     }
 
+    /**
+     * 查询操作
+     *
+     * @param sql  原始SQL
+     * @param type 查询类型
+     * @param args 参数
+     * @param <T>
+     * @return 查询的数据
+     */
     default <T> List<T> queryForList(String sql, Class<T> type, Object... args) {
         return queryForList(sql, new JdbcStatementSetter(args), type);
     }
 
+    /**
+     * 查询操作
+     *
+     * @param sql             原始SQL
+     * @param statementSetter 自定义参数设置
+     * @param type            查询类型
+     * @param <T>
+     * @return 查询的数据
+     */
     default <T> List<T> queryForList(String sql, StatementSetter statementSetter, Class<T> type) {
         RowMapping rowMapping;
         if (ReflectUtil.isBaseClass(type)) {
@@ -61,14 +159,40 @@ public interface JdbcMapper {
         return queryForList(sql, statementSetter, rowMapping);
     }
 
+    /**
+     * 查询操作
+     *
+     * @param sql        原始SQL
+     * @param rowMapping 自定义映射
+     * @param <T>
+     * @return 查询的数据
+     */
     default <T> List<T> queryForList(String sql, RowMapping<T> rowMapping) {
         return queryForList(sql, new JdbcStatementSetter(null), rowMapping);
     }
 
+    /**
+     * 查询操作
+     *
+     * @param sql        原始SQL
+     * @param rowMapping 自定义映射
+     * @param args       参数
+     * @param <T>
+     * @return 查询的数据
+     */
     default <T> List<T> queryForList(String sql, RowMapping<T> rowMapping, Object... args) {
         return queryForList(sql, new JdbcStatementSetter(args), rowMapping);
     }
 
+    /**
+     * 查询操作
+     *
+     * @param sql             原始SQL
+     * @param statementSetter 自定义参数设置
+     * @param rowMapping      自定义映射
+     * @param <T>
+     * @return 查询的数据
+     */
     <T> List<T> queryForList(String sql, StatementSetter statementSetter, RowMapping<T> rowMapping);
 
     default <T> T getOne(List<T> list) {

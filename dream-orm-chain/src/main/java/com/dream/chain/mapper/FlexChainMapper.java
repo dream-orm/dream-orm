@@ -13,6 +13,7 @@ import com.dream.flex.def.TableDef;
 public interface FlexChainMapper {
     /**
      * 查询链式操作
+     *
      * @param columnDefs 查询字段集
      * @return 查询链式
      */
@@ -20,6 +21,7 @@ public interface FlexChainMapper {
 
     /**
      * 更新链式操作
+     *
      * @param tableDef 表
      * @return 更新链式
      */
@@ -27,6 +29,7 @@ public interface FlexChainMapper {
 
     /**
      * 插入链式操作
+     *
      * @param tableDef 表
      * @return 插入链式
      */
@@ -34,6 +37,7 @@ public interface FlexChainMapper {
 
     /**
      * 删除链式操作
+     *
      * @param tableDef 表
      * @return 删除链式
      */
