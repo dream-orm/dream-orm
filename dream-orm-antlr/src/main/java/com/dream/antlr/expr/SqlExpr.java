@@ -613,6 +613,15 @@ public abstract class SqlExpr {
             case INVOKER:
                 statement = exprInvoker(exprInfo);
                 break;
+            case COLON:
+                statement = exprColon(exprInfo);
+                break;
+            case DOLLAR:
+                statement = exprDollar(exprInfo);
+                break;
+            case SHARP:
+                statement = exprSharp(exprInfo);
+                break;
             case TO_CHAR:
                 statement = exprToChar(exprInfo);
                 break;
@@ -624,9 +633,6 @@ public abstract class SqlExpr {
                 break;
             case TO_TIMESTAMP:
                 statement = exprToTimeStamp(exprInfo);
-                break;
-            case COLON:
-                statement = exprColon(exprInfo);
                 break;
             case AUTO_INCREMENT:
                 statement = exprAutoIncrement(exprInfo);
@@ -693,10 +699,6 @@ public abstract class SqlExpr {
         return exprKeyWord(exprInfo);
     }
 
-    protected Statement exprColon(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
     protected Statement exprAutoIncrement(ExprInfo exprInfo) throws AntlrException {
         return exprNil(exprInfo);
     }
@@ -738,6 +740,18 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
+        return exprNil(exprInfo);
+    }
+
+    protected Statement exprColon(ExprInfo exprInfo) throws AntlrException {
+        return exprNil(exprInfo);
+    }
+
+    protected Statement exprDollar(ExprInfo exprInfo) throws AntlrException {
+        return exprNil(exprInfo);
+    }
+
+    protected Statement exprSharp(ExprInfo exprInfo) throws AntlrException {
         return exprNil(exprInfo);
     }
 

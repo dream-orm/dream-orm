@@ -15,5 +15,6 @@ public class DefaultInvokerFactory extends AntlrInvokerFactory {
         addInvoker(new LimitInvoker());
         addInvoker(new OffSetInvoker());
         addInvoker(new TableInvoker());
+        addInvoker(new EmitInvoker());
     }
 }

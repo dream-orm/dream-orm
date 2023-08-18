@@ -8,7 +8,7 @@ import java.util.Stack;
 
 public class ExprUtil {
     public static boolean isLetter(int c) {
-        return 65 <= c && c <= 90 || 97 <= c && c <= 122 || c == 95 || c == 83 || c == 36;
+        return 65 <= c && c <= 90 || 97 <= c && c <= 122 || c == 95 || c == 83;
     }
 
     public static boolean isStr(int c) {

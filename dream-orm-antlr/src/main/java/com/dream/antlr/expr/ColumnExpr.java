@@ -19,7 +19,7 @@ public class ColumnExpr extends HelperExpr {
 
     public ColumnExpr(ExprReader exprReader, Helper helper) {
         super(exprReader, helper);
-        setExprTypes(Constant.FUNCTION).addExprTypes(ExprType.CASE, ExprType.LBRACE, ExprType.HELP, ExprType.INVOKER);
+        setExprTypes(Constant.FUNCTION).addExprTypes(ExprType.CASE, ExprType.LBRACE, ExprType.COLON, ExprType.DOLLAR, ExprType.SHARP, ExprType.HELP, ExprType.INVOKER);
     }
 
     @Override
@@ -30,21 +30,6 @@ public class ColumnExpr extends HelperExpr {
         return expr();
     }
 
-    @Override
-    protected Statement exprStar(ExprInfo exprInfo) throws AntlrException {
-        SymbolExpr symbolExpr = new SymbolExpr(exprReader);
-        statement = symbolExpr.expr();
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprSymbol(ExprInfo exprInfo) throws AntlrException {
-        SymbolExpr symbolExpr = new SymbolExpr(exprReader);
-        statement = symbolExpr.expr();
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
 
     @Override
     protected Statement exprCase(ExprInfo exprInfo) throws AntlrException {
@@ -70,6 +55,27 @@ public class ColumnExpr extends HelperExpr {
         return expr();
     }
 
+    @Override
+    protected Statement exprColon(ExprInfo exprInfo) throws AntlrException {
+        return exprEmit(exprInfo);
+    }
+
+    @Override
+    protected Statement exprDollar(ExprInfo exprInfo) throws AntlrException {
+        return exprEmit(exprInfo);
+    }
+
+    @Override
+    protected Statement exprSharp(ExprInfo exprInfo) throws AntlrException {
+        return exprEmit(exprInfo);
+    }
+
+    protected Statement exprEmit(ExprInfo exprInfo) throws AntlrException {
+        EmitExpr emitExpr = new EmitExpr(exprReader);
+        this.statement = emitExpr.expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
 
     @Override
     public Statement nil() {

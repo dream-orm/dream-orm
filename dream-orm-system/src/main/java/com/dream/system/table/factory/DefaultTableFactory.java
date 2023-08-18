@@ -12,7 +12,6 @@ import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
 import com.dream.util.reflect.ReflectUtil;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,25 +62,13 @@ public class DefaultTableFactory implements TableFactory {
         return table;
     }
 
-    protected Map<Class<? extends Annotation>, Annotation> annotationMap(Field field) {
-        Annotation[] annotations = field.getDeclaredAnnotations();
-        Map<Class<? extends Annotation>, Annotation> annotationMap = new HashMap(4);
-        if (!ObjectUtil.isNull(annotations)) {
-            for (Annotation annotation : annotations) {
-                annotationMap.put(annotation.annotationType(), annotation);
-            }
-        }
-        return annotationMap;
-
-    }
-
     protected ColumnInfo getColumnInfo(String table, Field field) {
         Column columnAnnotation = field.getDeclaredAnnotation(Column.class);
         if (columnAnnotation == null) {
             return null;
         }
         String column = columnAnnotation.value();
-        return new ColumnInfo(table, column, field, annotationMap(field), columnAnnotation.jdbcType());
+        return new ColumnInfo(table, column, field, columnAnnotation.jdbcType());
     }
 
     protected JoinInfo getJoinInfo(String table, Field field) {

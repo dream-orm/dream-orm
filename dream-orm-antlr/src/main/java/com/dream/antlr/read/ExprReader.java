@@ -32,6 +32,12 @@ public class ExprReader extends StringReader {
         mark();
         int c = read();
         switch (c) {
+            case 35:
+                lastInfo = new ExprInfo(ExprType.SHARP, "#", getStart(), getEnd());
+                break;
+            case 36:
+                lastInfo = new ExprInfo(ExprType.DOLLAR, "$", getStart(), getEnd());
+                break;
             case 48:
             case 49:
             case 50:
@@ -56,7 +62,6 @@ public class ExprReader extends StringReader {
                 reset();
                 lastInfo = pushJavaStr();
                 break;
-            case 36:
             case 65:
             case 66:
             case 67:

@@ -1,10 +1,7 @@
 package com.dream.system.inject.factory;
 
 import com.dream.system.config.MethodInfo;
-import com.dream.system.inject.AnnotationInject;
-import com.dream.system.inject.Inject;
-import com.dream.system.inject.PageInject;
-import com.dream.system.inject.ScanInject;
+import com.dream.system.inject.*;
 import com.dream.util.common.ObjectUtil;
 
 import java.util.LinkedHashMap;
@@ -17,6 +14,7 @@ public class DefaultInjectFactory implements InjectFactory {
     public DefaultInjectFactory() {
         injectMap.put(AnnotationInject.class, new AnnotationInject());
         injectMap.put(PageInject.class, new PageInject(false));
+        injectMap.put(EmitInject.class, new EmitInject());
         injectMap.put(ScanInject.class, new ScanInject());
     }
 
@@ -27,8 +25,10 @@ public class DefaultInjectFactory implements InjectFactory {
                 injectMap.put(inject.getClass(), inject);
             }
             Inject pageInject = injectMap.remove(PageInject.class);
+            Inject emitInject = injectMap.remove(EmitInject.class);
             Inject scanInject = injectMap.remove(ScanInject.class);
             injectMap.put(PageInject.class, pageInject);
+            injectMap.put(EmitInject.class, emitInject);
             injectMap.put(ScanInject.class, scanInject);
         }
     }

@@ -3,7 +3,7 @@ package com.dream.mate.util;
 import com.dream.antlr.smt.*;
 
 public class MateUtil {
-    public static void appendWhere(WhereStatement whereStatement, Statement tenantStatement) {
+    public static void appendWhere(WhereStatement whereStatement, Statement statement) {
         Statement condition = whereStatement.getCondition();
         if (condition instanceof ConditionStatement) {
             OperStatement operStatement = ((ConditionStatement) condition).getOper();
@@ -14,7 +14,7 @@ public class MateUtil {
         ConditionStatement conditionStatement = new ConditionStatement();
         conditionStatement.setLeft(condition);
         conditionStatement.setOper(new OperStatement.ANDStatement());
-        conditionStatement.setRight(tenantStatement);
+        conditionStatement.setRight(statement);
         whereStatement.setCondition(conditionStatement);
     }
 }
