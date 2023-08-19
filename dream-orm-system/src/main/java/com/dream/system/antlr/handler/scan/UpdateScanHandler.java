@@ -21,8 +21,8 @@ public class UpdateScanHandler extends AbstractHandler {
         scanInfo.setCommand(Command.UPDATE);
         UpdateStatement updateStatement = (UpdateStatement) statement;
         Statement table = updateStatement.getTable();
-        if(table instanceof SymbolStatement){
-            scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement)table).getValue(), null, true));
+        if (table instanceof SymbolStatement) {
+            scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement) table).getValue(), null, true));
         }
         return super.handlerAfter(statement, assist, sql, life);
     }

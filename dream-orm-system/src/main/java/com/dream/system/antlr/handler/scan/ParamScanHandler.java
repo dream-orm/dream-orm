@@ -85,7 +85,7 @@ public class ParamScanHandler extends AbstractHandler {
         }
 
         protected String parseParamName(Statement statement) {
-            if (InvokerUtil.is$(statement)) {
+            if (InvokerUtil.isMark(statement)) {
                 InvokerStatement invokerStatement = (InvokerStatement) statement;
                 try {
                     return toSQL.toStr(invokerStatement.getParamStatement(), null, null);
@@ -173,7 +173,7 @@ public class ParamScanHandler extends AbstractHandler {
                     Statement[] columnList = listColumnStatement.getColumnList();
                     for (int i = 0; i < columnList.length; i++) {
                         String field = null;
-                        if (InvokerUtil.is$(columnList[i])) {
+                        if (InvokerUtil.isMark(columnList[i])) {
                             field = toSQL.toStr(((InvokerStatement) columnList[i]).getParamStatement(), null, null);
                         }
                         paramList.add(field);

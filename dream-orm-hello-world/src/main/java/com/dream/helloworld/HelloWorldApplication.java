@@ -2,20 +2,13 @@ package com.dream.helloworld;
 
 import com.dream.boot.bean.ConfigurationBean;
 import com.dream.flex.annotation.FlexAPT;
-import com.dream.mate.dynamic.inject.DynamicHandler;
-import com.dream.mate.dynamic.inject.DynamicInject;
-import com.dream.mate.logic.inject.LogicHandler;
-import com.dream.mate.logic.inject.LogicInject;
-import com.dream.mate.permission.inject.PermissionHandler;
-import com.dream.mate.permission.inject.PermissionInject;
-import com.dream.mate.tenant.inject.TenantHandler;
-import com.dream.mate.tenant.inject.TenantInject;
-import com.dream.mate.transform.inject.InterceptTransformHandler;
-import com.dream.mate.transform.inject.TransformInject;
-import com.dream.system.config.MethodInfo;
+import com.dream.flex.mapper.DefaultFlexMapper;
+import com.dream.system.core.session.Session;
 import com.dream.system.inject.Inject;
 import com.dream.system.table.ColumnInfo;
-import com.dream.system.table.TableInfo;
+import com.dream.tdengine.mapper.DefaultFlexTdChainMapper;
+import com.dream.tdengine.mapper.FlexTdChainMapper;
+import com.dream.tdengine.sql.ToTdEngine;
 import com.dream.template.sequence.AbstractSequence;
 import com.dream.template.sequence.Sequence;
 import org.springframework.boot.SpringApplication;
@@ -87,41 +80,9 @@ public class HelloWorldApplication {
 //    public InjectFactory injectFactory() {
 //        InjectFactory injectFactory = new DefaultInjectFactory();
 //        /**
-//         * 开启关键字插件
+//         * 注入插件工厂插件
 //         */
-//        injectFactory.injects(new TransformInject(new InterceptTransformHandler("keyword.txt")));
-//        /**
-//         * 开启数据权限插件
-//         */
-//        injectFactory.injects(new PermissionInject(new PermissionHandler() {
-//            @Override
-//            public boolean isPermissionInject(MethodInfo methodInfo, TableInfo tableInfo) {
-//                return tableInfo.getFieldName("field_id") != null;
-//            }
-//
-//            @Override
-//            public String getPermission(String alias) {
-//                return alias + ".dept_id=1";
-//            }
-//        }));
-//        /**
-//         * 开启多租户插件
-//         */
-//        injectFactory.injects(new TenantInject(new TenantHandler() {
-//            public boolean isTenant(MethodInfo methodInfo, TableInfo tableInfo) {
-//                return tableInfo.getFieldName(getTenantColumn()) != null;
-//            }
-//
-//            @Override
-//            public String getTenantColumn() {
-//                return "tenant_id";
-//            }
-//
-//            @Override
-//            public Object getTenantObject() {
-//                return 1;
-//            }
-//        }));
+//        injectFactory.injects(new Inject[0]);
 //        return injectFactory;
 //    }
 
@@ -201,11 +162,16 @@ public class HelloWorldApplication {
 //                */
 //                new DynamicInject(new DynamicHandler() {
 //                    @Override
+//                    public boolean isDynamic(MethodInfo methodInfo, String table) {
+//                        return true;
+//                    }
+//
+//                    @Override
 //                    public String process(String table) {
-//                        System.out.println("修改表名："+table);
+//                        System.out.println("修改表名：" + table);
 //                        return table;
 //                    }
-//                })
+//                }),
         };
     }
 
@@ -261,4 +227,9 @@ public class HelloWorldApplication {
         };
     }
 
+
+    @Bean
+    public FlexTdChainMapper flexTdChainMapper(Session session) {
+        return new DefaultFlexTdChainMapper(new DefaultFlexMapper(session, new ToTdEngine()));
+    }
 }

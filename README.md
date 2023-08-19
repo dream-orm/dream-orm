@@ -215,8 +215,8 @@ private FlexMapper flexMapper;
 
 ```java
 @Autowired
-private FlexChainMapper flexChainMapper;
-        List<User> userList=flexChainMapper.select(user.name).from(user).list(User.class);
+private FlexChainMapper flexTdChainMapper;
+        List<User> userList=flexTdChainMapper.select(user.name).from(user).list(User.class);
 ```
 
 ## 2.2. dream配置

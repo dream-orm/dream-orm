@@ -6,7 +6,7 @@ import com.dream.antlr.smt.Statement;
 import com.dream.system.antlr.invoker.MarkInvoker;
 
 public class InvokerUtil {
-    public static boolean is$(Statement statement) {
+    public static boolean isMark(Statement statement) {
         if (InvokerUtil.isInvoker(statement)) {
             InvokerStatement invokerStatement = (InvokerStatement) statement;
             String namespace = invokerStatement.getNamespace();

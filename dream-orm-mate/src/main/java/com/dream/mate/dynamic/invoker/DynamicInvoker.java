@@ -11,11 +11,22 @@ import com.dream.mate.dynamic.handler.DynamicDeleteHandler;
 import com.dream.mate.dynamic.handler.DynamicInsertHandler;
 import com.dream.mate.dynamic.handler.DynamicQueryHandler;
 import com.dream.mate.dynamic.handler.DynamicUpdateHandler;
+import com.dream.mate.dynamic.inject.DynamicHandler;
+import com.dream.mate.dynamic.inject.DynamicInject;
+import com.dream.system.config.MethodInfo;
 
 import java.util.List;
 
 public class DynamicInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_dynamic";
+    private MethodInfo methodInfo;
+    private DynamicHandler dynamicHandler;
+
+    @Override
+    public void init(Assist assist) {
+        methodInfo = assist.getCustom(MethodInfo.class);
+        dynamicHandler = methodInfo.getConfiguration().getInjectFactory().getInject(DynamicInject.class).getDynamicHandler();
+    }
 
     @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
@@ -36,6 +47,10 @@ public class DynamicInvoker extends AbstractInvoker {
 
     @Override
     protected Handler[] handler() {
-        return new Handler[]{new DynamicQueryHandler(), new DynamicUpdateHandler(), new DynamicInsertHandler(), new DynamicDeleteHandler()};
+        return new Handler[]{new DynamicQueryHandler(this), new DynamicUpdateHandler(this), new DynamicInsertHandler(this), new DynamicDeleteHandler(this)};
+    }
+
+    public boolean isDynamic(String table) {
+        return dynamicHandler.isDynamic(methodInfo, table);
     }
 }

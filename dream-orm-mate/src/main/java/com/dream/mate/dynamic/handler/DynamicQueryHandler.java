@@ -9,6 +9,7 @@ import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.antlr.util.AntlrUtil;
 import com.dream.mate.dynamic.invoker.DynamicGetInvoker;
+import com.dream.mate.dynamic.invoker.DynamicInvoker;
 import com.dream.mate.permission.invoker.PermissionGetInvoker;
 import com.dream.system.antlr.handler.scan.QueryScanHandler;
 import com.dream.system.antlr.invoker.ScanInvoker;
@@ -16,6 +17,12 @@ import com.dream.system.antlr.invoker.ScanInvoker;
 import java.util.List;
 
 public class DynamicQueryHandler extends AbstractHandler {
+
+    private DynamicInvoker dynamicInvoker;
+
+    public DynamicQueryHandler(DynamicInvoker dynamicInvoker) {
+        this.dynamicInvoker = dynamicInvoker;
+    }
 
     @Override
     protected boolean interest(Statement statement, Assist sqlAssist) {
@@ -34,15 +41,18 @@ public class DynamicQueryHandler extends AbstractHandler {
             FromStatement fromStatement = (FromStatement) statement;
             ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(fromStatement.getMainTable(), true);
             if (tableScanInfo != null) {
-                InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
-                        DynamicGetInvoker.FUNCTION,
-                        Invoker.DEFAULT_NAMESPACE,
-                        new SymbolStatement.SingleMarkStatement(tableScanInfo.getTable()));
-                String alias = tableScanInfo.getAlias();
-                AliasStatement aliasStatement = new AliasStatement();
-                aliasStatement.setColumn(invokerStatement);
-                aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
-                fromStatement.setMainTable(aliasStatement);
+                String table = tableScanInfo.getTable();
+                if (dynamicInvoker.isDynamic(table)) {
+                    InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
+                            DynamicGetInvoker.FUNCTION,
+                            Invoker.DEFAULT_NAMESPACE,
+                            new SymbolStatement.SingleMarkStatement(table));
+                    String alias = tableScanInfo.getAlias();
+                    AliasStatement aliasStatement = new AliasStatement();
+                    aliasStatement.setColumn(invokerStatement);
+                    aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
+                    fromStatement.setMainTable(aliasStatement);
+                }
             }
             return statement;
         }
@@ -59,15 +69,18 @@ public class DynamicQueryHandler extends AbstractHandler {
             JoinStatement joinStatement = (JoinStatement) statement;
             ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(joinStatement.getJoinTable(), false);
             if (tableScanInfo != null) {
-                InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
-                        PermissionGetInvoker.FUNCTION,
-                        Invoker.DEFAULT_NAMESPACE,
-                        new SymbolStatement.SingleMarkStatement(tableScanInfo.getTable()));
-                String alias = tableScanInfo.getAlias();
-                AliasStatement aliasStatement = new AliasStatement();
-                aliasStatement.setColumn(invokerStatement);
-                aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
-                joinStatement.setJoinTable(aliasStatement);
+                String table = tableScanInfo.getTable();
+                if (dynamicInvoker.isDynamic(table)) {
+                    InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
+                            PermissionGetInvoker.FUNCTION,
+                            Invoker.DEFAULT_NAMESPACE,
+                            new SymbolStatement.SingleMarkStatement(table));
+                    String alias = tableScanInfo.getAlias();
+                    AliasStatement aliasStatement = new AliasStatement();
+                    aliasStatement.setColumn(invokerStatement);
+                    aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement(alias));
+                    joinStatement.setJoinTable(aliasStatement);
+                }
             }
             return statement;
         }

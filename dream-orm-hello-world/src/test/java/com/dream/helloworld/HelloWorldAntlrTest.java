@@ -3,7 +3,6 @@ package com.dream.helloworld;
 
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.expr.PackageExpr;
-import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.sql.*;
@@ -186,14 +185,14 @@ public class HelloWorldAntlrTest {
         System.out.println();
         for (ToSQL toSQL : toSQLList) {
             try {
-                System.out.println(toSQL.getName() + "->" + toSQL.toStr(createStatement(sql, null), null, null));
+                System.out.println(toSQL.getName() + "->" + toSQL.toStr(createStatement(sql), null, null));
             } catch (AntlrException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    protected PackageStatement createStatement(String sql, MyFunctionFactory myFunctionFactory) throws AntlrException {
-        return (PackageStatement) new PackageExpr(new ExprReader(sql, myFunctionFactory)).expr();
+    protected PackageStatement createStatement(String sql) throws AntlrException {
+        return (PackageStatement) new PackageExpr(new ExprReader(sql, null)).expr();
     }
 }

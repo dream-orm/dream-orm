@@ -23,6 +23,11 @@
             <version>${dream-orm.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.dream-orm</groupId>
+            <artifactId>dream-orm-tdengine</artifactId>
+            <version>${dream-orm.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>

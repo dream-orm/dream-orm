@@ -8,7 +8,7 @@ import com.dream.flex.def.InsertIntoValuesDef;
 
 public interface InsertCreatorFactory
         <Insert extends InsertDef<InsertIntoTable>,
-                InsertIntoTable extends InsertIntoTableDef<InsertIntoColumns>,
+                InsertIntoTable extends InsertIntoTableDef<InsertIntoColumns, InsertIntoValues>,
                 InsertIntoColumns extends InsertIntoColumnsDef<InsertIntoValues>,
                 InsertIntoValues extends InsertIntoValuesDef> {
     Insert newInsertDef();

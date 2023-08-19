@@ -3,9 +3,9 @@ package com.dream.flex.def;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.OrderStatement;
 
-public interface HavingDef<T extends OrderByDef> extends OrderByDef {
+public interface HavingDef<OrderBy extends OrderByDef, Limit extends LimitDef, Union extends UnionDef, ForUpdate extends ForUpdateDef> extends OrderByDef<Limit, Union, ForUpdate> {
 
-    default T orderBy(SortDef... sortDefs) {
+    default OrderBy orderBy(SortDef... sortDefs) {
         ListColumnStatement columnStatement = new ListColumnStatement(",");
         for (SortDef sortDef : sortDefs) {
             columnStatement.add(sortDef.getStatement());
@@ -13,6 +13,6 @@ public interface HavingDef<T extends OrderByDef> extends OrderByDef {
         OrderStatement orderStatement = new OrderStatement();
         orderStatement.setOrder(columnStatement);
         statement().setOrderStatement(orderStatement);
-        return (T) creatorFactory().newOrderByDef(statement());
+        return (OrderBy) creatorFactory().newOrderByDef(statement());
     }
 }

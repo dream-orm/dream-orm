@@ -21,8 +21,8 @@ public class InsertScanHandler extends AbstractHandler {
         scanInfo.setCommand(Command.INSERT);
         InsertStatement insertStatement = (InsertStatement) statement;
         Statement table = insertStatement.getTable();
-        if(table instanceof SymbolStatement){
-            scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement)table).getValue(), null, true));
+        if (table instanceof SymbolStatement) {
+            scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement) table).getValue(), null, true));
         }
         return super.handlerAfter(statement, assist, sql, life);
     }

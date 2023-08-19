@@ -5,7 +5,7 @@ import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.Statement;
 
 
-public interface InsertIntoTableDef<T extends InsertIntoColumnsDef> extends Insert {
+public interface InsertIntoTableDef<T extends InsertIntoColumnsDef, R extends InsertIntoValuesDef> extends InsertIntoColumnsDef<R>, Insert {
     default T columns(ColumnDef... columnDefs) {
         ListColumnStatement paramsListStatement = new ListColumnStatement(",");
         for (ColumnDef columnDef : columnDefs) {

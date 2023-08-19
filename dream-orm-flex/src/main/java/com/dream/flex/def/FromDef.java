@@ -2,7 +2,7 @@ package com.dream.flex.def;
 
 import com.dream.antlr.smt.*;
 
-public interface FromDef<From extends FromDef, Where extends WhereDef> extends WhereDef {
+public interface FromDef<From extends FromDef, Where extends WhereDef, GroupBy extends GroupByDef, Having extends HavingDef, OrderBy extends OrderByDef, Limit extends LimitDef, Union extends UnionDef, ForUpdate extends ForUpdateDef> extends WhereDef<GroupBy, Having, OrderBy, Limit, Union, ForUpdate> {
 
 
     default JoinDef leftJoin(TableDef tableDef) {

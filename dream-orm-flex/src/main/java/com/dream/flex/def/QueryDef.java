@@ -4,9 +4,9 @@ import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.SelectStatement;
 import com.dream.antlr.smt.SymbolStatement;
 
-public interface QueryDef<T extends SelectDef> extends Query {
+public interface QueryDef<Select extends SelectDef<From, Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate>, From extends FromDef<From, Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate>, Where extends WhereDef, GroupBy extends GroupByDef, Having extends HavingDef, OrderBy extends OrderByDef, Limit extends LimitDef, Union extends UnionDef, ForUpdate extends ForUpdateDef> extends Query {
 
-    default T select(ColumnDef... columnDefs) {
+    default Select select(ColumnDef... columnDefs) {
         SelectStatement selectStatement = new SelectStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         if (columnDefs != null && columnDefs.length > 0) {
@@ -18,6 +18,6 @@ public interface QueryDef<T extends SelectDef> extends Query {
         }
         selectStatement.setSelectList(listColumnStatement);
         statement().setSelectStatement(selectStatement);
-        return (T) creatorFactory().newSelectDef(statement());
+        return (Select) creatorFactory().newSelectDef(statement());
     }
 }

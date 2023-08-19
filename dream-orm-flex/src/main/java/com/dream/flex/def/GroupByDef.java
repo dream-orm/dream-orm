@@ -3,15 +3,15 @@ package com.dream.flex.def;
 import com.dream.antlr.smt.ConditionStatement;
 import com.dream.antlr.smt.HavingStatement;
 
-public interface GroupByDef<T extends HavingDef> extends HavingDef {
+public interface GroupByDef<Having extends HavingDef, OrderBy extends OrderByDef, Limit extends LimitDef, Union extends UnionDef, ForUpdate extends ForUpdateDef> extends HavingDef<OrderBy, Limit, Union, ForUpdate> {
 
-    default T having(ConditionDef conditionDef) {
+    default Having having(ConditionDef conditionDef) {
         ConditionStatement conditionStatement = conditionDef.getStatement();
         if (conditionStatement != null) {
             HavingStatement havingStatement = new HavingStatement();
             havingStatement.setCondition(conditionDef.getStatement());
             statement().setHavingStatement(havingStatement);
         }
-        return (T) creatorFactory().newHavingDef(statement());
+        return (Having) creatorFactory().newHavingDef(statement());
     }
 }

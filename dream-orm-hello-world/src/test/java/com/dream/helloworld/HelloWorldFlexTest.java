@@ -5,6 +5,7 @@ import com.dream.flex.def.Insert;
 import com.dream.flex.def.Query;
 import com.dream.flex.def.Update;
 import com.dream.flex.mapper.FlexMapper;
+import com.dream.helloworld.table.Account;
 import com.dream.helloworld.view.AccountView;
 import com.dream.system.config.Page;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.dream.flex.def.FunctionDef.*;
@@ -70,6 +72,26 @@ public class HelloWorldFlexTest {
     @Test
     public void testInsert() {
         Insert insert = insertInto(account).columns(account.name, account.age).values("accountName", 12);
+        flexMapper.insert(insert);
+    }
+
+    /**
+     * 批量插入，注意有些数据库不支持这种批量插入
+     */
+    @Test
+    public void testInsert3() {
+        List<Account> accountList = new ArrayList<>();
+        for (int i = 10; i < 14; i++) {
+            Account account = new Account();
+            account.setId(i);
+            account.setName("name" + i);
+            account.setAge(i * 2);
+            accountList.add(account);
+        }
+        Insert insert = insertInto(account).columns(account.id, account.name, account.age).valuesList(accountList, acc -> {
+            Account account = (Account) acc;
+            return new Object[]{account.getId(), account.getName(), account.getAge()};
+        });
         flexMapper.insert(insert);
     }
 

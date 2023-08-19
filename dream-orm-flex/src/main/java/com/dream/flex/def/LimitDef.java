@@ -2,21 +2,21 @@ package com.dream.flex.def;
 
 import com.dream.antlr.smt.UnionStatement;
 
-public interface LimitDef<T extends UnionDef> extends UnionDef {
+public interface LimitDef<Union extends UnionDef, ForUpdate extends ForUpdateDef> extends UnionDef<ForUpdate> {
 
-    default T union(Query query) {
+    default Union union(Query query) {
         UnionStatement unionStatement = new UnionStatement();
         unionStatement.setAll(false);
         unionStatement.setStatement(query.statement());
         statement().setUnionStatement(unionStatement);
-        return (T) creatorFactory().newUnionDef(statement());
+        return (Union) creatorFactory().newUnionDef(statement());
     }
 
-    default T unionAll(Query query) {
+    default Union unionAll(Query query) {
         UnionStatement unionStatement = new UnionStatement();
         unionStatement.setAll(true);
         unionStatement.setStatement(query.statement());
         statement().setUnionStatement(unionStatement);
-        return (T) creatorFactory().newUnionDef(statement());
+        return (Union) creatorFactory().newUnionDef(statement());
     }
 }
