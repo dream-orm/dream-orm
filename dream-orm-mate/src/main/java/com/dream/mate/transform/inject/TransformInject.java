@@ -23,8 +23,8 @@ public class TransformInject implements Inject {
             invokerFactory.addInvokers(new TransformInvoker());
         }
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement columnFilterStatement = AntlrUtil.invokerStatement(TransformInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
-        statement.setStatement(columnFilterStatement);
+        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TransformInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
+        statement.setStatement(invokerStatement);
     }
 
     public TransformHandler getTransformHandler() {

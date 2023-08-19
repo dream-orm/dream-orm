@@ -20,7 +20,10 @@ public class DeleteScanHandler extends AbstractHandler {
     protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
         scanInfo.setCommand(Command.DELETE);
         DeleteStatement deleteStatement = (DeleteStatement) statement;
-        scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement) deleteStatement.getTable()).getValue(), null, true));
+        Statement table = deleteStatement.getTable();
+        if(table instanceof SymbolStatement){
+            scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement)table).getValue(), null, true));
+        }
         return super.handlerAfter(statement, assist, sql, life);
     }
 

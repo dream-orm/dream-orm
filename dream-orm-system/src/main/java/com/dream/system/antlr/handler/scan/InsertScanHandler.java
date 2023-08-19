@@ -20,7 +20,10 @@ public class InsertScanHandler extends AbstractHandler {
     protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
         scanInfo.setCommand(Command.INSERT);
         InsertStatement insertStatement = (InsertStatement) statement;
-        scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement) insertStatement.getTable()).getValue(), null, true));
+        Statement table = insertStatement.getTable();
+        if(table instanceof SymbolStatement){
+            scanInfo.add(new ScanInvoker.TableScanInfo(null, ((SymbolStatement)table).getValue(), null, true));
+        }
         return super.handlerAfter(statement, assist, sql, life);
     }
 

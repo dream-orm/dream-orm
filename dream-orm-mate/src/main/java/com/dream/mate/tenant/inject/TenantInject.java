@@ -29,8 +29,8 @@ public class TenantInject implements Inject {
             invokerFactory.addInvokers(new TenantGetInvoker());
         }
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement tenantStatement = AntlrUtil.invokerStatement(TenantInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
-        statement.setStatement(tenantStatement);
+        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
+        statement.setStatement(invokerStatement);
     }
 
     public TenantHandler getTenantHandler() {

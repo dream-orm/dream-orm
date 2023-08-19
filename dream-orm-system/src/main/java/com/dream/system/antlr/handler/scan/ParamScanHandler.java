@@ -127,7 +127,10 @@ public class ParamScanHandler extends AbstractHandler {
         @Override
         protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
             InsertStatement insertStatement = (InsertStatement) statement;
-            table = ((SymbolStatement) insertStatement.getTable()).getValue();
+            Statement tableStatement = insertStatement.getTable();
+            if (tableStatement instanceof SymbolStatement) {
+                this.table = ((SymbolStatement) insertStatement.getTable()).getValue();
+            }
             if (insertStatement.getColumns() != null) {
                 List<String> columnList = Arrays.stream(((ListColumnStatement) ((BraceStatement) insertStatement.getColumns()).getStatement()).getColumnList())
                         .map(column -> ((SymbolStatement) column).getValue())
@@ -136,7 +139,7 @@ public class ParamScanHandler extends AbstractHandler {
                     for (int i = 0; i < columnList.size(); i++) {
                         String param = paramList.get(i);
                         if (param != null) {
-                            scanInfo.add(new ScanInvoker.ParamScanInfo(null, table, columnList.get(i), param));
+                            scanInfo.add(new ScanInvoker.ParamScanInfo(null, this.table, columnList.get(i), param));
                         }
                     }
                 }
