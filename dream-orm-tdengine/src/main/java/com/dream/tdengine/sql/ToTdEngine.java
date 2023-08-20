@@ -5,13 +5,35 @@ import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InsertStatement;
 import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.antlr.smt.QueryStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToPubSQL;
 import com.dream.tdengine.statement.TdInsertStatement;
+import com.dream.tdengine.statement.TdQueryStatement;
 
 import java.util.List;
 
 public class ToTdEngine extends ToPubSQL {
+    @Override
+    protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        if (statement instanceof TdQueryStatement) {
+            String from = toStr(statement.getFromStatement(), assist, invokerList);
+            String where = toStr(statement.getWhereStatement(), assist, invokerList);
+            String partitionBy = toStr(((TdQueryStatement) statement).getPartitionBy(), assist, invokerList);
+            String interval = toStr(((TdQueryStatement) statement).getInterval(), assist, invokerList);
+            String groupBy = toStr(statement.getGroupStatement(), assist, invokerList);
+            String having = toStr(statement.getHavingStatement(), assist, invokerList);
+            String select = toStr(statement.getSelectStatement(), assist, invokerList);
+            String orderBy = toStr(statement.getOrderStatement(), assist, invokerList);
+            String limit = toStr(statement.getLimitStatement(), assist, invokerList);
+            String union = toStr(statement.getUnionStatement(), assist, invokerList);
+            String forUpdate = toStr(statement.getForUpdateStatement(), assist, invokerList);
+            return select + from + where +partitionBy+interval+ groupBy + having + orderBy + limit + union + forUpdate;
+        }else{
+            return super.toString(statement,assist,invokerList);
+        }
+    }
+
     @Override
     protected String toString(InsertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         if (statement instanceof TdInsertStatement) {

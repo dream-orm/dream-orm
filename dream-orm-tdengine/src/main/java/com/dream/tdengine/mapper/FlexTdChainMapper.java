@@ -1,11 +1,11 @@
 package com.dream.tdengine.mapper;
 
+import com.dream.flex.def.ColumnDef;
+import com.dream.flex.def.TableDef;
 import com.dream.tdengine.def.TdChainDeleteTableDef;
 import com.dream.tdengine.def.TdChainInsertIntoTableDef;
 import com.dream.tdengine.def.TdChainSelectDef;
 import com.dream.tdengine.def.TdChainUpdateColumnDef;
-import com.dream.flex.def.ColumnDef;
-import com.dream.flex.def.TableDef;
 
 /**
  * 链式强化接口

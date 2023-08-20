@@ -10,6 +10,7 @@ import com.dream.helloworld.view.AccountView;
 import com.dream.system.config.Page;
 import com.dream.system.core.session.Session;
 import com.dream.tdengine.def.TdChainFromDef;
+import com.dream.tdengine.def.TdChainHavingDef;
 import com.dream.tdengine.def.TdChainSelectDef;
 import com.dream.tdengine.mapper.DefaultFlexTdChainMapper;
 import com.dream.tdengine.mapper.FlexTdChainMapper;
@@ -23,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.dream.flex.def.FunctionDef.*;
 import static com.dream.helloworld.table.table.AccountTableDef.account;
@@ -44,8 +46,6 @@ public class HelloWorldTdSqlTest {
      */
     @Test
     public void testQuery() {
-        AccountTableDef d001 = new AccountTableDef("d001", null);
-        TdChainSelectDef select = flexMapper.select(col("*"));
-        TdChainFromDef from = select.from(account);
+        flexMapper.select(col("*")).from("d1001").partitionBy("id","name").interval("10m").one(Map.class);
     }
 }

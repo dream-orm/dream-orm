@@ -10,7 +10,7 @@ import com.dream.system.config.Page;
 import java.util.List;
 
 public abstract class AbstractTdChainQuery extends AbstractQuery implements Query, TdChainQuery {
-    private FlexMapper flexMapper;
+    protected FlexMapper flexMapper;
 
     public AbstractTdChainQuery(QueryStatement statement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
         super(statement, queryCreatorFactory);

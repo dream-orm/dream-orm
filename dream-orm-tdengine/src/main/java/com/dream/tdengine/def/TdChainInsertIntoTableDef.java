@@ -2,6 +2,7 @@ package com.dream.tdengine.def;
 
 import com.dream.antlr.smt.InsertStatement;
 import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.InsertIntoTableDef;
 import com.dream.flex.def.TableDef;
 import com.dream.flex.factory.InsertCreatorFactory;
@@ -13,16 +14,21 @@ public class TdChainInsertIntoTableDef extends AbstractTdChainInsert implements 
     public TdChainInsertIntoTableDef(InsertStatement insertStatement, InsertCreatorFactory creatorFactory, FlexMapper flexMapper) {
         super(insertStatement, creatorFactory, flexMapper);
     }
-    public TdChainInsertIntoTableDef using(TableDef tableDef){
+
+    public TdChainInsertIntoTableDef using(TableDef tableDef) {
         TdInsertStatement tdInsertStatement = (TdInsertStatement) statement();
         tdInsertStatement.setStdTable(tableDef.getStatement());
         return this;
     }
 
-    public TdChainInsertIntoTableDef tags(Object...values){
+    public TdChainInsertIntoTableDef using(String table) {
+        return using(FunctionDef.table(table));
+    }
+
+    public TdChainInsertIntoTableDef tags(Object... values) {
         TdInsertStatement tdInsertStatement = (TdInsertStatement) statement();
-        ListColumnStatement listColumnStatement=new ListColumnStatement(",");
-        for(Object value:values){
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        for (Object value : values) {
             listColumnStatement.add(new FlexMarkInvokerStatement(value));
         }
         tdInsertStatement.setTags(listColumnStatement);

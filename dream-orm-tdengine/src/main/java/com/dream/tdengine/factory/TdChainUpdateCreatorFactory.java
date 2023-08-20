@@ -1,16 +1,16 @@
 package com.dream.tdengine.factory;
 
 import com.dream.antlr.smt.UpdateStatement;
+import com.dream.flex.factory.UpdateCreatorFactory;
+import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.def.TdChainUpdateColumnDef;
 import com.dream.tdengine.def.TdChainUpdateDef;
 import com.dream.tdengine.def.TdChainUpdateWhereDef;
-import com.dream.flex.factory.UpdateCreatorFactory;
-import com.dream.flex.mapper.FlexMapper;
 
-public class ChainUpdateCreatorFactory implements UpdateCreatorFactory<TdChainUpdateDef, TdChainUpdateColumnDef, TdChainUpdateWhereDef> {
+public class TdChainUpdateCreatorFactory implements UpdateCreatorFactory<TdChainUpdateDef, TdChainUpdateColumnDef, TdChainUpdateWhereDef> {
     private FlexMapper flexMapper;
 
-    public ChainUpdateCreatorFactory(FlexMapper flexMapper) {
+    public TdChainUpdateCreatorFactory(FlexMapper flexMapper) {
         this.flexMapper = flexMapper;
     }
 

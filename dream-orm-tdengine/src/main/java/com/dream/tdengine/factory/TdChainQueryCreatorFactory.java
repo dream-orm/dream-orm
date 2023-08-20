@@ -5,10 +5,10 @@ import com.dream.flex.factory.QueryCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.def.*;
 
-public class ChainQueryCreatorFactory implements QueryCreatorFactory<TdChainQueryDef, TdChainSelectDef, TdChainFromDef, TdChainWhereDef, TdChainGroupByDef, TdChainHavingDef, TdChainOrderByDef, TdChainLimitDef, TdChainUnionDef, TdChainForUpdateDef> {
+public class TdChainQueryCreatorFactory implements QueryCreatorFactory<TdChainQueryDef, TdChainSelectDef, TdChainFromDef, TdChainWhereDef, TdChainGroupByDef, TdChainHavingDef, TdChainOrderByDef, TdChainLimitDef, TdChainUnionDef, TdChainForUpdateDef> {
     private FlexMapper flexMapper;
 
-    public ChainQueryCreatorFactory(FlexMapper flexMapper) {
+    public TdChainQueryCreatorFactory(FlexMapper flexMapper) {
         this.flexMapper = flexMapper;
     }
 
