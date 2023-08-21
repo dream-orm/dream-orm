@@ -26,6 +26,11 @@ public class DefaultFlexTdChainMapper implements FlexTdChainMapper {
     }
 
     @Override
+    public TdChainSelectDef select(boolean distinct, ColumnDef... columnDefs) {
+        return new TdChainQueryCreatorFactory(flexMapper).newQueryDef().select(distinct,columnDefs);
+    }
+
+    @Override
     public TdChainUpdateColumnDef update(TableDef tableDef) {
         return new TdChainUpdateCreatorFactory(flexMapper).newUpdateDef().update(tableDef);
     }

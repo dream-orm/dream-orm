@@ -12,6 +12,7 @@ import com.dream.system.core.session.Session;
 import com.dream.tdengine.def.TdChainFromDef;
 import com.dream.tdengine.def.TdChainHavingDef;
 import com.dream.tdengine.def.TdChainSelectDef;
+import com.dream.tdengine.def.TdFunctionDef;
 import com.dream.tdengine.mapper.DefaultFlexTdChainMapper;
 import com.dream.tdengine.mapper.FlexTdChainMapper;
 import com.dream.tdengine.sql.ToTdEngine;
@@ -46,6 +47,6 @@ public class HelloWorldTdSqlTest {
      */
     @Test
     public void testQuery() {
-        flexMapper.select(col("*")).from("d1001").partitionBy("id","name").interval("10m").one(Map.class);
+        flexMapper.select(col("*")).from("d1001").partitionBy("id","name").interval("10m").sLimit(10,20).one(Map.class);
     }
 }

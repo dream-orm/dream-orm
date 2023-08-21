@@ -7,6 +7,8 @@ public class TdQueryStatement extends QueryStatement {
     private TdPartitionStatement partitionBy;
 
     private TdIntervalStatement interval;
+
+    private TdSLimitStatement slimit;
     @Override
     public int getNameId() {
         return QueryStatement.class.getSimpleName().hashCode();
@@ -26,5 +28,13 @@ public class TdQueryStatement extends QueryStatement {
 
     public void setInterval(TdIntervalStatement interval) {
         this.interval = interval;
+    }
+
+    public TdSLimitStatement getSlimit() {
+        return slimit;
+    }
+
+    public void setSlimit(TdSLimitStatement slimit) {
+        this.slimit = slimit;
     }
 }

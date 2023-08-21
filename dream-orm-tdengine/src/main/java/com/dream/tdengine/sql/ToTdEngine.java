@@ -25,10 +25,11 @@ public class ToTdEngine extends ToPubSQL {
             String having = toStr(statement.getHavingStatement(), assist, invokerList);
             String select = toStr(statement.getSelectStatement(), assist, invokerList);
             String orderBy = toStr(statement.getOrderStatement(), assist, invokerList);
+            String sLimit = toStr(((TdQueryStatement) statement).getSlimit(), assist, invokerList);
             String limit = toStr(statement.getLimitStatement(), assist, invokerList);
             String union = toStr(statement.getUnionStatement(), assist, invokerList);
             String forUpdate = toStr(statement.getForUpdateStatement(), assist, invokerList);
-            return select + from + where +partitionBy+interval+ groupBy + having + orderBy + limit + union + forUpdate;
+            return select + from + where +partitionBy+interval+ groupBy + having + orderBy +sLimit+ limit + union + forUpdate;
         }else{
             return super.toString(statement,assist,invokerList);
         }

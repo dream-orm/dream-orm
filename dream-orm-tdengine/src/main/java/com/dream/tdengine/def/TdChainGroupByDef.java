@@ -9,4 +9,12 @@ public class TdChainGroupByDef extends AbstractTdChainQuery implements GroupByDe
     public TdChainGroupByDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
         super(queryStatement, queryCreatorFactory, flexMapper);
     }
+
+    public TdChainOrderByDef sLimit(Integer offset, Integer rows) {
+        return new TdChainSLimitDef(statement(), creatorFactory(), flexMapper).sLimit(offset, rows);
+    }
+
+    public TdChainOrderByDef sOffset(Integer offset, Integer rows) {
+        return new TdChainSLimitDef(statement(), creatorFactory(), flexMapper).sOffset(offset, rows);
+    }
 }

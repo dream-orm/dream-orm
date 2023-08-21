@@ -31,6 +31,6 @@ public class TdChainPartitionByDef extends TdChainIntervalDef {
         TdPartitionStatement tdPartitionStatement = new TdPartitionStatement();
         tdPartitionStatement.setParamsStatement(listColumnStatement);
         tdQueryStatement.setPartitionBy(tdPartitionStatement);
-        return new TdChainIntervalDef(tdQueryStatement,creatorFactory(),flexMapper);
+        return new TdChainIntervalDef(statement(),creatorFactory(),flexMapper);
     }
 }

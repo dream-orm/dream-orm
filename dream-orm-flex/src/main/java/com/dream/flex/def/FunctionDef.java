@@ -740,11 +740,11 @@ public class FunctionDef {
         return new AliasTableDef(aliasStatement);
     }
 
-    private static ColumnDef functionDef(FunctionStatement functionStatement, ColumnDef... columnDefs) {
+    protected static ColumnDef functionDef(FunctionStatement functionStatement, ColumnDef... columnDefs) {
         return functionDef(functionStatement, ",", columnDefs);
     }
 
-    private static ColumnDef functionDef(FunctionStatement functionStatement, String split, ColumnDef... columnDefs) {
+    protected static ColumnDef functionDef(FunctionStatement functionStatement, String split, ColumnDef... columnDefs) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(split);
         for (ColumnDef columnDef : columnDefs) {
             listColumnStatement.add(columnDef.getStatement());

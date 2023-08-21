@@ -20,6 +20,14 @@ public interface FlexChainMapper {
     ChainSelectDef select(ColumnDef... columnDefs);
 
     /**
+     * 查询链式操作
+     * @param distinct 是否去重
+     * @param columnDefs columnDefs 查询字段集
+     * @return
+     */
+    ChainSelectDef select(boolean distinct,ColumnDef... columnDefs);
+
+    /**
      * 更新链式操作
      *
      * @param tableDef 表

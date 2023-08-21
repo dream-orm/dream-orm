@@ -15,11 +15,11 @@ public class TdChainWhereDef extends AbstractTdChainQuery implements WhereDef<Td
         return new TdChainPartitionByDef(statement(), creatorFactory(), flexMapper).partitionBy(columnDefs);
     }
 
-    public TdChainHavingDef interval(String intervalVal) {
+    public TdChainSlidingDef interval(String intervalVal) {
         return new TdChainPartitionByDef(statement(), creatorFactory(), flexMapper).interval(intervalVal);
     }
 
-    public TdChainHavingDef interval(String intervalVal, String intervalOffset) {
+    public TdChainSlidingDef interval(String intervalVal, String intervalOffset) {
         return new TdChainPartitionByDef(statement(), creatorFactory(), flexMapper).interval(intervalVal, intervalOffset);
     }
 
