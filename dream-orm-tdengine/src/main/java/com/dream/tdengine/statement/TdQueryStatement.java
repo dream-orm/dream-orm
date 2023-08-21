@@ -6,7 +6,7 @@ public class TdQueryStatement extends QueryStatement {
 
     private TdPartitionStatement partitionBy;
 
-    private TdIntervalStatement interval;
+    private TdWindowStatement windnow;
 
     private TdSLimitStatement slimit;
 
@@ -23,12 +23,12 @@ public class TdQueryStatement extends QueryStatement {
         this.partitionBy = partitionBy;
     }
 
-    public TdIntervalStatement getInterval() {
-        return interval;
+    public TdWindowStatement getWindnow() {
+        return windnow;
     }
 
-    public void setInterval(TdIntervalStatement interval) {
-        this.interval = interval;
+    public void setWindnow(TdWindowStatement windnow) {
+        this.windnow = windnow;
     }
 
     public TdSLimitStatement getSlimit() {

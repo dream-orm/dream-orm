@@ -14,7 +14,7 @@ public class TdChainPartitionDef extends TdChainIntervalDef {
         super(queryStatement, queryCreatorFactory, flexMapper);
     }
 
-    public TdChainIntervalDef partitionBy(String... columns) {
+    public TdChainGroupByDef partitionBy(String... columns) {
         ColumnDef[] columnDefs = new ColumnDef[columns.length];
         for (int i = 0; i < columns.length; i++) {
             columnDefs[i] = FunctionDef.column(columns[i]);
@@ -22,7 +22,7 @@ public class TdChainPartitionDef extends TdChainIntervalDef {
         return partitionBy(columnDefs);
     }
 
-    public TdChainIntervalDef partitionBy(ColumnDef... columnDefs) {
+    public TdChainGroupByDef partitionBy(ColumnDef... columnDefs) {
         TdQueryStatement tdQueryStatement = (TdQueryStatement) statement();
         ListColumnStatement listColumnStatement = new ListColumnStatement();
         for (ColumnDef columnDef : columnDefs) {
@@ -31,6 +31,6 @@ public class TdChainPartitionDef extends TdChainIntervalDef {
         TdPartitionStatement tdPartitionStatement = new TdPartitionStatement();
         tdPartitionStatement.setParamsStatement(listColumnStatement);
         tdQueryStatement.setPartitionBy(tdPartitionStatement);
-        return new TdChainIntervalDef(statement(), creatorFactory(), flexMapper);
+        return (TdChainGroupByDef) creatorFactory().newGroupByDef(statement());
     }
 }

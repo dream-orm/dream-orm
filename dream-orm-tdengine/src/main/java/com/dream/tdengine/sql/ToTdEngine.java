@@ -20,7 +20,7 @@ public class ToTdEngine extends ToPubSQL {
             String from = toStr(statement.getFromStatement(), assist, invokerList);
             String where = toStr(statement.getWhereStatement(), assist, invokerList);
             String partitionBy = toStr(((TdQueryStatement) statement).getPartitionBy(), assist, invokerList);
-            String interval = toStr(((TdQueryStatement) statement).getInterval(), assist, invokerList);
+            String window = toStr(((TdQueryStatement) statement).getWindnow(), assist, invokerList);
             String groupBy = toStr(statement.getGroupStatement(), assist, invokerList);
             String having = toStr(statement.getHavingStatement(), assist, invokerList);
             String select = toStr(statement.getSelectStatement(), assist, invokerList);
@@ -29,7 +29,7 @@ public class ToTdEngine extends ToPubSQL {
             String limit = toStr(statement.getLimitStatement(), assist, invokerList);
             String union = toStr(statement.getUnionStatement(), assist, invokerList);
             String forUpdate = toStr(statement.getForUpdateStatement(), assist, invokerList);
-            return select + from + where + partitionBy + interval + groupBy + having + orderBy + sLimit + limit + union + forUpdate;
+            return select + from + where + partitionBy + window + groupBy + having + orderBy + sLimit + limit + union + forUpdate;
         } else {
             return super.toString(statement, assist, invokerList);
         }

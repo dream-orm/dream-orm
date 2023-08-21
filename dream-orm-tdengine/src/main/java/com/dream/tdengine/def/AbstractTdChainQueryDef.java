@@ -1,11 +1,19 @@
 package com.dream.tdengine.def;
 
+import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.QueryStatement;
+import com.dream.antlr.smt.SymbolStatement;
 import com.dream.flex.def.AbstractQueryDef;
+import com.dream.flex.def.ColumnDef;
+import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.factory.QueryCreatorFactory;
+import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.system.config.Page;
+import com.dream.tdengine.statement.TdQueryStatement;
+import com.dream.tdengine.statement.TdSLimitStatement;
+import com.dream.tdengine.statement.TdWindowStatement;
 
 import java.util.List;
 
@@ -30,5 +38,69 @@ public abstract class AbstractTdChainQueryDef extends AbstractQueryDef implement
     @Override
     public <T> Page<T> page(Class<T> type, Page page) {
         return flexMapper.selectPage(this, type, page);
+    }
+
+
+    protected TdChainLimitDef sLimit(Integer offset, Integer rows) {
+        TdSLimitStatement tdSLimitStatement = new TdSLimitStatement();
+        tdSLimitStatement.setOffset(false);
+        tdSLimitStatement.setFirst(new FlexMarkInvokerStatement(offset));
+        tdSLimitStatement.setSecond(new FlexMarkInvokerStatement(rows));
+        ((TdQueryStatement) statement()).setSlimit(tdSLimitStatement);
+        return (TdChainLimitDef) creatorFactory().newLimitDef(statement());
+    }
+
+    protected TdChainLimitDef sOffset(Integer offset, Integer rows) {
+        TdSLimitStatement tdSLimitStatement = new TdSLimitStatement();
+        tdSLimitStatement.setOffset(true);
+        tdSLimitStatement.setFirst(new FlexMarkInvokerStatement(rows));
+        tdSLimitStatement.setSecond(new FlexMarkInvokerStatement(offset));
+        ((TdQueryStatement) statement()).setSlimit(tdSLimitStatement);
+        return (TdChainLimitDef) creatorFactory().newLimitDef(statement());
+    }
+
+    protected TdChainGroupByDef partitionBy(String... columns) {
+        return new TdChainPartitionDef(statement(), creatorFactory(), flexMapper).partitionBy(columns);
+    }
+
+    protected TdChainGroupByDef partitionBy(ColumnDef... columnDefs) {
+        return new TdChainPartitionDef(statement(), creatorFactory(), flexMapper).partitionBy(columnDefs);
+    }
+
+    protected TdChainOrderByDef session(String tsCol, String tsVol) {
+        return session(FunctionDef.column(tsCol), tsVol);
+    }
+
+    protected TdChainOrderByDef session(ColumnDef columnDef, String tsVol) {
+        TdQueryStatement tdQueryStatement = (TdQueryStatement) statement();
+        TdWindowStatement.TdSessionWindowStatement tdSessionWindowStatement = new TdWindowStatement.TdSessionWindowStatement();
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.add(columnDef.getStatement());
+        listColumnStatement.add(new SymbolStatement.LetterStatement(tsVol));
+        tdSessionWindowStatement.setParamsStatement(listColumnStatement);
+        tdQueryStatement.setWindnow(tdSessionWindowStatement);
+        return (TdChainOrderByDef) creatorFactory().newOrderByDef(statement());
+    }
+
+    protected TdChainOrderByDef state_window(String col) {
+        return state_window(FunctionDef.column(col));
+    }
+
+    protected TdChainOrderByDef state_window(ColumnDef columnDef) {
+        TdQueryStatement tdQueryStatement = (TdQueryStatement) statement();
+        TdWindowStatement.TdStateWindowStatement tdStateWindowStatement = new TdWindowStatement.TdStateWindowStatement();
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.add(columnDef.getStatement());
+        tdStateWindowStatement.setParamsStatement(listColumnStatement);
+        tdQueryStatement.setWindnow(tdStateWindowStatement);
+        return (TdChainOrderByDef) creatorFactory().newOrderByDef(statement());
+    }
+
+    protected TdChainSlidingDef interval(String intervalVal) {
+        return new TdChainIntervalDef(statement(), creatorFactory(), flexMapper).interval(intervalVal);
+    }
+
+    protected TdChainSlidingDef interval(String intervalVal, String intervalOffset) {
+        return new TdChainIntervalDef(statement(), creatorFactory(), flexMapper).interval(intervalVal, intervalOffset);
     }
 }

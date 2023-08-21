@@ -9,4 +9,14 @@ public class TdChainLimitDef extends AbstractTdChainQueryDef implements LimitDef
     public TdChainLimitDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
         super(queryStatement, queryCreatorFactory, flexMapper);
     }
+
+    @Override
+    public TdChainLimitDef sLimit(Integer offset, Integer rows) {
+        return super.sLimit(offset, rows);
+    }
+
+    @Override
+    public TdChainLimitDef sOffset(Integer offset, Integer rows) {
+        return super.sOffset(offset, rows);
+    }
 }

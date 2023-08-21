@@ -10,11 +10,13 @@ public class TdChainOrderByDef extends AbstractTdChainQueryDef implements OrderB
         super(queryStatement, queryCreatorFactory, flexMapper);
     }
 
+    @Override
     public TdChainLimitDef sLimit(Integer offset, Integer rows) {
-        return new TdChainSUnionDef(statement(), creatorFactory(), flexMapper).sLimit(offset, rows);
+        return super.sLimit(offset, rows);
     }
 
+    @Override
     public TdChainLimitDef sOffset(Integer offset, Integer rows) {
-        return new TdChainSUnionDef(statement(), creatorFactory(), flexMapper).sOffset(offset, rows);
+        return super.sOffset(offset, rows);
     }
 }

@@ -1,35 +1,59 @@
 package com.dream.tdengine.def;
 
+import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.QueryStatement;
+import com.dream.antlr.smt.SymbolStatement;
 import com.dream.flex.factory.QueryCreatorFactory;
+import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.mapper.FlexMapper;
+import com.dream.tdengine.statement.TdFillStatement;
+import com.dream.tdengine.statement.TdQueryStatement;
+import com.dream.tdengine.statement.TdWindowStatement;
 
-public class TdChainFillDef extends TdChainSUnionDef {
+public class TdChainFillDef extends TdChainOrderByDef {
     public TdChainFillDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
         super(queryStatement, queryCreatorFactory, flexMapper);
     }
 
-    public void fillNone() {
-
+    public TdChainOrderByDef fillNone() {
+        return fill("NONE");
     }
 
-    public void fillValue(Object value) {
-
+    public TdChainOrderByDef fillValue(Object... values) {
+        return fill("VALUE", values);
     }
 
-    public void fillPrev() {
-
+    public TdChainOrderByDef fillPrev() {
+        return fill("PREV");
     }
 
-    public void fillNull() {
-
+    public TdChainOrderByDef fillNull() {
+        return fill("NULL");
     }
 
-    public void fillLinear() {
-
+    public TdChainOrderByDef fillLinear() {
+        return fill("LINEAR");
     }
 
-    public void fillNext() {
+    public TdChainOrderByDef fillNext() {
+        return fill("NEXT");
+    }
 
+    public TdChainOrderByDef fill(String flag, Object... values) {
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        if (flag != null) {
+            listColumnStatement.add(new SymbolStatement.LetterStatement(flag));
+        }
+        if (values != null && values.length > 0) {
+            for (Object value : values) {
+                listColumnStatement.add(new FlexMarkInvokerStatement(value));
+            }
+        }
+        TdFillStatement tdFillStatement = new TdFillStatement();
+        tdFillStatement.setParamsStatement(listColumnStatement);
+        TdQueryStatement tdQueryStatement = (TdQueryStatement) statement();
+        TdWindowStatement.TdIntervalWindowStatement tdIntervalWindowStatement = (TdWindowStatement.TdIntervalWindowStatement) tdQueryStatement.getWindnow();
+        tdIntervalWindowStatement.setFill(tdFillStatement);
+        return (TdChainOrderByDef) creatorFactory().newOrderByDef(statement());
     }
 }

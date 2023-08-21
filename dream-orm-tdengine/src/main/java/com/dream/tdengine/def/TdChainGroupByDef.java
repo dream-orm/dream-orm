@@ -11,12 +11,12 @@ public class TdChainGroupByDef extends AbstractTdChainQueryDef implements GroupB
         super(queryStatement, queryCreatorFactory, flexMapper);
     }
 
-    public TdChainIntervalDef partitionBy(ColumnDef... columnDefs) {
+    public TdChainGroupByDef partitionBy(ColumnDef... columnDefs) {
         return new TdChainPartitionDef(statement(), creatorFactory(), flexMapper).partitionBy(columnDefs);
     }
 
     public TdChainSlidingDef interval(String intervalVal) {
-        return new TdChainPartitionDef(statement(), creatorFactory(), flexMapper).interval(intervalVal);
+        return super.interval(intervalVal);
     }
 
     public TdChainSlidingDef interval(String intervalVal, String intervalOffset) {

@@ -11,19 +11,33 @@ public class TdChainWhereDef extends AbstractTdChainQueryDef implements WhereDef
         super(queryStatement, queryCreatorFactory, flexMapper);
     }
 
-    public TdChainIntervalDef partitionBy(String... columns) {
-        return new TdChainPartitionDef(statement(), creatorFactory(), flexMapper).partitionBy(columns);
+    @Override
+    public TdChainGroupByDef partitionBy(String... columns) {
+        return super.partitionBy(columns);
     }
 
-    public TdChainIntervalDef partitionBy(ColumnDef... columnDefs) {
-        return new TdChainPartitionDef(statement(), creatorFactory(), flexMapper).partitionBy(columnDefs);
+    @Override
+    public TdChainGroupByDef partitionBy(ColumnDef... columnDefs) {
+        return super.partitionBy(columnDefs);
     }
 
+    @Override
     public TdChainSlidingDef interval(String intervalVal) {
-        return new TdChainPartitionDef(statement(), creatorFactory(), flexMapper).interval(intervalVal);
+        return super.interval(intervalVal);
     }
 
+    @Override
     public TdChainSlidingDef interval(String intervalVal, String intervalOffset) {
-        return new TdChainPartitionDef(statement(), creatorFactory(), flexMapper).interval(intervalVal, intervalOffset);
+        return super.interval(intervalVal, intervalOffset);
+    }
+
+    @Override
+    public TdChainLimitDef sLimit(Integer offset, Integer rows) {
+        return super.sLimit(offset, rows);
+    }
+
+    @Override
+    public TdChainLimitDef sOffset(Integer offset, Integer rows) {
+        return super.sOffset(offset, rows);
     }
 }
