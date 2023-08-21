@@ -2,13 +2,8 @@ package com.dream.helloworld;
 
 import com.dream.boot.bean.ConfigurationBean;
 import com.dream.flex.annotation.FlexAPT;
-import com.dream.flex.mapper.DefaultFlexMapper;
-import com.dream.system.core.session.Session;
 import com.dream.system.inject.Inject;
 import com.dream.system.table.ColumnInfo;
-import com.dream.tdengine.mapper.DefaultFlexTdChainMapper;
-import com.dream.tdengine.mapper.FlexTdChainMapper;
-import com.dream.tdengine.sql.ToTdEngine;
 import com.dream.template.sequence.AbstractSequence;
 import com.dream.template.sequence.Sequence;
 import org.springframework.boot.SpringApplication;
@@ -225,11 +220,5 @@ public class HelloWorldApplication {
                 return String.valueOf(System.currentTimeMillis()).hashCode();
             }
         };
-    }
-
-
-    @Bean
-    public FlexTdChainMapper flexTdChainMapper(Session session) {
-        return new DefaultFlexTdChainMapper(new DefaultFlexMapper(session, new ToTdEngine()));
     }
 }

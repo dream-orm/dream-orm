@@ -1,9 +1,12 @@
 package com.dream.tdengine.mapper;
 
+import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.TableDef;
+import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
+import com.dream.system.core.session.Session;
 import com.dream.tdengine.def.TdChainDeleteTableDef;
 import com.dream.tdengine.def.TdChainFromDef;
 import com.dream.tdengine.def.TdChainInsertIntoTableDef;
@@ -12,12 +15,17 @@ import com.dream.tdengine.factory.TdChainDeleteCreatorFactory;
 import com.dream.tdengine.factory.TdChainInsertCreatorFactory;
 import com.dream.tdengine.factory.TdChainQueryCreatorFactory;
 import com.dream.tdengine.factory.TdChainUpdateCreatorFactory;
+import com.dream.tdengine.sql.ToTdEngine;
 
 public class DefaultFlexTdChainMapper implements FlexTdChainMapper {
     private FlexMapper flexMapper;
 
-    public DefaultFlexTdChainMapper(FlexMapper flexMapper) {
-        this.flexMapper = flexMapper;
+    public DefaultFlexTdChainMapper(Session session) {
+        this(session, new ToTdEngine());
+    }
+
+    public DefaultFlexTdChainMapper(Session session, ToSQL toSQL) {
+        this.flexMapper = new DefaultFlexMapper(session, toSQL);
     }
 
     @Override

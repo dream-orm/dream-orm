@@ -83,6 +83,8 @@ public class ReflectUtil {
             case "java.lang.String":
             case "java.lang.Boolean":
             case "java.lang.Object":
+            case "java.util.Date":
+            case "java.sql.Date":
                 return true;
             default:
                 return false;

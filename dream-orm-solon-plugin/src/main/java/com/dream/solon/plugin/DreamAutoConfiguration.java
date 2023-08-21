@@ -28,7 +28,7 @@ import com.dream.system.config.MappedStatement;
 import com.dream.system.core.listener.Listener;
 import com.dream.system.core.listener.factory.DefaultListenerFactory;
 import com.dream.system.core.listener.factory.ListenerFactory;
-import com.dream.system.core.resultsethandler.DefaultResultSetHandler;
+import com.dream.system.core.resultsethandler.ExtractorResultSetHandler;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.session.SessionFactory;
 import com.dream.system.core.statementhandler.PrepareStatementHandler;
@@ -92,7 +92,7 @@ public class DreamAutoConfiguration {
     @Bean
     @Condition(onMissingBean = ResultSetHandler.class)
     public ResultSetHandler resultSetHandler() {
-        return new DefaultResultSetHandler();
+        return new ExtractorResultSetHandler();
     }
 
     /**

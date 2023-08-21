@@ -10,7 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dream-orm-hello-world</artifactId>
+    <artifactId>dream-orm-hello-world-tde</artifactId>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -23,13 +23,18 @@
             <version>${dream-orm.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.dream-orm</groupId>
+            <artifactId>dream-orm-tdengine</artifactId>
+            <version>${dream-orm.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.200</version>
+            <groupId>com.taosdata.jdbc</groupId>
+            <artifactId>taos-jdbcdriver</artifactId>
+            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

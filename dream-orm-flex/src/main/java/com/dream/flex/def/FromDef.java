@@ -17,6 +17,6 @@ public interface FromDef<
         fromStatement.setMainTable(tableDef.getStatement());
         fromStatement.setJoinList(tableDef.getJoinList());
         statement().setFromStatement(fromStatement);
-        return (Where) creatorFactory().newFromDef(statement());
+        return (Where) creatorFactory().newWhereDef(statement());
     }
 }

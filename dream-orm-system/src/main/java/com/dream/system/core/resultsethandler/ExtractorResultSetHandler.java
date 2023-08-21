@@ -31,13 +31,13 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.*;
 
-public class DefaultResultSetHandler implements ResultSetHandler {
+public class ExtractorResultSetHandler implements ResultSetHandler {
     private ExtractorFactory extractorFactory;
 
-    public DefaultResultSetHandler() {
+    public ExtractorResultSetHandler() {
     }
 
-    public DefaultResultSetHandler(ExtractorFactory extractorFactory) {
+    public ExtractorResultSetHandler(ExtractorFactory extractorFactory) {
         this.extractorFactory = extractorFactory;
     }
 
@@ -139,7 +139,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     protected MappedResult getMappedResult(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException {
         MappedResult mappedResult = mappedStatement.get(MappedResult.class);
         if (mappedResult == null) {
-            synchronized (DefaultResultSetHandler.class) {
+            synchronized (ExtractorResultSetHandler.class) {
                 mappedResult = mappedStatement.get(MappedResult.class);
                 if (mappedResult == null) {
                     mappedResult = createMappedResult(resultSet, mappedStatement);
