@@ -12,6 +12,6 @@ public class TdChainFromDef extends AbstractTdChainQueryDef implements FromDef<T
     }
 
     public TdChainWhereDef from(String table) {
-        return from(FunctionDef.table(table));
+        return from(FunctionDef.tab(table));
     }
 }

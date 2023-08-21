@@ -3,3 +3,6 @@ spring:
     driver-class-name: com.taosdata.jdbc.TSDBDriver
     url: jdbc:TAOS://192.168.0.232:6030/test?user=root&password=taosdata
 
+dream:
+  listeners:
+    - com.dream.drive.listener.DebugListener

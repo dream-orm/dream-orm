@@ -13,7 +13,7 @@ public abstract class TdWindowStatement extends MyFunctionStatement {
 
         @Override
         public String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws AntlrException {
-            return null;
+            return " SESSION(" + toSQL.toStr(paramsStatement, assist, invokerList) + ")";
         }
     }
 
@@ -21,7 +21,7 @@ public abstract class TdWindowStatement extends MyFunctionStatement {
 
         @Override
         public String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws AntlrException {
-            return null;
+            return " STATE_WINDOW(" + toSQL.toStr(paramsStatement, assist, invokerList) + ")";
         }
     }
 
@@ -56,7 +56,7 @@ public abstract class TdWindowStatement extends MyFunctionStatement {
 
         @Override
         public String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws AntlrException {
-            return null;
+            return toSQL.toStr(interval,assist,invokerList)+toSQL.toStr(sliding,assist,invokerList)+toSQL.toStr(fill,assist,invokerList);
         }
     }
 }

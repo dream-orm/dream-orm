@@ -32,6 +32,26 @@ public class TdChainWhereDef extends AbstractTdChainQueryDef implements WhereDef
     }
 
     @Override
+    public TdChainOrderByDef state_window(String col) {
+        return super.state_window(col);
+    }
+
+    @Override
+    public TdChainOrderByDef state_window(ColumnDef columnDef) {
+        return super.state_window(columnDef);
+    }
+
+    @Override
+    public TdChainOrderByDef session(String tsCol, String tsVol) {
+        return super.session(tsCol, tsVol);
+    }
+
+    @Override
+    public TdChainOrderByDef session(ColumnDef columnDef, String tsVol) {
+        return super.session(columnDef, tsVol);
+    }
+
+    @Override
     public TdChainLimitDef sLimit(Integer offset, Integer rows) {
         return super.sLimit(offset, rows);
     }
