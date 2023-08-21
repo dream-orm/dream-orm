@@ -4,7 +4,7 @@ import com.dream.antlr.smt.Statement;
 import com.dream.flex.config.SqlInfo;
 import com.dream.flex.def.CaseColumnDef;
 import com.dream.flex.def.ColumnDef;
-import com.dream.flex.def.Query;
+import com.dream.flex.def.QueryDef;
 import com.dream.helloworld.debug.FlexDebug;
 import com.dream.helloworld.table.table.AccountTableDef;
 import org.junit.Test;
@@ -19,7 +19,7 @@ import static com.dream.helloworld.table.table.AccountTableDef.account;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
-public class HelloWorldFlexQueryTest {
+public class HelloWorldFlexQueryTestDef {
     FlexDebug flexDebug = new FlexDebug();
 
     /**
@@ -27,8 +27,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testSelect() {
-        Query query = select(account.id, account.name);
-        SqlInfo sqlInfo = flexDebug.toSQL(query);
+        QueryDef queryDef = select(account.id, account.name);
+        SqlInfo sqlInfo = flexDebug.toSQL(queryDef);
         System.out.println(sqlInfo.getSql());
     }
 
@@ -37,8 +37,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testSelectArray() {
-        Query query = select(account.accountView);
-        SqlInfo sqlInfo = flexDebug.toSQL(query);
+        QueryDef queryDef = select(account.accountView);
+        SqlInfo sqlInfo = flexDebug.toSQL(queryDef);
         System.out.println(sqlInfo.getSql());
     }
 
@@ -80,8 +80,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testFrom() {
-        Query query = select(account.id).from(account);
-        Statement statement = query.statement();
+        QueryDef queryDef = select(account.id).from(account);
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -92,8 +92,8 @@ public class HelloWorldFlexQueryTest {
     @Test
     public void testFromJoin() {
         AccountTableDef account2 = new AccountTableDef("account2");
-        Query query = select(account.id).from(account).leftJoin(account2).on(account2.id.eq(account.id));
-        Statement statement = query.statement();
+        QueryDef queryDef = select(account.id).from(account.leftJoin(account2, account2.id, account2.id));
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -103,8 +103,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testWhere() {
-        Query query = select(account.id).from(account).where(account.name.like("a"));
-        Statement statement = query.statement();
+        QueryDef queryDef = select(account.id).from(account).where(account.name.like("a"));
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -114,8 +114,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testWhereDynamic1() {
-        Query query = select(account.id).from(account).where(account.name.like("a", Objects::isNull));
-        Statement statement = query.statement();
+        QueryDef queryDef = select(account.id).from(account).where(account.name.like("a", Objects::isNull));
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -125,8 +125,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testWhereDynamic2() {
-        Query query = select(account.id).from(account).where(account.name.like("a").when(false));
-        Statement statement = query.statement();
+        QueryDef queryDef = select(account.id).from(account).where(account.name.like("a").when(false));
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -136,8 +136,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testGroup() {
-        Query query = select(count(account.id)).from(account).groupBy(account.age);
-        Statement statement = query.statement();
+        QueryDef queryDef = select(count(account.id)).from(account).groupBy(account.age);
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -147,8 +147,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testHaving() {
-        Query query = select(count(account.id)).from(account).groupBy(account.age).having(account.name.likeLeft("a"));
-        Statement statement = query.statement();
+        QueryDef queryDef = select(count(account.id)).from(account).groupBy(account.age).having(account.name.likeLeft("a"));
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -158,8 +158,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testOrderBy() {
-        Query query = select(count(account.id)).from(account).orderBy(account.age.desc(), account.name.asc());
-        Statement statement = query.statement();
+        QueryDef queryDef = select(count(account.id)).from(account).orderBy(account.age.desc(), account.name.asc());
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -169,8 +169,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testLimit() {
-        Query query = select(count(account.id)).from(account).limit(5, 10);
-        Statement statement = query.statement();
+        QueryDef queryDef = select(count(account.id)).from(account).limit(5, 10);
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -181,8 +181,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testOffset() {
-        Query query = select(count(account.id)).from(account).offset(10, 5);
-        Statement statement = query.statement();
+        QueryDef queryDef = select(count(account.id)).from(account).offset(10, 5);
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -192,8 +192,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testUnion() {
-        Query query = select(count(account.id)).from(account).union(select(count(account.id)).from(account));
-        Statement statement = query.statement();
+        QueryDef queryDef = select(count(account.id)).from(account).union(select(count(account.id)).from(account));
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -203,8 +203,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testUnionAll() {
-        Query query = select(count(account.id)).from(account).unionAll(select(count(account.id)).from(account));
-        Statement statement = query.statement();
+        QueryDef queryDef = select(count(account.id)).from(account).unionAll(select(count(account.id)).from(account));
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -214,8 +214,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testforUpdate() {
-        Query query = select(count(account.id)).from(account).forUpdate();
-        Statement statement = query.statement();
+        QueryDef queryDef = select(count(account.id)).from(account).forUpdate();
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
@@ -225,8 +225,8 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void forUpdateNoWait() {
-        Query query = select(count(account.id)).from(account).forUpdateNoWait();
-        Statement statement = query.statement();
+        QueryDef queryDef = select(count(account.id)).from(account).forUpdateNoWait();
+        Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }

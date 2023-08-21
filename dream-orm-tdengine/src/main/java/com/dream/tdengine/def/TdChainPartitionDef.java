@@ -9,8 +9,8 @@ import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.statement.TdPartitionStatement;
 import com.dream.tdengine.statement.TdQueryStatement;
 
-public class TdChainPartitionByDef extends TdChainIntervalDef {
-    public TdChainPartitionByDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
+public class TdChainPartitionDef extends TdChainIntervalDef {
+    public TdChainPartitionDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
         super(queryStatement, queryCreatorFactory, flexMapper);
     }
 
@@ -23,14 +23,14 @@ public class TdChainPartitionByDef extends TdChainIntervalDef {
     }
 
     public TdChainIntervalDef partitionBy(ColumnDef... columnDefs) {
-        TdQueryStatement tdQueryStatement = (TdQueryStatement)statement();
-        ListColumnStatement listColumnStatement=new ListColumnStatement();
-        for(ColumnDef columnDef:columnDefs){
+        TdQueryStatement tdQueryStatement = (TdQueryStatement) statement();
+        ListColumnStatement listColumnStatement = new ListColumnStatement();
+        for (ColumnDef columnDef : columnDefs) {
             listColumnStatement.add(columnDef.getStatement());
         }
         TdPartitionStatement tdPartitionStatement = new TdPartitionStatement();
         tdPartitionStatement.setParamsStatement(listColumnStatement);
         tdQueryStatement.setPartitionBy(tdPartitionStatement);
-        return new TdChainIntervalDef(statement(),creatorFactory(),flexMapper);
+        return new TdChainIntervalDef(statement(), creatorFactory(), flexMapper);
     }
 }

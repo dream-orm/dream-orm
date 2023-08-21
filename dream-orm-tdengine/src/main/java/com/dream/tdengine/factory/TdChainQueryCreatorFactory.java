@@ -5,7 +5,7 @@ import com.dream.flex.factory.QueryCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.def.*;
 
-public class TdChainQueryCreatorFactory implements QueryCreatorFactory<TdChainQueryDef, TdChainSelectDef, TdChainFromDef, TdChainWhereDef, TdChainGroupByDef, TdChainHavingDef, TdChainOrderByDef, TdChainLimitDef, TdChainUnionDef, TdChainForUpdateDef> {
+public class TdChainQueryCreatorFactory implements QueryCreatorFactory<TdChainSelectDef, TdChainFromDef, TdChainWhereDef, TdChainGroupByDef, TdChainHavingDef, TdChainOrderByDef, TdChainLimitDef, TdChainUnionDef, TdChainForUpdateDef, TdChainQueryDef> {
     private FlexMapper flexMapper;
 
     public TdChainQueryCreatorFactory(FlexMapper flexMapper) {
@@ -13,13 +13,8 @@ public class TdChainQueryCreatorFactory implements QueryCreatorFactory<TdChainQu
     }
 
     @Override
-    public TdChainQueryDef newQueryDef() {
-        return new TdChainQueryDef(this, flexMapper);
-    }
-
-    @Override
-    public TdChainSelectDef newSelectDef(QueryStatement statement) {
-        return new TdChainSelectDef(statement, this, flexMapper);
+    public TdChainSelectDef newSelectDef() {
+        return new TdChainSelectDef(this, flexMapper);
     }
 
     @Override
@@ -60,5 +55,10 @@ public class TdChainQueryCreatorFactory implements QueryCreatorFactory<TdChainQu
     @Override
     public TdChainForUpdateDef newForUpdateDef(QueryStatement statement) {
         return new TdChainForUpdateDef(statement, this, flexMapper);
+    }
+
+    @Override
+    public TdChainQueryDef newQueryDef(QueryStatement statement) {
+        return new TdChainQueryDef(statement, this, flexMapper);
     }
 }

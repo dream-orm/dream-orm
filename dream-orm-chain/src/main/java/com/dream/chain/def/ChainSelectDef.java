@@ -5,8 +5,8 @@ import com.dream.flex.def.SelectDef;
 import com.dream.flex.factory.QueryCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public class ChainSelectDef extends AbstractChainQuery implements SelectDef<ChainFromDef, ChainWhereDef, ChainGroupByDef, ChainHavingDef, ChainOrderByDef, ChainLimitDef, ChainUnionDef, ChainForUpdateDef> {
-    public ChainSelectDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
-        super(queryStatement, queryCreatorFactory, flexMapper);
+public class ChainSelectDef extends AbstractChainQueryDef implements SelectDef<ChainFromDef, ChainWhereDef, ChainGroupByDef, ChainHavingDef, ChainOrderByDef, ChainLimitDef, ChainUnionDef, ChainForUpdateDef, ChainQueryDef> {
+    public ChainSelectDef(QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
+        super(new QueryStatement(), queryCreatorFactory, flexMapper);
     }
 }

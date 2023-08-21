@@ -10,11 +10,13 @@ import java.util.List;
 
 public class TdMyFunctionStatement extends MyFunctionStatement {
     private String functionName;
-    public TdMyFunctionStatement(String functionName){
-        this.functionName=functionName;
+
+    public TdMyFunctionStatement(String functionName) {
+        this.functionName = functionName;
     }
+
     @Override
     public String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return functionName+"("+toSQL.toStr(paramsStatement,assist,invokerList)+")";
+        return functionName + "(" + toSQL.toStr(paramsStatement, assist, invokerList) + ")";
     }
 }

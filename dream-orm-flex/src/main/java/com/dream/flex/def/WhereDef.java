@@ -1,18 +1,25 @@
 package com.dream.flex.def;
 
-import com.dream.antlr.smt.GroupStatement;
-import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.antlr.smt.ConditionStatement;
+import com.dream.antlr.smt.WhereStatement;
 
-public interface WhereDef<GroupBy extends GroupByDef, Having extends HavingDef, OrderBy extends OrderByDef, Limit extends LimitDef, Union extends UnionDef, ForUpdate extends ForUpdateDef> extends GroupByDef<Having, OrderBy, Limit, Union, ForUpdate> {
+public interface WhereDef<
+        Group extends GroupByDef<Having, OrderBy, Limit, Union, ForUpdate, Query>,
+        Having extends HavingDef<OrderBy, Limit, Union, ForUpdate, Query>,
+        OrderBy extends OrderByDef<Limit, Union, ForUpdate, Query>,
+        Limit extends LimitDef<Union, ForUpdate, Query>,
+        Union extends UnionDef<ForUpdate, Query>,
+        ForUpdate extends ForUpdateDef<Query>,
+        Query extends QueryDef>
+        extends GroupByDef<Having, OrderBy, Limit, Union, ForUpdate, Query> {
 
-    default GroupBy groupBy(ColumnDef... columnDefs) {
-        GroupStatement groupStatement = new GroupStatement();
-        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        for (ColumnDef columnDef : columnDefs) {
-            listColumnStatement.add(columnDef.getStatement());
+    default Group where(ConditionDef conditionDef) {
+        ConditionStatement conditionStatement = conditionDef.getStatement();
+        if (conditionStatement != null) {
+            WhereStatement whereStatement = new WhereStatement();
+            whereStatement.setCondition(conditionDef.getStatement());
+            statement().setWhereStatement(whereStatement);
         }
-        groupStatement.setGroup(listColumnStatement);
-        statement().setGroupStatement(groupStatement);
-        return (GroupBy) creatorFactory().newGroupByDef(statement());
+        return (Group) creatorFactory().newGroupByDef(statement());
     }
 }

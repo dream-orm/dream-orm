@@ -2,7 +2,7 @@ package com.dream.flex.mapper;
 
 import com.dream.flex.def.Delete;
 import com.dream.flex.def.Insert;
-import com.dream.flex.def.Query;
+import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.Update;
 import com.dream.system.config.Page;
 import com.dream.system.inject.Inject;
@@ -23,33 +23,33 @@ public interface FlexMapper {
     /**
      * 查询并返回一条
      *
-     * @param query 查询定义器
-     * @param type  返回类型
+     * @param queryDef 查询定义器
+     * @param type     返回类型
      * @param <T>
      * @return 单条数据
      */
-    <T> T selectOne(Query query, Class<T> type);
+    <T> T selectOne(QueryDef queryDef, Class<T> type);
 
     /**
      * 查询并返回集合
      *
-     * @param query 查询定义器
-     * @param type  返回类型
+     * @param queryDef 查询定义器
+     * @param type     返回类型
      * @param <T>
      * @return 集合数据
      */
-    <T> List<T> selectList(Query query, Class<T> type);
+    <T> List<T> selectList(QueryDef queryDef, Class<T> type);
 
     /**
      * 查询并返回分页
      *
-     * @param query 查询定义器
-     * @param type  返回类型
-     * @param page  分页
+     * @param queryDef 查询定义器
+     * @param type     返回类型
+     * @param page     分页
      * @param <T>
      * @return 分页数据
      */
-    <T> Page<T> selectPage(Query query, Class<T> type, Page page);
+    <T> Page<T> selectPage(QueryDef queryDef, Class<T> type, Page page);
 
     /**
      * 更新操作

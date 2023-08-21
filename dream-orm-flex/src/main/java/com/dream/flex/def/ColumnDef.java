@@ -127,8 +127,8 @@ public class ColumnDef {
         return in(values).when(fn.test(values));
     }
 
-    public ConditionDef in(Query query) {
-        BraceStatement braceStatement = new BraceStatement(query.statement());
+    public ConditionDef in(QueryDef queryDef) {
+        BraceStatement braceStatement = new BraceStatement(queryDef.statement());
         return conditionDef(new OperStatement.INStatement(), braceStatement);
     }
 
@@ -148,8 +148,8 @@ public class ColumnDef {
         return not(in(values)).when(fn.test(values));
     }
 
-    public ConditionDef notIn(Query query) {
-        return not(in(query));
+    public ConditionDef notIn(QueryDef queryDef) {
+        return not(in(queryDef));
     }
 
     public ConditionDef like(Object value) {

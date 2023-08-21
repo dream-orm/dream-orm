@@ -9,6 +9,7 @@ public class TdQueryStatement extends QueryStatement {
     private TdIntervalStatement interval;
 
     private TdSLimitStatement slimit;
+
     @Override
     public int getNameId() {
         return QueryStatement.class.getSimpleName().hashCode();

@@ -3,11 +3,11 @@ package com.dream.flex.def;
 import com.dream.antlr.smt.QueryStatement;
 import com.dream.flex.factory.QueryCreatorFactory;
 
-public abstract class AbstractQuery implements Query {
+public abstract class AbstractQueryDef implements QueryDef {
     private QueryStatement statement;
     private QueryCreatorFactory creatorFactory;
 
-    public AbstractQuery(QueryStatement statement, QueryCreatorFactory creatorFactory) {
+    public AbstractQueryDef(QueryStatement statement, QueryCreatorFactory creatorFactory) {
         this.statement = statement;
         this.creatorFactory = creatorFactory;
     }

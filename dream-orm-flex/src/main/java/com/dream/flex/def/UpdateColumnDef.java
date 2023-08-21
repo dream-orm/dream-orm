@@ -25,8 +25,8 @@ public interface UpdateColumnDef<UpdateColumn extends UpdateColumnDef, UpdateWhe
         return (UpdateColumn) this;
     }
 
-    default UpdateColumn set(ColumnDef columnDef, Query query) {
-        BraceStatement braceStatement = new BraceStatement(query.statement());
+    default UpdateColumn set(ColumnDef columnDef, QueryDef queryDef) {
+        BraceStatement braceStatement = new BraceStatement(queryDef.statement());
         set(columnDef, new ColumnDef(braceStatement));
         return (UpdateColumn) this;
     }

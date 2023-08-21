@@ -7,26 +7,26 @@ import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.statement.TdQueryStatement;
 import com.dream.tdengine.statement.TdSLimitStatement;
 
-public class TdChainSLimitDef extends TdChainOrderByDef {
-    public TdChainSLimitDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
+public class TdChainSUnionDef extends TdChainLimitDef {
+    public TdChainSUnionDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
         super(queryStatement, queryCreatorFactory, flexMapper);
     }
 
-    public TdChainOrderByDef sLimit(Integer offset, Integer rows) {
+    public TdChainLimitDef sLimit(Integer offset, Integer rows) {
         TdSLimitStatement tdSLimitStatement = new TdSLimitStatement();
         tdSLimitStatement.setOffset(false);
         tdSLimitStatement.setFirst(new FlexMarkInvokerStatement(offset));
         tdSLimitStatement.setSecond(new FlexMarkInvokerStatement(rows));
         ((TdQueryStatement) statement()).setSlimit(tdSLimitStatement);
-        return (TdChainOrderByDef) creatorFactory().newOrderByDef(statement());
+        return (TdChainLimitDef) creatorFactory().newOrderByDef(statement());
     }
 
-    public TdChainOrderByDef sOffset(Integer offset, Integer rows) {
+    public TdChainLimitDef sOffset(Integer offset, Integer rows) {
         TdSLimitStatement tdSLimitStatement = new TdSLimitStatement();
         tdSLimitStatement.setOffset(true);
         tdSLimitStatement.setFirst(new FlexMarkInvokerStatement(rows));
         tdSLimitStatement.setSecond(new FlexMarkInvokerStatement(offset));
         ((TdQueryStatement) statement()).setSlimit(tdSLimitStatement);
-        return (TdChainOrderByDef) creatorFactory().newOrderByDef(statement());
+        return (TdChainLimitDef) creatorFactory().newOrderByDef(statement());
     }
 }

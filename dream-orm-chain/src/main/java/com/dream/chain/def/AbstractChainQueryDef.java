@@ -1,18 +1,18 @@
-package com.dream.tdengine.def;
+package com.dream.chain.def;
 
 import com.dream.antlr.smt.QueryStatement;
-import com.dream.flex.def.AbstractQuery;
-import com.dream.flex.def.Query;
+import com.dream.flex.def.AbstractQueryDef;
+import com.dream.flex.def.QueryDef;
 import com.dream.flex.factory.QueryCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.system.config.Page;
 
 import java.util.List;
 
-public abstract class AbstractTdChainQuery extends AbstractQuery implements Query, TdChainQuery {
+public abstract class AbstractChainQueryDef extends AbstractQueryDef implements QueryDef, ChainQuery {
     protected FlexMapper flexMapper;
 
-    public AbstractTdChainQuery(QueryStatement statement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
+    public AbstractChainQueryDef(QueryStatement statement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
         super(statement, queryCreatorFactory);
         this.flexMapper = flexMapper;
     }

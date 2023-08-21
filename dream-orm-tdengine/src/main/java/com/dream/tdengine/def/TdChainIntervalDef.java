@@ -20,19 +20,19 @@ public class TdChainIntervalDef extends TdChainSlidingDef {
     }
 
     public TdChainSlidingDef interval(String intervalVal, String intervalOffset) {
-        TdQueryStatement tdQueryStatement = (TdQueryStatement)statement();
-        ListColumnStatement listColumnStatement=new ListColumnStatement(",");
+        TdQueryStatement tdQueryStatement = (TdQueryStatement) statement();
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.add(new SymbolStatement.LetterStatement(intervalVal));
-        if(intervalOffset!=null){
+        if (intervalOffset != null) {
             listColumnStatement.add(new SymbolStatement.LetterStatement(intervalOffset));
         }
-        TdIntervalStatement tdIntervalStatement=new TdIntervalStatement();
+        TdIntervalStatement tdIntervalStatement = new TdIntervalStatement();
         tdIntervalStatement.setParamsStatement(listColumnStatement);
         tdQueryStatement.setInterval(tdIntervalStatement);
-        return new TdChainSlidingDef(statement(),creatorFactory(),flexMapper);
+        return new TdChainSlidingDef(statement(), creatorFactory(), flexMapper);
     }
 
-    public TdChainGroupByDef groupBy(ColumnDef... columnDefs) {
+    public TdChainHavingDef groupBy(ColumnDef... columnDefs) {
         GroupStatement groupStatement = new GroupStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         for (ColumnDef columnDef : columnDefs) {
@@ -40,6 +40,6 @@ public class TdChainIntervalDef extends TdChainSlidingDef {
         }
         groupStatement.setGroup(listColumnStatement);
         statement().setGroupStatement(groupStatement);
-        return (TdChainGroupByDef) creatorFactory().newGroupByDef(statement());
+        return (TdChainHavingDef) creatorFactory().newGroupByDef(statement());
     }
 }

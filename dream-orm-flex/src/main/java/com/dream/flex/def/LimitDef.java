@@ -1,22 +1,29 @@
 package com.dream.flex.def;
 
-import com.dream.antlr.smt.UnionStatement;
+import com.dream.antlr.smt.LimitStatement;
+import com.dream.flex.invoker.FlexMarkInvokerStatement;
 
-public interface LimitDef<Union extends UnionDef, ForUpdate extends ForUpdateDef> extends UnionDef<ForUpdate> {
+public interface LimitDef<
+        Union extends UnionDef<ForUpdate, Query>,
+        ForUpdate extends ForUpdateDef<Query>,
+        Query extends QueryDef>
+        extends UnionDef<ForUpdate, Query> {
 
-    default Union union(Query query) {
-        UnionStatement unionStatement = new UnionStatement();
-        unionStatement.setAll(false);
-        unionStatement.setStatement(query.statement());
-        statement().setUnionStatement(unionStatement);
+    default Union limit(Integer offset, Integer rows) {
+        LimitStatement limitStatement = new LimitStatement();
+        limitStatement.setOffset(false);
+        limitStatement.setFirst(new FlexMarkInvokerStatement(offset));
+        limitStatement.setSecond(new FlexMarkInvokerStatement(rows));
+        statement().setLimitStatement(limitStatement);
         return (Union) creatorFactory().newUnionDef(statement());
     }
 
-    default Union unionAll(Query query) {
-        UnionStatement unionStatement = new UnionStatement();
-        unionStatement.setAll(true);
-        unionStatement.setStatement(query.statement());
-        statement().setUnionStatement(unionStatement);
+    default Union offset(Integer offset, Integer rows) {
+        LimitStatement limitStatement = new LimitStatement();
+        limitStatement.setOffset(true);
+        limitStatement.setFirst(new FlexMarkInvokerStatement(rows));
+        limitStatement.setSecond(new FlexMarkInvokerStatement(offset));
+        statement().setLimitStatement(limitStatement);
         return (Union) creatorFactory().newUnionDef(statement());
     }
 }

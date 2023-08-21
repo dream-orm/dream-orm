@@ -1,18 +1,23 @@
 package com.dream.flex.def;
 
-import com.dream.antlr.smt.ListColumnStatement;
-import com.dream.antlr.smt.OrderStatement;
+import com.dream.antlr.smt.ConditionStatement;
+import com.dream.antlr.smt.HavingStatement;
 
-public interface HavingDef<OrderBy extends OrderByDef, Limit extends LimitDef, Union extends UnionDef, ForUpdate extends ForUpdateDef> extends OrderByDef<Limit, Union, ForUpdate> {
+public interface HavingDef<
+        OrderBy extends OrderByDef<Limit, Union, ForUpdate, Query>,
+        Limit extends LimitDef<Union, ForUpdate, Query>,
+        Union extends UnionDef<ForUpdate, Query>,
+        ForUpdate extends ForUpdateDef<Query>,
+        Query extends QueryDef>
+        extends OrderByDef<Limit, Union, ForUpdate, Query> {
 
-    default OrderBy orderBy(SortDef... sortDefs) {
-        ListColumnStatement columnStatement = new ListColumnStatement(",");
-        for (SortDef sortDef : sortDefs) {
-            columnStatement.add(sortDef.getStatement());
+    default OrderBy having(ConditionDef conditionDef) {
+        ConditionStatement conditionStatement = conditionDef.getStatement();
+        if (conditionStatement != null) {
+            HavingStatement havingStatement = new HavingStatement();
+            havingStatement.setCondition(conditionDef.getStatement());
+            statement().setHavingStatement(havingStatement);
         }
-        OrderStatement orderStatement = new OrderStatement();
-        orderStatement.setOrder(columnStatement);
-        statement().setOrderStatement(orderStatement);
         return (OrderBy) creatorFactory().newOrderByDef(statement());
     }
 }

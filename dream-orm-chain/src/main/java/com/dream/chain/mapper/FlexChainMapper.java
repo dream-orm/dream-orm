@@ -1,8 +1,8 @@
 package com.dream.chain.mapper;
 
 import com.dream.chain.def.ChainDeleteTableDef;
+import com.dream.chain.def.ChainFromDef;
 import com.dream.chain.def.ChainInsertIntoTableDef;
-import com.dream.chain.def.ChainSelectDef;
 import com.dream.chain.def.ChainUpdateColumnDef;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.TableDef;
@@ -17,15 +17,16 @@ public interface FlexChainMapper {
      * @param columnDefs 查询字段集
      * @return 查询链式
      */
-    ChainSelectDef select(ColumnDef... columnDefs);
+    ChainFromDef select(ColumnDef... columnDefs);
 
     /**
      * 查询链式操作
-     * @param distinct 是否去重
+     *
+     * @param distinct   是否去重
      * @param columnDefs columnDefs 查询字段集
      * @return
      */
-    ChainSelectDef select(boolean distinct,ColumnDef... columnDefs);
+    ChainFromDef select(boolean distinct, ColumnDef... columnDefs);
 
     /**
      * 更新链式操作

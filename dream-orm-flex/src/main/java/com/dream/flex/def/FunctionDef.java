@@ -681,8 +681,8 @@ public class FunctionDef {
         return new CaseColumnDef.Builder(columnDef);
     }
 
-    public static SelectDef select(ColumnDef... columnDefs) {
-        return new DefaultQueryCreatorFactory().newQueryDef().select(columnDefs);
+    public static FromDef select(ColumnDef... columnDefs) {
+        return new DefaultQueryCreatorFactory().newSelectDef().select(columnDefs);
     }
 
     public static UpdateColumnDef update(TableDef tableDef) {
@@ -733,8 +733,8 @@ public class FunctionDef {
         return new AliasTableDef(aliasStatement);
     }
 
-    public static AliasTableDef table(Query query) {
-        BraceStatement braceStatement = new BraceStatement(query.statement());
+    public static AliasTableDef table(QueryDef queryDef) {
+        BraceStatement braceStatement = new BraceStatement(queryDef.statement());
         AliasStatement aliasStatement = new AliasStatement();
         aliasStatement.setColumn(braceStatement);
         return new AliasTableDef(aliasStatement);
@@ -753,15 +753,15 @@ public class FunctionDef {
         return new ColumnDef(functionStatement);
     }
 
-    public static ConditionDef exists(Query query) {
+    public static ConditionDef exists(QueryDef queryDef) {
         ConditionStatement conditionStatement = new ConditionStatement();
         conditionStatement.setOper(new OperStatement.EXISTSStatement());
-        conditionStatement.setRight(new BraceStatement(query.statement()));
+        conditionStatement.setRight(new BraceStatement(queryDef.statement()));
         return new ConditionDef(conditionStatement);
     }
 
-    public static ConditionDef notExists(Query query) {
-        return not(exists(query));
+    public static ConditionDef notExists(QueryDef queryDef) {
+        return not(exists(queryDef));
     }
 
     protected static ConditionDef not(ConditionDef conditionDef) {

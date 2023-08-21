@@ -1,42 +1,22 @@
 package com.dream.flex.def;
 
-import com.dream.antlr.smt.*;
+import com.dream.antlr.smt.FromStatement;
 
-public interface FromDef<From extends FromDef, Where extends WhereDef, GroupBy extends GroupByDef, Having extends HavingDef, OrderBy extends OrderByDef, Limit extends LimitDef, Union extends UnionDef, ForUpdate extends ForUpdateDef> extends WhereDef<GroupBy, Having, OrderBy, Limit, Union, ForUpdate> {
-
-
-    default JoinDef leftJoin(TableDef tableDef) {
-        return new JoinDef(this, statement(), new JoinStatement.LeftJoinStatement(), tableDef.getStatement());
-    }
-
-    default JoinDef rightJoin(TableDef tableDef) {
-        return new JoinDef(this, statement(), new JoinStatement.RightJoinStatement(), tableDef.getStatement());
-    }
-
-    default JoinDef innerJoin(TableDef tableDef) {
-        return new JoinDef(this, statement(), new JoinStatement.InnerJoinStatement(), tableDef.getStatement());
-    }
-
-    default From crossJoin(TableDef tableDef) {
-        JoinStatement.CrossJoinStatement joinStatement = new JoinStatement.CrossJoinStatement();
-        joinStatement.setJoinTable(tableDef.getStatement());
-        FromStatement fromStatement = statement().getFromStatement();
-        Statement joinList = fromStatement.getJoinList();
-        if (joinList == null) {
-            joinList = new ListColumnStatement(" ");
-            fromStatement.setJoinList(joinList);
-        }
-        ((ListColumnStatement) joinList).add(joinStatement);
-        return (From) this;
-    }
-
-    default Where where(ConditionDef conditionDef) {
-        ConditionStatement conditionStatement = conditionDef.getStatement();
-        if (conditionStatement != null) {
-            WhereStatement whereStatement = new WhereStatement();
-            whereStatement.setCondition(conditionDef.getStatement());
-            statement().setWhereStatement(whereStatement);
-        }
-        return (Where) creatorFactory().newWhereDef(statement());
+public interface FromDef<
+        Where extends WhereDef<Group, Having, OrderBy, Limit, Union, ForUpdate, Query>,
+        Group extends GroupByDef<Having, OrderBy, Limit, Union, ForUpdate, Query>,
+        Having extends HavingDef<OrderBy, Limit, Union, ForUpdate, Query>,
+        OrderBy extends OrderByDef<Limit, Union, ForUpdate, Query>,
+        Limit extends LimitDef<Union, ForUpdate, Query>,
+        Union extends UnionDef<ForUpdate, Query>,
+        ForUpdate extends ForUpdateDef<Query>,
+        Query extends QueryDef>
+        extends QueryDef, WhereDef<Group, Having, OrderBy, Limit, Union, ForUpdate, Query> {
+    default Where from(TableDef tableDef) {
+        FromStatement fromStatement = new FromStatement();
+        fromStatement.setMainTable(tableDef.getStatement());
+        fromStatement.setJoinList(tableDef.getJoinList());
+        statement().setFromStatement(fromStatement);
+        return (Where) creatorFactory().newFromDef(statement());
     }
 }

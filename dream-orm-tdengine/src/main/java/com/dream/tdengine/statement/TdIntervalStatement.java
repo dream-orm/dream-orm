@@ -11,6 +11,6 @@ import java.util.List;
 public class TdIntervalStatement extends MyFunctionStatement {
     @Override
     public String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " INTERVAL("+toSQL.toStr(paramsStatement,assist,invokerList)+")";
+        return " INTERVAL(" + toSQL.toStr(paramsStatement, assist, invokerList) + ")";
     }
 }

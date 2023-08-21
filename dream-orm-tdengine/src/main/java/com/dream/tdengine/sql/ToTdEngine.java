@@ -29,9 +29,9 @@ public class ToTdEngine extends ToPubSQL {
             String limit = toStr(statement.getLimitStatement(), assist, invokerList);
             String union = toStr(statement.getUnionStatement(), assist, invokerList);
             String forUpdate = toStr(statement.getForUpdateStatement(), assist, invokerList);
-            return select + from + where +partitionBy+interval+ groupBy + having + orderBy +sLimit+ limit + union + forUpdate;
-        }else{
-            return super.toString(statement,assist,invokerList);
+            return select + from + where + partitionBy + interval + groupBy + having + orderBy + sLimit + limit + union + forUpdate;
+        } else {
+            return super.toString(statement, assist, invokerList);
         }
     }
 

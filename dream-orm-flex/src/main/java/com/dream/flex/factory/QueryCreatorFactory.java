@@ -4,20 +4,18 @@ import com.dream.antlr.smt.QueryStatement;
 import com.dream.flex.def.*;
 
 public interface QueryCreatorFactory
-        <Query extends QueryDef<Select, From, Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate>,
-                Select extends SelectDef<From, Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate>,
-                From extends FromDef<From, Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate>,
-                Where extends WhereDef<GroupBy, Having, OrderBy, Limit, Union, ForUpdate>,
-                GroupBy extends GroupByDef<Having, OrderBy, Limit, Union, ForUpdate>,
-                Having extends HavingDef<OrderBy, Limit, Union, ForUpdate>,
-                OrderBy extends OrderByDef<Limit, Union, ForUpdate>,
-                Limit extends LimitDef<Union, ForUpdate>,
-                Union extends UnionDef<ForUpdate>,
-                ForUpdate extends ForUpdateDef> {
+        <Select extends SelectDef<From, Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
+                From extends FromDef<Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
+                Where extends WhereDef<GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
+                GroupBy extends GroupByDef<Having, OrderBy, Limit, Union, ForUpdate, Query>,
+                Having extends HavingDef<OrderBy, Limit, Union, ForUpdate, Query>,
+                OrderBy extends OrderByDef<Limit, Union, ForUpdate, Query>,
+                Limit extends LimitDef<Union, ForUpdate, Query>,
+                Union extends UnionDef<ForUpdate, Query>,
+                ForUpdate extends ForUpdateDef<Query>,
+                Query extends QueryDef> {
 
-    Query newQueryDef();
-
-    Select newSelectDef(QueryStatement statement);
+    Select newSelectDef();
 
     From newFromDef(QueryStatement statement);
 
@@ -34,4 +32,7 @@ public interface QueryCreatorFactory
     Union newUnionDef(QueryStatement statement);
 
     ForUpdate newForUpdateDef(QueryStatement statement);
+
+    Query newQueryDef(QueryStatement statement);
+
 }

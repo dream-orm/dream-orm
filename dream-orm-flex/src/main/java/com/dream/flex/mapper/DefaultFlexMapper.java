@@ -9,7 +9,7 @@ import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.config.SqlInfo;
 import com.dream.flex.def.Delete;
 import com.dream.flex.def.Insert;
-import com.dream.flex.def.Query;
+import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.Update;
 import com.dream.flex.inject.FlexInject;
 import com.dream.flex.invoker.FlexMarkInvoker;
@@ -58,20 +58,20 @@ public class DefaultFlexMapper implements FlexMapper {
     }
 
     @Override
-    public <T> T selectOne(Query query, Class<T> type) {
-        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, query.statement(), NonCollection.class, type);
+    public <T> T selectOne(QueryDef queryDef, Class<T> type) {
+        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, queryDef.statement(), NonCollection.class, type);
         return (T) session.execute(mappedStatement);
     }
 
     @Override
-    public <T> List<T> selectList(Query query, Class<T> type) {
-        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, query.statement(), List.class, type);
+    public <T> List<T> selectList(QueryDef queryDef, Class<T> type) {
+        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, queryDef.statement(), List.class, type);
         return (List<T>) session.execute(mappedStatement);
     }
 
     @Override
-    public <T> Page<T> selectPage(Query query, Class<T> type, Page page) {
-        QueryStatement statement = query.statement();
+    public <T> Page<T> selectPage(QueryDef queryDef, Class<T> type, Page page) {
+        QueryStatement statement = queryDef.statement();
         QueryStatement queryStatement = pageQueryStatement(statement, page.getStartRow(), page.getPageSize());
         MappedStatement mappedStatement = getMappedStatement(Command.QUERY, queryStatement, Collection.class, type);
         if (page.getTotal() == 0) {

@@ -37,8 +37,8 @@ public interface InsertIntoColumnsDef<T extends InsertIntoValuesDef> extends Ins
         return (T) creatorFactory().newInsertIntoValuesDef(statement());
     }
 
-    default T values(Query query) {
-        statement().setValues(query.statement());
+    default T values(QueryDef queryDef) {
+        statement().setValues(queryDef.statement());
         return (T) creatorFactory().newInsertIntoValuesDef(statement());
     }
 }

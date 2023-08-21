@@ -2,7 +2,7 @@ package com.dream.helloworld;
 
 import com.dream.flex.def.Delete;
 import com.dream.flex.def.Insert;
-import com.dream.flex.def.Query;
+import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.Update;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.helloworld.table.Account;
@@ -31,8 +31,8 @@ public class HelloWorldFlexTest {
      */
     @Test
     public void testSelectById() {
-        Query query = select(account.accountView).from(account).where(account.id.eq(1));
-        AccountView accountView = flexMapper.selectOne(query, AccountView.class);
+        QueryDef queryDef = select(account.accountView).from(account).where(account.id.eq(1));
+        AccountView accountView = flexMapper.selectOne(queryDef, AccountView.class);
         System.out.println("查询结果：" + accountView);
     }
 
@@ -41,8 +41,8 @@ public class HelloWorldFlexTest {
      */
     @Test
     public void testSelectList() {
-        Query query = select(account.accountView).from(account).where(account.id.gt(3));
-        List<AccountView> accountViews = flexMapper.selectList(query, AccountView.class);
+        QueryDef queryDef = select(account.accountView).from(account).where(account.id.gt(3));
+        List<AccountView> accountViews = flexMapper.selectList(queryDef, AccountView.class);
         System.out.println("查询结果：" + accountViews);
     }
 
@@ -51,9 +51,9 @@ public class HelloWorldFlexTest {
      */
     @Test
     public void testSelectPage() {
-        Query query = select(account.accountView).from(account).where(account.id.gt(1));
+        QueryDef queryDef = select(account.accountView).from(account).where(account.id.gt(1));
         Page page = new Page(1, 2);
-        page = flexMapper.selectPage(query, AccountView.class, page);
+        page = flexMapper.selectPage(queryDef, AccountView.class, page);
         System.out.println("总数：" + page.getTotal() + "\n查询结果：" + page.getRows());
     }
 

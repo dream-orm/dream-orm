@@ -11,7 +11,7 @@ import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.config.SqlInfo;
 import com.dream.flex.def.Delete;
 import com.dream.flex.def.Insert;
-import com.dream.flex.def.Query;
+import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.Update;
 import com.dream.flex.invoker.FlexMarkInvoker;
 import com.dream.flex.invoker.FlexTableInvoker;
@@ -31,8 +31,8 @@ public class FlexDebug {
         this.toSQL = toSQL;
     }
 
-    public SqlInfo toSQL(Query query) {
-        return toSQL(query.statement());
+    public SqlInfo toSQL(QueryDef queryDef) {
+        return toSQL(queryDef.statement());
     }
 
     public SqlInfo toSQL(Insert insert) {

@@ -11,6 +11,6 @@ import java.util.List;
 public class TdPartitionStatement extends MyFunctionStatement {
     @Override
     public String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " PARTITION BY("+toSQL.toStr(paramsStatement,assist,invokerList)+")";
+        return " PARTITION BY(" + toSQL.toStr(paramsStatement, assist, invokerList) + ")";
     }
 }

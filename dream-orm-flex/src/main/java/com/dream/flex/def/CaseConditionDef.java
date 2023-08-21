@@ -5,7 +5,6 @@ import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.SymbolStatement;
 
-
 public class CaseConditionDef extends ColumnDef {
     public CaseConditionDef(Statement statement) {
         super(statement);

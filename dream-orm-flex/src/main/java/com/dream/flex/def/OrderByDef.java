@@ -1,25 +1,23 @@
 package com.dream.flex.def;
 
-import com.dream.antlr.smt.LimitStatement;
-import com.dream.flex.invoker.FlexMarkInvokerStatement;
+import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.antlr.smt.OrderStatement;
 
-public interface OrderByDef<Limit extends LimitDef, Union extends UnionDef, ForUpdate extends ForUpdateDef> extends LimitDef<Union, ForUpdate> {
+public interface OrderByDef<
+        Limit extends LimitDef<Union, ForUpdate, Query>,
+        Union extends UnionDef<ForUpdate, Query>,
+        ForUpdate extends ForUpdateDef<Query>,
+        Query extends QueryDef>
+        extends LimitDef<Union, ForUpdate, Query> {
 
-    default Limit limit(Integer offset, Integer rows) {
-        LimitStatement limitStatement = new LimitStatement();
-        limitStatement.setOffset(false);
-        limitStatement.setFirst(new FlexMarkInvokerStatement(offset));
-        limitStatement.setSecond(new FlexMarkInvokerStatement(rows));
-        statement().setLimitStatement(limitStatement);
-        return (Limit) creatorFactory().newLimitDef(statement());
-    }
-
-    default Limit offset(Integer offset, Integer rows) {
-        LimitStatement limitStatement = new LimitStatement();
-        limitStatement.setOffset(true);
-        limitStatement.setFirst(new FlexMarkInvokerStatement(rows));
-        limitStatement.setSecond(new FlexMarkInvokerStatement(offset));
-        statement().setLimitStatement(limitStatement);
+    default Limit orderBy(SortDef... sortDefs) {
+        ListColumnStatement columnStatement = new ListColumnStatement(",");
+        for (SortDef sortDef : sortDefs) {
+            columnStatement.add(sortDef.getStatement());
+        }
+        OrderStatement orderStatement = new OrderStatement();
+        orderStatement.setOrder(columnStatement);
+        statement().setOrderStatement(orderStatement);
         return (Limit) creatorFactory().newLimitDef(statement());
     }
 }

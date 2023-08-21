@@ -5,7 +5,7 @@ import com.dream.chain.def.*;
 import com.dream.flex.factory.QueryCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public class ChainQueryCreatorFactory implements QueryCreatorFactory<ChainQueryDef, ChainSelectDef, ChainFromDef, ChainWhereDef, ChainGroupByDef, ChainHavingDef, ChainOrderByDef, ChainLimitDef, ChainUnionDef, ChainForUpdateDef> {
+public class ChainQueryCreatorFactory implements QueryCreatorFactory<ChainSelectDef, ChainFromDef, ChainWhereDef, ChainGroupByDef, ChainHavingDef, ChainOrderByDef, ChainLimitDef, ChainUnionDef, ChainForUpdateDef, ChainQueryDef> {
     private FlexMapper flexMapper;
 
     public ChainQueryCreatorFactory(FlexMapper flexMapper) {
@@ -13,13 +13,8 @@ public class ChainQueryCreatorFactory implements QueryCreatorFactory<ChainQueryD
     }
 
     @Override
-    public ChainQueryDef newQueryDef() {
-        return new ChainQueryDef(this, flexMapper);
-    }
-
-    @Override
-    public ChainSelectDef newSelectDef(QueryStatement statement) {
-        return new ChainSelectDef(statement, this, flexMapper);
+    public ChainSelectDef newSelectDef() {
+        return new ChainSelectDef(this, flexMapper);
     }
 
     @Override
@@ -60,5 +55,10 @@ public class ChainQueryCreatorFactory implements QueryCreatorFactory<ChainQueryD
     @Override
     public ChainForUpdateDef newForUpdateDef(QueryStatement statement) {
         return new ChainForUpdateDef(statement, this, flexMapper);
+    }
+
+    @Override
+    public ChainQueryDef newQueryDef(QueryStatement statement) {
+        return new ChainQueryDef(statement, this, flexMapper);
     }
 }

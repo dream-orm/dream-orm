@@ -5,8 +5,8 @@ import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.TableDef;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.def.TdChainDeleteTableDef;
+import com.dream.tdengine.def.TdChainFromDef;
 import com.dream.tdengine.def.TdChainInsertIntoTableDef;
-import com.dream.tdengine.def.TdChainSelectDef;
 import com.dream.tdengine.def.TdChainUpdateColumnDef;
 import com.dream.tdengine.factory.TdChainDeleteCreatorFactory;
 import com.dream.tdengine.factory.TdChainInsertCreatorFactory;
@@ -21,13 +21,13 @@ public class DefaultFlexTdChainMapper implements FlexTdChainMapper {
     }
 
     @Override
-    public TdChainSelectDef select(ColumnDef... columnDefs) {
-        return new TdChainQueryCreatorFactory(flexMapper).newQueryDef().select(columnDefs);
+    public TdChainFromDef select(ColumnDef... columnDefs) {
+        return new TdChainQueryCreatorFactory(flexMapper).newSelectDef().select(columnDefs);
     }
 
     @Override
-    public TdChainSelectDef select(boolean distinct, ColumnDef... columnDefs) {
-        return new TdChainQueryCreatorFactory(flexMapper).newQueryDef().select(distinct,columnDefs);
+    public TdChainFromDef select(boolean distinct, ColumnDef... columnDefs) {
+        return new TdChainQueryCreatorFactory(flexMapper).newSelectDef().select(distinct, columnDefs);
     }
 
     @Override

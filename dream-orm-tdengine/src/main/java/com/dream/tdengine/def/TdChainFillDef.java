@@ -4,7 +4,7 @@ import com.dream.antlr.smt.QueryStatement;
 import com.dream.flex.factory.QueryCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public class TdChainFillDef extends TdChainSLimitDef {
+public class TdChainFillDef extends TdChainSUnionDef {
     public TdChainFillDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
         super(queryStatement, queryCreatorFactory, flexMapper);
     }
