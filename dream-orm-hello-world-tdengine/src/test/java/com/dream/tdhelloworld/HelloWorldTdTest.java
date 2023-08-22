@@ -1,5 +1,6 @@
 package com.dream.tdhelloworld;
 
+import com.dream.tdengine.def.TdChainInsertIntoColumnsDef;
 import com.dream.tdengine.mapper.FlexTdChainMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,5 +84,12 @@ public class HelloWorldTdTest {
     @Test
     public void testInsertAndCreate(){
         flexTdChainMapper.insertInto("d2001").using("meters").tags(2,"abc").values(new Date(),10.2,219,0.32).execute();
+    }
+    /**
+     * 测试插入来自文件
+     */
+    @Test
+    public void testInsertFile(){
+        flexTdChainMapper.insertInto("d2001").using("meters").tags(2, "abc").file("fff.txt").execute();
     }
 }

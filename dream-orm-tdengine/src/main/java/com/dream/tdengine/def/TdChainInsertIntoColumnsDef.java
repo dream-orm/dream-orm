@@ -9,4 +9,9 @@ public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsert implement
     public TdChainInsertIntoColumnsDef(InsertStatement insertStatement, InsertCreatorFactory creatorFactory, FlexMapper flexMapper) {
         super(insertStatement, creatorFactory, flexMapper);
     }
+
+    @Override
+    public TdChainInsertIntoValuesDef file(String file) {
+        return super.file(file);
+    }
 }

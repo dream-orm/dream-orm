@@ -5,6 +5,28 @@ import com.dream.flex.def.FunctionDef;
 import com.dream.tdengine.statement.TdMyFunctionStatement;
 
 public class TdFunctionDef extends FunctionDef {
+
+    public static ColumnDef database(){
+        return FunctionDef.col("DATABASE()");
+    }
+    public static ColumnDef client_version(){
+        return FunctionDef.col("CLIENT_VERSION()");
+    }
+    public static ColumnDef server_version(){
+        return FunctionDef.col("SERVER_VERSION()");
+    }
+    public static ColumnDef server_status(){
+        return FunctionDef.col("SERVER_STATUS()");
+    }
+    public static ColumnDef today(){
+        return FunctionDef.col("TODAY()");
+    }
+    public static ColumnDef timezone(){
+        return FunctionDef.col("TIMEZONE()");
+    }
+    public static ColumnDef current_user(){
+        return FunctionDef.col("CURRENT_USER()");
+    }
     public static ColumnDef first(String col) {
         return first(FunctionDef.col(col));
     }
