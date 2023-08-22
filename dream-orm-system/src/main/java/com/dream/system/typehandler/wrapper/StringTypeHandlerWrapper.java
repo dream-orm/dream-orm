@@ -31,6 +31,12 @@ public class StringTypeHandlerWrapper implements TypeHandlerWrapper {
                 TypeUtil.hash(String.class, Types.NVARCHAR),
                 TypeUtil.hash(String.class, Types.NCHAR),
                 TypeUtil.hash(String.class, Types.NCLOB),
+                TypeUtil.hash(String.class, Types.BINARY),
+                TypeUtil.hash(Object.class, Types.BINARY),
+                TypeUtil.hash(String.class, Types.VARBINARY),
+                TypeUtil.hash(Object.class, Types.VARBINARY),
+                TypeUtil.hash(String.class, Types.LONGVARBINARY),
+                TypeUtil.hash(Object.class, Types.LONGVARBINARY),
                 TypeUtil.hash(String.class, Types.NULL),
         };
     }

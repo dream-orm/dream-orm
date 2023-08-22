@@ -17,7 +17,7 @@ public class TdChainPartitionDef extends TdChainIntervalDef {
     public TdChainGroupByDef partitionBy(String... columns) {
         ColumnDef[] columnDefs = new ColumnDef[columns.length];
         for (int i = 0; i < columns.length; i++) {
-            columnDefs[i] = FunctionDef.column(columns[i]);
+            columnDefs[i] = FunctionDef.col(columns[i]);
         }
         return partitionBy(columnDefs);
     }

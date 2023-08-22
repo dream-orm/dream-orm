@@ -1,5 +1,6 @@
 package com.dream.tdhelloworld;
 
+import com.dream.system.config.Page;
 import com.dream.tdengine.def.TdChainInsertIntoColumnsDef;
 import com.dream.tdengine.mapper.FlexTdChainMapper;
 import org.junit.Test;
@@ -28,8 +29,8 @@ public class HelloWorldTdTest {
      * @throws Exception
      */
     @Test
-    public void testPartitionBy() throws Exception {
-        List<Map> list = flexTdChainMapper.select(max(col("current"))).from("meters").partitionBy("location").interval("10m").limit(1, 100).list(Map.class);
+    public void testPartitionBy() {
+        List<Map> list = flexTdChainMapper.select(max(col("current"))).from("meters").partitionBy("location").interval("10m").limit(1, 2).list(Map.class);
         System.out.println("查询结果：" + list);
     }
 
@@ -38,8 +39,8 @@ public class HelloWorldTdTest {
      * @throws Exception
      */
     @Test
-    public void testSliding() throws Exception {
-        List<Map> list = flexTdChainMapper.select(max(col("current"))).from("meters").partitionBy("location").interval("10m").sliding("5m").limit(1, 100).list(Map.class);
+    public void testSliding() {
+        List<Map> list = flexTdChainMapper.select(max(col("current"))).from("meters").partitionBy("location").interval("10m").sliding("5m").limit(1, 2).list(Map.class);
         System.out.println("查询结果：" + list);
     }
 
@@ -49,7 +50,7 @@ public class HelloWorldTdTest {
      */
     @Test
     public void testState() throws Exception {
-        List<Map> list = flexTdChainMapper.select("voltage").from("meters").state_window("voltage").limit(1, 10).list(Map.class);
+        List<Map> list = flexTdChainMapper.select("voltage").from("meters").state_window("voltage").limit(1, 2).list(Map.class);
         System.out.println("查询结果：" + list);
     }
     /**
@@ -58,7 +59,7 @@ public class HelloWorldTdTest {
      */
     @Test
     public void testSession() throws Exception {
-        List<Map> list = flexTdChainMapper.select(col("voltage"),first("ts")).from("meters").session("ts","10s").limit(1, 10).list(Map.class);
+        List<Map> list = flexTdChainMapper.select(col("voltage"),first("ts")).from("meters").session("ts","10s").limit(1, 2).list(Map.class);
         System.out.println("查询结果：" + list);
     }
     /**
@@ -91,5 +92,14 @@ public class HelloWorldTdTest {
     @Test
     public void testInsertFile(){
         flexTdChainMapper.insertInto("d2001").using("meters").tags(2, "abc").file("fff.txt").execute();
+    }
+
+    /**
+     * 测试分页查询
+     */
+    @Test
+    public void testPageQuery() {
+        Page<Map> page = flexTdChainMapper.select(col("*")).from("meters").page(Map.class,new Page(1,2));
+        System.out.println("总数：" + page.getTotal() + "\n查询结果：" + page.getRows());
     }
 }
