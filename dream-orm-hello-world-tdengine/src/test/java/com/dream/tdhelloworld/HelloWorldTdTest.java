@@ -58,7 +58,7 @@ public class HelloWorldTdTest {
      * @throws Exception
      */
     @Test
-    public void testSession() throws Exception {
+    public void testSession()  {
         List<Map> list = flexTdChainMapper.select(col("voltage"),first("ts")).from("meters").session("ts","10s").limit(1, 2).list(Map.class);
         System.out.println("查询结果：" + list);
     }

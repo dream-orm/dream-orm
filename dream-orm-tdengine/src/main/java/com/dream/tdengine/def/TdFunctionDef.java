@@ -36,7 +36,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef to_iso8601(String column) {
-        return to_iso8601(column, null);
+        return to_iso8601(col(column));
     }
 
     public static ColumnDef to_iso8601(String column, String timezone) {
@@ -44,15 +44,11 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef to_iso8601(ColumnDef columnDef) {
-        return to_iso8601(columnDef, null);
+        return functionDef(new TdMyFunctionStatement("TO_ISO8601"), columnDef);
     }
 
     public static ColumnDef to_iso8601(ColumnDef columnDef, String timezone) {
-        if (timezone != null) {
-            return functionDef(new TdMyFunctionStatement("TO_ISO8601"), columnDef, new ColumnDef(new SymbolStatement.StrStatement(timezone)));
-        } else {
-            return functionDef(new TdMyFunctionStatement("TO_ISO8601"), columnDef);
-        }
+        return functionDef(new TdMyFunctionStatement("TO_ISO8601"), columnDef, new ColumnDef(new SymbolStatement.StrStatement(timezone)));
     }
 
     public static ColumnDef to_json(String column) {
@@ -248,6 +244,13 @@ public class TdFunctionDef extends FunctionDef {
     public static ColumnDef hyperloglog(ColumnDef columnDef) {
         return functionDef(new TdMyFunctionStatement("HYPERLOGLOG"),columnDef);
     }
+    public static ColumnDef bottom(String column,int k) {
+        return bottom(col(column),k);
+    }
+
+    public static ColumnDef bottom(ColumnDef columnDef,int k) {
+        return functionDef(new TdMyFunctionStatement("BOTTOM"), columnDef,col(k));
+    }
 
     public static ColumnDef first(String col) {
         return first(col(col));
@@ -290,7 +293,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef tail(String col, int k) {
-        return tail(col, k, null);
+        return tail(col(col), k);
     }
 
     public static ColumnDef tail(String col, int k, Integer offset) {
@@ -298,15 +301,11 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef tail(ColumnDef columnDef, int k) {
-        return tail(columnDef, k, null);
+        return functionDef(new TdMyFunctionStatement("TAIL"), columnDef, col(k));
     }
 
     public static ColumnDef tail(ColumnDef columnDef, int k, Integer offset) {
-        if (offset != null) {
-            return functionDef(new TdMyFunctionStatement("TAIL"), columnDef, col(k), col(offset));
-        } else {
-            return functionDef(new TdMyFunctionStatement("TAIL"), columnDef, col(k));
-        }
+        return functionDef(new TdMyFunctionStatement("TAIL"), columnDef, col(k), col(offset));
     }
 
     public static ColumnDef top(String col, int k) {
