@@ -33,8 +33,8 @@ public class FunctionExpr extends SqlExpr {
     }
 
     @Override
-    protected Statement exprLen(ExprInfo exprInfo) throws AntlrException {
-        FunctionStatement func = new FunctionStatement.LenStatement();
+    protected Statement exprCharLength(ExprInfo exprInfo) throws AntlrException {
+        FunctionStatement func = new FunctionStatement.CharLengthStatement();
         functionStatement = new FunctionParamExpr(exprReader, func).expr();
         setExprTypes(ExprType.NIL);
         return expr();

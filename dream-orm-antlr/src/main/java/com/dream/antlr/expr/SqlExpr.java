@@ -130,8 +130,7 @@ public abstract class SqlExpr {
                 break;
             case CHARACTER_LENGTH:
             case CHAR_LENGTH:
-            case LEN:
-                statement = exprLen(exprInfo);
+                statement = exprCharLength(exprInfo);
                 break;
             case LENGTH:
                 statement = exprLength(exprInfo);
@@ -1295,7 +1294,7 @@ public abstract class SqlExpr {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprLen(ExprInfo exprInfo) throws AntlrException {
+    protected Statement exprCharLength(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 

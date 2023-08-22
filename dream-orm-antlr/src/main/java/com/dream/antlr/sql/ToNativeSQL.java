@@ -378,7 +378,7 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.LenStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+    protected String toString(FunctionStatement.CharLengthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CHAR_LENGTH(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 

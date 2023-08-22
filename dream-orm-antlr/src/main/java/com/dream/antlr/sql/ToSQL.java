@@ -182,8 +182,8 @@ public abstract class ToSQL {
             case -1225453250://AsciiStatement
                 sql = toString((FunctionStatement.AsciiStatement) statement, assist, invokerList);
                 break;
-            case -105938182://LenStatement
-                sql = toString((FunctionStatement.LenStatement) statement, assist, invokerList);
+            case -1053292845://CharLengthStatement
+                sql = toString((FunctionStatement.CharLengthStatement) statement, assist, invokerList);
                 break;
             case 252356873://LengthStatement
                 sql = toString((FunctionStatement.LengthStatement) statement, assist, invokerList);
@@ -752,7 +752,7 @@ public abstract class ToSQL {
 
     protected abstract String toString(FunctionStatement.AsciiStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(FunctionStatement.LenStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+    protected abstract String toString(FunctionStatement.CharLengthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.LengthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

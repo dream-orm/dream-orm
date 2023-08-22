@@ -15,8 +15,8 @@ public class FunctionDef {
         return functionDef(new FunctionStatement.AsciiStatement(), columnDef);
     }
 
-    public static ColumnDef len(ColumnDef columnDef) {
-        return functionDef(new FunctionStatement.LenStatement(), columnDef);
+    public static ColumnDef char_length(ColumnDef columnDef) {
+        return functionDef(new FunctionStatement.CharLengthStatement(), columnDef);
     }
 
     public static ColumnDef length(ColumnDef columnDef) {

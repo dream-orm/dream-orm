@@ -50,7 +50,6 @@ public enum ExprType {
     FOR,
     NOWAIT,
     ASCII,
-    LEN,
     LENGTH,
     CHAR_LENGTH,
     CHARACTER_LENGTH,

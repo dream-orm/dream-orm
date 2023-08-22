@@ -228,7 +228,7 @@ public class ToORACLE extends ToPubSQL {
     }
 
     @Override
-    protected String toString(FunctionStatement.LenStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+    protected String toString(FunctionStatement.CharLengthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LENGTH(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 

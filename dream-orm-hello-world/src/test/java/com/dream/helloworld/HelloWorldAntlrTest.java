@@ -16,7 +16,7 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testStr() {
-        testSqlForMany("SELECT ascii(s),len(s),length(s),CHAR_LENGTH(s),CHARACTER_LENGTH(s),concat(s1,s2),concat(s1,s2,s3),group_concat(a,b),group_concat(distinct a,b),group_concat(distinct a,b order by a separator ','),concat_ws(s,s1,s2,s3),repeat(s,n),reverse(s),replace(s,from_s,to_s)" +
+        testSqlForMany("SELECT ascii(s),length(s),CHAR_LENGTH(s),CHARACTER_LENGTH(s),concat(s1,s2),concat(s1,s2,s3),group_concat(a,b),group_concat(distinct a,b),group_concat(distinct a,b order by a separator ','),concat_ws(s,s1,s2,s3),repeat(s,n),reverse(s),replace(s,from_s,to_s)" +
                 ",instr(s,sub),locate(sub,s),locate(sub,s,pos),lower(s),LCASE(s),lpad(s1,num,s2),rpad(s1,num,s2),left(s,num),right(s,num)" +
                 ",SPACE(num),substr(str,num),substr(str,num1,num2),UPPER(s),trim(s),coalesce(s1,s2,s3)");
 

@@ -31,7 +31,7 @@ public abstract class FunctionStatement extends Statement {
 
     }
 
-    public static class LenStatement extends FunctionStatement {
+    public static class CharLengthStatement extends FunctionStatement {
 
     }
 
