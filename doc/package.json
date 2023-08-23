@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/dream-orm/dream-orm",
+  "scripts": {
+    "dev": "vitepress dev --port 3000",
+    "build": "vitepress build",
+    "serve": "vitepress serve"
+  },
+  "devDependencies": {
+    "vitepress": "^1.0.0-rc.4"
+  }
+}
