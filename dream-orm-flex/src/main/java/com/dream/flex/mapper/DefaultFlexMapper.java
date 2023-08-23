@@ -74,6 +74,7 @@ public class DefaultFlexMapper implements FlexMapper {
         QueryStatement statement = queryDef.statement();
         QueryStatement queryStatement = pageQueryStatement(statement, page.getStartRow(), page.getPageSize());
         MappedStatement mappedStatement = getMappedStatement(Command.QUERY, queryStatement, Collection.class, type);
+        queryStatement.setLimitStatement(null);
         if (page.getTotal() == 0) {
             MappedStatement countMappedStatement = getMappedStatement(Command.QUERY, countQueryStatement(queryStatement), NonCollection.class, Long.class);
             page.setTotal((long) session.execute(countMappedStatement));
@@ -121,41 +122,24 @@ public class DefaultFlexMapper implements FlexMapper {
     }
 
     private QueryStatement countQueryStatement(QueryStatement statement) {
+        statement.setOrderStatement(null);
+        FunctionStatement.CountStatement countStatement = new FunctionStatement.CountStatement();
+        ListColumnStatement paramListColumnStatement = new ListColumnStatement(",");
+        paramListColumnStatement.add(new SymbolStatement.LetterStatement("*"));
+        countStatement.setParamsStatement(paramListColumnStatement);
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.add(countStatement);
         QueryStatement queryStatement = new QueryStatement();
-        SelectStatement selectStatement = statement.getSelectStatement();
-        queryStatement.setSelectStatement(selectStatement);
-        SelectStatement countSelectStatement = new SelectStatement();
-        ListColumnStatement listColumnStatement = new ListColumnStatement();
-        listColumnStatement.add(countFunctionStatement());
-        countSelectStatement.setSelectList(listColumnStatement);
-        queryStatement.setSelectStatement(countSelectStatement);
-        if (!(selectStatement.isDistinct())) {
-            UnionStatement unionStatement = queryStatement.getUnionStatement();
-            if (unionStatement == null) {
-                queryStatement.setFromStatement(statement.getFromStatement());
-                queryStatement.setWhereStatement(statement.getWhereStatement());
-                queryStatement.setGroupStatement(statement.getGroupStatement());
-                queryStatement.setHavingStatement(statement.getHavingStatement());
-                queryStatement.setUnionStatement(statement.getUnionStatement());
-                queryStatement.setForUpdateStatement(statement.getForUpdateStatement());
-                return queryStatement;
-            }
-        }
+        SelectStatement newSelectStatement = new SelectStatement();
+        newSelectStatement.setSelectList(listColumnStatement);
+        queryStatement.setSelectStatement(newSelectStatement);
         AliasStatement aliasStatement = new AliasStatement();
-        aliasStatement.setColumn(statement);
+        aliasStatement.setColumn(new BraceStatement(statement));
         aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement("t_tmp"));
         FromStatement fromStatement = new FromStatement();
         fromStatement.setMainTable(aliasStatement);
         queryStatement.setFromStatement(fromStatement);
         return queryStatement;
-    }
-
-    private FunctionStatement countFunctionStatement() {
-        FunctionStatement.CountStatement countStatement = new FunctionStatement.CountStatement();
-        ListColumnStatement paramListColumnStatement = new ListColumnStatement(",");
-        paramListColumnStatement.add(new SymbolStatement.LetterStatement("1"));
-        countStatement.setParamsStatement(paramListColumnStatement);
-        return countStatement;
     }
 
     private MethodInfo getMethodInfo(Statement statement, Class<? extends Collection> rowType, Class<?> colType) {

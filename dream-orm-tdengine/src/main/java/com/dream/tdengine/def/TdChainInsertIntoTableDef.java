@@ -2,14 +2,12 @@ package com.dream.tdengine.def;
 
 import com.dream.antlr.smt.InsertStatement;
 import com.dream.antlr.smt.ListColumnStatement;
-import com.dream.antlr.smt.SymbolStatement;
 import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.InsertIntoTableDef;
 import com.dream.flex.def.TableDef;
 import com.dream.flex.factory.InsertCreatorFactory;
 import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.mapper.FlexMapper;
-import com.dream.tdengine.statement.TdFileStatement;
 import com.dream.tdengine.statement.TdInsertStatement;
 
 public class TdChainInsertIntoTableDef extends AbstractTdChainInsert implements InsertIntoTableDef<TdChainInsertIntoColumnsDef, TdChainInsertIntoValuesDef> {

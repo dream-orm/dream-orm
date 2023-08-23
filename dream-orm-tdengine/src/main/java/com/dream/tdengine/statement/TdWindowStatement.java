@@ -56,7 +56,7 @@ public abstract class TdWindowStatement extends MyFunctionStatement {
 
         @Override
         public String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws AntlrException {
-            return toSQL.toStr(interval,assist,invokerList)+toSQL.toStr(sliding,assist,invokerList)+toSQL.toStr(fill,assist,invokerList);
+            return toSQL.toStr(interval, assist, invokerList) + toSQL.toStr(sliding, assist, invokerList) + toSQL.toStr(fill, assist, invokerList);
         }
     }
 }

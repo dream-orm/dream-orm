@@ -12,5 +12,11 @@ public interface DynamicHandler {
      */
     boolean isDynamic(MethodInfo methodInfo, String table);
 
+    /**
+     * 根据当前表名，返回新的表名
+     *
+     * @param table 当前表名
+     * @return 根据当前表名，返回新的表名
+     */
     String process(String table);
 }

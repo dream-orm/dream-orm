@@ -2,16 +2,16 @@ package com.dream.system.antlr.handler.page;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
-import com.dream.antlr.expr.FunctionExpr;
 import com.dream.antlr.expr.QueryExpr;
 import com.dream.antlr.handler.AbstractHandler;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.read.ExprReader;
-import com.dream.antlr.smt.*;
+import com.dream.antlr.smt.LimitStatement;
+import com.dream.antlr.smt.QueryStatement;
+import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToNativeSQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.system.config.MethodInfo;
-import com.dream.util.common.ObjectUtil;
 import com.dream.util.reflect.ReflectUtil;
 
 import java.util.List;
@@ -43,22 +43,7 @@ public class PageHandler extends AbstractHandler {
         if (queryStatement.getOrderStatement() != null) {
             queryStatement.setOrderStatement(null);
         }
-        SelectStatement selectStatement = queryStatement.getSelectStatement();
-        String countSql = null;
-        if (!(selectStatement.isDistinct())) {
-            UnionStatement unionStatement = queryStatement.getUnionStatement();
-            if (unionStatement == null) {
-                SelectStatement countSelectStatement = new SelectStatement();
-                ListColumnStatement listColumnStatement = new ListColumnStatement();
-                listColumnStatement.add(new FunctionExpr(new ExprReader("count(1)")).expr());
-                countSelectStatement.setSelectList(listColumnStatement);
-                queryStatement.setSelectStatement(countSelectStatement);
-                countSql = toNativeSQL.toStr(queryStatement, null, null);
-            }
-        }
-        if (ObjectUtil.isNull(countSql)) {
-            countSql = "select count(1) from (" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp";
-        }
+        String countSql = "select count(1) from (" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp";
         PageAction pageAction = new PageAction(methodInfo, countSql);
         methodInfo.addInitAction(pageAction);
     }

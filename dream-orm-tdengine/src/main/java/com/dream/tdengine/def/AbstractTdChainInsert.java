@@ -20,9 +20,9 @@ public abstract class AbstractTdChainInsert extends AbstractInsert implements In
 
     protected TdChainInsertIntoValuesDef file(String file) {
         TdInsertStatement tdInsertStatement = (TdInsertStatement) statement();
-        ListColumnStatement listColumnStatement=new ListColumnStatement(",");
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.add(new SymbolStatement.StrStatement(file));
-        TdFileStatement tdFileStatement=new TdFileStatement();
+        TdFileStatement tdFileStatement = new TdFileStatement();
         tdFileStatement.setParamsStatement(listColumnStatement);
         tdInsertStatement.setValues(tdFileStatement);
         return (TdChainInsertIntoValuesDef) creatorFactory().newInsertIntoValuesDef(statement());

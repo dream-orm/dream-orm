@@ -166,90 +166,117 @@ public class TdFunctionDef extends FunctionDef {
     public static ColumnDef apercentile(ColumnDef columnDef, int p, String algoType) {
         return functionDef(new TdMyFunctionStatement("APERCENTILE"), columnDef, col(p), new ColumnDef(new SymbolStatement.StrStatement(algoType)));
     }
+
     public static ColumnDef elapsed(String column, String timeUnit) {
-        return elapsed(col(column),timeUnit);
+        return elapsed(col(column), timeUnit);
     }
+
     public static ColumnDef elapsed_1b(String column) {
-        return elapsed(col(column),"1b");
+        return elapsed(col(column), "1b");
     }
+
     public static ColumnDef elapsed_1u(String column) {
-        return elapsed(col(column),"1u");
+        return elapsed(col(column), "1u");
     }
+
     public static ColumnDef elapsed_1a(String column) {
-        return elapsed(col(column),"1a");
+        return elapsed(col(column), "1a");
     }
+
     public static ColumnDef elapsed_1s(String column) {
-        return elapsed(col(column),"1s");
+        return elapsed(col(column), "1s");
     }
+
     public static ColumnDef elapsed_1m(String column) {
-        return elapsed(col(column),"1m");
+        return elapsed(col(column), "1m");
     }
+
     public static ColumnDef elapsed_1h(String column) {
-        return elapsed(col(column),"1h");
+        return elapsed(col(column), "1h");
     }
+
     public static ColumnDef elapsed_1d(String column) {
-        return elapsed(col(column),"1d");
+        return elapsed(col(column), "1d");
     }
+
     public static ColumnDef elapsed_1w(String column) {
-        return elapsed(col(column),"1w");
+        return elapsed(col(column), "1w");
     }
+
     public static ColumnDef elapsed_1b(ColumnDef columnDef) {
-        return elapsed(columnDef,"1b");
+        return elapsed(columnDef, "1b");
     }
+
     public static ColumnDef elapsed_1u(ColumnDef columnDef) {
-        return elapsed(columnDef,"1u");
+        return elapsed(columnDef, "1u");
     }
+
     public static ColumnDef elapsed_1a(ColumnDef columnDef) {
-        return elapsed(columnDef,"1a");
+        return elapsed(columnDef, "1a");
     }
+
     public static ColumnDef elapsed_1s(ColumnDef columnDef) {
-        return elapsed(columnDef,"1s");
+        return elapsed(columnDef, "1s");
     }
+
     public static ColumnDef elapsed_1m(ColumnDef columnDef) {
-        return elapsed(columnDef,"1m");
+        return elapsed(columnDef, "1m");
     }
+
     public static ColumnDef elapsed_1h(ColumnDef columnDef) {
-        return elapsed(columnDef,"1h");
+        return elapsed(columnDef, "1h");
     }
+
     public static ColumnDef elapsed_1d(ColumnDef columnDef) {
-        return elapsed(columnDef,"1d");
+        return elapsed(columnDef, "1d");
     }
+
     public static ColumnDef elapsed_1w(ColumnDef columnDef) {
-        return elapsed(columnDef,"1w");
+        return elapsed(columnDef, "1w");
     }
+
     public static ColumnDef elapsed(ColumnDef columnDef, String timeUnit) {
-        return functionDef(new TdMyFunctionStatement("ELAPSED"), columnDef,col(timeUnit));
+        return functionDef(new TdMyFunctionStatement("ELAPSED"), columnDef, col(timeUnit));
     }
-    public static ColumnDef leastsquares(String column, double startVal,double stepVal) {
-        return leastsquares(col(column),startVal,stepVal);
+
+    public static ColumnDef leastsquares(String column, double startVal, double stepVal) {
+        return leastsquares(col(column), startVal, stepVal);
     }
-    public static ColumnDef leastsquares(ColumnDef columnDef, double startVal,double stepVal) {
-        return functionDef(new TdMyFunctionStatement("LEASTSQUARES"), columnDef,col(startVal),col(startVal));
+
+    public static ColumnDef leastsquares(ColumnDef columnDef, double startVal, double stepVal) {
+        return functionDef(new TdMyFunctionStatement("LEASTSQUARES"), columnDef, col(startVal), col(startVal));
     }
+
     public static ColumnDef spread(String column) {
         return spread(col(column));
     }
+
     public static ColumnDef spread(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("SPREAD"),columnDef);
+        return functionDef(new TdMyFunctionStatement("SPREAD"), columnDef);
     }
+
     public static ColumnDef stddev(String column) {
         return stddev(col(column));
     }
+
     public static ColumnDef stddev(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("STDDEV"),columnDef);
+        return functionDef(new TdMyFunctionStatement("STDDEV"), columnDef);
     }
+
     public static ColumnDef hyperloglog(String column) {
         return hyperloglog(col(column));
     }
+
     public static ColumnDef hyperloglog(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("HYPERLOGLOG"),columnDef);
-    }
-    public static ColumnDef bottom(String column,int k) {
-        return bottom(col(column),k);
+        return functionDef(new TdMyFunctionStatement("HYPERLOGLOG"), columnDef);
     }
 
-    public static ColumnDef bottom(ColumnDef columnDef,int k) {
-        return functionDef(new TdMyFunctionStatement("BOTTOM"), columnDef,col(k));
+    public static ColumnDef bottom(String column, int k) {
+        return bottom(col(column), k);
+    }
+
+    public static ColumnDef bottom(ColumnDef columnDef, int k) {
+        return functionDef(new TdMyFunctionStatement("BOTTOM"), columnDef, col(k));
     }
 
     public static ColumnDef first(String col) {

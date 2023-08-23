@@ -1,7 +1,6 @@
 package com.dream.tdhelloworld;
 
 import com.dream.system.config.Page;
-import com.dream.tdengine.def.TdChainInsertIntoColumnsDef;
 import com.dream.tdengine.mapper.FlexTdChainMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,8 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.dream.flex.def.FunctionDef.col;
-import static com.dream.flex.def.FunctionDef.max;
+import static com.dream.flex.def.FunctionDef.*;
 import static com.dream.tdengine.def.TdFunctionDef.first;
 
 @RunWith(SpringRunner.class)
@@ -26,6 +24,7 @@ public class HelloWorldTdTest {
 
     /**
      * 数据切分查询
+     *
      * @throws Exception
      */
     @Test
@@ -36,6 +35,7 @@ public class HelloWorldTdTest {
 
     /**
      * 时间窗口查询
+     *
      * @throws Exception
      */
     @Test
@@ -46,51 +46,58 @@ public class HelloWorldTdTest {
 
     /**
      * 测试状态窗口
+     *
      * @throws Exception
      */
     @Test
-    public void testState() throws Exception {
+    public void testState() {
         List<Map> list = flexTdChainMapper.select("voltage").from("meters").state_window("voltage").limit(1, 2).list(Map.class);
         System.out.println("查询结果：" + list);
     }
+
     /**
      * 测试会话窗口
+     *
      * @throws Exception
      */
     @Test
-    public void testSession()  {
-        List<Map> list = flexTdChainMapper.select(col("voltage"),first("ts")).from("meters").session("ts","10s").limit(1, 2).list(Map.class);
+    public void testSession() {
+        List<Map> list = flexTdChainMapper.select(col("voltage"), first("ts")).from("meters").session("ts", "10s").limit(1, 2).list(Map.class);
         System.out.println("查询结果：" + list);
     }
+
     /**
      * 测试插入
      */
     @Test
-    public void testInsert(){
-        flexTdChainMapper.insertInto("d1001").values(new Date(),10.2,219,0.32).execute();
+    public void testInsert() {
+        flexTdChainMapper.insertInto("d1001").values(new Date(), 10.2, 219, 0.32).execute();
     }
+
     /**
      * 测试插入多条
      */
     @Test
-    public void testInsertMany(){
-        List<Object[]>list=new ArrayList<>();
-        list.add(new Object[]{new Date(),10.2,219,0.32});
-        list.add(new Object[]{new Date(),11.2,219,0.32});
-        flexTdChainMapper.insertInto("d1001").valuesList(list,o->(Object[])o ).execute();
+    public void testInsertMany() {
+        List<Object[]> list = new ArrayList<>();
+        list.add(new Object[]{new Date(), 10.2, 219, 0.32});
+        list.add(new Object[]{new Date(), 11.2, 219, 0.32});
+        flexTdChainMapper.insertInto("d1001").valuesList(list, o -> (Object[]) o).execute();
     }
+
     /**
      * 测试插入并自动建表
      */
     @Test
-    public void testInsertAndCreate(){
-        flexTdChainMapper.insertInto("d2001").using("meters").tags(2,"abc").values(new Date(),10.2,219,0.32).execute();
+    public void testInsertAndCreate() {
+        flexTdChainMapper.insertInto("d2001").using("meters").tags(2, "abc").values(new Date(), 10.2, 219, 0.32).execute();
     }
+
     /**
      * 测试插入来自文件
      */
     @Test
-    public void testInsertFile(){
+    public void testInsertFile() {
         flexTdChainMapper.insertInto("d2001").using("meters").tags(2, "abc").file("fff.txt").execute();
     }
 
@@ -99,7 +106,7 @@ public class HelloWorldTdTest {
      */
     @Test
     public void testPageQuery() {
-        Page<Map> page = flexTdChainMapper.select(col("*")).from("meters").page(Map.class,new Page(1,2));
+        Page<Map> page = flexTdChainMapper.select(col("voltage"), count(col("*"))).from("meters").partitionBy("voltage").page(Map.class, new Page(1, 2));
         System.out.println("总数：" + page.getTotal() + "\n查询结果：" + page.getRows());
     }
 }
