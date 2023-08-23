@@ -35,6 +35,12 @@ public abstract class SymbolStatement extends Statement {
         }
     }
 
+    public static class NumberStatement extends SymbolStatement {
+        public NumberStatement(String symbol) {
+            super(symbol);
+        }
+    }
+
     public static class MarkStatement extends SymbolStatement {
         public MarkStatement() {
             super("?");

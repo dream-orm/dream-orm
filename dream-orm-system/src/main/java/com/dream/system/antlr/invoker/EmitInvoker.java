@@ -9,7 +9,7 @@ import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToSQL;
-import com.dream.system.antlr.handler.emit.EmitHandler;
+import com.dream.system.antlr.handler.emit.EmitColonHandler;
 
 import java.util.List;
 
@@ -37,6 +37,6 @@ public class EmitInvoker extends AbstractInvoker {
 
     @Override
     protected Handler[] handler() {
-        return new Handler[]{new EmitHandler()};
+        return new Handler[]{new EmitColonHandler()};
     }
 }

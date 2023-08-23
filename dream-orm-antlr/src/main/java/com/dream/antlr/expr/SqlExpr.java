@@ -89,6 +89,9 @@ public abstract class SqlExpr {
             case LETTER:
                 statement = exprLetter(exprInfo);
                 break;
+            case NUMBER:
+                statement = exprNumber(exprInfo);
+                break;
             case LIKE:
                 statement = exprLike(exprInfo);
                 break;
@@ -1456,6 +1459,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprLetter(ExprInfo exprInfo) throws AntlrException {
+        return exprSymbol(exprInfo);
+    }
+
+    protected Statement exprNumber(ExprInfo exprInfo) throws AntlrException {
         return exprSymbol(exprInfo);
     }
 

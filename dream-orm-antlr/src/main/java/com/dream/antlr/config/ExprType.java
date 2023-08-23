@@ -14,6 +14,7 @@ public enum ExprType {
     LONG,
     DOUBLE,
     LETTER,
+    NUMBER,
     SELECT,
     UPDATE,
     SET,

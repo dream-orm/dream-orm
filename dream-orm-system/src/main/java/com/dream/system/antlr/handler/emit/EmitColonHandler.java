@@ -10,7 +10,7 @@ import com.dream.system.antlr.invoker.MarkInvoker;
 
 import java.util.List;
 
-public class EmitHandler extends AbstractHandler {
+public class EmitColonHandler extends AbstractHandler {
     @Override
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
         EmitStatement.ColonStatement colonStatement = (EmitStatement.ColonStatement) statement;

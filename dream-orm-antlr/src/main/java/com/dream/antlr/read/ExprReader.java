@@ -312,7 +312,7 @@ public class ExprReader extends StringReader {
         char[] chars = new char[count];
         int len = read(chars, 0, count);
         String info = new String(chars, 0, len);
-        return new ExprInfo(ExprType.LETTER, info, getStart(), getEnd());
+        return new ExprInfo(ExprType.NUMBER, info, getStart(), getEnd());
 
     }
 

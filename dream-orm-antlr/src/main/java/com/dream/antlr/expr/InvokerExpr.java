@@ -24,7 +24,7 @@ public class InvokerExpr extends SqlExpr {
     @Override
     protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
         push();
-        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.KEYWORD).addExprTypes(ExprType.MARK, ExprType.STAR, ExprType.LETTER, ExprType.MY_FUNCTION);
+        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.KEYWORD).addExprTypes(ExprType.MARK, ExprType.STAR, ExprType.LETTER,ExprType.NUMBER, ExprType.MY_FUNCTION);
         return expr();
     }
 
@@ -55,6 +55,11 @@ public class InvokerExpr extends SqlExpr {
 
     @Override
     protected Statement exprLetter(ExprInfo exprInfo) throws AntlrException {
+        return exprName(exprInfo);
+    }
+
+    @Override
+    protected Statement exprNumber(ExprInfo exprInfo) throws AntlrException {
         return exprName(exprInfo);
     }
 

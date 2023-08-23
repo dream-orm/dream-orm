@@ -23,6 +23,7 @@ public class SymbolExpr extends SqlExpr {
                 ExprType.SINGLE_MARK,
                 ExprType.MY_FUNCTION,
                 ExprType.LETTER,
+                ExprType.NUMBER,
                 ExprType.STAR,
                 ExprType.NULL);
     }
@@ -53,6 +54,14 @@ public class SymbolExpr extends SqlExpr {
         push();
         MyFunctionStatement myFunctionStatement = (MyFunctionStatement) exprInfo.getObjInfo();
         statement = new SymbolStatement.LetterStatement(myFunctionStatement.getFunctionName());
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprNumber(ExprInfo exprInfo) throws AntlrException {
+        push();
+        statement = new SymbolStatement.NumberStatement(exprInfo.getInfo());
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -100,7 +109,7 @@ public class SymbolExpr extends SqlExpr {
 
         public LetterExpr(ExprReader exprReader) {
             super(exprReader);
-            setExprTypes(ExprType.LETTER, ExprType.STR, ExprType.JAVA_STR, ExprType.STAR, ExprType.SINGLE_MARK, ExprType.INT);
+            setExprTypes(ExprType.LETTER, ExprType.NUMBER, ExprType.STR, ExprType.JAVA_STR, ExprType.STAR, ExprType.SINGLE_MARK, ExprType.INT);
         }
 
         @Override
@@ -120,6 +129,14 @@ public class SymbolExpr extends SqlExpr {
         protected Statement exprLetter(ExprInfo exprInfo) throws AntlrException {
             push();
             statement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprNumber(ExprInfo exprInfo) throws AntlrException {
+            push();
+            statement = new SymbolStatement.NumberStatement(exprInfo.getInfo());
             setExprTypes(ExprType.NIL);
             return expr();
         }
