@@ -1,13 +1,13 @@
-package com.dream.boot.factory;
+package com.dream.drive.factory;
 
 import com.dream.system.datasource.DataSourceFactory;
 
 import javax.sql.DataSource;
 
-public class SpringDataSourceFactory implements DataSourceFactory {
+public class DriveDataSourceFactory implements DataSourceFactory {
     private DataSource dataSource;
 
-    public SpringDataSourceFactory(DataSource dataSource) {
+    public DriveDataSourceFactory(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

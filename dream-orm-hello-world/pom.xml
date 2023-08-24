@@ -14,7 +14,7 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <dream-orm.version>1.2.0</dream-orm.version>
+        <dream-orm.version>1.2.1</dream-orm.version>
     </properties>
     <dependencies>
         <dependency>

@@ -8,13 +8,13 @@ import com.dream.antlr.sql.ToMYSQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.chain.mapper.DefaultFlexChainMapper;
 import com.dream.chain.mapper.FlexChainMapper;
+import com.dream.drive.build.DefaultSessionFactoryBuilder;
+import com.dream.drive.build.SessionFactoryBuilder;
+import com.dream.drive.factory.DriveDataSourceFactory;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.jdbc.mapper.DefaultJdbcMapper;
 import com.dream.jdbc.mapper.JdbcMapper;
-import com.dream.solon.build.DefaultSessionFactoryBuilder;
-import com.dream.solon.build.SessionFactoryBuilder;
-import com.dream.solon.factory.SolonDataSourceFactory;
 import com.dream.solon.factory.SolonTransactionFactory;
 import com.dream.solon.holder.SolonSessionHolder;
 import com.dream.system.antlr.factory.DefaultInvokerFactory;
@@ -372,7 +372,7 @@ public class DreamAutoConfiguration {
     @Bean
     @Condition(onMissingBean = DataSourceFactory.class)
     public DataSourceFactory dataSourceFactory(DataSource dataSource) {
-        return new SolonDataSourceFactory(dataSource);
+        return new DriveDataSourceFactory(dataSource);
     }
 
     /**

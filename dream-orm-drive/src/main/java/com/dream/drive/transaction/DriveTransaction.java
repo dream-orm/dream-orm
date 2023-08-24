@@ -1,20 +1,19 @@
-package com.dream.solon.transaction;
+package com.dream.drive.transaction;
 
 import com.dream.system.transaction.Transaction;
-import org.noear.solon.data.tran.TranUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class SolonTransaction implements Transaction {
+public class DriveTransaction implements Transaction {
 
     private DataSource dataSource;
     private Connection connection;
     private boolean isConnectionTransactional;
     private boolean autoCommit;
 
-    public SolonTransaction(DataSource dataSource) {
+    public DriveTransaction(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -70,8 +69,8 @@ public class SolonTransaction implements Transaction {
     }
 
     protected void openConnection() throws SQLException {
-        this.connection = TranUtils.getConnection(dataSource);
+        this.connection = TransManager.getConnection(dataSource);
         this.autoCommit = this.connection.getAutoCommit();
-        this.isConnectionTransactional = TranUtils.inTrans();
+        this.isConnectionTransactional = TransManager.isTrans();
     }
 }

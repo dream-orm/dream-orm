@@ -6,13 +6,13 @@ import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.sql.ToMYSQL;
 import com.dream.antlr.sql.ToSQL;
-import com.dream.boot.build.DefaultSessionFactoryBuilder;
-import com.dream.boot.build.SessionFactoryBuilder;
-import com.dream.boot.factory.SpringDataSourceFactory;
 import com.dream.boot.factory.SpringTransactionFactory;
 import com.dream.boot.holder.SpringSessionHolder;
 import com.dream.chain.mapper.DefaultFlexChainMapper;
 import com.dream.chain.mapper.FlexChainMapper;
+import com.dream.drive.build.DefaultSessionFactoryBuilder;
+import com.dream.drive.build.SessionFactoryBuilder;
+import com.dream.drive.factory.DriveDataSourceFactory;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.jdbc.mapper.DefaultJdbcMapper;
@@ -342,7 +342,7 @@ public class DreamAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public DataSourceFactory dataSourceFactory(DataSource dataSource) {
-        return new SpringDataSourceFactory(dataSource);
+        return new DriveDataSourceFactory(dataSource);
     }
 
     /**

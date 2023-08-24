@@ -59,6 +59,10 @@ const sidebar: DefaultTheme.Sidebar = {
                     link: '/basic/function',
                 },
                 {
+                    text: '特殊标识',
+                    link: '/basic/emit',
+                },
+                {
                     text: 'IService',
                     link: 'basic/service'
                 }
@@ -121,9 +125,9 @@ const sidebar: DefaultTheme.Sidebar = {
             text: '扩充功能',
             items: [
                 {
-                text: 'TdEngine时序数据库',
-                link: '/expand/tdengine'
-            }
+                    text: 'TdEngine时序数据库',
+                    link: '/expand/tdengine'
+                }
             ]
         }
     ],

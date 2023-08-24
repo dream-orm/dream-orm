@@ -1,5 +1,6 @@
-import { DefaultTheme } from 'vitepress';
-const nav:DefaultTheme.NavItem[] = [
+import {DefaultTheme} from 'vitepress';
+
+const nav: DefaultTheme.NavItem[] = [
     {
         text: '首页',
         link: '/'
