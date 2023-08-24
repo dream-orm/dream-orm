@@ -11,6 +11,7 @@ import com.dream.chain.mapper.FlexChainMapper;
 import com.dream.drive.build.DefaultSessionFactoryBuilder;
 import com.dream.drive.build.SessionFactoryBuilder;
 import com.dream.drive.config.DefaultConfig;
+import com.dream.drive.config.DriveProperties;
 import com.dream.drive.holder.DriveSessionHolder;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
@@ -68,8 +69,8 @@ public class DefaultDriveFactory implements DriveFactory {
     protected FlexChainMapper flexChainMapper;
     protected JdbcMapper jdbcMapper;
     protected ToSQL toSQL;
-
-    public DefaultDriveFactory(DataSource dataSource, List<String> tablePackages, List<String> mapperPackages) {
+    protected DriveProperties driveProperties;
+    public DefaultDriveFactory(DataSource dataSource, List<String> tablePackages, List<String> mapperPackages, DriveProperties driveProperties) {
         this.toSQL = toSQL();
         this.sessionFactory = sessionFactory(dataSource, tablePackages, mapperPackages);
         this.sessionTemplate = sessionTemplate(sessionHolder(), this.sessionFactory, mapperInvokeFactory());
@@ -77,6 +78,7 @@ public class DefaultDriveFactory implements DriveFactory {
         this.flexMapper = flexMapper(sessionTemplate, toSQL);
         this.flexChainMapper = flexChainMapper(this.flexMapper);
         this.jdbcMapper = jdbcMapper(this.sessionTemplate);
+        this.driveProperties = driveProperties;
     }
 
     @Override

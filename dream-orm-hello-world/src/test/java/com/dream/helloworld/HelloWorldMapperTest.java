@@ -27,7 +27,6 @@ public class HelloWorldMapperTest {
     /**
      * 测试主键查询
      */
-    @Transactional
     @Test
     public void testSelectById() {
         AccountView accountView = accountMapper.selectById(1);
