@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 链式操作类
+ * 链式操作接口
  */
 public interface FlexMapper {
     /**

@@ -19,6 +19,7 @@ public class DriveProperties {
     private String[] typeHandlerWrappers;
 
     private String[] listeners;
+
     private Map<String, Map<String, Object>> datasource;
 
     public String getToSQL() {

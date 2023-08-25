@@ -16,10 +16,23 @@ public class TransManager {
     private TransManager() {
     }
 
+    /**
+     * 执行事务
+     * @param supplier 自定义内容
+     * @param <T>
+     * @return 数据
+     */
     public static <T> T exec(Supplier<T> supplier) {
         return exec(supplier, Propagation.REQUIRED);
     }
 
+    /**
+     * 执行事务
+     * @param supplier 自定义内容
+     * @param propagation 事务传播机制
+     * @param <T>
+     * @return 数据
+     */
     public static <T> T exec(Supplier<T> supplier, Propagation propagation) {
         String currentXID = TransactionContext.getXID();
         try {

@@ -1,7 +1,7 @@
 {
   "repository": "https://github.com/dream-orm/dream-orm",
   "scripts": {
-    "dev": "vitepress dev --port 3000",
+    "dev": "vitepress dev --port 5932",
     "build": "vitepress build",
     "serve": "vitepress serve"
   },

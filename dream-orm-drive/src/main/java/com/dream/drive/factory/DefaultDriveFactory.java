@@ -57,9 +57,12 @@ import com.dream.template.sequence.Sequence;
 import com.dream.template.session.SessionHolder;
 import com.dream.template.session.SessionTemplate;
 import com.dream.util.common.ObjectUtil;
+import com.dream.util.reflect.ReflectUtil;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DefaultDriveFactory implements DriveFactory {
     protected SessionFactory sessionFactory;
@@ -70,7 +73,13 @@ public class DefaultDriveFactory implements DriveFactory {
     protected JdbcMapper jdbcMapper;
     protected ToSQL toSQL;
     protected DriveProperties driveProperties;
+
+    public DefaultDriveFactory(DataSource dataSource, List<String> tablePackages, List<String> mapperPackages) {
+        this(dataSource, tablePackages, mapperPackages, new DriveProperties());
+    }
+
     public DefaultDriveFactory(DataSource dataSource, List<String> tablePackages, List<String> mapperPackages, DriveProperties driveProperties) {
+        this.driveProperties = driveProperties;
         this.toSQL = toSQL();
         this.sessionFactory = sessionFactory(dataSource, tablePackages, mapperPackages);
         this.sessionTemplate = sessionTemplate(sessionHolder(), this.sessionFactory, mapperInvokeFactory());
@@ -78,11 +87,10 @@ public class DefaultDriveFactory implements DriveFactory {
         this.flexMapper = flexMapper(sessionTemplate, toSQL);
         this.flexChainMapper = flexChainMapper(this.flexMapper);
         this.jdbcMapper = jdbcMapper(this.sessionTemplate);
-        this.driveProperties = driveProperties;
     }
 
     @Override
-    public SessionTemplate sessionTemplate() {
+    public Session session() {
         return sessionTemplate;
     }
 
@@ -164,7 +172,15 @@ public class DefaultDriveFactory implements DriveFactory {
      * @return
      */
     protected ToSQL toSQL() {
-        return new ToMYSQL();
+        ToSQL toSQL;
+        String strToSQL = driveProperties.getToSQL();
+        if (!ObjectUtil.isNull(strToSQL)) {
+            Class<? extends ToSQL> toSQLType = ReflectUtil.loadClass(strToSQL);
+            toSQL = ReflectUtil.create(toSQLType);
+        } else {
+            toSQL = new ToMYSQL();
+        }
+        return toSQL;
     }
 
     protected Interceptor[] interceptors() {
@@ -179,6 +195,14 @@ public class DefaultDriveFactory implements DriveFactory {
     protected PluginFactory pluginFactory() {
         Interceptor[] interceptors = interceptors();
         PluginFactory pluginFactory = new ProxyPluginFactory();
+        String[] strInterceptors = driveProperties.getInterceptors();
+        if (!ObjectUtil.isNull(strInterceptors)) {
+            Interceptor[] interceptorList = Arrays.stream(strInterceptors).map(interceptor -> {
+                Class<? extends Interceptor> interceptorType = ReflectUtil.loadClass(interceptor);
+                return ReflectUtil.create(interceptorType);
+            }).collect(Collectors.toList()).toArray(new Interceptor[0]);
+            interceptors = ObjectUtil.merge(interceptors, interceptorList);
+        }
         if (!ObjectUtil.isNull(interceptors)) {
             pluginFactory.interceptors(interceptors);
         }
@@ -191,7 +215,15 @@ public class DefaultDriveFactory implements DriveFactory {
      * @return 自定义函数
      */
     protected MyFunctionFactory myFunctionFactory() {
-        return new DefaultMyFunctionFactory();
+        String strMyFunctionFactory = driveProperties.getMyFunctionFactory();
+        MyFunctionFactory myFunctionFactory;
+        if (!ObjectUtil.isNull(strMyFunctionFactory)) {
+            Class<? extends MyFunctionFactory> myFunctionFactoryType = ReflectUtil.loadClass(strMyFunctionFactory);
+            myFunctionFactory = ReflectUtil.create(myFunctionFactoryType);
+        } else {
+            myFunctionFactory = new DefaultMyFunctionFactory();
+        }
+        return myFunctionFactory;
     }
 
     /**
@@ -215,8 +247,16 @@ public class DefaultDriveFactory implements DriveFactory {
      * @return
      */
     protected InjectFactory injectFactory() {
-        InjectFactory injectFactory = new DefaultInjectFactory();
         Inject[] injects = injects();
+        InjectFactory injectFactory = new DefaultInjectFactory();
+        String[] strInjects = driveProperties.getInjects();
+        if (!ObjectUtil.isNull(strInjects)) {
+            Inject[] injectList = Arrays.stream(strInjects).map(inject -> {
+                Class<? extends Inject> injectType = ReflectUtil.loadClass(inject);
+                return ReflectUtil.create(injectType);
+            }).collect(Collectors.toList()).toArray(new Inject[0]);
+            injects = ObjectUtil.merge(injects, injectList);
+        }
         if (!ObjectUtil.isNull(injects)) {
             injectFactory.injects(injects);
         }
@@ -234,6 +274,14 @@ public class DefaultDriveFactory implements DriveFactory {
     protected InvokerFactory invokerFactory() {
         Invoker[] invokers = invokers();
         InvokerFactory invokerFactory = new DefaultInvokerFactory();
+        String[] strInvokers = driveProperties.getInvokers();
+        if (!ObjectUtil.isNull(strInvokers)) {
+            Invoker[] invokerList = Arrays.stream(strInvokers).map(invoker -> {
+                Class<? extends Invoker> invokerType = ReflectUtil.loadClass(invoker);
+                return ReflectUtil.create(invokerType);
+            }).collect(Collectors.toList()).toArray(new Invoker[0]);
+            invokers = ObjectUtil.merge(invokers, invokerList);
+        }
         if (!ObjectUtil.isNull(invokers)) {
             invokerFactory.addInvokers(invokers);
         }
@@ -263,6 +311,11 @@ public class DefaultDriveFactory implements DriveFactory {
     protected CacheFactory cacheFactory() {
         Cache cache = cache();
         DefaultCacheFactory defaultCacheFactory = new DefaultCacheFactory();
+        String strCache = driveProperties.getCache();
+        if (!ObjectUtil.isNull(strCache)) {
+            Class<? extends Cache> cacheType = ReflectUtil.loadClass(strCache);
+            cache = ReflectUtil.create(cacheType);
+        }
         if (cache != null) {
             defaultCacheFactory.setCache(cache);
         }
@@ -281,6 +334,14 @@ public class DefaultDriveFactory implements DriveFactory {
     protected TypeHandlerFactory typeHandlerFactory() {
         TypeHandlerWrapper[] typeHandlerWrappers = typeHandlerWrappers();
         TypeHandlerFactory typeHandlerFactory = new DefaultTypeHandlerFactory();
+        String[] strTypeHandlerWrappers = driveProperties.getTypeHandlerWrappers();
+        if (!ObjectUtil.isNull(strTypeHandlerWrappers)) {
+            TypeHandlerWrapper[] typeHandlerWrapperList = Arrays.stream(strTypeHandlerWrappers).map(typeHandlerWrapper -> {
+                Class<? extends TypeHandlerWrapper> typeHandlerWrapperType = ReflectUtil.loadClass(typeHandlerWrapper);
+                return ReflectUtil.create(typeHandlerWrapperType);
+            }).collect(Collectors.toList()).toArray(new TypeHandlerWrapper[0]);
+            typeHandlerWrappers = ObjectUtil.merge(typeHandlerWrappers, typeHandlerWrapperList);
+        }
         if (!ObjectUtil.isNull(typeHandlerWrappers)) {
             typeHandlerFactory.wrappers(typeHandlerWrappers);
         }
@@ -299,6 +360,14 @@ public class DefaultDriveFactory implements DriveFactory {
     protected ListenerFactory listenerFactory() {
         Listener[] listeners = listeners();
         ListenerFactory listenerFactory = new DefaultListenerFactory();
+        String[] strListeners = driveProperties.getListeners();
+        if (!ObjectUtil.isNull(strListeners)) {
+            Listener[] listenerList = Arrays.stream(strListeners).map(listener -> {
+                Class<? extends Listener> listenerType = ReflectUtil.loadClass(listener);
+                return ReflectUtil.create(listenerType);
+            }).collect(Collectors.toList()).toArray(new Listener[0]);
+            listeners = ObjectUtil.merge(listeners, listenerList);
+        }
         if (!ObjectUtil.isNull(listeners)) {
             listenerFactory.listeners(listeners);
         }

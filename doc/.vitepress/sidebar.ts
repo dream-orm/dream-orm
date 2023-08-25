@@ -112,6 +112,10 @@ const sidebar: DefaultTheme.Sidebar = {
                     link: '/advance/datasource'
                 },
                 {
+                    text: '事务管理',
+                    link: '/advance/transaction'
+                },
+                {
                     text: '代理插件',
                     link: '/advance/proxy-plugin'
                 },

@@ -3,6 +3,7 @@ package com.dream.helloworld;
 import com.dream.drive.config.DriveProperties;
 import com.dream.drive.factory.DefaultDriveFactory;
 import com.dream.drive.factory.DriveFactory;
+import com.dream.drive.listener.DebugListener;
 import com.dream.helloworld.table.Account;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.Before;
@@ -42,8 +43,9 @@ public class HelloWorldDriveTest {
                 "       (3, 'Tom', 28, 'test3', 1, 1, 0),\n" +
                 "       (4, 'Sandy', 21, 'test4', 2, 2, 0),\n" +
                 "       (5, 'Billie', 24, 'test5', 2, 2, 0);";
-
-        driveFactory = new DefaultDriveFactory(hikariDataSource, packageList, packageList,new DriveProperties());
+        DriveProperties driveProperties = new DriveProperties();
+        driveProperties.setListeners(new String[]{DebugListener.class.getName()});
+        driveFactory = new DefaultDriveFactory(hikariDataSource, packageList, packageList,driveProperties);
         driveFactory.jdbcMapper().execute(sql);
     }
 
