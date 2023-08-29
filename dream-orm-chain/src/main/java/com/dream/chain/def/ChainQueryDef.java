@@ -28,4 +28,8 @@ public class ChainQueryDef extends AbstractQueryDef implements QueryDef {
     public <T> Page<T> page(Class<T> type, Page page) {
         return flexMapper.selectPage(this, type, page);
     }
+
+    public boolean exists() {
+        return flexMapper.exists(this);
+    }
 }

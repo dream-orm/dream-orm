@@ -59,19 +59,50 @@ public class DefaultFlexMapper implements FlexMapper {
 
     @Override
     public <T> T selectOne(QueryDef queryDef, Class<T> type) {
-        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, queryDef.statement(), NonCollection.class, type);
-        return (T) session.execute(mappedStatement);
+        return selectOne(queryDef.statement(), type);
     }
 
     @Override
     public <T> List<T> selectList(QueryDef queryDef, Class<T> type) {
-        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, queryDef.statement(), List.class, type);
-        return (List<T>) session.execute(mappedStatement);
+        return selectList(queryDef.statement(), type);
     }
 
     @Override
     public <T> Page<T> selectPage(QueryDef queryDef, Class<T> type, Page page) {
-        QueryStatement statement = queryDef.statement();
+        return selectPage(queryDef.statement(), type, page);
+    }
+
+    @Override
+    public int update(Update update) {
+        return update(update.statement());
+    }
+
+    @Override
+    public int delete(Delete delete) {
+        return delete(delete.statement());
+    }
+
+    @Override
+    public int insert(Insert insert) {
+        return insert(insert.statement());
+    }
+
+    @Override
+    public boolean exists(QueryDef queryDef) {
+        return exists(queryDef.statement());
+    }
+
+    protected <T> T selectOne(QueryStatement statement, Class<T> type) {
+        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, statement, NonCollection.class, type);
+        return (T) session.execute(mappedStatement);
+    }
+
+    protected <T> List<T> selectList(QueryStatement statement, Class<T> type) {
+        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, statement, List.class, type);
+        return (List<T>) session.execute(mappedStatement);
+    }
+
+    protected <T> Page<T> selectPage(QueryStatement statement, Class<T> type, Page page) {
         QueryStatement queryStatement = pageQueryStatement(statement, page.getStartRow(), page.getPageSize());
         MappedStatement mappedStatement = getMappedStatement(Command.QUERY, queryStatement, Collection.class, type);
         queryStatement.setLimitStatement(null);
@@ -83,25 +114,35 @@ public class DefaultFlexMapper implements FlexMapper {
         return page;
     }
 
-    @Override
-    public int update(Update update) {
-        MappedStatement mappedStatement = getMappedStatement(Command.UPDATE, update.statement(), NonCollection.class, Integer.class);
+    protected int update(UpdateStatement statement) {
+        MappedStatement mappedStatement = getMappedStatement(Command.UPDATE, statement, NonCollection.class, Integer.class);
         return (int) session.execute(mappedStatement);
     }
 
-    @Override
-    public int delete(Delete delete) {
-        MappedStatement mappedStatement = getMappedStatement(Command.DELETE, delete.statement(), NonCollection.class, Integer.class);
+    protected int delete(DeleteStatement statement) {
+        MappedStatement mappedStatement = getMappedStatement(Command.DELETE, statement, NonCollection.class, Integer.class);
         return (int) session.execute(mappedStatement);
     }
 
-    @Override
-    public int insert(Insert insert) {
-        MappedStatement mappedStatement = getMappedStatement(Command.INSERT, insert.statement(), NonCollection.class, Integer.class);
+    protected int insert(InsertStatement statement) {
+        MappedStatement mappedStatement = getMappedStatement(Command.INSERT, statement, NonCollection.class, Integer.class);
         return (int) session.execute(mappedStatement);
     }
 
-    private QueryStatement pageQueryStatement(QueryStatement queryStatement, long startRow, long pageNum) {
+    protected boolean exists(QueryStatement statement) {
+        SelectStatement selectStatement = statement.getSelectStatement();
+        ListColumnStatement listColumnStatement = new ListColumnStatement();
+        listColumnStatement.add(new SymbolStatement.NumberStatement("1"));
+        selectStatement.setSelectList(listColumnStatement);
+        LimitStatement limitStatement = new LimitStatement();
+        limitStatement.setFirst(new SymbolStatement.NumberStatement("0"));
+        limitStatement.setSecond(new SymbolStatement.NumberStatement("1"));
+        statement.setLimitStatement(limitStatement);
+        Integer result= this.selectOne(statement, Integer.class);
+        return result!=null;
+    }
+
+    protected QueryStatement pageQueryStatement(QueryStatement queryStatement, long startRow, long pageNum) {
         LimitStatement limitStatement = queryStatement.getLimitStatement();
         if (limitStatement == null) {
             limitStatement = new LimitStatement();
@@ -121,7 +162,7 @@ public class DefaultFlexMapper implements FlexMapper {
         return queryStatement;
     }
 
-    private QueryStatement countQueryStatement(QueryStatement statement) {
+    protected QueryStatement countQueryStatement(QueryStatement statement) {
         statement.setOrderStatement(null);
         FunctionStatement.CountStatement countStatement = new FunctionStatement.CountStatement();
         ListColumnStatement paramListColumnStatement = new ListColumnStatement(",");
@@ -142,7 +183,7 @@ public class DefaultFlexMapper implements FlexMapper {
         return queryStatement;
     }
 
-    private MethodInfo getMethodInfo(Statement statement, Class<? extends Collection> rowType, Class<?> colType) {
+    protected MethodInfo getMethodInfo(Statement statement, Class<? extends Collection> rowType, Class<?> colType) {
         PackageStatement packageStatement = new PackageStatement();
         packageStatement.setStatement(statement);
         MethodInfo methodInfo = new MethodInfo()
@@ -155,7 +196,7 @@ public class DefaultFlexMapper implements FlexMapper {
         return methodInfo;
     }
 
-    private MappedStatement getMappedStatement(Command command, Statement statement, Class<? extends Collection> rowType, Class<?> colType) {
+    protected MappedStatement getMappedStatement(Command command, Statement statement, Class<? extends Collection> rowType, Class<?> colType) {
         MethodInfo methodInfo = getMethodInfo(statement, rowType, colType);
         SqlInfo sqlInfo = toSQL(methodInfo);
         List<Object> paramList = sqlInfo.getParamList();
@@ -193,7 +234,7 @@ public class DefaultFlexMapper implements FlexMapper {
         return mappedStatement;
     }
 
-    private SqlInfo toSQL(MethodInfo methodInfo) {
+    protected SqlInfo toSQL(MethodInfo methodInfo) {
         Map<Class, Object> customMap = new HashMap<>();
         customMap.put(MethodInfo.class, methodInfo);
         customMap.put(Configuration.class, configuration);

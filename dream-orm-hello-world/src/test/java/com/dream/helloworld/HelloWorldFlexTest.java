@@ -104,4 +104,13 @@ public class HelloWorldFlexTest {
         flexMapper.delete(delete);
     }
 
+    /**
+     * 测试存在
+     */
+    @Test
+    public void testExist() {
+        QueryDef queryDef = select().from(account).where(account.id.gt(3));
+        boolean exists = flexMapper.exists(queryDef);
+        System.out.println("查询结果：" + exists);
+    }
 }

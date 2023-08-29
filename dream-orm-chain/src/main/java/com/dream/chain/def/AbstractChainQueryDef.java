@@ -31,4 +31,9 @@ public abstract class AbstractChainQueryDef extends AbstractQueryDef implements 
     public <T> Page<T> page(Class<T> type, Page page) {
         return flexMapper.selectPage(this, type, page);
     }
+
+    @Override
+    public boolean exists() {
+        return flexMapper.exists(this);
+    }
 }

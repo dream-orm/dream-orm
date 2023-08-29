@@ -1,9 +1,6 @@
 package com.dream.flex.mapper;
 
-import com.dream.flex.def.Delete;
-import com.dream.flex.def.Insert;
-import com.dream.flex.def.QueryDef;
-import com.dream.flex.def.Update;
+import com.dream.flex.def.*;
 import com.dream.system.config.Page;
 import com.dream.system.inject.Inject;
 
@@ -74,4 +71,11 @@ public interface FlexMapper {
      * @return 插入数量
      */
     int insert(Insert insert);
+
+    /**
+     * 数据是否存在
+     * @param queryDef
+     * @return
+     */
+    boolean exists(QueryDef queryDef);
 }

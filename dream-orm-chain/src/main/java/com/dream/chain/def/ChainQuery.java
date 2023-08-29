@@ -10,4 +10,6 @@ public interface ChainQuery {
     <T> List<T> list(Class<T> type);
 
     <T> Page<T> page(Class<T> type, Page page);
+
+    boolean exists();
 }
