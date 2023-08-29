@@ -11,12 +11,12 @@
 
 ## **必备步骤**
 
-- **创建FlexTdChainMapper对象**
+- **创建FlexTdMapper对象**
 
 ```java
 @Bean
-public FlexTdChainMapper flexTdChainMapper(Session session) {
-    return new DefaultFlexTdChainMapper(session);
+public FlexTdMapper flexTdMapper(Session session) {
+    return new DefaultFlexTdMapper(session);
 }
 ```
 
@@ -91,7 +91,7 @@ public ResultSetHandler resultSetHandler() {
  */
     @Test
     public void testPartitionBy() throws Exception {
-        List<Map> list = flexTdChainMapper
+        List<Map> list = flexTdMapper
             .select(max(col("current"))).from("meters").partitionBy("location").interval("10m").limit(1, 2).list(Map.class);
         System.out.println("查询结果：" + list);
     }
@@ -118,7 +118,7 @@ public ResultSetHandler resultSetHandler() {
      */
     @Test
     public void testSliding() {
-        List<Map> list = flexTdChainMapper.select(max(col("current")))
+        List<Map> list = flexTdMapper.select(max(col("current")))
             .from("meters").partitionBy("location").interval("10m").sliding("5m").limit(1, 2).list(Map.class);
         System.out.println("查询结果：" + list);
     }
@@ -146,7 +146,7 @@ public ResultSetHandler resultSetHandler() {
  */
 @Test
 public void testState(){
-    List<Map> list = flexTdChainMapper.select("voltage").from("meters").state_window("voltage").limit(1, 2).list(Map.class);
+    List<Map> list = flexTdMapper.select("voltage").from("meters").state_window("voltage").limit(1, 2).list(Map.class);
     System.out.println("查询结果：" + list);
 }
 ```
@@ -172,7 +172,7 @@ public void testState(){
  */
 @Test
 public void testSession(){
-    List<Map> list = flexTdChainMapper.select(col("voltage"),first("ts")).from("meters").session("ts","10s").limit(1, 2).list(Map.class);
+    List<Map> list = flexTdMapper.select(col("voltage"),first("ts")).from("meters").session("ts","10s").limit(1, 2).list(Map.class);
     System.out.println("查询结果：" + list);
 }
 ```
@@ -197,7 +197,7 @@ public void testSession(){
      */
     @Test
     public void testInsert(){
-        flexTdChainMapper.insertInto("d1001").values(new Date(),10.2,219,0.32).execute();
+        flexTdMapper.insertInto("d1001").values(new Date(),10.2,219,0.32).execute();
     }
 ```
 
@@ -223,7 +223,7 @@ public void testSession(){
         List<Object[]>list=new ArrayList<>();
         list.add(new Object[]{new Date(),10.2,219,0.32});
         list.add(new Object[]{new Date(),11.2,219,0.32});
-        flexTdChainMapper.insertInto("d1001").valuesList(list,o->(Object[])o ).execute();
+        flexTdMapper.insertInto("d1001").valuesList(list,o->(Object[])o ).execute();
     }
 ```
 
@@ -246,7 +246,7 @@ public void testSession(){
      */
     @Test
     public void testInsertAndCreate(){
-        flexTdChainMapper.insertInto("d2001").using("meters").tags(2,"abc").values(new Date(),10.2,219,0.32).execute();
+        flexTdMapper.insertInto("d2001").using("meters").tags(2,"abc").values(new Date(),10.2,219,0.32).execute();
     }
 ```
 
@@ -269,7 +269,7 @@ public void testSession(){
      */
     @Test
     public void testInsertFile(){
-        flexTdChainMapper.insertInto("d2001").using("meters").tags(2, "abc").file("fff.txt").execute();
+        flexTdMapper.insertInto("d2001").using("meters").tags(2, "abc").file("fff.txt").execute();
     }
 ```
 
@@ -290,7 +290,7 @@ public void testSession(){
  */
 @Test
 public void testPageQuery() {
-    Page<Map> page = flexTdChainMapper.select(col("*")).from("meters").page(Map.class,new Page(1,2));
+    Page<Map> page = flexTdMapper.select(col("*")).from("meters").page(Map.class,new Page(1,2));
     System.out.println("总数：" + page.getTotal() + "\n查询结果：" + page.getRows());
 }
 ```
@@ -309,3 +309,54 @@ public void testPageQuery() {
 总数：100000008
 查询结果：[{phase=0.308333, current=10.0, location=California.LosAngles, ts=2017-07-14 10:40:00.0, voltage=110, groupid=9}, {phase=0.291667, current=10.12, location=California.LosAngles, ts=2017-07-14 10:40:00.001, voltage=109, groupid=9}]
 ```
+
+## **举例十：插入实体**
+
+**创建实体**
+
+```java
+@Table
+public class Meters {
+    @Column
+    private Date ts;
+    @Column
+    private double current;
+    @Column
+    private int voltage;
+    @Column
+    private double phase;
+    @Tag
+    private int groupid;
+    @Tag
+    private String location;
+    }
+```
+
+**测试**
+
+```java
+/**
+ * 测试插入实体
+ */
+@Test
+public void insertEntity() {
+    Meters meters=new Meters();
+    meters.setTs(new Date());
+    meters.setCurrent(1.23);
+    meters.setPhase(3.45);
+    meters.setVoltage(4);
+    meters.setGroupid(1);
+    meters.setLocation("a");
+    flexTdMapper.insert("d1001", meters);
+}
+```
+
+**控制台输出**
+
+```tex
+方法：null
+语句：INSERT INTO `d1001`  USING `meters`  TAGS(?,?) VALUES(?,?,?,?)
+参数：[1, a, Tue Aug 29 23:09:40 CST 2023, 1.23, 4, 3.45]
+用时：592ms
+```
+

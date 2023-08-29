@@ -41,6 +41,26 @@ public class SystemUtil {
         return sb.toString();
     }
 
+    public static String camelToUnderline(String field) {
+        if (field == null) {
+            return null;
+        }
+        int len = field.length();
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            char c = field.charAt(i);
+            if (c >= 'A' && c <= 'Z') {
+                if (sb.length() > 0) {
+                    sb.append("_");
+                }
+                sb.append(Character.toLowerCase(c));
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
     public static CacheKey cacheKey(String sql, int split, boolean clean) {
         char[] charList = sql.toCharArray();
         int index;

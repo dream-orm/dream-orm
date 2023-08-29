@@ -5,7 +5,9 @@ import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.resultsethandler.SimpleResultSetHandler;
 import com.dream.system.core.session.Session;
 import com.dream.tdengine.mapper.DefaultFlexTdChainMapper;
+import com.dream.tdengine.mapper.DefaultFlexTdMapper;
 import com.dream.tdengine.mapper.FlexTdChainMapper;
+import com.dream.tdengine.mapper.FlexTdMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -33,8 +35,8 @@ public class TdHelloWorldApplication {
     }
 
     @Bean
-    public FlexTdChainMapper flexTdChainMapper(Session session) {
-        return new DefaultFlexTdChainMapper(session);
+    public FlexTdMapper flexTdMapper(Session session) {
+        return new DefaultFlexTdMapper(session);
     }
 
     @Bean

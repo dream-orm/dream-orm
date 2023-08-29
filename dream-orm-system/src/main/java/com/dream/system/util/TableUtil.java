@@ -2,6 +2,7 @@ package com.dream.system.util;
 
 import com.dream.system.annotation.Table;
 import com.dream.system.annotation.View;
+import com.dream.util.common.ObjectUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +18,11 @@ class TableUtil {
         }
         Table tableAnnotation = type.getDeclaredAnnotation(Table.class);
         if (tableAnnotation != null) {
-            return tableAnnotation.value();
+            String table = tableAnnotation.value();
+            if(ObjectUtil.isNull(table)){
+                table=SystemUtil.camelToUnderline(type.getSimpleName());
+            }
+            return table;
         }
         View viewAnnotation = type.getDeclaredAnnotation(View.class);
         if (viewAnnotation != null) {

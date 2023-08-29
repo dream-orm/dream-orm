@@ -7,6 +7,7 @@ import com.dream.system.annotation.Table;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.JoinInfo;
 import com.dream.system.table.TableInfo;
+import com.dream.system.util.SystemUtil;
 import com.dream.util.common.LowHashMap;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
@@ -59,6 +60,9 @@ public class DefaultTableFactory implements TableFactory {
             return null;
         }
         String table = tableAnnotation.value();
+        if(ObjectUtil.isNull(table)){
+            table=SystemUtil.camelToUnderline(tableClass.getSimpleName());
+        }
         return table;
     }
 
@@ -68,6 +72,9 @@ public class DefaultTableFactory implements TableFactory {
             return null;
         }
         String column = columnAnnotation.value();
+        if(ObjectUtil.isNull(column)){
+            column=SystemUtil.camelToUnderline(field.getName());
+        }
         return new ColumnInfo(table, column, field, columnAnnotation.jdbcType());
     }
 

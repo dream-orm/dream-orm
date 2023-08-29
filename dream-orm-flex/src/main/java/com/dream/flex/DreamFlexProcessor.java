@@ -5,6 +5,8 @@ import com.dream.system.annotation.Column;
 import com.dream.system.annotation.Ignore;
 import com.dream.system.annotation.Table;
 import com.dream.system.annotation.View;
+import com.dream.system.util.SystemUtil;
+import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -58,15 +60,15 @@ public class DreamFlexProcessor extends AbstractProcessor {
                     String tableDefPackage = buildTableDefPackage(entityClass, dir);
                     String tableDefClassName = className.concat(classSuffix);
                     Table table = tableElement.getAnnotation(Table.class);
-                    String tableName = table.value();
+                    String tableName = ObjectUtil.isNull(table.value())?SystemUtil.camelToUnderline(className):table.value();
                     Map<String, Set<String>> fieldMap = tableFieldMap.get(entityClass);
                     Map<String, List<String>> columnMap = new HashMap<>();
                     List<String> columnList = columnInfoList((TypeElement) tableElement, fieldElement -> {
                         Column column = fieldElement.getAnnotation(Column.class);
                         if (column != null) {
-                            String columnName = column.value();
+                            String fieldName = fieldElement.toString();
+                            String columnName = ObjectUtil.isNull(column.value())? SystemUtil.camelToUnderline(fieldName):column.value();
                             if (fieldMap != null && !fieldMap.isEmpty()) {
-                                String fieldName = fieldElement.toString();
                                 fieldMap.forEach((k, v) -> {
                                     if (v.contains(fieldName)) {
                                         List<String> columns = columnMap.get(k);
