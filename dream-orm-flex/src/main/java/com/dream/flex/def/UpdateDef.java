@@ -1,9 +1,11 @@
 package com.dream.flex.def;
 
-public interface UpdateDef<T extends UpdateColumnDef> extends Update {
+import com.dream.antlr.smt.UpdateStatement;
+import com.dream.flex.factory.UpdateCreatorFactory;
 
-    default T update(TableDef tableDef) {
-        statement().setTable(tableDef.getStatement());
-        return (T) creatorFactory().newUpdateColumnDef(statement());
-    }
+
+public interface UpdateDef {
+    UpdateStatement statement();
+
+    UpdateCreatorFactory creatorFactory();
 }

@@ -312,7 +312,7 @@ public interface JdbcMapper {
      */
     @Test
     public void testUpdate() {
-        jdbcMapper.execute("update account set name=? where id=?","accountName",1);
+        jdbcMapper.execute("updateDef account set name=? where id=?","accountName",1);
     }
 ```
 
@@ -320,7 +320,7 @@ public interface JdbcMapper {
 
 ```tex
 方法：null
-语句：update account set name=? where id=?
+语句：updateDef account set name=? where id=?
 参数：[]
 用时：12ms
 ```
@@ -338,7 +338,7 @@ public interface JdbcMapper {
         AccountView accountView=new AccountView();
         accountView.setName("accountName");
         accountView.setId(1);
-        jdbcMapper.execute("update account set name=? where id=?", new StatementSetter() {
+        jdbcMapper.execute("updateDef account set name=? where id=?", new StatementSetter() {
             @Override
             public void setter(PreparedStatement ps, MappedStatement mappedStatement) throws SQLException {
                 ps.setString(1,accountView.getName());
@@ -352,7 +352,7 @@ public interface JdbcMapper {
 
 ```tex
 方法：null
-语句：update account set name=? where id=?
+语句：updateDef account set name=? where id=?
 参数：[]
 用时：11ms
 ```
@@ -369,7 +369,7 @@ public interface JdbcMapper {
      */
     @Test
     public void testInsert() {
-        jdbcMapper.execute("insert into account(id,name)values(?,?)",1,"accountName");
+        jdbcMapper.execute("insertDef into account(id,name)values(?,?)",1,"accountName");
     }
 ```
 
@@ -377,7 +377,7 @@ public interface JdbcMapper {
 
 ```tex
 方法：null
-语句：insert into account(id,name)values(?,?)
+语句：insertDef into account(id,name)values(?,?)
 参数：[]
 用时：15ms
 ```
@@ -395,7 +395,7 @@ public interface JdbcMapper {
         AccountView accountView = new AccountView();
         accountView.setName("accountName");
         accountView.setId(14);
-        jdbcMapper.execute("insert into account(id,name)values(?,?)", new StatementSetter() {
+        jdbcMapper.execute("insertDef into account(id,name)values(?,?)", new StatementSetter() {
             @Override
             public void setter(PreparedStatement ps, MappedStatement mappedStatement) throws SQLException {
                 ps.setInt(1, accountView.getId());
@@ -409,7 +409,7 @@ public interface JdbcMapper {
 
 ```tex
 方法：null
-语句：insert into account(id,name)values(?,?)
+语句：insertDef into account(id,name)values(?,?)
 参数：[]
 用时：20ms
 ```
@@ -424,7 +424,7 @@ public interface JdbcMapper {
      */
     @Test
     public void testDelete() {
-        jdbcMapper.execute("delete from account where id=?",1);
+        jdbcMapper.execute("deleteDef from account where id=?",1);
     }
 ```
 
@@ -432,7 +432,7 @@ public interface JdbcMapper {
 
 ```tex
 方法：null
-语句：delete from account where id=?
+语句：deleteDef from account where id=?
 参数：[]
 用时：11ms
 ```
@@ -449,7 +449,7 @@ public interface JdbcMapper {
     public void testDelete2() {
         AccountView accountView = new AccountView();
         accountView.setId(1);
-        jdbcMapper.execute("delete from account where id=?", new StatementSetter() {
+        jdbcMapper.execute("deleteDef from account where id=?", new StatementSetter() {
             @Override
             public void setter(PreparedStatement ps, MappedStatement mappedStatement) throws SQLException {
                 ps.setInt(1,accountView.getId());
@@ -462,7 +462,7 @@ public interface JdbcMapper {
 
 ```tex
 方法：null
-语句：delete from account where id=?
+语句：deleteDef from account where id=?
 参数：[]
 用时：14ms
 ```

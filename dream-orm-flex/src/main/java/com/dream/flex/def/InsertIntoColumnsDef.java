@@ -1,44 +1,22 @@
 package com.dream.flex.def;
 
 import com.dream.antlr.smt.BraceStatement;
-import com.dream.antlr.smt.InsertStatement;
 import com.dream.antlr.smt.ListColumnStatement;
-import com.dream.flex.invoker.FlexMarkInvokerStatement;
-
-import java.util.List;
-import java.util.function.Function;
+import com.dream.antlr.smt.Statement;
 
 
-public interface InsertIntoColumnsDef<T extends InsertIntoValuesDef> extends Insert {
-    default T values(Object... values) {
-        ListColumnStatement valueListStatement = new ListColumnStatement(",");
-        for (Object value : values) {
-            valueListStatement.add(new FlexMarkInvokerStatement(value));
-        }
-        InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
-        valuesStatement.setStatement(new BraceStatement(valueListStatement));
-        statement().setValues(valuesStatement);
-        return (T) creatorFactory().newInsertIntoValuesDef(statement());
-    }
-
-    default T valuesList(List<?> values, Function<Object, Object[]> fn) {
-        ListColumnStatement valueListStatement = new ListColumnStatement(",");
-        for (Object value : values) {
-            Object[] objects = fn.apply(value);
-            ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-            for (Object object : objects) {
-                listColumnStatement.add(new FlexMarkInvokerStatement(object));
+public interface InsertIntoColumnsDef<InsertDefIntoValues extends InsertIntoValuesDef<Insert>, Insert extends InsertDef> extends InsertIntoValuesDef<Insert>, InsertDef {
+    default InsertDefIntoValues columns(ColumnDef... columnDefs) {
+        ListColumnStatement paramsListStatement = new ListColumnStatement(",");
+        for (ColumnDef columnDef : columnDefs) {
+            Statement statement = columnDef.getStatement();
+            if (statement instanceof ListColumnStatement) {
+                Statement[] columnList = ((ListColumnStatement) statement).getColumnList();
+                statement = columnList[columnList.length - 1];
             }
-            valueListStatement.add(new BraceStatement(listColumnStatement));
+            paramsListStatement.add(statement);
         }
-        InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
-        valuesStatement.setStatement(valueListStatement);
-        statement().setValues(valuesStatement);
-        return (T) creatorFactory().newInsertIntoValuesDef(statement());
-    }
-
-    default T values(QueryDef queryDef) {
-        statement().setValues(queryDef.statement());
-        return (T) creatorFactory().newInsertIntoValuesDef(statement());
+        statement().setColumns(new BraceStatement(paramsListStatement));
+        return (InsertDefIntoValues) creatorFactory().newInsertIntoColumnsDef(statement());
     }
 }

@@ -1,17 +1,17 @@
 package com.dream.flex.factory;
 
 import com.dream.antlr.smt.UpdateStatement;
-import com.dream.flex.def.UpdateColumnDef;
 import com.dream.flex.def.UpdateDef;
-import com.dream.flex.def.UpdateWhereDef;
+import com.dream.flex.def.UpdateDefColumnDef;
+import com.dream.flex.def.UpdateTableDef;
 
 public interface UpdateCreatorFactory
-        <Update extends UpdateDef<UpdateColumn>,
-                UpdateColumn extends UpdateColumnDef<UpdateColumn, UpdateWhere>,
-                UpdateWhere extends UpdateWhereDef> {
-    Update newUpdateDef();
+        <UpdateTable extends UpdateTableDef<UpdateColumn>,
+                UpdateColumn extends UpdateDefColumnDef<UpdateColumn, Update>,
+                Update extends UpdateDef> {
+    UpdateTable newUpdateTableDef();
 
     UpdateColumn newUpdateColumnDef(UpdateStatement statement);
 
-    UpdateWhere newUpdateWhereDef(UpdateStatement statement);
+    Update newUpdateDef(UpdateStatement statement);
 }

@@ -18,6 +18,7 @@ public class TransManager {
 
     /**
      * 执行事务
+     *
      * @param supplier 自定义内容
      * @param <T>
      * @return 数据
@@ -28,7 +29,8 @@ public class TransManager {
 
     /**
      * 执行事务
-     * @param supplier 自定义内容
+     *
+     * @param supplier    自定义内容
      * @param propagation 事务传播机制
      * @param <T>
      * @return 数据

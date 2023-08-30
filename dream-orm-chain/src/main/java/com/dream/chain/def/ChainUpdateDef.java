@@ -5,8 +5,8 @@ import com.dream.flex.def.UpdateDef;
 import com.dream.flex.factory.UpdateCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public class ChainUpdateDef extends AbstractChainUpdate implements UpdateDef<ChainUpdateColumnDef> {
-    public ChainUpdateDef(UpdateCreatorFactory creatorFactory, FlexMapper flexMapper) {
-        super(new UpdateStatement(), creatorFactory, flexMapper);
+public class ChainUpdateDef extends AbstractChainUpdateDef implements UpdateDef {
+    public ChainUpdateDef(UpdateStatement statement, UpdateCreatorFactory creatorFactory, FlexMapper flexMapper) {
+        super(statement, creatorFactory, flexMapper);
     }
 }

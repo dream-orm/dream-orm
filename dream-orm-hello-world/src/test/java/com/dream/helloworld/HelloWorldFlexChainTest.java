@@ -1,7 +1,6 @@
 package com.dream.helloworld;
 
 import com.dream.chain.mapper.FlexChainMapper;
-import com.dream.flex.def.QueryDef;
 import com.dream.helloworld.view.AccountView;
 import com.dream.system.config.Page;
 import org.junit.Test;
@@ -12,7 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static com.dream.flex.def.FunctionDef.select;
 import static com.dream.helloworld.table.table.AccountTableDef.account;
 
 @RunWith(SpringRunner.class)
@@ -85,7 +83,7 @@ public class HelloWorldFlexChainTest {
      */
     @Test
     public void testExist() {
-        boolean exists  = flexChainMapper.select().from(account).where(account.id.gt(3)).exists();
+        boolean exists = flexChainMapper.select().from(account).where(account.id.gt(3)).exists();
         System.out.println("查询结果：" + exists);
     }
 }

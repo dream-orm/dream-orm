@@ -6,13 +6,13 @@ import com.dream.flex.def.DeleteTableDef;
 import com.dream.flex.def.DeleteWhereDef;
 
 public interface DeleteCreatorFactory
-        <Delete extends DeleteDef<DeleteTable>,
-                DeleteTable extends DeleteTableDef<DeleteWhere>,
-                DeleteWhere extends DeleteWhereDef> {
+        <DeleteTable extends DeleteTableDef<DeleteWhere>,
+                DeleteWhere extends DeleteWhereDef,
+                Delete extends DeleteDef> {
 
-    Delete newDeleteDef();
-
-    DeleteTable newDeleteTableDef(DeleteStatement statement);
+    DeleteTable newDeleteTableDef();
 
     DeleteWhere newDeleteWhereDef(DeleteStatement statement);
+
+    Delete newDeleteDef(DeleteStatement statement);
 }

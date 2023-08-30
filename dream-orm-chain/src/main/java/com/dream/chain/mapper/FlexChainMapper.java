@@ -1,8 +1,8 @@
 package com.dream.chain.mapper;
 
-import com.dream.chain.def.ChainDeleteTableDef;
+import com.dream.chain.def.ChainDeleteWhereDef;
 import com.dream.chain.def.ChainFromDef;
-import com.dream.chain.def.ChainInsertIntoTableDef;
+import com.dream.chain.def.ChainInsertIntoColumnsDef;
 import com.dream.chain.def.ChainUpdateColumnDef;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.TableDef;
@@ -42,7 +42,7 @@ public interface FlexChainMapper {
      * @param tableDef 表
      * @return 插入链式
      */
-    ChainInsertIntoTableDef insertInto(TableDef tableDef);
+    ChainInsertIntoColumnsDef insertInto(TableDef tableDef);
 
     /**
      * 删除链式操作
@@ -50,5 +50,5 @@ public interface FlexChainMapper {
      * @param tableDef 表
      * @return 删除链式
      */
-    ChainDeleteTableDef delete(TableDef tableDef);
+    ChainDeleteWhereDef delete(TableDef tableDef);
 }

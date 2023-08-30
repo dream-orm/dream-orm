@@ -685,16 +685,16 @@ public class FunctionDef {
         return new DefaultQueryCreatorFactory().newSelectDef().select(columnDefs);
     }
 
-    public static UpdateColumnDef update(TableDef tableDef) {
-        return new DefaultUpdateCreatorFactory().newUpdateDef().update(tableDef);
+    public static UpdateDefColumnDef update(TableDef tableDef) {
+        return new DefaultUpdateCreatorFactory().newUpdateTableDef().update(tableDef);
     }
 
-    public static DeleteTableDef delete(TableDef tableDef) {
-        return new DefaultDeleteCreatorFactory().newDeleteDef().delete(tableDef);
+    public static DeleteWhereDef delete(TableDef tableDef) {
+        return new DefaultDeleteCreatorFactory().newDeleteTableDef().delete(tableDef);
     }
 
-    public static InsertIntoTableDef insertInto(TableDef tableDef) {
-        return new DefaultInsertCreatorFactory().newInsertDef().insertInto(tableDef);
+    public static InsertIntoColumnsDef insertInto(TableDef tableDef) {
+        return new DefaultInsertCreatorFactory().newInsertIntoTableDef().insertInto(tableDef);
     }
 
     public static ColumnDef col(Object column) {

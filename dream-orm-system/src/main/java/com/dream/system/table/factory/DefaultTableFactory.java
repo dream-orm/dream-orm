@@ -60,8 +60,8 @@ public class DefaultTableFactory implements TableFactory {
             return null;
         }
         String table = tableAnnotation.value();
-        if(ObjectUtil.isNull(table)){
-            table=SystemUtil.camelToUnderline(tableClass.getSimpleName());
+        if (ObjectUtil.isNull(table)) {
+            table = SystemUtil.camelToUnderline(tableClass.getSimpleName());
         }
         return table;
     }
@@ -72,8 +72,8 @@ public class DefaultTableFactory implements TableFactory {
             return null;
         }
         String column = columnAnnotation.value();
-        if(ObjectUtil.isNull(column)){
-            column=SystemUtil.camelToUnderline(field.getName());
+        if (ObjectUtil.isNull(column)) {
+            column = SystemUtil.camelToUnderline(field.getName());
         }
         return new ColumnInfo(table, column, field, columnAnnotation.jdbcType());
     }

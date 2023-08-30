@@ -10,17 +10,17 @@ import com.dream.flex.def.defaults.DefaultDeleteWhereDef;
 
 public class DefaultDeleteCreatorFactory implements DeleteCreatorFactory {
     @Override
-    public DeleteDef newDeleteDef() {
-        return new DefaultDeleteDef(this);
-    }
-
-    @Override
-    public DeleteTableDef newDeleteTableDef(DeleteStatement statement) {
-        return new DefaultDeleteTableDef(statement, this);
+    public DeleteTableDef newDeleteTableDef() {
+        return new DefaultDeleteTableDef(this);
     }
 
     @Override
     public DeleteWhereDef newDeleteWhereDef(DeleteStatement statement) {
         return new DefaultDeleteWhereDef(statement, this);
+    }
+
+    @Override
+    public DeleteDef newDeleteDef(DeleteStatement statement) {
+        return new DefaultDeleteDef(statement, this);
     }
 }

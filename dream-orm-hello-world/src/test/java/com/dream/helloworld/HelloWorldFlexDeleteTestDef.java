@@ -1,7 +1,7 @@
 package com.dream.helloworld;
 
 import com.dream.flex.config.SqlInfo;
-import com.dream.flex.def.Delete;
+import com.dream.flex.def.DeleteDef;
 import com.dream.helloworld.debug.FlexDebug;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,13 +13,13 @@ import static com.dream.helloworld.table.table.AccountTableDef.account;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
-public class HelloWorldFlexDeleteTest {
+public class HelloWorldFlexDeleteTestDef {
     FlexDebug flexDebug = new FlexDebug();
 
     @Test
     public void testInsert() {
-        Delete delete = delete(account).where(account.id.eq(1));
-        SqlInfo sqlInfo = flexDebug.toSQL(delete);
+        DeleteDef deleteDef = delete(account).where(account.id.eq(1));
+        SqlInfo sqlInfo = flexDebug.toSQL(deleteDef);
         System.out.println(sqlInfo.getSql());
     }
 }

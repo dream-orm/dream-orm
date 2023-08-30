@@ -1,7 +1,7 @@
 package com.dream.helloworld;
 
 import com.dream.flex.config.SqlInfo;
-import com.dream.flex.def.Update;
+import com.dream.flex.def.UpdateDef;
 import com.dream.helloworld.debug.FlexDebug;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,13 +13,13 @@ import static com.dream.helloworld.table.table.AccountTableDef.account;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
-public class HelloWorldFlexUpdateTest {
+public class HelloWorldFlexUpdateTestDef {
     FlexDebug flexDebug = new FlexDebug();
 
     @Test
     public void testUpdate() {
-        Update update = update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
-        SqlInfo sqlInfo = flexDebug.toSQL(update);
+        UpdateDef updateDef = update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
+        SqlInfo sqlInfo = flexDebug.toSQL(updateDef);
         System.out.println(sqlInfo.getSql());
     }
 }

@@ -18,7 +18,7 @@ public @interface Column {
      *
      * @return
      */
-    String value()default "";
+    String value() default "";
 
     /**
      * 对应的数据库表字段类型

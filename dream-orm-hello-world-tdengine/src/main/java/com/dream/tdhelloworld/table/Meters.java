@@ -5,6 +5,7 @@ import com.dream.system.annotation.Table;
 import com.dream.tdengine.annotation.Tag;
 
 import java.util.Date;
+
 @Table
 public class Meters {
     @Column

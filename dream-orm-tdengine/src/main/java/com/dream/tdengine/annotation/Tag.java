@@ -14,7 +14,7 @@ public @interface Tag {
      *
      * @return
      */
-    String value()default "";
+    String value() default "";
 
     /**
      * 对应的数据库表标签字段类型

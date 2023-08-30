@@ -1,9 +1,10 @@
 package com.dream.flex.def;
 
-public interface DeleteDef<T extends DeleteTableDef> extends Delete {
+import com.dream.antlr.smt.DeleteStatement;
+import com.dream.flex.factory.DeleteCreatorFactory;
 
-    default T delete(TableDef tableDef) {
-        statement().setTable(tableDef.getStatement());
-        return (T) creatorFactory().newDeleteTableDef(statement());
-    }
+public interface DeleteDef {
+    DeleteStatement statement();
+
+    DeleteCreatorFactory creatorFactory();
 }

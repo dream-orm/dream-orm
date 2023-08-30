@@ -1,9 +1,9 @@
 package com.dream.helloworld;
 
-import com.dream.flex.def.Delete;
-import com.dream.flex.def.Insert;
+import com.dream.flex.def.DeleteDef;
+import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
-import com.dream.flex.def.Update;
+import com.dream.flex.def.UpdateDef;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.helloworld.table.Account;
 import com.dream.helloworld.view.AccountView;
@@ -62,8 +62,8 @@ public class HelloWorldFlexTest {
      */
     @Test
     public void testUpdate() {
-        Update update = update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
-        flexMapper.update(update);
+        UpdateDef updateDef = update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
+        flexMapper.update(updateDef);
     }
 
     /**
@@ -71,8 +71,8 @@ public class HelloWorldFlexTest {
      */
     @Test
     public void testInsert() {
-        Insert insert = insertInto(account).columns(account.name, account.age).values("accountName", 12);
-        flexMapper.insert(insert);
+        InsertDef insertDef = insertInto(account).columns(account.name, account.age).values("accountName", 12);
+        flexMapper.insertDef(insertDef);
     }
 
     /**
@@ -88,11 +88,11 @@ public class HelloWorldFlexTest {
             account.setAge(i * 2);
             accountList.add(account);
         }
-        Insert insert = insertInto(account).columns(account.id, account.name, account.age).valuesList(accountList, acc -> {
+        InsertDef insertDef = insertInto(account).columns(account.id, account.name, account.age).valuesList(accountList, acc -> {
             Account account = (Account) acc;
             return new Object[]{account.getId(), account.getName(), account.getAge()};
         });
-        flexMapper.insert(insert);
+        flexMapper.insertDef(insertDef);
     }
 
     /**
@@ -100,8 +100,8 @@ public class HelloWorldFlexTest {
      */
     @Test
     public void testDelete() {
-        Delete delete = delete(account).where(account.id.eq(1));
-        flexMapper.delete(delete);
+        DeleteDef deleteDef = delete(account).where(account.id.eq(1));
+        flexMapper.delete(deleteDef);
     }
 
     /**

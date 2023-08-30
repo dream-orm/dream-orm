@@ -9,10 +9,10 @@ import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToMYSQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.config.SqlInfo;
-import com.dream.flex.def.Delete;
-import com.dream.flex.def.Insert;
+import com.dream.flex.def.DeleteDef;
+import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
-import com.dream.flex.def.Update;
+import com.dream.flex.def.UpdateDef;
 import com.dream.flex.invoker.FlexMarkInvoker;
 import com.dream.flex.invoker.FlexTableInvoker;
 import com.dream.util.exception.DreamRunTimeException;
@@ -35,16 +35,16 @@ public class FlexDebug {
         return toSQL(queryDef.statement());
     }
 
-    public SqlInfo toSQL(Insert insert) {
-        return toSQL(insert.statement());
+    public SqlInfo toSQL(InsertDef insertDef) {
+        return toSQL(insertDef.statement());
     }
 
-    public SqlInfo toSQL(Delete delete) {
-        return toSQL(delete.statement());
+    public SqlInfo toSQL(DeleteDef deleteDef) {
+        return toSQL(deleteDef.statement());
     }
 
-    public SqlInfo toSQL(Update update) {
-        return toSQL(update.statement());
+    public SqlInfo toSQL(UpdateDef updateDef) {
+        return toSQL(updateDef.statement());
     }
 
     public SqlInfo toSQL(Statement statement) {

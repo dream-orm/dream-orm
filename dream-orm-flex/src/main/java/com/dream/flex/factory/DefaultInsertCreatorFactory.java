@@ -11,14 +11,10 @@ import com.dream.flex.def.defaults.DefaultInsertIntoTableDef;
 import com.dream.flex.def.defaults.DefaultInsertIntoValuesDef;
 
 public class DefaultInsertCreatorFactory implements InsertCreatorFactory {
-    @Override
-    public InsertDef newInsertDef() {
-        return new DefaultInsertDef(this);
-    }
 
     @Override
-    public InsertIntoTableDef newInsertIntoTableDef(InsertStatement statement) {
-        return new DefaultInsertIntoTableDef(statement, this);
+    public InsertIntoTableDef newInsertIntoTableDef() {
+        return new DefaultInsertIntoTableDef(this);
     }
 
     @Override
@@ -29,5 +25,10 @@ public class DefaultInsertCreatorFactory implements InsertCreatorFactory {
     @Override
     public InsertIntoValuesDef newInsertIntoValuesDef(InsertStatement statement) {
         return new DefaultInsertIntoValuesDef(statement, this);
+    }
+
+    @Override
+    public InsertDef newInsertDef(InsertStatement statement) {
+        return new DefaultInsertDef(statement, this);
     }
 }

@@ -45,7 +45,7 @@ public class HelloWorldDriveTest {
                 "       (5, 'Billie', 24, 'test5', 2, 2, 0);";
         DriveProperties driveProperties = new DriveProperties();
         driveProperties.setListeners(new String[]{DebugListener.class.getName()});
-        driveFactory = new DefaultDriveFactory(hikariDataSource, packageList, packageList,driveProperties);
+        driveFactory = new DefaultDriveFactory(hikariDataSource, packageList, packageList, driveProperties);
         driveFactory.jdbcMapper().execute(sql);
     }
 

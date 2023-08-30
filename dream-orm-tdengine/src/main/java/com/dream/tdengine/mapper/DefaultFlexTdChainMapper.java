@@ -7,10 +7,10 @@ import com.dream.flex.def.TableDef;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.system.core.session.Session;
-import com.dream.tdengine.def.TdChainDeleteTableDef;
+import com.dream.tdengine.def.TdChainDeleteWhereDef;
 import com.dream.tdengine.def.TdChainFromDef;
-import com.dream.tdengine.def.TdChainInsertIntoTableDef;
-import com.dream.tdengine.def.TdChainUpdateColumnDef;
+import com.dream.tdengine.def.TdChainInsertIntoColumnsDef;
+import com.dream.tdengine.def.TdChainUpdateColumnDefDef;
 import com.dream.tdengine.factory.TdChainDeleteCreatorFactory;
 import com.dream.tdengine.factory.TdChainInsertCreatorFactory;
 import com.dream.tdengine.factory.TdChainQueryCreatorFactory;
@@ -39,17 +39,17 @@ public class DefaultFlexTdChainMapper implements FlexTdChainMapper {
     }
 
     @Override
-    public TdChainUpdateColumnDef update(TableDef tableDef) {
-        return new TdChainUpdateCreatorFactory(flexMapper).newUpdateDef().update(tableDef);
+    public TdChainUpdateColumnDefDef update(TableDef tableDef) {
+        return new TdChainUpdateCreatorFactory(flexMapper).newUpdateTableDef().update(tableDef);
     }
 
     @Override
-    public TdChainInsertIntoTableDef insertInto(String subTableName) {
-        return new TdChainInsertCreatorFactory(flexMapper).newInsertDef().insertInto(FunctionDef.table(subTableName));
+    public TdChainInsertIntoColumnsDef insertInto(String subTableName) {
+        return new TdChainInsertCreatorFactory(flexMapper).newInsertIntoTableDef().insertInto(FunctionDef.table(subTableName));
     }
 
     @Override
-    public TdChainDeleteTableDef delete(TableDef tableDef) {
-        return new TdChainDeleteCreatorFactory(flexMapper).newDeleteDef().delete(tableDef);
+    public TdChainDeleteWhereDef delete(TableDef tableDef) {
+        return new TdChainDeleteCreatorFactory(flexMapper).newDeleteTableDef().delete(tableDef);
     }
 }

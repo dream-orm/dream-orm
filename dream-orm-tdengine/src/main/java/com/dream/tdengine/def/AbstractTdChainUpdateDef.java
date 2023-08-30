@@ -1,15 +1,15 @@
-package com.dream.chain.def;
+package com.dream.tdengine.def;
 
 import com.dream.antlr.smt.UpdateStatement;
-import com.dream.flex.def.AbstractUpdate;
-import com.dream.flex.def.Update;
+import com.dream.flex.def.AbstractUpdateDef;
+import com.dream.flex.def.UpdateDef;
 import com.dream.flex.factory.UpdateCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public abstract class AbstractChainUpdate extends AbstractUpdate implements Update, ChainUpdate {
+public abstract class AbstractTdChainUpdateDef extends AbstractUpdateDef implements UpdateDef, TdChainUpdate {
     private FlexMapper flexMapper;
 
-    public AbstractChainUpdate(UpdateStatement statement, UpdateCreatorFactory creatorFactory, FlexMapper flexMapper) {
+    public AbstractTdChainUpdateDef(UpdateStatement statement, UpdateCreatorFactory creatorFactory, FlexMapper flexMapper) {
         super(statement, creatorFactory);
         this.flexMapper = flexMapper;
     }

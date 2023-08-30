@@ -7,10 +7,10 @@ import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.config.SqlInfo;
-import com.dream.flex.def.Delete;
-import com.dream.flex.def.Insert;
+import com.dream.flex.def.DeleteDef;
+import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
-import com.dream.flex.def.Update;
+import com.dream.flex.def.UpdateDef;
 import com.dream.flex.inject.FlexInject;
 import com.dream.flex.invoker.FlexMarkInvoker;
 import com.dream.flex.invoker.FlexMarkInvokerStatement;
@@ -73,18 +73,18 @@ public class DefaultFlexMapper implements FlexMapper {
     }
 
     @Override
-    public int update(Update update) {
-        return update(update.statement());
+    public int update(UpdateDef updateDef) {
+        return update(updateDef.statement());
     }
 
     @Override
-    public int delete(Delete delete) {
-        return delete(delete.statement());
+    public int delete(DeleteDef deleteDef) {
+        return delete(deleteDef.statement());
     }
 
     @Override
-    public int insert(Insert insert) {
-        return insert(insert.statement());
+    public int insertDef(InsertDef insertDef) {
+        return insertDef(insertDef.statement());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class DefaultFlexMapper implements FlexMapper {
         return (int) session.execute(mappedStatement);
     }
 
-    protected int insert(InsertStatement statement) {
+    protected int insertDef(InsertStatement statement) {
         MappedStatement mappedStatement = getMappedStatement(Command.INSERT, statement, NonCollection.class, Integer.class);
         return (int) session.execute(mappedStatement);
     }
@@ -137,8 +137,8 @@ public class DefaultFlexMapper implements FlexMapper {
         limitStatement.setFirst(new SymbolStatement.NumberStatement("0"));
         limitStatement.setSecond(new SymbolStatement.NumberStatement("1"));
         statement.setLimitStatement(limitStatement);
-        Integer result= this.selectOne(statement, Integer.class);
-        return result!=null;
+        Integer result = this.selectOne(statement, Integer.class);
+        return result != null;
     }
 
     protected QueryStatement pageQueryStatement(QueryStatement queryStatement, long startRow, long pageNum) {

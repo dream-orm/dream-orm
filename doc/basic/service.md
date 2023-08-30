@@ -73,7 +73,7 @@ public interface IService<ListView, EditView> {
      * @param view 插入对象
      * @return
      */
-    int insert(EditView view);
+    int insertDef(EditView view);
 
     /**
      * 插入数据并返回主键值

@@ -4,7 +4,7 @@ import com.dream.antlr.smt.*;
 import com.dream.flex.invoker.FlexMarkInvokerStatement;
 
 
-public interface UpdateColumnDef<UpdateColumn extends UpdateColumnDef, UpdateWhere extends UpdateWhereDef> extends Update {
+public interface UpdateDefColumnDef<UpdateColumn extends UpdateDefColumnDef, Update extends UpdateDef> extends UpdateDef {
     default UpdateColumn set(ColumnDef columnDef, ColumnDef columnDef2) {
         Statement where = statement().getConditionList();
         if (where == null) {
@@ -31,10 +31,10 @@ public interface UpdateColumnDef<UpdateColumn extends UpdateColumnDef, UpdateWhe
         return (UpdateColumn) this;
     }
 
-    default UpdateWhere where(ConditionDef conditionDef) {
+    default Update where(ConditionDef conditionDef) {
         WhereStatement whereStatement = new WhereStatement();
         whereStatement.setCondition(conditionDef.getStatement());
         statement().setWhere(whereStatement);
-        return (UpdateWhere) creatorFactory().newUpdateWhereDef(statement());
+        return (Update) creatorFactory().newUpdateDef(statement());
     }
 }

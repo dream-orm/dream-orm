@@ -402,7 +402,7 @@ SELECT COUNT(`account`.`id`) FROM `account`  FOR UPDATE NOWAIT
 **测试**
 
 ```sql
-update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
+updateDef(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
 ```
 
 **SQL输出**
@@ -430,7 +430,7 @@ INSERT INTO `account` (`name`,`age`)VALUES(?,?)
 **测试**
 
 ```sql
-delete(account).where(account.id.eq(1));
+deleteDef(account).where(account.id.eq(1));
 ```
 
 **SQL输出**
@@ -487,26 +487,26 @@ public interface FlexMapper {
     /**
      * 更新操作
      *
-     * @param update 更新定义器
+     * @param updateDef 更新定义器
      * @return 更新数量
      */
-    int update(Update update);
+    int updateDef(Update updateDef);
 
     /**
      * 删除操作
      *
-     * @param delete 删除定义器
+     * @param deleteDef 删除定义器
      * @return 删除数量
      */
-    int delete(Delete delete);
+    int deleteDef(Delete deleteDef);
 
     /**
      * 插入操作
      *
-     * @param insert 插入定义器
+     * @param insertDef 插入定义器
      * @return 插入数量
      */
-    int insert(Insert insert);
+    int insertDef(Insert insertDef);
 }
 ```
 
@@ -516,9 +516,9 @@ public interface FlexMapper {
 | selectOne  | 根据查询链式SQL查询一条数据                                  |
 | selectList | 根据查询链式SQL查询多条数据                                  |
 | selectPage | 根据查询链式SQL分页查询多条数据（链式SQL不支持手动加入分页） |
-| update     | 根据更新链式SQL做修改操作                                    |
-| delete     | 根据删除链式SQL做删除操作                                    |
-| insert     | 根据插入链式SQL做插入操作                                    |
+| updateDef     | 根据更新链式SQL做修改操作                                    |
+| deleteDef     | 根据删除链式SQL做删除操作                                    |
+| insertDef     | 根据插入链式SQL做插入操作                                    |
 
 ### 测试一：查询单条
 
@@ -614,9 +614,9 @@ public void testSelectById() {
      */
     @Test
     public void testUpdate() {
-        Update update = update(account).set(account.age, account.age.add(1))
+        Update updateDef = updateDef(account).set(account.age, account.age.add(1))
             .set(account.name, "accountName").where(account.id.eq(1));
-        flexMapper.update(update);
+        flexMapper.updateDef(updateDef);
     }
 ```
 
@@ -639,8 +639,8 @@ public void testSelectById() {
      */
     @Test
     public void testInsert() {
-        Insert insert = insertInto(account).columns(account.name, account.age).values("accountName", 12);
-        flexMapper.insert(insert);
+        Insert insertDef = insertInto(account).columns(account.name, account.age).values("accountName", 12);
+        flexMapper.insertDef(insertDef);
     }
 ```
 
@@ -663,8 +663,8 @@ public void testSelectById() {
      */
     @Test
     public void testDelete() {
-        Delete delete= delete(account).where(account.id.eq(1));
-        flexMapper.delete(delete);
+        Delete deleteDef= deleteDef(account).where(account.id.eq(1));
+        flexMapper.deleteDef(deleteDef);
     }
 ```
 

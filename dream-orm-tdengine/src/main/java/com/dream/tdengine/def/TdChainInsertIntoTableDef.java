@@ -1,6 +1,5 @@
 package com.dream.tdengine.def;
 
-import com.dream.antlr.smt.InsertStatement;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.InsertIntoTableDef;
@@ -10,9 +9,9 @@ import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.statement.TdInsertStatement;
 
-public class TdChainInsertIntoTableDef extends AbstractTdChainInsert implements InsertIntoTableDef<TdChainInsertIntoColumnsDef, TdChainInsertIntoValuesDef> {
-    public TdChainInsertIntoTableDef(InsertStatement insertStatement, InsertCreatorFactory creatorFactory, FlexMapper flexMapper) {
-        super(insertStatement, creatorFactory, flexMapper);
+public class TdChainInsertIntoTableDef extends AbstractTdChainInsertDef implements InsertIntoTableDef<TdChainInsertIntoColumnsDef> {
+    public TdChainInsertIntoTableDef(InsertCreatorFactory creatorFactory, FlexMapper flexMapper) {
+        super(new TdInsertStatement(), creatorFactory, flexMapper);
     }
 
     public TdChainInsertIntoTableDef using(TableDef tableDef) {
@@ -36,7 +35,7 @@ public class TdChainInsertIntoTableDef extends AbstractTdChainInsert implements 
     }
 
     @Override
-    public TdChainInsertIntoValuesDef file(String file) {
+    public TdChainInsertDef file(String file) {
         return super.file(file);
     }
 }

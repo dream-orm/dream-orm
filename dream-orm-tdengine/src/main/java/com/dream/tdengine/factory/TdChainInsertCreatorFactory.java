@@ -8,7 +8,7 @@ import com.dream.tdengine.def.TdChainInsertIntoColumnsDef;
 import com.dream.tdengine.def.TdChainInsertIntoTableDef;
 import com.dream.tdengine.def.TdChainInsertIntoValuesDef;
 
-public class TdChainInsertCreatorFactory implements InsertCreatorFactory<TdChainInsertDef, TdChainInsertIntoTableDef, TdChainInsertIntoColumnsDef, TdChainInsertIntoValuesDef> {
+public class TdChainInsertCreatorFactory implements InsertCreatorFactory<TdChainInsertIntoTableDef, TdChainInsertIntoColumnsDef, TdChainInsertIntoValuesDef, TdChainInsertDef> {
     private FlexMapper flexMapper;
 
     public TdChainInsertCreatorFactory(FlexMapper flexMapper) {
@@ -16,13 +16,13 @@ public class TdChainInsertCreatorFactory implements InsertCreatorFactory<TdChain
     }
 
     @Override
-    public TdChainInsertDef newInsertDef() {
-        return new TdChainInsertDef(this, flexMapper);
+    public TdChainInsertDef newInsertDef(InsertStatement statement) {
+        return new TdChainInsertDef(statement, this, flexMapper);
     }
 
     @Override
-    public TdChainInsertIntoTableDef newInsertIntoTableDef(InsertStatement statement) {
-        return new TdChainInsertIntoTableDef(statement, this, flexMapper);
+    public TdChainInsertIntoTableDef newInsertIntoTableDef() {
+        return new TdChainInsertIntoTableDef(this, flexMapper);
     }
 
     @Override

@@ -8,21 +8,17 @@ import com.dream.chain.def.ChainInsertIntoValuesDef;
 import com.dream.flex.factory.InsertCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public class ChainInsertCreatorFactory implements InsertCreatorFactory<ChainInsertDef, ChainInsertIntoTableDef, ChainInsertIntoColumnsDef, ChainInsertIntoValuesDef> {
+public class ChainInsertCreatorFactory implements InsertCreatorFactory<ChainInsertIntoTableDef, ChainInsertIntoColumnsDef, ChainInsertIntoValuesDef, ChainInsertDef> {
     private FlexMapper flexMapper;
 
     public ChainInsertCreatorFactory(FlexMapper flexMapper) {
         this.flexMapper = flexMapper;
     }
 
-    @Override
-    public ChainInsertDef newInsertDef() {
-        return new ChainInsertDef(this, flexMapper);
-    }
 
     @Override
-    public ChainInsertIntoTableDef newInsertIntoTableDef(InsertStatement statement) {
-        return new ChainInsertIntoTableDef(statement, this, flexMapper);
+    public ChainInsertIntoTableDef newInsertIntoTableDef() {
+        return new ChainInsertIntoTableDef(this, flexMapper);
     }
 
     @Override
@@ -33,5 +29,10 @@ public class ChainInsertCreatorFactory implements InsertCreatorFactory<ChainInse
     @Override
     public ChainInsertIntoValuesDef newInsertIntoValuesDef(InsertStatement statement) {
         return new ChainInsertIntoValuesDef(statement, this, flexMapper);
+    }
+
+    @Override
+    public ChainInsertDef newInsertDef(InsertStatement statement) {
+        return new ChainInsertDef(statement, this, flexMapper);
     }
 }

@@ -19,8 +19,8 @@ class TableUtil {
         Table tableAnnotation = type.getDeclaredAnnotation(Table.class);
         if (tableAnnotation != null) {
             String table = tableAnnotation.value();
-            if(ObjectUtil.isNull(table)){
-                table=SystemUtil.camelToUnderline(type.getSimpleName());
+            if (ObjectUtil.isNull(table)) {
+                table = SystemUtil.camelToUnderline(type.getSimpleName());
             }
             return table;
         }

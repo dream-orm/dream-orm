@@ -100,7 +100,7 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testInsert() {
-        testSqlForMany("insert into dual(id,name)values(id,name)");
+        testSqlForMany("insertDef into dual(id,name)values(id,name)");
     }
 
     @Test

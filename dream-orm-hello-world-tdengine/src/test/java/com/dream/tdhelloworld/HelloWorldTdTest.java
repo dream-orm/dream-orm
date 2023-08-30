@@ -1,7 +1,6 @@
 package com.dream.tdhelloworld;
 
 import com.dream.system.config.Page;
-import com.dream.tdengine.mapper.FlexTdChainMapper;
 import com.dream.tdengine.mapper.FlexTdMapper;
 import com.dream.tdhelloworld.table.Meters;
 import org.junit.Test;
@@ -117,7 +116,7 @@ public class HelloWorldTdTest {
      */
     @Test
     public void insertEntity() {
-        Meters meters=new Meters();
+        Meters meters = new Meters();
         meters.setTs(new Date());
         meters.setCurrent(1.23);
         meters.setPhase(3.45);

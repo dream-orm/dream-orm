@@ -1,7 +1,7 @@
 package com.dream.helloworld;
 
 import com.dream.flex.config.SqlInfo;
-import com.dream.flex.def.Insert;
+import com.dream.flex.def.InsertDef;
 import com.dream.helloworld.debug.FlexDebug;
 import com.dream.helloworld.table.Account;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import static com.dream.helloworld.table.table.AccountTableDef.account;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
-public class HelloWorldFlexInsertTest {
+public class HelloWorldFlexInsertTestDef {
     FlexDebug flexDebug = new FlexDebug();
 
     /**
@@ -25,8 +25,8 @@ public class HelloWorldFlexInsertTest {
      */
     @Test
     public void testInsert() {
-        Insert insert = insertInto(account).columns(account.name, account.age).values("accountName", 12);
-        SqlInfo sqlInfo = flexDebug.toSQL(insert);
+        InsertDef insertDef = insertInto(account).columns(account.name, account.age).values("accountName", 12);
+        SqlInfo sqlInfo = flexDebug.toSQL(insertDef);
         System.out.println(sqlInfo.getSql());
     }
 
@@ -35,8 +35,8 @@ public class HelloWorldFlexInsertTest {
      */
     @Test
     public void testInsert2() {
-        Insert insert = insertInto(account).values("accountName", 12);
-        SqlInfo sqlInfo = flexDebug.toSQL(insert);
+        InsertDef insertDef = insertInto(account).values("accountName", 12);
+        SqlInfo sqlInfo = flexDebug.toSQL(insertDef);
         System.out.println(sqlInfo.getSql());
     }
 
@@ -53,11 +53,11 @@ public class HelloWorldFlexInsertTest {
             account.setAge(i * 2);
             accountList.add(account);
         }
-        Insert insert = insertInto(account).columns(account.id, account.name, account.age).valuesList(accountList, acc -> {
+        InsertDef insertDef = insertInto(account).columns(account.id, account.name, account.age).valuesList(accountList, acc -> {
             Account account = (Account) acc;
             return new Object[]{account.getId(), account.getName(), account.getAge()};
         });
-        SqlInfo sqlInfo = flexDebug.toSQL(insert);
+        SqlInfo sqlInfo = flexDebug.toSQL(insertDef);
         System.out.println(sqlInfo.getSql());
     }
 

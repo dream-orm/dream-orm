@@ -16,5 +16,5 @@ public @interface Table {
      *
      * @return
      */
-    String value()default "";
+    String value() default "";
 }

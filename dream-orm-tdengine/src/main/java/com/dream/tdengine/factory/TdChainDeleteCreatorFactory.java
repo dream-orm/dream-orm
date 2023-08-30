@@ -7,7 +7,7 @@ import com.dream.tdengine.def.TdChainDeleteDef;
 import com.dream.tdengine.def.TdChainDeleteTableDef;
 import com.dream.tdengine.def.TdChainDeleteWhereDef;
 
-public class TdChainDeleteCreatorFactory implements DeleteCreatorFactory<TdChainDeleteDef, TdChainDeleteTableDef, TdChainDeleteWhereDef> {
+public class TdChainDeleteCreatorFactory implements DeleteCreatorFactory<TdChainDeleteTableDef, TdChainDeleteWhereDef, TdChainDeleteDef> {
     private FlexMapper flexMapper;
 
     public TdChainDeleteCreatorFactory(FlexMapper flexMapper) {
@@ -15,13 +15,13 @@ public class TdChainDeleteCreatorFactory implements DeleteCreatorFactory<TdChain
     }
 
     @Override
-    public TdChainDeleteDef newDeleteDef() {
+    public TdChainDeleteDef newDeleteDef(DeleteStatement statement) {
         return new TdChainDeleteDef(this, flexMapper);
     }
 
     @Override
-    public TdChainDeleteTableDef newDeleteTableDef(DeleteStatement statement) {
-        return new TdChainDeleteTableDef(statement, this, flexMapper);
+    public TdChainDeleteTableDef newDeleteTableDef() {
+        return new TdChainDeleteTableDef(this, flexMapper);
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.dream.flex.mapper;
 
-import com.dream.flex.def.*;
+import com.dream.flex.def.DeleteDef;
+import com.dream.flex.def.InsertDef;
+import com.dream.flex.def.QueryDef;
+import com.dream.flex.def.UpdateDef;
 import com.dream.system.config.Page;
 import com.dream.system.inject.Inject;
 
@@ -51,29 +54,30 @@ public interface FlexMapper {
     /**
      * 更新操作
      *
-     * @param update 更新定义器
+     * @param updateDef 更新定义器
      * @return 更新数量
      */
-    int update(Update update);
+    int update(UpdateDef updateDef);
 
     /**
      * 删除操作
      *
-     * @param delete 删除定义器
+     * @param deleteDef 删除定义器
      * @return 删除数量
      */
-    int delete(Delete delete);
+    int delete(DeleteDef deleteDef);
 
     /**
      * 插入操作
      *
-     * @param insert 插入定义器
+     * @param insertDef 插入定义器
      * @return 插入数量
      */
-    int insert(Insert insert);
+    int insertDef(InsertDef insertDef);
 
     /**
      * 数据是否存在
+     *
      * @param queryDef
      * @return
      */

@@ -1,8 +1,8 @@
 package com.dream.chain.mapper;
 
-import com.dream.chain.def.ChainDeleteTableDef;
+import com.dream.chain.def.ChainDeleteWhereDef;
 import com.dream.chain.def.ChainFromDef;
-import com.dream.chain.def.ChainInsertIntoTableDef;
+import com.dream.chain.def.ChainInsertIntoColumnsDef;
 import com.dream.chain.def.ChainUpdateColumnDef;
 import com.dream.chain.factory.ChainDeleteCreatorFactory;
 import com.dream.chain.factory.ChainInsertCreatorFactory;
@@ -31,16 +31,16 @@ public class DefaultFlexChainMapper implements FlexChainMapper {
 
     @Override
     public ChainUpdateColumnDef update(TableDef tableDef) {
-        return new ChainUpdateCreatorFactory(flexMapper).newUpdateDef().update(tableDef);
+        return new ChainUpdateCreatorFactory(flexMapper).newUpdateTableDef().update(tableDef);
     }
 
     @Override
-    public ChainInsertIntoTableDef insertInto(TableDef tableDef) {
-        return new ChainInsertCreatorFactory(flexMapper).newInsertDef().insertInto(tableDef);
+    public ChainInsertIntoColumnsDef insertInto(TableDef tableDef) {
+        return new ChainInsertCreatorFactory(flexMapper).newInsertIntoTableDef().insertInto(tableDef);
     }
 
     @Override
-    public ChainDeleteTableDef delete(TableDef tableDef) {
-        return new ChainDeleteCreatorFactory(flexMapper).newDeleteDef().delete(tableDef);
+    public ChainDeleteWhereDef delete(TableDef tableDef) {
+        return new ChainDeleteCreatorFactory(flexMapper).newDeleteTableDef().delete(tableDef);
     }
 }

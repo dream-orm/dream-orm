@@ -7,25 +7,27 @@ import com.dream.chain.def.ChainDeleteWhereDef;
 import com.dream.flex.factory.DeleteCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public class ChainDeleteCreatorFactory implements DeleteCreatorFactory<ChainDeleteDef, ChainDeleteTableDef, ChainDeleteWhereDef> {
+public class ChainDeleteCreatorFactory implements DeleteCreatorFactory<ChainDeleteTableDef, ChainDeleteWhereDef, ChainDeleteDef> {
     private FlexMapper flexMapper;
 
     public ChainDeleteCreatorFactory(FlexMapper flexMapper) {
         this.flexMapper = flexMapper;
     }
 
-    @Override
-    public ChainDeleteDef newDeleteDef() {
-        return new ChainDeleteDef(this, flexMapper);
-    }
 
     @Override
-    public ChainDeleteTableDef newDeleteTableDef(DeleteStatement statement) {
-        return new ChainDeleteTableDef(statement, this, flexMapper);
+    public ChainDeleteTableDef newDeleteTableDef() {
+        return new ChainDeleteTableDef(this, flexMapper);
     }
 
     @Override
     public ChainDeleteWhereDef newDeleteWhereDef(DeleteStatement statement) {
         return new ChainDeleteWhereDef(statement, this, flexMapper);
     }
+
+    @Override
+    public ChainDeleteDef newDeleteDef(DeleteStatement statement) {
+        return new ChainDeleteDef(this, flexMapper);
+    }
+
 }

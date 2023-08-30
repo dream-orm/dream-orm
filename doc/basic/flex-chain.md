@@ -19,7 +19,7 @@ public interface FlexChainMapper {
      * @param tableDef 表
      * @return 更新链式
      */
-    ChainUpdateColumnDef update(TableDef tableDef);
+    ChainUpdateColumnDef updateDef(TableDef tableDef);
 
     /**
      * 插入链式操作
@@ -33,16 +33,16 @@ public interface FlexChainMapper {
      * @param tableDef 表
      * @return 删除链式
      */
-    ChainDeleteTableDef delete(TableDef tableDef);
+    ChainDeleteTableDef deleteDef(TableDef tableDef);
 }
 ```
 
 | 方法名     | 描述         |
 | ---------- | ------------ |
 | select     | 查询链式操作 |
-| update     | 更新链式操作 |
+| updateDef     | 更新链式操作 |
 | insertInto | 插入链式操作 |
-| delete     | 删除链式操作 |
+| deleteDef     | 删除链式操作 |
 
 ## 测试一：查询单条
 
@@ -140,7 +140,7 @@ public interface FlexChainMapper {
      */
     @Test
     public void testUpdate() {
-        flexChainMapper.update(account).set(account.age, account.age.add(1))
+        flexChainMapper.updateDef(account).set(account.age, account.age.add(1))
                 .set(account.name, "accountName")
                 .where(account.id.eq(1)).execute();
     }
@@ -188,7 +188,7 @@ public interface FlexChainMapper {
      */
     @Test
     public void testDelete() {
-        flexChainMapper.delete(account).where(account.id.eq(1)).execute();
+        flexChainMapper.deleteDef(account).where(account.id.eq(1)).execute();
     }
 ```
 
