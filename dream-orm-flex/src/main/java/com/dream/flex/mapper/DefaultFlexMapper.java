@@ -103,13 +103,12 @@ public class DefaultFlexMapper implements FlexMapper {
     }
 
     protected <T> Page<T> selectPage(QueryStatement statement, Class<T> type, Page page) {
-        QueryStatement queryStatement = pageQueryStatement(statement, page.getStartRow(), page.getPageSize());
-        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, queryStatement, Collection.class, type);
-        queryStatement.setLimitStatement(null);
         if (page.getTotal() == 0) {
-            MappedStatement countMappedStatement = getMappedStatement(Command.QUERY, countQueryStatement(queryStatement), NonCollection.class, Long.class);
+            MappedStatement countMappedStatement = getMappedStatement(Command.QUERY, countQueryStatement(statement), NonCollection.class, Long.class);
             page.setTotal((long) session.execute(countMappedStatement));
         }
+        QueryStatement queryStatement = pageQueryStatement(statement, page.getStartRow(), page.getPageSize());
+        MappedStatement mappedStatement = getMappedStatement(Command.QUERY, queryStatement, Collection.class, type);
         page.setRows((Collection) session.execute(mappedStatement));
         return page;
     }
