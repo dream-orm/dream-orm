@@ -347,7 +347,7 @@ public void insertEntity() {
     meters.setVoltage(4);
     meters.setGroupid(1);
     meters.setLocation("a");
-    flexTdMapper.insertDef("d1001", meters);
+    flexTdMapper.insert("d1001", meters);
 }
 ```
 

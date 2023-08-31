@@ -14,7 +14,7 @@
 | selectPage(Class&lt;T&gt; type, Object conditionObject, Page page) | 根据注解生成条件，分页查询多条         |
 | updateById(Object view)                                      | 主键更新                               |
 | updateNonById(Object view)                                   | 主键非空更新，注意：空字符串也更新     |
-| insertDef(Object view)                                          | 插入                                   |
+| insert(Object view)                                          | 插入                                   |
 | insertFetchKey(Object view)                                  | 插入并在view属性记录主键值             |
 | deleteById(Class&lt;?&gt; type, Object id)                   | 主键删除                               |
 | deleteByIds(Class&lt;?&gt; type, Collection&lt;?&gt; idList) | 主键批量删除                           |
@@ -168,7 +168,7 @@ public void testInsertValidated() {
     ValidatedAccountView validatedAccountView=new ValidatedAccountView();
     validatedAccountView.setId(12);
     validatedAccountView.setName("12");
-    templateMapper.insertDef(validatedAccountView);
+    templateMapper.insert(validatedAccountView);
 }
 ```
 

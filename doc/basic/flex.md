@@ -402,7 +402,7 @@ SELECT COUNT(`account`.`id`) FROM `account`  FOR UPDATE NOWAIT
 **测试**
 
 ```sql
-updateDef(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
+update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
 ```
 
 **SQL输出**
@@ -430,7 +430,7 @@ INSERT INTO `account` (`name`,`age`)VALUES(?,?)
 **测试**
 
 ```sql
-deleteDef(account).where(account.id.eq(1));
+delete(account).where(account.id.eq(1));
 ```
 
 **SQL输出**
@@ -490,7 +490,7 @@ public interface FlexMapper {
      * @param updateDef 更新定义器
      * @return 更新数量
      */
-    int updateDef(Update updateDef);
+    int update(Update updateDef);
 
     /**
      * 删除操作
@@ -498,7 +498,7 @@ public interface FlexMapper {
      * @param deleteDef 删除定义器
      * @return 删除数量
      */
-    int deleteDef(Delete deleteDef);
+    int delete(Delete deleteDef);
 
     /**
      * 插入操作
@@ -506,19 +506,19 @@ public interface FlexMapper {
      * @param insertDef 插入定义器
      * @return 插入数量
      */
-    int insertDef(Insert insertDef);
+    int insert(Insert insertDef);
 }
 ```
 
-| 方法       | 描述                                                         |
-| ---------- | ------------------------------------------------------------ |
-| WHITE_SET  | 链式使用插件的白名单，默认不添加，处于性能考虑，需要开发者手动加入插件到白名单 |
-| selectOne  | 根据查询链式SQL查询一条数据                                  |
+| 方法     | 描述                                                         |
+| ------ | ------------------------------------------------------------ |
+| WHITE_SET | 链式使用插件的白名单，默认不添加，处于性能考虑，需要开发者手动加入插件到白名单 |
+| selectOne | 根据查询链式SQL查询一条数据                                  |
 | selectList | 根据查询链式SQL查询多条数据                                  |
 | selectPage | 根据查询链式SQL分页查询多条数据（链式SQL不支持手动加入分页） |
-| updateDef     | 根据更新链式SQL做修改操作                                    |
-| deleteDef     | 根据删除链式SQL做删除操作                                    |
-| insertDef     | 根据插入链式SQL做插入操作                                    |
+| update | 根据更新链式SQL做修改操作                                    |
+| delete | 根据删除链式SQL做删除操作                                    |
+| insert | 根据插入链式SQL做插入操作                                    |
 
 ### 测试一：查询单条
 
@@ -614,9 +614,9 @@ public void testSelectById() {
      */
     @Test
     public void testUpdate() {
-        Update updateDef = updateDef(account).set(account.age, account.age.add(1))
+        Update updateDef = update(account).set(account.age, account.age.add(1))
             .set(account.name, "accountName").where(account.id.eq(1));
-        flexMapper.updateDef(updateDef);
+        flexMapper.update(updateDef);
     }
 ```
 
@@ -640,7 +640,7 @@ public void testSelectById() {
     @Test
     public void testInsert() {
         Insert insertDef = insertInto(account).columns(account.name, account.age).values("accountName", 12);
-        flexMapper.insertDef(insertDef);
+        flexMapper.insert(insertDef);
     }
 ```
 
@@ -663,8 +663,8 @@ public void testSelectById() {
      */
     @Test
     public void testDelete() {
-        Delete deleteDef= deleteDef(account).where(account.id.eq(1));
-        flexMapper.deleteDef(deleteDef);
+        DeleteDef deleteDef= delete(account).where(account.id.eq(1));
+        flexMapper.delete(deleteDef);
     }
 ```
 

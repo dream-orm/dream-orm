@@ -16,6 +16,6 @@ public abstract class AbstractChainInsertDef extends AbstractInsertDef implement
 
     @Override
     public int execute() {
-        return flexMapper.insertDef(this);
+        return flexMapper.insert(this);
     }
 }

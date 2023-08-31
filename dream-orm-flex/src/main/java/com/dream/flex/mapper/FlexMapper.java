@@ -73,7 +73,7 @@ public interface FlexMapper {
      * @param insertDef 插入定义器
      * @return 插入数量
      */
-    int insertDef(InsertDef insertDef);
+    int insert(InsertDef insertDef);
 
     /**
      * 数据是否存在

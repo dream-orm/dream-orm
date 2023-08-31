@@ -83,8 +83,8 @@ public class DefaultFlexMapper implements FlexMapper {
     }
 
     @Override
-    public int insertDef(InsertDef insertDef) {
-        return insertDef(insertDef.statement());
+    public int insert(InsertDef insertDef) {
+        return insert(insertDef.statement());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class DefaultFlexMapper implements FlexMapper {
         return (int) session.execute(mappedStatement);
     }
 
-    protected int insertDef(InsertStatement statement) {
+    protected int insert(InsertStatement statement) {
         MappedStatement mappedStatement = getMappedStatement(Command.INSERT, statement, NonCollection.class, Integer.class);
         return (int) session.execute(mappedStatement);
     }

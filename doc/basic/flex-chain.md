@@ -9,40 +9,53 @@
 public interface FlexChainMapper {
     /**
      * 查询链式操作
+     *
      * @param columnDefs 查询字段集
      * @return 查询链式
      */
-    ChainSelectDef select(ColumnDef... columnDefs);
+    ChainFromDef select(ColumnDef... columnDefs);
+
+    /**
+     * 查询链式操作
+     *
+     * @param distinct   是否去重
+     * @param columnDefs columnDefs 查询字段集
+     * @return
+     */
+    ChainFromDef select(boolean distinct, ColumnDef... columnDefs);
 
     /**
      * 更新链式操作
+     *
      * @param tableDef 表
      * @return 更新链式
      */
-    ChainUpdateColumnDef updateDef(TableDef tableDef);
+    ChainUpdateColumnDef update(TableDef tableDef);
 
     /**
      * 插入链式操作
+     *
      * @param tableDef 表
      * @return 插入链式
      */
-    ChainInsertIntoTableDef insertInto(TableDef tableDef);
+    ChainInsertIntoColumnsDef insertInto(TableDef tableDef);
 
     /**
      * 删除链式操作
+     *
      * @param tableDef 表
      * @return 删除链式
      */
-    ChainDeleteTableDef deleteDef(TableDef tableDef);
+    ChainDeleteWhereDef delete(TableDef tableDef);
 }
 ```
 
 | 方法名     | 描述         |
-| ---------- | ------------ |
-| select     | 查询链式操作 |
-| updateDef     | 更新链式操作 |
+| ------- | ------------ |
+| select  | 查询链式操作 |
+| update  | 更新链式操作 |
 | insertInto | 插入链式操作 |
-| deleteDef     | 删除链式操作 |
+| delete  | 删除链式操作 |
 
 ## 测试一：查询单条
 
@@ -140,7 +153,7 @@ public interface FlexChainMapper {
      */
     @Test
     public void testUpdate() {
-        flexChainMapper.updateDef(account).set(account.age, account.age.add(1))
+        flexChainMapper.update(account).set(account.age, account.age.add(1))
                 .set(account.name, "accountName")
                 .where(account.id.eq(1)).execute();
     }
@@ -188,7 +201,7 @@ public interface FlexChainMapper {
      */
     @Test
     public void testDelete() {
-        flexChainMapper.deleteDef(account).where(account.id.eq(1)).execute();
+        flexChainMapper.delete(account).where(account.id.eq(1)).execute();
     }
 ```
 

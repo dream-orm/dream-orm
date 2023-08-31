@@ -72,7 +72,7 @@ public class HelloWorldFlexTest {
     @Test
     public void testInsert() {
         InsertDef insertDef = insertInto(account).columns(account.name, account.age).values("accountName", 12);
-        flexMapper.insertDef(insertDef);
+        flexMapper.insert(insertDef);
     }
 
     /**
@@ -92,7 +92,7 @@ public class HelloWorldFlexTest {
             Account account = (Account) acc;
             return new Object[]{account.getId(), account.getName(), account.getAge()};
         });
-        flexMapper.insertDef(insertDef);
+        flexMapper.insert(insertDef);
     }
 
     /**

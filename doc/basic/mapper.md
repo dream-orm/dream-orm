@@ -430,8 +430,8 @@ public interface AccountMapper {
 ```java
 @Mapper
 public interface AccountMapper {
-    @Sql("insertDef into account(id,name)values(@?(account.id),@?(account.name))")
-    int insertDef(@Param("account") AccountView accountView);
+    @Sql("insert into account(id,name)values(@?(account.id),@?(account.name))")
+    int insert(@Param("account") AccountView accountView);
 }
 ```
 
@@ -449,14 +449,14 @@ public interface AccountMapper {
         AccountView accountView=new AccountView();
         accountView.setId(12);
         accountView.setName("accountName");
-        accountMapper.insertDef(accountView);
+        accountMapper.insert(accountView);
     }
 ```
 
 **控制台输出**
 
 ```tex
-方法：com.dream.helloworld.mapper.AccountMapper.insertDef
+方法：com.dream.helloworld.mapper.AccountMapper.insert
 语句：INSERT INTO account(id,name)VALUES(?,?)
 参数：[12, accountName]
 用时：16ms
@@ -469,7 +469,7 @@ public interface AccountMapper {
 ```java
 @Mapper
 public interface AccountMapper {
-    @Sql("deleteDef from account where id=@?(id)")
+    @Sql("delete from account where id=@?(id)")
     int deleteById(@Param("id") long id);
 }
 ```
@@ -505,7 +505,7 @@ public interface AccountMapper {
 ```java
 @Mapper
 public interface AccountMapper {
-    @Sql("deleteDef from account where id in (@foreach(ids))")
+    @Sql("delete from account where id in (@foreach(ids))")
     int deleteByIds(@Param("ids") List<Integer>ids);
 }
 ```
@@ -541,7 +541,7 @@ public interface AccountMapper {
 ```java
 @Mapper
 public interface AccountMapper {
-    @Sql("deleteDef from account where id in (@foreach(accounts,@?(item.id)))")
+    @Sql("delete from account where id in (@foreach(accounts,@?(item.id)))")
     int deleteByViews(@Param("accounts") List<AccountView>accountViews);
 }
 ```
