@@ -17,7 +17,7 @@ import static com.dream.helloworld.table.table.AccountTableDef.account;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
-public class HelloWorldFlexInsertTestDef {
+public class HelloWorldFlexInsertTest {
     FlexDebug flexDebug = new FlexDebug();
 
     /**

@@ -348,7 +348,7 @@ public interface AccountMapper {
 ```java
 @Mapper
 public interface AccountMapper {
-    @Sql("updateDef account set name=@?(account.name),age=@?(account.age) where id=@?(account.id)")
+    @Sql("update account set name=@?(account.name),age=@?(account.age) where id=@?(account.id)")
     int updateById(@Param("account") AccountView accountView);
 }
 ```
@@ -387,7 +387,7 @@ public interface AccountMapper {
 ```java
 @Mapper
 public interface AccountMapper {
-    @Sql("updateDef account set @non(name=@?(account.name),age=@?(account.age)) where id=@?(account.id)")
+    @Sql("update account set @non(name=@?(account.name),age=@?(account.age)) where id=@?(account.id)")
     int updateNonById(@Param("account") AccountView accountView);
 }
 ```

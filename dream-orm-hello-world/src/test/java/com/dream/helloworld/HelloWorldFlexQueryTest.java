@@ -19,7 +19,7 @@ import static com.dream.helloworld.table.table.AccountTableDef.account;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
-public class HelloWorldFlexQueryTestDef {
+public class HelloWorldFlexQueryTest {
     FlexDebug flexDebug = new FlexDebug();
 
     /**

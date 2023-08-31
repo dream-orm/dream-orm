@@ -4,7 +4,7 @@
 
 **注入器：[PermissionInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/permission/inject/PermissionInject.java)**
 
-**处理器：[PermissionInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/permission/inject/PermissionInject.java)**
+**处理器：[PermissionHandler](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/permission/inject/PermissionHandler.java)**
 
 ```java
 public interface PermissionHandler {

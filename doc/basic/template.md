@@ -136,7 +136,7 @@ public interface Condition {
 | StartWithCondition | like '%?'       |
 | BetweenCondition   | between ? and ? |
 
-**当然，液可以基于接口实现自己的条件类，除了生成条件外，也可以对参数值校验、参数值修改、默认值填充以及指定排序字段。**
+**当然，也可以基于接口实现自己的条件类，除了生成条件外，也可以对参数值校验、参数值修改、默认值填充以及指定排序字段。**
 
 ## 注解校验
 
