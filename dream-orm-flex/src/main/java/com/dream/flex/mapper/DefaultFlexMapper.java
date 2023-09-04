@@ -17,6 +17,7 @@ import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.invoker.FlexTableInvoker;
 import com.dream.system.cache.CacheKey;
 import com.dream.system.config.*;
+import com.dream.system.core.resultsethandler.TransformResultSetHandler;
 import com.dream.system.core.session.Session;
 import com.dream.system.inject.PageInject;
 import com.dream.system.inject.factory.InjectFactory;
@@ -28,6 +29,8 @@ import com.dream.system.util.SystemUtil;
 import com.dream.util.common.NonCollection;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
+import com.dream.util.tree.Tree;
+import com.dream.util.tree.TreeUtil;
 
 import java.sql.Types;
 import java.util.*;
@@ -68,6 +71,11 @@ public class DefaultFlexMapper implements FlexMapper {
     }
 
     @Override
+    public <T extends Tree> List<T> selectTree(QueryDef queryDef, Class<T> type) {
+        return selectTree(queryDef.statement(), type);
+    }
+
+    @Override
     public <T> Page<T> selectPage(QueryDef queryDef, Class<T> type, Page page) {
         return selectPage(queryDef.statement(), type, page);
     }
@@ -99,6 +107,13 @@ public class DefaultFlexMapper implements FlexMapper {
 
     protected <T> List<T> selectList(QueryStatement statement, Class<T> type) {
         MappedStatement mappedStatement = getMappedStatement(Command.QUERY, statement, List.class, type);
+        return (List<T>) session.execute(mappedStatement);
+    }
+
+    protected <T> List<T> selectTree(QueryStatement statement, Class<T> type) {
+        MethodInfo methodInfo = getMethodInfo(statement, List.class, type);
+        methodInfo.setResultSetHandler(new TransformResultSetHandler<Collection,List>(result-> TreeUtil.toTree(result)));
+        MappedStatement mappedStatement = getMappedStatement(methodInfo,Command.QUERY);
         return (List<T>) session.execute(mappedStatement);
     }
 
@@ -197,6 +212,10 @@ public class DefaultFlexMapper implements FlexMapper {
 
     protected MappedStatement getMappedStatement(Command command, Statement statement, Class<? extends Collection> rowType, Class<?> colType) {
         MethodInfo methodInfo = getMethodInfo(statement, rowType, colType);
+        return getMappedStatement(methodInfo,command);
+    }
+
+    protected MappedStatement getMappedStatement(MethodInfo methodInfo,Command command) {
         SqlInfo sqlInfo = toSQL(methodInfo);
         List<Object> paramList = sqlInfo.getParamList();
         List<MappedParam> mappedParamList = null;
@@ -218,7 +237,7 @@ public class DefaultFlexMapper implements FlexMapper {
         }
         String sql = sqlInfo.getSql();
         CacheKey methodKey = SystemUtil.cacheKey(sql, 5, false);
-        methodKey.update(rowType, colType);
+        methodKey.update(methodInfo.getRowType(),methodInfo.getColType());
         methodInfo.setMethodKey(methodKey);
         CacheKey uniqueKey = methodKey.clone();
         uniqueKey.update(sqlInfo.getParamList().toArray());
@@ -232,7 +251,6 @@ public class DefaultFlexMapper implements FlexMapper {
                 .build();
         return mappedStatement;
     }
-
     protected SqlInfo toSQL(MethodInfo methodInfo) {
         Map<Class, Object> customMap = new HashMap<>();
         customMap.put(MethodInfo.class, methodInfo);

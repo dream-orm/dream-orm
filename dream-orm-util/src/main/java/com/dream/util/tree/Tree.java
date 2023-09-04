@@ -1,4 +1,4 @@
-package com.dream.template.resulthandler;
+package com.dream.util.tree;
 
 import java.util.List;
 
@@ -27,12 +27,5 @@ public interface Tree<T> {
      *
      * @return
      */
-    List<? extends Tree> getChildren();
-
-    /**
-     * 设置当前子类
-     *
-     * @param children 子类
-     */
-    void setChildren(List<? extends Tree> children);
+    List<? extends Tree> getChildrenOrNew();
 }

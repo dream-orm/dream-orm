@@ -2,15 +2,19 @@ package com.dream.template.mapper;
 
 import com.dream.system.config.MethodInfo;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
+import com.dream.system.core.resultsethandler.TransformResultSetHandler;
 import com.dream.system.core.session.Session;
-import com.dream.template.resulthandler.TreeResultSetHandler;
+import com.dream.util.tree.TreeUtil;
+
+import java.util.Collection;
+import java.util.List;
 
 public class SelectTreeMapper extends SelectListMapper {
     private ResultSetHandler resultSetHandler;
 
     public SelectTreeMapper(Session session) {
         super(session);
-        resultSetHandler = new TreeResultSetHandler(session.getConfiguration().getResultSetHandler());
+        resultSetHandler = new TransformResultSetHandler<Collection, List>(result-> TreeUtil.toTree(result));
     }
 
     @Override

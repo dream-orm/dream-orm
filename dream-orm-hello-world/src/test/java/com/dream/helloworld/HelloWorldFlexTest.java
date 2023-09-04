@@ -7,6 +7,7 @@ import com.dream.flex.def.UpdateDef;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.helloworld.table.Account;
 import com.dream.helloworld.view.AccountView;
+import com.dream.helloworld.view.TreeAccountView;
 import com.dream.system.config.Page;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -112,5 +113,15 @@ public class HelloWorldFlexTest {
         QueryDef queryDef = select().from(account).where(account.id.gt(3));
         boolean exists = flexMapper.exists(queryDef);
         System.out.println("查询结果：" + exists);
+    }
+
+    /**
+     * 测试树查询
+     */
+    @Test
+    public void testTree() {
+        QueryDef queryDef = select(account.treeAccountView).from(account);
+        List<TreeAccountView> treeAccountViews = flexMapper.selectTree(queryDef, TreeAccountView.class);
+        System.out.println("查询结果：" + treeAccountViews);
     }
 }

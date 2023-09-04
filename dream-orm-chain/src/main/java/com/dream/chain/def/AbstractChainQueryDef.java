@@ -6,6 +6,7 @@ import com.dream.flex.def.QueryDef;
 import com.dream.flex.factory.QueryCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.system.config.Page;
+import com.dream.util.tree.Tree;
 
 import java.util.List;
 
@@ -25,6 +26,11 @@ public abstract class AbstractChainQueryDef extends AbstractQueryDef implements 
     @Override
     public <T> List<T> list(Class<T> type) {
         return flexMapper.selectList(this, type);
+    }
+
+    @Override
+    public <T extends Tree> List<T> tree(Class<T> type) {
+        return flexMapper.selectTree(this,type);
     }
 
     @Override

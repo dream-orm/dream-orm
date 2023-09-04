@@ -1,7 +1,7 @@
 package com.dream.template.mapper;
 
 import com.dream.system.config.Page;
-import com.dream.template.resulthandler.Tree;
+import com.dream.util.tree.Tree;
 
 import java.util.Collection;
 import java.util.List;

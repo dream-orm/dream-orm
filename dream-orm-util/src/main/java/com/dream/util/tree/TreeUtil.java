@@ -1,4 +1,4 @@
-package com.dream.template.resulthandler;
+package com.dream.util.tree;
 
 import com.dream.util.common.ObjectUtil;
 
@@ -29,29 +29,9 @@ public class TreeUtil {
             if (parentTree == null) {
                 parentList.add(tree);
             } else {
-                List<Tree> children = parentTree.getChildren();
-                if (children == null) {
-                    children = new ArrayList<>();
-                    parentTree.setChildren(children);
-                }
+                List<Tree> children = parentTree.getChildrenOrNew();
                 children.add(tree);
             }
         }
-    }
-
-    public static List<? extends Tree> deepTree(List<? extends Tree> treeList, List<?> treeIdList) {
-        List<Tree> resultTreeList = new ArrayList<>();
-        for (Tree tree : treeList) {
-            Object treeId = tree.getTreeId();
-            if (treeIdList.contains(treeId)) {
-                resultTreeList.add(tree);
-            } else {
-                List<? extends Tree> children = tree.getChildren();
-                if (!ObjectUtil.isNull(children)) {
-                    resultTreeList.addAll(deepTree(children, treeIdList));
-                }
-            }
-        }
-        return resultTreeList;
     }
 }

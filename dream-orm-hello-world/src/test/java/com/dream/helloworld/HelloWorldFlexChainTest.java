@@ -1,7 +1,9 @@
 package com.dream.helloworld;
 
 import com.dream.chain.mapper.FlexChainMapper;
+import com.dream.flex.def.QueryDef;
 import com.dream.helloworld.view.AccountView;
+import com.dream.helloworld.view.TreeAccountView;
 import com.dream.system.config.Page;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
+import static com.dream.flex.def.FunctionDef.select;
 import static com.dream.helloworld.table.table.AccountTableDef.account;
 
 @RunWith(SpringRunner.class)
@@ -85,5 +88,14 @@ public class HelloWorldFlexChainTest {
     public void testExist() {
         boolean exists = flexChainMapper.select().from(account).where(account.id.gt(3)).exists();
         System.out.println("查询结果：" + exists);
+    }
+
+    /**
+     * 测试树查询
+     */
+    @Test
+    public void testTree() {
+        List<TreeAccountView> treeAccountViews = flexChainMapper.select(account.treeAccountView).from(account).tree(TreeAccountView.class);
+        System.out.println("查询结果：" + treeAccountViews);
     }
 }

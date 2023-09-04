@@ -2,7 +2,7 @@ package com.dream.template.mapper;
 
 import com.dream.system.config.Page;
 import com.dream.system.core.session.Session;
-import com.dream.template.resulthandler.Tree;
+import com.dream.util.tree.Tree;
 import com.dream.template.sequence.BatchSequence;
 import com.dream.template.sequence.FetchKeySequence;
 import com.dream.template.sequence.Sequence;
