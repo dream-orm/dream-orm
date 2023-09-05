@@ -19,6 +19,13 @@ public abstract class DDLAlterStatement extends Statement {
         return true;
     }
 
+    @Override
+    public DDLAlterStatement clone() {
+        DDLAlterStatement ddlAlterStatement = (DDLAlterStatement) super.clone();
+        ddlAlterStatement.table = clone(table);
+        return ddlAlterStatement;
+    }
+
     public static class DDLAlterRenameStatement extends DDLAlterStatement {
         private Statement newTable;
 
@@ -28,6 +35,13 @@ public abstract class DDLAlterStatement extends Statement {
 
         public void setNewTable(Statement newTable) {
             this.newTable = wrapParent(newTable);
+        }
+
+        @Override
+        public DDLAlterRenameStatement clone() {
+            DDLAlterRenameStatement ddlAlterStatement = (DDLAlterRenameStatement) super.clone();
+            ddlAlterStatement.newTable = clone(newTable);
+            return ddlAlterStatement;
         }
     }
 
@@ -77,6 +91,17 @@ public abstract class DDLAlterStatement extends Statement {
         public void setNullFlag(boolean nullFlag) {
             this.nullFlag = nullFlag;
         }
+
+        @Override
+        public DDLAlterAddStatement clone() {
+            DDLAlterAddStatement ddlAlterStatement = (DDLAlterAddStatement) super.clone();
+            ddlAlterStatement.column = clone(column);
+            ddlAlterStatement.columnType = columnType;
+            ddlAlterStatement.defaultValue = clone(defaultValue);
+            ddlAlterStatement.nullFlag = nullFlag;
+            ddlAlterStatement.columnTypeParamList = (ListColumnStatement) clone(columnTypeParamList);
+            return ddlAlterStatement;
+        }
     }
 
     public static class DDLAlterDropStatement extends DDLAlterStatement {
@@ -88,6 +113,13 @@ public abstract class DDLAlterStatement extends Statement {
 
         public void setColumn(Statement column) {
             this.column = wrapParent(column);
+        }
+
+        @Override
+        public DDLAlterDropStatement clone() {
+            DDLAlterDropStatement ddlAlterStatement = (DDLAlterDropStatement) super.clone();
+            ddlAlterStatement.column = clone(column);
+            return ddlAlterStatement;
         }
     }
 
@@ -136,6 +168,17 @@ public abstract class DDLAlterStatement extends Statement {
 
         public void setNullFlag(boolean nullFlag) {
             this.nullFlag = nullFlag;
+        }
+
+        @Override
+        public DDLAlterModifyStatement clone() {
+            DDLAlterModifyStatement ddlAlterModifyStatement = (DDLAlterModifyStatement) super.clone();
+            ddlAlterModifyStatement.column = clone(column);
+            ddlAlterModifyStatement.columnType = columnType;
+            ddlAlterModifyStatement.defaultValue = clone(defaultValue);
+            ddlAlterModifyStatement.nullFlag = nullFlag;
+            ddlAlterModifyStatement.columnTypeParamList = (ListColumnStatement) clone(columnTypeParamList);
+            return ddlAlterModifyStatement;
         }
     }
 }

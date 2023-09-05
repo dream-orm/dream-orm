@@ -27,6 +27,14 @@ public abstract class DDLDefineStatement extends Statement {
         public void setPrimaryKeys(ListColumnStatement primaryKeys) {
             this.primaryKeys = primaryKeys;
         }
+
+        @Override
+        public DDLPrimaryKeyDefineStatement clone() {
+            DDLPrimaryKeyDefineStatement ddlPrimaryKeyDefineStatement = (DDLPrimaryKeyDefineStatement) super.clone();
+            ddlPrimaryKeyDefineStatement.constraint = clone(constraint);
+            ddlPrimaryKeyDefineStatement.primaryKeys = (ListColumnStatement) clone(primaryKeys);
+            return ddlPrimaryKeyDefineStatement;
+        }
     }
 
     public static class DDLForeignKeyDefineStatement extends DDLDefineStatement {
@@ -65,6 +73,16 @@ public abstract class DDLDefineStatement extends Statement {
 
         public void setForeignColumn(Statement foreignColumn) {
             this.foreignColumn = wrapParent(foreignColumn);
+        }
+
+        @Override
+        public DDLForeignKeyDefineStatement clone() {
+            DDLForeignKeyDefineStatement ddlForeignKeyDefineStatement = (DDLForeignKeyDefineStatement) super.clone();
+            ddlForeignKeyDefineStatement.constraint = clone(constraint);
+            ddlForeignKeyDefineStatement.foreignKey = clone(foreignKey);
+            ddlForeignKeyDefineStatement.foreignTable = clone(foreignTable);
+            ddlForeignKeyDefineStatement.foreignColumn = clone(foreignColumn);
+            return ddlForeignKeyDefineStatement;
         }
     }
 
@@ -140,6 +158,20 @@ public abstract class DDLDefineStatement extends Statement {
 
         public void setPrimaryKey(boolean primaryKey) {
             this.primaryKey = primaryKey;
+        }
+
+        @Override
+        public DDLColumnDefineStatement clone() {
+            DDLColumnDefineStatement ddlColumnDefineStatement = (DDLColumnDefineStatement) super.clone();
+            ddlColumnDefineStatement.column = clone(column);
+            ddlColumnDefineStatement.columnType = columnType;
+            ddlColumnDefineStatement.columnTypeParamList = (ListColumnStatement) clone(columnTypeParamList);
+            ddlColumnDefineStatement.defaultValue = clone(defaultValue);
+            ddlColumnDefineStatement.comment = clone(comment);
+            ddlColumnDefineStatement.nullFlag = nullFlag;
+            ddlColumnDefineStatement.autoIncrement = autoIncrement;
+            ddlColumnDefineStatement.primaryKey = primaryKey;
+            return ddlColumnDefineStatement;
         }
     }
 }

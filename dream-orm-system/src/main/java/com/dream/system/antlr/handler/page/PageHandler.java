@@ -12,7 +12,6 @@ import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToNativeSQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.system.config.MethodInfo;
-import com.dream.util.reflect.ReflectUtil;
 
 import java.util.List;
 
@@ -38,8 +37,7 @@ public class PageHandler extends AbstractHandler {
     }
 
     void handlerCount(QueryStatement statement) throws AntlrException {
-        QueryStatement queryStatement = new QueryStatement();
-        ReflectUtil.copy(queryStatement, statement);
+        QueryStatement queryStatement = statement.clone();
         if (queryStatement.getOrderStatement() != null) {
             queryStatement.setOrderStatement(null);
         }
@@ -58,7 +56,7 @@ public class PageHandler extends AbstractHandler {
         } else {
             String sql = "select t_tmp.* from(" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp " + toNativeSQL.toStr(limitStatement, null, null);
             QueryStatement pageQueryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-            ReflectUtil.copy(queryStatement, pageQueryStatement);
+            queryStatement.replaceWith(pageQueryStatement);
         }
     }
 

@@ -24,4 +24,12 @@ public class UnionStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(statement);
     }
+
+    @Override
+    public UnionStatement clone() {
+        UnionStatement unionStatement = (UnionStatement) super.clone();
+        unionStatement.all = all;
+        unionStatement.statement = clone(statement);
+        return unionStatement;
+    }
 }

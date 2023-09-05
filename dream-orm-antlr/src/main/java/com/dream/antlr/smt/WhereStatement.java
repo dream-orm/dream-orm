@@ -15,4 +15,11 @@ public class WhereStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(condition);
     }
+
+    @Override
+    public WhereStatement clone() {
+        WhereStatement whereStatement = (WhereStatement) super.clone();
+        whereStatement.condition = clone(condition);
+        return whereStatement;
+    }
 }

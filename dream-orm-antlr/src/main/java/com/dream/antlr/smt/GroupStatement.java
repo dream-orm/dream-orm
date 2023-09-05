@@ -15,4 +15,11 @@ public class GroupStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(group);
     }
+
+    @Override
+    public GroupStatement clone() {
+        GroupStatement groupStatement = (GroupStatement) super.clone();
+        groupStatement.group = clone(group);
+        return groupStatement;
+    }
 }

@@ -46,4 +46,15 @@ public class ListColumnStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(columnList);
     }
+
+    @Override
+    public ListColumnStatement clone() {
+        ListColumnStatement listColumnStatement = (ListColumnStatement) super.clone();
+        listColumnStatement.cut = (SymbolStatement.LetterStatement) clone(cut);
+        listColumnStatement.columnList = new Statement[columnList.length];
+        for (int i = 0; i < columnList.length; i++) {
+            listColumnStatement.columnList[i] = clone(columnList[i]);
+        }
+        return listColumnStatement;
+    }
 }

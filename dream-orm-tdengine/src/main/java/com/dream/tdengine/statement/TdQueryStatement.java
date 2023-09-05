@@ -20,7 +20,7 @@ public class TdQueryStatement extends QueryStatement {
     }
 
     public void setPartitionBy(TdPartitionStatement partitionBy) {
-        this.partitionBy = partitionBy;
+        this.partitionBy = wrapParent(partitionBy);
     }
 
     public TdWindowStatement getWindnow() {
@@ -28,7 +28,7 @@ public class TdQueryStatement extends QueryStatement {
     }
 
     public void setWindnow(TdWindowStatement windnow) {
-        this.windnow = windnow;
+        this.windnow = wrapParent(windnow);
     }
 
     public TdSLimitStatement getSlimit() {
@@ -36,6 +36,15 @@ public class TdQueryStatement extends QueryStatement {
     }
 
     public void setSlimit(TdSLimitStatement slimit) {
-        this.slimit = slimit;
+        this.slimit = wrapParent(slimit);
+    }
+
+    @Override
+    public TdQueryStatement clone() {
+        TdQueryStatement tdQueryStatement = (TdQueryStatement) super.clone();
+        tdQueryStatement.partitionBy = (TdPartitionStatement) clone(partitionBy);
+        tdQueryStatement.windnow = (TdWindowStatement) clone(windnow);
+        tdQueryStatement.slimit = (TdSLimitStatement) clone(slimit);
+        return tdQueryStatement;
     }
 }

@@ -1,7 +1,7 @@
 package com.dream.antlr.smt;
 
 public abstract class ConvertTypeStatement extends Statement {
-    private final Statement statement;
+    private Statement statement;
 
     public ConvertTypeStatement(Statement statement) {
         this.statement = wrapParent(statement);
@@ -14,6 +14,13 @@ public abstract class ConvertTypeStatement extends Statement {
 
     public Statement getStatement() {
         return statement;
+    }
+
+    @Override
+    public ConvertTypeStatement clone() {
+        ConvertTypeStatement convertTypeStatement = (ConvertTypeStatement) super.clone();
+        convertTypeStatement.statement = clone(statement);
+        return convertTypeStatement;
     }
 
     public static class CharConvertStatement extends ConvertTypeStatement {
@@ -71,6 +78,13 @@ public abstract class ConvertTypeStatement extends Statement {
 
         public void setParamStatement(Statement paramStatement) {
             this.paramStatement = wrapParent(paramStatement);
+        }
+
+        @Override
+        public DecimalConvertStatement clone() {
+            DecimalConvertStatement decimalConvertStatement = (DecimalConvertStatement) super.clone();
+            decimalConvertStatement.paramStatement = clone(paramStatement);
+            return decimalConvertStatement;
         }
     }
 

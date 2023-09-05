@@ -27,6 +27,14 @@ public abstract class FunctionStatement extends Statement {
         return isNeedInnerCache(paramsStatement);
     }
 
+    @Override
+    public FunctionStatement clone() {
+        FunctionStatement functionStatement = (FunctionStatement) super.clone();
+        functionStatement.paramsStatement = clone(paramsStatement);
+        functionStatement.functionName = functionName;
+        return functionStatement;
+    }
+
     public static class AsciiStatement extends FunctionStatement {
 
     }
@@ -79,6 +87,16 @@ public abstract class FunctionStatement extends Statement {
 
         public void setSeparator(Statement separator) {
             this.separator = wrapParent(separator);
+        }
+
+        @Override
+        public GroupConcatStatement clone() {
+            GroupConcatStatement groupConcatStatement = (GroupConcatStatement) super.clone();
+            groupConcatStatement.distinct = distinct;
+            groupConcatStatement.all = all;
+            groupConcatStatement.order = clone(order);
+            groupConcatStatement.separator = clone(separator);
+            return groupConcatStatement;
         }
     }
 
@@ -300,6 +318,13 @@ public abstract class FunctionStatement extends Statement {
         public void setPattern(String pattern) {
             this.pattern = pattern;
         }
+
+        @Override
+        public DateForMatStatement clone() {
+            DateForMatStatement dateForMatStatement = (DateForMatStatement) super.clone();
+            dateForMatStatement.pattern = pattern;
+            return dateForMatStatement;
+        }
     }
 
     public static class StrToDateStatement extends FunctionStatement {
@@ -311,6 +336,13 @@ public abstract class FunctionStatement extends Statement {
 
         public void setPattern(String pattern) {
             this.pattern = pattern;
+        }
+
+        @Override
+        public StrToDateStatement clone() {
+            StrToDateStatement strToDateStatement = (StrToDateStatement) super.clone();
+            strToDateStatement.pattern = pattern;
+            return strToDateStatement;
         }
     }
 

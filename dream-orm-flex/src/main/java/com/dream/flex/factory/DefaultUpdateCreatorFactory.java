@@ -1,8 +1,8 @@
 package com.dream.flex.factory;
 
 import com.dream.antlr.smt.UpdateStatement;
-import com.dream.flex.def.UpdateDef;
 import com.dream.flex.def.UpdateColumnDef;
+import com.dream.flex.def.UpdateDef;
 import com.dream.flex.def.UpdateTableDef;
 import com.dream.flex.def.defaults.DefaultUpdateColumnDef;
 import com.dream.flex.def.defaults.DefaultUpdateDef;

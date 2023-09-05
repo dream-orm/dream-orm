@@ -19,4 +19,11 @@ public class TdMyFunctionStatement extends MyFunctionStatement {
     public String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return functionName + "(" + toSQL.toStr(paramsStatement, assist, invokerList) + ")";
     }
+
+    @Override
+    public TdMyFunctionStatement clone() {
+        TdMyFunctionStatement tdMyFunctionStatement = (TdMyFunctionStatement) super.clone();
+        tdMyFunctionStatement.functionName = functionName;
+        return tdMyFunctionStatement;
+    }
 }

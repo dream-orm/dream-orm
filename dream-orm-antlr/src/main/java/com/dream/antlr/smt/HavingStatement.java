@@ -15,4 +15,11 @@ public class HavingStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(condition);
     }
+
+    @Override
+    public HavingStatement clone() {
+        HavingStatement havingStatement = (HavingStatement) super.clone();
+        havingStatement.condition = clone(condition);
+        return havingStatement;
+    }
 }

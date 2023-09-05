@@ -24,4 +24,11 @@ public class BraceStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(statement);
     }
+
+    @Override
+    public BraceStatement clone() {
+        BraceStatement braceStatement = (BraceStatement) super.clone();
+        braceStatement.statement = clone(statement);
+        return braceStatement;
+    }
 }

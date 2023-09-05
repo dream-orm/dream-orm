@@ -33,4 +33,13 @@ public class ConditionStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(left, right);
     }
+
+    @Override
+    public ConditionStatement clone() {
+        ConditionStatement conditionStatement = (ConditionStatement) super.clone();
+        conditionStatement.left = clone(left);
+        conditionStatement.oper = (OperStatement) clone(oper);
+        conditionStatement.right = clone(right);
+        return conditionStatement;
+    }
 }

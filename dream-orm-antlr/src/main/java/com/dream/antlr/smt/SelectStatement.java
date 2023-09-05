@@ -27,4 +27,12 @@ public class SelectStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(selectList);
     }
+
+    @Override
+    public SelectStatement clone() {
+        SelectStatement selectStatement = (SelectStatement) super.clone();
+        selectStatement.distinct = distinct;
+        selectStatement.selectList = (ListColumnStatement) clone(selectList);
+        return selectStatement;
+    }
 }

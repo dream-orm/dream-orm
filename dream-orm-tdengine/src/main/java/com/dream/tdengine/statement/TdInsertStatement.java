@@ -18,7 +18,7 @@ public class TdInsertStatement extends InsertStatement {
     }
 
     public void setStdTable(Statement stdTable) {
-        this.stdTable = stdTable;
+        this.stdTable = wrapParent(stdTable);
     }
 
     public ListColumnStatement getTags() {
@@ -26,6 +26,14 @@ public class TdInsertStatement extends InsertStatement {
     }
 
     public void setTags(ListColumnStatement tags) {
-        this.tags = tags;
+        this.tags = wrapParent(tags);
+    }
+
+    @Override
+    public TdInsertStatement clone() {
+        TdInsertStatement tdInsertStatement = (TdInsertStatement) super.clone();
+        tdInsertStatement.stdTable = clone(stdTable);
+        tdInsertStatement.tags = (ListColumnStatement) clone(tags);
+        return tdInsertStatement;
     }
 }

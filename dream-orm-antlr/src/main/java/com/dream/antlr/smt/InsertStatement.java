@@ -34,6 +34,15 @@ public class InsertStatement extends Statement {
         return isNeedInnerCache(table, columns, values);
     }
 
+    @Override
+    public InsertStatement clone() {
+        InsertStatement insertStatement = (InsertStatement) super.clone();
+        insertStatement.table = clone(table);
+        insertStatement.columns = clone(columns);
+        insertStatement.values = clone(values);
+        return insertStatement;
+    }
+
     public static class ValuesStatement extends Statement {
         private Statement statement;
 
@@ -48,6 +57,13 @@ public class InsertStatement extends Statement {
         @Override
         protected Boolean isNeedInnerCache() {
             return isNeedInnerCache(statement);
+        }
+
+        @Override
+        public ValuesStatement clone() {
+            ValuesStatement valuesStatement = (ValuesStatement) super.clone();
+            valuesStatement.statement = clone(statement);
+            return valuesStatement;
         }
     }
 }

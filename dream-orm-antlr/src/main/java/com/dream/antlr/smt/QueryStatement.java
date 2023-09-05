@@ -87,4 +87,19 @@ public class QueryStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(selectStatement, fromStatement, whereStatement, groupStatement, havingStatement, orderStatement, limitStatement, unionStatement, forUpdateStatement);
     }
+
+    @Override
+    public QueryStatement clone() {
+        QueryStatement queryStatement = (QueryStatement) super.clone();
+        queryStatement.selectStatement = (SelectStatement) clone(selectStatement);
+        queryStatement.fromStatement = (FromStatement) clone(fromStatement);
+        queryStatement.whereStatement = (WhereStatement) clone(whereStatement);
+        queryStatement.groupStatement = (GroupStatement) clone(groupStatement);
+        queryStatement.havingStatement = (HavingStatement) clone(havingStatement);
+        queryStatement.orderStatement = (OrderStatement) clone(orderStatement);
+        queryStatement.limitStatement = (LimitStatement) clone(limitStatement);
+        queryStatement.unionStatement = (UnionStatement) clone(unionStatement);
+        queryStatement.forUpdateStatement = (ForUpdateStatement) clone(forUpdateStatement);
+        return queryStatement;
+    }
 }

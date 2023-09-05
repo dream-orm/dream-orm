@@ -27,12 +27,12 @@ public class NotExistValidator implements Validator<Object> {
             TableFactory tableFactory = configuration.getTableFactory();
             NotExist notExist = field.getAnnotation(NotExist.class);
             String tableName = notExist.table();
-            if(ObjectUtil.isNull(tableName)){
-                tableName=SystemUtil.getTableName(type);
+            if (ObjectUtil.isNull(tableName)) {
+                tableName = SystemUtil.getTableName(type);
             }
             String fieldName = notExist.column();
-            if(ObjectUtil.isNull(fieldName)){
-                fieldName=field.getName();
+            if (ObjectUtil.isNull(fieldName)) {
+                fieldName = field.getName();
             }
             TableInfo tableInfo = tableFactory.getTableInfo(tableName);
             ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);

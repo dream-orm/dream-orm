@@ -25,6 +25,14 @@ public abstract class JoinStatement extends Statement {
         return isNeedInnerCache(joinTable, on);
     }
 
+    @Override
+    public JoinStatement clone() {
+        JoinStatement joinStatement = (JoinStatement) super.clone();
+        joinStatement.joinTable = clone(joinTable);
+        joinStatement.on = clone(on);
+        return joinStatement;
+    }
+
     public static class LeftJoinStatement extends JoinStatement {
 
     }

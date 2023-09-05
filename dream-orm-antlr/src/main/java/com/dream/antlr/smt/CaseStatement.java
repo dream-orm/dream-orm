@@ -35,6 +35,15 @@ public class CaseStatement extends Statement {
         return isNeedInnerCache(caseColumn, whenthenList, elseColumn);
     }
 
+    @Override
+    public Statement clone() {
+        CaseStatement caseStatement = (CaseStatement) super.clone();
+        caseStatement.caseColumn = clone(caseColumn);
+        caseStatement.whenthenList = clone(whenthenList);
+        caseStatement.elseColumn = clone(elseColumn);
+        return caseStatement;
+    }
+
     public static class WhenThenStatement extends Statement {
         private Statement when;
         private Statement then;
@@ -58,6 +67,14 @@ public class CaseStatement extends Statement {
         @Override
         protected Boolean isNeedInnerCache() {
             return isNeedInnerCache(when, then);
+        }
+
+        @Override
+        public WhenThenStatement clone() {
+            WhenThenStatement whenThenStatement = (WhenThenStatement) super.clone();
+            whenThenStatement.when = clone(when);
+            whenThenStatement.then = clone(then);
+            return whenThenStatement;
         }
     }
 

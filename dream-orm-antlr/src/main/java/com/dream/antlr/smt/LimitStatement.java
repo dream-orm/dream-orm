@@ -33,4 +33,13 @@ public class LimitStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(first, second);
     }
+
+    @Override
+    public LimitStatement clone() {
+        LimitStatement limitStatement = (LimitStatement) super.clone();
+        limitStatement.first = clone(first);
+        limitStatement.second = clone(second);
+        limitStatement.offset = offset;
+        return limitStatement;
+    }
 }

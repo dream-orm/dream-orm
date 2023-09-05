@@ -2,12 +2,13 @@ package com.dream.antlr.smt;
 
 import com.dream.antlr.exception.AntlrException;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 
 /**
  * SQL语句对应的抽象树顶级类
  */
-public abstract class Statement {
+public abstract class Statement implements Serializable, Cloneable {
 
     protected Statement parentStatement;
     Boolean needCache;
@@ -49,7 +50,7 @@ public abstract class Statement {
         return statement;
     }
 
-    protected boolean isNeedInnerCache(Statement... statements) {
+    protected final boolean isNeedInnerCache(Statement... statements) {
         needCache = true;
         for (Statement statement : statements) {
             if (statement != null) {
@@ -112,4 +113,24 @@ public abstract class Statement {
         throw new AntlrException("不能替换" + this.getClass().getName() + "为" + statement.getClass().getName());
     }
 
+    @Override
+    public Statement clone() {
+        try {
+            Statement statement = (Statement) super.clone();
+            statement.parentStatement = parentStatement;
+            statement.needCache = needCache;
+            statement.quickValue = quickValue;
+            return statement;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected final Statement clone(Statement statement) {
+        if (statement == null) {
+            return null;
+        } else {
+            return statement.clone();
+        }
+    }
 }

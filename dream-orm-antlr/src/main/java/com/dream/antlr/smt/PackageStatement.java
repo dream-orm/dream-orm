@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PackageStatement extends Statement {
-    private final Map<Class, Object> infoMap = new HashMap<>(4);
+    private Map<Class, Object> infoMap = new HashMap<>(4);
     private Statement statement;
 
     public Statement getStatement() {
@@ -26,5 +26,14 @@ public class PackageStatement extends Statement {
     @Override
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(statement);
+    }
+
+    @Override
+    public PackageStatement clone() {
+        PackageStatement packageStatement = (PackageStatement) super.clone();
+        packageStatement.infoMap = new HashMap<>(4);
+        packageStatement.infoMap.putAll(infoMap);
+        packageStatement.statement = clone(statement);
+        return packageStatement;
     }
 }

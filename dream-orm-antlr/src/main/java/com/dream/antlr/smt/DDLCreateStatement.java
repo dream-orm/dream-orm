@@ -25,6 +25,14 @@ public abstract class DDLCreateStatement extends Statement {
         return isNeedInnerCache(statement);
     }
 
+    @Override
+    public DDLCreateStatement clone() {
+        DDLCreateStatement ddlCreateStatement = (DDLCreateStatement) super.clone();
+        ddlCreateStatement.statement = clone(statement);
+        ddlCreateStatement.existCreate = existCreate;
+        return ddlCreateStatement;
+    }
+
     public static class DDLCreateDatabaseStatement extends DDLCreateStatement {
 
     }
@@ -65,6 +73,16 @@ public abstract class DDLCreateStatement extends Statement {
 
         public void setDefaultCharset(Statement defaultCharset) {
             this.defaultCharset = wrapParent(defaultCharset);
+        }
+
+        @Override
+        public DDLCreateTableStatement clone() {
+            DDLCreateTableStatement ddlCreateStatement = (DDLCreateTableStatement) super.clone();
+            ddlCreateStatement.columnDefineList = (ListColumnStatement) clone(columnDefineList);
+            ddlCreateStatement.engine = clone(engine);
+            ddlCreateStatement.comment = clone(comment);
+            ddlCreateStatement.defaultCharset = clone(defaultCharset);
+            return ddlCreateStatement;
         }
     }
 }

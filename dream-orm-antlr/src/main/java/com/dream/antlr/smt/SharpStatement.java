@@ -22,4 +22,11 @@ public class SharpStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(statement);
     }
+
+    @Override
+    public SharpStatement clone() {
+        SharpStatement sharpStatement = (SharpStatement) super.clone();
+        sharpStatement.statement = clone(statement);
+        return sharpStatement;
+    }
 }

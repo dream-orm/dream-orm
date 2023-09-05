@@ -24,4 +24,12 @@ public class DeleteStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(table, where);
     }
+
+    @Override
+    public DeleteStatement clone() {
+        DeleteStatement deleteStatement = (DeleteStatement) super.clone();
+        deleteStatement.table = clone(table);
+        deleteStatement.where = clone(where);
+        return deleteStatement;
+    }
 }

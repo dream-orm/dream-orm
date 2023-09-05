@@ -15,4 +15,11 @@ public class TruncateTableStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(table);
     }
+
+    @Override
+    public TruncateTableStatement clone() {
+        TruncateTableStatement truncateTableStatement = (TruncateTableStatement) super.clone();
+        truncateTableStatement.table = clone(table);
+        return truncateTableStatement;
+    }
 }

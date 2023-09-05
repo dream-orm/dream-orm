@@ -24,4 +24,12 @@ public class FromStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(mainTable, joinList);
     }
+
+    @Override
+    public FromStatement clone() {
+        FromStatement fromStatement = (FromStatement) super.clone();
+        fromStatement.mainTable = clone(mainTable);
+        fromStatement.joinList = clone(joinList);
+        return fromStatement;
+    }
 }

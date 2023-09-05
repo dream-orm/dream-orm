@@ -141,15 +141,14 @@ public class DreamFlexProcessor extends AbstractProcessor {
         }
         String[] parentFiles = dir.split("\\.\\./");
         for (String parentFile : parentFiles) {
-            if (!parentFile.isEmpty()) {
-                deque.pollLast();
-                String[] files = parentFile.split("\\./");
-                for (String file : files) {
-                    if (!file.isEmpty()) {
-                        deque.addLast(file.replace("/", "."));
-                    }
+            deque.pollLast();
+            String[] files = parentFile.split("\\./");
+            for (String file : files) {
+                if (!file.isEmpty()) {
+                    deque.addLast(file.replace("/", "."));
                 }
             }
+
         }
         return String.join(".", deque);
     }

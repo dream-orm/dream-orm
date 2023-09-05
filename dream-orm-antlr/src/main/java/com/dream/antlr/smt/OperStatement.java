@@ -16,6 +16,13 @@ public abstract class OperStatement extends Statement {
         return parentStatement.isNeedInnerCache();
     }
 
+    @Override
+    public OperStatement clone() {
+        OperStatement operStatement = (OperStatement) super.clone();
+        operStatement.level = level;
+        return operStatement;
+    }
+
     public static class ADDStatement extends OperStatement {
         public ADDStatement() {
             setLevel(11);

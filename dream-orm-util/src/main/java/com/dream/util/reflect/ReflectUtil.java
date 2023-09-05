@@ -146,19 +146,4 @@ public class ReflectUtil {
             return Object.class;
         }
     }
-
-    public static <T> void copy(T target, T source) {
-        List<Field> fieldList = ReflectUtil.findField(source.getClass());
-        if (!ObjectUtil.isNull(fieldList)) {
-            for (Field field : fieldList) {
-                try {
-                    field.setAccessible(true);
-                    Object value = field.get(source);
-                    field.set(target, value);
-                } catch (Exception e) {
-                    throw new DreamRunTimeException(e);
-                }
-            }
-        }
-    }
 }

@@ -59,4 +59,13 @@ public class TdSLimitStatement extends MyFunctionStatement {
         }
         return builder.toString();
     }
+
+    @Override
+    public TdSLimitStatement clone() {
+        TdSLimitStatement tdSLimitStatement = (TdSLimitStatement) super.clone();
+        tdSLimitStatement.first = clone(first);
+        tdSLimitStatement.second = clone(second);
+        tdSLimitStatement.offset = offset;
+        return tdSLimitStatement;
+    }
 }

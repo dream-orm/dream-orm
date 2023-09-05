@@ -7,7 +7,7 @@ public abstract class EmitStatement extends Statement {
     }
 
     public EmitStatement(Statement statement) {
-        this.statement = statement;
+        this.statement = wrapParent(statement);
     }
 
     public Statement getStatement() {
@@ -15,12 +15,19 @@ public abstract class EmitStatement extends Statement {
     }
 
     public void setStatement(Statement statement) {
-        this.statement = statement;
+        this.statement = wrapParent(statement);
     }
 
     @Override
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(statement);
+    }
+
+    @Override
+    public EmitStatement clone() {
+        EmitStatement emitStatement = (EmitStatement) super.clone();
+        emitStatement.statement = clone(statement);
+        return emitStatement;
     }
 
     public static class ColonStatement extends EmitStatement {

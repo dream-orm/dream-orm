@@ -16,6 +16,13 @@ public abstract class DDLDropStatement extends Statement {
         return isNeedInnerCache(statement);
     }
 
+    @Override
+    public DDLDropStatement clone() {
+        DDLDropStatement ddlDropStatement = (DDLDropStatement) super.clone();
+        ddlDropStatement.statement = clone(statement);
+        return ddlDropStatement;
+    }
+
     public static class DDLDropDatabaseStatement extends DDLDropStatement {
 
     }

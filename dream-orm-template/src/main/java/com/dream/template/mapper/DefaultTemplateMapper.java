@@ -38,7 +38,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
         selectPageSqlMapper = new SelectPageMapper(session);
         deleteByIdSqlMapper = new DeleteByIdMapper(session);
         deleteByIdsSqlMapper = new DeleteByIdsMapper(session);
-        deleteOneMapper=new DeleteOneMapper(session);
+        deleteOneMapper = new DeleteOneMapper(session);
         updateByIdSqlMapper = new UpdateByIdMapper(session);
         batchUpdateByIdMapper = new BatchUpdateByIdMapper(session);
         updateNonByIdSqlMapper = new UpdateNonByIdMapper(session);
@@ -108,7 +108,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
 
     @Override
     public int delete(Object view) {
-        return (int) deleteOneMapper.execute(view.getClass(),view);
+        return (int) deleteOneMapper.execute(view.getClass(), view);
     }
 
     @Override

@@ -100,7 +100,7 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testInsert() {
-        testSqlForMany("insertDef into dual(id,name)values(id,name)");
+        testSqlForMany("insert into dual(id,name)values(id,name)");
     }
 
     @Test
@@ -183,12 +183,13 @@ public class HelloWorldAntlrTest {
 
     protected void testSqlForMany(String sql) {
         System.out.println();
-        for (ToSQL toSQL : toSQLList) {
-            try {
-                System.out.println(toSQL.getName() + "->" + toSQL.toStr(createStatement(sql), null, null));
-            } catch (AntlrException e) {
-                throw new RuntimeException(e);
+        try {
+            PackageStatement statement = createStatement(sql);
+            for (ToSQL toSQL : toSQLList) {
+                System.out.println(toSQL.getName() + "->" + toSQL.toStr(statement.clone(), null, null));
             }
+        } catch (AntlrException e) {
+            throw new RuntimeException(e);
         }
     }
 

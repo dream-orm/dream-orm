@@ -33,4 +33,13 @@ public class AliasStatement extends Statement {
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(column, alias);
     }
+
+    @Override
+    public AliasStatement clone() {
+        AliasStatement aliasStatement = (AliasStatement) super.clone();
+        aliasStatement.showAlias = showAlias;
+        aliasStatement.column = clone(column);
+        aliasStatement.alias = clone(alias);
+        return aliasStatement;
+    }
 }

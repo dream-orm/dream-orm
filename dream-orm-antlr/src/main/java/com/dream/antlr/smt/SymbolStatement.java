@@ -25,6 +25,13 @@ public abstract class SymbolStatement extends Statement {
         return true;
     }
 
+    @Override
+    public SymbolStatement clone() {
+        SymbolStatement symbolStatement = (SymbolStatement) super.clone();
+        symbolStatement.symbol = symbol;
+        return symbolStatement;
+    }
+
     public interface Symbol {
         String getValue();
     }

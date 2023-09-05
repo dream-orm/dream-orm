@@ -1,7 +1,7 @@
 package com.dream.antlr.smt;
 
 public abstract class CastTypeStatement extends Statement {
-    private final Statement statement;
+    private Statement statement;
 
     public CastTypeStatement(Statement statement) {
         this.statement = wrapParent(statement);
@@ -14,6 +14,13 @@ public abstract class CastTypeStatement extends Statement {
 
     public Statement getStatement() {
         return statement;
+    }
+
+    @Override
+    public Statement clone() {
+        CastTypeStatement castTypeStatement = (CastTypeStatement) super.clone();
+        castTypeStatement.statement = clone(statement);
+        return castTypeStatement;
     }
 
     public static class CharCastStatement extends CastTypeStatement {
@@ -71,6 +78,13 @@ public abstract class CastTypeStatement extends Statement {
 
         public void setParamStatement(Statement paramStatement) {
             this.paramStatement = paramStatement;
+        }
+
+        @Override
+        public DecimalCastStatement clone() {
+            DecimalCastStatement decimalCastStatement = (DecimalCastStatement) super.clone();
+            decimalCastStatement.paramStatement = clone(paramStatement);
+            return decimalCastStatement;
         }
     }
 

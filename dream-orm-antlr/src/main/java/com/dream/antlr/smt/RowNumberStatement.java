@@ -16,6 +16,13 @@ public class RowNumberStatement extends Statement {
         return isNeedInnerCache(statement);
     }
 
+    @Override
+    public RowNumberStatement clone() {
+        RowNumberStatement rowNumberStatement = (RowNumberStatement) super.clone();
+        rowNumberStatement.statement = clone(statement);
+        return rowNumberStatement;
+    }
+
     public static class OverStatement extends Statement {
         private Statement partitionStatement;
         private Statement orderStatement;
@@ -41,6 +48,14 @@ public class RowNumberStatement extends Statement {
             return isNeedInnerCache(partitionStatement, orderStatement);
         }
 
+        @Override
+        public OverStatement clone() {
+            OverStatement overStatement = (OverStatement) super.clone();
+            overStatement.partitionStatement = clone(partitionStatement);
+            overStatement.orderStatement = clone(orderStatement);
+            return overStatement;
+        }
+
         public static class PartitionStatement extends Statement {
             private Statement statement;
 
@@ -55,6 +70,13 @@ public class RowNumberStatement extends Statement {
             @Override
             protected Boolean isNeedInnerCache() {
                 return isNeedInnerCache(statement);
+            }
+
+            @Override
+            public PartitionStatement clone() {
+                PartitionStatement partitionStatement = (PartitionStatement) super.clone();
+                partitionStatement.statement = clone(statement);
+                return partitionStatement;
             }
         }
     }
