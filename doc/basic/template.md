@@ -230,19 +230,19 @@ public interface Validator<T> {
 
 已实现的Validator
 
-| Validator类           | 描述                         |
-|----------------------|----------------------------|
-| AssertFalseValidator | 校验值若不为空，值必须为false          |
-| AssertTrueValidator  | 校验值若不为空，值必须为true           |
-| LengthValidator      | 校验值若不为空，校验值长度              |
-| MaxValidator         | 校验值若不为空，校验值是否超过最大值         |
-| MinValidator         | 校验值若不为空，校验值是否小于最小值         |
-| NotBlankValidator    | 校验值不能为空，且不能为空字符串           |
-| NotNullValidator     | 校验值不能为空                    |
-| PatternValidator     | 校验值若不为空，校验满足正则表达式          |
-| RangeValidator       | 校验值若不为空，校验值是否在规定范围         |
-| SizeValidator        | 校验值若不为空，校验集合或map的大小是否在规定范围 |
-| UniqueValidator      | 校验值若不为空，与数据库校验值是否唯一        |
+| Validator类          | 描述                                              | 校验语句                                     |
+| -------------------- | ------------------------------------------------- | -------------------------------------------- |
+| AssertFalseValidator | 校验值若不为空，值必须为false                     | 增删改查                                     |
+| AssertTrueValidator  | 校验值若不为空，值必须为true                      | 增删改查                                     |
+| LengthValidator      | 校验值若不为空，校验值长度                        | 增删改查                                     |
+| MaxValidator         | 校验值若不为空，校验值是否超过最大值              | 增删改查                                     |
+| MinValidator         | 校验值若不为空，校验值是否小于最小值              | 增删改查                                     |
+| NotBlankValidator    | 校验值不能为空，且不能为空字符串                  | 增删改查                                     |
+| NotNullValidator     | 校验值不能为空                                    | 增删改查                                     |
+| PatternValidator     | 校验值若不为空，校验满足正则表达式                | 增删改查                                     |
+| RangeValidator       | 校验值若不为空，校验值是否在规定范围              | 增删改查                                     |
+| SizeValidator        | 校验值若不为空，校验集合或map的大小是否在规定范围 | 增删改查                                     |
+| NotExistValidator    | 校验值若不为空，校验数据不存在                    | 增删（新增进行唯一性校验，删除进行依赖校验） |
 
 ## **注解修改**
 
