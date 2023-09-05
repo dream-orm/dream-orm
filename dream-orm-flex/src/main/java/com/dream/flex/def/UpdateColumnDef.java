@@ -4,7 +4,7 @@ import com.dream.antlr.smt.*;
 import com.dream.flex.invoker.FlexMarkInvokerStatement;
 
 
-public interface UpdateDefColumnDef<UpdateColumn extends UpdateDefColumnDef, Update extends UpdateDef> extends UpdateDef {
+public interface UpdateColumnDef<UpdateColumn extends UpdateColumnDef, Update extends UpdateDef> extends UpdateDef {
     default UpdateColumn set(ColumnDef columnDef, ColumnDef columnDef2) {
         Statement where = statement().getConditionList();
         if (where == null) {

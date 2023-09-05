@@ -4,11 +4,11 @@ import com.dream.helloworld.table.Account;
 import com.dream.system.annotation.View;
 import com.dream.template.annotation.validate.Length;
 import com.dream.template.annotation.validate.NotBlank;
-import com.dream.template.annotation.validate.Unique;
+import com.dream.template.annotation.validate.NotExist;
 
 @View(Account.class)
 public class ValidatedAccountView {
-    @Unique(msg = "数据库已经存在该字段")
+    @NotExist(msg = "数据库已经存在该字段")
     private Integer id;
     @NotBlank(msg = "名称不能为空")
     @Length(min = 5, max = 20, msg = "名称长度必须在【5,20】之间")

@@ -14,7 +14,7 @@ public class SelectTreeMapper extends SelectListMapper {
 
     public SelectTreeMapper(Session session) {
         super(session);
-        resultSetHandler = new TransformResultSetHandler<Collection, List>(result-> TreeUtil.toTree(result));
+        resultSetHandler = new TransformResultSetHandler<Collection, List>(result -> TreeUtil.toTree(result));
     }
 
     @Override

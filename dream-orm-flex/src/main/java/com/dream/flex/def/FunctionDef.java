@@ -685,7 +685,7 @@ public class FunctionDef {
         return new DefaultQueryCreatorFactory().newSelectDef().select(columnDefs);
     }
 
-    public static UpdateDefColumnDef update(TableDef tableDef) {
+    public static UpdateColumnDef update(TableDef tableDef) {
         return new DefaultUpdateCreatorFactory().newUpdateTableDef().update(tableDef);
     }
 

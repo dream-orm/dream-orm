@@ -30,7 +30,7 @@ public abstract class AbstractChainQueryDef extends AbstractQueryDef implements 
 
     @Override
     public <T extends Tree> List<T> tree(Class<T> type) {
-        return flexMapper.selectTree(this,type);
+        return flexMapper.selectTree(this, type);
     }
 
     @Override

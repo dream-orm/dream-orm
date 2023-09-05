@@ -43,12 +43,14 @@ public interface FlexMapper {
 
     /**
      * 查询树形结构
+     *
      * @param queryDef 查询定义器
-     * @param type 返回类型
+     * @param type     返回类型
      * @param <T>
      * @return
      */
     <T extends Tree> List<T> selectTree(QueryDef queryDef, Class<T> type);
+
     /**
      * 查询并返回分页
      *

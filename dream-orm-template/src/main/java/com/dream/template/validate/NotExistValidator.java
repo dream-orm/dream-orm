@@ -8,23 +8,32 @@ import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
 import com.dream.system.util.SystemUtil;
+import com.dream.template.annotation.validate.NotExist;
 import com.dream.util.common.NonCollection;
 import com.dream.util.common.ObjectMap;
+import com.dream.util.common.ObjectUtil;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
-public class UniqueValidator implements Validator<Object> {
+public class NotExistValidator implements Validator<Object> {
     private MethodInfo methodInfo;
     private Session session;
 
     @Override
     public boolean isValid(Session session, Class type, Field field, Command command) {
-        if (command == Command.INSERT) {
+        if (command == Command.INSERT || command == Command.DELETE) {
             Configuration configuration = session.getConfiguration();
             TableFactory tableFactory = configuration.getTableFactory();
-            String tableName = SystemUtil.getTableName(type);
-            String fieldName = field.getName();
+            NotExist notExist = field.getAnnotation(NotExist.class);
+            String tableName = notExist.table();
+            if(ObjectUtil.isNull(tableName)){
+                tableName=SystemUtil.getTableName(type);
+            }
+            String fieldName = notExist.column();
+            if(ObjectUtil.isNull(fieldName)){
+                fieldName=field.getName();
+            }
             TableInfo tableInfo = tableFactory.getTableInfo(tableName);
             ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
             String column = columnInfo.getColumn();

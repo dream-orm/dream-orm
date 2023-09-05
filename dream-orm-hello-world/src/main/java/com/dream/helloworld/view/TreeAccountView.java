@@ -68,12 +68,12 @@ public class TreeAccountView implements Tree<Integer> {
         return id - 1;
     }
 
-    public void setChildren(List<TreeAccountView> children) {
-        this.children = children;
-    }
-
     public List<TreeAccountView> getChildren() {
         return children;
+    }
+
+    public void setChildren(List<TreeAccountView> children) {
+        this.children = children;
     }
 
     @Override

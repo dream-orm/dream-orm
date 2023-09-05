@@ -20,7 +20,7 @@ public @interface FlexAPT {
      *
      * @return
      */
-    String classSuffix() default "TableDef";
+    String classSuffix() default "Def";
 
     /**
      * 生成类所在目录
@@ -28,5 +28,5 @@ public @interface FlexAPT {
      *
      * @return
      */
-    String dir() default "./table";
+    String dir() default "../def";
 }

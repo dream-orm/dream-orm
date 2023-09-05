@@ -112,8 +112,8 @@ public class DefaultFlexMapper implements FlexMapper {
 
     protected <T> List<T> selectTree(QueryStatement statement, Class<T> type) {
         MethodInfo methodInfo = getMethodInfo(statement, List.class, type);
-        methodInfo.setResultSetHandler(new TransformResultSetHandler<Collection,List>(result-> TreeUtil.toTree(result)));
-        MappedStatement mappedStatement = getMappedStatement(methodInfo,Command.QUERY);
+        methodInfo.setResultSetHandler(new TransformResultSetHandler<Collection, List>(result -> TreeUtil.toTree(result)));
+        MappedStatement mappedStatement = getMappedStatement(methodInfo, Command.QUERY);
         return (List<T>) session.execute(mappedStatement);
     }
 
@@ -212,10 +212,10 @@ public class DefaultFlexMapper implements FlexMapper {
 
     protected MappedStatement getMappedStatement(Command command, Statement statement, Class<? extends Collection> rowType, Class<?> colType) {
         MethodInfo methodInfo = getMethodInfo(statement, rowType, colType);
-        return getMappedStatement(methodInfo,command);
+        return getMappedStatement(methodInfo, command);
     }
 
-    protected MappedStatement getMappedStatement(MethodInfo methodInfo,Command command) {
+    protected MappedStatement getMappedStatement(MethodInfo methodInfo, Command command) {
         SqlInfo sqlInfo = toSQL(methodInfo);
         List<Object> paramList = sqlInfo.getParamList();
         List<MappedParam> mappedParamList = null;
@@ -237,7 +237,7 @@ public class DefaultFlexMapper implements FlexMapper {
         }
         String sql = sqlInfo.getSql();
         CacheKey methodKey = SystemUtil.cacheKey(sql, 5, false);
-        methodKey.update(methodInfo.getRowType(),methodInfo.getColType());
+        methodKey.update(methodInfo.getRowType(), methodInfo.getColType());
         methodInfo.setMethodKey(methodKey);
         CacheKey uniqueKey = methodKey.clone();
         uniqueKey.update(sqlInfo.getParamList().toArray());
@@ -251,6 +251,7 @@ public class DefaultFlexMapper implements FlexMapper {
                 .build();
         return mappedStatement;
     }
+
     protected SqlInfo toSQL(MethodInfo methodInfo) {
         Map<Class, Object> customMap = new HashMap<>();
         customMap.put(MethodInfo.class, methodInfo);

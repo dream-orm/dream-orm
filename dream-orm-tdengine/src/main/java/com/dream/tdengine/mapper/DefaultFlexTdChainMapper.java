@@ -10,7 +10,7 @@ import com.dream.system.core.session.Session;
 import com.dream.tdengine.def.TdChainDeleteWhereDef;
 import com.dream.tdengine.def.TdChainFromDef;
 import com.dream.tdengine.def.TdChainInsertIntoColumnsDef;
-import com.dream.tdengine.def.TdChainUpdateColumnDefDef;
+import com.dream.tdengine.def.TdChainUpdateColumnDef;
 import com.dream.tdengine.factory.TdChainDeleteCreatorFactory;
 import com.dream.tdengine.factory.TdChainInsertCreatorFactory;
 import com.dream.tdengine.factory.TdChainQueryCreatorFactory;
@@ -39,7 +39,7 @@ public class DefaultFlexTdChainMapper implements FlexTdChainMapper {
     }
 
     @Override
-    public TdChainUpdateColumnDefDef update(TableDef tableDef) {
+    public TdChainUpdateColumnDef update(TableDef tableDef) {
         return new TdChainUpdateCreatorFactory(flexMapper).newUpdateTableDef().update(tableDef);
     }
 

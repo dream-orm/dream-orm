@@ -2,10 +2,10 @@ package com.dream.template.mapper;
 
 import com.dream.system.config.Page;
 import com.dream.system.core.session.Session;
-import com.dream.util.tree.Tree;
 import com.dream.template.sequence.BatchSequence;
 import com.dream.template.sequence.FetchKeySequence;
 import com.dream.template.sequence.Sequence;
+import com.dream.util.tree.Tree;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,6 +19,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private SelectPageMapper selectPageSqlMapper;
     private DeleteByIdMapper deleteByIdSqlMapper;
     private DeleteByIdsMapper deleteByIdsSqlMapper;
+    private DeleteOneMapper deleteOneMapper;
     private UpdateByIdMapper updateByIdSqlMapper;
     private BatchUpdateByIdMapper batchUpdateByIdMapper;
     private UpdateNonByIdMapper updateNonByIdSqlMapper;
@@ -37,6 +38,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
         selectPageSqlMapper = new SelectPageMapper(session);
         deleteByIdSqlMapper = new DeleteByIdMapper(session);
         deleteByIdsSqlMapper = new DeleteByIdsMapper(session);
+        deleteOneMapper=new DeleteOneMapper(session);
         updateByIdSqlMapper = new UpdateByIdMapper(session);
         batchUpdateByIdMapper = new BatchUpdateByIdMapper(session);
         updateNonByIdSqlMapper = new UpdateNonByIdMapper(session);
@@ -102,6 +104,11 @@ public class DefaultTemplateMapper implements TemplateMapper {
     @Override
     public int deleteById(Class<?> type, Object id) {
         return (int) deleteByIdSqlMapper.execute(type, id);
+    }
+
+    @Override
+    public int delete(Object view) {
+        return (int) deleteOneMapper.execute(view.getClass(),view);
     }
 
     @Override

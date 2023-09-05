@@ -89,6 +89,11 @@ public abstract class ServiceImpl<ListView, EditView> implements IService<ListVi
     }
 
     @Override
+    public int delete(Object view) {
+        return templateMapper.delete(view);
+    }
+
+    @Override
     public boolean existById(Object id) {
         return templateMapper.existById(editViewType, id);
     }

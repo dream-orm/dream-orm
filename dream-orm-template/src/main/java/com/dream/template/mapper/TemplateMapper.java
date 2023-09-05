@@ -113,6 +113,14 @@ public interface TemplateMapper {
     int deleteById(Class<?> type, Object id);
 
     /**
+     * 根据主键删除
+     *
+     * @param view 删除对象，根据主键删除，同时可进行参数校验
+     * @return
+     */
+    int delete(Object view);
+
+    /**
      * 根据主键集合删除
      *
      * @param type   java类型映射的表

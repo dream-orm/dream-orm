@@ -1,6 +1,5 @@
 package com.dream.util.reflection.factory;
 
-import com.dream.util.common.ObjectUtil;
 
 public class BasicObjectFactory implements ObjectFactory {
     private Object result;
@@ -16,11 +15,7 @@ public class BasicObjectFactory implements ObjectFactory {
 
     @Override
     public Object get(String property) {
-        if (ObjectUtil.isNull(property)) {
-            return result;
-        } else {
-            return null;
-        }
+        return result;
     }
 
     @Override

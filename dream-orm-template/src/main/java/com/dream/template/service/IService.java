@@ -102,6 +102,14 @@ public interface IService<ListView, EditView> {
     int deleteByIds(Collection<?> idList);
 
     /**
+     * 根据主键删除
+     *
+     * @param view 删除对象，根据主键删除，同时可进行参数校验
+     * @return
+     */
+    int delete(Object view);
+
+    /**
      * 判断主键是否存在
      *
      * @param id 主键值

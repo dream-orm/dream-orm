@@ -5,7 +5,7 @@ import com.dream.flex.def.UpdateTableDef;
 import com.dream.flex.factory.UpdateCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public class TdChainUpdateTableDef extends AbstractTdChainUpdateDef implements UpdateTableDef<TdChainUpdateColumnDefDef> {
+public class TdChainUpdateTableDef extends AbstractTdChainUpdateDef implements UpdateTableDef<TdChainUpdateColumnDef> {
     public TdChainUpdateTableDef(UpdateCreatorFactory creatorFactory, FlexMapper flexMapper) {
         super(new UpdateStatement(), creatorFactory, flexMapper);
     }

@@ -6,7 +6,7 @@ import com.dream.flex.def.TableDef;
 import com.dream.tdengine.def.TdChainDeleteWhereDef;
 import com.dream.tdengine.def.TdChainFromDef;
 import com.dream.tdengine.def.TdChainInsertIntoColumnsDef;
-import com.dream.tdengine.def.TdChainUpdateColumnDefDef;
+import com.dream.tdengine.def.TdChainUpdateColumnDef;
 
 /**
  * 链式强化接口
@@ -45,7 +45,7 @@ public interface FlexTdChainMapper {
      */
     TdChainFromDef select(boolean distinct, ColumnDef... columnDefs);
 
-    default TdChainUpdateColumnDefDef update(String table) {
+    default TdChainUpdateColumnDef update(String table) {
         return update(FunctionDef.tab(table));
     }
 
@@ -55,7 +55,7 @@ public interface FlexTdChainMapper {
      * @param tableDef 表
      * @return 更新链式
      */
-    TdChainUpdateColumnDefDef update(TableDef tableDef);
+    TdChainUpdateColumnDef update(TableDef tableDef);
 
     /**
      * 插入链式操作

@@ -84,4 +84,15 @@ public class HelloWorldTemplateTest {
         accountView.setName("12");
         templateMapper.insert(accountView);
     }
+
+    /**
+     * 测试校验删除
+     */
+    @Test
+    public void testDeleteValidated() {
+        ValidatedAccountView validatedAccountView = new ValidatedAccountView();
+        validatedAccountView.setId(12);
+        validatedAccountView.setName("123456");
+        templateMapper.delete(validatedAccountView);
+    }
 }
