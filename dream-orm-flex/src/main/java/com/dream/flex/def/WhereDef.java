@@ -17,7 +17,7 @@ public interface WhereDef<
         ConditionStatement conditionStatement = conditionDef.getStatement();
         if (conditionStatement != null) {
             WhereStatement whereStatement = new WhereStatement();
-            whereStatement.setCondition(conditionDef.getStatement());
+            whereStatement.setStatement(conditionDef.getStatement());
             statement().setWhereStatement(whereStatement);
         }
         return (Group) creatorFactory().newGroupByDef(statement());

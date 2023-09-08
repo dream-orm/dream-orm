@@ -65,7 +65,7 @@ public class FunctionDef {
                 listColumnStatement.add(sortDef.getStatement());
             }
             OrderStatement orderStatement = new OrderStatement();
-            orderStatement.setOrder(listColumnStatement);
+            orderStatement.setStatement(listColumnStatement);
             groupConcatStatement.setOrder(orderStatement);
         }
         groupConcatStatement.setDistinct(distinct);

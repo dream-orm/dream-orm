@@ -5,7 +5,7 @@ import com.dream.antlr.smt.WhereStatement;
 public interface DeleteWhereDef<T extends DeleteDef> extends DeleteDef {
     default T where(ConditionDef conditionDef) {
         WhereStatement whereStatement = new WhereStatement();
-        whereStatement.setCondition(conditionDef.getStatement());
+        whereStatement.setStatement(conditionDef.getStatement());
         statement().setWhere(whereStatement);
         return (T) creatorFactory().newDeleteDef(statement());
     }

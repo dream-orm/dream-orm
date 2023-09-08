@@ -51,7 +51,7 @@ public abstract class ToPubSQL extends ToNativeSQL {
                 statement.setOrderStatement(null);
             } else {
                 orderStatement = new OrderStatement();
-                orderStatement.setOrder(new BraceStatement(new SymbolStatement.LetterStatement("(select 0)")));
+                orderStatement.setStatement(new BraceStatement(new SymbolStatement.LetterStatement("(select 0)")));
             }
             RowNumberStatement rowNumberStatement = new RowNumberStatement();
             RowNumberStatement.OverStatement overStatement = new RowNumberStatement.OverStatement();
@@ -106,7 +106,7 @@ public abstract class ToPubSQL extends ToNativeSQL {
                 conditionStatement.setRight(rightConditionStatement);
             }
             WhereStatement whereStatement = new WhereStatement();
-            whereStatement.setCondition(conditionStatement);
+            whereStatement.setStatement(conditionStatement);
             queryStatement.setWhereStatement(whereStatement);
             statement = queryStatement;
         }

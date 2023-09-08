@@ -37,9 +37,9 @@ public class LimitStatement extends Statement {
     @Override
     public LimitStatement clone() {
         LimitStatement limitStatement = (LimitStatement) super.clone();
-        limitStatement.first = clone(first);
-        limitStatement.second = clone(second);
-        limitStatement.offset = offset;
+        limitStatement.setFirst(clone(first));
+        limitStatement.setSecond(clone(second));
+        limitStatement.setOffset(offset);
         return limitStatement;
     }
 }

@@ -19,7 +19,7 @@ public class TruncateTableStatement extends Statement {
     @Override
     public TruncateTableStatement clone() {
         TruncateTableStatement truncateTableStatement = (TruncateTableStatement) super.clone();
-        truncateTableStatement.table = clone(table);
+        truncateTableStatement.setTable(clone(table));
         return truncateTableStatement;
     }
 }

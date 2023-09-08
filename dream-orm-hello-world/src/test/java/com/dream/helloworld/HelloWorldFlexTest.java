@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.dream.flex.def.FunctionDef.*;
-import static com.dream.helloworld.table.table.AccountTableDef.account;
+import static com.dream.helloworld.def.AccountDef.account;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
@@ -72,7 +72,7 @@ public class HelloWorldFlexTest {
      */
     @Test
     public void testInsert() {
-        InsertDef insertDef = insertInto(account).columns(account.name, account.age).values("accountName", 12);
+        InsertDef insertDef = insertInto(account).columns(account.name, account.age).values("accountName", 200);
         flexMapper.insert(insertDef);
     }
 
@@ -82,7 +82,7 @@ public class HelloWorldFlexTest {
     @Test
     public void testInsert3() {
         List<Account> accountList = new ArrayList<>();
-        for (int i = 10; i < 14; i++) {
+        for (int i = 200; i < 210; i++) {
             Account account = new Account();
             account.setId(i);
             account.setName("name" + i);

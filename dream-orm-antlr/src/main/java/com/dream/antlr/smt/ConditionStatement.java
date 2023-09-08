@@ -37,9 +37,9 @@ public class ConditionStatement extends Statement {
     @Override
     public ConditionStatement clone() {
         ConditionStatement conditionStatement = (ConditionStatement) super.clone();
-        conditionStatement.left = clone(left);
-        conditionStatement.oper = (OperStatement) clone(oper);
-        conditionStatement.right = clone(right);
+        conditionStatement.setLeft(clone(left));
+        conditionStatement.setOper((OperStatement) clone(oper));
+        conditionStatement.setRight(clone(right));
         return conditionStatement;
     }
 }

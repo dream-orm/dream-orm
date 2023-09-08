@@ -28,7 +28,7 @@ public class BraceStatement extends Statement {
     @Override
     public BraceStatement clone() {
         BraceStatement braceStatement = (BraceStatement) super.clone();
-        braceStatement.statement = clone(statement);
+        braceStatement.setStatement(clone(statement));
         return braceStatement;
     }
 }

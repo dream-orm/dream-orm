@@ -2,26 +2,25 @@ package com.dream.system.antlr.handler.page;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
-import com.dream.antlr.expr.QueryExpr;
 import com.dream.antlr.handler.AbstractHandler;
 import com.dream.antlr.invoker.Invoker;
-import com.dream.antlr.read.ExprReader;
-import com.dream.antlr.smt.LimitStatement;
-import com.dream.antlr.smt.QueryStatement;
-import com.dream.antlr.smt.Statement;
+import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToNativeSQL;
 import com.dream.antlr.sql.ToSQL;
+import com.dream.system.annotation.PageQuery;
 import com.dream.system.config.MethodInfo;
+import com.dream.util.common.NonCollection;
+import com.dream.util.common.ObjectUtil;
 
 import java.util.List;
 
 public class PageHandler extends AbstractHandler {
     private final MethodInfo methodInfo;
     private final Invoker invoker;
-    private final ToNativeSQL toNativeSQL = new ToNativeSQL();
     private boolean offset;
     private Statement first;
     private Statement second;
+    private ToSQL toNativeSQL = new ToNativeSQL();
 
     public PageHandler(Invoker invoker, MethodInfo methodInfo) {
         this.invoker = invoker;
@@ -36,27 +35,73 @@ public class PageHandler extends AbstractHandler {
         return statement;
     }
 
-    void handlerCount(QueryStatement statement) throws AntlrException {
+    void handlerCount(QueryStatement statement) {
+        PackageStatement packageStatement = new PackageStatement();
         QueryStatement queryStatement = statement.clone();
-        if (queryStatement.getOrderStatement() != null) {
-            queryStatement.setOrderStatement(null);
+        queryStatement.setOrderStatement(null);
+        SelectStatement selectStatement = new SelectStatement();
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        FunctionStatement.CountStatement countStatement = new FunctionStatement.CountStatement();
+        ListColumnStatement paramListColumnStatement = new ListColumnStatement(",");
+        paramListColumnStatement.add(new SymbolStatement.LetterStatement("*"));
+        countStatement.setParamsStatement(paramListColumnStatement);
+        listColumnStatement.add(countStatement);
+        selectStatement.setSelectList(listColumnStatement);
+        if (queryStatement.getUnionStatement() == null && !queryStatement.getSelectStatement().isDistinct()) {
+            queryStatement.setSelectStatement(selectStatement);
+            packageStatement.setStatement(queryStatement);
+        } else {
+            queryStatement.setSelectStatement(statement.getSelectStatement());
+            QueryStatement newQueryStatement = new QueryStatement();
+            newQueryStatement.setSelectStatement(selectStatement);
+            FromStatement fromStatement = new FromStatement();
+            AliasStatement aliasStatement = new AliasStatement();
+            aliasStatement.setColumn(new BraceStatement(queryStatement));
+            aliasStatement.setAlias(new SymbolStatement.LetterStatement("t_tmp"));
+            fromStatement.setMainTable(aliasStatement);
+            newQueryStatement.setFromStatement(fromStatement);
+            packageStatement.setStatement(newQueryStatement);
         }
-        String countSql = "select count(1) from (" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp";
-        PageAction pageAction = new PageAction(methodInfo, countSql);
-        methodInfo.addInitAction(pageAction);
+        PageQuery pageQuery = methodInfo.get(PageQuery.class);
+        String value = pageQuery.value();
+        String property = "total";
+        if (!ObjectUtil.isNull(value)) {
+            property = value + "." + property;
+        }
+        MethodInfo methodInfo = new MethodInfo()
+                .setId(this.methodInfo.getId() + "#count")
+                .setConfiguration(this.methodInfo.getConfiguration())
+                .setRowType(NonCollection.class)
+                .setColType(Long.class)
+                .setCache(this.methodInfo.isCache())
+                .setSql("SELECT COUNT(*)FROM(" + this.methodInfo.getSql() + ")t_mp")
+                .setStatement(packageStatement);
+        PageAction pageAction = new PageAction(methodInfo, property);
+        this.methodInfo.addInitAction(pageAction);
     }
 
-    void handlerPage(QueryStatement queryStatement) throws AntlrException {
+    void handlerPage(QueryStatement statement) throws AntlrException {
         LimitStatement limitStatement = new LimitStatement();
         limitStatement.setOffset(offset);
         limitStatement.setFirst(first);
         limitStatement.setSecond(second);
-        if (queryStatement.getUnionStatement() == null && queryStatement.getLimitStatement() == null) {
-            queryStatement.setLimitStatement(limitStatement);
+        if (statement.getUnionStatement() == null && statement.getLimitStatement() == null) {
+            statement.setLimitStatement(limitStatement);
         } else {
-            String sql = "select t_tmp.* from(" + toNativeSQL.toStr(queryStatement, null, null) + ")t_tmp " + toNativeSQL.toStr(limitStatement, null, null);
-            QueryStatement pageQueryStatement = (QueryStatement) new QueryExpr(new ExprReader(sql)).expr();
-            queryStatement.replaceWith(pageQueryStatement);
+            QueryStatement queryStatement = new QueryStatement();
+            SelectStatement selectStatement = new SelectStatement();
+            ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+            listColumnStatement.add(new SymbolStatement.LetterStatement("t_tmp.*"));
+            selectStatement.setSelectList(listColumnStatement);
+            queryStatement.setSelectStatement(selectStatement);
+            FromStatement fromStatement = new FromStatement();
+            AliasStatement aliasStatement = new AliasStatement();
+            aliasStatement.setColumn(new BraceStatement(statement));
+            aliasStatement.setAlias(new SymbolStatement.LetterStatement("t_tmp"));
+            fromStatement.setMainTable(aliasStatement);
+            queryStatement.setFromStatement(fromStatement);
+            queryStatement.setLimitStatement(limitStatement);
+            statement.replaceWith(queryStatement);
         }
     }
 

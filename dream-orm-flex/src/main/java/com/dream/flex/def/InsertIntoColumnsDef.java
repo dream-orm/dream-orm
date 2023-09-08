@@ -17,6 +17,6 @@ public interface InsertIntoColumnsDef<InsertDefIntoValues extends InsertIntoValu
             paramsListStatement.add(statement);
         }
         statement().setColumns(new BraceStatement(paramsListStatement));
-        return (InsertDefIntoValues) creatorFactory().newInsertIntoColumnsDef(statement());
+        return (InsertDefIntoValues) creatorFactory().newInsertIntoValuesDef(statement());
     }
 }

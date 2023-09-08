@@ -6,7 +6,7 @@ import com.dream.flex.factory.DeleteCreatorFactory;
 import com.dream.flex.mapper.FlexMapper;
 
 public class ChainDeleteDef extends AbstractChainDeleteDef implements DeleteDef {
-    public ChainDeleteDef(DeleteCreatorFactory creatorFactory, FlexMapper flexMapper) {
-        super(new DeleteStatement(), creatorFactory, flexMapper);
+    public ChainDeleteDef(DeleteStatement statement, DeleteCreatorFactory creatorFactory, FlexMapper flexMapper) {
+        super(statement, creatorFactory, flexMapper);
     }
 }

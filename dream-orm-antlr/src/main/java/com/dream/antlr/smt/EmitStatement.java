@@ -26,7 +26,7 @@ public abstract class EmitStatement extends Statement {
     @Override
     public EmitStatement clone() {
         EmitStatement emitStatement = (EmitStatement) super.clone();
-        emitStatement.statement = clone(statement);
+        emitStatement.setStatement(clone(statement));
         return emitStatement;
     }
 

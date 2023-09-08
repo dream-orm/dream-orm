@@ -28,8 +28,8 @@ public class UnionStatement extends Statement {
     @Override
     public UnionStatement clone() {
         UnionStatement unionStatement = (UnionStatement) super.clone();
-        unionStatement.all = all;
-        unionStatement.statement = clone(statement);
+        unionStatement.setAll(all);
+        unionStatement.setStatement(clone(statement));
         return unionStatement;
     }
 }

@@ -28,8 +28,8 @@ public abstract class JoinStatement extends Statement {
     @Override
     public JoinStatement clone() {
         JoinStatement joinStatement = (JoinStatement) super.clone();
-        joinStatement.joinTable = clone(joinTable);
-        joinStatement.on = clone(on);
+        joinStatement.setJoinTable(clone(joinTable));
+        joinStatement.setOn(clone(on));
         return joinStatement;
     }
 

@@ -4,7 +4,7 @@ public abstract class CastTypeStatement extends Statement {
     private Statement statement;
 
     public CastTypeStatement(Statement statement) {
-        this.statement = wrapParent(statement);
+        setStatement(statement);
     }
 
     @Override
@@ -16,10 +16,14 @@ public abstract class CastTypeStatement extends Statement {
         return statement;
     }
 
+    public void setStatement(Statement statement) {
+        this.statement = wrapParent(statement);
+    }
+
     @Override
     public Statement clone() {
         CastTypeStatement castTypeStatement = (CastTypeStatement) super.clone();
-        castTypeStatement.statement = clone(statement);
+        castTypeStatement.setStatement(clone(statement));
         return castTypeStatement;
     }
 
@@ -83,7 +87,7 @@ public abstract class CastTypeStatement extends Statement {
         @Override
         public DecimalCastStatement clone() {
             DecimalCastStatement decimalCastStatement = (DecimalCastStatement) super.clone();
-            decimalCastStatement.paramStatement = clone(paramStatement);
+            decimalCastStatement.setParentStatement(clone(paramStatement));
             return decimalCastStatement;
         }
     }

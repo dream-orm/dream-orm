@@ -101,7 +101,7 @@ public class HelloWorldFlexJdbcTest {
      */
     @Test
     public void testInsert() {
-        jdbcMapper.execute("insert into account(id,name)values(?,?)", 13, "accountName");
+        jdbcMapper.execute("insert into account(id,name)values(?,?)", 400, "accountName");
     }
 
     /**
@@ -111,7 +111,7 @@ public class HelloWorldFlexJdbcTest {
     public void testInsert2() {
         AccountView accountView = new AccountView();
         accountView.setName("accountName");
-        accountView.setId(14);
+        accountView.setId(401);
         jdbcMapper.execute("insert into account(id,name)values(?,?)", new StatementSetter() {
             @Override
             public void setter(PreparedStatement ps, MappedStatement mappedStatement) throws SQLException {

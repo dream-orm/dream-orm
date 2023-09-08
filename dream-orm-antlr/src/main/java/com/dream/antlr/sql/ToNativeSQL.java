@@ -204,7 +204,7 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(OrderStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " ORDER BY " + toStr(statement.getOrder(), assist, invokerList);
+        return " ORDER BY " + toStr(statement.getStatement(), assist, invokerList);
     }
 
     @Override
@@ -229,7 +229,7 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(WhereStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String condition = toStr(statement.getCondition(), assist, invokerList);
+        String condition = toStr(statement.getStatement(), assist, invokerList);
         return " WHERE " + condition;
     }
 

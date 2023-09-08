@@ -19,7 +19,7 @@ public class HavingStatement extends Statement {
     @Override
     public HavingStatement clone() {
         HavingStatement havingStatement = (HavingStatement) super.clone();
-        havingStatement.condition = clone(condition);
+        havingStatement.setCondition(clone(condition));
         return havingStatement;
     }
 }

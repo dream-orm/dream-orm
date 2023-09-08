@@ -12,7 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static com.dream.helloworld.table.table.AccountTableDef.account;
+import static com.dream.helloworld.def.AccountDef.account;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
@@ -68,7 +69,7 @@ public class HelloWorldFlexChainTest {
      */
     @Test
     public void testInsert() {
-        flexChainMapper.insertInto(account).columns(account.name, account.age).values("accountName", 12).execute();
+        flexChainMapper.insertInto(account).columns(account.name, account.age).values("accountName", 100).execute();
     }
 
     /**

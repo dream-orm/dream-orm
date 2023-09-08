@@ -38,9 +38,9 @@ public class CaseStatement extends Statement {
     @Override
     public Statement clone() {
         CaseStatement caseStatement = (CaseStatement) super.clone();
-        caseStatement.caseColumn = clone(caseColumn);
-        caseStatement.whenthenList = clone(whenthenList);
-        caseStatement.elseColumn = clone(elseColumn);
+        caseStatement.setCaseColumn(clone(caseColumn));
+        caseStatement.setWhenthenList(clone(whenthenList));
+        caseStatement.setElseColumn(clone(elseColumn));
         return caseStatement;
     }
 
@@ -72,8 +72,8 @@ public class CaseStatement extends Statement {
         @Override
         public WhenThenStatement clone() {
             WhenThenStatement whenThenStatement = (WhenThenStatement) super.clone();
-            whenThenStatement.when = clone(when);
-            whenThenStatement.then = clone(then);
+            whenThenStatement.setWhen(clone(when));
+            whenThenStatement.setThen(clone(then));
             return whenThenStatement;
         }
     }

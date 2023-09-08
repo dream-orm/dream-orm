@@ -1,25 +1,25 @@
 package com.dream.antlr.smt;
 
 public class WhereStatement extends Statement {
-    private Statement condition;
+    private Statement statement;
 
-    public Statement getCondition() {
-        return condition;
+    public Statement getStatement() {
+        return statement;
     }
 
-    public void setCondition(Statement condition) {
-        this.condition = wrapParent(condition);
+    public void setStatement(Statement statement) {
+        this.statement = wrapParent(statement);
     }
 
     @Override
     protected Boolean isNeedInnerCache() {
-        return isNeedInnerCache(condition);
+        return isNeedInnerCache(statement);
     }
 
     @Override
     public WhereStatement clone() {
         WhereStatement whereStatement = (WhereStatement) super.clone();
-        whereStatement.condition = clone(condition);
+        whereStatement.setStatement(clone(statement));
         return whereStatement;
     }
 }

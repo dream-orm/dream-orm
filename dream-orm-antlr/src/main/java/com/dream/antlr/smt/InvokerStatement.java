@@ -37,9 +37,9 @@ public class InvokerStatement extends Statement {
     @Override
     public InvokerStatement clone() {
         InvokerStatement invokerStatement = (InvokerStatement) super.clone();
-        invokerStatement.namespace = namespace;
-        invokerStatement.function = function;
-        invokerStatement.paramStatement = clone(paramStatement);
+        invokerStatement.setNamespace(namespace);
+        invokerStatement.setFunction(function);
+        invokerStatement.setParamStatement(clone(paramStatement));
         return invokerStatement;
     }
 }

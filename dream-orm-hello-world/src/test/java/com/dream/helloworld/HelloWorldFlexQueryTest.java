@@ -6,7 +6,7 @@ import com.dream.flex.def.CaseColumnDef;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.helloworld.debug.FlexDebug;
-import com.dream.helloworld.table.table.AccountTableDef;
+import com.dream.helloworld.def.AccountDef;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Objects;
 
 import static com.dream.flex.def.FunctionDef.*;
-import static com.dream.helloworld.table.table.AccountTableDef.account;
+import static com.dream.helloworld.def.AccountDef.account;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
@@ -91,7 +91,7 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testFromJoin() {
-        AccountTableDef account2 = new AccountTableDef("account2");
+        AccountDef account2 = new AccountDef("account2");
         QueryDef queryDef = select(account.id).from(account.leftJoin(account2, account2.id, account2.id));
         Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDebug.toSQL(statement);

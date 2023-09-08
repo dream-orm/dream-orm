@@ -16,7 +16,7 @@ public interface OrderByDef<
             columnStatement.add(sortDef.getStatement());
         }
         OrderStatement orderStatement = new OrderStatement();
-        orderStatement.setOrder(columnStatement);
+        orderStatement.setStatement(columnStatement);
         statement().setOrderStatement(orderStatement);
         return (Limit) creatorFactory().newLimitDef(statement());
     }

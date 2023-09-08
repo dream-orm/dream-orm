@@ -19,7 +19,7 @@ public class GroupStatement extends Statement {
     @Override
     public GroupStatement clone() {
         GroupStatement groupStatement = (GroupStatement) super.clone();
-        groupStatement.group = clone(group);
+        groupStatement.setGroup(clone(group));
         return groupStatement;
     }
 }

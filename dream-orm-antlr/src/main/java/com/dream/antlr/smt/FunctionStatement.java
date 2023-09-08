@@ -30,8 +30,8 @@ public abstract class FunctionStatement extends Statement {
     @Override
     public FunctionStatement clone() {
         FunctionStatement functionStatement = (FunctionStatement) super.clone();
-        functionStatement.paramsStatement = clone(paramsStatement);
-        functionStatement.functionName = functionName;
+        functionStatement.setParamsStatement(clone(paramsStatement));
+        functionStatement.setFunctionName(functionName);
         return functionStatement;
     }
 
@@ -92,10 +92,10 @@ public abstract class FunctionStatement extends Statement {
         @Override
         public GroupConcatStatement clone() {
             GroupConcatStatement groupConcatStatement = (GroupConcatStatement) super.clone();
-            groupConcatStatement.distinct = distinct;
-            groupConcatStatement.all = all;
-            groupConcatStatement.order = clone(order);
-            groupConcatStatement.separator = clone(separator);
+            groupConcatStatement.setDistinct(distinct);
+            groupConcatStatement.setAll(all);
+            groupConcatStatement.setOrder(clone(order));
+            groupConcatStatement.setSeparator(clone(separator));
             return groupConcatStatement;
         }
     }
@@ -322,7 +322,7 @@ public abstract class FunctionStatement extends Statement {
         @Override
         public DateForMatStatement clone() {
             DateForMatStatement dateForMatStatement = (DateForMatStatement) super.clone();
-            dateForMatStatement.pattern = pattern;
+            dateForMatStatement.setPattern(pattern);
             return dateForMatStatement;
         }
     }
@@ -341,7 +341,7 @@ public abstract class FunctionStatement extends Statement {
         @Override
         public StrToDateStatement clone() {
             StrToDateStatement strToDateStatement = (StrToDateStatement) super.clone();
-            strToDateStatement.pattern = pattern;
+            strToDateStatement.setPattern(pattern);
             return strToDateStatement;
         }
     }

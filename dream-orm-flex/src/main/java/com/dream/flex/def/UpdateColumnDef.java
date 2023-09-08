@@ -33,7 +33,7 @@ public interface UpdateColumnDef<UpdateColumn extends UpdateColumnDef, Update ex
 
     default Update where(ConditionDef conditionDef) {
         WhereStatement whereStatement = new WhereStatement();
-        whereStatement.setCondition(conditionDef.getStatement());
+        whereStatement.setStatement(conditionDef.getStatement());
         statement().setWhere(whereStatement);
         return (Update) creatorFactory().newUpdateDef(statement());
     }

@@ -19,7 +19,7 @@ public abstract class OperStatement extends Statement {
     @Override
     public OperStatement clone() {
         OperStatement operStatement = (OperStatement) super.clone();
-        operStatement.level = level;
+        operStatement.setLevel(level);
         return operStatement;
     }
 

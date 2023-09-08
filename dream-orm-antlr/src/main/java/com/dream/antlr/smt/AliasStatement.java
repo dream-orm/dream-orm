@@ -38,8 +38,8 @@ public class AliasStatement extends Statement {
     public AliasStatement clone() {
         AliasStatement aliasStatement = (AliasStatement) super.clone();
         aliasStatement.showAlias = showAlias;
-        aliasStatement.column = clone(column);
-        aliasStatement.alias = clone(alias);
+        aliasStatement.setColumn(clone(column));
+        aliasStatement.setAlias(clone(alias));
         return aliasStatement;
     }
 }

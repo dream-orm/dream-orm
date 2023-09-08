@@ -91,15 +91,15 @@ public class QueryStatement extends Statement {
     @Override
     public QueryStatement clone() {
         QueryStatement queryStatement = (QueryStatement) super.clone();
-        queryStatement.selectStatement = (SelectStatement) clone(selectStatement);
-        queryStatement.fromStatement = (FromStatement) clone(fromStatement);
-        queryStatement.whereStatement = (WhereStatement) clone(whereStatement);
-        queryStatement.groupStatement = (GroupStatement) clone(groupStatement);
-        queryStatement.havingStatement = (HavingStatement) clone(havingStatement);
-        queryStatement.orderStatement = (OrderStatement) clone(orderStatement);
-        queryStatement.limitStatement = (LimitStatement) clone(limitStatement);
-        queryStatement.unionStatement = (UnionStatement) clone(unionStatement);
-        queryStatement.forUpdateStatement = (ForUpdateStatement) clone(forUpdateStatement);
+        queryStatement.setSelectStatement((SelectStatement) clone(selectStatement));
+        queryStatement.setFromStatement((FromStatement) clone(fromStatement));
+        queryStatement.setWhereStatement((WhereStatement) clone(whereStatement));
+        queryStatement.setGroupStatement((GroupStatement) clone(groupStatement));
+        queryStatement.setHavingStatement((HavingStatement) clone(havingStatement));
+        queryStatement.setOrderStatement((OrderStatement) clone(orderStatement));
+        queryStatement.setLimitStatement((LimitStatement) clone(limitStatement));
+        queryStatement.setUnionStatement((UnionStatement) clone(unionStatement));
+        queryStatement.setForUpdateStatement((ForUpdateStatement) clone(forUpdateStatement));
         return queryStatement;
     }
 }

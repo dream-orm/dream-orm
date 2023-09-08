@@ -3,12 +3,12 @@ package com.dream.antlr.smt;
 public class OrderStatement extends Statement {
     private Statement statement;
 
-    public Statement getOrder() {
+    public Statement getStatement() {
         return statement;
     }
 
-    public void setOrder(Statement order) {
-        this.statement = wrapParent(order);
+    public void setStatement(Statement statement) {
+        this.statement = wrapParent(statement);
     }
 
     @Override
@@ -19,7 +19,7 @@ public class OrderStatement extends Statement {
     @Override
     public OrderStatement clone() {
         OrderStatement orderStatement = (OrderStatement) super.clone();
-        orderStatement.statement = clone(statement);
+        orderStatement.setStatement(clone(statement));
         return orderStatement;
     }
 
@@ -27,6 +27,10 @@ public class OrderStatement extends Statement {
         private Statement statement;
 
         public AscStatement(Statement statement) {
+            setStatement(statement);
+        }
+
+        public void setStatement(Statement statement) {
             this.statement = wrapParent(statement);
         }
 
@@ -42,7 +46,7 @@ public class OrderStatement extends Statement {
         @Override
         public AscStatement clone() {
             AscStatement ascStatement = (AscStatement) super.clone();
-            ascStatement.statement = clone(statement);
+            ascStatement.setStatement(clone(statement));
             return ascStatement;
         }
     }
@@ -51,6 +55,10 @@ public class OrderStatement extends Statement {
         private Statement statement;
 
         public DescStatement(Statement statement) {
+            setStatement(statement);
+        }
+
+        public void setStatement(Statement statement) {
             this.statement = wrapParent(statement);
         }
 
@@ -66,7 +74,7 @@ public class OrderStatement extends Statement {
         @Override
         public DescStatement clone() {
             DescStatement descStatement = (DescStatement) super.clone();
-            descStatement.statement = clone(statement);
+            descStatement.setStatement(clone(statement));
             return descStatement;
         }
     }

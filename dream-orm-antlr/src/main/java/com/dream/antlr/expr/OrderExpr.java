@@ -29,7 +29,7 @@ public class OrderExpr extends SqlExpr {
     protected Statement exprBy(ExprInfo exprInfo) throws AntlrException {
         push();
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new AscDescExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
-        orderStatement.setOrder(listColumnExpr.expr());
+        orderStatement.setStatement(listColumnExpr.expr());
         setExprTypes(ExprType.NIL);
         return expr();
     }

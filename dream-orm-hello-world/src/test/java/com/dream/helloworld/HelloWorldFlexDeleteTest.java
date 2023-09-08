@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static com.dream.flex.def.FunctionDef.delete;
-import static com.dream.helloworld.table.table.AccountTableDef.account;
+import static com.dream.helloworld.def.AccountDef.account;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)

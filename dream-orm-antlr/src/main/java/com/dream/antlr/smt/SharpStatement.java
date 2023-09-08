@@ -26,7 +26,7 @@ public class SharpStatement extends Statement {
     @Override
     public SharpStatement clone() {
         SharpStatement sharpStatement = (SharpStatement) super.clone();
-        sharpStatement.statement = clone(statement);
+        sharpStatement.setStatement(clone(statement));
         return sharpStatement;
     }
 }

@@ -5,6 +5,7 @@ import com.dream.helloworld.condition.OrderAccountCondition;
 import com.dream.helloworld.view.AccountView;
 import com.dream.helloworld.view.ValidatedAccountView;
 import com.dream.helloworld.view.WrapAccountView;
+import com.dream.system.config.Page;
 import com.dream.template.mapper.TemplateMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,16 @@ public class HelloWorldTemplateTest {
     public void testSelectById() {
         AccountView accountView = templateMapper.selectById(AccountView.class, 1);
         System.out.println("查询结果：" + accountView);
+    }
+
+    /**
+     * 测试分页
+     */
+    @Test
+    public void testSelectPage() {
+        Page page = new Page<>(1, 10);
+        templateMapper.selectPage(AccountView.class, null, page);
+        System.out.println("总数：" + page.getTotal() + "\n查询结果：" + page.getRows());
     }
 
     /**
@@ -91,7 +102,7 @@ public class HelloWorldTemplateTest {
     @Test
     public void testDeleteValidated() {
         ValidatedAccountView validatedAccountView = new ValidatedAccountView();
-        validatedAccountView.setId(12);
+        validatedAccountView.setId(13);
         validatedAccountView.setName("123456");
         templateMapper.delete(validatedAccountView);
     }

@@ -23,7 +23,7 @@ public class WhereExpr extends SqlExpr {
         push();
         CompareExpr operTreeExpr = new CompareExpr(exprReader);
         Statement statement = operTreeExpr.expr();
-        whereStatement.setCondition(statement);
+        whereStatement.setStatement(statement);
         setExprTypes(ExprType.NIL);
         return expr();
     }

@@ -42,9 +42,9 @@ public class TdQueryStatement extends QueryStatement {
     @Override
     public TdQueryStatement clone() {
         TdQueryStatement tdQueryStatement = (TdQueryStatement) super.clone();
-        tdQueryStatement.partitionBy = (TdPartitionStatement) clone(partitionBy);
-        tdQueryStatement.windnow = (TdWindowStatement) clone(windnow);
-        tdQueryStatement.slimit = (TdSLimitStatement) clone(slimit);
+        tdQueryStatement.setPartitionBy((TdPartitionStatement) clone(partitionBy));
+        tdQueryStatement.setWindnow((TdWindowStatement) clone(windnow));
+        tdQueryStatement.setSlimit((TdSLimitStatement) clone(slimit));
         return tdQueryStatement;
     }
 }

@@ -28,8 +28,8 @@ public class FromStatement extends Statement {
     @Override
     public FromStatement clone() {
         FromStatement fromStatement = (FromStatement) super.clone();
-        fromStatement.mainTable = clone(mainTable);
-        fromStatement.joinList = clone(joinList);
+        fromStatement.setMainTable(clone(mainTable));
+        fromStatement.setJoinList(clone(joinList));
         return fromStatement;
     }
 }

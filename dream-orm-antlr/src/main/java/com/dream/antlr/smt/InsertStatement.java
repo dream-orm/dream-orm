@@ -37,9 +37,9 @@ public class InsertStatement extends Statement {
     @Override
     public InsertStatement clone() {
         InsertStatement insertStatement = (InsertStatement) super.clone();
-        insertStatement.table = clone(table);
-        insertStatement.columns = clone(columns);
-        insertStatement.values = clone(values);
+        insertStatement.setTable(clone(table));
+        insertStatement.setColumns(clone(columns));
+        insertStatement.setValues(clone(values));
         return insertStatement;
     }
 
@@ -62,7 +62,7 @@ public class InsertStatement extends Statement {
         @Override
         public ValuesStatement clone() {
             ValuesStatement valuesStatement = (ValuesStatement) super.clone();
-            valuesStatement.statement = clone(statement);
+            valuesStatement.setStatement(clone(statement));
             return valuesStatement;
         }
     }

@@ -22,7 +22,7 @@ public abstract class DDLAlterStatement extends Statement {
     @Override
     public DDLAlterStatement clone() {
         DDLAlterStatement ddlAlterStatement = (DDLAlterStatement) super.clone();
-        ddlAlterStatement.table = clone(table);
+        ddlAlterStatement.setTable(clone(table));
         return ddlAlterStatement;
     }
 
@@ -40,7 +40,7 @@ public abstract class DDLAlterStatement extends Statement {
         @Override
         public DDLAlterRenameStatement clone() {
             DDLAlterRenameStatement ddlAlterStatement = (DDLAlterRenameStatement) super.clone();
-            ddlAlterStatement.newTable = clone(newTable);
+            ddlAlterStatement.setNewTable(clone(newTable));
             return ddlAlterStatement;
         }
     }
@@ -95,11 +95,12 @@ public abstract class DDLAlterStatement extends Statement {
         @Override
         public DDLAlterAddStatement clone() {
             DDLAlterAddStatement ddlAlterStatement = (DDLAlterAddStatement) super.clone();
-            ddlAlterStatement.column = clone(column);
-            ddlAlterStatement.columnType = columnType;
-            ddlAlterStatement.defaultValue = clone(defaultValue);
-            ddlAlterStatement.nullFlag = nullFlag;
-            ddlAlterStatement.columnTypeParamList = (ListColumnStatement) clone(columnTypeParamList);
+            ddlAlterStatement.setColumn(clone(column));
+            ddlAlterStatement.setColumnType(columnType);
+            ddlAlterStatement.setDefaultValue(clone(defaultValue));
+            ddlAlterStatement.setNullFlag(nullFlag);
+            ;
+            ddlAlterStatement.setColumnTypeParamList((ListColumnStatement) clone(columnTypeParamList));
             return ddlAlterStatement;
         }
     }
@@ -118,7 +119,8 @@ public abstract class DDLAlterStatement extends Statement {
         @Override
         public DDLAlterDropStatement clone() {
             DDLAlterDropStatement ddlAlterStatement = (DDLAlterDropStatement) super.clone();
-            ddlAlterStatement.column = clone(column);
+            ddlAlterStatement.setColumn(clone(column));
+            ;
             return ddlAlterStatement;
         }
     }
@@ -173,11 +175,12 @@ public abstract class DDLAlterStatement extends Statement {
         @Override
         public DDLAlterModifyStatement clone() {
             DDLAlterModifyStatement ddlAlterModifyStatement = (DDLAlterModifyStatement) super.clone();
-            ddlAlterModifyStatement.column = clone(column);
-            ddlAlterModifyStatement.columnType = columnType;
-            ddlAlterModifyStatement.defaultValue = clone(defaultValue);
-            ddlAlterModifyStatement.nullFlag = nullFlag;
-            ddlAlterModifyStatement.columnTypeParamList = (ListColumnStatement) clone(columnTypeParamList);
+            ddlAlterModifyStatement.setColumn(clone(column));
+            ddlAlterModifyStatement.setColumnType(columnType);
+            ;
+            ddlAlterModifyStatement.setDefaultValue(clone(defaultValue));
+            ddlAlterModifyStatement.setNullFlag(nullFlag);
+            ddlAlterModifyStatement.setColumnTypeParamList((ListColumnStatement) clone(columnTypeParamList));
             return ddlAlterModifyStatement;
         }
     }

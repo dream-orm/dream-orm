@@ -28,8 +28,8 @@ public abstract class DDLCreateStatement extends Statement {
     @Override
     public DDLCreateStatement clone() {
         DDLCreateStatement ddlCreateStatement = (DDLCreateStatement) super.clone();
-        ddlCreateStatement.statement = clone(statement);
-        ddlCreateStatement.existCreate = existCreate;
+        ddlCreateStatement.setStatement(clone(statement));
+        ddlCreateStatement.setExistCreate(existCreate);
         return ddlCreateStatement;
     }
 
@@ -78,10 +78,11 @@ public abstract class DDLCreateStatement extends Statement {
         @Override
         public DDLCreateTableStatement clone() {
             DDLCreateTableStatement ddlCreateStatement = (DDLCreateTableStatement) super.clone();
-            ddlCreateStatement.columnDefineList = (ListColumnStatement) clone(columnDefineList);
-            ddlCreateStatement.engine = clone(engine);
-            ddlCreateStatement.comment = clone(comment);
-            ddlCreateStatement.defaultCharset = clone(defaultCharset);
+            ddlCreateStatement.setColumnDefineList((ListColumnStatement) clone(columnDefineList));
+            ddlCreateStatement.setEngine(clone(engine));
+            ddlCreateStatement.setComment(clone(comment));
+            ;
+            ddlCreateStatement.setDefaultCharset(clone(defaultCharset));
             return ddlCreateStatement;
         }
     }

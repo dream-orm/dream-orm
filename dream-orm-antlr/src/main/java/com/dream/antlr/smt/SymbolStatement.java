@@ -4,7 +4,7 @@ public abstract class SymbolStatement extends Statement {
     protected String symbol;
 
     public SymbolStatement(String symbol) {
-        this.symbol = symbol;
+        setSymbol(symbol);
     }
 
     @Override
@@ -14,6 +14,10 @@ public abstract class SymbolStatement extends Statement {
 
     public String getSymbol() {
         return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public String getValue() {
@@ -28,7 +32,7 @@ public abstract class SymbolStatement extends Statement {
     @Override
     public SymbolStatement clone() {
         SymbolStatement symbolStatement = (SymbolStatement) super.clone();
-        symbolStatement.symbol = symbol;
+        symbolStatement.setSymbol(symbol);
         return symbolStatement;
     }
 

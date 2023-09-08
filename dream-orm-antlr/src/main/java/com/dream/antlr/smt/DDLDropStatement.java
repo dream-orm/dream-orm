@@ -19,7 +19,7 @@ public abstract class DDLDropStatement extends Statement {
     @Override
     public DDLDropStatement clone() {
         DDLDropStatement ddlDropStatement = (DDLDropStatement) super.clone();
-        ddlDropStatement.statement = clone(statement);
+        ddlDropStatement.setStatement(clone(statement));
         return ddlDropStatement;
     }
 

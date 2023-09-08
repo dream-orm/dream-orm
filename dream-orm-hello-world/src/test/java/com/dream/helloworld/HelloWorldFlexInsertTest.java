@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.dream.flex.def.FunctionDef.insertInto;
-import static com.dream.helloworld.table.table.AccountTableDef.account;
+import static com.dream.helloworld.def.AccountDef.account;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
@@ -35,7 +35,7 @@ public class HelloWorldFlexInsertTest {
      */
     @Test
     public void testInsert2() {
-        InsertDef insertDef = insertInto(account).values("accountName", 12);
+        InsertDef insertDef = insertInto(account).values("accountName", 13);
         SqlInfo sqlInfo = flexDebug.toSQL(insertDef);
         System.out.println(sqlInfo.getSql());
     }
@@ -46,7 +46,7 @@ public class HelloWorldFlexInsertTest {
     @Test
     public void testInsert3() {
         List<Account> accountList = new ArrayList<Account>();
-        for (int i = 10; i < 14; i++) {
+        for (int i = 14; i < 20; i++) {
             Account account = new Account();
             account.setId(i);
             account.setName("name" + i);

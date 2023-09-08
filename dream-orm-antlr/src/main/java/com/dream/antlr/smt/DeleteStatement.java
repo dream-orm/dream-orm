@@ -28,8 +28,8 @@ public class DeleteStatement extends Statement {
     @Override
     public DeleteStatement clone() {
         DeleteStatement deleteStatement = (DeleteStatement) super.clone();
-        deleteStatement.table = clone(table);
-        deleteStatement.where = clone(where);
+        deleteStatement.setTable(clone(table));
+        deleteStatement.setWhere(clone(where));
         return deleteStatement;
     }
 }

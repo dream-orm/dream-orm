@@ -231,7 +231,7 @@ public class ToMSSQL extends ToPubSQL {
             OrderStatement orderStatement = statement.getOrderStatement();
             if (orderStatement == null) {
                 orderStatement = new OrderStatement();
-                orderStatement.setOrder(new BraceExpr(new ExprReader("(select 0)")).expr());
+                orderStatement.setStatement(new BraceExpr(new ExprReader("(select 0)")).expr());
                 statement.setOrderStatement(orderStatement);
             }
         }

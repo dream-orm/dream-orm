@@ -50,11 +50,12 @@ public class ListColumnStatement extends Statement {
     @Override
     public ListColumnStatement clone() {
         ListColumnStatement listColumnStatement = (ListColumnStatement) super.clone();
-        listColumnStatement.cut = (SymbolStatement.LetterStatement) clone(cut);
-        listColumnStatement.columnList = new Statement[columnList.length];
+        listColumnStatement.setCut((SymbolStatement.LetterStatement) clone(cut));
+        Statement[] columnList = new Statement[this.columnList.length];
         for (int i = 0; i < columnList.length; i++) {
-            listColumnStatement.columnList[i] = clone(columnList[i]);
+            columnList[i] = clone(this.columnList[i]);
         }
+        listColumnStatement.setColumnList(columnList);
         return listColumnStatement;
     }
 }

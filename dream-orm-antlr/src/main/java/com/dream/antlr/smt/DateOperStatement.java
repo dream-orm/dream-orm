@@ -28,8 +28,8 @@ public abstract class DateOperStatement extends Statement {
     @Override
     public DateOperStatement clone() {
         DateOperStatement dateOperStatement = (DateOperStatement) super.clone();
-        dateOperStatement.date = clone(date);
-        dateOperStatement.qty = clone(qty);
+        dateOperStatement.setDate(clone(date));
+        dateOperStatement.setQty(clone(qty));
         return dateOperStatement;
     }
 

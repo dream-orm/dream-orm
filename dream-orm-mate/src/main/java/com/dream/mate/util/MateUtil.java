@@ -4,7 +4,7 @@ import com.dream.antlr.smt.*;
 
 public class MateUtil {
     public static void appendWhere(WhereStatement whereStatement, Statement statement) {
-        Statement condition = whereStatement.getCondition();
+        Statement condition = whereStatement.getStatement();
         if (condition instanceof ConditionStatement) {
             OperStatement operStatement = ((ConditionStatement) condition).getOper();
             if (operStatement != null && operStatement instanceof OperStatement.ORStatement) {
@@ -15,6 +15,6 @@ public class MateUtil {
         conditionStatement.setLeft(condition);
         conditionStatement.setOper(new OperStatement.ANDStatement());
         conditionStatement.setRight(statement);
-        whereStatement.setCondition(conditionStatement);
+        whereStatement.setStatement(conditionStatement);
     }
 }

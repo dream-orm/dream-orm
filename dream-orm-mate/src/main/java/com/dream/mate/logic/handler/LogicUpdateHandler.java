@@ -31,7 +31,7 @@ public class LogicUpdateHandler extends AbstractHandler {
             WhereStatement whereStatement = (WhereStatement) updateStatement.getWhere();
             if (whereStatement == null) {
                 whereStatement = new WhereStatement();
-                whereStatement.setCondition(whereConditionStatement);
+                whereStatement.setStatement(whereConditionStatement);
                 updateStatement.setWhere(whereStatement);
             } else {
                 MateUtil.appendWhere(whereStatement, whereConditionStatement);

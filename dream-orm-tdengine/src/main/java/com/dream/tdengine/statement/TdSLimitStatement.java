@@ -63,9 +63,9 @@ public class TdSLimitStatement extends MyFunctionStatement {
     @Override
     public TdSLimitStatement clone() {
         TdSLimitStatement tdSLimitStatement = (TdSLimitStatement) super.clone();
-        tdSLimitStatement.first = clone(first);
-        tdSLimitStatement.second = clone(second);
-        tdSLimitStatement.offset = offset;
+        tdSLimitStatement.setFirst(clone(first));
+        tdSLimitStatement.setSecond(clone(second));
+        tdSLimitStatement.setOffset(offset);
         return tdSLimitStatement;
     }
 }

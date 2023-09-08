@@ -17,10 +17,7 @@ public class SelectStatement extends Statement {
     }
 
     public void setSelectList(ListColumnStatement selectList) {
-        this.selectList = selectList;
-        if (selectList != null) {
-            selectList.parentStatement = this;
-        }
+        this.selectList = wrapParent(selectList);
     }
 
     @Override
@@ -31,8 +28,8 @@ public class SelectStatement extends Statement {
     @Override
     public SelectStatement clone() {
         SelectStatement selectStatement = (SelectStatement) super.clone();
-        selectStatement.distinct = distinct;
-        selectStatement.selectList = (ListColumnStatement) clone(selectList);
+        selectStatement.setDistinct(distinct);
+        selectStatement.setSelectList((ListColumnStatement) clone(selectList));
         return selectStatement;
     }
 }

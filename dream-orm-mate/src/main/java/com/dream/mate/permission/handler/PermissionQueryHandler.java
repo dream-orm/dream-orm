@@ -67,7 +67,7 @@ public class PermissionQueryHandler extends AbstractHandler {
                             new SymbolStatement.LetterStatement(tableScanInfo.getAlias()));
                     if (whereStatement == null) {
                         whereStatement = new WhereStatement();
-                        whereStatement.setCondition(invokerStatement);
+                        whereStatement.setStatement(invokerStatement);
                         queryStatement.setWhereStatement(whereStatement);
                     } else {
                         MateUtil.appendWhere(whereStatement, invokerStatement);

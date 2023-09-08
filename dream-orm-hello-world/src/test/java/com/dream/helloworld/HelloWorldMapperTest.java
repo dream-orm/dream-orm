@@ -92,7 +92,7 @@ public class HelloWorldMapperTest {
     @Test
     public void testInsert() {
         AccountView accountView = new AccountView();
-        accountView.setId(12);
+        accountView.setId(300);
         accountView.setName("accountName");
         accountMapper.insert(accountView);
     }

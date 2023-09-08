@@ -37,9 +37,9 @@ public class UpdateStatement extends Statement {
     @Override
     public UpdateStatement clone() {
         UpdateStatement updateStatement = (UpdateStatement) super.clone();
-        updateStatement.table = clone(table);
-        updateStatement.conditionList = clone(conditionList);
-        updateStatement.where = clone(where);
+        updateStatement.setTable(clone(table));
+        updateStatement.setConditionList(clone(conditionList));
+        updateStatement.setWhere(clone(where));
         return updateStatement;
     }
 }

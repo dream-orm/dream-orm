@@ -37,7 +37,7 @@ public class TenantUpdateHandler extends AbstractHandler {
             if (whereStatement == null) {
                 whereStatement = new WhereStatement();
                 updateStatement.setWhere(whereStatement);
-                whereStatement.setCondition(conditionStatement);
+                whereStatement.setStatement(conditionStatement);
                 updateStatement.setWhere(whereStatement);
             } else {
                 MateUtil.appendWhere(whereStatement, conditionStatement);

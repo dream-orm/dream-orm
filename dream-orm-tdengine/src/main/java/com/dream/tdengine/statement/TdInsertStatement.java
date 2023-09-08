@@ -32,8 +32,8 @@ public class TdInsertStatement extends InsertStatement {
     @Override
     public TdInsertStatement clone() {
         TdInsertStatement tdInsertStatement = (TdInsertStatement) super.clone();
-        tdInsertStatement.stdTable = clone(stdTable);
-        tdInsertStatement.tags = (ListColumnStatement) clone(tags);
+        tdInsertStatement.setStdTable(clone(stdTable));
+        tdInsertStatement.setTags((ListColumnStatement) clone(tags));
         return tdInsertStatement;
     }
 }

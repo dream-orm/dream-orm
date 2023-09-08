@@ -19,7 +19,7 @@ public class RowNumberStatement extends Statement {
     @Override
     public RowNumberStatement clone() {
         RowNumberStatement rowNumberStatement = (RowNumberStatement) super.clone();
-        rowNumberStatement.statement = clone(statement);
+        rowNumberStatement.setStatement(clone(statement));
         return rowNumberStatement;
     }
 
@@ -51,8 +51,8 @@ public class RowNumberStatement extends Statement {
         @Override
         public OverStatement clone() {
             OverStatement overStatement = (OverStatement) super.clone();
-            overStatement.partitionStatement = clone(partitionStatement);
-            overStatement.orderStatement = clone(orderStatement);
+            overStatement.setPartitionStatement(clone(partitionStatement));
+            overStatement.setOrderStatement(clone(orderStatement));
             return overStatement;
         }
 
@@ -75,7 +75,7 @@ public class RowNumberStatement extends Statement {
             @Override
             public PartitionStatement clone() {
                 PartitionStatement partitionStatement = (PartitionStatement) super.clone();
-                partitionStatement.statement = clone(statement);
+                partitionStatement.setStatement(clone(statement));
                 return partitionStatement;
             }
         }

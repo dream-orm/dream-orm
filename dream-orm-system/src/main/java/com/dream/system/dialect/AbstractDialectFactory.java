@@ -22,9 +22,12 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                     if (Compile.ANTLR_COMPILE == methodInfo.getCompile()) {
                         String sql = methodInfo.getSql();
                         try {
-                            CompileFactory compileFactory = configuration.getCompileFactory();
-                            PackageStatement statement = compileFactory.compile(sql);
-                            methodInfo.setStatement(statement);
+                            PackageStatement statement = methodInfo.getStatement();
+                            if (statement == null) {
+                                CompileFactory compileFactory = configuration.getCompileFactory();
+                                statement = compileFactory.compile(sql);
+                                methodInfo.setStatement(statement);
+                            }
                             CacheKey methodKey = SystemUtil.cacheKey(sql, 5, true);
                             if (methodKey != null) {
                                 methodKey.update(methodInfo.getId());

@@ -4,7 +4,7 @@ public abstract class ConvertTypeStatement extends Statement {
     private Statement statement;
 
     public ConvertTypeStatement(Statement statement) {
-        this.statement = wrapParent(statement);
+        setStatement(statement);
     }
 
     @Override
@@ -16,10 +16,14 @@ public abstract class ConvertTypeStatement extends Statement {
         return statement;
     }
 
+    public void setStatement(Statement statement) {
+        this.statement = wrapParent(statement);
+    }
+
     @Override
     public ConvertTypeStatement clone() {
         ConvertTypeStatement convertTypeStatement = (ConvertTypeStatement) super.clone();
-        convertTypeStatement.statement = clone(statement);
+        convertTypeStatement.setStatement(clone(statement));
         return convertTypeStatement;
     }
 
@@ -83,7 +87,7 @@ public abstract class ConvertTypeStatement extends Statement {
         @Override
         public DecimalConvertStatement clone() {
             DecimalConvertStatement decimalConvertStatement = (DecimalConvertStatement) super.clone();
-            decimalConvertStatement.paramStatement = clone(paramStatement);
+            decimalConvertStatement.setParamStatement(clone(paramStatement));
             return decimalConvertStatement;
         }
     }

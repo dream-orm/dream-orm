@@ -36,7 +36,7 @@ public class TenantDeleteHandler extends AbstractHandler {
             if (whereStatement == null) {
                 whereStatement = new WhereStatement();
                 deleteStatement.setWhere(whereStatement);
-                whereStatement.setCondition(conditionStatement);
+                whereStatement.setStatement(conditionStatement);
                 deleteStatement.setWhere(whereStatement);
             } else {
                 MateUtil.appendWhere(whereStatement, conditionStatement);

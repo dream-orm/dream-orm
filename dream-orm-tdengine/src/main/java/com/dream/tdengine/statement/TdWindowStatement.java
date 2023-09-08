@@ -62,9 +62,9 @@ public abstract class TdWindowStatement extends MyFunctionStatement {
         @Override
         public TdIntervalWindowStatement clone() {
             TdIntervalWindowStatement tdIntervalWindowStatement = (TdIntervalWindowStatement) super.clone();
-            tdIntervalWindowStatement.interval = (TdIntervalStatement) clone(interval);
-            tdIntervalWindowStatement.sliding = (TdSlidingStatement) clone(sliding);
-            tdIntervalWindowStatement.fill = (TdFillStatement) clone(fill);
+            tdIntervalWindowStatement.setInterval((TdIntervalStatement) clone(interval));
+            tdIntervalWindowStatement.setSliding((TdSlidingStatement) clone(sliding));
+            tdIntervalWindowStatement.setFill((TdFillStatement) clone(fill));
             return tdIntervalWindowStatement;
         }
     }

@@ -12,6 +12,11 @@ public class TdMyFunctionStatement extends MyFunctionStatement {
     private String functionName;
 
     public TdMyFunctionStatement(String functionName) {
+        setFunctionName(functionName);
+    }
+
+    @Override
+    public void setFunctionName(String functionName) {
         this.functionName = functionName;
     }
 
@@ -23,7 +28,7 @@ public class TdMyFunctionStatement extends MyFunctionStatement {
     @Override
     public TdMyFunctionStatement clone() {
         TdMyFunctionStatement tdMyFunctionStatement = (TdMyFunctionStatement) super.clone();
-        tdMyFunctionStatement.functionName = functionName;
+        tdMyFunctionStatement.setFunctionName(functionName);
         return tdMyFunctionStatement;
     }
 }

@@ -31,8 +31,8 @@ public abstract class DDLDefineStatement extends Statement {
         @Override
         public DDLPrimaryKeyDefineStatement clone() {
             DDLPrimaryKeyDefineStatement ddlPrimaryKeyDefineStatement = (DDLPrimaryKeyDefineStatement) super.clone();
-            ddlPrimaryKeyDefineStatement.constraint = clone(constraint);
-            ddlPrimaryKeyDefineStatement.primaryKeys = (ListColumnStatement) clone(primaryKeys);
+            ddlPrimaryKeyDefineStatement.setConstraint(clone(constraint));
+            ddlPrimaryKeyDefineStatement.setPrimaryKeys((ListColumnStatement) clone(primaryKeys));
             return ddlPrimaryKeyDefineStatement;
         }
     }
@@ -78,10 +78,10 @@ public abstract class DDLDefineStatement extends Statement {
         @Override
         public DDLForeignKeyDefineStatement clone() {
             DDLForeignKeyDefineStatement ddlForeignKeyDefineStatement = (DDLForeignKeyDefineStatement) super.clone();
-            ddlForeignKeyDefineStatement.constraint = clone(constraint);
-            ddlForeignKeyDefineStatement.foreignKey = clone(foreignKey);
-            ddlForeignKeyDefineStatement.foreignTable = clone(foreignTable);
-            ddlForeignKeyDefineStatement.foreignColumn = clone(foreignColumn);
+            ddlForeignKeyDefineStatement.setConstraint(clone(constraint));
+            ddlForeignKeyDefineStatement.setForeignKey(clone(foreignKey));
+            ddlForeignKeyDefineStatement.setForeignTable(clone(foreignTable));
+            ddlForeignKeyDefineStatement.setForeignColumn(clone(foreignColumn));
             return ddlForeignKeyDefineStatement;
         }
     }
@@ -163,14 +163,16 @@ public abstract class DDLDefineStatement extends Statement {
         @Override
         public DDLColumnDefineStatement clone() {
             DDLColumnDefineStatement ddlColumnDefineStatement = (DDLColumnDefineStatement) super.clone();
-            ddlColumnDefineStatement.column = clone(column);
-            ddlColumnDefineStatement.columnType = columnType;
-            ddlColumnDefineStatement.columnTypeParamList = (ListColumnStatement) clone(columnTypeParamList);
-            ddlColumnDefineStatement.defaultValue = clone(defaultValue);
-            ddlColumnDefineStatement.comment = clone(comment);
-            ddlColumnDefineStatement.nullFlag = nullFlag;
-            ddlColumnDefineStatement.autoIncrement = autoIncrement;
-            ddlColumnDefineStatement.primaryKey = primaryKey;
+            ddlColumnDefineStatement.setColumn(clone(column));
+            ddlColumnDefineStatement.setColumnType(columnType);
+            ddlColumnDefineStatement.setColumnTypeParamList((ListColumnStatement) clone(columnTypeParamList));
+            ddlColumnDefineStatement.setDefaultValue(clone(defaultValue));
+            ddlColumnDefineStatement.setComment(clone(comment));
+            ;
+            ddlColumnDefineStatement.setNullFlag(nullFlag);
+            ;
+            ddlColumnDefineStatement.setAutoIncrement(autoIncrement);
+            ddlColumnDefineStatement.setPrimaryKey(primaryKey);
             return ddlColumnDefineStatement;
         }
     }

@@ -27,7 +27,7 @@ public class ChainDeleteCreatorFactory implements DeleteCreatorFactory<ChainDele
 
     @Override
     public ChainDeleteDef newDeleteDef(DeleteStatement statement) {
-        return new ChainDeleteDef(this, flexMapper);
+        return new ChainDeleteDef(statement, this, flexMapper);
     }
 
 }

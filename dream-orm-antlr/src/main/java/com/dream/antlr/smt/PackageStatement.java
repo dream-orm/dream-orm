@@ -33,7 +33,7 @@ public class PackageStatement extends Statement {
         PackageStatement packageStatement = (PackageStatement) super.clone();
         packageStatement.infoMap = new HashMap<>(4);
         packageStatement.infoMap.putAll(infoMap);
-        packageStatement.statement = clone(statement);
+        packageStatement.setStatement(clone(statement));
         return packageStatement;
     }
 }
