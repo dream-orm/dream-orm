@@ -36,8 +36,11 @@ public class HelloWorldTemplateTest {
      */
     @Test
     public void testSelectPage() {
-        Page page = new Page<>(1, 10);
-        templateMapper.selectPage(AccountView.class, null, page);
+        Page page = new Page<>(1, 10,10);
+        AccountCondition accountCondition = new AccountCondition();
+        accountCondition.setName("a");
+        accountCondition.setAge(Arrays.asList(18, 20, 21, 24));
+        templateMapper.selectPage(AccountView.class, accountCondition, page);
         System.out.println("总数：" + page.getTotal() + "\n查询结果：" + page.getRows());
     }
 

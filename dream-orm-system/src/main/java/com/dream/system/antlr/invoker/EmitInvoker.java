@@ -19,9 +19,9 @@ public class EmitInvoker extends AbstractInvoker {
     @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         ListColumnStatement paramStatement = (ListColumnStatement) invokerStatement.getParamStatement();
-        Statement statement = paramStatement.getColumnList()[0];
-        String sql = toSQL.toStr(statement, assist, invokerList);
-        invokerStatement.replaceWith(statement);
+        Statement[] columnList = paramStatement.getColumnList();
+        String sql = toSQL.toStr(columnList[0], assist, invokerList);
+        invokerStatement.replaceWith(columnList[0]);
         return sql;
     }
 
