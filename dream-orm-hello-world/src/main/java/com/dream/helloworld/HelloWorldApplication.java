@@ -138,11 +138,6 @@ public class HelloWorldApplication {
 //                    }
 //
 //                    @Override
-//                    public String getNormalValue() {
-//                        return "0";
-//                    }
-//
-//                    @Override
 //                    public String getDeletedValue() {
 //                        return "1";
 //                    }

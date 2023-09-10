@@ -36,7 +36,7 @@ public class HelloWorldTemplateTest {
      */
     @Test
     public void testSelectPage() {
-        Page page = new Page<>(1, 10,10);
+        Page page = new Page<>(1, 10, 10);
         AccountCondition accountCondition = new AccountCondition();
         accountCondition.setName("a");
         accountCondition.setAge(Arrays.asList(18, 20, 21, 24));

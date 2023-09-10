@@ -21,15 +21,6 @@ public interface LogicHandler {
     }
 
     /**
-     * 未删除的标识
-     *
-     * @return
-     */
-    default String getNormalValue() {
-        return "0";
-    }
-
-    /**
      * 删除后的标识
      *
      * @return
@@ -68,11 +59,6 @@ public Inject[] injects() {
                     public boolean isLogic(MethodInfo methodInfo, TableInfo tableInfo) {
                         return tableInfo.getFieldName(getLogicColumn()) != null;
                     }
-
-                    @Override
-                    public String getNormalValue() {
-                        return "0";
-                    }
                     
                     @Override
                     public String getDeletedValue() {
@@ -108,11 +94,6 @@ public Inject[] injects() {
                     @Override
                     public boolean isLogic(MethodInfo methodInfo, TableInfo tableInfo) {
                         return tableInfo.getFieldName(getLogicColumn()) != null;
-                    }
-
-                    @Override
-                    public String getNormalValue() {
-                        return "0";
                     }
                     
                     @Override
