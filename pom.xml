@@ -49,6 +49,7 @@
         <module>dream-orm-solon-plugin</module>
         <module>dream-orm-jdbc</module>
         <module>dream-orm-tdengine</module>
+        <module>dream-orm-generator</module>
     </modules>
 
     <properties>
