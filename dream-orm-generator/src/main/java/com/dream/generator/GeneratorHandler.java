@@ -29,6 +29,7 @@ public interface GeneratorHandler {
 
     /**
      * 是否覆盖
+     *
      * @param table 数据表
      * @return 是否覆盖
      */
@@ -99,11 +100,4 @@ public interface GeneratorHandler {
      * @return 查询视图全类名
      */
     String dtoClassName(String table);
-
-    /**
-     * 接口URL
-     * @param table 数据表
-     * @return 接口URL
-     */
-    String requestMapping(String table);
 }

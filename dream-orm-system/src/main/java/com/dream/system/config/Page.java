@@ -3,25 +3,25 @@ package com.dream.system.config;
 import java.util.Collection;
 
 public class Page<E> {
-    private final int pageNum;
-    private final int pageSize;
-    private final long startRow;
+    private int pageNum;
+    private int pageSize;
     private long total;
     private Collection<E> rows;
 
-    public Page() {
-        this(1, Integer.MAX_VALUE);
+    public int getPageNum() {
+        return pageNum;
     }
 
-    public Page(int pageNum, int pageSize) {
-        this(pageNum, pageSize, 0);
-    }
-
-    public Page(int pageNum, int pageSize, long total) {
+    public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
-        this.startRow = (pageNum - 1) * pageSize;
-        this.total = total;
     }
 
     public long getTotal() {
@@ -30,14 +30,6 @@ public class Page<E> {
 
     public void setTotal(long total) {
         this.total = total;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public int getPageSize() {
-        return pageSize;
     }
 
     public Collection<E> getRows() {
@@ -49,6 +41,6 @@ public class Page<E> {
     }
 
     public long getStartRow() {
-        return startRow;
+        return (pageNum - 1) * pageSize;
     }
 }

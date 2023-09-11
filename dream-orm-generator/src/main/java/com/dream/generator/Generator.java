@@ -14,9 +14,9 @@ import java.sql.Types;
 import java.util.*;
 
 public class Generator {
+    public Map<Integer, DataType> dataTypeMap = new HashMap<>();
     private DataSource dataSource;
     private GeneratorHandler generatorHandler;
-    public Map<Integer, DataType> dataTypeMap = new HashMap<>();
 
     public Generator(DataSource dataSource, GeneratorHandler generatorHandler) {
         this.dataSource = dataSource;
@@ -64,7 +64,6 @@ public class Generator {
                     dataModel.put("table", tableName);
                     String remark = resultSet.getString("REMARKS");
                     dataModel.put("remark", remark);
-                    dataModel.put("requestMapping", generatorHandler.requestMapping(tableName));
                     List<Column> columnList = listColumn(connection, tableName);
                     dataModel.put("columns", columnList);
                     String boClassName = generatorHandler.boClassName(tableName);
@@ -110,25 +109,25 @@ public class Generator {
                         dataModel.put("serviceImplName", getName(serviceImplClassName));
                     }
                     if (boClassName != null && !boClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.BO.getPath(), generatorHandler.sourceDir() + boClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, TemplateEnum.BO.getPath(), generatorHandler.sourceDir() + "\\" + boClassName.replace(".", "\\") + ".java");
                     }
                     if (voClassName != null && !voClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.VO.getPath(), generatorHandler.sourceDir() + voClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, TemplateEnum.VO.getPath(), generatorHandler.sourceDir() + "\\" + voClassName.replace(".", "\\") + ".java");
                     }
                     if (dtoClassName != null && !dtoClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.DTO.getPath(), generatorHandler.sourceDir() + dtoClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, TemplateEnum.DTO.getPath(), generatorHandler.sourceDir() + "\\" + dtoClassName.replace(".", "\\") + ".java");
                     }
                     if (tableClassName != null && !tableClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.TABLE.getPath(), generatorHandler.sourceDir() + tableClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, TemplateEnum.TABLE.getPath(), generatorHandler.sourceDir() + "\\" + tableClassName.replace(".", "\\") + ".java");
                     }
                     if (serviceClassName != null && !serviceClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.SERVICE.getPath(), generatorHandler.sourceDir() + serviceClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, TemplateEnum.SERVICE.getPath(), generatorHandler.sourceDir() + "\\" + serviceClassName.replace(".", "\\") + ".java");
                     }
                     if (controllerClassName != null && !controllerClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.CONTROLLER.getPath(), generatorHandler.sourceDir() + controllerClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, TemplateEnum.CONTROLLER.getPath(), generatorHandler.sourceDir() + "\\" + controllerClassName.replace(".", "\\") + ".java");
                     }
                     if (serviceImplClassName != null && !serviceImplClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.SERVICE_IMPL.getPath(), generatorHandler.sourceDir() + serviceImplClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, TemplateEnum.SERVICE_IMPL.getPath(), generatorHandler.sourceDir() + "\\" + serviceImplClassName.replace(".", "\\") + ".java");
                     }
                 }
             }
@@ -196,24 +195,6 @@ public class Generator {
         return columnList;
     }
 
-    class DataType {
-        private String jdbcType;
-        private String javaType;
-
-        public DataType(String jdbcType, String javaType) {
-            this.jdbcType = jdbcType;
-            this.javaType = javaType;
-        }
-
-        public String getJdbcType() {
-            return jdbcType;
-        }
-
-        public String getJavaType() {
-            return javaType;
-        }
-    }
-
     public static class Column {
         private String columnName;
         private String attrName;
@@ -259,6 +240,24 @@ public class Generator {
 
         public boolean isPrim() {
             return prim;
+        }
+    }
+
+    class DataType {
+        private String jdbcType;
+        private String javaType;
+
+        public DataType(String jdbcType, String javaType) {
+            this.jdbcType = jdbcType;
+            this.javaType = javaType;
+        }
+
+        public String getJdbcType() {
+            return jdbcType;
+        }
+
+        public String getJavaType() {
+            return javaType;
         }
     }
 
