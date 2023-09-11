@@ -2,7 +2,7 @@ package com.dream.helloworld;
 
 import com.dream.flex.config.SqlInfo;
 import com.dream.flex.def.InsertDef;
-import com.dream.helloworld.debug.FlexDebug;
+import com.dream.flex.debug.FlexDebug;
 import com.dream.helloworld.table.Account;
 import org.junit.Test;
 import org.junit.runner.RunWith;

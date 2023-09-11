@@ -5,7 +5,7 @@ import com.dream.flex.config.SqlInfo;
 import com.dream.flex.def.CaseColumnDef;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.QueryDef;
-import com.dream.helloworld.debug.FlexDebug;
+import com.dream.flex.debug.FlexDebug;
 import com.dream.helloworld.def.AccountDef;
 import org.junit.Test;
 import org.junit.runner.RunWith;

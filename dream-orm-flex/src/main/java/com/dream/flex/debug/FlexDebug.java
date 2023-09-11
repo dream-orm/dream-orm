@@ -1,4 +1,4 @@
-package com.dream.helloworld.debug;
+package com.dream.flex.debug;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
@@ -51,7 +51,7 @@ public class FlexDebug {
         Assist assist = getAssist();
         String sql;
         try {
-            sql = toSQL.toStr(statement, assist, null);
+            sql = toSQL.toStr(statement.clone(), assist, null);
         } catch (AntlrException e) {
             throw new DreamRunTimeException(e);
         }
