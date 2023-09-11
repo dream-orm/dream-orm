@@ -31,11 +31,6 @@ public class HelloWordGeneratorTest {
         }
 
         @Override
-        public boolean override(String table) {
-            return true;
-        }
-
-        @Override
         public boolean support(String table) {
             return table.contains("user");
         }

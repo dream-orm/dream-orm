@@ -129,6 +129,10 @@ const sidebar: DefaultTheme.Sidebar = {
             text: '扩充功能',
             items: [
                 {
+                    text: '代码生成器',
+                    link: '/expand/generator.md'
+                },
+                {
                     text: 'TdEngine时序数据库',
                     link: '/expand/tdengine'
                 }

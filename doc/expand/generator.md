@@ -1,8 +1,16 @@
-package com.dream.generator;
+# 代码生成器
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+提供模块 `dream-orm-generator` 生成代码，需要额外引入。
 
+```xml
+<dependency>
+    <groupId>com.dream-orm</groupId>
+    <artifactId>dream-orm-generator</artifactId>
+    <version>${dream-orm.version}</version>
+</dependency>
+```
+
+```java
 /**
  * 代码生成配置
  */
@@ -104,3 +112,41 @@ public interface GeneratorHandler {
      */
     String dtoClassName(String table);
 }
+```
+
+**测试**
+
+```java
+public class HelloWordGeneratorTest {
+    public static void main(String[] args) {
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl("jdbc:mysql://192.168.0.242/d-open");
+        dataSource.setUsername("root");
+        dataSource.setPassword("BMW#Halu@1234%");
+        new Generator(dataSource, new GeneratorHandlerImpl()).generate();
+    }
+
+    public static class GeneratorHandlerImpl extends AbstractGeneratorHandler {
+
+        @Override
+        protected String basePackage() {
+            return "com.dream.codegen";
+        }
+
+        @Override
+        public String author() {
+            return "moxa";
+        }
+
+        @Override
+        public String sourceDir() {
+            return "D:\\projects\\dream-project\\dream-orm\\dream-orm-hello-world-generator\\src\\main\\java";
+        }
+
+        @Override
+        public boolean support(String table) {
+            return table.contains("user");
+        }
+    }
+}
+```
