@@ -8,6 +8,20 @@ public class Page<E> {
     private long total;
     private Collection<E> rows;
 
+    public Page() {
+        this(1, Integer.MAX_VALUE);
+    }
+
+    public Page(int pageNum, int pageSize) {
+        this(pageNum, pageSize, 0);
+    }
+
+    public Page(int pageNum, int pageSize, long total) {
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+        this.total = total;
+    }
+
     public int getPageNum() {
         return pageNum;
     }
