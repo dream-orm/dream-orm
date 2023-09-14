@@ -1,0 +1,6 @@
+com\dream\helloworld\solon\SolonApp.class
+com\dream\helloworld\solon\table\User.class
+com\dream\helloworld\solon\mapper\UserMapper.class
+com\dream\helloworld\solon\mapper\BlogMapper.class
+com\dream\helloworld\solon\Config.class
+com\dream\helloworld\solon\table\Blog.class

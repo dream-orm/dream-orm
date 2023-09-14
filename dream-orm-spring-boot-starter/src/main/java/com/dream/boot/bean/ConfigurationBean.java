@@ -11,16 +11,29 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.Environment;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ConfigurationBean implements BeanDefinitionRegistryPostProcessor, FactoryBean<Configuration> {
-    private DefaultConfig defaultConfig;
+public class ConfigurationBean implements BeanDefinitionRegistryPostProcessor, FactoryBean<Configuration>, EnvironmentAware {
     private Configuration configuration;
+    private List<String> tablePackages = new ArrayList<>();
+    private List<String> mapperPackages = new ArrayList<>();
+
+    public ConfigurationBean() {
+        this(null, null);
+    }
 
     public ConfigurationBean(List<String> tablePackages, List<String> mapperPackages) {
-        this.defaultConfig = this.initDefaultConfig(tablePackages, mapperPackages);
+        if (tablePackages != null) {
+            this.tablePackages.addAll(tablePackages);
+        }
+        if (mapperPackages != null) {
+            this.mapperPackages.addAll(mapperPackages);
+        }
     }
 
     @Override
@@ -35,6 +48,7 @@ public class ConfigurationBean implements BeanDefinitionRegistryPostProcessor, F
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
+        DefaultConfig defaultConfig = this.defaultConfig(tablePackages, mapperPackages);
         configuration = defaultConfig.toConfiguration();
         Collection<Class> mapperTypeList = configuration
                 .getMapperFactory()
@@ -54,7 +68,7 @@ public class ConfigurationBean implements BeanDefinitionRegistryPostProcessor, F
 
     }
 
-    protected DefaultConfig initDefaultConfig(List<String> tablePackages, List<String> mapperPackages) {
+    protected DefaultConfig defaultConfig(List<String> tablePackages, List<String> mapperPackages) {
         DefaultConfig defaultConfig = new DefaultConfig();
         defaultConfig
                 .setMapperFactory(new DefaultMapperFactory())
@@ -62,5 +76,24 @@ public class ConfigurationBean implements BeanDefinitionRegistryPostProcessor, F
         defaultConfig.setTablePackages(tablePackages);
         defaultConfig.setMapperPackages(mapperPackages);
         return defaultConfig;
+    }
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        int index = 0;
+        while (true) {
+            String tablePackage = environment.getProperty("dream.tablePackages[" + index + "]");
+            String mapperPackage = environment.getProperty("dream.mapperPackages[" + index + "]");
+            if (tablePackage == null && mapperPackage == null) {
+                break;
+            }
+            if (tablePackage != null) {
+                tablePackages.add(tablePackage);
+            }
+            if (mapperPackage != null) {
+                mapperPackages.add(mapperPackage);
+            }
+            index++;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.dream.drive.config;
 
+import java.util.List;
 import java.util.Map;
 
 public class DriveProperties {
@@ -19,6 +20,10 @@ public class DriveProperties {
     private String[] typeHandlerWrappers;
 
     private String[] listeners;
+
+    private List<String> mapperPackages;
+
+    private List<String> tablePackages;
 
     private Map<String, Map<String, Object>> datasource;
 

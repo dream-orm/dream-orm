@@ -30,7 +30,7 @@ public class DataSourceConfiguration {
         }
         Map<String, DataSource> dataSourceMap = new HashMap<>(4);
         datasource.forEach((k, v) -> {
-            Properties properties = new Properties(v.size());
+            Properties properties = new Properties();
             properties.putAll(v);
             Object value = ClassWrap.get(dataSourceType).newBy(properties);
             dataSourceMap.put(k, (DataSource) value);

@@ -1,0 +1,43 @@
+solon.app:
+  name: demoapp
+  group: demo
+
+solon.output.meta: 1
+
+solon.logging.logger:
+  "org.eclipse.jetty.*":
+    level: "WARN"
+  "com.zaxxer.hikari.*":
+    level: "WARN"
+
+
+test.db1:
+  schema: solon
+  jdbcUrl: jdbc:mysql://192.168.0.3:3306/solon?useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&rewriteBatchedStatements=true
+  driverClassName: com.mysql.cj.jdbc.Driver
+  username: root
+  password: BMW#Halu@1234%
+  url: ${test.db1.jdbcUrl}
+
+dream:
+  datasource:
+    master:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      jdbcUrl: jdbc:mysql://192.168.0.3/d-open
+      username: root
+      password: BMW#Halu@1234%
+      keepaliveTime: 1000
+      isReadOnly: false
+    slave:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      jdbcUrl: jdbc:mysql://192.168.0.3/d-open-6c
+      username: root
+      password: BMW#Halu@1234%
+  toSQL: com.dream.antlr.sql.ToMYSQL
+  cache: com.dream.system.cache.MemoryCache
+  listeners:
+    - com.dream.drive.listener.DebugListener
+  mapperPackages:
+    - com.dream.helloworld.solon
+  tablePackages:
+    - com.dream.helloworld.solon
