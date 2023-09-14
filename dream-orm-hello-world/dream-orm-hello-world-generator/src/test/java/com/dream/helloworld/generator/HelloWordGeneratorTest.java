@@ -27,7 +27,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         public String sourceDir() {
-            return "D:\\projects\\dream-project\\dream-orm\\dream-orm-hello-world-generator\\src\\main\\java";
+            return "D:\\projects\\dream-project\\dream-orm\\dream-orm-hello-world\\dream-orm-hello-world-generator\\src\\main\\java";
         }
 
         @Override
