@@ -12,6 +12,7 @@ import com.dream.template.annotation.validate.NotExist;
 import com.dream.util.common.NonCollection;
 import com.dream.util.common.ObjectMap;
 import com.dream.util.common.ObjectUtil;
+import com.dream.util.exception.DreamRunTimeException;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -29,14 +30,23 @@ public class NotExistValidator implements Validator<Object> {
             String tableName = notExist.table();
             if (ObjectUtil.isNull(tableName)) {
                 tableName = SystemUtil.getTableName(type);
+                if (ObjectUtil.isNull(tableName)) {
+                    throw new ValidatedRunTimeException("请指定表名，所在类：" + type.getName() + "，所在字段：" + field.getName());
+                }
             }
-            String fieldName = notExist.column();
-            if (ObjectUtil.isNull(fieldName)) {
-                fieldName = field.getName();
+            String column = notExist.column();
+            if (ObjectUtil.isNull(column)) {
+                column = field.getName();
             }
             TableInfo tableInfo = tableFactory.getTableInfo(tableName);
-            ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-            String column = columnInfo.getColumn();
+            if (tableInfo != null) {
+                ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
+                if (columnInfo != null) {
+                    column = columnInfo.getColumn();
+                }else{
+                    throw new DreamRunTimeException("数据表："+tableName+"不存在字段"+column+"，所在类："+type.getName());
+                }
+            }
             methodInfo = new MethodInfo();
             methodInfo.setConfiguration(configuration);
             methodInfo.setSql("select 1 from " + tableName + " where " + column + "=@?(v) limit 1");

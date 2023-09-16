@@ -24,7 +24,7 @@ public class DefaultTableFactory implements TableFactory {
 
     protected TableInfo createTableInfo(Class tableClass) {
         String table = getTable(tableClass);
-        if (ObjectUtil.isNull(table)) {
+        if (ObjectUtil.isNull(table)||tableInfoMap.get(table)!=null) {
             return null;
         }
         Map<String, JoinInfo> joinInfoMap = new LowHashMap<>();
