@@ -20,10 +20,14 @@ class ConditionUtil {
                 if (field.isAnnotationPresent(Conditional.class)) {
                     Conditional conditionalAnnotation = field.getAnnotation(Conditional.class);
                     String table = conditionalAnnotation.table();
+                    String column = conditionalAnnotation.column();
+                    if (ObjectUtil.isNull(column)) {
+                        column = field.getName();
+                    }
                     boolean nullFlag = conditionalAnnotation.nullFlag();
                     boolean or = conditionalAnnotation.or();
                     Class<? extends Condition> conditionType = conditionalAnnotation.value();
-                    conditionObjectList.add(new ConditionObject(table, field.getName(), nullFlag, or, ReflectUtil.create(conditionType)));
+                    conditionObjectList.add(new ConditionObject(table, column,field.getName(), nullFlag, or, ReflectUtil.create(conditionType)));
                 }
             }
             return conditionObjectList;

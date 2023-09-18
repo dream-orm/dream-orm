@@ -73,16 +73,16 @@ public class SelectListMapper extends SelectMapper {
         if (!ObjectUtil.isNull(conditionObjectList)) {
             for (ConditionObject conditionObject : conditionObjectList) {
                 String table = conditionObject.getTable();
-                String property = conditionObject.getProperty();
+                String column = conditionObject.getColumn();
                 Condition condition = conditionObject.getCondition();
                 if (!ObjectUtil.isNull(table)) {
                     if (!tableSet.contains(table)) {
                         throw new DreamRunTimeException("条件表名限定" + tableSet);
                     }
                     TableInfo tableInfo = tableFactory.getTableInfo(table);
-                    String fieldName = tableInfo.getFieldName(property);
+                    String fieldName = tableInfo.getFieldName(column);
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-                    String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), property);
+                    String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), conditionObject.getField());
                     if (conditionObject.isOr()) {
                         orConditionList.add(conditionSql);
                     } else {
@@ -93,7 +93,7 @@ public class SelectListMapper extends SelectMapper {
                         TableInfo tableInfo = tableFactory.getTableInfo(tab);
                         return tableInfo;
                     }).filter(tableInfo -> {
-                        String fieldName = tableInfo.getFieldName(conditionObject.getProperty());
+                        String fieldName = tableInfo.getFieldName(conditionObject.getColumn());
                         if (fieldName == null) {
                             return false;
                         } else {
@@ -101,15 +101,15 @@ public class SelectListMapper extends SelectMapper {
                         }
                     }).collect(Collectors.toList());
                     if (ObjectUtil.isNull(tableInfoList)) {
-                        throw new DreamRunTimeException("条件字段" + conditionObject.getProperty() + "在" + tableSet + "对应的类未注册");
+                        throw new DreamRunTimeException("条件字段" + conditionObject.getColumn() + "在" + tableSet + "对应的类未注册");
                     }
                     if (tableInfoList.size() > 1) {
-                        throw new DreamRunTimeException("条件字段" + conditionObject.getProperty() + "在" + tableInfoList.stream().map(tableInfo -> tableInfo.getTable()).collect(Collectors.toList()) + "对应的类都存在，请指定具体表名");
+                        throw new DreamRunTimeException("条件字段" + conditionObject.getColumn() + "在" + tableInfoList.stream().map(tableInfo -> tableInfo.getTable()).collect(Collectors.toList()) + "对应的类都存在，请指定具体表名");
                     }
                     TableInfo tableInfo = tableInfoList.get(0);
-                    String fieldName = tableInfo.getFieldName(property);
+                    String fieldName = tableInfo.getFieldName(column);
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
-                    String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), property);
+                    String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), conditionObject.getField());
                     if (conditionObject.isOr()) {
                         orConditionList.add(conditionSql);
                     } else {

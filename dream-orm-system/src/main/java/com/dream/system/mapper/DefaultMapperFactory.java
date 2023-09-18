@@ -29,7 +29,7 @@ public class DefaultMapperFactory implements MapperFactory {
 
     @Override
     public boolean addMapper(Configuration configuration, Class mapperClass) {
-        if (!mapperTypeMap.containsKey(mapperClass)&&isMapper(mapperClass)) {
+        if (!mapperTypeMap.containsKey(mapperClass) && isMapper(mapperClass)) {
             Map<String, MethodInfo> methodInfoMap = new HashMap<>(4);
             List<Method> methodList = ReflectUtil.findMethod(mapperClass);
             if (!ObjectUtil.isNull(methodList)) {

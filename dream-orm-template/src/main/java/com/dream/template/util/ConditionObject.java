@@ -4,14 +4,16 @@ import com.dream.template.condition.Condition;
 
 public class ConditionObject {
     private String table;
-    private String property;
+    private String column;
+    private String field;
     private boolean filterNull;
     private boolean or;
     private Condition condition;
 
-    public ConditionObject(String table, String property, boolean filterNull, boolean or, Condition condition) {
+    public ConditionObject(String table, String column,String field, boolean filterNull, boolean or, Condition condition) {
         this.table = table;
-        this.property = property;
+        this.column = column;
+        this.field = field;
         this.filterNull = filterNull;
         this.or = or;
         this.condition = condition;
@@ -21,8 +23,12 @@ public class ConditionObject {
         return table;
     }
 
-    public String getProperty() {
-        return property;
+    public String getColumn() {
+        return column;
+    }
+
+    public String getField() {
+        return field;
     }
 
     public boolean isFilterNull() {

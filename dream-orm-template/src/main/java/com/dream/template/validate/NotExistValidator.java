@@ -43,8 +43,8 @@ public class NotExistValidator implements Validator<Object> {
                 ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
                 if (columnInfo != null) {
                     column = columnInfo.getColumn();
-                }else{
-                    throw new DreamRunTimeException("数据表："+tableName+"不存在字段"+column+"，所在类："+type.getName());
+                } else {
+                    throw new DreamRunTimeException("数据表：" + tableName + "不存在字段" + column + "，所在类：" + type.getName());
                 }
             }
             methodInfo = new MethodInfo();

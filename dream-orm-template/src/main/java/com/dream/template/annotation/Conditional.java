@@ -12,6 +12,8 @@ import java.lang.annotation.Target;
 public @interface Conditional {
     String table() default "";
 
+    String column() default "";
+
     boolean nullFlag() default true;
 
     boolean or() default false;
