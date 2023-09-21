@@ -10,7 +10,7 @@ public class ConditionObject {
     private boolean or;
     private Condition condition;
 
-    public ConditionObject(String table, String column,String field, boolean filterNull, boolean or, Condition condition) {
+    public ConditionObject(String table, String column, String field, boolean filterNull, boolean or, Condition condition) {
         this.table = table;
         this.column = column;
         this.field = field;

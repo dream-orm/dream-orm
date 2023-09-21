@@ -27,7 +27,7 @@ class ConditionUtil {
                     boolean nullFlag = conditionalAnnotation.nullFlag();
                     boolean or = conditionalAnnotation.or();
                     Class<? extends Condition> conditionType = conditionalAnnotation.value();
-                    conditionObjectList.add(new ConditionObject(table, column,field.getName(), nullFlag, or, ReflectUtil.create(conditionType)));
+                    conditionObjectList.add(new ConditionObject(table, column, field.getName(), nullFlag, or, ReflectUtil.create(conditionType)));
                 }
             }
             return conditionObjectList;
