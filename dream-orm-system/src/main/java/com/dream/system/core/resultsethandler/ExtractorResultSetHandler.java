@@ -225,7 +225,7 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
                 .getTypeHandler(mappedResult.getColType()
                         , builder.getJdbcType()));
         if (extractorFactory != null) {
-            Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), null, builder.getProperty());
+            Extractor extractor = extractorFactory.getExtractor(null, null, builder.getProperty());
             if (extractor != null) {
                 builder.extractor(extractor);
             }
@@ -241,7 +241,7 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
                 .getTypeHandler(Object.class
                         , builder.getJdbcType()));
         if (extractorFactory != null) {
-            Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), null, builder.getProperty());
+            Extractor extractor = extractorFactory.getExtractor(null, null, builder.getProperty());
             if (extractor != null) {
                 builder.extractor(extractor);
             }
@@ -269,7 +269,7 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
                             TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), builder.getJdbcType());
                             builder.field(field).typeHandler(typeHandler);
                             if (extractorFactory != null) {
-                                Extractor extractor = extractorFactory.getExtractor(builder.getColumnInfo(), field, builder.getProperty());
+                                Extractor extractor = extractorFactory.getExtractor(mappedResult.getColType(), field, builder.getProperty());
                                 if (extractor != null) {
                                     builder.extractor(extractor);
                                 }

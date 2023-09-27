@@ -356,10 +356,10 @@ public class ToNativeSQL extends ToSQL {
     @Override
     protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String from = toStr(statement.getFromStatement(), assist, invokerList);
+        String select = toStr(statement.getSelectStatement(), assist, invokerList);
         String where = toStr(statement.getWhereStatement(), assist, invokerList);
         String groupBy = toStr(statement.getGroupStatement(), assist, invokerList);
         String having = toStr(statement.getHavingStatement(), assist, invokerList);
-        String select = toStr(statement.getSelectStatement(), assist, invokerList);
         String orderBy = toStr(statement.getOrderStatement(), assist, invokerList);
         String limit = toStr(statement.getLimitStatement(), assist, invokerList);
         String union = toStr(statement.getUnionStatement(), assist, invokerList);

@@ -1,12 +1,8 @@
 package com.dream.helloworld.h2;
 
 import com.dream.flex.annotation.FlexAPT;
-import com.dream.mate.tenant.inject.TenantHandler;
-import com.dream.mate.tenant.inject.TenantInject;
-import com.dream.system.config.MethodInfo;
 import com.dream.system.inject.Inject;
 import com.dream.system.table.ColumnInfo;
-import com.dream.system.table.TableInfo;
 import com.dream.template.sequence.AbstractSequence;
 import com.dream.template.sequence.Sequence;
 import org.springframework.boot.SpringApplication;
@@ -113,21 +109,21 @@ public class HelloWorldApplication {
 //                /**
 //                 * 开启多租户插件
 //                */
-                new TenantInject(new TenantHandler() {
-                    public boolean isTenant(MethodInfo methodInfo, TableInfo tableInfo) {
-                        return tableInfo.getFieldName(getTenantColumn()) != null;
-                    }
-
-                    @Override
-                    public String getTenantColumn() {
-                        return "tenant_id";
-                    }
-
-                    @Override
-                    public Object getTenantObject() {
-                        return 1;
-                    }
-                }),
+//                new TenantInject(new TenantHandler() {
+//                    public boolean isTenant(MethodInfo methodInfo, TableInfo tableInfo) {
+//                        return tableInfo.getFieldName(getTenantColumn()) != null;
+//                    }
+//
+//                    @Override
+//                    public String getTenantColumn() {
+//                        return "tenant_id";
+//                    }
+//
+//                    @Override
+//                    public Object getTenantObject() {
+//                        return 1;
+//                    }
+//                }),
 //                /**
 //                 * 开启逻辑删除插件
 //                */
