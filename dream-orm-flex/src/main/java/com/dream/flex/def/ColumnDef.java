@@ -221,9 +221,9 @@ public class ColumnDef {
         conditionStatement.setLeft(this.getStatement());
         conditionStatement.setOper(new OperStatement.BETWEENStatement());
         ConditionStatement rightConditionStatement = new ConditionStatement();
-        rightConditionStatement.setLeft(new SymbolStatement.LetterStatement(String.valueOf(start)));
+        rightConditionStatement.setLeft(new FlexMarkInvokerStatement(start));
         rightConditionStatement.setOper(new OperStatement.ANDStatement());
-        rightConditionStatement.setRight(new SymbolStatement.LetterStatement(String.valueOf(end)));
+        rightConditionStatement.setRight(new FlexMarkInvokerStatement(end));
         conditionStatement.setRight(rightConditionStatement);
         return new ConditionDef(conditionStatement);
     }
