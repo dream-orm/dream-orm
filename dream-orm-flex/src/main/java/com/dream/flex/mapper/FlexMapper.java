@@ -5,21 +5,14 @@ import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
 import com.dream.system.config.Page;
-import com.dream.system.inject.Inject;
 import com.dream.util.tree.Tree;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 链式操作接口
  */
 public interface FlexMapper {
-    /**
-     * 白名单，列如开启插件后，链式并不默认添加，需要在白名单额外增加
-     */
-    Set<Class<? extends Inject>> WHITE_SET = new HashSet<>();
 
     /**
      * 查询并返回一条

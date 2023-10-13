@@ -167,7 +167,7 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
             if (!ObjectUtil.isNull(tableName)) {
                 columnInfo = getColumnInfo(mappedStatement, tableName, columnLabel);
             }
-            if (columnInfo!=null&&columnInfo.getJdbcType() != Types.NULL && columnInfo.getJdbcType() != jdbcType) {
+            if (columnInfo != null && columnInfo.getJdbcType() != Types.NULL && columnInfo.getJdbcType() != jdbcType) {
                 jdbcType = columnInfo.getJdbcType();
             }
 
