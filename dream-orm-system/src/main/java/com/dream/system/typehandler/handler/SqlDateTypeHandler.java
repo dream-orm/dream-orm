@@ -20,11 +20,11 @@ public class SqlDateTypeHandler extends BaseTypeHandler<Date> {
 
     @Override
     public Date getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
-        if (Types.DATE == jdbcType) {
-            return rs.getDate(column);
+        Timestamp timestamp = rs.getTimestamp(column);
+        if (timestamp == null) {
+            return null;
         } else {
-            return new Date(rs.getTimestamp(column).getTime());
-
+            return new Date(timestamp.getTime());
         }
     }
 

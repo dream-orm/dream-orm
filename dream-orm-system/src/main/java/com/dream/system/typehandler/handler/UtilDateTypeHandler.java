@@ -21,13 +21,12 @@ public class UtilDateTypeHandler extends BaseTypeHandler<Date> {
 
     @Override
     public Date getResult(ResultSet rs, String column, int jdbcType) throws SQLException {
-        Date date;
-        if (Types.DATE == jdbcType) {
-            date = rs.getDate(column);
+        Timestamp timestamp = rs.getTimestamp(column);
+        if (timestamp == null) {
+            return null;
         } else {
-            date = rs.getTimestamp(column);
+            return new Date(timestamp.getTime());
         }
-        return date;
     }
 
     @Override
