@@ -74,4 +74,8 @@ public class LogicInvoker extends AbstractInvoker {
     public String getDeletedValue() {
         return logicHandler.getDeletedValue();
     }
+
+    public String getNormalValue() {
+        return logicHandler.getNormalValue();
+    }
 }

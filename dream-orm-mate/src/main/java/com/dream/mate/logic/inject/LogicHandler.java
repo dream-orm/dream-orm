@@ -17,6 +17,15 @@ public interface LogicHandler {
     }
 
     /**
+     * 未删除的标识
+     *
+     * @return
+     */
+    default String getNormalValue() {
+        return "0";
+    }
+
+    /**
      * 删除后的标识
      *
      * @return

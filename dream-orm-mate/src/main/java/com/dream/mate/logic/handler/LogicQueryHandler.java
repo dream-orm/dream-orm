@@ -60,8 +60,8 @@ public class LogicQueryHandler extends AbstractHandler {
                     String logicColumn = logicInvoker.getLogicColumn();
                     ConditionStatement conditionStatement = new ConditionStatement();
                     conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + logicColumn)).expr());
-                    conditionStatement.setOper(new OperStatement.NEQStatement());
-                    conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getDeletedValue()));
+                    conditionStatement.setOper(new OperStatement.EQStatement());
+                    conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNormalValue()));
                     QueryStatement queryStatement = queryDeque.peek();
                     WhereStatement whereStatement = queryStatement.getWhereStatement();
                     if (whereStatement == null) {
@@ -97,8 +97,8 @@ public class LogicQueryHandler extends AbstractHandler {
                         String logicColumn = logicInvoker.getLogicColumn();
                         ConditionStatement conditionStatement = new ConditionStatement();
                         conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + logicColumn)).expr());
-                        conditionStatement.setOper(new OperStatement.NEQStatement());
-                        conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getDeletedValue()));
+                        conditionStatement.setOper(new OperStatement.EQStatement());
+                        conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNormalValue()));
                         Statement joinOnStatement = joinStatement.getOn();
                         BraceStatement braceStatement = new BraceStatement(joinOnStatement);
                         ConditionStatement joinConditionStatement = new ConditionStatement();

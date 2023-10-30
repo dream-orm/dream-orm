@@ -26,8 +26,8 @@ public class LogicUpdateHandler extends AbstractHandler {
         if (logicInvoker.isLogicDelete(table)) {
             ConditionStatement whereConditionStatement = new ConditionStatement();
             whereConditionStatement.setLeft(new SymbolStatement.LetterStatement(logicInvoker.getLogicColumn()));
-            whereConditionStatement.setOper(new OperStatement.NEQStatement());
-            whereConditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getDeletedValue()));
+            whereConditionStatement.setOper(new OperStatement.EQStatement());
+            whereConditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNormalValue()));
             WhereStatement whereStatement = (WhereStatement) updateStatement.getWhere();
             if (whereStatement == null) {
                 whereStatement = new WhereStatement();
