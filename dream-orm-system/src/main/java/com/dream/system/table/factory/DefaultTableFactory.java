@@ -51,7 +51,7 @@ public class DefaultTableFactory implements TableFactory {
                 }
             }
         }
-        return new TableInfo(table, primKeys, columnInfoMap, joinInfoMap, fieldMap);
+        return new TableInfo(table, tableClass, primKeys, columnInfoMap, joinInfoMap, fieldMap);
     }
 
     protected String getTable(Class<?> tableClass) {
