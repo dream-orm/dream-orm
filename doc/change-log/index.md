@@ -3,7 +3,7 @@
 ## v1.2.5
 
 - 修复：解决链式条件between参数未使用占位符
-- 新增：类型选择器支持LocalDateTime
+- 新增：类型选择器支持LocalDate，LocalDateTime
 - 优化：支持tableInfo对象获取表对应的java实体类
 - 优化：恢复之前逻辑删除逻辑，删除标识和未删除标识根据自定义值判断
 

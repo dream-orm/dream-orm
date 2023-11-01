@@ -69,6 +69,7 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
                 new TimeTypeHandlerWrapper(),
                 new StringArrayTypeHandlerWrapper(),
                 new LongArrayTypeHandlerWrapper(),
+                new LocalDateTypeHandlerWrapper(),
                 new LocalDateTimeTypeHandlerWrapper(),
                 new ObjectTypeHandlerWrapper()
         };
