@@ -82,16 +82,16 @@ public class InsertMapper extends WrapMapper {
             TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
             for (int i = 0; i < columnNames.length; i++) {
                 String column = columnNames[i];
-                String fieldName = tableInfo.getFieldName(column);
-                if (fieldName == null) {
+                ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
+                if (columnInfo == null) {
                     throw new DreamRunTimeException("表" + tableInfo.getTable() + "不存在字段" + column);
                 }
-                Class<?> type = tableInfo.getColumnInfo(fieldName).getField().getType();
+                Class<?> type = columnInfo.getField().getType();
                 TypeHandler typeHandler;
                 try {
                     typeHandler = typeHandlerFactory.getTypeHandler(type, Types.NULL);
                 } catch (TypeHandlerNotFoundException e) {
-                    throw new DreamRunTimeException(fieldName + "获取类型转换器失败，" + e.getMessage(), e);
+                    throw new DreamRunTimeException(columnInfo.getName() + "获取类型转换器失败，" + e.getMessage(), e);
                 }
                 typeHandlers[i] = typeHandler;
             }

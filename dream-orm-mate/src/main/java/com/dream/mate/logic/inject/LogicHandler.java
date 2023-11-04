@@ -13,7 +13,7 @@ public interface LogicHandler {
      * @return
      */
     default boolean isLogic(MethodInfo methodInfo, TableInfo tableInfo) {
-        return tableInfo.getFieldName(getLogicColumn()) != null;
+        return tableInfo.getColumnInfo(getLogicColumn()) != null;
     }
 
     /**

@@ -80,8 +80,7 @@ public class SelectListMapper extends SelectMapper {
                         throw new DreamRunTimeException("条件表名限定" + tableSet);
                     }
                     TableInfo tableInfo = tableFactory.getTableInfo(table);
-                    String fieldName = tableInfo.getFieldName(column);
-                    ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
+                    ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
                     String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), conditionObject.getField());
                     if (conditionObject.isOr()) {
                         orConditionList.add(conditionSql);
@@ -92,14 +91,7 @@ public class SelectListMapper extends SelectMapper {
                     List<TableInfo> tableInfoList = tableSet.stream().map(tab -> {
                         TableInfo tableInfo = tableFactory.getTableInfo(tab);
                         return tableInfo;
-                    }).filter(tableInfo -> {
-                        String fieldName = tableInfo.getFieldName(conditionObject.getColumn());
-                        if (fieldName == null) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }).collect(Collectors.toList());
+                    }).filter(tableInfo -> tableInfo.getColumnInfo(conditionObject.getColumn()) != null).collect(Collectors.toList());
                     if (ObjectUtil.isNull(tableInfoList)) {
                         throw new DreamRunTimeException("条件字段" + conditionObject.getColumn() + "在" + tableSet + "对应的类未注册");
                     }
@@ -107,8 +99,7 @@ public class SelectListMapper extends SelectMapper {
                         throw new DreamRunTimeException("条件字段" + conditionObject.getColumn() + "在" + tableInfoList.stream().map(tableInfo -> tableInfo.getTable()).collect(Collectors.toList()) + "对应的类都存在，请指定具体表名");
                     }
                     TableInfo tableInfo = tableInfoList.get(0);
-                    String fieldName = tableInfo.getFieldName(column);
-                    ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
+                    ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
                     String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), conditionObject.getField());
                     if (conditionObject.isOr()) {
                         orConditionList.add(conditionSql);
@@ -143,21 +134,13 @@ public class SelectListMapper extends SelectMapper {
                         throw new DreamRunTimeException("排序表名限定" + tableSet);
                     } else {
                         TableInfo tableInfo = tableFactory.getTableInfo(table);
-                        String fieldName = tableInfo.getFieldName(sortObject.getProperty());
-                        orderList.add(table + "." + tableInfo.getColumnInfo(fieldName).getColumn() + " " + sortObject.getOrderType());
+                        orderList.add(table + "." + tableInfo.getColumnInfo(sortObject.getProperty()).getColumn() + " " + sortObject.getOrderType());
                     }
                 } else {
                     List<TableInfo> tableInfoList = tableSet.stream().map(tab -> {
                         TableInfo tableInfo = tableFactory.getTableInfo(tab);
                         return tableInfo;
-                    }).filter(tableInfo -> {
-                        String fieldName = tableInfo.getFieldName(sortObject.getProperty());
-                        if (fieldName == null) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }).collect(Collectors.toList());
+                    }).filter(tableInfo -> tableInfo.getColumnInfo(sortObject.getProperty()) != null).collect(Collectors.toList());
                     if (ObjectUtil.isNull(tableInfoList)) {
                         throw new DreamRunTimeException("排序字段" + sortObject.getProperty() + "在" + tableSet + "对应的类未注册");
                     }
@@ -165,7 +148,7 @@ public class SelectListMapper extends SelectMapper {
                         throw new DreamRunTimeException("排序字段" + sortObject.getProperty() + "在" + tableInfoList.stream().map(tableInfo -> tableInfo.getTable()).collect(Collectors.toList()) + "对应的类都存在，请指定具体表名");
                     }
                     TableInfo tableInfo = tableInfoList.get(0);
-                    orderList.add(tableInfo.getColumnInfo(tableInfo.getFieldName(sortObject.getProperty())).getColumn() + " " + sortObject.getOrderType());
+                    orderList.add(tableInfo.getColumnInfo(sortObject.getProperty()).getColumn() + " " + sortObject.getOrderType());
                 }
             }
         }
