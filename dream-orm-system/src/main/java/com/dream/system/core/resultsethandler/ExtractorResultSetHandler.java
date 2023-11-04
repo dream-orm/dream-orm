@@ -194,10 +194,7 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
         if (tableFactory != null) {
             tableInfo = tableFactory.getTableInfo(tableName);
             if (tableInfo != null) {
-                String link = tableInfo.getFieldName(columnLabel);
-                if (!ObjectUtil.isNull(link)) {
-                    return tableInfo.getColumnInfo(link);
-                }
+                return tableInfo.getColumnInfo(columnLabel);
             }
         }
         return null;

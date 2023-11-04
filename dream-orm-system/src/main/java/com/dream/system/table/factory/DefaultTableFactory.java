@@ -28,7 +28,6 @@ public class DefaultTableFactory implements TableFactory {
             return null;
         }
         Map<String, JoinInfo> joinInfoMap = new LowHashMap<>();
-        Map<String, String> fieldMap = new LowHashMap<>();
         Map<String, ColumnInfo> columnInfoMap = new HashMap<>(8);
         List<Field> fieldList = ReflectUtil.findField(tableClass);
         List<ColumnInfo> primKeys = new ArrayList<>();
@@ -37,9 +36,8 @@ public class DefaultTableFactory implements TableFactory {
                 String name = field.getName();
                 ColumnInfo columnInfo = getColumnInfo(table, field);
                 if (columnInfo != null) {
-                    fieldMap.put(columnInfo.getColumn(), name);
-                    fieldMap.put(name, name);
                     columnInfoMap.put(name, columnInfo);
+                    columnInfoMap.put(columnInfo.getColumn(), columnInfo);
                     if (columnInfo.isPrimary()) {
                         primKeys.add(columnInfo);
                     }
@@ -51,7 +49,7 @@ public class DefaultTableFactory implements TableFactory {
                 }
             }
         }
-        return new TableInfo(table, tableClass, primKeys, columnInfoMap, joinInfoMap, fieldMap);
+        return new TableInfo(table, tableClass, primKeys, columnInfoMap, joinInfoMap);
     }
 
     protected String getTable(Class<?> tableClass) {

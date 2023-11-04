@@ -9,20 +9,14 @@ public class TableInfo {
     private final Class type;
     private final Map<String, ColumnInfo> columnInfoMap;
     private final Map<String, JoinInfo> joinInfoMap;
-    private final Map<String, String> fieldMap;
     private final List<ColumnInfo> primKeys;
 
-    public TableInfo(String table,Class type, List<ColumnInfo> primKeys, Map<String, ColumnInfo> columnInfoMap, Map<String, JoinInfo> joinInfoMap, Map<String, String> fieldMap) {
+    public TableInfo(String table, Class type, List<ColumnInfo> primKeys, Map<String, ColumnInfo> columnInfoMap, Map<String, JoinInfo> joinInfoMap) {
         this.table = table;
-        this.type=type;
+        this.type = type;
         this.primKeys = primKeys;
         this.columnInfoMap = columnInfoMap;
         this.joinInfoMap = joinInfoMap;
-        this.fieldMap = fieldMap;
-    }
-
-    public String getFieldName(String label) {
-        return fieldMap.get(label);
     }
 
     public ColumnInfo getColumnInfo(String fieldName) {

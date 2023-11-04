@@ -12,7 +12,7 @@ public interface TenantHandler {
      * @return
      */
     default boolean isTenant(MethodInfo methodInfo, TableInfo tableInfo) {
-        return tableInfo.getFieldName(getTenantColumn()) != null;
+        return tableInfo.getColumnInfo(getTenantColumn()) != null;
     }
 
     /**
