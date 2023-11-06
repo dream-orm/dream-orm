@@ -28,7 +28,7 @@ public class ListenerExecutor implements Executor {
             Object result;
             try {
                 result = nextExecutor.execute(mappedStatement, session);
-            } catch (SQLException e) {
+            } catch (Throwable e) {
                 exceptionListeners(listeners, e, mappedStatement);
                 throw e;
             }
@@ -71,7 +71,7 @@ public class ListenerExecutor implements Executor {
         }
     }
 
-    protected void exceptionListeners(Listener[] listeners, SQLException e, MappedStatement mappedStatement) {
+    protected void exceptionListeners(Listener[] listeners, Throwable e, MappedStatement mappedStatement) {
         for (Listener listener : listeners) {
             listener.exception(e, mappedStatement);
         }

@@ -5,7 +5,6 @@ import com.dream.system.config.MappedStatement;
 import com.dream.system.core.listener.Listener;
 import com.dream.util.common.ObjectUtil;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ public class DebugListener implements Listener {
     }
 
     @Override
-    public void exception(SQLException e, MappedStatement mappedStatement) {
+    public void exception(Throwable e, MappedStatement mappedStatement) {
         System.err.println("异常：" + e.getMessage());
         after(mappedStatement);
     }

@@ -6,6 +6,7 @@
 - 修复：oracle环境下，因分页翻译新增order by排序导致查询错误
 - 优化：链式插入支持valuesMap，动态指定插入字段
 - 优化：tdengine链式写法支持valuesStrMap，动态指定插入字段
+- 优化：监听器异常放松，有SQLException->Throwable
 
 ## v1.2.5
 
