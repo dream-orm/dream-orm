@@ -72,7 +72,10 @@ public class HelloWorldTdTest {
      */
     @Test
     public void testInsert() {
-        flexTdMapper.insertInto("d1001").values(new Date(), 10.2, 219, 0.32).execute();
+        List<Object>value=new ArrayList<>();
+        value.add(new Date());
+        value.add(1);
+        flexTdMapper.insertInto("d1001").columns(col("a"),col("b")).values(value.toArray(new Object[0])).execute();
     }
 
     /**

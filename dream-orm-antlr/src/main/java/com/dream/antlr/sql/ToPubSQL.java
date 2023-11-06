@@ -51,7 +51,7 @@ public abstract class ToPubSQL extends ToNativeSQL {
                 statement.setOrderStatement(null);
             } else {
                 orderStatement = new OrderStatement();
-                orderStatement.setStatement(new BraceStatement(new SymbolStatement.LetterStatement("(select 0)")));
+                orderStatement.setStatement(new SymbolStatement.LetterStatement("null"));
             }
             RowNumberStatement rowNumberStatement = new RowNumberStatement();
             RowNumberStatement.OverStatement overStatement = new RowNumberStatement.OverStatement();
