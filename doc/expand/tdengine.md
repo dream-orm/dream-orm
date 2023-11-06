@@ -220,10 +220,10 @@ public void testSession(){
      */
     @Test
     public void testInsertMany(){
-        List<Object[]>list=new ArrayList<>();
-        list.add(new Object[]{new Date(),10.2,219,0.32});
-        list.add(new Object[]{new Date(),11.2,219,0.32});
-        flexTdMapper.insertInto("d1001").valuesList(list,o->(Object[])o ).execute();
+		List<Object[]> list = new ArrayList<>();
+        list.add(new Object[]{new Date(), 10.2, 219, 0.32});
+        list.add(new Object[]{new Date(), 11.2, 219, 0.32});
+        flexTdMapper.insertInto("d1001").valuesList(list, o -> o).execute();
     }
 ```
 
@@ -282,7 +282,7 @@ public void testSession(){
 用时：317ms
 ```
 
-## 举例九：分页插入
+## 举例九：分页查询
 
 ```java
 /**
@@ -360,3 +360,23 @@ public void insertEntity() {
 用时：592ms
 ```
 
+## **举例十一：插入部分字段（1）**
+
+```java
+@Test
+public void testStrInsert() {
+    flexTdMapper.insertInto("d1001").columns("name", "age").values("accountName", 100).execute();
+}
+```
+
+## **举例十二：插入部分字段（2）**
+
+```java
+@Test
+public void testInsertMap() {
+    Map<String, Object> strMap = new HashMap();
+    strMap.put("name", "aaa");
+    strMap.put("age", 22);
+    flexTdMapper.insertInto("d1001").using("aa").tags("a").valuesStrMap(strMap).execute();
+}
+```

@@ -10,6 +10,10 @@ import java.util.function.Function;
 
 
 public interface InsertIntoValuesDef<Insert extends InsertDef> extends InsertDef {
+    default Insert values(List<Object> valueList) {
+        return values(valueList.toArray(new Object[valueList.size()]));
+    }
+
     default Insert values(Object... values) {
         ListColumnStatement valueListStatement = new ListColumnStatement(",");
         for (Object value : values) {
@@ -21,9 +25,9 @@ public interface InsertIntoValuesDef<Insert extends InsertDef> extends InsertDef
         return (Insert) creatorFactory().newInsertDef(statement());
     }
 
-    default Insert valuesList(List<?> values, Function<Object, Object[]> fn) {
+    default <T> Insert valuesList(List<T> valueList, Function<T, Object[]> fn) {
         ListColumnStatement valueListStatement = new ListColumnStatement(",");
-        for (Object value : values) {
+        for (T value : valueList) {
             Object[] objects = fn.apply(value);
             ListColumnStatement listColumnStatement = new ListColumnStatement(",");
             for (Object object : objects) {
