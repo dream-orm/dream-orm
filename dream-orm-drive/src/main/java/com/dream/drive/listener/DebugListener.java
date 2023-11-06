@@ -16,16 +16,6 @@ public class DebugListener implements Listener {
     @Override
     public void before(MappedStatement mappedStatement) {
         mappedStatement.put(START_DATE, System.currentTimeMillis());
-        List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
-        List<Object> paramList;
-        if (!ObjectUtil.isNull(mappedParamList)) {
-            paramList = mappedParamList.stream().map(MappedParam::getParamValue).collect(Collectors.toList());
-        } else {
-            paramList = new ArrayList<>();
-        }
-        System.out.println("方法：" + mappedStatement.getId());
-        System.out.println("语句：" + mappedStatement.getSql());
-        System.out.println("参数：" + paramList);
     }
 
     @Override
@@ -40,6 +30,16 @@ public class DebugListener implements Listener {
     }
 
     public void after(MappedStatement mappedStatement) {
+        List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
+        List<Object> paramList;
+        if (!ObjectUtil.isNull(mappedParamList)) {
+            paramList = mappedParamList.stream().map(MappedParam::getParamValue).collect(Collectors.toList());
+        } else {
+            paramList = new ArrayList<>();
+        }
+        System.out.println("方法：" + mappedStatement.getId());
+        System.out.println("语句：" + mappedStatement.getSql());
+        System.out.println("参数：" + paramList);
         System.out.println("用时：" + (System.currentTimeMillis() - (long) mappedStatement.get(START_DATE)) + "ms");
     }
 }
