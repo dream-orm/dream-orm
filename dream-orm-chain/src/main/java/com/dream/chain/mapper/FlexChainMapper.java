@@ -17,7 +17,9 @@ public interface FlexChainMapper {
      * @param columnDefs 查询字段集
      * @return 查询链式
      */
-    ChainFromDef select(ColumnDef... columnDefs);
+    default ChainFromDef select(ColumnDef... columnDefs) {
+        return select(false, columnDefs);
+    }
 
     /**
      * 查询链式操作

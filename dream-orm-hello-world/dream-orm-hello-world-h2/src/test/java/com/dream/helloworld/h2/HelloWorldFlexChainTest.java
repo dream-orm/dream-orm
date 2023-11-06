@@ -1,6 +1,7 @@
 package com.dream.helloworld.h2;
 
 import com.dream.chain.mapper.FlexChainMapper;
+import com.dream.flex.def.ColumnDef;
 import com.dream.helloworld.h2.view.AccountView;
 import com.dream.helloworld.h2.view.TreeAccountView;
 import com.dream.system.config.Page;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.dream.helloworld.h2.def.AccountDef.account;
 
@@ -71,6 +74,16 @@ public class HelloWorldFlexChainTest {
     public void testInsert() {
         flexChainMapper.insertInto(account).columns(account.name, account.age).values("accountName", 100).execute();
     }
+
+
+    @Test
+    public void testInsertMap() {
+        Map<ColumnDef, Object> columnDefMap = new HashMap();
+        columnDefMap.put(account.name, "aaa");
+        columnDefMap.put(account.age, 22);
+        flexChainMapper.insertInto(account).valuesMap(columnDefMap).execute();
+    }
+
 
     /**
      * 测试删除

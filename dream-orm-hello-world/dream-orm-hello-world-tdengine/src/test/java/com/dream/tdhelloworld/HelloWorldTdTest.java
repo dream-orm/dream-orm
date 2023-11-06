@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.dream.flex.def.FunctionDef.*;
 import static com.dream.tdengine.def.TdFunctionDef.first;
@@ -68,14 +65,27 @@ public class HelloWorldTdTest {
     }
 
     /**
-     * 测试插入
+     * 测试插入部分字段
      */
     @Test
     public void testInsert() {
-        List<Object>value=new ArrayList<>();
+        List<Object> value = new ArrayList<>();
         value.add(new Date());
         value.add(1);
-        flexTdMapper.insertInto("d1001").columns(col("a"),col("b")).values(value.toArray(new Object[0])).execute();
+        flexTdMapper.insertInto("d1001").using("aa").tags("a").columns(col("a"), col("b")).values(value.toArray(new Object[0])).execute();
+    }
+
+    @Test
+    public void testStrInsert() {
+        flexTdMapper.insertInto("d1001").using("aa").tags("a").columns("name", "age").values("accountName", 100).execute();
+    }
+
+    @Test
+    public void testInsertMap() {
+        Map<String, Object> strMap = new HashMap();
+        strMap.put("name", "aaa");
+        strMap.put("age", 22);
+        flexTdMapper.insertInto("d1001").using("aa").tags("a").valuesStrMap(strMap).execute();
     }
 
     /**
@@ -86,7 +96,7 @@ public class HelloWorldTdTest {
         List<Object[]> list = new ArrayList<>();
         list.add(new Object[]{new Date(), 10.2, 219, 0.32});
         list.add(new Object[]{new Date(), 11.2, 219, 0.32});
-        flexTdMapper.insertInto("d1001").valuesList(list, o -> (Object[]) o).execute();
+        flexTdMapper.insertInto("d1001").valuesList(list, o -> o).execute();
     }
 
     /**

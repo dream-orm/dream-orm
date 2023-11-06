@@ -2,6 +2,7 @@ package com.dream.tdengine.def;
 
 import com.dream.antlr.smt.InsertStatement;
 import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.InsertIntoColumnsDef;
 import com.dream.flex.def.TableDef;
@@ -9,6 +10,11 @@ import com.dream.flex.factory.InsertCreatorFactory;
 import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.statement.TdInsertStatement;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implements InsertIntoColumnsDef<TdChainInsertIntoValuesDef, TdChainInsertDef> {
     public TdChainInsertIntoColumnsDef(InsertStatement statement, InsertCreatorFactory creatorFactory, FlexMapper flexMapper) {
@@ -25,6 +31,10 @@ public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implem
         return using(FunctionDef.table(table));
     }
 
+    public TdChainInsertIntoColumnsDef tags(Collection<Object> values) {
+        return tags(values.toArray());
+    }
+
     public TdChainInsertIntoColumnsDef tags(Object... values) {
         TdInsertStatement tdInsertStatement = (TdInsertStatement) statement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
@@ -38,5 +48,23 @@ public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implem
     @Override
     public TdChainInsertDef file(String file) {
         return super.file(file);
+    }
+
+    public TdChainInsertIntoValuesDef columns(String... columns) {
+        ColumnDef[] columnDefs = new ColumnDef[columns.length];
+        for (int i = 0; i < columnDefs.length; i++) {
+            columnDefs[i] = FunctionDef.column(columns[i]);
+        }
+        return columns(columnDefs);
+    }
+
+    public TdChainInsertDef valuesStrMap(Map<String, Object> valueStrMap) {
+        Map<ColumnDef, Object> valueMap = new HashMap<>(valueStrMap.size());
+        Iterator<Map.Entry<String, Object>> iterator = valueStrMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Object> entry = iterator.next();
+            valueMap.put(FunctionDef.column(entry.getKey()), entry.getValue());
+        }
+        return valuesMap(valueMap);
     }
 }

@@ -1,5 +1,11 @@
 # dream-orm 升级日志
 
+## v1.2.6
+
+- 优化：TableInfo结构优化，去重属性fieldMap
+- 修复：oracle环境下，因分页翻译新增order by排序导致查询错误
+- 优化：tdengine链式写法支持valueMap，动态指定插入字段
+
 ## v1.2.5
 
 - 修复：解决链式条件between参数未使用占位符
