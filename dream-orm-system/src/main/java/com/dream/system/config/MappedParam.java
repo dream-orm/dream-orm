@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 public class MappedParam {
     private int jdbcType;
+    private String paramName;
     private Object paramValue;
     private TypeHandler typeHandler;
 
@@ -16,6 +17,15 @@ public class MappedParam {
 
     public MappedParam setJdbcType(int jdbcType) {
         this.jdbcType = jdbcType;
+        return this;
+    }
+
+    public String getParamName() {
+        return paramName;
+    }
+
+    public MappedParam setParamName(String paramName) {
+        this.paramName = paramName;
         return this;
     }
 

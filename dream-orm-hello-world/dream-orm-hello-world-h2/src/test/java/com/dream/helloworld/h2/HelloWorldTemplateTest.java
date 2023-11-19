@@ -68,6 +68,17 @@ public class HelloWorldTemplateTest {
     }
 
     /**
+     * 测试修改
+     */
+    @Test
+    public void testUpdate() {
+        AccountView accountView = new AccountView();
+        accountView.setId(1);
+        accountView.setName("哈哈");
+        accountView.setAge(11);
+        templateMapper.updateById(accountView);
+    }
+    /**
      * 测试注解修改
      */
     @Test

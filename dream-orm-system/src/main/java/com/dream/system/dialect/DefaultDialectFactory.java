@@ -72,7 +72,7 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
                     }
                     paramTypeWrapper.put(paramName, paramType);
                 }
-                mappedParamList.add(new MappedParam().setParamValue(paramInfo.getParamValue()).setJdbcType(paramType.columnInfo == null ? Types.NULL : paramType.columnInfo.getJdbcType()).setTypeHandler(paramType.getTypeHandler()));
+                mappedParamList.add(new MappedParam().setParamName(paramName).setParamValue(paramInfo.getParamValue()).setJdbcType(paramType.columnInfo == null ? Types.NULL : paramType.columnInfo.getJdbcType()).setTypeHandler(paramType.getTypeHandler()));
             }
         }
         CacheKey uniqueKey = getUniqueKey(methodInfo, mappedParamList, sql);

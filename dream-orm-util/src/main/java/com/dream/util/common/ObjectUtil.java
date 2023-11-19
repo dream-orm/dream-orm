@@ -52,7 +52,12 @@ public class ObjectUtil {
         if (sourceList.isEmpty()) {
             return null;
         }
-        T[] source = (T[]) Array.newInstance(sourceList.get(0).getClass(), 0);
+        Class<?> type = sourceList.get(0).getClass();
+        Class<?>[] interfaces = type.getInterfaces();
+        if (interfaces.length == 1) {
+            type = interfaces[0];
+        }
+        T[] source = (T[]) Array.newInstance(type, sourceList.size());
         return sourceList.toArray(source);
     }
 }
