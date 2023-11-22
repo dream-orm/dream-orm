@@ -7,6 +7,9 @@ import com.dream.system.antlr.invoker.TableInvoker;
 import com.dream.system.config.Command;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
+import com.dream.system.core.action.DestroyAction;
+import com.dream.system.core.action.InitAction;
+import com.dream.system.core.action.LoopAction;
 import com.dream.system.core.session.Session;
 import com.dream.system.table.TableInfo;
 import com.dream.template.util.TemplateUtil;
@@ -28,7 +31,10 @@ public abstract class SelectMapper extends ValidateMapper {
                 .setConfiguration(configuration)
                 .setRowType(getRowType())
                 .setColType(getColType(type))
-                .setSql(sql);
+                .setSql(sql)
+                .addInitAction(initActions())
+                .addLoopAction(loopActions())
+                .addDestroyAction(destroyActions());
     }
 
     protected String getSelectColumn(Class<?> type) {
@@ -52,5 +58,17 @@ public abstract class SelectMapper extends ValidateMapper {
     @Override
     protected Command getCommand() {
         return Command.QUERY;
+    }
+
+    protected InitAction[] initActions() {
+        return null;
+    }
+
+    protected LoopAction[] loopActions() {
+        return null;
+    }
+
+    protected DestroyAction[] destroyActions() {
+        return null;
     }
 }

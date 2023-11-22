@@ -1,7 +1,6 @@
 package com.dream.system.core.resultsethandler;
 
 import com.dream.system.config.MappedStatement;
-import com.dream.system.core.session.Session;
 import com.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.dream.system.typehandler.handler.TypeHandler;
@@ -19,7 +18,7 @@ import java.util.*;
 
 public class SimpleResultSetHandler implements ResultSetHandler {
     @Override
-    public Object result(ResultSet resultSet, MappedStatement mappedStatement, Session session) throws SQLException {
+    public Object result(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException {
         TypeHandlerFactory typeHandlerFactory = mappedStatement.getConfiguration().getTypeHandlerFactory();
         ResultSetMetaData metaData = resultSet.getMetaData();
         int columnCount = metaData.getColumnCount();

@@ -1,6 +1,5 @@
 package com.dream.helloworld.h2.mapper.provider;
 
-import com.dream.system.core.action.Action;
 import com.dream.system.provider.ActionProvider;
 
 public class AccountProvider {
@@ -15,15 +14,6 @@ public class AccountProvider {
                 return "select @*() from account where id>@?(account.id)";
             }
 
-            @Override
-            public Action[] initActionList() {
-                return new Action[]{(session, mappedStatement, arg) -> System.out.println("sql执行前自定义操作")};
-            }
-
-            @Override
-            public Action[] destroyActionList() {
-                return new Action[]{(session, mappedStatement, arg) -> System.out.println("sql执行后自定义操作")};
-            }
         };
     }
 }

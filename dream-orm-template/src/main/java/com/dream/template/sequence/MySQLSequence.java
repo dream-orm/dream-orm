@@ -1,21 +1,16 @@
 package com.dream.template.sequence;
 
-import com.dream.system.table.ColumnInfo;
+import com.dream.system.config.MappedStatement;
 import com.dream.system.table.TableInfo;
 
-public class MySQLSequence extends AbstractSequence {
+public class MySQLSequence implements Sequence {
     @Override
-    public boolean before() {
-        return false;
+    public boolean isAutoIncrement(TableInfo tableInfo) {
+        return true;
     }
 
     @Override
-    public String[] columnNames(TableInfo tableInfo) {
-        return new String[0];
-    }
+    public void sequence(TableInfo tableInfo, MappedStatement mappedStatement, Object result) {
 
-    @Override
-    protected Object sequence(ColumnInfo columnInfo) {
-        return null;
     }
 }

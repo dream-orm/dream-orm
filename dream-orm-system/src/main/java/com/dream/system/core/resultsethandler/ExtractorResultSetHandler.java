@@ -8,7 +8,6 @@ import com.dream.system.core.resultsethandler.config.MappedColumn;
 import com.dream.system.core.resultsethandler.config.MappedResult;
 import com.dream.system.core.resultsethandler.extract.Extractor;
 import com.dream.system.core.resultsethandler.extract.ExtractorFactory;
-import com.dream.system.core.session.Session;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
@@ -42,7 +41,7 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
     }
 
     @Override
-    public Object result(ResultSet resultSet, MappedStatement mappedStatement, Session session) throws SQLException {
+    public Object result(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException {
         MappedResult mappedResult = getMappedResult(resultSet, mappedStatement);
         ObjectFactory resultObjectFactory = mappedResult.newRowObjectFactory();
         if (mappedResult.isSimple()) {
@@ -220,7 +219,7 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
                 .getTypeHandler(mappedResult.getColType()
                         , builder.getJdbcType()));
         if (extractorFactory != null) {
-            Extractor extractor = extractorFactory.getExtractor(null, null, builder.getProperty());
+            Extractor extractor = extractorFactory.getExtractor(null, builder.getProperty());
             if (extractor != null) {
                 builder.extractor(extractor);
             }
@@ -236,7 +235,7 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
                 .getTypeHandler(Object.class
                         , builder.getJdbcType()));
         if (extractorFactory != null) {
-            Extractor extractor = extractorFactory.getExtractor(null, null, builder.getProperty());
+            Extractor extractor = extractorFactory.getExtractor(null, builder.getProperty());
             if (extractor != null) {
                 builder.extractor(extractor);
             }
@@ -264,7 +263,7 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
                             TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), builder.getJdbcType());
                             builder.field(field).typeHandler(typeHandler);
                             if (extractorFactory != null) {
-                                Extractor extractor = extractorFactory.getExtractor(mappedResult.getColType(), field, builder.getProperty());
+                                Extractor extractor = extractorFactory.getExtractor(field, builder.getProperty());
                                 if (extractor != null) {
                                     builder.extractor(extractor);
                                 }

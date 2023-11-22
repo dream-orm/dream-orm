@@ -4,6 +4,7 @@ import com.dream.system.config.Page;
 import com.dream.system.core.session.Session;
 import com.dream.template.sequence.BatchSequence;
 import com.dream.template.sequence.FetchKeySequence;
+import com.dream.template.sequence.NoFetchKeySequence;
 import com.dream.template.sequence.Sequence;
 import com.dream.util.tree.Tree;
 
@@ -42,7 +43,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
         updateByIdSqlMapper = new UpdateByIdMapper(session);
         batchUpdateByIdMapper = new BatchUpdateByIdMapper(session);
         updateNonByIdSqlMapper = new UpdateNonByIdMapper(session);
-        insertSqlMapper = new InsertMapper(session, sequence);
+        insertSqlMapper = new InsertMapper(session, new NoFetchKeySequence(sequence));
         insertFetchKeyMapper = new InsertMapper(session, new FetchKeySequence(sequence));
         batchInsertMapper = new BatchInsertMapper(session, new BatchSequence(sequence));
         existByIdMapper = new ExistByIdMapper(session);

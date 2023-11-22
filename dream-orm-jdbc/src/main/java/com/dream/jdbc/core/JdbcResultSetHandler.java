@@ -3,7 +3,6 @@ package com.dream.jdbc.core;
 import com.dream.jdbc.row.RowMapping;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
-import com.dream.system.core.session.Session;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +17,7 @@ public class JdbcResultSetHandler implements ResultSetHandler {
     }
 
     @Override
-    public Object result(ResultSet resultSet, MappedStatement mappedStatement, Session session) throws SQLException {
+    public Object result(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException {
         rowMapping.init(resultSet.getMetaData(), mappedStatement.getConfiguration());
         List<Object> resultList = new ArrayList<>();
         while (resultSet.next()) {

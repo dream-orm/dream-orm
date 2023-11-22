@@ -2,7 +2,9 @@ package com.dream.system.config;
 
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.system.cache.CacheKey;
-import com.dream.system.core.action.Action;
+import com.dream.system.core.action.DestroyAction;
+import com.dream.system.core.action.InitAction;
+import com.dream.system.core.action.LoopAction;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.statementhandler.StatementHandler;
 import com.dream.system.typehandler.handler.TypeHandler;
@@ -106,11 +108,15 @@ public class MappedStatement {
         return mappedParamList;
     }
 
-    public Action[] getInitActionList() {
+    public InitAction[] getInitActionList() {
         return methodInfo.getInitActionList();
     }
 
-    public Action[] getDestroyActionList() {
+    public LoopAction[] getLoopActionList() {
+        return methodInfo.getLoopActionList();
+    }
+
+    public DestroyAction[] getDestroyActionList() {
         return methodInfo.getDestroyActionList();
     }
 

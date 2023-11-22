@@ -6,7 +6,9 @@ import com.dream.system.annotation.Sql;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.config.MethodParam;
-import com.dream.system.core.action.Action;
+import com.dream.system.core.action.DestroyAction;
+import com.dream.system.core.action.InitAction;
+import com.dream.system.core.action.LoopAction;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.statementhandler.StatementHandler;
 import com.dream.system.provider.ActionProvider;
@@ -99,23 +101,27 @@ public class DefaultMapperFactory implements MapperFactory {
                         throw new DreamRunTimeException("调用方法" + actionType.getName() + "." + methodName + "失败，" + e.getMessage(), e);
                     }
                     if (actionProvider != null) {
-                        Action[] initActionList = actionProvider.initActionList();
                         String sql = actionProvider.sql();
-                        Action[] destroyActionList = actionProvider.destroyActionList();
+                        InitAction initAction = actionProvider.initAction();
+                        LoopAction loopAction = actionProvider.loopAction();
+                        DestroyAction destroyAction = actionProvider.destroyAction();
                         Class<? extends Collection> rowType = actionProvider.rowType();
                         Class<?> colType = actionProvider.colType();
                         Boolean cache = actionProvider.cache();
                         Integer timeOut = actionProvider.timeOut();
                         StatementHandler statementHandler = actionProvider.statementHandler();
                         ResultSetHandler resultSetHandler = actionProvider.resultSetHandler();
-                        if (initActionList != null) {
-                            methodInfo.addInitAction(initActionList);
-                        }
                         if (sql != null) {
                             methodInfo.setSql(sql);
                         }
-                        if (destroyActionList != null) {
-                            methodInfo.addDestroyAction(destroyActionList);
+                        if (initAction != null) {
+                            methodInfo.addInitAction(initAction);
+                        }
+                        if (loopAction != null) {
+                            methodInfo.addLoopAction(loopAction);
+                        }
+                        if (destroyAction != null) {
+                            methodInfo.addDestroyAction(destroyAction);
                         }
                         if (rowType != null) {
                             methodInfo.setRowType(rowType);

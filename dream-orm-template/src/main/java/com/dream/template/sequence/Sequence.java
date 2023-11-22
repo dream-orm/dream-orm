@@ -8,24 +8,23 @@ import com.dream.system.table.TableInfo;
  */
 public interface Sequence {
     /**
-     * 主键序列策略初始化
-     *
-     * @param tableInfo 主表详情
-     */
-    default void init(TableInfo tableInfo) {
-    }
-
-    /**
-     * 是否SQL操作前进行策略操作
+     * 是否主键自增
      *
      * @return
      */
-    default boolean before() {
-        return true;
-    }
+    boolean isAutoIncrement(TableInfo tableInfo);
 
     /**
-     * 返回SQL返回字段
+     * 自定义主键策略方法
+     *
+     * @param tableInfo       主表详情
+     * @param mappedStatement 编译后的接口方法详情
+     * @param result
+     */
+    void sequence(TableInfo tableInfo, MappedStatement mappedStatement, Object result);
+
+    /**
+     * 返回查询的字段
      *
      * @param tableInfo 主表详情
      * @return
@@ -33,13 +32,4 @@ public interface Sequence {
     default String[] columnNames(TableInfo tableInfo) {
         return new String[0];
     }
-
-    /**
-     * 自定义主键策略方法
-     *
-     * @param tableInfo       主表详情
-     * @param mappedStatement 编译后的接口方法详情
-     * @param arg             参数
-     */
-    void sequence(TableInfo tableInfo, MappedStatement mappedStatement, Object arg);
 }

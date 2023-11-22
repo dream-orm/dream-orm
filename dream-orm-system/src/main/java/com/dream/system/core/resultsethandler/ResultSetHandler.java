@@ -1,7 +1,6 @@
 package com.dream.system.core.resultsethandler;
 
 import com.dream.system.config.MappedStatement;
-import com.dream.system.core.session.Session;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,9 +15,8 @@ public interface ResultSetHandler {
      *
      * @param resultSet       SQL操作返回数据迭代器
      * @param mappedStatement 编译后的接口方法详尽信息
-     * @param session         SQL操作会话
-     * @return
+     * @return 查询结果集
      * @throws SQLException
      */
-    Object result(ResultSet resultSet, MappedStatement mappedStatement, Session session) throws SQLException;
+    Object result(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException;
 }

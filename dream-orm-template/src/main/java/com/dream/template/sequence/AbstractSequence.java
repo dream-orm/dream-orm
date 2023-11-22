@@ -9,7 +9,12 @@ import java.util.List;
 
 public abstract class AbstractSequence implements Sequence {
     @Override
-    public void sequence(TableInfo tableInfo, MappedStatement mappedStatement, Object arg) {
+    public boolean isAutoIncrement(TableInfo tableInfo) {
+        return false;
+    }
+
+    @Override
+    public void sequence(TableInfo tableInfo, MappedStatement mappedStatement, Object result) {
         List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
         List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
         for (int i = 0; i < primKeys.size(); i++) {

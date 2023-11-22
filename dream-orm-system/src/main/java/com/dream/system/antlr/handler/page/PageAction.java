@@ -3,14 +3,14 @@ package com.dream.system.antlr.handler.page;
 
 import com.dream.system.config.MappedStatement;
 import com.dream.system.config.MethodInfo;
-import com.dream.system.core.action.Action;
+import com.dream.system.core.action.InitAction;
 import com.dream.system.core.session.Session;
 import com.dream.util.common.ObjectMap;
 import com.dream.util.common.ObjectWrapper;
 
 import java.util.Map;
 
-public class PageAction implements Action {
+public class PageAction implements InitAction {
     private MethodInfo methodInfo;
     private String property;
 
@@ -20,7 +20,8 @@ public class PageAction implements Action {
     }
 
     @Override
-    public void doAction(Session session, MappedStatement mappedStatement, Object arg) {
+    public void init(MappedStatement mappedStatement, Session session) {
+        Object arg = mappedStatement.getArg();
         Map<String, Object> argMap;
         if (arg instanceof Map) {
             argMap = (Map<String, Object>) arg;

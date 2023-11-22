@@ -2,7 +2,9 @@ package com.dream.system.config;
 
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.system.cache.CacheKey;
-import com.dream.system.core.action.Action;
+import com.dream.system.core.action.DestroyAction;
+import com.dream.system.core.action.InitAction;
+import com.dream.system.core.action.LoopAction;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.statementhandler.StatementHandler;
 import com.dream.system.typehandler.handler.TypeHandler;
@@ -28,8 +30,9 @@ public class MethodInfo {
     protected PackageStatement statement;
     protected CacheKey methodKey;
     protected Method method;
-    protected Action[] initActionList;
-    protected Action[] destroyActionList;
+    protected InitAction[] initActionList;
+    protected LoopAction[] loopActionList;
+    protected DestroyAction[] destroyActionList;
     protected MethodParam[] methodParamList;
     protected StatementHandler statementHandler;
     protected ResultSetHandler resultSetHandler;
@@ -151,20 +154,29 @@ public class MethodInfo {
         return this;
     }
 
-    public Action[] getInitActionList() {
+    public InitAction[] getInitActionList() {
         return initActionList;
     }
 
-    public MethodInfo addInitAction(Action... initActions) {
+    public MethodInfo addInitAction(InitAction... initActions) {
         this.initActionList = ObjectUtil.merge(this.initActionList, initActions);
         return this;
     }
 
-    public Action[] getDestroyActionList() {
+    public LoopAction[] getLoopActionList() {
+        return loopActionList;
+    }
+
+    public MethodInfo addLoopAction(LoopAction... loopActionList) {
+        this.loopActionList = ObjectUtil.merge(this.loopActionList, loopActionList);
+        return this;
+    }
+
+    public DestroyAction[] getDestroyActionList() {
         return destroyActionList;
     }
 
-    public MethodInfo addDestroyAction(Action... destroyActionList) {
+    public MethodInfo addDestroyAction(DestroyAction... destroyActionList) {
         this.destroyActionList = ObjectUtil.merge(this.destroyActionList, destroyActionList);
         return this;
     }

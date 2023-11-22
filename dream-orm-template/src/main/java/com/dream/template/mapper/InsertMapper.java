@@ -7,7 +7,8 @@ import com.dream.system.config.Command;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.config.MethodInfo;
-import com.dream.system.core.action.Action;
+import com.dream.system.core.action.DestroyAction;
+import com.dream.system.core.action.InitAction;
 import com.dream.system.core.session.Session;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
@@ -36,7 +37,6 @@ public class InsertMapper extends WrapMapper {
 
     @Override
     protected MethodInfo getWrapMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg) {
-        this.sequence.init(tableInfo);
         String table = tableInfo.getTable();
         List<String> columnList = new ArrayList<>();
         List<String> valueList = new ArrayList<>();
@@ -67,16 +67,9 @@ public class InsertMapper extends WrapMapper {
     }
 
     protected MethodInfo getMethodInfo(Configuration configuration, TableInfo tableInfo, String sql) {
-        List<Action> initActionList = new ArrayList<>();
-        List<Action> destroyActionList = new ArrayList<>();
         String[] columnNames = sequence.columnNames(tableInfo);
         TypeHandler[] typeHandlers = null;
         SequenceAction sequenceAction = new SequenceAction(tableInfo, sequence);
-        if (sequence.before()) {
-            initActionList.add(sequenceAction);
-        } else {
-            destroyActionList.add(sequenceAction);
-        }
         if (columnNames != null && columnNames.length > 0) {
             typeHandlers = new TypeHandler[columnNames.length];
             TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
@@ -96,15 +89,19 @@ public class InsertMapper extends WrapMapper {
                 typeHandlers[i] = typeHandler;
             }
         }
-        return new MethodInfo()
+        MethodInfo methodInfo = new MethodInfo()
                 .setConfiguration(configuration)
                 .setRowType(NonCollection.class)
                 .setColType(Integer.class)
                 .setColumnNames(columnNames)
                 .setColumnTypeHandlers(typeHandlers)
-                .addInitAction(initActionList.toArray(new Action[0]))
-                .addDestroyAction(destroyActionList.toArray(new Action[0]))
                 .setSql(sql);
+        if (sequence.isAutoIncrement(tableInfo)) {
+            methodInfo.addDestroyAction(sequenceAction);
+        } else {
+            methodInfo.addInitAction(sequenceAction);
+        }
+        return methodInfo;
     }
 
     @Override
@@ -117,7 +114,7 @@ public class InsertMapper extends WrapMapper {
         return Command.INSERT;
     }
 
-    protected class SequenceAction implements Action {
+    protected class SequenceAction implements InitAction, DestroyAction {
         private TableInfo tableInfo;
         private Sequence sequence;
 
@@ -127,8 +124,14 @@ public class InsertMapper extends WrapMapper {
         }
 
         @Override
-        public void doAction(Session session, MappedStatement mappedStatement, Object arg) {
-            sequence.sequence(tableInfo, mappedStatement, arg);
+        public void init(MappedStatement mappedStatement, Session session) {
+            sequence.sequence(tableInfo, mappedStatement, null);
+        }
+
+        @Override
+        public Object destroy(Object result, MappedStatement mappedStatement, Session session) {
+            sequence.sequence(tableInfo, mappedStatement, result);
+            return result;
         }
     }
 }

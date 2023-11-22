@@ -1,6 +1,8 @@
 package com.dream.system.provider;
 
-import com.dream.system.core.action.Action;
+import com.dream.system.core.action.DestroyAction;
+import com.dream.system.core.action.InitAction;
+import com.dream.system.core.action.LoopAction;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.statementhandler.StatementHandler;
 
@@ -23,7 +25,16 @@ public interface ActionProvider {
      *
      * @return
      */
-    default Action[] initActionList() {
+    default InitAction initAction() {
+        return null;
+    }
+
+    /**
+     * SQL结果遍历行为
+     *
+     * @return
+     */
+    default LoopAction loopAction() {
         return null;
     }
 
@@ -32,7 +43,7 @@ public interface ActionProvider {
      *
      * @return
      */
-    default Action[] destroyActionList() {
+    default DestroyAction destroyAction() {
         return null;
     }
 

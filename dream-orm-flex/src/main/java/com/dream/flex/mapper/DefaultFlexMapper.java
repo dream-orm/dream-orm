@@ -10,7 +10,6 @@ import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
 import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.system.config.*;
-import com.dream.system.core.resultsethandler.TransformResultSetHandler;
 import com.dream.system.core.session.Session;
 import com.dream.system.inject.PageInject;
 import com.dream.system.inject.factory.InjectFactory;
@@ -74,7 +73,7 @@ public class DefaultFlexMapper implements FlexMapper {
     public <T extends Tree> List<T> selectTree(QueryDef queryDef, Class<T> type) {
         SqlInfo sqlInfo = flexDebug.toSQL(queryDef);
         MethodInfo methodInfo = getMethodInfo(List.class, type);
-        methodInfo.setResultSetHandler(new TransformResultSetHandler<Collection, List>(result -> TreeUtil.toTree(result)));
+        methodInfo.addDestroyAction((result, mappedStatement, session) -> TreeUtil.toTree((Collection<? extends Tree>) result));
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.QUERY, methodInfo);
         return (List<T>) session.execute(mappedStatement);
     }

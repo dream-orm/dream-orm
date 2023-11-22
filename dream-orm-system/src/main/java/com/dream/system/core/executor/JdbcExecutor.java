@@ -66,7 +66,7 @@ public class JdbcExecutor implements Executor {
     protected Object query(Statement statement, MappedStatement mappedStatement, Session session) throws SQLException {
         ResultSet resultSet = statementHandler(mappedStatement).query(statement, mappedStatement);
         try {
-            return resultSetHandler(mappedStatement).result(resultSet, mappedStatement, session);
+            return resultSetHandler(mappedStatement).result(resultSet, mappedStatement);
         } finally {
             if (resultSet != null && !resultSet.isClosed()) {
                 resultSet.close();

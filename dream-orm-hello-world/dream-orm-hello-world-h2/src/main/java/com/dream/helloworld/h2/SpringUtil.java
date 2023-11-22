@@ -14,14 +14,13 @@ import org.springframework.stereotype.Component;
 public class SpringUtil implements BeanFactoryPostProcessor {
     private static ConfigurableListableBeanFactory beanFactory;
 
+    public static <T> T getBean(Class<T> clazz) {
+        return beanFactory.getBean(clazz);
+    }
+
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         SpringUtil.beanFactory = beanFactory;
-    }
-
-
-    public static <T> T getBean(Class<T> clazz) {
-        return beanFactory.getBean(clazz);
     }
 
 
