@@ -6,8 +6,6 @@ import com.dream.system.config.Configuration;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.core.resultsethandler.config.MappedColumn;
 import com.dream.system.core.resultsethandler.config.MappedResult;
-import com.dream.system.core.resultsethandler.extract.Extractor;
-import com.dream.system.core.resultsethandler.extract.ExtractorFactory;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
@@ -30,14 +28,9 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.*;
 
-public class ExtractorResultSetHandler implements ResultSetHandler {
-    private ExtractorFactory extractorFactory;
+public class DefaultResultSetHandler implements ResultSetHandler {
 
-    public ExtractorResultSetHandler() {
-    }
-
-    public ExtractorResultSetHandler(ExtractorFactory extractorFactory) {
-        this.extractorFactory = extractorFactory;
+    public DefaultResultSetHandler() {
     }
 
     @Override
@@ -123,13 +116,8 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
         ObjectFactory objectFactory = mappedResult.newColObjectFactory();
         for (MappedColumn mappedColumn : mappedColumnList) {
             Object value = mappedColumn.getValue(resultSet);
-            Extractor extractor = mappedColumn.getExtractor();
-            if (extractor == null) {
-                if (value != null) {
-                    objectFactory.set(mappedColumn.getProperty(), value);
-                }
-            } else {
-                extractor.extract(mappedColumn.getProperty(), value, objectFactory);
+            if (value != null) {
+                objectFactory.set(mappedColumn.getProperty(), value);
             }
         }
         return objectFactory;
@@ -138,7 +126,7 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
     protected MappedResult getMappedResult(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException {
         MappedResult mappedResult = mappedStatement.get(MappedResult.class);
         if (mappedResult == null) {
-            synchronized (ExtractorResultSetHandler.class) {
+            synchronized (DefaultResultSetHandler.class) {
                 mappedResult = mappedStatement.get(MappedResult.class);
                 if (mappedResult == null) {
                     mappedResult = createMappedResult(resultSet, mappedStatement);
@@ -218,12 +206,6 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
                 .getTypeHandlerFactory()
                 .getTypeHandler(mappedResult.getColType()
                         , builder.getJdbcType()));
-        if (extractorFactory != null) {
-            Extractor extractor = extractorFactory.getExtractor(null, builder.getProperty());
-            if (extractor != null) {
-                builder.extractor(extractor);
-            }
-        }
         mappedResult.add(builder.build());
         return true;
     }
@@ -234,12 +216,6 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
                 .getTypeHandlerFactory()
                 .getTypeHandler(Object.class
                         , builder.getJdbcType()));
-        if (extractorFactory != null) {
-            Extractor extractor = extractorFactory.getExtractor(null, builder.getProperty());
-            if (extractor != null) {
-                builder.extractor(extractor);
-            }
-        }
         mappedResult.add(builder.build());
         return true;
     }
@@ -262,12 +238,6 @@ public class ExtractorResultSetHandler implements ResultSetHandler {
                             builder.property(fieldName);
                             TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), builder.getJdbcType());
                             builder.field(field).typeHandler(typeHandler);
-                            if (extractorFactory != null) {
-                                Extractor extractor = extractorFactory.getExtractor(field, builder.getProperty());
-                                if (extractor != null) {
-                                    builder.extractor(extractor);
-                                }
-                            }
                             if (!ObjectUtil.isNull(curTableName)) {
                                 mappedResult.add(builder.build());
                                 return true;

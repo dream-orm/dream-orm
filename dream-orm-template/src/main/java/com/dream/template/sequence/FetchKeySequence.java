@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class FetchKeySequence implements Sequence {
+public class FetchKeySequence implements SequenceWrapper {
     private Sequence sequence;
 
     public FetchKeySequence(Sequence sequence) {

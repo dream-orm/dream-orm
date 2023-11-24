@@ -6,7 +6,7 @@ import com.dream.system.table.TableInfo;
 
 import java.util.List;
 
-public class BatchSequence implements Sequence {
+public class BatchSequence implements SequenceWrapper {
     public Sequence sequence;
 
     public BatchSequence(Sequence sequence) {

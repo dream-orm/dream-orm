@@ -22,14 +22,4 @@ public interface Sequence {
      * @param result
      */
     void sequence(TableInfo tableInfo, MappedStatement mappedStatement, Object result);
-
-    /**
-     * 返回查询的字段
-     *
-     * @param tableInfo 主表详情
-     * @return
-     */
-    default String[] columnNames(TableInfo tableInfo) {
-        return new String[0];
-    }
 }

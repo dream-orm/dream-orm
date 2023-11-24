@@ -3,7 +3,7 @@ package com.dream.template.sequence;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.table.TableInfo;
 
-public class NoFetchKeySequence implements Sequence {
+public class NoFetchKeySequence implements SequenceWrapper {
     private Sequence sequence;
 
     public NoFetchKeySequence(Sequence sequence) {

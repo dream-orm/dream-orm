@@ -28,7 +28,7 @@ import com.dream.system.config.MappedStatement;
 import com.dream.system.core.listener.Listener;
 import com.dream.system.core.listener.factory.DefaultListenerFactory;
 import com.dream.system.core.listener.factory.ListenerFactory;
-import com.dream.system.core.resultsethandler.ExtractorResultSetHandler;
+import com.dream.system.core.resultsethandler.DefaultResultSetHandler;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.session.SessionFactory;
 import com.dream.system.core.statementhandler.PrepareStatementHandler;
@@ -50,7 +50,7 @@ import com.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.dream.system.typehandler.wrapper.TypeHandlerWrapper;
 import com.dream.template.mapper.DefaultTemplateMapper;
 import com.dream.template.mapper.TemplateMapper;
-import com.dream.template.sequence.MySQLSequence;
+import com.dream.template.sequence.AutoIncrementSequence;
 import com.dream.template.sequence.Sequence;
 import com.dream.template.session.SessionHolder;
 import com.dream.template.session.SessionTemplate;
@@ -92,7 +92,7 @@ public class DreamAutoConfiguration {
     @Bean
     @Condition(onMissingBean = ResultSetHandler.class)
     public ResultSetHandler resultSetHandler() {
-        return new ExtractorResultSetHandler();
+        return new DefaultResultSetHandler();
     }
 
     /**
@@ -469,7 +469,7 @@ public class DreamAutoConfiguration {
     @Bean
     @Condition(onMissingBean = Sequence.class)
     public Sequence sequence() {
-        return new MySQLSequence();
+        return new AutoIncrementSequence();
     }
 
     /**

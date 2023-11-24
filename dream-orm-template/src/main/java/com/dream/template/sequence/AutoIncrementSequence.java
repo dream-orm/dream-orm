@@ -3,7 +3,7 @@ package com.dream.template.sequence;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.table.TableInfo;
 
-public class MySQLSequence implements Sequence {
+public class AutoIncrementSequence implements Sequence {
     @Override
     public boolean isAutoIncrement(TableInfo tableInfo) {
         return true;

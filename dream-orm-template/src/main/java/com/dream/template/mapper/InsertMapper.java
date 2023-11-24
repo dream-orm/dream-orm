@@ -17,6 +17,7 @@ import com.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.dream.system.typehandler.handler.TypeHandler;
 import com.dream.template.annotation.WrapType;
 import com.dream.template.sequence.Sequence;
+import com.dream.template.sequence.SequenceWrapper;
 import com.dream.util.common.NonCollection;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
@@ -28,9 +29,9 @@ import java.util.List;
 
 public class InsertMapper extends WrapMapper {
     private final int CODE = 1;
-    protected Sequence sequence;
+    protected SequenceWrapper sequence;
 
-    public InsertMapper(Session session, Sequence sequence) {
+    public InsertMapper(Session session, SequenceWrapper sequence) {
         super(session);
         this.sequence = sequence;
     }

@@ -4,12 +4,12 @@ import com.dream.system.config.BatchMappedStatement;
 import com.dream.system.config.Command;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.core.session.Session;
-import com.dream.template.sequence.Sequence;
+import com.dream.template.sequence.SequenceWrapper;
 
 import java.util.List;
 
 public class BatchInsertMapper extends InsertMapper {
-    public BatchInsertMapper(Session session, Sequence sequence) {
+    public BatchInsertMapper(Session session, SequenceWrapper sequence) {
         super(session, sequence);
     }
 

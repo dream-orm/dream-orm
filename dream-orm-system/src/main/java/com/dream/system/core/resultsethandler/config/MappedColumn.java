@@ -1,6 +1,5 @@
 package com.dream.system.core.resultsethandler.config;
 
-import com.dream.system.core.resultsethandler.extract.Extractor;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.typehandler.handler.TypeHandler;
 
@@ -16,7 +15,6 @@ public class MappedColumn {
     private String columnLabel;
     private ColumnInfo columnInfo;
     private TypeHandler typeHandler;
-    private Extractor extractor;
     private Field field;
 
     private MappedColumn() {
@@ -53,10 +51,6 @@ public class MappedColumn {
 
     public TypeHandler getTypeHandler() {
         return typeHandler;
-    }
-
-    public Extractor getExtractor() {
-        return extractor;
     }
 
     public boolean isPrimary() {
@@ -107,11 +101,6 @@ public class MappedColumn {
 
         public Builder property(String property) {
             mappedColumn.property = property;
-            return this;
-        }
-
-        public Builder extractor(Extractor extractor) {
-            mappedColumn.extractor = extractor;
             return this;
         }
 
