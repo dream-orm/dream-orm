@@ -2,15 +2,12 @@ package com.dream.system.table.factory;
 
 
 import com.dream.system.annotation.Column;
-import com.dream.system.annotation.Join;
 import com.dream.system.annotation.Table;
 import com.dream.system.table.ColumnInfo;
-import com.dream.system.table.JoinInfo;
 import com.dream.system.table.TableInfo;
 import com.dream.system.util.SystemUtil;
 import com.dream.util.common.LowHashMap;
 import com.dream.util.common.ObjectUtil;
-import com.dream.util.exception.DreamRunTimeException;
 import com.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
@@ -27,7 +24,6 @@ public class DefaultTableFactory implements TableFactory {
         if (ObjectUtil.isNull(table) || tableInfoMap.get(table) != null) {
             return null;
         }
-        Map<String, JoinInfo> joinInfoMap = new LowHashMap<>();
         Map<String, ColumnInfo> columnInfoMap = new HashMap<>(8);
         List<Field> fieldList = ReflectUtil.findField(tableClass);
         List<ColumnInfo> primKeys = new ArrayList<>();
@@ -41,15 +37,10 @@ public class DefaultTableFactory implements TableFactory {
                     if (columnInfo.isPrimary()) {
                         primKeys.add(columnInfo);
                     }
-                } else {
-                    JoinInfo joinInfo = getJoinInfo(table, field);
-                    if (joinInfo != null) {
-                        joinInfoMap.put(joinInfo.getJoinTable(), joinInfo);
-                    }
                 }
             }
         }
-        return new TableInfo(table, tableClass, primKeys, columnInfoMap, joinInfoMap);
+        return new TableInfo(table, tableClass, primKeys, columnInfoMap);
     }
 
     protected String getTable(Class<?> tableClass) {
@@ -74,20 +65,6 @@ public class DefaultTableFactory implements TableFactory {
             column = SystemUtil.camelToUnderline(field.getName());
         }
         return new ColumnInfo(table, column, field, columnAnnotation.jdbcType());
-    }
-
-    protected JoinInfo getJoinInfo(String table, Field field) {
-        Join joinAnnotation = field.getDeclaredAnnotation(Join.class);
-        if (joinAnnotation == null) {
-            return null;
-        }
-        Class<?> colType = ReflectUtil.getColType(field.getGenericType());
-        String joinTable = getTable(colType);
-        if (ObjectUtil.isNull(joinTable)) {
-            throw new DreamRunTimeException(colType.getName() + "不存在注解" + Table.class.getName());
-        }
-        JoinInfo joinInfo = new JoinInfo(table, joinAnnotation.column(), joinTable, joinAnnotation.joinColumn(), joinAnnotation.joinType());
-        return joinInfo;
     }
 
     @Override

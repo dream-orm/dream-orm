@@ -19,7 +19,6 @@ class ConditionUtil {
             for (Field field : fieldList) {
                 if (field.isAnnotationPresent(Conditional.class)) {
                     Conditional conditionalAnnotation = field.getAnnotation(Conditional.class);
-                    String table = conditionalAnnotation.table();
                     String column = conditionalAnnotation.column();
                     if (ObjectUtil.isNull(column)) {
                         column = field.getName();
@@ -27,7 +26,7 @@ class ConditionUtil {
                     boolean nullFlag = conditionalAnnotation.nullFlag();
                     boolean or = conditionalAnnotation.or();
                     Class<? extends Condition> conditionType = conditionalAnnotation.value();
-                    conditionObjectList.add(new ConditionObject(table, column, field.getName(), nullFlag, or, ReflectUtil.create(conditionType)));
+                    conditionObjectList.add(new ConditionObject(column, field.getName(), nullFlag, or, ReflectUtil.create(conditionType)));
                 }
             }
             return conditionObjectList;
@@ -42,10 +41,13 @@ class ConditionUtil {
             for (Field field : fieldList) {
                 if (field.isAnnotationPresent(Sort.class)) {
                     Sort sortAnnotation = field.getAnnotation(Sort.class);
+                    String column = sortAnnotation.column();
+                    if (ObjectUtil.isNull(column)) {
+                        column = field.getName();
+                    }
                     sortObjectList.add(
                             new SortObject(
-                                    sortAnnotation.table(),
-                                    field.getName(),
+                                    column,
                                     sortAnnotation.value().getOrderType(),
                                     sortAnnotation.order()
                             )

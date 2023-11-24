@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Sort {
-    String table() default "";
+    String column() default "";
 
     Order value() default Order.ASC;
 

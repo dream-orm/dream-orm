@@ -2,9 +2,7 @@ package com.dream.helloworld.solon.table;
 
 import com.dream.system.annotation.Column;
 import com.dream.system.annotation.Id;
-import com.dream.system.annotation.Join;
 import com.dream.system.annotation.Table;
-import com.dream.system.table.JoinType;
 import com.dream.template.annotation.validate.NotBlank;
 
 import java.sql.Types;
@@ -28,7 +26,6 @@ public class User {
     private Integer deptId;
     @Column("del_flag")
     private Integer delFlag;
-    @Join(column = "id", joinColumn = "user_id", joinType = JoinType.LEFT_JOIN)
     private List<Blog> blogList;
 
     public Integer getId() {

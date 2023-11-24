@@ -8,15 +8,13 @@ public class TableInfo {
     private final String table;
     private final Class type;
     private final Map<String, ColumnInfo> columnInfoMap;
-    private final Map<String, JoinInfo> joinInfoMap;
     private final List<ColumnInfo> primKeys;
 
-    public TableInfo(String table, Class type, List<ColumnInfo> primKeys, Map<String, ColumnInfo> columnInfoMap, Map<String, JoinInfo> joinInfoMap) {
+    public TableInfo(String table, Class type, List<ColumnInfo> primKeys, Map<String, ColumnInfo> columnInfoMap) {
         this.table = table;
         this.type = type;
         this.primKeys = primKeys;
         this.columnInfoMap = columnInfoMap;
-        this.joinInfoMap = joinInfoMap;
     }
 
     public ColumnInfo getColumnInfo(String fieldName) {
@@ -39,7 +37,4 @@ public class TableInfo {
         return primKeys;
     }
 
-    public JoinInfo getJoinInfo(String joinTable) {
-        return joinInfoMap.get(joinTable);
-    }
 }

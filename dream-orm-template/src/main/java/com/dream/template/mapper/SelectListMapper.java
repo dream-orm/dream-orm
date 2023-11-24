@@ -8,14 +8,17 @@ import com.dream.system.core.session.Session;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
+import com.dream.system.util.SystemUtil;
 import com.dream.template.condition.Condition;
 import com.dream.template.util.ConditionObject;
 import com.dream.template.util.SortObject;
 import com.dream.template.util.TemplateUtil;
 import com.dream.util.common.ObjectUtil;
-import com.dream.util.exception.DreamRunTimeException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SelectListMapper extends SelectMapper {
@@ -28,10 +31,10 @@ public class SelectListMapper extends SelectMapper {
     protected String getOther(Configuration configuration, TableInfo tableInfo, Class<?> type, Object arg) {
         if (arg != null) {
             Class<?> argType = arg.getClass();
-            Set<String> tableNameSet = TemplateUtil.getTableNameSet(type);
+            String tableName = SystemUtil.getTableName(type);
             TableFactory tableFactory = configuration.getTableFactory();
-            String where = getWhereSql(argType, tableNameSet, tableFactory);
-            String order = getOrderSql(argType, tableNameSet, tableFactory);
+            String where = getWhereSql(argType, tableName, tableFactory);
+            String order = getOrderSql(argType, tableName, tableFactory);
             return where + order;
         }
         return "";
@@ -42,14 +45,14 @@ public class SelectListMapper extends SelectMapper {
         return List.class;
     }
 
-    protected String getWhereSql(Class type, Set<String> tableSet, TableFactory tableFactory) {
+    protected String getWhereSql(Class type, String tableName, TableFactory tableFactory) {
         List<ConditionObject> conditionObjectList = TemplateUtil.getCondition(type);
         if (!ObjectUtil.isNull(conditionObjectList)) {
             Map<Boolean, List<ConditionObject>> booleanConditionObjectListMap = conditionObjectList.stream().collect(Collectors.groupingBy(conditionObject -> conditionObject.isFilterNull()));
             List<ConditionObject> conditionObjectFalseList = booleanConditionObjectListMap.get(false);
             List<ConditionObject> conditionObjectTrueList = booleanConditionObjectListMap.get(true);
-            String whereFalseSql = getWhereSql(tableSet, tableFactory, conditionObjectFalseList);
-            String whereTrueSql = getWhereSql(tableSet, tableFactory, conditionObjectTrueList);
+            String whereFalseSql = getWhereSql(tableName, tableFactory, conditionObjectFalseList);
+            String whereTrueSql = getWhereSql(tableName, tableFactory, conditionObjectTrueList);
             String whereSql = " where ";
             if (!ObjectUtil.isNull(whereFalseSql)) {
                 whereSql = whereSql + whereFalseSql;
@@ -67,46 +70,22 @@ public class SelectListMapper extends SelectMapper {
         return "";
     }
 
-    protected String getWhereSql(Set<String> tableSet, TableFactory tableFactory, List<ConditionObject> conditionObjectList) {
+    protected String getWhereSql(String tableName, TableFactory tableFactory, List<ConditionObject> conditionObjectList) {
         List<String> andConditionList = new ArrayList<>();
         List<String> orConditionList = new ArrayList<>();
         if (!ObjectUtil.isNull(conditionObjectList)) {
             for (ConditionObject conditionObject : conditionObjectList) {
-                String table = conditionObject.getTable();
                 String column = conditionObject.getColumn();
                 Condition condition = conditionObject.getCondition();
-                if (!ObjectUtil.isNull(table)) {
-                    if (!tableSet.contains(table)) {
-                        throw new DreamRunTimeException("条件表名限定" + tableSet);
-                    }
-                    TableInfo tableInfo = tableFactory.getTableInfo(table);
-                    ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
-                    String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), conditionObject.getField());
-                    if (conditionObject.isOr()) {
-                        orConditionList.add(conditionSql);
-                    } else {
-                        andConditionList.add(conditionSql);
-                    }
+                TableInfo tableInfo = tableFactory.getTableInfo(tableName);
+                ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
+                String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), conditionObject.getField());
+                if (conditionObject.isOr()) {
+                    orConditionList.add(conditionSql);
                 } else {
-                    List<TableInfo> tableInfoList = tableSet.stream().map(tab -> {
-                        TableInfo tableInfo = tableFactory.getTableInfo(tab);
-                        return tableInfo;
-                    }).filter(tableInfo -> tableInfo.getColumnInfo(conditionObject.getColumn()) != null).collect(Collectors.toList());
-                    if (ObjectUtil.isNull(tableInfoList)) {
-                        throw new DreamRunTimeException("条件字段" + conditionObject.getColumn() + "在" + tableSet + "对应的类未注册");
-                    }
-                    if (tableInfoList.size() > 1) {
-                        throw new DreamRunTimeException("条件字段" + conditionObject.getColumn() + "在" + tableInfoList.stream().map(tableInfo -> tableInfo.getTable()).collect(Collectors.toList()) + "对应的类都存在，请指定具体表名");
-                    }
-                    TableInfo tableInfo = tableInfoList.get(0);
-                    ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
-                    String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), conditionObject.getField());
-                    if (conditionObject.isOr()) {
-                        orConditionList.add(conditionSql);
-                    } else {
-                        andConditionList.add(conditionSql);
-                    }
+                    andConditionList.add(conditionSql);
                 }
+
             }
         }
         String orSql = "";
@@ -123,33 +102,13 @@ public class SelectListMapper extends SelectMapper {
         return orSql + andSql;
     }
 
-    protected String getOrderSql(Class type, Set<String> tableSet, TableFactory tableFactory) {
+    protected String getOrderSql(Class type, String tableName, TableFactory tableFactory) {
         List<SortObject> sortObjectList = TemplateUtil.getSort(type);
         List<String> orderList = new ArrayList<>();
         if (!ObjectUtil.isNull(sortObjectList)) {
             for (SortObject sortObject : sortObjectList) {
-                String table = sortObject.getTable();
-                if (!ObjectUtil.isNull(table)) {
-                    if (!tableSet.contains(table)) {
-                        throw new DreamRunTimeException("排序表名限定" + tableSet);
-                    } else {
-                        TableInfo tableInfo = tableFactory.getTableInfo(table);
-                        orderList.add(table + "." + tableInfo.getColumnInfo(sortObject.getProperty()).getColumn() + " " + sortObject.getOrderType());
-                    }
-                } else {
-                    List<TableInfo> tableInfoList = tableSet.stream().map(tab -> {
-                        TableInfo tableInfo = tableFactory.getTableInfo(tab);
-                        return tableInfo;
-                    }).filter(tableInfo -> tableInfo.getColumnInfo(sortObject.getProperty()) != null).collect(Collectors.toList());
-                    if (ObjectUtil.isNull(tableInfoList)) {
-                        throw new DreamRunTimeException("排序字段" + sortObject.getProperty() + "在" + tableSet + "对应的类未注册");
-                    }
-                    if (tableInfoList.size() > 1) {
-                        throw new DreamRunTimeException("排序字段" + sortObject.getProperty() + "在" + tableInfoList.stream().map(tableInfo -> tableInfo.getTable()).collect(Collectors.toList()) + "对应的类都存在，请指定具体表名");
-                    }
-                    TableInfo tableInfo = tableInfoList.get(0);
-                    orderList.add(tableInfo.getColumnInfo(sortObject.getProperty()).getColumn() + " " + sortObject.getOrderType());
-                }
+                TableInfo tableInfo = tableFactory.getTableInfo(tableName);
+                orderList.add(tableName + "." + tableInfo.getColumnInfo(sortObject.getProperty()).getColumn() + " " + sortObject.getOrderType());
             }
         }
         if (!ObjectUtil.isNull(orderList)) {
