@@ -14,5 +14,4 @@ public interface ProviderAccountMapper {
     AccountView selectProvideById(@Param("id") int id);
     @Provider(type = AccountProvider.class)
     List<AccountView> selectProvideList(@Param("account") AccountView accountView);
-
 }

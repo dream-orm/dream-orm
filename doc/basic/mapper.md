@@ -14,12 +14,6 @@
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Mapper {
-    /**
-     * 接口方法与SQL语句映射辅助类
-     *
-     * @return
-     */
-    Class<?> value() default NullObject.class;
 }
 ```
 
@@ -75,7 +69,44 @@ public @interface Sql {
 
 ## PageQuery注解
 
-## 接口方法增强类
+```java
+/**
+ * 分页查询标识
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface PageQuery {
+    /**
+     * Page地址
+     *
+     * @return
+     */
+    String value() default "page";
+}
+```
+
+| 属性  | 描述               |
+| ----- | ------------------ |
+| value | 对象Page的参数地址 |
+
+## Provider注解
+
+此注解可以把sql语句写在其他位置，另外具有sql增强功能
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Provider {
+    Class type();
+
+    String method() default "";
+}
+```
+
+| 属性   | 描述                                                         |
+| ------ | ------------------------------------------------------------ |
+| type   | 指定sql写在的类                                              |
+| method | 对应类中的方法名（返回值限：String和ActionProvider），如果为空，则取注解绑定的方法名， |
 
 ```java
 /**
@@ -95,7 +126,16 @@ public interface ActionProvider {
      *
      * @return
      */
-    default Action[] initActionList() {
+    default InitAction initAction() {
+        return null;
+    }
+
+    /**
+     * SQL结果遍历行为
+     *
+     * @return
+     */
+    default LoopAction loopAction() {
         return null;
     }
 
@@ -104,7 +144,7 @@ public interface ActionProvider {
      *
      * @return
      */
-    default Action[] destroyActionList() {
+    default DestroyAction destroyAction() {
         return null;
     }
 
@@ -164,17 +204,59 @@ public interface ActionProvider {
 }
 ```
 
-| ActionProvider方法 | 描述                             |
-| ------------------ | -------------------------------- |
-| sql                | SQL语句                          |
-| initActionList     | SQL执行前行为                    |
-| destroyActionList  | SQL执行后行为                    |
-| rowType            | 接受的集合类型，一般系统判断即可 |
-| colType            | 接受的对象类型，一般系统判断即可 |
-| cache              | 是否使用缓存                     |
-| timeOut            | 超时设置                         |
-| statementHandler   | SQL操作最终类                    |
-| resultSetHandler   | 映射数据库查询数据与java对象     |
+| ActionProvider方法 | 描述                               |
+| ------------------ | ---------------------------------- |
+| sql                | SQL语句                            |
+| initAction         | SQL执行前行为                      |
+| loopAction         | 若查询结果为集合，则遍历调用此方法 |
+| destroyAction      | SQL执行后行为                      |
+| rowType            | 接受的集合类型，一般系统判断即可   |
+| colType            | 接受的对象类型，一般系统判断即可   |
+| cache              | 是否使用缓存                       |
+| timeOut            | 超时设置                           |
+| statementHandler   | SQL操作最终类                      |
+| resultSetHandler   | 映射数据库查询数据与java对象       |
+
+**SQL执行前行为**
+
+```
+public interface InitAction {
+    void init(MappedStatement mappedStatement, Session session);
+}
+```
+
+| 参数名          | 描述                     |
+| --------------- | ------------------------ |
+| mappedStatement | 编译后的接口方法详尽信息 |
+| session         | SQL操作会话              |
+
+**SQL遍历行为（查询结果为集合情况）**
+
+```java
+public interface LoopAction {
+    void loop(Object row, MappedStatement mappedStatement, Session session);
+}
+```
+
+| 参数名          | 描述                     |
+| --------------- | ------------------------ |
+| row             | 查询结果集合单个元素     |
+| mappedStatement | 编译后的接口方法详尽信息 |
+| session         | SQL操作会话              |
+
+**SQL执行后行为**
+
+```java
+public interface DestroyAction {
+    Object destroy(Object result, MappedStatement mappedStatement, Session session);
+}
+```
+
+| 参数名          | 描述                     |
+| --------------- | ------------------------ |
+| result          | 数据库查询结果           |
+| mappedStatement | 编译后的接口方法详尽信息 |
+| session         | SQL操作会话              |
 
 ## 测试一：查询单条
 
@@ -595,9 +677,10 @@ public class AccountProvider {
 **编写Mapper接口**
 
 ```java
-@Mapper(AccountProvider.class)
+@Mapper
 public interface ProviderAccountMapper {
-   AccountView selectProvideById(@Param("id") int id);
+    @Provider(type = AccountProvider.class)
+    AccountView selectProvideById(@Param("id") int id);
 }
 ```
 
@@ -684,12 +767,14 @@ public interface ProviderAccountMapper {
 **控制台输出**
 
 ```tex
-方法：com.dream.helloworld.mapper.ProviderAccountMapper.selectProvideList
+sql执行前自定义操作
+查询结果遍历自定义操作
+查询结果遍历自定义操作
+sql执行后自定义操作
+方法：com.dream.helloworld.h2.mapper.ProviderAccountMapper.selectProvideList
 语句：SELECT account.id,account.name,account.age,account.email FROM account WHERE id>?
 参数：[3]
-sql执行前自定义操作
-sql执行后自定义操作
-用时：71ms
+用时：34ms
 查询结果：[AccountView{id=4, name='Sandy', age=21, email='test4'}, AccountView{id=5, name='Billie', age=24, email='test5'}]
 ```
 

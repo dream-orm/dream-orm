@@ -118,10 +118,6 @@ const sidebar: DefaultTheme.Sidebar = {
                 {
                     text: '代理插件',
                     link: '/advance/proxy-plugin'
-                },
-                {
-                    text: '映射拦截',
-                    link: '/advance/extractor'
                 }
             ]
         },
