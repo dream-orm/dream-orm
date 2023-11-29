@@ -5,10 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * 接口可执行标识
- */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Mapper {
+@Target(ElementType.METHOD)
+public @interface Provider {
+    Class type();
+
+    String method() default "";
 }
