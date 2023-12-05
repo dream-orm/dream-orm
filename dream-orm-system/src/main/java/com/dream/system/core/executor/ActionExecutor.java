@@ -28,12 +28,10 @@ public class ActionExecutor implements Executor {
             }
         }
         Object result = nextExecutor.execute(mappedStatement, session);
-        if (!ObjectUtil.isNull(loopActionList)) {
-            if (result != null && result instanceof Collection) {
-                for (LoopAction loopAction : loopActionList) {
-                    for (Object row : (Collection) result) {
-                        loopAction.loop(row, mappedStatement, session);
-                    }
+        if (result != null && !ObjectUtil.isNull(loopActionList) && result instanceof Collection) {
+            for (LoopAction loopAction : loopActionList) {
+                for (Object row : (Collection) result) {
+                    loopAction.loop(row, mappedStatement, session);
                 }
             }
         }

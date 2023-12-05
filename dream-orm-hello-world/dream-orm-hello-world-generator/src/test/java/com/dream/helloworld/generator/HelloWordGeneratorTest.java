@@ -7,7 +7,7 @@ import com.zaxxer.hikari.HikariDataSource;
 public class HelloWordGeneratorTest {
     public static void main(String[] args) {
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl("jdbc:mysql://192.168.0.242/d-open?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai");
+        dataSource.setJdbcUrl("jdbc:mysql://192.168.0.242/sooth?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai");
         dataSource.setUsername("root");
         dataSource.setPassword("BMW#Halu@1234%");
         new Generator(dataSource, new GeneratorHandlerImpl()).generate();
@@ -17,7 +17,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         protected String basePackage() {
-            return "com.dream.codegen";
+            return "com.sooth.micro";
         }
 
         @Override
@@ -32,7 +32,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         public boolean support(String table) {
-            return table.contains("user");
+            return table.contains("micro");
         }
     }
 }
