@@ -1,10 +1,14 @@
 package com.dream.util.reflect;
 
+import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReflectUtil {
     private static ReflectLoader reflectLoader = new ReflectLoader();
@@ -144,5 +148,22 @@ public class ReflectUtil {
         } else {
             return Object.class;
         }
+    }
+
+    public static Map<String, Object> getAnnotationMap(Annotation annotation) {
+        Class<? extends Annotation> annotationType = annotation.annotationType();
+        Method[] methods = annotationType.getDeclaredMethods();
+        Map<String, Object> paramMap = new HashMap<>(4);
+        if (!ObjectUtil.isNull(methods)) {
+            for (Method method : methods) {
+                try {
+                    Object value = method.invoke(annotation);
+                    paramMap.put(method.getName(), value);
+                } catch (Exception e) {
+                    throw new DreamRunTimeException(e);
+                }
+            }
+        }
+        return paramMap;
     }
 }

@@ -11,6 +11,7 @@ public class DefaultInjectFactory implements InjectFactory {
     private Map<Class<? extends Inject>, Inject> injectMap = new LinkedHashMap<>();
 
     public DefaultInjectFactory() {
+        injectMap.put(ActionInject.class, new ActionInject());
         injectMap.put(AnnotationInject.class, new AnnotationInject());
         injectMap.put(PageInject.class, new PageInject(false));
         injectMap.put(EmitInject.class, new EmitInject());

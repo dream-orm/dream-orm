@@ -1,4 +1,4 @@
-package com.dream.system.provider;
+package com.dream.system.action;
 
 import com.dream.system.core.action.DestroyAction;
 import com.dream.system.core.action.InitAction;

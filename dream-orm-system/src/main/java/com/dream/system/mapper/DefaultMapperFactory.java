@@ -1,5 +1,6 @@
 package com.dream.system.mapper;
 
+import com.dream.system.action.ActionProvider;
 import com.dream.system.annotation.Mapper;
 import com.dream.system.annotation.Param;
 import com.dream.system.annotation.Provider;
@@ -12,7 +13,6 @@ import com.dream.system.core.action.InitAction;
 import com.dream.system.core.action.LoopAction;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.statementhandler.StatementHandler;
-import com.dream.system.provider.ActionProvider;
 import com.dream.util.common.NonCollection;
 import com.dream.util.common.ObjectMap;
 import com.dream.util.common.ObjectUtil;
@@ -67,8 +67,8 @@ public class DefaultMapperFactory implements MapperFactory {
             throw new DreamRunTimeException("获取对象" + ActionProvider.class + "失败，" + e.getMessage());
         }
         String sql = getSql(mapperClass, method, actionProvider);
-        if(ObjectUtil.isNull(sql)){
-            throw new DreamRunTimeException(method.getDeclaringClass().getName() + "." + method.getName()+"未绑定SQL");
+        if (ObjectUtil.isNull(sql)) {
+            throw new DreamRunTimeException(method.getDeclaringClass().getName() + "." + method.getName() + "未绑定SQL");
         }
         MethodParam[] methodParamList = getMethodParamList(method);
         Class<? extends Collection> rowType = getRowType(mapperClass, method, actionProvider);

@@ -68,7 +68,6 @@ public class DefaultSession implements Session {
     @Override
     public void commit() {
         executor.commit();
-
     }
 
     @Override

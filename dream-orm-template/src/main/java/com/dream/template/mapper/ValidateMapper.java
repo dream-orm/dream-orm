@@ -10,14 +10,11 @@ import com.dream.template.validate.ValidatedRunTimeException;
 import com.dream.template.validate.Validator;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.common.ObjectWrapper;
-import com.dream.util.exception.DreamRunTimeException;
 import com.dream.util.reflect.ReflectUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +38,7 @@ public abstract class ValidateMapper extends AbstractMapper {
                             Class<? extends Annotation> annotationType = annotation.annotationType();
                             Validated validatedAnnotation = annotationType.getAnnotation(Validated.class);
                             if (validatedAnnotation != null) {
-                                Map<String, Object> paramMap = getParamMap(annotation);
+                                Map<String, Object> paramMap = ReflectUtil.getAnnotationMap(annotation);
                                 Class<? extends Validator> validatorType = validatedAnnotation.value();
                                 Validator validator = ReflectUtil.create(validatorType);
                                 if (validator.isValid(session, validateType, field, getCommand())) {
@@ -61,23 +58,6 @@ public abstract class ValidateMapper extends AbstractMapper {
     }
 
     protected abstract MethodInfo getValidateMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg);
-
-    protected Map<String, Object> getParamMap(Annotation annotation) {
-        Class<? extends Annotation> annotationType = annotation.annotationType();
-        Method[] methods = annotationType.getDeclaredMethods();
-        Map<String, Object> paramMap = new HashMap<>(4);
-        if (!ObjectUtil.isNull(methods)) {
-            for (Method method : methods) {
-                try {
-                    Object value = method.invoke(annotation);
-                    paramMap.put(method.getName(), value);
-                } catch (Exception e) {
-                    throw new DreamRunTimeException(e);
-                }
-            }
-        }
-        return paramMap;
-    }
 
     @Override
     protected Object execute(MethodInfo methodInfo, Object arg) {

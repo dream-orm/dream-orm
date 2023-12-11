@@ -12,6 +12,7 @@ import java.util.List;
 public interface ProviderAccountMapper {
     @Provider(type = AccountProvider.class)
     AccountView selectProvideById(@Param("id") int id);
+
     @Provider(type = AccountProvider.class)
     List<AccountView> selectProvideList(@Param("account") AccountView accountView);
 }

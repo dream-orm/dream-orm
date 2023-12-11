@@ -22,7 +22,7 @@
         <junit.version>4.13.2</junit.version>
         <mysql.version>8.0.28</mysql.version>
         <HikariCP.version>4.0.3</HikariCP.version>
-        <lombok.version> 1.18.28</lombok.version>
+        <lombok.version> 1.18.30</lombok.version>
         <solob-web.version>2.4.1</solob-web.version>
         <taos.version>3.0.2</taos.version>
     </properties>

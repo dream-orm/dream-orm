@@ -1,11 +1,11 @@
 package com.dream.helloworld.h2.mapper.provider;
 
+import com.dream.system.action.ActionProvider;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.core.action.DestroyAction;
 import com.dream.system.core.action.InitAction;
 import com.dream.system.core.action.LoopAction;
 import com.dream.system.core.session.Session;
-import com.dream.system.provider.ActionProvider;
 
 public class AccountProvider {
     public String selectProvideById(Class type) {
