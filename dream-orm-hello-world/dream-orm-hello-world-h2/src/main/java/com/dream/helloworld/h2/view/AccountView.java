@@ -1,6 +1,7 @@
 package com.dream.helloworld.h2.view;
 
 import com.dream.helloworld.h2.table.Account;
+import com.dream.system.annotation.EasyFetch;
 import com.dream.system.annotation.Fetch;
 import com.dream.system.annotation.View;
 
@@ -9,6 +10,7 @@ public class AccountView {
     private Integer id;
     @Fetch(sql = "select concat(name,' fetch test') from account where id=:row.id")
     private String name;
+    @EasyFetch(table = "account",column = "id",field = "id", columns = "age")
     private Integer age;
     private String email;
 

@@ -2,11 +2,12 @@
 
 ## v1.2.7
 
-- 优化：sql执行参数缓存参数名
+- 优化：sql执行参数缓存参数名，可支持记录字段变更
 - 修复：解决配置文件配置多个监听器报错
 - 优化：重构action实现，增加loop
 - 新增：提供provider注解
-- 新增：提供fetch注解、processor注解，ActionProcessor完成一对一，一对多，多对多操作
+- 新增：提供processor注解，ActionProcessor接口
+- 新增：基于提供processor注解、ActionProcessor接口，提供Fetch注解、EasyFetch注解完成一对一，一对多，多对多操作
 
 ## v1.2.6
 
