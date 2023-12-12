@@ -20,7 +20,6 @@ public class PageHandler extends AbstractHandler {
     private boolean offset;
     private Statement first;
     private Statement second;
-    private ToSQL toNativeSQL = new ToNativeSQL();
 
     public PageHandler(Invoker invoker, MethodInfo methodInfo) {
         this.invoker = invoker;

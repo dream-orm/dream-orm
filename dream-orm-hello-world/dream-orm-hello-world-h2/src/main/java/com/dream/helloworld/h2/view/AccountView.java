@@ -1,13 +1,13 @@
 package com.dream.helloworld.h2.view;
 
-import com.dream.helloworld.h2.annotation.Mark;
 import com.dream.helloworld.h2.table.Account;
+import com.dream.system.annotation.Fetch;
 import com.dream.system.annotation.View;
 
 @View(Account.class)
 public class AccountView {
     private Integer id;
-    @Mark(startPos = 0,endPos = 2)
+    @Fetch(sql = "select concat(name,' fetch test') from account where id=:row.id")
     private String name;
     private Integer age;
     private String email;

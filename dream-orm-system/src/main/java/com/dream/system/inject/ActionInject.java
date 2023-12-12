@@ -35,7 +35,8 @@ public class ActionInject implements Inject {
                             Class<? extends ActionProcessor> actionProcessorType = loopActionAnnotation.value();
                             ActionProcessor actionProcessor = ReflectUtil.create(actionProcessorType);
                             Map<String, Object> paramMap = ReflectUtil.getAnnotationMap(annotation);
-                            loopActionList.add(new ProcessorLoopAction(actionProcessor, field.getName(), paramMap));
+                            actionProcessor.init(field, paramMap,methodInfo.getConfiguration());
+                            loopActionList.add(new ProcessorLoopAction(actionProcessor));
                         }
                     }
                 }
@@ -48,20 +49,14 @@ public class ActionInject implements Inject {
 
     class ProcessorLoopAction implements LoopAction {
         private ActionProcessor actionProcessor;
-        private String fieldName;
-        private Map<String, Object> paramMap;
 
-        public ProcessorLoopAction(ActionProcessor actionProcessor, String fieldName, Map<String, Object> paramMap) {
+        public ProcessorLoopAction(ActionProcessor actionProcessor) {
             this.actionProcessor = actionProcessor;
-            this.fieldName = fieldName;
-            this.paramMap = paramMap;
         }
 
         @Override
         public void loop(Object row, MappedStatement mappedStatement, Session session) {
-            if (row != null) {
-                actionProcessor.process(row, fieldName, paramMap);
-            }
+            actionProcessor.loop(row, mappedStatement, session);
         }
     }
 }
