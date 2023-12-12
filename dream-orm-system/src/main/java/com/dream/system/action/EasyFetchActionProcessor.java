@@ -35,7 +35,7 @@ public class EasyFetchActionProcessor implements ActionProcessor {
                 .setConfiguration(configuration)
                 .setRowType(ReflectUtil.getRowType(field.getGenericType()))
                 .setColType(ReflectUtil.getColType(field.getGenericType()))
-                .setSql("select " + (ObjectUtil.isNull(columns) ? "@*()" : String.join(",", columns)) + " from " + table + " where " + column + "=@?(row." + fieldName + ")");
+                .setSql("select " + (ObjectUtil.isNull(columns) ? "@*()" : String.join(",", columns)) + " from " + table + " where " + column + "=@?(" + fieldName + ")");
     }
 
     @Override

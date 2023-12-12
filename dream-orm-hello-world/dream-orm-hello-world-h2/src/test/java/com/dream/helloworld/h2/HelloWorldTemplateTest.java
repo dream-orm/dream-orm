@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -97,6 +98,8 @@ public class HelloWorldTemplateTest {
     public void testSelectOrder() {
         OrderAccountCondition accountCondition = new OrderAccountCondition();
         accountCondition.setName("a");
+        accountCondition.setMinAge(1);
+        accountCondition.setMaxAge(10);
         List<AccountView> accountViews = templateMapper.selectList(AccountView.class, accountCondition);
         System.out.println("查询结果：" + accountViews);
     }
@@ -121,4 +124,48 @@ public class HelloWorldTemplateTest {
         validatedAccountView.setName("123456");
         templateMapper.delete(validatedAccountView);
     }
+
+    @Test
+    public void testBatchInsert() {
+        List<AccountView> accountViews = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            AccountView accountView = new AccountView();
+            accountView.setId(700 + i);
+            accountView.setName("name" + i);
+            accountViews.add(accountView);
+        }
+        templateMapper.batchInsert(accountViews);
+    }
+
+    @Test
+    public void testDeleteById() {
+        templateMapper.deleteById(AccountView.class, 1);
+    }
+
+    @Test
+    public void testDeleteByIds() {
+        templateMapper.deleteByIds(AccountView.class, Arrays.asList(1, 2, 3, 4));
+    }
+
+    @Test
+    public void testUpdateNonById() {
+        AccountView accountView = new AccountView();
+        accountView.setId(1);
+        accountView.setName("哈哈");
+        accountView.setAge(11);
+        templateMapper.updateNonById(accountView);
+    }
+
+    @Test
+    public void testBatchUpdate() {
+        List<AccountView> accountViews = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            AccountView accountView = new AccountView();
+            accountView.setId(700 + i);
+            accountView.setName("name" + i);
+            accountViews.add(accountView);
+        }
+        templateMapper.batchUpdateById(accountViews);
+    }
+
 }

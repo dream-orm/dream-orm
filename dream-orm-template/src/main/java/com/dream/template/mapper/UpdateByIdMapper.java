@@ -12,6 +12,6 @@ public class UpdateByIdMapper extends UpdateMapper {
 
     @Override
     protected String getOther(Configuration configuration, TableInfo tableInfo, Object arg) {
-        return super.getIdWhere(tableInfo, true);
+        return super.getIdWhere(tableInfo);
     }
 }

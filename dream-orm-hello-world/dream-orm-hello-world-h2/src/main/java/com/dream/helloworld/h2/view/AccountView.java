@@ -8,7 +8,7 @@ import com.dream.system.annotation.View;
 @View(Account.class)
 public class AccountView {
     private Integer id;
-    @Fetch(sql = "select concat(name,' fetch test') from account where id=:row.id")
+    @Fetch(sql = "select concat(name,' fetch test') from account where id=:id")
     private String name;
     @EasyFetch(table = "account", column = "id", field = "id", columns = "age")
     private Integer age;

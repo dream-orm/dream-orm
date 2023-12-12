@@ -9,7 +9,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class ObjectMap implements Map<String, Object> {
-    private Object defaultValue;
+    private ObjectWrapper valueWrapper;
     private Map<String, Object> builtMap;
 
     public ObjectMap(Object defaultValue) {
@@ -17,7 +17,7 @@ public class ObjectMap implements Map<String, Object> {
     }
 
     public ObjectMap(Object defaultValue, Map<String, Object> builtMap) {
-        this.defaultValue = defaultValue;
+        this.valueWrapper = ObjectWrapper.wrapper(defaultValue);
         this.builtMap = builtMap;
     }
 
@@ -46,7 +46,7 @@ public class ObjectMap implements Map<String, Object> {
         if (builtMap.containsKey(key)) {
             return builtMap.get(key);
         } else {
-            return defaultValue;
+            return valueWrapper.get((String) key);
         }
     }
 
@@ -140,11 +140,7 @@ public class ObjectMap implements Map<String, Object> {
         return builtMap.merge(key, value, remappingFunction);
     }
 
-    public Object getDefaultValue() {
-        return defaultValue;
-    }
-
-    public Map<String, Object> getBuiltMap() {
-        return builtMap;
+    public ObjectWrapper wrapper() {
+        return valueWrapper;
     }
 }

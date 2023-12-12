@@ -68,9 +68,6 @@ public class ObjectWrapper {
             String token = tokenizer.nextToken();
             Object value = targetFactory.get(token);
             while (tokenizer.hasMoreTokens()) {
-                if (value == null) {
-                    return null;
-                }
                 ObjectWrapper wrapper = ObjectWrapper.wrapper(value);
                 targetFactory = wrapper.objectFactory;
                 token = tokenizer.nextToken();

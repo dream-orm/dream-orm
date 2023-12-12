@@ -4,13 +4,12 @@ import com.dream.system.config.MappedParam;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
-import com.dream.template.mapper.AbstractMapper;
+import com.dream.util.common.ObjectMap;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.common.ObjectWrapper;
 
 import java.lang.reflect.Array;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FetchKeySequence implements SequenceWrapper {
@@ -44,8 +43,8 @@ public class FetchKeySequence implements SequenceWrapper {
     public void sequence(TableInfo tableInfo, MappedStatement mappedStatement, Object result) {
         if (!isAutoIncrement(tableInfo)) {
             sequence.sequence(tableInfo, mappedStatement, result);
-            Map<String, Object> argMap = (Map<String, Object>) mappedStatement.getArg();
-            ObjectWrapper wrapper = ObjectWrapper.wrapper(argMap.get(AbstractMapper.DREAM_TEMPLATE_PARAM));
+            ObjectMap argMap = (ObjectMap) mappedStatement.getArg();
+            ObjectWrapper wrapper = argMap.wrapper();
             List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
             List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
             for (int i = 0; i < primKeys.size(); i++) {
@@ -57,8 +56,8 @@ public class FetchKeySequence implements SequenceWrapper {
         } else {
             List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
             if (!ObjectUtil.isNull(primKeys)) {
-                Map<String, Object> argMap = (Map<String, Object>) mappedStatement.getArg();
-                ObjectWrapper wrapper = ObjectWrapper.wrapper(argMap.get(AbstractMapper.DREAM_TEMPLATE_PARAM));
+                ObjectMap argMap = (ObjectMap) mappedStatement.getArg();
+                ObjectWrapper wrapper = argMap.wrapper();
                 List<String> columnList = primKeys.stream().map(ColumnInfo::getName).collect(Collectors.toList());
                 for (int i = 0; i < columnList.size(); i++) {
                     wrapper.set(columnList.get(i), Array.get(result, 0));

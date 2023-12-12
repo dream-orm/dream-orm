@@ -13,6 +13,7 @@ import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
 import com.dream.system.util.SystemUtil;
+import com.dream.util.common.ObjectMap;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
 
@@ -84,9 +85,7 @@ public abstract class AbstractMapper {
             if (arg instanceof Map) {
                 return (Map<String, Object>) arg;
             } else {
-                Map<String, Object> paramMap = new HashMap<>(4);
-                paramMap.put(DREAM_TEMPLATE_PARAM, arg);
-                return paramMap;
+                return new ObjectMap(arg);
             }
         } else {
             return new HashMap<>(4);
@@ -100,10 +99,6 @@ public abstract class AbstractMapper {
     }
 
     protected String getIdWhere(TableInfo tableInfo) {
-        return getIdWhere(tableInfo, false);
-    }
-
-    protected String getIdWhere(TableInfo tableInfo, boolean appendField) {
         List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
         if (primKeys == null || primKeys.isEmpty()) {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'未注册主键");
@@ -112,11 +107,7 @@ public abstract class AbstractMapper {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'存在多个主键");
         }
         ColumnInfo columnInfo = primKeys.get(0);
-        String param = DREAM_TEMPLATE_PARAM;
-        if (appendField) {
-            param = param + "." + columnInfo.getName();
-        }
-        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + "=" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, param);
+        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + "=" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName());
     }
 
     protected String getIdsWhere(TableInfo tableInfo) {
