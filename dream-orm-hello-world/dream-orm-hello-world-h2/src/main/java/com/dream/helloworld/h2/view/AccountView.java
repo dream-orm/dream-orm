@@ -10,7 +10,7 @@ public class AccountView {
     private Integer id;
     @Fetch(sql = "select concat(name,' fetch test') from account where id=:row.id")
     private String name;
-    @EasyFetch(table = "account",column = "id",field = "id", columns = "age")
+    @EasyFetch(table = "account", column = "id", field = "id", columns = "age")
     private Integer age;
     private String email;
 

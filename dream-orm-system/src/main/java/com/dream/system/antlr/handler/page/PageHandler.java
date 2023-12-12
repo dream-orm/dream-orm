@@ -5,7 +5,6 @@ import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.handler.AbstractHandler;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
-import com.dream.antlr.sql.ToNativeSQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.system.annotation.PageQuery;
 import com.dream.system.config.MethodInfo;

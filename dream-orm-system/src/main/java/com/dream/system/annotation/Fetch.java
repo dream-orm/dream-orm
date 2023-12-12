@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
 public @interface Fetch {
     /**
      * 自定义sql满足复杂开发
+     *
      * @return
      */
     String sql();

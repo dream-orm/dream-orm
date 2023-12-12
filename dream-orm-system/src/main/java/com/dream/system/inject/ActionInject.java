@@ -35,7 +35,7 @@ public class ActionInject implements Inject {
                             Class<? extends ActionProcessor> actionProcessorType = loopActionAnnotation.value();
                             ActionProcessor actionProcessor = ReflectUtil.create(actionProcessorType);
                             Map<String, Object> paramMap = ReflectUtil.getAnnotationMap(annotation);
-                            actionProcessor.init(field, paramMap,methodInfo.getConfiguration());
+                            actionProcessor.init(field, paramMap, methodInfo.getConfiguration());
                             loopActionList.add(new ProcessorLoopAction(actionProcessor));
                         }
                     }
