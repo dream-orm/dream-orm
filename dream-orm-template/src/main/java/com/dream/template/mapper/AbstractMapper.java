@@ -23,7 +23,6 @@ import java.util.Map;
 
 
 public abstract class AbstractMapper {
-    public static final String DREAM_TEMPLATE_PARAM = "dream_template_param";
     protected Session session;
     protected Map<String, MethodInfo> methodInfoMap = new HashMap<>(4);
     private DialectFactory dialectFactory;
@@ -119,7 +118,7 @@ public abstract class AbstractMapper {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'存在多个主键");
         }
         ColumnInfo columnInfo = primKeys.get(0);
-        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, DREAM_TEMPLATE_PARAM) + ")";
+        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, "null") + ")";
     }
 
     protected String getId() {

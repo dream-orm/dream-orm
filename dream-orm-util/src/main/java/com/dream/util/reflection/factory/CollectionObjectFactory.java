@@ -40,9 +40,7 @@ public class CollectionObjectFactory implements ObjectFactory {
     }
 
     protected Object get(Collection result, String property) {
-        if (property == null) {
-            return result;
-        } else if (Character.isDigit(property.charAt(0))) {
+        if (property != null && Character.isDigit(property.charAt(0))) {
             if (!(result instanceof List)) {
                 throw new DreamRunTimeException(result.getClass().getName() + "不支持根据索引获取值");
             }
@@ -54,7 +52,7 @@ public class CollectionObjectFactory implements ObjectFactory {
                 return null;
             }
         } else {
-            throw new DreamRunTimeException(result.getClass().getName() + "不支持获取属性值");
+            return result;
         }
     }
 }

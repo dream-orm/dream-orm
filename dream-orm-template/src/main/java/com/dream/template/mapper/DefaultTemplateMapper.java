@@ -9,11 +9,7 @@ import com.dream.template.sequence.Sequence;
 import com.dream.util.tree.Tree;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static com.dream.template.mapper.AbstractMapper.DREAM_TEMPLATE_PARAM;
 
 public class DefaultTemplateMapper implements TemplateMapper {
     private SelectByIdMapper selectByIdSqlMapper;
@@ -118,9 +114,9 @@ public class DefaultTemplateMapper implements TemplateMapper {
 
     @Override
     public int deleteByIds(Class<?> type, Collection<?> idList) {
-        Map<String, Object> argMap = new HashMap<>();
-        argMap.put(DREAM_TEMPLATE_PARAM, idList);
-        return (int) deleteByIdsSqlMapper.execute(type, argMap);
+//        Map<String, Object> argMap = new HashMap<>();
+//        argMap.put(DREAM_TEMPLATE_PARAM, idList);
+        return (int) deleteByIdsSqlMapper.execute(type, idList);
     }
 
     @Override

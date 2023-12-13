@@ -32,6 +32,12 @@ public class HelloWorldTemplateTest {
         System.out.println("查询结果：" + accountView);
     }
 
+    @Test
+    public void testSelectByIds() {
+        List<AccountView> accountViews = templateMapper.selectByIds(AccountView.class, Arrays.asList(1, 2, 3));
+        System.out.println("查询结果：" + accountViews);
+    }
+
     /**
      * 测试分页
      */
