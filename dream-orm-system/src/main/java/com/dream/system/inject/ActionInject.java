@@ -2,10 +2,8 @@ package com.dream.system.inject;
 
 import com.dream.system.action.ActionProcessor;
 import com.dream.system.annotation.Processor;
-import com.dream.system.config.MappedStatement;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.core.action.LoopAction;
-import com.dream.system.core.session.Session;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.reflect.ReflectUtil;
 
@@ -36,7 +34,7 @@ public class ActionInject implements Inject {
                             ActionProcessor actionProcessor = ReflectUtil.create(actionProcessorType);
                             Map<String, Object> paramMap = ReflectUtil.getAnnotationMap(annotation);
                             actionProcessor.init(field, paramMap, methodInfo.getConfiguration());
-                            loopActionList.add(new ProcessorLoopAction(actionProcessor));
+                            loopActionList.add(actionProcessor);
                         }
                     }
                 }
@@ -44,19 +42,6 @@ public class ActionInject implements Inject {
             if (!ObjectUtil.isNull(loopActionList)) {
                 methodInfo.addLoopAction(loopActionList.toArray(new LoopAction[0]));
             }
-        }
-    }
-
-    class ProcessorLoopAction implements LoopAction {
-        private ActionProcessor actionProcessor;
-
-        public ProcessorLoopAction(ActionProcessor actionProcessor) {
-            this.actionProcessor = actionProcessor;
-        }
-
-        @Override
-        public void loop(Object row, MappedStatement mappedStatement, Session session) {
-            actionProcessor.loop(row, mappedStatement, session);
         }
     }
 }
