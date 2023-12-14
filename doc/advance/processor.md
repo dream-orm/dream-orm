@@ -1,4 +1,4 @@
-# 字段拦截处理
+# 字段拦截
 
 此功能可完成字段修改，列如：加密、解密、掩码、一对一、一对多、多对多等功能，涉及一个注解类和一个接口类。
 
@@ -11,25 +11,31 @@ public @interface Processor {
 }
 ```
 
-| 属性  | 描述       |
-| ----- | ---------- |
-| value | 字段处理类 |
+| 属性  | 描述           |
+| ----- | -------------- |
+| value | 字段拦截处理类 |
 
 ```java
 /**
- * 此接口继承自LoopAction，核心操作在LoopAction提供的方法里，此类仅仅提供额外信息作为辅助
+ * 此接口继承自LoopAction，具备查询结果遍历功能
  */
 public interface ActionProcessor extends LoopAction {
+    /**
+     * 提供额外信息参数，加强版loopAction
+     *
+     * @param field         注解修饰的对象属性
+     * @param paramMap      注解的内容
+     * @param configuration 工厂配置
+     */
     void init(Field field, Map<String, Object> paramMap, Configuration configuration);
 }
-
 ```
 
-| 参数属性      | 描述              |
-| ------------- | ----------------- |
-| field         | 注解修饰的字段    |
-| paramMap      | 注解的内容        |
-| configuration | dream-orm全局配置 |
+| 参数属性      | 描述               |
+| ------------- | ------------------ |
+| field         | 注解修饰的对象属性 |
+| paramMap      | 注解的内容         |
+| configuration | 全局配置           |
 
 **一对一，一对多，多对多**
 

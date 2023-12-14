@@ -88,6 +88,18 @@ const sidebar: DefaultTheme.Sidebar = {
                     link: '/advance/cache'
                 },
                 {
+                    text: '字段拦截',
+                    link: '/advance/processor'
+                },
+                {
+                    text: '动态数据源',
+                    link: '/advance/datasource'
+                },
+                {
+                    text: '事务管理',
+                    link: '/advance/transaction'
+                },
+                {
                     text: '关键字插件',
                     link: '/advance/transform'
                 },
@@ -106,14 +118,6 @@ const sidebar: DefaultTheme.Sidebar = {
                 {
                     text: '动态表名插件',
                     link: '/advance/dynamic'
-                },
-                {
-                    text: '动态数据源',
-                    link: '/advance/datasource'
-                },
-                {
-                    text: '事务管理',
-                    link: '/advance/transaction'
                 },
                 {
                     text: '代理插件',
