@@ -9,8 +9,8 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public class ShareDataSource extends AbstractDataSource {
-    private String primary;
-    private Map<String, DataSource> dataSourceMap;
+    protected String primary;
+    protected Map<String, DataSource> dataSourceMap;
 
     public ShareDataSource(Map<String, DataSource> dataSourceMap) {
         this("master", dataSourceMap);

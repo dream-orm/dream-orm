@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -36,12 +35,13 @@ public class HelloWorldJdbcTest {
         System.out.println(accountViews1);
         System.out.println(accountViews2);
     }
+
     /**
      * 手动选择数据源切换，注解share失效
      */
     @Test
     public void testSelectById2() {
-        DataSourceHolder.use("master",()->{
+        DataSourceHolder.use("master", () -> {
             List<AccountView> accountViews1 = masterAccountMapper.selectList(1);
             List<AccountView> accountViews2 = slaveAccountMapper.selectList(1);
             System.out.println("master数量：" + accountViews1.size());

@@ -114,8 +114,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
 
     @Override
     public int deleteByIds(Class<?> type, Collection<?> idList) {
-//        Map<String, Object> argMap = new HashMap<>();
-//        argMap.put(DREAM_TEMPLATE_PARAM, idList);
         return (int) deleteByIdsSqlMapper.execute(type, idList);
     }
 

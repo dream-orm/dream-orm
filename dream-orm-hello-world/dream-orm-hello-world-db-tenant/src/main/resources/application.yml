@@ -1,0 +1,9 @@
+dream:
+  toSQL: com.dream.antlr.sql.ToMYSQL
+  cache: com.dream.system.cache.MemoryCache
+  listeners:
+    - com.dream.drive.listener.DebugListener
+  mapperPackages:
+    - com.dream.helloworld
+  tablePackages:
+    - com.dream.helloworld
