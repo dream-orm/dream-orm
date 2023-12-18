@@ -1,5 +1,6 @@
 package com.dream.helloworld.h2;
 
+import com.dream.helloworld.h2.table.Account;
 import com.dream.helloworld.h2.view.AccountView;
 import com.dream.jdbc.core.StatementSetter;
 import com.dream.jdbc.mapper.JdbcMapper;
@@ -14,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -140,6 +142,31 @@ public class HelloWorldFlexJdbcTest {
             @Override
             public void setter(PreparedStatement ps, MappedStatement mappedStatement) throws SQLException {
                 ps.setInt(1, accountView.getId());
+            }
+        });
+    }
+
+    /**
+     * 测试批量
+     */
+    @Test
+    public void testBatch() {
+        List<Account>accountList=new ArrayList<>();
+        for(int i=0;i<10;i++){
+            Account account=new Account();
+            account.setId(100+i);
+            account.setName("name"+i);
+            account.setAge(20+i);
+            accountList.add(account);
+        }
+        jdbcMapper.batchExecute("insert into account(id,name,age)values(?,?,?)", accountList, new StatementSetter() {
+            @Override
+            public void setter(PreparedStatement ps, MappedStatement mappedStatement) throws SQLException {
+                Object arg = mappedStatement.getArg();
+                Account account=(Account)arg;
+                ps.setLong(1,account.getId());
+                ps.setString(2,account.getName());
+                ps.setInt(3,account.getAge());
             }
         });
     }
