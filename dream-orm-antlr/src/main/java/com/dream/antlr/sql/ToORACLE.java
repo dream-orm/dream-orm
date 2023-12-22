@@ -24,7 +24,7 @@ public class ToORACLE extends ToPubSQL {
         replaceMap.put("%m", "MM");
         replaceMap.put("%d", "dd");
         replaceMap.put("%e", "dd");
-        replaceMap.put("%h", "HH24");
+        replaceMap.put("%H", "HH24");
         replaceMap.put("%k", "HH24");
         replaceMap.put("%h", "hh");
         replaceMap.put("%l", "hh");
