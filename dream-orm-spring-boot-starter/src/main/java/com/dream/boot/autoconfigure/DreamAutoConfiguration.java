@@ -4,7 +4,7 @@ import com.dream.antlr.factory.DefaultMyFunctionFactory;
 import com.dream.antlr.factory.InvokerFactory;
 import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.invoker.Invoker;
-import com.dream.antlr.sql.ToMYSQL;
+import com.dream.antlr.sql.ToMySQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.boot.factory.SpringTransactionFactory;
 import com.dream.boot.holder.SpringSessionHolder;
@@ -141,7 +141,7 @@ public class DreamAutoConfiguration {
             Class<? extends ToSQL> toSQLType = ReflectUtil.loadClass(strToSQL);
             toSQL = ReflectUtil.create(toSQLType);
         } else {
-            toSQL = new ToMYSQL();
+            toSQL = new ToMySQL();
         }
         return toSQL;
     }

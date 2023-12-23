@@ -10,23 +10,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TenantShareDatasource extends AbstractDataSource {
-    private Map<String, DataSource> dataSourceMap=new HashMap<>();
+    private Map<String, DataSource> dataSourceMap = new HashMap<>();
 
     @Override
     public Connection getConnection() throws SQLException {
         String tenantId = TenantUtil.getTenantId();
         DataSource dataSource = dataSourceMap.get(tenantId);
-        if(dataSource==null){
+        if (dataSource == null) {
             synchronized (this) {
                 dataSource = dataSourceMap.get(tenantId);
                 if (dataSource == null) {
                     //自己获取数据源操作
-                    HikariDataSource hikariDataSource=new HikariDataSource();
+                    HikariDataSource hikariDataSource = new HikariDataSource();
                     hikariDataSource.setJdbcUrl("jdbc:mysql://192.168.0.242/d-open-sun");
                     hikariDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
                     hikariDataSource.setPassword("BMW#Halu@1234%");
                     hikariDataSource.setUsername("root");
-                    dataSource=hikariDataSource;
+                    dataSource = hikariDataSource;
                     dataSourceMap.put(tenantId, dataSource);
                 }
             }

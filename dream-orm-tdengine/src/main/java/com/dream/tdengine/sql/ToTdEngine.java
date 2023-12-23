@@ -40,11 +40,15 @@ public class ToTdEngine extends ToPubSQL {
         if (statement instanceof TdInsertStatement) {
             TdInsertStatement tdInsertStatement = (TdInsertStatement) statement;
             Statement stdTable = tdInsertStatement.getStdTable();
+            Statement tagColumn = tdInsertStatement.getTagColumn();
             ListColumnStatement tags = tdInsertStatement.getTags();
             Statement columns = tdInsertStatement.getColumns();
             StringBuilder builder = new StringBuilder();
             if (stdTable != null) {
                 builder.append(" USING " + toStr(stdTable, assist, invokerList));
+            }
+            if(tagColumn!=null){
+                builder.append(toStr(tagColumn,assist,invokerList));
             }
             if (tags != null) {
                 builder.append(" TAGS(" + toStr(tags, assist, invokerList) + ")");

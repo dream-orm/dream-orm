@@ -10,12 +10,12 @@ import javax.sql.DataSource;
 @FlexAPT
 @SpringBootApplication
 public class HelloWorldDbTenantApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(HelloWorldDbTenantApplication.class, args);
+    }
+
     @Bean
     public DataSource dataSource() {
         return new TenantShareDatasource();
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(HelloWorldDbTenantApplication.class, args);
     }
 }

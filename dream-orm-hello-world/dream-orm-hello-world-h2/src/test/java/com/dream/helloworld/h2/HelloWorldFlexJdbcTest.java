@@ -151,22 +151,22 @@ public class HelloWorldFlexJdbcTest {
      */
     @Test
     public void testBatch() {
-        List<Account>accountList=new ArrayList<>();
-        for(int i=0;i<10;i++){
-            Account account=new Account();
-            account.setId(100+i);
-            account.setName("name"+i);
-            account.setAge(20+i);
+        List<Account> accountList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Account account = new Account();
+            account.setId(100 + i);
+            account.setName("name" + i);
+            account.setAge(20 + i);
             accountList.add(account);
         }
         jdbcMapper.batchExecute("insert into account(id,name,age)values(?,?,?)", accountList, new StatementSetter() {
             @Override
             public void setter(PreparedStatement ps, MappedStatement mappedStatement) throws SQLException {
                 Object arg = mappedStatement.getArg();
-                Account account=(Account)arg;
-                ps.setLong(1,account.getId());
-                ps.setString(2,account.getName());
-                ps.setInt(3,account.getAge());
+                Account account = (Account) arg;
+                ps.setLong(1, account.getId());
+                ps.setString(2, account.getName());
+                ps.setInt(3, account.getAge());
             }
         });
     }

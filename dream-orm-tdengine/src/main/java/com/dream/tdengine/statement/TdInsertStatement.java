@@ -6,6 +6,7 @@ import com.dream.antlr.smt.Statement;
 
 public class TdInsertStatement extends InsertStatement {
     private Statement stdTable;
+    private Statement tagColumn;
     private ListColumnStatement tags;
 
     @Override
@@ -19,6 +20,14 @@ public class TdInsertStatement extends InsertStatement {
 
     public void setStdTable(Statement stdTable) {
         this.stdTable = wrapParent(stdTable);
+    }
+
+    public Statement getTagColumn() {
+        return tagColumn;
+    }
+
+    public void setTagColumn(Statement tagColumn) {
+        this.tagColumn = tagColumn;
     }
 
     public ListColumnStatement getTags() {

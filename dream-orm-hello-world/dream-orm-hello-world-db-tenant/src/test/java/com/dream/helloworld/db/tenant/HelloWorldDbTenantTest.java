@@ -2,7 +2,6 @@ package com.dream.helloworld.db.tenant;
 
 import com.dream.helloworld.db.tenant.mapper.AccountMapper;
 import com.dream.helloworld.db.tenant.view.AccountView;
-import com.dream.mate.share.holder.DataSourceHolder;
 import com.dream.template.mapper.TemplateMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;

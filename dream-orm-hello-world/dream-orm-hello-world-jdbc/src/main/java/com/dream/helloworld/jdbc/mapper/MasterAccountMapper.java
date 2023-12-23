@@ -9,6 +9,7 @@ import com.dream.system.annotation.Sql;
 import com.dream.system.config.Page;
 
 import java.util.List;
+
 @Share("master")
 @Mapper
 public interface MasterAccountMapper {

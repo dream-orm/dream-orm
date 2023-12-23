@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * mssql方言
  */
-public class ToMSSQL extends ToPubSQL {
+public class ToSQLServer extends ToPubSQL {
 
     @Override
     protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {

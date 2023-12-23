@@ -1,7 +1,9 @@
 package com.dream.tdengine.def;
 
+import com.dream.antlr.smt.BraceStatement;
 import com.dream.antlr.smt.InsertStatement;
 import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.antlr.smt.SymbolStatement;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.InsertIntoColumnsDef;
@@ -11,10 +13,7 @@ import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.statement.TdInsertStatement;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implements InsertIntoColumnsDef<TdChainInsertIntoValuesDef, TdChainInsertDef> {
     public TdChainInsertIntoColumnsDef(InsertStatement statement, InsertCreatorFactory creatorFactory, FlexMapper flexMapper) {
@@ -42,6 +41,20 @@ public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implem
             listColumnStatement.add(new FlexMarkInvokerStatement(value));
         }
         tdInsertStatement.setTags(listColumnStatement);
+        return this;
+    }
+
+    public TdChainInsertIntoColumnsDef tagMap(Map<String,Object>tagMap) {
+        TdInsertStatement tdInsertStatement = (TdInsertStatement) statement();
+        Set<Map.Entry<String, Object>> entrySet = tagMap.entrySet();
+        ListColumnStatement tagColumnStatement = new ListColumnStatement(",");
+        ListColumnStatement tagValueStatement = new ListColumnStatement(",");
+        for(Map.Entry<String,Object>entry:entrySet){
+            tagColumnStatement.add(new SymbolStatement.SingleMarkStatement(entry.getKey()));
+            tagValueStatement.add(new FlexMarkInvokerStatement(entry.getValue()));
+        }
+        tdInsertStatement.setTagColumn(new BraceStatement(tagColumnStatement));
+        tdInsertStatement.setTags(tagValueStatement);
         return this;
     }
 

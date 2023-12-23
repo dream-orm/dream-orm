@@ -6,7 +6,7 @@ import com.dream.antlr.factory.AntlrInvokerFactory;
 import com.dream.antlr.factory.InvokerFactory;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.Statement;
-import com.dream.antlr.sql.ToMYSQL;
+import com.dream.antlr.sql.ToMySQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.config.SqlInfo;
 import com.dream.flex.def.DeleteDef;
@@ -24,7 +24,7 @@ public class FlexDebug {
     private ToSQL toSQL;
 
     public FlexDebug() {
-        this(new ToMYSQL());
+        this(new ToMySQL());
     }
 
     public FlexDebug(ToSQL toSQL) {

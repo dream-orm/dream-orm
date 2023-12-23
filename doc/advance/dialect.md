@@ -36,7 +36,7 @@
 
 ```yaml
 dream:
-  toSQL: com.dream.antlr.sql.ToMYSQL
+  toSQL: com.dream.antlr.sql.ToMySQL
 ```
 
 若内置方言无法满足，可以继承接口[ToPubSQL](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-antlr/src/main/java/com/dream/antlr/sql/ToPubSQL.java)实现自己的方言。

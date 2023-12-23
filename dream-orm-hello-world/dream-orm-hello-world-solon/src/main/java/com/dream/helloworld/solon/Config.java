@@ -1,6 +1,6 @@
 package com.dream.helloworld.solon;
 
-import com.dream.antlr.sql.ToMYSQL;
+import com.dream.antlr.sql.ToMySQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.helloworld.solon.mapper.UserMapper;
@@ -35,6 +35,6 @@ public class Config {
 
     @Bean
     public ToSQL toSQL() {
-        return new ToMYSQL();
+        return new ToMySQL();
     }
 }
