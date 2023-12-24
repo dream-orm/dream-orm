@@ -47,8 +47,8 @@ public class ToTdEngine extends ToPubSQL {
             if (stdTable != null) {
                 builder.append(" USING " + toStr(stdTable, assist, invokerList));
             }
-            if(tagColumn!=null){
-                builder.append(toStr(tagColumn,assist,invokerList));
+            if (tagColumn != null) {
+                builder.append(toStr(tagColumn, assist, invokerList));
             }
             if (tags != null) {
                 builder.append(" TAGS(" + toStr(tags, assist, invokerList) + ")");

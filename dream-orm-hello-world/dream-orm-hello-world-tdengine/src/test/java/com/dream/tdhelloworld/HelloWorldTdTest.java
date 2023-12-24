@@ -90,14 +90,15 @@ public class HelloWorldTdTest {
 
     @Test
     public void testInsertFixTag() {
-        Map<String,Object>tagMap=new LinkedHashMap<>();
-        tagMap.put("a","abc");
-        tagMap.put("b","bcd");
+        Map<String, Object> tagMap = new LinkedHashMap<>();
+        tagMap.put("a", "abc");
+        tagMap.put("b", "bcd");
         Map<String, Object> strMap = new HashMap();
         strMap.put("name", "aaa");
         strMap.put("age", 22);
         flexTdMapper.insertInto("d1001").using("aa").tagMap(tagMap).valuesStrMap(strMap).execute();
     }
+
     /**
      * 测试插入多条
      */

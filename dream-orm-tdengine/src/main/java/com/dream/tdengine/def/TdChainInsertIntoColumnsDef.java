@@ -44,12 +44,12 @@ public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implem
         return this;
     }
 
-    public TdChainInsertIntoColumnsDef tagMap(Map<String,Object>tagMap) {
+    public TdChainInsertIntoColumnsDef tagMap(Map<String, Object> tagMap) {
         TdInsertStatement tdInsertStatement = (TdInsertStatement) statement();
         Set<Map.Entry<String, Object>> entrySet = tagMap.entrySet();
         ListColumnStatement tagColumnStatement = new ListColumnStatement(",");
         ListColumnStatement tagValueStatement = new ListColumnStatement(",");
-        for(Map.Entry<String,Object>entry:entrySet){
+        for (Map.Entry<String, Object> entry : entrySet) {
             tagColumnStatement.add(new SymbolStatement.SingleMarkStatement(entry.getKey()));
             tagValueStatement.add(new FlexMarkInvokerStatement(entry.getValue()));
         }

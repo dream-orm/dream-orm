@@ -47,6 +47,13 @@ public class HelloWorldFlexTest {
         System.out.println("查询结果：" + accountViews);
     }
 
+    @Test
+    public void testSelectList2() {
+        QueryDef queryDef = select(account.accountView).from(account);
+        List<List> accountViews = flexMapper.selectList(queryDef, List.class);
+        System.out.println("查询结果：" + accountViews);
+    }
+
     /**
      * 测试分页查询
      */

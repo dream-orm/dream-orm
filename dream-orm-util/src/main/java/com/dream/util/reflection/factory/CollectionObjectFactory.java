@@ -22,11 +22,7 @@ public class CollectionObjectFactory implements ObjectFactory {
 
     @Override
     public void set(String property, Object value) {
-        if (property == null) {
-            result.add(value);
-        } else {
-            throw new DreamRunTimeException(result.getClass().getName() + "不支持修改属性值");
-        }
+        result.add(value);
     }
 
     @Override

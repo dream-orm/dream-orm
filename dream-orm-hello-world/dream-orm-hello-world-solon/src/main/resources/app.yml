@@ -33,7 +33,6 @@ dream:
       jdbcUrl: jdbc:mysql://192.168.0.3/d-open-6c
       username: root
       password: BMW#Halu@1234%
-  toSQL: com.dream.antlr.sql.ToMYSQL
   cache: com.dream.system.cache.MemoryCache
   listeners:
     - com.dream.drive.listener.DebugListener

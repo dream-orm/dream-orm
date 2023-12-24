@@ -193,7 +193,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         Class colType = mappedResult.getColType();
         if (ReflectUtil.isBaseClass(colType)) {
             return linkHandlerForBase(builder, mappedStatement, mappedResult, tableSet);
-        } else if (Map.class.isAssignableFrom(colType)) {
+        } else if (Map.class.isAssignableFrom(colType) || Collection.class.isAssignableFrom(colType)) {
             return linkHandlerForMap(builder, mappedStatement, mappedResult, tableSet);
         } else {
             return linkHandlerForClass(builder, mappedStatement, mappedResult, tableSet);
