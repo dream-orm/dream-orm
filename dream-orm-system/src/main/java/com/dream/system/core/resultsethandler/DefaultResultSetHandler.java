@@ -116,9 +116,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         ObjectFactory objectFactory = mappedResult.newColObjectFactory();
         for (MappedColumn mappedColumn : mappedColumnList) {
             Object value = mappedColumn.getValue(resultSet);
-            if (value != null) {
-                objectFactory.set(mappedColumn.getProperty(), value);
-            }
+            objectFactory.set(mappedColumn.getProperty(), value);
         }
         return objectFactory;
     }
