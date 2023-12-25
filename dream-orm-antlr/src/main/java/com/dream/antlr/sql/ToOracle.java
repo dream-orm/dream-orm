@@ -199,6 +199,16 @@ public class ToOracle extends ToPubSQL {
     }
 
     @Override
+    protected String toString(CastTypeStatement.DateCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-MM-dd')";
+    }
+
+    @Override
+    protected String toString(CastTypeStatement.DateTimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-MM-dd HH24:mi:ss')";
+    }
+
+    @Override
     protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS INT)";
     }
@@ -216,6 +226,16 @@ public class ToOracle extends ToPubSQL {
     @Override
     protected String toString(ConvertTypeStatement.DecimalConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS DECIMAL" + toStr(statement.getParamStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.DateConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-MM-dd')";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.DateTimeConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-MM-dd HH24:mi:ss')";
     }
 
     @Override

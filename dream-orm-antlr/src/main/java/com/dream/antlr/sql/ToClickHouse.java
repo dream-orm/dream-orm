@@ -218,6 +218,25 @@ public class ToClickHouse extends ToPubSQL {
     }
 
     @Override
+    protected String toString(CastTypeStatement.DecimalCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement paramStatement = statement.getParamStatement();
+        Statement decimalStatement=null;
+        if(paramStatement!=null&&paramStatement instanceof BraceStatement){
+            BraceStatement braceStatement=(BraceStatement) paramStatement;
+            Statement braceParamStatement = braceStatement.getStatement();
+            if(braceParamStatement!=null&&braceParamStatement instanceof ListColumnStatement){
+                ListColumnStatement listColumnStatement=(ListColumnStatement)braceParamStatement;
+                Statement[] columnList = listColumnStatement.getColumnList();
+                if(columnList.length==2){
+                    decimalStatement=columnList[1];
+                }
+            }
+        }
+        return "toDecimal64(" + toStr(statement.getStatement(), assist, invokerList)+","+(decimalStatement==null?"0":toStr(decimalStatement,assist,invokerList)) + ")";
+
+    }
+
+    @Override
     protected String toString(CastTypeStatement.DateTimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "toDateTime(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
@@ -225,6 +244,11 @@ public class ToClickHouse extends ToPubSQL {
     @Override
     protected String toString(CastTypeStatement.DateCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "toDate(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(CastTypeStatement.TimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toTime(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -243,6 +267,24 @@ public class ToClickHouse extends ToPubSQL {
     }
 
     @Override
+    protected String toString(ConvertTypeStatement.DecimalConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement paramStatement = statement.getParamStatement();
+        Statement decimalStatement=null;
+        if(paramStatement!=null&&paramStatement instanceof BraceStatement){
+            BraceStatement braceStatement=(BraceStatement) paramStatement;
+            Statement braceParamStatement = braceStatement.getStatement();
+            if(braceParamStatement!=null&&braceParamStatement instanceof ListColumnStatement){
+                ListColumnStatement listColumnStatement=(ListColumnStatement)braceParamStatement;
+                Statement[] columnList = listColumnStatement.getColumnList();
+                if(columnList.length==2){
+                    decimalStatement=columnList[1];
+                }
+            }
+        }
+        return "toDecimal64(" + toStr(statement.getStatement(), assist, invokerList)+","+(decimalStatement==null?"0":toStr(decimalStatement,assist,invokerList)) + ")";
+    }
+
+    @Override
     protected String toString(ConvertTypeStatement.DateTimeConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "toDateTime(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
@@ -250,6 +292,11 @@ public class ToClickHouse extends ToPubSQL {
     @Override
     protected String toString(ConvertTypeStatement.DateConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "toDate(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.TimeConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toTime(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
     @Override
