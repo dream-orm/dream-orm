@@ -20,12 +20,12 @@ public class ToPostgreSQL extends ToPubSQL {
     public ToPostgreSQL() {
         replaceMap.put("%Y", "yyyy");
         replaceMap.put("%y", "yy");
-        replaceMap.put("%c", "MM");
-        replaceMap.put("%m", "MM");
+        replaceMap.put("%c", "mm");
+        replaceMap.put("%m", "mm");
         replaceMap.put("%d", "dd");
         replaceMap.put("%e", "dd");
-        replaceMap.put("%H", "HH24");
-        replaceMap.put("%k", "HH24");
+        replaceMap.put("%H", "hh24");
+        replaceMap.put("%k", "hh24");
         replaceMap.put("%h", "hh");
         replaceMap.put("%l", "hh");
         replaceMap.put("%i", "mi");
@@ -288,6 +288,80 @@ public class ToPostgreSQL extends ToPubSQL {
         String s1 = toStr(columnList[0], assist, invokerList);
         String s2 = toStr(columnList[1], assist, invokerList);
         return "FLOOR(" + s1 + "*POWER(10," + s2 + "))*POWER(10,-" + s2 + ")";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.YearIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "INTERVAL '" + res + " YEAR'";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.QuarterIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        if (Character.isDigit(res.charAt(0))) {
+            return "INTERVAL '" + Integer.valueOf(res) * 3 + " MONTH'";
+        } else {
+            return "(INTERVAL '" + res + " MONTH'"+"+"+"INTERVAL '" + res + " MONTH'"+"+"+"INTERVAL '" + res + " MONTH')";
+        }
+    }
+
+    @Override
+    protected String toString(IntervalStatement.MonthIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "INTERVAL '" + res + " MONTH'";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.DayIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "INTERVAL '" + res + " DAY'";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.HourIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "INTERVAL '" + res + " HOUR'";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.MinuteIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "INTERVAL '" + res + " MINUTE'";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.SecondIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "INTERVAL '" + res + " SECOND'";
     }
 
     @Override

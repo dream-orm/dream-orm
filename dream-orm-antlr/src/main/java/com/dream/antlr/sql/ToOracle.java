@@ -20,12 +20,12 @@ public class ToOracle extends ToPubSQL {
     public ToOracle() {
         replaceMap.put("%Y", "yyyy");
         replaceMap.put("%y", "yy");
-        replaceMap.put("%c", "MM");
-        replaceMap.put("%m", "MM");
+        replaceMap.put("%c", "mm");
+        replaceMap.put("%m", "mm");
         replaceMap.put("%d", "dd");
         replaceMap.put("%e", "dd");
-        replaceMap.put("%H", "HH24");
-        replaceMap.put("%k", "HH24");
+        replaceMap.put("%H", "hh24");
+        replaceMap.put("%k", "hh24");
         replaceMap.put("%h", "hh");
         replaceMap.put("%l", "hh");
         replaceMap.put("%i", "mi");
@@ -200,12 +200,12 @@ public class ToOracle extends ToPubSQL {
 
     @Override
     protected String toString(CastTypeStatement.DateCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-MM-dd')";
+        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-mm-dd')";
     }
 
     @Override
     protected String toString(CastTypeStatement.DateTimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-MM-dd HH24:mi:ss')";
+        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-mm-dd hh24:mi:ss')";
     }
 
     @Override
@@ -230,12 +230,12 @@ public class ToOracle extends ToPubSQL {
 
     @Override
     protected String toString(ConvertTypeStatement.DateConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-MM-dd')";
+        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-mm-dd')";
     }
 
     @Override
     protected String toString(ConvertTypeStatement.DateTimeConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-MM-dd HH24:mi:ss')";
+        return "TO_DATE(" + toStr(statement.getStatement(), assist, invokerList) + ",'yyyy-mm-dd hh24:mi:ss')";
     }
 
     @Override
@@ -357,8 +357,84 @@ public class ToOracle extends ToPubSQL {
 
 
     @Override
+    protected String toString(IntervalStatement.YearIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (!(numStatement instanceof SymbolStatement.StrStatement)) {
+            res = "'" + res + "'";
+        }
+        return "INTERVAL " + res + " YEAR";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.QuarterIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        if (Character.isDigit(res.charAt(0))) {
+            return "INTERVAL '" + Integer.valueOf(res) * 3 + "' MONTH";
+        } else {
+            return "(INTERVAL '" + res + "' MONTH" + "INTERVAL '" + res + "' MONTH" + "INTERVAL '" + res + "' MONTH)";
+        }
+    }
+
+    @Override
+    protected String toString(IntervalStatement.MonthIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (!(numStatement instanceof SymbolStatement.StrStatement)) {
+            res = "'" + res + "'";
+        }
+        return "INTERVAL " + res + " MONTH";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.DayIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (!(numStatement instanceof SymbolStatement.StrStatement)) {
+            res = "'" + res + "'";
+        }
+        return "INTERVAL " + res + " DAY";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.HourIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (!(numStatement instanceof SymbolStatement.StrStatement)) {
+            res = "'" + res + "'";
+        }
+        return "INTERVAL " + res + " HOUR";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.MinuteIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (!(numStatement instanceof SymbolStatement.StrStatement)) {
+            res = "'" + res + "'";
+        }
+        return "INTERVAL " + res + " MINUTE";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.SecondIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (!(numStatement instanceof SymbolStatement.StrStatement)) {
+            res = "'" + res + "'";
+        }
+        return "INTERVAL " + res + " SECOND";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getParamsStatement(), assist, invokerList);
+        ListColumnStatement paramsStatement = (ListColumnStatement) statement.getParamsStatement();
+        Statement[] columnList = paramsStatement.getColumnList();
+        return toStr(columnList[0], assist, invokerList) + "+" + toStr(columnList[1], assist, invokerList);
     }
 
     @Override

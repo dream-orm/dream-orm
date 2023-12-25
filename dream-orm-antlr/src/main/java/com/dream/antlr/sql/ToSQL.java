@@ -407,6 +407,27 @@ public abstract class ToSQL {
             case 589882770://YearStatement
                 sql = toString((FunctionStatement.YearStatement) statement, assist, invokerList);
                 break;
+            case 849271629://YearIntervalStatement
+                sql = toString((IntervalStatement.YearIntervalStatement) statement, assist, invokerList);
+                break;
+            case -729227010://QuarterIntervalStatement
+                sql = toString((IntervalStatement.QuarterIntervalStatement) statement, assist, invokerList);
+                break;
+            case 2023754666://MonthIntervalStatement
+                sql = toString((IntervalStatement.MonthIntervalStatement) statement, assist, invokerList);
+                break;
+            case 1435635214://DayIntervalStatement
+                sql = toString((IntervalStatement.DayIntervalStatement) statement, assist, invokerList);
+                break;
+            case 2048430214://HourIntervalStatement
+                sql = toString((IntervalStatement.HourIntervalStatement) statement, assist, invokerList);
+                break;
+            case 2068434518://MinuteIntervalStatement
+                sql = toString((IntervalStatement.MinuteIntervalStatement) statement, assist, invokerList);
+                break;
+            case -1888568330://SecondIntervalStatement
+                sql = toString((IntervalStatement.SecondIntervalStatement) statement, assist, invokerList);
+                break;
             case 12913433://YearDateAddStatement
                 sql = toString((DateOperStatement.YearDateAddStatement) statement, assist, invokerList);
                 break;
@@ -655,6 +676,20 @@ public abstract class ToSQL {
     protected abstract String toString(ForUpdateNoWaitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(AliasStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(IntervalStatement.YearIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(IntervalStatement.QuarterIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(IntervalStatement.MonthIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(IntervalStatement.DayIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(IntervalStatement.HourIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(IntervalStatement.MinuteIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(IntervalStatement.SecondIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(DateOperStatement.YearDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

@@ -4,6 +4,7 @@ package com.dream.helloworld.h2;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.expr.PackageExpr;
 import com.dream.antlr.read.ExprReader;
+import com.dream.antlr.smt.IntervalStatement;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.sql.*;
 import org.junit.Test;
@@ -24,6 +25,11 @@ public class HelloWorldAntlrTest {
     @Test
     public void testAlias() {
         testSqlForMany("SELECT a.'a', a.`b` 'b',c `c`,e as e,f as 'f',g as 'g'");
+    }
+
+    @Test
+    public void testInterval() {
+        testSqlForMany("select * from sys_oper_log where oper_time<CURDATE()-INTERVAL 1 YEAR-INTERVAL 1 QUARTER-INTERVAL 1 month-INTERVAL 1 DAY+INTERVAL 1 HOUR+INTERVAL 1 minute+INTERVAL 1 second");
     }
 
     @Test

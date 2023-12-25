@@ -85,6 +85,41 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(IntervalStatement.YearIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "INTERVAL " + toStr(statement.getStatement(), assist, invokerList) + " YEAR";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.QuarterIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "INTERVAL " + toStr(statement.getStatement(), assist, invokerList) + " QUARTER";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.MonthIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "INTERVAL " + toStr(statement.getStatement(), assist, invokerList) + " MONTH";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.DayIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "INTERVAL " + toStr(statement.getStatement(), assist, invokerList) + " DAY";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.HourIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "INTERVAL " + toStr(statement.getStatement(), assist, invokerList) + " HOUR";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.MinuteIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "INTERVAL " + toStr(statement.getStatement(), assist, invokerList) + " MINUTE";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.SecondIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "INTERVAL " + toStr(statement.getStatement(), assist, invokerList) + " SECOND";
+    }
+
+    @Override
     protected String toString(DateOperStatement.YearDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "DATE_ADD(" + toStr(statement.getDate(), assist, invokerList) + ",INTERVAL " + toStr(statement.getQty(), assist, invokerList) + " YEAR)";
     }
@@ -657,7 +692,7 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getParamsStatement(), assist, invokerList);
+        return "DATE_ADD(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
