@@ -209,6 +209,16 @@ public class ToOracle extends ToPubSQL {
     }
 
     @Override
+    protected String toString(ConvertTypeStatement.FloatConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS FLOAT)";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.DecimalConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS DECIMAL" + toStr(statement.getParamStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(LimitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         if (statement.isOffset()) {
             StringBuilder builder = new StringBuilder();

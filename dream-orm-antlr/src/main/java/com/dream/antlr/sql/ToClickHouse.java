@@ -101,7 +101,7 @@ public class ToClickHouse extends ToPubSQL {
         if (columnList.length == 2) {
             return "position(" + toStr(columnList[1], assist, invokerList) + "," + toStr(columnList[0], assist, invokerList) + ")";
         } else {
-            return "position(" + toStr(columnList[1], assist, invokerList) + "," + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[3], assist, invokerList) + ")";
+            return "position(" + toStr(columnList[1], assist, invokerList) + "," + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[2], assist, invokerList) + ")";
         }
     }
 
@@ -213,6 +213,21 @@ public class ToClickHouse extends ToPubSQL {
     }
 
     @Override
+    protected String toString(CastTypeStatement.FloatCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toFloat64(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(CastTypeStatement.DateTimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toDateTime(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(CastTypeStatement.DateCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toDate(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "toInt64(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
@@ -220,6 +235,21 @@ public class ToClickHouse extends ToPubSQL {
     @Override
     protected String toString(ConvertTypeStatement.CharConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "toString(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.FloatConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toFloat64(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.DateTimeConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toDateTime(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.DateConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toDate(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
     @Override
