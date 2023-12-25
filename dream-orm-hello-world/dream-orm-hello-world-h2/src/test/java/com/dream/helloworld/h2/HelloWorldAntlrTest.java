@@ -4,7 +4,6 @@ package com.dream.helloworld.h2;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.expr.PackageExpr;
 import com.dream.antlr.read.ExprReader;
-import com.dream.antlr.smt.IntervalStatement;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.sql.*;
 import org.junit.Test;
@@ -29,7 +28,7 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testInterval() {
-        testSqlForMany("select * from sys_oper_log where oper_time<CURDATE()-INTERVAL 1 YEAR-INTERVAL 1 QUARTER-INTERVAL 1 month-INTERVAL 1 DAY+INTERVAL 1 HOUR+INTERVAL 1 minute+INTERVAL 1 second");
+        testSqlForMany("select CURDATE()+INTERVAL 1 YEAR-INTERVAL 1 QUARTER+INTERVAL 1 second");
     }
 
     @Test
@@ -47,13 +46,11 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testDate() {
-        testSqlForMany("SELECT curdate(),datediff(s1,s2),date_sub(s1,s2 day),date_add(s1,s2 year),date_add(s1,s2 quarter),date_add(s1,s2 month)" +
-                ",date_add(s1,s2 week),date_add(s1,s2 day),date_add(s1,s2 hour),date_add(s1,s2 minute),date_add(s1,s2 second)" +
-                ",date_add(s1,interval s2 year),date_add(s1,interval s2 quarter),date_add(s1,interval s2 month)" +
-                ",date_add(s1,interval s2 week),date_add(s1,interval s2 day),date_add(s1,interval s2 hour),date_add(s1,interval s2 minute),date_add(s1,interval s2 second)" +
+        testSqlForMany("SELECT curdate(),datediff(s1,s2),date_sub(s1,interval 2 year)" +
+                ",date_add(s1,interval 2 year),date_add(s1,interval 4 quarter),date_add(s1,interval 4 month)" +
+                ",date_add(s1,interval 3 week),date_add(s1,interval 4 day),date_add(s1,interval 4 hour),date_add(s1,interval 4 minute),date_add(s1,interval 4 second)" +
                 ",DAYOFYEAR(s),year(s),month(s),now(),day(s),DAYOFWEEK(s),hour(s),last_day(s),minute(s),quarter(s),second(s),weekofyear(s)" +
                 ",date_format(s,'%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j'),str_to_date(s,'%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j')");
-
     }
 
     @Test

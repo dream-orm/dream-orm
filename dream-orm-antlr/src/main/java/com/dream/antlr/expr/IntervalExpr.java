@@ -14,6 +14,7 @@ public class IntervalExpr extends HelperExpr {
     private IntervalStatement intervalStatement;
 
     private Statement statement;
+
     public IntervalExpr(ExprReader exprReader) {
         this(exprReader, () -> new SymbolExpr(exprReader));
     }
@@ -33,7 +34,7 @@ public class IntervalExpr extends HelperExpr {
     @Override
     protected Statement exprHelp(Statement statement) throws AntlrException {
         setExprTypes(ExprType.YEAR, ExprType.QUARTER, ExprType.MONTH, ExprType.WEEK, ExprType.DAY, ExprType.HOUR, ExprType.MINUTE, ExprType.SECOND);
-        this.statement=statement;
+        this.statement = statement;
         return expr();
     }
 

@@ -123,83 +123,93 @@ public class ToClickHouse extends ToPubSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.YearDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "plus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalYear(" + toStr(statement.getQty(), assist, invokerList) + "))";
+    protected String toString(IntervalStatement.YearIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "toIntervalYear(" + res + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.YearDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "minus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalYear(" + toStr(statement.getQty(), assist, invokerList) + "))";
+    protected String toString(IntervalStatement.QuarterIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "toIntervalQuarter(" + res + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.QuarterDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "plus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalQuarter(" + toStr(statement.getQty(), assist, invokerList) + "))";
+    protected String toString(IntervalStatement.MonthIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "toIntervalMonth(" + res + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.QuarterDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "minus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalQuarter(" + toStr(statement.getQty(), assist, invokerList) + "))";
+    protected String toString(IntervalStatement.WeekIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "toIntervalWeek(" + res + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.MonthDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "plus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalMonth(" + toStr(statement.getQty(), assist, invokerList) + "))";
+    protected String toString(IntervalStatement.DayIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "toIntervalDay(" + res + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.MonthDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "minus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalMonth(" + toStr(statement.getQty(), assist, invokerList) + "))";
+    protected String toString(IntervalStatement.HourIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "toIntervalHour(" + res + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.WeekDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "plus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalWeek(" + toStr(statement.getQty(), assist, invokerList) + "))";
+    protected String toString(IntervalStatement.MinuteIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "toIntervalMinute(" + res + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.WeekDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "minus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalWeek(" + toStr(statement.getQty(), assist, invokerList) + "))";
+    protected String toString(IntervalStatement.SecondIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "toIntervalSecond(" + res + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.DayDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "plus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalDay(" + toStr(statement.getQty(), assist, invokerList) + "))";
+    protected String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "plus(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(DateOperStatement.DayDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "minus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalDay(" + toStr(statement.getQty(), assist, invokerList) + "))";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.HourDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "plus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalHour(" + toStr(statement.getQty(), assist, invokerList) + "))";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.HourDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "minus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalHour(" + toStr(statement.getQty(), assist, invokerList) + "))";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.MinuteDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "plus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalMinute(" + toStr(statement.getQty(), assist, invokerList) + "))";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.MinuteDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "minus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalMinute(" + toStr(statement.getQty(), assist, invokerList) + "))";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.SecondDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "plus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalSecond(" + toStr(statement.getQty(), assist, invokerList) + "))";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.SecondDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "minus(" + toStr(statement.getDate(), assist, invokerList) + ",toIntervalSecond(" + toStr(statement.getQty(), assist, invokerList) + "))";
+    protected String toString(FunctionStatement.DateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "minus(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -220,19 +230,19 @@ public class ToClickHouse extends ToPubSQL {
     @Override
     protected String toString(CastTypeStatement.DecimalCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement paramStatement = statement.getParamStatement();
-        Statement decimalStatement=null;
-        if(paramStatement!=null&&paramStatement instanceof BraceStatement){
-            BraceStatement braceStatement=(BraceStatement) paramStatement;
+        Statement decimalStatement = null;
+        if (paramStatement != null && paramStatement instanceof BraceStatement) {
+            BraceStatement braceStatement = (BraceStatement) paramStatement;
             Statement braceParamStatement = braceStatement.getStatement();
-            if(braceParamStatement!=null&&braceParamStatement instanceof ListColumnStatement){
-                ListColumnStatement listColumnStatement=(ListColumnStatement)braceParamStatement;
+            if (braceParamStatement != null && braceParamStatement instanceof ListColumnStatement) {
+                ListColumnStatement listColumnStatement = (ListColumnStatement) braceParamStatement;
                 Statement[] columnList = listColumnStatement.getColumnList();
-                if(columnList.length==2){
-                    decimalStatement=columnList[1];
+                if (columnList.length == 2) {
+                    decimalStatement = columnList[1];
                 }
             }
         }
-        return "toDecimal64(" + toStr(statement.getStatement(), assist, invokerList)+","+(decimalStatement==null?"0":toStr(decimalStatement,assist,invokerList)) + ")";
+        return "toDecimal64(" + toStr(statement.getStatement(), assist, invokerList) + "," + (decimalStatement == null ? "0" : toStr(decimalStatement, assist, invokerList)) + ")";
 
     }
 
@@ -269,19 +279,19 @@ public class ToClickHouse extends ToPubSQL {
     @Override
     protected String toString(ConvertTypeStatement.DecimalConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement paramStatement = statement.getParamStatement();
-        Statement decimalStatement=null;
-        if(paramStatement!=null&&paramStatement instanceof BraceStatement){
-            BraceStatement braceStatement=(BraceStatement) paramStatement;
+        Statement decimalStatement = null;
+        if (paramStatement != null && paramStatement instanceof BraceStatement) {
+            BraceStatement braceStatement = (BraceStatement) paramStatement;
             Statement braceParamStatement = braceStatement.getStatement();
-            if(braceParamStatement!=null&&braceParamStatement instanceof ListColumnStatement){
-                ListColumnStatement listColumnStatement=(ListColumnStatement)braceParamStatement;
+            if (braceParamStatement != null && braceParamStatement instanceof ListColumnStatement) {
+                ListColumnStatement listColumnStatement = (ListColumnStatement) braceParamStatement;
                 Statement[] columnList = listColumnStatement.getColumnList();
-                if(columnList.length==2){
-                    decimalStatement=columnList[1];
+                if (columnList.length == 2) {
+                    decimalStatement = columnList[1];
                 }
             }
         }
-        return "toDecimal64(" + toStr(statement.getStatement(), assist, invokerList)+","+(decimalStatement==null?"0":toStr(decimalStatement,assist,invokerList)) + ")";
+        return "toDecimal64(" + toStr(statement.getStatement(), assist, invokerList) + "," + (decimalStatement == null ? "0" : toStr(decimalStatement, assist, invokerList)) + ")";
     }
 
     @Override
@@ -344,12 +354,6 @@ public class ToClickHouse extends ToPubSQL {
         String s1 = toStr(columnList[0], assist, invokerList);
         String s2 = toStr(columnList[1], assist, invokerList);
         return "FLOOR(" + s1 + "*POWER(10," + s2 + "))*POWER(10,-" + s2 + ")";
-    }
-
-
-    @Override
-    protected String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getParamsStatement(), assist, invokerList);
     }
 
     @Override

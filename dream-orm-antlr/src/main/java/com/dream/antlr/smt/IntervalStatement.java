@@ -40,6 +40,7 @@ public abstract class IntervalStatement extends Statement {
 
     public static class HourIntervalStatement extends IntervalStatement {
     }
+
     public static class MinuteIntervalStatement extends IntervalStatement {
     }
 

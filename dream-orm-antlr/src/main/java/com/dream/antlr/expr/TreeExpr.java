@@ -27,7 +27,7 @@ public abstract class TreeExpr extends HelperExpr {
                     conditionStatement.setLeft(top);
                     cur = top = conditionStatement;
                     break;
-                } else if (oper.getLevel() - cur.getOper().getLevel() >= 0) {
+                } else if (oper.getLevel() - cur.getOper().getLevel() > 0) {
                     conditionStatement.setLeft(cur.getRight());
                     cur.setRight(conditionStatement);
                     cur = conditionStatement;

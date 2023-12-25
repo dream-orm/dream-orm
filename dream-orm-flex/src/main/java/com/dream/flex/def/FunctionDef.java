@@ -384,73 +384,81 @@ public class FunctionDef {
     }
 
     public static ColumnDef date_add(ColumnDef columnDef, Object number, DateType dateType) {
-        DateOperStatement dateOperStatement = null;
+        IntervalStatement intervalStatement = null;
         switch (dateType) {
             case SECOND:
-                dateOperStatement = new DateOperStatement.SecondDateAddStatement();
+                intervalStatement = new IntervalStatement.SecondIntervalStatement();
                 break;
             case MINUTE:
-                dateOperStatement = new DateOperStatement.MinuteDateAddStatement();
+                intervalStatement = new IntervalStatement.MinuteIntervalStatement();
                 break;
             case HOUR:
-                dateOperStatement = new DateOperStatement.HourDateAddStatement();
+                intervalStatement = new IntervalStatement.HourIntervalStatement();
                 break;
             case DAY:
-                dateOperStatement = new DateOperStatement.DayDateAddStatement();
+                intervalStatement = new IntervalStatement.DayIntervalStatement();
                 break;
             case WEEK:
-                dateOperStatement = new DateOperStatement.WeekDateAddStatement();
+                intervalStatement = new IntervalStatement.WeekIntervalStatement();
                 break;
             case MONTH:
-                dateOperStatement = new DateOperStatement.MonthDateAddStatement();
+                intervalStatement = new IntervalStatement.MonthIntervalStatement();
                 break;
             case QUARTER:
-                dateOperStatement = new DateOperStatement.QuarterDateAddStatement();
+                intervalStatement = new IntervalStatement.QuarterIntervalStatement();
                 break;
             case YEAR:
-                dateOperStatement = new DateOperStatement.YearDateAddStatement();
+                intervalStatement = new IntervalStatement.YearIntervalStatement();
                 break;
             default:
                 break;
         }
-        dateOperStatement.setDate(columnDef.getStatement());
-        dateOperStatement.setQty(new SymbolStatement.LetterStatement(String.valueOf(number)));
-        return new ColumnDef(dateOperStatement);
+        intervalStatement.setStatement(new SymbolStatement.LetterStatement(String.valueOf(number)));
+        FunctionStatement.DateAddStatement dateAddStatement = new FunctionStatement.DateAddStatement();
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.add(columnDef.getStatement());
+        listColumnStatement.add(intervalStatement);
+        dateAddStatement.setParamsStatement(listColumnStatement);
+        return new ColumnDef(dateAddStatement);
     }
 
     public static ColumnDef date_sub(ColumnDef columnDef, Object number, DateType dateType) {
-        DateOperStatement dateOperStatement = null;
+        IntervalStatement intervalStatement = null;
         switch (dateType) {
             case SECOND:
-                dateOperStatement = new DateOperStatement.SecondDateSubStatement();
+                intervalStatement = new IntervalStatement.SecondIntervalStatement();
                 break;
             case MINUTE:
-                dateOperStatement = new DateOperStatement.MinuteDateSubStatement();
+                intervalStatement = new IntervalStatement.MinuteIntervalStatement();
                 break;
             case HOUR:
-                dateOperStatement = new DateOperStatement.HourDateSubStatement();
+                intervalStatement = new IntervalStatement.HourIntervalStatement();
                 break;
             case DAY:
-                dateOperStatement = new DateOperStatement.DayDateSubStatement();
+                intervalStatement = new IntervalStatement.DayIntervalStatement();
                 break;
             case WEEK:
-                dateOperStatement = new DateOperStatement.WeekDateSubStatement();
+                intervalStatement = new IntervalStatement.WeekIntervalStatement();
                 break;
             case MONTH:
-                dateOperStatement = new DateOperStatement.MonthDateSubStatement();
+                intervalStatement = new IntervalStatement.MonthIntervalStatement();
                 break;
             case QUARTER:
-                dateOperStatement = new DateOperStatement.QuarterDateSubStatement();
+                intervalStatement = new IntervalStatement.QuarterIntervalStatement();
                 break;
             case YEAR:
-                dateOperStatement = new DateOperStatement.YearDateSubStatement();
+                intervalStatement = new IntervalStatement.YearIntervalStatement();
                 break;
             default:
                 break;
         }
-        dateOperStatement.setDate(columnDef.getStatement());
-        dateOperStatement.setQty(new SymbolStatement.LetterStatement(String.valueOf(number)));
-        return new ColumnDef(dateOperStatement);
+        intervalStatement.setStatement(new SymbolStatement.LetterStatement(String.valueOf(number)));
+        FunctionStatement.DateSubStatement dateSubStatement = new FunctionStatement.DateSubStatement();
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        listColumnStatement.add(columnDef.getStatement());
+        listColumnStatement.add(intervalStatement);
+        dateSubStatement.setParamsStatement(listColumnStatement);
+        return new ColumnDef(dateSubStatement);
     }
 
     public static ColumnDef date_format(ColumnDef columnDef, String format) {

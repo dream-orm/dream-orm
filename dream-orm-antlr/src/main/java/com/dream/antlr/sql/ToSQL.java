@@ -347,6 +347,9 @@ public abstract class ToSQL {
             case -295868228://DateAddStatement
                 sql = toString((FunctionStatement.DateAddStatement) statement, assist, invokerList);
                 break;
+            case 1937245693://DateSubStatement
+                sql = toString((FunctionStatement.DateSubStatement) statement, assist, invokerList);
+                break;
             case -937838815://CurDateStatement
                 sql = toString((FunctionStatement.CurDateStatement) statement, assist, invokerList);
                 break;
@@ -416,6 +419,9 @@ public abstract class ToSQL {
             case 2023754666://MonthIntervalStatement
                 sql = toString((IntervalStatement.MonthIntervalStatement) statement, assist, invokerList);
                 break;
+            case -266778506://WeekIntervalStatement
+                sql = toString((IntervalStatement.WeekIntervalStatement) statement, assist, invokerList);
+                break;
             case 1435635214://DayIntervalStatement
                 sql = toString((IntervalStatement.DayIntervalStatement) statement, assist, invokerList);
                 break;
@@ -427,51 +433,6 @@ public abstract class ToSQL {
                 break;
             case -1888568330://SecondIntervalStatement
                 sql = toString((IntervalStatement.SecondIntervalStatement) statement, assist, invokerList);
-                break;
-            case 12913433://YearDateAddStatement
-                sql = toString((DateOperStatement.YearDateAddStatement) statement, assist, invokerList);
-                break;
-            case -2048939942://YearDateSubStatement
-                sql = toString((DateOperStatement.YearDateSubStatement) statement, assist, invokerList);
-                break;
-            case 2040204104://QuarterDateAddStatement
-                sql = toString((DateOperStatement.QuarterDateAddStatement) statement, assist, invokerList);
-                break;
-            case -21649271://QuarterDateSubStatement
-                sql = toString((DateOperStatement.QuarterDateSubStatement) statement, assist, invokerList);
-                break;
-            case 1574820636://MonthDateAddStatement
-                sql = toString((DateOperStatement.MonthDateAddStatement) statement, assist, invokerList);
-                break;
-            case 254006480://WeekDateAddStatement
-                sql = toString((DateOperStatement.WeekDateAddStatement) statement, assist, invokerList);
-                break;
-            case -1807846895://WeekDateSubStatement
-                sql = toString((DateOperStatement.WeekDateSubStatement) statement, assist, invokerList);
-                break;
-            case 724565048://DayDateAddStatement
-                sql = toString((DateOperStatement.DayDateAddStatement) statement, assist, invokerList);
-                break;
-            case -1337288327://DayDateSubStatement
-                sql = toString((DateOperStatement.DayDateSubStatement) statement, assist, invokerList);
-                break;
-            case 51595968://HourDateAddStatement
-                sql = toString((DateOperStatement.HourDateAddStatement) statement, assist, invokerList);
-                break;
-            case -2010257407://HourDateSubStatement
-                sql = toString((DateOperStatement.HourDateSubStatement) statement, assist, invokerList);
-                break;
-            case -86306064://MinuteDateAddStatement
-                sql = toString((DateOperStatement.MinuteDateAddStatement) statement, assist, invokerList);
-                break;
-            case -2146807857://MinuteDateSubStatement
-                sql = toString((DateOperStatement.MinuteDateSubStatement) statement, assist, invokerList);
-                break;
-            case 1032974672://SecondDateAddStatement
-                sql = toString((DateOperStatement.SecondDateAddStatement) statement, assist, invokerList);
-                break;
-            case -1028878703://SecondDateSubStatement
-                sql = toString((DateOperStatement.SecondDateSubStatement) statement, assist, invokerList);
                 break;
             case 552589950://IsNullStatement
                 sql = toString((FunctionStatement.IsNullStatement) statement, assist, invokerList);
@@ -683,6 +644,8 @@ public abstract class ToSQL {
 
     protected abstract String toString(IntervalStatement.MonthIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
+    protected abstract String toString(IntervalStatement.WeekIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
     protected abstract String toString(IntervalStatement.DayIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(IntervalStatement.HourIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
@@ -690,38 +653,6 @@ public abstract class ToSQL {
     protected abstract String toString(IntervalStatement.MinuteIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(IntervalStatement.SecondIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.YearDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.YearDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.QuarterDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.QuarterDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.MonthDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.MonthDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.WeekDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.WeekDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.DayDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.DayDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.HourDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.HourDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.MinuteDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.MinuteDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.SecondDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DateOperStatement.SecondDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(UpdateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
@@ -892,6 +823,8 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.TruncateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.DateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.CurDateStatement statement, Assist assist, List<Invoker> invokerList);
 

@@ -106,11 +106,9 @@ public class ToDM extends ToPubSQL {
         if (numStatement instanceof SymbolStatement.StrStatement) {
             res = res.substring(1, res.length() - 1);
         }
-        if (Character.isDigit(res.charAt(0))) {
-            return "INTERVAL '" + Integer.valueOf(res) * 3 + "' MONTH";
-        } else {
-            return "(INTERVAL '" + res + "' MONTH" + "INTERVAL '" + res + "' MONTH" + "INTERVAL '" + res + "' MONTH)";
-        }
+
+        return "INTERVAL '" + Integer.valueOf(res) * 3 + "' MONTH";
+
     }
 
     @Override
@@ -121,6 +119,16 @@ public class ToDM extends ToPubSQL {
             res = "'" + res + "'";
         }
         return "INTERVAL " + res + " MONTH";
+    }
+
+    @Override
+    protected String toString(IntervalStatement.WeekIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement numStatement = statement.getStatement();
+        String res = toStr(statement.getStatement(), assist, invokerList);
+        if (numStatement instanceof SymbolStatement.StrStatement) {
+            res = res.substring(1, res.length() - 1);
+        }
+        return "INTERVAL '" + Integer.parseInt(res) * 7 + "' DAY";
     }
 
     @Override
@@ -161,86 +169,6 @@ public class ToDM extends ToPubSQL {
             res = "'" + res + "'";
         }
         return "INTERVAL " + res + " SECOND";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.YearDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "ADD_MONTHS(" + toStr(statement.getDate(), assist, invokerList) + "," + toStr(statement.getQty(), assist, invokerList) + "*12)";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.YearDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "ADD_MONTHS(" + toStr(statement.getDate(), assist, invokerList) + ",-" + toStr(statement.getQty(), assist, invokerList) + "*12)";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.QuarterDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "ADD_MONTHS(" + toStr(statement.getDate(), assist, invokerList) + "," + toStr(statement.getQty(), assist, invokerList) + "*3)";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.QuarterDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "ADD_MONTHS(" + toStr(statement.getDate(), assist, invokerList) + ",-" + toStr(statement.getQty(), assist, invokerList) + "*3)";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.MonthDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "ADD_MONTHS(" + toStr(statement.getDate(), assist, invokerList) + "," + toStr(statement.getQty(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.MonthDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "ADD_MONTHS(" + toStr(statement.getDate(), assist, invokerList) + ",-" + toStr(statement.getQty(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.WeekDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getDate(), assist, invokerList) + "+" + toStr(statement.getQty(), assist, invokerList) + "*7";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.WeekDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getDate(), assist, invokerList) + "-" + toStr(statement.getQty(), assist, invokerList) + "*7";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.DayDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getDate(), assist, invokerList) + "+" + toStr(statement.getQty(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(DateOperStatement.DayDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getDate(), assist, invokerList) + "-" + toStr(statement.getQty(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(DateOperStatement.HourDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getDate(), assist, invokerList) + "+" + toStr(statement.getQty(), assist, invokerList) + "/24";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.HourDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getDate(), assist, invokerList) + "-" + toStr(statement.getQty(), assist, invokerList) + "/24";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.MinuteDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getDate(), assist, invokerList) + "+" + toStr(statement.getQty(), assist, invokerList) + "/1440";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.MinuteDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getDate(), assist, invokerList) + "-" + toStr(statement.getQty(), assist, invokerList) + "/1440";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.SecondDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getDate(), assist, invokerList) + "+" + toStr(statement.getQty(), assist, invokerList) + "/86400";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.SecondDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getDate(), assist, invokerList) + "-" + toStr(statement.getQty(), assist, invokerList) + "/86400";
     }
 
     @Override
@@ -300,7 +228,16 @@ public class ToDM extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getParamsStatement(), assist, invokerList);
+        ListColumnStatement paramsStatement = (ListColumnStatement) statement.getParamsStatement();
+        Statement[] columnList = paramsStatement.getColumnList();
+        return toStr(columnList[0], assist, invokerList) + "+" + toStr(columnList[1], assist, invokerList);
+    }
+
+    @Override
+    protected String toString(FunctionStatement.DateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        ListColumnStatement paramsStatement = (ListColumnStatement) statement.getParamsStatement();
+        Statement[] columnList = paramsStatement.getColumnList();
+        return toStr(columnList[0], assist, invokerList) + "-" + toStr(columnList[1], assist, invokerList);
     }
 
     @Override

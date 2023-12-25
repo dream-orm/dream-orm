@@ -80,83 +80,76 @@ public class ToSQLServer extends ToPubSQL {
     }
 
     @Override
-    protected String toString(DateOperStatement.YearDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(yy," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    protected String toString(OperStatement.ADDStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
+        Statement leftStatement = conditionStatement.getLeft();
+        Statement rightStatement = conditionStatement.getRight();
+        if (rightStatement instanceof IntervalStatement) {
+            Statement intervalParamstatement = ((IntervalStatement) rightStatement).getStatement();
+            String left = toStr(leftStatement, assist, invokerList);
+            String right = toStr(intervalParamstatement, assist, invokerList);
+            if (intervalParamstatement instanceof SymbolStatement.StrStatement) {
+                right = right.substring(1, right.length() - 1);
+            }
+            switch (rightStatement.getNameId()) {
+                case 849271629://YearIntervalStatement
+                    return "DATEADD(yy," + right + "," + left + ")";
+                case -729227010://QuarterIntervalStatement
+                    return "DATEADD(qq," + right + "," + left + ")";
+                case 2023754666://MonthIntervalStatement
+                    return "DATEADD(mm," + right + "," + left + ")";
+                case -266778506://WeekIntervalStatement
+                    return "DATEADD(wk," + right + "," + left + ")";
+                case 1435635214://DayIntervalStatement
+                    return "DATEADD(dd," + right + "," + left + ")";
+                case 2048430214://HourIntervalStatement
+                    return "DATEADD(hh," + right + "," + left + ")";
+                case 2068434518://MinuteIntervalStatement
+                    return "DATEADD(mi," + right + "," + left + ")";
+                case -1888568330://SecondIntervalStatement
+                    return "DATEADD(ss," + right + "," + left + ")";
+                default:
+                    break;
+            }
+        }
+        return toStr(leftStatement, assist, invokerList) + "+" + toStr(rightStatement, assist, invokerList);
     }
 
     @Override
-    protected String toString(DateOperStatement.YearDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(yy,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.QuarterDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(qq," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.QuarterDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(qq,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.MonthDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(mm," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.MonthDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(mm,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.WeekDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(wk," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.WeekDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(wk,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.DayDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(dd," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.DayDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(dd,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.HourDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(hh," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.HourDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(hh,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.MinuteDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(mi," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.MinuteDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(mi,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.SecondDateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(ss," + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DateOperStatement.SecondDateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEADD(ss,-" + toStr(statement.getQty(), assist, invokerList) + "," + toStr(statement.getDate(), assist, invokerList) + ")";
+    protected String toString(OperStatement.SUBStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
+        Statement leftStatement = conditionStatement.getLeft();
+        Statement rightStatement = conditionStatement.getRight();
+        if (rightStatement instanceof IntervalStatement) {
+            Statement intervalParamstatement = ((IntervalStatement) rightStatement).getStatement();
+            String left = toStr(leftStatement, assist, invokerList);
+            String right = toStr(intervalParamstatement, assist, invokerList);
+            if (intervalParamstatement instanceof SymbolStatement.StrStatement) {
+                right = right.substring(1, right.length() - 1);
+            }
+            right = "-" + right;
+            switch (rightStatement.getNameId()) {
+                case 849271629://YearIntervalStatement
+                    return "DATEADD(yy," + right + "," + left + ")";
+                case -729227010://QuarterIntervalStatement
+                    return "DATEADD(qq," + right + "," + left + ")";
+                case 2023754666://MonthIntervalStatement
+                    return "DATEADD(mm," + right + "," + left + ")";
+                case -266778506://WeekIntervalStatement
+                    return "DATEADD(wk," + right + "," + left + ")";
+                case 1435635214://DayIntervalStatement
+                    return "DATEADD(dd," + right + "," + left + ")";
+                case 2048430214://HourIntervalStatement
+                    return "DATEADD(hh," + right + "," + left + ")";
+                case 2068434518://MinuteIntervalStatement
+                    return "DATEADD(mi," + right + "," + left + ")";
+                case -1888568330://SecondIntervalStatement
+                    return "DATEADD(ss," + right + "," + left + ")";
+                default:
+                    break;
+            }
+        }
+        return toStr(leftStatement, assist, invokerList) + "-" + toStr(rightStatement, assist, invokerList);
     }
 
     @Override
@@ -324,7 +317,77 @@ public class ToSQLServer extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getParamsStatement(), assist, invokerList);
+        ListColumnStatement listColumnStatement = (ListColumnStatement) statement.getParentStatement();
+        Statement[] columnList = listColumnStatement.getColumnList();
+        Statement rightStatement = columnList[1];
+        if (rightStatement instanceof IntervalStatement) {
+            Statement intervalParamstatement = ((IntervalStatement) rightStatement).getStatement();
+            Statement leftStatement = columnList[0];
+            String left = toStr(leftStatement, assist, invokerList);
+            String right = toStr(intervalParamstatement, assist, invokerList);
+            if (intervalParamstatement instanceof SymbolStatement.StrStatement) {
+                right = right.substring(1, right.length() - 1);
+            }
+            switch (rightStatement.getNameId()) {
+                case 849271629://YearIntervalStatement
+                    return "DATEADD(yy," + right + "," + left + ")";
+                case -729227010://QuarterIntervalStatement
+                    return "DATEADD(qq," + right + "," + left + ")";
+                case 2023754666://MonthIntervalStatement
+                    return "DATEADD(mm," + right + "," + left + ")";
+                case -266778506://WeekIntervalStatement
+                    return "DATEADD(wk," + right + "," + left + ")";
+                case 1435635214://DayIntervalStatement
+                    return "DATEADD(dd," + right + "," + left + ")";
+                case 2048430214://HourIntervalStatement
+                    return "DATEADD(hh," + right + "," + left + ")";
+                case 2068434518://MinuteIntervalStatement
+                    return "DATEADD(mi," + right + "," + left + ")";
+                case -1888568330://SecondIntervalStatement
+                    return "DATEADD(ss," + right + "," + left + ")";
+                default:
+                    break;
+            }
+        }
+        return super.toString(statement, assist, invokerList);
+    }
+
+    @Override
+    protected String toString(FunctionStatement.DateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        ListColumnStatement listColumnStatement = (ListColumnStatement) statement.getParentStatement();
+        Statement[] columnList = listColumnStatement.getColumnList();
+        Statement rightStatement = columnList[1];
+        if (rightStatement instanceof IntervalStatement) {
+            Statement intervalParamstatement = ((IntervalStatement) rightStatement).getStatement();
+            Statement leftStatement = columnList[0];
+            String left = toStr(leftStatement, assist, invokerList);
+            String right = toStr(intervalParamstatement, assist, invokerList);
+            if (intervalParamstatement instanceof SymbolStatement.StrStatement) {
+                right = right.substring(1, right.length() - 1);
+            }
+            right = "-" + right;
+            switch (rightStatement.getNameId()) {
+                case 849271629://YearIntervalStatement
+                    return "DATEADD(yy," + right + "," + left + ")";
+                case -729227010://QuarterIntervalStatement
+                    return "DATEADD(qq," + right + "," + left + ")";
+                case 2023754666://MonthIntervalStatement
+                    return "DATEADD(mm," + right + "," + left + ")";
+                case -266778506://WeekIntervalStatement
+                    return "DATEADD(wk," + right + "," + left + ")";
+                case 1435635214://DayIntervalStatement
+                    return "DATEADD(dd," + right + "," + left + ")";
+                case 2048430214://HourIntervalStatement
+                    return "DATEADD(hh," + right + "," + left + ")";
+                case 2068434518://MinuteIntervalStatement
+                    return "DATEADD(mi," + right + "," + left + ")";
+                case -1888568330://SecondIntervalStatement
+                    return "DATEADD(ss," + right + "," + left + ")";
+                default:
+                    break;
+            }
+        }
+        return super.toString(statement, assist, invokerList);
     }
 
 
