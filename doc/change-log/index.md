@@ -6,7 +6,9 @@
 - 修复：解决notnull条件错误
 - 修复：解决日期转换错误
 - 新增：支持clickhouse
+- 新增：tdengine支持指定tag字段
 - 新增：支持查询对象类型为List
+- 新增：新增翻译语法，curdate()+interval 1 day
 
 ## v1.2.7
 

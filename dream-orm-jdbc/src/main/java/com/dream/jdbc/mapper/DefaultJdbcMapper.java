@@ -10,6 +10,7 @@ import com.dream.jdbc.row.RowMapping;
 import com.dream.system.config.*;
 import com.dream.system.core.session.Session;
 import com.dream.util.common.LowHashSet;
+import com.dream.util.common.ObjectUtil;
 
 import java.util.List;
 import java.util.Set;
@@ -38,6 +39,9 @@ public class DefaultJdbcMapper implements JdbcMapper {
 
     @Override
     public <T> List<Object> batchExecute(String sql, List<T> argList, StatementSetter statementSetter, int batchSize) {
+        if (ObjectUtil.isNull(argList)) {
+            return null;
+        }
         JdbcStatementHandler jdbcStatementHandler = new JdbcStatementHandler(statementSetter);
         MethodInfo methodInfo = new MethodInfo();
         methodInfo.setCache(false);
