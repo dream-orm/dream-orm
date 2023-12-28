@@ -10,26 +10,34 @@ import com.dream.antlr.smt.WhereStatement;
 /**
  * 条件语法解析器
  */
-public class WhereExpr extends SqlExpr {
+public class WhereExpr extends HelperExpr {
     private final WhereStatement whereStatement = new WhereStatement();
 
     public WhereExpr(ExprReader exprReader) {
-        super(exprReader);
+        this(exprReader, () -> new CompareExpr(exprReader));
+    }
+
+    public WhereExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
         setExprTypes(ExprType.WHERE);
     }
 
     @Override
     protected Statement exprWhere(ExprInfo exprInfo) throws AntlrException {
         push();
-        CompareExpr operTreeExpr = new CompareExpr(exprReader);
-        Statement statement = operTreeExpr.expr();
-        whereStatement.setStatement(statement);
-        setExprTypes(ExprType.NIL);
+        setExprTypes(ExprType.HELP);
         return expr();
     }
 
     @Override
     public Statement nil() {
         return whereStatement;
+    }
+
+    @Override
+    protected Statement exprHelp(Statement statement) throws AntlrException {
+        whereStatement.setStatement(statement);
+        setExprTypes(ExprType.NIL);
+        return expr();
     }
 }

@@ -12,12 +12,16 @@ import com.dream.antlr.smt.Statement;
 /**
  * @函数语法解析器
  */
-public class InvokerExpr extends SqlExpr {
+public class InvokerExpr extends HelperExpr {
 
     private final InvokerStatement invokerStatement = new InvokerStatement();
 
     public InvokerExpr(ExprReader exprReader) {
-        super(exprReader);
+        this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")));
+    }
+
+    public InvokerExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
         setExprTypes(ExprType.INVOKER);
     }
 
@@ -95,9 +99,7 @@ public class InvokerExpr extends SqlExpr {
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
         push();
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ","));
-        invokerStatement.setParamStatement(listColumnExpr.expr());
-        setExprTypes(ExprType.RBRACE);
+        setExprTypes(ExprType.HELP, ExprType.RBRACE);
         return expr();
     }
 
@@ -111,5 +113,12 @@ public class InvokerExpr extends SqlExpr {
     @Override
     public Statement nil() {
         return invokerStatement;
+    }
+
+    @Override
+    protected Statement exprHelp(Statement statement) throws AntlrException {
+        invokerStatement.setParamStatement(statement);
+        setExprTypes(ExprType.RBRACE);
+        return expr();
     }
 }

@@ -7,7 +7,7 @@
     <groupId>com.dream-orm</groupId>
     <artifactId>dream-orm</artifactId>
     <packaging>pom</packaging>
-    <version>1.2.8</version>
+    <version>1.2.9</version>
     <name>dream-orm</name>
     <description>dream-orm is a translation based orm framework</description>
     <url>https://github.com/dream-orm/dream-orm</url>

@@ -11,22 +11,48 @@ import com.dream.antlr.smt.Statement;
 /**
  * from语法解析器
  */
-public class FromExpr extends SqlExpr {
+public class FromExpr extends HelperExpr {
     private final FromStatement fromStatement = new FromStatement();
 
     public FromExpr(ExprReader exprReader) {
-        super(exprReader);
+        this(exprReader, () -> new AliasColumnExpr(exprReader));
+    }
+
+    public FromExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
         setExprTypes(ExprType.FROM);
     }
 
     @Override
     protected Statement exprFrom(ExprInfo exprInfo) throws AntlrException {
         push();
-        AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader);
-        aliasColumnExpr.setExprTypes(ExprType.HELP);
-        fromStatement.setMainTable(aliasColumnExpr.expr());
+        setExprTypes(ExprType.HELP);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprCross(ExprInfo exprInfo) throws AntlrException {
+        return exprJoin(exprInfo);
+    }
+
+    @Override
+    protected Statement exprLeft(ExprInfo exprInfo) throws AntlrException {
+        return exprJoin(exprInfo);
+    }
+
+    @Override
+    protected Statement exprRight(ExprInfo exprInfo) throws AntlrException {
+        return exprJoin(exprInfo);
+    }
+
+    @Override
+    protected Statement exprInner(ExprInfo exprInfo) throws AntlrException {
+        return exprJoin(exprInfo);
+    }
+
+    @Override
+    protected Statement exprJoin(ExprInfo exprInfo) throws AntlrException {
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new JoinExpr(exprReader), new ExprInfo(ExprType.BLANK, " "));
-        listColumnExpr.addExprTypes(ExprType.NIL);
         ListColumnStatement listColumnStatement = (ListColumnStatement) listColumnExpr.expr();
         if (listColumnStatement.getColumnList().length > 0) {
             fromStatement.setJoinList(listColumnStatement);
@@ -38,5 +64,12 @@ public class FromExpr extends SqlExpr {
     @Override
     public Statement nil() {
         return fromStatement;
+    }
+
+    @Override
+    protected Statement exprHelp(Statement statement) throws AntlrException {
+        fromStatement.setMainTable(statement);
+        setExprTypes(ExprType.LEFT, ExprType.RIGHT, ExprType.CROSS, ExprType.INNER, ExprType.JOIN, ExprType.NIL);
+        return expr();
     }
 }

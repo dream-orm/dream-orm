@@ -10,11 +10,15 @@ import com.dream.antlr.smt.Statement;
 /**
  * 分组语法解析器
  */
-public class GroupExpr extends SqlExpr {
+public class GroupExpr extends HelperExpr {
     private final GroupStatement groupStatement = new GroupStatement();
 
     public GroupExpr(ExprReader exprReader) {
-        super(exprReader);
+        this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")));
+    }
+
+    public GroupExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
         setExprTypes(ExprType.GROUP);
     }
 
@@ -28,15 +32,19 @@ public class GroupExpr extends SqlExpr {
     @Override
     protected Statement exprBy(ExprInfo exprInfo) throws AntlrException {
         push();
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ","));
-
-        groupStatement.setGroup(listColumnExpr.expr());
-        setExprTypes(ExprType.NIL);
+        setExprTypes(ExprType.HELP);
         return expr();
     }
 
     @Override
     public Statement nil() {
         return groupStatement;
+    }
+
+    @Override
+    protected Statement exprHelp(Statement statement) throws AntlrException {
+        groupStatement.setGroup(statement);
+        setExprTypes(ExprType.NIL);
+        return expr();
     }
 }

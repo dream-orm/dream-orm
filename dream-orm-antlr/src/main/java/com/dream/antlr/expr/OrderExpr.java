@@ -10,11 +10,15 @@ import com.dream.antlr.smt.Statement;
 /**
  * 排序语法解析器
  */
-public class OrderExpr extends SqlExpr {
+public class OrderExpr extends HelperExpr {
     private final OrderStatement orderStatement = new OrderStatement();
 
     public OrderExpr(ExprReader exprReader) {
-        super(exprReader);
+        this(exprReader, () -> new ListColumnExpr(exprReader, () -> new AscDescExpr(exprReader), new ExprInfo(ExprType.COMMA, ",")));
+    }
+
+    public OrderExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
         setExprTypes(ExprType.ORDER);
     }
 
@@ -28,9 +32,7 @@ public class OrderExpr extends SqlExpr {
     @Override
     protected Statement exprBy(ExprInfo exprInfo) throws AntlrException {
         push();
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new AscDescExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
-        orderStatement.setStatement(listColumnExpr.expr());
-        setExprTypes(ExprType.NIL);
+        setExprTypes(ExprType.HELP);
         return expr();
     }
 
@@ -39,7 +41,14 @@ public class OrderExpr extends SqlExpr {
         return orderStatement;
     }
 
-    class AscDescExpr extends HelperExpr {
+    @Override
+    protected Statement exprHelp(Statement statement) throws AntlrException {
+        orderStatement.setStatement(statement);
+        setExprTypes(ExprType.NIL);
+        return null;
+    }
+
+    static class AscDescExpr extends HelperExpr {
         private Statement sortStatement;
         private Statement statement;
 

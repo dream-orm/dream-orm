@@ -10,25 +10,34 @@ import com.dream.antlr.smt.Statement;
 /**
  * 分组条件语法解析器
  */
-public class HavingExpr extends SqlExpr {
+public class HavingExpr extends HelperExpr {
     private final HavingStatement havingStatement = new HavingStatement();
 
     public HavingExpr(ExprReader exprReader) {
-        super(exprReader);
+        this(exprReader, () -> new CompareExpr(exprReader));
+    }
+
+    public HavingExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
         setExprTypes(ExprType.HAVING);
     }
 
     @Override
     protected Statement exprHaving(ExprInfo exprInfo) throws AntlrException {
         push();
-        CompareExpr operTreeExpr = new CompareExpr(exprReader);
-        havingStatement.setCondition(operTreeExpr.expr());
-        setExprTypes(ExprType.NIL);
+        setExprTypes(ExprType.HELP);
         return expr();
     }
 
     @Override
     public Statement nil() {
         return havingStatement;
+    }
+
+    @Override
+    protected Statement exprHelp(Statement statement) throws AntlrException {
+        havingStatement.setCondition(statement);
+        setExprTypes(ExprType.NIL);
+        return expr();
     }
 }

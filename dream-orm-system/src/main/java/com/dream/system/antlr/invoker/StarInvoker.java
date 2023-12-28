@@ -40,16 +40,17 @@ public class StarInvoker extends AbstractInvoker {
         Class colType = methodInfo.getColType();
         Configuration configuration = methodInfo.getConfiguration();
         TableFactory tableFactory = configuration.getTableFactory();
-        Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         String[] tableList = null;
-        if (!ObjectUtil.isNull(columnList)) {
+        ListColumnStatement listColumnStatement = (ListColumnStatement) invokerStatement.getParamStatement();
+        if (listColumnStatement != null) {
+            Statement[] columnList = listColumnStatement.getColumnList();
             tableList = new String[columnList.length];
             for (int i = 0; i < columnList.length; i++) {
                 if (columnList[i] instanceof SymbolStatement.LetterStatement) {
                     String symbol = ((SymbolStatement.LetterStatement) columnList[i]).getValue();
                     tableList[i] = symbol;
                 } else {
-                    throw new AntlrException("@all参数类型不合法，不合法参数：'" + new ToNativeSQL().toStr(columnList[i], null, null) + "'");
+                    throw new AntlrException("@"+FUNCTION+"参数类型不合法，不合法参数：'" + new ToNativeSQL().toStr(columnList[i], null, null) + "'");
                 }
             }
         }
