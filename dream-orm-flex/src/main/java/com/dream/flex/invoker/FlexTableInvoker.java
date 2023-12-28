@@ -30,7 +30,7 @@ public class FlexTableInvoker extends AbstractInvoker {
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         FlexTableInvokerStatement flexTableInvokerStatement = (FlexTableInvokerStatement) invokerStatement;
-        String table = flexTableInvokerStatement.getValue();
+        String table = flexTableInvokerStatement.getTable();
         tableSet.add(table);
         return toSQL.toStr(new SymbolStatement.SingleMarkStatement(table), assist, invokerList);
     }

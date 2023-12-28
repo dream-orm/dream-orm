@@ -20,12 +20,22 @@ public class DynamicGetInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_dynamic_get";
     private DynamicHandler dynamicHandler;
 
+    public DynamicGetInvoker() {
+
+    }
+
+    public DynamicGetInvoker(DynamicHandler dynamicHandler) {
+        this.dynamicHandler = dynamicHandler;
+    }
+
     @Override
     public void init(Assist assist) {
-        Configuration configuration = assist.getCustom(Configuration.class);
-        InjectFactory injectFactory = configuration.getInjectFactory();
-        DynamicInject dynamicInject = injectFactory.getInject(DynamicInject.class);
-        dynamicHandler = dynamicInject.getDynamicHandler();
+        if (this.dynamicHandler == null) {
+            Configuration configuration = assist.getCustom(Configuration.class);
+            InjectFactory injectFactory = configuration.getInjectFactory();
+            DynamicInject dynamicInject = injectFactory.getInject(DynamicInject.class);
+            this.dynamicHandler = dynamicInject.getDynamicHandler();
+        }
     }
 
     @Override

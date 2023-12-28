@@ -48,10 +48,14 @@ public class FlexDebug {
     }
 
     public SqlInfo toSQL(Statement statement) {
+        return toSQL(statement, null);
+    }
+
+    public SqlInfo toSQL(Statement statement, List<Invoker> invokerList) {
         Assist assist = getAssist();
         String sql;
         try {
-            sql = toSQL.toStr(statement.clone(), assist, null);
+            sql = toSQL.toStr(statement.clone(), assist, invokerList);
         } catch (AntlrException e) {
             throw new DreamRunTimeException(e);
         }

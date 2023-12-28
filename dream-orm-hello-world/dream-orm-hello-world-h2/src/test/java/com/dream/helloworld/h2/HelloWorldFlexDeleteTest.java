@@ -17,7 +17,7 @@ public class HelloWorldFlexDeleteTest {
     FlexDebug flexDebug = new FlexDebug();
 
     @Test
-    public void testInsert() {
+    public void testDelete() {
         DeleteDef deleteDef = delete(account).where(account.id.eq(1));
         SqlInfo sqlInfo = flexDebug.toSQL(deleteDef);
         System.out.println(sqlInfo.getSql());

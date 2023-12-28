@@ -1,5 +1,10 @@
 # dream-orm 升级日志
 
+## v1.2.9
+
+- 优化：语法分析尽可能继承HelperExpr实现
+- 新增：增加方言转换接口IStatement
+
 ## v1.2.8
 
 - 优化：分页默认offset

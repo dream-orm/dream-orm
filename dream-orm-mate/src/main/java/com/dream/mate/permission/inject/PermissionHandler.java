@@ -1,7 +1,6 @@
 package com.dream.mate.permission.inject;
 
 import com.dream.system.config.MethodInfo;
-import com.dream.system.table.TableInfo;
 
 public interface PermissionHandler {
 
@@ -9,10 +8,10 @@ public interface PermissionHandler {
      * 判断是否应用数据权限
      *
      * @param methodInfo mapper方法详尽信息
-     * @param tableInfo  主表详尽信息
+     * @param table      主表
      * @return
      */
-    boolean isPermissionInject(MethodInfo methodInfo, TableInfo tableInfo);
+    boolean isPermissionInject(MethodInfo methodInfo, String table);
 
     /**
      * 获取数据权限SQL

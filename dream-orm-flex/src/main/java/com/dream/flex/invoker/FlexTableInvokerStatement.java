@@ -1,9 +1,8 @@
 package com.dream.flex.invoker;
 
 import com.dream.antlr.smt.InvokerStatement;
-import com.dream.antlr.smt.SymbolStatement;
 
-public class FlexTableInvokerStatement extends InvokerStatement implements SymbolStatement.Symbol {
+public class FlexTableInvokerStatement extends InvokerStatement {
     private String table;
 
     public FlexTableInvokerStatement(String table) {
@@ -24,8 +23,7 @@ public class FlexTableInvokerStatement extends InvokerStatement implements Symbo
         return FlexTableInvoker.FUNCTION;
     }
 
-    @Override
-    public String getValue() {
+    public String getTable() {
         return table;
     }
 }

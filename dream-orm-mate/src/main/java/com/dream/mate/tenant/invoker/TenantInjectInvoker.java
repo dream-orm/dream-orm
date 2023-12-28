@@ -16,26 +16,34 @@ import com.dream.mate.tenant.inject.TenantInject;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.inject.factory.InjectFactory;
-import com.dream.system.table.TableInfo;
-import com.dream.system.table.factory.TableFactory;
 
 import java.util.List;
 
 public class TenantInjectInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_tenant_inject";
-    private TableFactory tableFactory;
     private MethodInfo methodInfo;
     private TenantHandler tenantHandler;
 
+    public TenantInjectInvoker() {
+
+    }
+
+    public TenantInjectInvoker(MethodInfo methodInfo, TenantHandler tenantHandler) {
+        this.methodInfo = methodInfo;
+        this.tenantHandler = tenantHandler;
+    }
+
     @Override
     public void init(Assist assist) {
-        methodInfo = assist.getCustom(MethodInfo.class);
-        Configuration configuration = assist.getCustom(Configuration.class);
-        tableFactory = configuration.getTableFactory();
-        InjectFactory injectFactory = configuration.getInjectFactory();
-        TenantInject tenantInject = injectFactory.getInject(TenantInject.class);
-        tenantHandler = tenantInject.getTenantHandler();
-
+        if (this.methodInfo == null) {
+            this.methodInfo = assist.getCustom(MethodInfo.class);
+        }
+        if (this.tenantHandler == null) {
+            Configuration configuration = assist.getCustom(Configuration.class);
+            InjectFactory injectFactory = configuration.getInjectFactory();
+            TenantInject tenantInject = injectFactory.getInject(TenantInject.class);
+            this.tenantHandler = tenantInject.getTenantHandler();
+        }
     }
 
     @Override
@@ -61,11 +69,7 @@ public class TenantInjectInvoker extends AbstractInvoker {
     }
 
     public boolean isTenant(String table) {
-        TableInfo tableInfo = tableFactory.getTableInfo(table);
-        if (tableInfo != null) {
-            return tenantHandler.isTenant(methodInfo, tableInfo);
-        }
-        return false;
+        return tenantHandler.isTenant(methodInfo, table);
     }
 
     public String getTenantColumn() {

@@ -63,7 +63,7 @@ public class DefaultFlexMapper implements FlexMapper {
 
     @Override
     public <T> List<T> selectList(QueryDef queryDef, Class<T> type) {
-        SqlInfo sqlInfo = flexDebug.toSQL(queryDef);
+        SqlInfo sqlInfo = flexDebug.toSQL(queryDef.statement());
         MethodInfo methodInfo = getMethodInfo(List.class, type);
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.QUERY, methodInfo);
         return (List<T>) session.execute(mappedStatement);
@@ -71,7 +71,7 @@ public class DefaultFlexMapper implements FlexMapper {
 
     @Override
     public <T extends Tree> List<T> selectTree(QueryDef queryDef, Class<T> type) {
-        SqlInfo sqlInfo = flexDebug.toSQL(queryDef);
+        SqlInfo sqlInfo = flexDebug.toSQL(queryDef.statement());
         MethodInfo methodInfo = getMethodInfo(List.class, type);
         methodInfo.addDestroyAction((result, mappedStatement, session) -> TreeUtil.toTree((Collection<? extends Tree>) result));
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.QUERY, methodInfo);
@@ -95,7 +95,7 @@ public class DefaultFlexMapper implements FlexMapper {
 
     @Override
     public int update(UpdateDef updateDef) {
-        SqlInfo sqlInfo = flexDebug.toSQL(updateDef);
+        SqlInfo sqlInfo = flexDebug.toSQL(updateDef.statement());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.UPDATE, methodInfo);
         return (int) session.execute(mappedStatement);
@@ -103,7 +103,7 @@ public class DefaultFlexMapper implements FlexMapper {
 
     @Override
     public int delete(DeleteDef deleteDef) {
-        SqlInfo sqlInfo = flexDebug.toSQL(deleteDef);
+        SqlInfo sqlInfo = flexDebug.toSQL(deleteDef.statement());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.DELETE, methodInfo);
         return (int) session.execute(mappedStatement);
@@ -111,7 +111,7 @@ public class DefaultFlexMapper implements FlexMapper {
 
     @Override
     public int insert(InsertDef insertDef) {
-        SqlInfo sqlInfo = flexDebug.toSQL(insertDef);
+        SqlInfo sqlInfo = flexDebug.toSQL(insertDef.statement());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.INSERT, methodInfo);
         return (int) session.execute(mappedStatement);

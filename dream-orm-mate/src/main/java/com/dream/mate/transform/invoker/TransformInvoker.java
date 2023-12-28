@@ -21,12 +21,22 @@ public class TransformInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_block";
     private TransformHandler transformHandler;
 
+    public TransformInvoker() {
+
+    }
+
+    public TransformInvoker(TransformHandler transformHandler) {
+        this.transformHandler = transformHandler;
+    }
+
     @Override
     public void init(Assist assist) {
-        Configuration configuration = assist.getCustom(Configuration.class);
-        InjectFactory injectFactory = configuration.getInjectFactory();
-        TransformInject transformInject = injectFactory.getInject(TransformInject.class);
-        this.transformHandler = transformInject.getTransformHandler();
+        if (this.transformHandler == null) {
+            Configuration configuration = assist.getCustom(Configuration.class);
+            InjectFactory injectFactory = configuration.getInjectFactory();
+            TransformInject transformInject = injectFactory.getInject(TransformInject.class);
+            this.transformHandler = transformInject.getTransformHandler();
+        }
     }
 
     @Override

@@ -85,8 +85,8 @@ public class ScanInvoker extends AbstractInvoker {
                 for (InvokerStatement invoker : invokerStatementList) {
                     invoker.replaceWith(new SymbolStatement.MarkStatement());
                 }
-                MarkInvoker MarkInvoker = (MarkInvoker) assist.getInvoker(com.dream.system.antlr.invoker.MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
-                scanInfo.setParamInfoList(MarkInvoker.getParamInfoList());
+                MarkInvoker markInvoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+                scanInfo.setParamInfoList(markInvoker.getParamInfoList());
                 scanInfo.sql = sql;
             }
         } else {

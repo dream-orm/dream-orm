@@ -1,5 +1,6 @@
 package com.dream.antlr.smt;
 
+
 public abstract class SymbolStatement extends Statement {
     protected String symbol;
 
@@ -34,10 +35,6 @@ public abstract class SymbolStatement extends Statement {
         SymbolStatement symbolStatement = (SymbolStatement) super.clone();
         symbolStatement.setSymbol(symbol);
         return symbolStatement;
-    }
-
-    public interface Symbol {
-        String getValue();
     }
 
     public static class LetterStatement extends SymbolStatement {

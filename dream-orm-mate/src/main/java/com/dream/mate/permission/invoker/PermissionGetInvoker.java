@@ -20,12 +20,22 @@ public class PermissionGetInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_permission_get";
     private PermissionHandler permissionHandler;
 
+    public PermissionGetInvoker() {
+
+    }
+
+    public PermissionGetInvoker(PermissionHandler permissionHandler) {
+        this.permissionHandler = permissionHandler;
+    }
+
     @Override
     public void init(Assist assist) {
-        Configuration configuration = assist.getCustom(Configuration.class);
-        InjectFactory injectFactory = configuration.getInjectFactory();
-        PermissionInject permissionInject = injectFactory.getInject(PermissionInject.class);
-        permissionHandler = permissionInject.getPermissionHandler();
+        if (this.permissionHandler == null) {
+            Configuration configuration = assist.getCustom(Configuration.class);
+            InjectFactory injectFactory = configuration.getInjectFactory();
+            PermissionInject permissionInject = injectFactory.getInject(PermissionInject.class);
+            this.permissionHandler = permissionInject.getPermissionHandler();
+        }
     }
 
     @Override

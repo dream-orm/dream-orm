@@ -18,13 +18,22 @@ public class TenantGetInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_tenant_get";
     private TenantHandler tenantHandler;
 
+    public TenantGetInvoker() {
+
+    }
+
+    public TenantGetInvoker(TenantHandler tenantHandler) {
+        this.tenantHandler = tenantHandler;
+    }
+
     @Override
     public void init(Assist assist) {
-        Configuration configuration = assist.getCustom(Configuration.class);
-        InjectFactory injectFactory = configuration.getInjectFactory();
-        TenantInject tenantInject = injectFactory.getInject(TenantInject.class);
-        tenantHandler = tenantInject.getTenantHandler();
-
+        if (this.tenantHandler == null) {
+            Configuration configuration = assist.getCustom(Configuration.class);
+            InjectFactory injectFactory = configuration.getInjectFactory();
+            TenantInject tenantInject = injectFactory.getInject(TenantInject.class);
+            this.tenantHandler = tenantInject.getTenantHandler();
+        }
     }
 
     @Override

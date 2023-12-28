@@ -9,11 +9,15 @@ public interface LogicHandler {
      * 判断是否应用逻辑删除
      *
      * @param methodInfo mapper方法详尽信息
-     * @param tableInfo  主表详尽信息
+     * @param table      主表
      * @return
      */
-    default boolean isLogic(MethodInfo methodInfo, TableInfo tableInfo) {
-        return tableInfo.getColumnInfo(getLogicColumn()) != null;
+    default boolean isLogic(MethodInfo methodInfo, String table) {
+        if (methodInfo != null) {
+            TableInfo tableInfo = methodInfo.getConfiguration().getTableFactory().getTableInfo(table);
+            return tableInfo != null && tableInfo.getColumnInfo(getLogicColumn()) != null;
+        }
+        return false;
     }
 
     /**

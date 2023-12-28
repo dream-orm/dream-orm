@@ -50,7 +50,7 @@ public class StarInvoker extends AbstractInvoker {
                     String symbol = ((SymbolStatement.LetterStatement) columnList[i]).getValue();
                     tableList[i] = symbol;
                 } else {
-                    throw new AntlrException("@"+FUNCTION+"参数类型不合法，不合法参数：'" + new ToNativeSQL().toStr(columnList[i], null, null) + "'");
+                    throw new AntlrException("@" + FUNCTION + "参数类型不合法，不合法参数：'" + new ToNativeSQL().toStr(columnList[i], null, null) + "'");
                 }
             }
         }

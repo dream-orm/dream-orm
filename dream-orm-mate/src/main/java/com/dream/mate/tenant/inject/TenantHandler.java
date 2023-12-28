@@ -8,11 +8,15 @@ public interface TenantHandler {
      * 是否应用多租户
      *
      * @param methodInfo mapper方法详尽信息
-     * @param tableInfo  主表详尽信息
+     * @param table      主表
      * @return
      */
-    default boolean isTenant(MethodInfo methodInfo, TableInfo tableInfo) {
-        return tableInfo.getColumnInfo(getTenantColumn()) != null;
+    default boolean isTenant(MethodInfo methodInfo, String table) {
+        if (methodInfo != null) {
+            TableInfo tableInfo = methodInfo.getConfiguration().getTableFactory().getTableInfo(table);
+            return tableInfo != null && tableInfo.getColumnInfo(getTenantColumn()) != null;
+        }
+        return false;
     }
 
     /**

@@ -13,6 +13,7 @@ import com.dream.mate.dynamic.handler.DynamicQueryHandler;
 import com.dream.mate.dynamic.handler.DynamicUpdateHandler;
 import com.dream.mate.dynamic.inject.DynamicHandler;
 import com.dream.mate.dynamic.inject.DynamicInject;
+import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
 
 import java.util.List;
@@ -22,10 +23,24 @@ public class DynamicInvoker extends AbstractInvoker {
     private MethodInfo methodInfo;
     private DynamicHandler dynamicHandler;
 
+    public DynamicInvoker() {
+
+    }
+
+    public DynamicInvoker(MethodInfo methodInfo, DynamicHandler dynamicHandler) {
+        this.methodInfo = methodInfo;
+        this.dynamicHandler = dynamicHandler;
+    }
+
     @Override
     public void init(Assist assist) {
-        methodInfo = assist.getCustom(MethodInfo.class);
-        dynamicHandler = methodInfo.getConfiguration().getInjectFactory().getInject(DynamicInject.class).getDynamicHandler();
+        if (this.methodInfo == null) {
+            methodInfo = assist.getCustom(MethodInfo.class);
+        }
+        if (this.dynamicHandler == null) {
+            Configuration configuration = assist.getCustom(Configuration.class);
+            this.dynamicHandler = configuration.getInjectFactory().getInject(DynamicInject.class).getDynamicHandler();
+        }
     }
 
     @Override

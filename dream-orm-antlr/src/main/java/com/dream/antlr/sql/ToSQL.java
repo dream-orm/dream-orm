@@ -607,7 +607,11 @@ public abstract class ToSQL {
                 sql = toString((DDLAlterStatement.DDLAlterModifyStatement) statement, assist, invokerList);
                 break;
             default:
-                throw new AntlrException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
+                if (statement instanceof IStatement) {
+                    return ((IStatement) statement).toString(this, assist, invokerList);
+                } else {
+                    throw new AntlrException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
+                }
         }
         if (handlerQueue != null && !handlerQueue.isEmpty()) {
             while (!handlerQueue.isEmpty()) {

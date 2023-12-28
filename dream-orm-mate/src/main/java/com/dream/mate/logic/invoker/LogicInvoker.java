@@ -15,25 +15,34 @@ import com.dream.mate.logic.inject.LogicInject;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.inject.factory.InjectFactory;
-import com.dream.system.table.TableInfo;
-import com.dream.system.table.factory.TableFactory;
 
 import java.util.List;
 
 public class LogicInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_logic";
-    private TableFactory tableFactory;
     private MethodInfo methodInfo;
     private LogicHandler logicHandler;
 
+    public LogicInvoker() {
+
+    }
+
+    public LogicInvoker(MethodInfo methodInfo, LogicHandler logicHandler) {
+        this.methodInfo = methodInfo;
+        this.logicHandler = logicHandler;
+    }
+
     @Override
     public void init(Assist assist) {
-        methodInfo = assist.getCustom(MethodInfo.class);
-        Configuration configuration = assist.getCustom(Configuration.class);
-        tableFactory = configuration.getTableFactory();
-        InjectFactory injectFactory = configuration.getInjectFactory();
-        LogicInject logicInject = injectFactory.getInject(LogicInject.class);
-        logicHandler = logicInject.getLogicHandler();
+        if (this.methodInfo == null) {
+            this.methodInfo = assist.getCustom(MethodInfo.class);
+        }
+        if (this.logicHandler == null) {
+            Configuration configuration = assist.getCustom(Configuration.class);
+            InjectFactory injectFactory = configuration.getInjectFactory();
+            LogicInject logicInject = injectFactory.getInject(LogicInject.class);
+            this.logicHandler = logicInject.getLogicHandler();
+        }
     }
 
     @Override
@@ -59,12 +68,7 @@ public class LogicInvoker extends AbstractInvoker {
     }
 
     public boolean isLogicDelete(String table) {
-        TableInfo tableInfo = tableFactory.getTableInfo(table);
-        if (tableInfo == null) {
-            return false;
-        } else {
-            return logicHandler.isLogic(methodInfo, tableInfo);
-        }
+        return logicHandler.isLogic(methodInfo, table);
     }
 
     public String getLogicColumn() {

@@ -13,26 +13,34 @@ import com.dream.mate.permission.inject.PermissionInject;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.inject.factory.InjectFactory;
-import com.dream.system.table.TableInfo;
-import com.dream.system.table.factory.TableFactory;
 
 import java.util.List;
 
 public class PermissionInjectInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_permission_inject";
-    private TableFactory tableFactory;
     private MethodInfo methodInfo;
     private PermissionHandler permissionHandler;
 
+    public PermissionInjectInvoker() {
+
+    }
+
+    public PermissionInjectInvoker(MethodInfo methodInfo, PermissionHandler permissionHandler) {
+        this.methodInfo = methodInfo;
+        this.permissionHandler = permissionHandler;
+    }
+
     @Override
     public void init(Assist assist) {
-        methodInfo = assist.getCustom(MethodInfo.class);
-        Configuration configuration = methodInfo.getConfiguration();
-        tableFactory = configuration.getTableFactory();
-        InjectFactory injectFactory = configuration.getInjectFactory();
-        PermissionInject permissionInject = injectFactory.getInject(PermissionInject.class);
-        permissionHandler = permissionInject.getPermissionHandler();
-
+        if (this.methodInfo == null) {
+            this.methodInfo = assist.getCustom(MethodInfo.class);
+        }
+        if (this.permissionHandler == null) {
+            Configuration configuration = assist.getCustom(Configuration.class);
+            InjectFactory injectFactory = configuration.getInjectFactory();
+            PermissionInject permissionInject = injectFactory.getInject(PermissionInject.class);
+            this.permissionHandler = permissionInject.getPermissionHandler();
+        }
     }
 
     @Override
@@ -58,11 +66,6 @@ public class PermissionInjectInvoker extends AbstractInvoker {
     }
 
     public boolean isPermissionInject(String table) {
-        TableInfo tableInfo = tableFactory.getTableInfo(table);
-        if (tableInfo == null) {
-            return false;
-        } else {
-            return permissionHandler.isPermissionInject(methodInfo, tableInfo);
-        }
+        return permissionHandler.isPermissionInject(methodInfo, table);
     }
 }
