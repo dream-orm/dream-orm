@@ -608,7 +608,7 @@ public abstract class ToSQL {
                 break;
             default:
                 if (statement instanceof IStatement) {
-                    return ((IStatement) statement).toString(this, assist, invokerList);
+                    sql = ((IStatement) statement).toString(this, assist, invokerList);
                 } else {
                     throw new AntlrException(statement.getClass().getName() + "未进行翻译，nameId：" + statement.getNameId());
                 }

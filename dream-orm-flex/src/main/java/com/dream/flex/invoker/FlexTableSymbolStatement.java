@@ -19,6 +19,11 @@ public class FlexTableSymbolStatement extends SymbolStatement implements IStatem
     }
 
     @Override
+    public int getNameId() {
+        return FlexTableSymbolStatement.class.getSimpleName().hashCode();
+    }
+
+    @Override
     public String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return toSQL.toStr(statement, assist, invokerList);
     }
