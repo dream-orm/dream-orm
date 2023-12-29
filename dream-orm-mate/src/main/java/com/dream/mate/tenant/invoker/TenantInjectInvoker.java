@@ -12,10 +12,7 @@ import com.dream.mate.tenant.handler.TenantInsertHandler;
 import com.dream.mate.tenant.handler.TenantQueryHandler;
 import com.dream.mate.tenant.handler.TenantUpdateHandler;
 import com.dream.mate.tenant.inject.TenantHandler;
-import com.dream.mate.tenant.inject.TenantInject;
-import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
-import com.dream.system.inject.factory.InjectFactory;
 
 import java.util.List;
 
@@ -24,31 +21,18 @@ public class TenantInjectInvoker extends AbstractInvoker {
     private MethodInfo methodInfo;
     private TenantHandler tenantHandler;
 
-    public TenantInjectInvoker() {
-
-    }
-
-    public TenantInjectInvoker(MethodInfo methodInfo, TenantHandler tenantHandler) {
-        this.methodInfo = methodInfo;
+    public TenantInjectInvoker(TenantHandler tenantHandler) {
         this.tenantHandler = tenantHandler;
     }
 
     @Override
     public void init(Assist assist) {
-        if (this.methodInfo == null) {
-            this.methodInfo = assist.getCustom(MethodInfo.class);
-        }
-        if (this.tenantHandler == null) {
-            Configuration configuration = assist.getCustom(Configuration.class);
-            InjectFactory injectFactory = configuration.getInjectFactory();
-            TenantInject tenantInject = injectFactory.getInject(TenantInject.class);
-            this.tenantHandler = tenantInject.getTenantHandler();
-        }
+        this.methodInfo = assist.getCustom(MethodInfo.class);
     }
 
     @Override
     public Invoker newInstance() {
-        return new TenantInjectInvoker();
+        return new TenantInjectInvoker(tenantHandler);
     }
 
     @Override

@@ -11,10 +11,7 @@ import com.dream.mate.logic.handler.LogicDeleteHandler;
 import com.dream.mate.logic.handler.LogicQueryHandler;
 import com.dream.mate.logic.handler.LogicUpdateHandler;
 import com.dream.mate.logic.inject.LogicHandler;
-import com.dream.mate.logic.inject.LogicInject;
-import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
-import com.dream.system.inject.factory.InjectFactory;
 
 import java.util.List;
 
@@ -23,31 +20,18 @@ public class LogicInvoker extends AbstractInvoker {
     private MethodInfo methodInfo;
     private LogicHandler logicHandler;
 
-    public LogicInvoker() {
-
-    }
-
-    public LogicInvoker(MethodInfo methodInfo, LogicHandler logicHandler) {
-        this.methodInfo = methodInfo;
+    public LogicInvoker(LogicHandler logicHandler) {
         this.logicHandler = logicHandler;
     }
 
     @Override
     public void init(Assist assist) {
-        if (this.methodInfo == null) {
-            this.methodInfo = assist.getCustom(MethodInfo.class);
-        }
-        if (this.logicHandler == null) {
-            Configuration configuration = assist.getCustom(Configuration.class);
-            InjectFactory injectFactory = configuration.getInjectFactory();
-            LogicInject logicInject = injectFactory.getInject(LogicInject.class);
-            this.logicHandler = logicInject.getLogicHandler();
-        }
+        this.methodInfo = assist.getCustom(MethodInfo.class);
     }
 
     @Override
     public Invoker newInstance() {
-        return new LogicInvoker();
+        return new LogicInvoker(logicHandler);
     }
 
     @Override

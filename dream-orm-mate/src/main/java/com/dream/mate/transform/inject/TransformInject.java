@@ -20,7 +20,7 @@ public class TransformInject implements Inject {
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
         if (invokerFactory.getInvoker(TransformInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            invokerFactory.addInvokers(new TransformInvoker());
+            invokerFactory.addInvokers(new TransformInvoker(transformHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TransformInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());

@@ -84,7 +84,7 @@ public class HelloWorldFlexTest {
     }
 
     /**
-     * 批量插入，注意有些数据库不支持这种批量插入
+     * 批量插入，注意有些数据库不支持这种批量插入，开启多租户后，此代码也会报错
      */
     @Test
     public void testInsert3() {

@@ -1,5 +1,7 @@
 package com.dream.tdhelloworld;
 
+import com.dream.flex.def.GroupByDef;
+import com.dream.flex.def.QueryDef;
 import com.dream.system.config.Page;
 import com.dream.tdengine.mapper.FlexTdMapper;
 import com.dream.tdhelloworld.table.Meters;
@@ -27,6 +29,8 @@ public class HelloWorldTdTest {
      */
     @Test
     public void testPartitionBy() {
+        Integer count = flexTdMapper.select(count()).from(tab("information_schema.ins_tables")).where(column("db_name").eq("库名").and(column("table_name").eq("表名"))).one(Integer.class);
+
         List<Map> list = flexTdMapper.select(max(col("current"))).from("meters").partitionBy("location").interval("10m").limit(1, 2).list(Map.class);
         System.out.println("查询结果：" + list);
     }

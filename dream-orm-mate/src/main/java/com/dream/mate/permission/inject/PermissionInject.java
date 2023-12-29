@@ -21,10 +21,10 @@ public class PermissionInject implements Inject {
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
         if (invokerFactory.getInvoker(PermissionInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            invokerFactory.addInvokers(new PermissionInjectInvoker());
+            invokerFactory.addInvokers(new PermissionInjectInvoker(permissionHandler));
         }
         if (invokerFactory.getInvoker(PermissionGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            invokerFactory.addInvokers(new PermissionGetInvoker());
+            invokerFactory.addInvokers(new PermissionGetInvoker(permissionHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement invokerStatement = AntlrUtil.invokerStatement(PermissionInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());

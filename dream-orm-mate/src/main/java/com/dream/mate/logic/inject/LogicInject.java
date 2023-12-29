@@ -20,7 +20,7 @@ public class LogicInject implements Inject {
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
         if (invokerFactory.getInvoker(LogicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            invokerFactory.addInvokers(new LogicInvoker());
+            invokerFactory.addInvokers(new LogicInvoker(logicHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement invokerStatement = AntlrUtil.invokerStatement(LogicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());

@@ -20,7 +20,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
-public class HelloWorldFlexJdbcTest {
+public class HelloWorldJdbcTest {
     @Autowired
     private JdbcMapper jdbcMapper;
 

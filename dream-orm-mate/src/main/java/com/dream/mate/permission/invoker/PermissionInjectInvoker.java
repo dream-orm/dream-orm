@@ -9,10 +9,7 @@ import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.mate.permission.handler.PermissionQueryHandler;
 import com.dream.mate.permission.inject.PermissionHandler;
-import com.dream.mate.permission.inject.PermissionInject;
-import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
-import com.dream.system.inject.factory.InjectFactory;
 
 import java.util.List;
 
@@ -21,31 +18,18 @@ public class PermissionInjectInvoker extends AbstractInvoker {
     private MethodInfo methodInfo;
     private PermissionHandler permissionHandler;
 
-    public PermissionInjectInvoker() {
-
-    }
-
-    public PermissionInjectInvoker(MethodInfo methodInfo, PermissionHandler permissionHandler) {
-        this.methodInfo = methodInfo;
+    public PermissionInjectInvoker(PermissionHandler permissionHandler) {
         this.permissionHandler = permissionHandler;
     }
 
     @Override
     public void init(Assist assist) {
-        if (this.methodInfo == null) {
-            this.methodInfo = assist.getCustom(MethodInfo.class);
-        }
-        if (this.permissionHandler == null) {
-            Configuration configuration = assist.getCustom(Configuration.class);
-            InjectFactory injectFactory = configuration.getInjectFactory();
-            PermissionInject permissionInject = injectFactory.getInject(PermissionInject.class);
-            this.permissionHandler = permissionInject.getPermissionHandler();
-        }
+        this.methodInfo = assist.getCustom(MethodInfo.class);
     }
 
     @Override
     public Invoker newInstance() {
-        return new PermissionInjectInvoker();
+        return new PermissionInjectInvoker(permissionHandler);
     }
 
     @Override

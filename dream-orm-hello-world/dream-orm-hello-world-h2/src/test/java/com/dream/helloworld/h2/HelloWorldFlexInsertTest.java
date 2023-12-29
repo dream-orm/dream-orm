@@ -1,8 +1,9 @@
 package com.dream.helloworld.h2;
 
+import com.dream.drive.factory.DefaultFlexDialect;
 import com.dream.flex.config.SqlInfo;
-import com.dream.flex.debug.FlexDebug;
 import com.dream.flex.def.InsertDef;
+import com.dream.flex.dialect.FlexDialect;
 import com.dream.helloworld.h2.table.Account;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +19,7 @@ import static com.dream.helloworld.h2.def.AccountDef.account;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldFlexInsertTest {
-    FlexDebug flexDebug = new FlexDebug();
+    FlexDialect flexDialect = new DefaultFlexDialect();
 
     /**
      * 普通插入sql
@@ -26,7 +27,7 @@ public class HelloWorldFlexInsertTest {
     @Test
     public void testInsert() {
         InsertDef insertDef = insertInto(account).columns(account.name, account.age).values("accountName", 12);
-        SqlInfo sqlInfo = flexDebug.toSQL(insertDef);
+        SqlInfo sqlInfo = flexDialect.toSQL(insertDef);
         System.out.println(sqlInfo.getSql());
     }
 
@@ -36,7 +37,7 @@ public class HelloWorldFlexInsertTest {
     @Test
     public void testInsert2() {
         InsertDef insertDef = insertInto(account).values("accountName", 13);
-        SqlInfo sqlInfo = flexDebug.toSQL(insertDef);
+        SqlInfo sqlInfo = flexDialect.toSQL(insertDef);
         System.out.println(sqlInfo.getSql());
     }
 
@@ -57,7 +58,7 @@ public class HelloWorldFlexInsertTest {
             Account account = (Account) acc;
             return new Object[]{account.getId(), account.getName(), account.getAge()};
         });
-        SqlInfo sqlInfo = flexDebug.toSQL(insertDef);
+        SqlInfo sqlInfo = flexDialect.toSQL(insertDef);
         System.out.println(sqlInfo.getSql());
     }
 

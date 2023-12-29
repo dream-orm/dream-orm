@@ -1,6 +1,13 @@
 package com.dream.helloworld.h2;
 
+import com.dream.antlr.sql.ToSQL;
+import com.dream.drive.factory.DefaultFlexDialect;
 import com.dream.flex.annotation.FlexAPT;
+import com.dream.flex.dialect.FlexDialect;
+import com.dream.mate.logic.inject.LogicHandler;
+import com.dream.mate.permission.inject.PermissionHandler;
+import com.dream.mate.tenant.inject.TenantHandler;
+import com.dream.system.config.MethodInfo;
 import com.dream.system.inject.Inject;
 import com.dream.system.table.ColumnInfo;
 import com.dream.template.sequence.AbstractSequence;
@@ -196,6 +203,41 @@ public class HelloWorldApplication {
 //        List<String> pathList = Arrays.asList(packageName);
 //        ConfigurationBean configurationBean = new ConfigurationBean(pathList, pathList);
 //        return configurationBean;
+//    }
+//
+//    @Bean
+//    public FlexDialect flexDialect(ToSQL toSQL) {
+//        return new DefaultFlexDialect(toSQL).tenantHandler(new TenantHandler() {
+//            @Override
+//            public boolean isTenant(MethodInfo methodInfo, String table) {
+//                return true;
+//            }
+//
+//            @Override
+//            public Object getTenantObject() {
+//                return "1";
+//            }
+//        }).permissionHandler(new PermissionHandler() {
+//            @Override
+//            public boolean isPermissionInject(MethodInfo methodInfo, String table) {
+//                return true;
+//            }
+//
+//            @Override
+//            public String getPermission(String alias) {
+//                return "1=1";
+//            }
+//        }).logicHandler(new LogicHandler() {
+//            @Override
+//            public boolean isLogic(MethodInfo methodInfo, String table) {
+//                return true;
+//            }
+//
+//            @Override
+//            public String getLogicColumn() {
+//                return "del_flag";
+//            }
+//        });
 //    }
 
     /**

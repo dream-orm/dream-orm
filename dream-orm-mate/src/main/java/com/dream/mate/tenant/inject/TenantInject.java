@@ -23,10 +23,10 @@ public class TenantInject implements Inject {
         Configuration configuration = methodInfo.getConfiguration();
         InvokerFactory invokerFactory = configuration.getInvokerFactory();
         if (invokerFactory.getInvoker(TenantInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            invokerFactory.addInvokers(new TenantInjectInvoker());
+            invokerFactory.addInvokers(new TenantInjectInvoker(tenantHandler));
         }
         if (invokerFactory.getInvoker(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            invokerFactory.addInvokers(new TenantGetInvoker());
+            invokerFactory.addInvokers(new TenantGetInvoker(tenantHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());

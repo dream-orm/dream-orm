@@ -1,8 +1,9 @@
 package com.dream.helloworld.h2;
 
+import com.dream.drive.factory.DefaultFlexDialect;
 import com.dream.flex.config.SqlInfo;
-import com.dream.flex.debug.FlexDebug;
 import com.dream.flex.def.UpdateDef;
+import com.dream.flex.dialect.FlexDialect;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,12 +15,12 @@ import static com.dream.helloworld.h2.def.AccountDef.account;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldFlexUpdateTest {
-    FlexDebug flexDebug = new FlexDebug();
+    FlexDialect flexDialect = new DefaultFlexDialect();
 
     @Test
     public void testUpdate() {
         UpdateDef updateDef = update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
-        SqlInfo sqlInfo = flexDebug.toSQL(updateDef);
+        SqlInfo sqlInfo = flexDialect.toSQL(updateDef);
         System.out.println(sqlInfo.getSql());
     }
 }

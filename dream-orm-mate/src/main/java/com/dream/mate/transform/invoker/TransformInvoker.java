@@ -11,9 +11,6 @@ import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.mate.transform.handler.LetterHandler;
 import com.dream.mate.transform.inject.TransformHandler;
-import com.dream.mate.transform.inject.TransformInject;
-import com.dream.system.config.Configuration;
-import com.dream.system.inject.factory.InjectFactory;
 
 import java.util.List;
 
@@ -21,22 +18,8 @@ public class TransformInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_block";
     private TransformHandler transformHandler;
 
-    public TransformInvoker() {
-
-    }
-
     public TransformInvoker(TransformHandler transformHandler) {
         this.transformHandler = transformHandler;
-    }
-
-    @Override
-    public void init(Assist assist) {
-        if (this.transformHandler == null) {
-            Configuration configuration = assist.getCustom(Configuration.class);
-            InjectFactory injectFactory = configuration.getInjectFactory();
-            TransformInject transformInject = injectFactory.getInject(TransformInject.class);
-            this.transformHandler = transformInject.getTransformHandler();
-        }
     }
 
     @Override

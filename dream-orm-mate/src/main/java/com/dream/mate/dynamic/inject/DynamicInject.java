@@ -21,10 +21,10 @@ public class DynamicInject implements Inject {
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
         if (invokerFactory.getInvoker(DynamicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            invokerFactory.addInvokers(new DynamicInvoker());
+            invokerFactory.addInvokers(new DynamicInvoker(dynamicHandler));
         }
         if (invokerFactory.getInvoker(DynamicGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
-            invokerFactory.addInvokers(new DynamicGetInvoker());
+            invokerFactory.addInvokers(new DynamicGetInvoker(dynamicHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement invokerStatement = AntlrUtil.invokerStatement(DynamicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());

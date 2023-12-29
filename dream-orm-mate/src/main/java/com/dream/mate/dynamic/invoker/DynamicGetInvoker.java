@@ -10,9 +10,6 @@ import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.SymbolStatement;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.mate.dynamic.inject.DynamicHandler;
-import com.dream.mate.dynamic.inject.DynamicInject;
-import com.dream.system.config.Configuration;
-import com.dream.system.inject.factory.InjectFactory;
 
 import java.util.List;
 
@@ -20,22 +17,8 @@ public class DynamicGetInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_dynamic_get";
     private DynamicHandler dynamicHandler;
 
-    public DynamicGetInvoker() {
-
-    }
-
     public DynamicGetInvoker(DynamicHandler dynamicHandler) {
         this.dynamicHandler = dynamicHandler;
-    }
-
-    @Override
-    public void init(Assist assist) {
-        if (this.dynamicHandler == null) {
-            Configuration configuration = assist.getCustom(Configuration.class);
-            InjectFactory injectFactory = configuration.getInjectFactory();
-            DynamicInject dynamicInject = injectFactory.getInject(DynamicInject.class);
-            this.dynamicHandler = dynamicInject.getDynamicHandler();
-        }
     }
 
     @Override

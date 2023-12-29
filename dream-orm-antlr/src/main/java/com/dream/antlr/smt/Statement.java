@@ -64,35 +64,19 @@ public abstract class Statement implements Serializable, Cloneable {
     }
 
     public void replaceWith(Statement statement) throws AntlrException {
-        Field[] fieldList = parentStatement.getClass().getDeclaredFields();
-        int index;
-        for (index = 0; index < fieldList.length; index++) {
-            Field field = fieldList[index];
-            field.setAccessible(true);
-            Object child;
-            try {
-                child = field.get(parentStatement);
-                if (child != null) {
-                    if (child instanceof Statement) {
-                        if (child == this) {
-                            field.set(parentStatement, statement);
-                            Statement parentStatement
-                                    = statement.parentStatement
-                                    = this.parentStatement;
-                            while (parentStatement != null) {
-                                parentStatement.needCache = null;
-                                parentStatement = parentStatement.getParentStatement();
-                            }
-                            this.parentStatement = null;
-                            return;
-                        }
-                    } else if (child instanceof Statement[]) {
-                        Statement[] columnList = (Statement[]) child;
-                        int i;
-                        for (i = 0; i < columnList.length; i++) {
-                            Statement value = columnList[i];
-                            if (value != null && value == this) {
-                                columnList[i] = statement;
+        if (parentStatement != null) {
+            Field[] fieldList = parentStatement.getClass().getDeclaredFields();
+            int index;
+            for (index = 0; index < fieldList.length; index++) {
+                Field field = fieldList[index];
+                field.setAccessible(true);
+                Object child;
+                try {
+                    child = field.get(parentStatement);
+                    if (child != null) {
+                        if (child instanceof Statement) {
+                            if (child == this) {
+                                field.set(parentStatement, statement);
                                 Statement parentStatement
                                         = statement.parentStatement
                                         = this.parentStatement;
@@ -103,14 +87,32 @@ public abstract class Statement implements Serializable, Cloneable {
                                 this.parentStatement = null;
                                 return;
                             }
+                        } else if (child instanceof Statement[]) {
+                            Statement[] columnList = (Statement[]) child;
+                            int i;
+                            for (i = 0; i < columnList.length; i++) {
+                                Statement value = columnList[i];
+                                if (value != null && value == this) {
+                                    columnList[i] = statement;
+                                    Statement parentStatement
+                                            = statement.parentStatement
+                                            = this.parentStatement;
+                                    while (parentStatement != null) {
+                                        parentStatement.needCache = null;
+                                        parentStatement = parentStatement.getParentStatement();
+                                    }
+                                    this.parentStatement = null;
+                                    return;
+                                }
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    throw new AntlrException("替换" + this.getClass().getName() + "为" + statement.getClass().getName() + "失败", e);
                 }
-            } catch (Exception e) {
-                throw new AntlrException("替换" + this.getClass().getName() + "为" + statement.getClass().getName() + "失败", e);
             }
+            throw new AntlrException("不能替换" + this.getClass().getName() + "为" + statement.getClass().getName());
         }
-        throw new AntlrException("不能替换" + this.getClass().getName() + "为" + statement.getClass().getName());
     }
 
     @Override
