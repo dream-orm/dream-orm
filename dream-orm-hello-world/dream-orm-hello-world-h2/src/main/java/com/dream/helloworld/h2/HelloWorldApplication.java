@@ -1,13 +1,6 @@
 package com.dream.helloworld.h2;
 
-import com.dream.antlr.sql.ToSQL;
-import com.dream.drive.factory.DefaultFlexDialect;
 import com.dream.flex.annotation.FlexAPT;
-import com.dream.flex.dialect.FlexDialect;
-import com.dream.mate.logic.inject.LogicHandler;
-import com.dream.mate.permission.inject.PermissionHandler;
-import com.dream.mate.tenant.inject.TenantHandler;
-import com.dream.system.config.MethodInfo;
 import com.dream.system.inject.Inject;
 import com.dream.system.table.ColumnInfo;
 import com.dream.template.sequence.AbstractSequence;

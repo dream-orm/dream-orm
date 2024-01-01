@@ -1,7 +1,5 @@
 package com.dream.tdhelloworld;
 
-import com.dream.flex.def.GroupByDef;
-import com.dream.flex.def.QueryDef;
 import com.dream.system.config.Page;
 import com.dream.tdengine.mapper.FlexTdMapper;
 import com.dream.tdhelloworld.table.Meters;

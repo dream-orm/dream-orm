@@ -1,6 +1,7 @@
 package com.dream.flex.mapper;
 
 import com.dream.antlr.smt.*;
+import com.dream.flex.config.FlexBatchMappedStatement;
 import com.dream.flex.config.SqlInfo;
 import com.dream.flex.def.DeleteDef;
 import com.dream.flex.def.InsertDef;
@@ -114,6 +115,22 @@ public class DefaultFlexMapper implements FlexMapper {
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.INSERT, methodInfo);
         return (int) session.execute(mappedStatement);
+    }
+
+    @Override
+    public List<int[]> batchInsert(List<InsertDef> insertDefList, int batchSize) {
+        if (ObjectUtil.isNull(insertDefList)) {
+            return null;
+        }
+        List<MappedStatement> mappedStatementList = new ArrayList<>(insertDefList.size());
+        MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer[].class);
+        for (InsertDef insertDef : insertDefList) {
+            SqlInfo sqlInfo = flexDialect.toSQL(insertDef);
+            MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.INSERT, methodInfo);
+            mappedStatementList.add(mappedStatement);
+        }
+        FlexBatchMappedStatement batchMappedStatement = new FlexBatchMappedStatement(methodInfo, mappedStatementList);
+        return (List<int[]>) session.execute(batchMappedStatement);
     }
 
     @Override

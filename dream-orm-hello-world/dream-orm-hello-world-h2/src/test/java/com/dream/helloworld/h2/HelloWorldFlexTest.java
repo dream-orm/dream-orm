@@ -103,6 +103,16 @@ public class HelloWorldFlexTest {
         flexMapper.insert(insertDef);
     }
 
+    @Test
+    public void testInsert4() {
+        List<InsertDef> insertDefList = new ArrayList<>();
+        for (int i = 220; i < 230; i++) {
+            InsertDef insertDef = insertInto(account).columns(account.id, account.name, account.age).values(i, "name" + i, i * 2);
+            insertDefList.add(insertDef);
+        }
+        flexMapper.batchInsert(insertDefList);
+    }
+
     /**
      * 测试删除
      */

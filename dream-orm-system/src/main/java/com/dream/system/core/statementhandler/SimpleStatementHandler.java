@@ -40,7 +40,8 @@ public class SimpleStatementHandler implements StatementHandler<Statement> {
         List<Object> resultList = new ArrayList<>();
         while (batchMappedStatement.hasNext()) {
             BatchMappedStatement nextBatchMappedStatement = batchMappedStatement.next();
-            for (MappedStatement ms : nextBatchMappedStatement.getMappedStatementList()) {
+            List<MappedStatement> mappedStatementList = nextBatchMappedStatement.getMappedStatementList();
+            for (MappedStatement ms : mappedStatementList) {
                 statement.addBatch(ms.getSql());
             }
             int[] result = statement.executeBatch();

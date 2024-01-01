@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcBatchMappedStatement extends BatchMappedStatement {
+    protected List<?> argList;
 
     public JdbcBatchMappedStatement(MethodInfo methodInfo, List<?> argList, MappedSql mappedSql) {
-        super(methodInfo, argList);
+        super(methodInfo);
+        this.argList = argList;
         this.mappedStatementList = compile(mappedSql);
     }
 
@@ -19,11 +21,6 @@ public class JdbcBatchMappedStatement extends BatchMappedStatement {
             mappedStatementList.add(mappedStatement);
         }
         return mappedStatementList;
-    }
-
-    @Override
-    protected List<MappedStatement> compile(Configuration configuration) {
-        return null;
     }
 
     @Override

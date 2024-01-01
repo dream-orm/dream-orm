@@ -37,7 +37,8 @@ public class JdbcStatementHandler implements StatementHandler<PreparedStatement>
         List<Object> resultList = new ArrayList<>();
         while (batchMappedStatement.hasNext()) {
             BatchMappedStatement nextBatchMappedStatement = batchMappedStatement.next();
-            for (MappedStatement ms : nextBatchMappedStatement.getMappedStatementList()) {
+            List<MappedStatement> mappedStatementList = nextBatchMappedStatement.getMappedStatementList();
+            for (MappedStatement ms : mappedStatementList) {
                 statementSetter.setter(statement, ms);
                 statement.addBatch();
             }

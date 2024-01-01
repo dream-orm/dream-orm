@@ -80,6 +80,25 @@ public interface FlexMapper {
     int insert(InsertDef insertDef);
 
     /**
+     * 批量插入
+     *
+     * @param insertDefList 插入定义器集合
+     * @return
+     */
+    default List<int[]> batchInsert(List<InsertDef> insertDefList) {
+        return batchInsert(insertDefList, 1000);
+    }
+
+    /**
+     * 批量插入
+     *
+     * @param insertDefList 插入定义器集合
+     * @param batchSize     批量大小
+     * @return
+     */
+    List<int[]> batchInsert(List<InsertDef> insertDefList, int batchSize);
+
+    /**
      * 数据是否存在
      *
      * @param queryDef

@@ -61,7 +61,8 @@ public class PrepareStatementHandler implements StatementHandler<PreparedStateme
         List<Object> resultList = new ArrayList<>();
         while (batchMappedStatement.hasNext()) {
             BatchMappedStatement nextBatchMappedStatement = batchMappedStatement.next();
-            for (MappedStatement ms : nextBatchMappedStatement.getMappedStatementList()) {
+            List<MappedStatement> mappedStatementList = nextBatchMappedStatement.getMappedStatementList();
+            for (MappedStatement ms : mappedStatementList) {
                 doParameter(statement, ms);
                 statement.addBatch();
             }

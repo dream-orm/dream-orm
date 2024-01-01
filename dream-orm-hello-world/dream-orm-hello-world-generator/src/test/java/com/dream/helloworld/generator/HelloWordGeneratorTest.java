@@ -32,7 +32,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         public boolean support(String table) {
-            return table.contains("micro");
+            return table.contains("oss");
         }
     }
 }
