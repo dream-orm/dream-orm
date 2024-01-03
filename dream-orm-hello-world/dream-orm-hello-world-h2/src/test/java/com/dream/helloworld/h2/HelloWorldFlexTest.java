@@ -75,6 +75,18 @@ public class HelloWorldFlexTest {
     }
 
     /**
+     * 测试批量更新
+     */
+    @Test
+    public void testBatchUpdate() {
+        List<UpdateDef> updateDefList = new ArrayList<>();
+        for (int i = 1; i < 10; i++) {
+            UpdateDef updateDef = update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
+            updateDefList.add(updateDef);
+        }
+    }
+
+    /**
      * 测试插入
      */
     @Test

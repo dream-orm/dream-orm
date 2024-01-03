@@ -64,6 +64,25 @@ public interface FlexMapper {
     int update(UpdateDef updateDef);
 
     /**
+     * 批量更新
+     *
+     * @param updateDefList 更新定义器集合
+     * @return
+     */
+    default List<int[]> batchUpdate(List<UpdateDef> updateDefList) {
+        return batchUpdate(updateDefList, 1000);
+    }
+
+    /**
+     * 批量插入
+     *
+     * @param updateDefList 更新定义器集合
+     * @param batchSize     批量大小
+     * @return
+     */
+    List<int[]> batchUpdate(List<UpdateDef> updateDefList, int batchSize);
+
+    /**
      * 删除操作
      *
      * @param deleteDef 删除定义器

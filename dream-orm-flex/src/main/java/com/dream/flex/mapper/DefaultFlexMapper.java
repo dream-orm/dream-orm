@@ -102,6 +102,23 @@ public class DefaultFlexMapper implements FlexMapper {
     }
 
     @Override
+    public List<int[]> batchUpdate(List<UpdateDef> updateDefList, int batchSize) {
+        if (ObjectUtil.isNull(updateDefList)) {
+            return null;
+        }
+        List<MappedStatement> mappedStatementList = new ArrayList<>(updateDefList.size());
+        MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer[].class);
+        for (UpdateDef updateDef : updateDefList) {
+            SqlInfo sqlInfo = flexDialect.toSQL(updateDef);
+            MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.UPDATE, methodInfo);
+            mappedStatementList.add(mappedStatement);
+        }
+        FlexBatchMappedStatement batchMappedStatement = new FlexBatchMappedStatement(methodInfo, mappedStatementList);
+        batchMappedStatement.setBatchSize(batchSize);
+        return (List<int[]>) session.execute(batchMappedStatement);
+    }
+
+    @Override
     public int delete(DeleteDef deleteDef) {
         SqlInfo sqlInfo = flexDialect.toSQL(deleteDef);
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
@@ -130,6 +147,7 @@ public class DefaultFlexMapper implements FlexMapper {
             mappedStatementList.add(mappedStatement);
         }
         FlexBatchMappedStatement batchMappedStatement = new FlexBatchMappedStatement(methodInfo, mappedStatementList);
+        batchMappedStatement.setBatchSize(batchSize);
         return (List<int[]>) session.execute(batchMappedStatement);
     }
 
