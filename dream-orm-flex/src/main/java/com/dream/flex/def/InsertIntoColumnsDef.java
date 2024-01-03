@@ -5,10 +5,15 @@ import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.Statement;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 
 public interface InsertIntoColumnsDef<InsertDefIntoValues extends InsertIntoValuesDef<Insert>, Insert extends InsertDef> extends InsertIntoValuesDef<Insert>, InsertDef {
+    default InsertDefIntoValues columns(List<ColumnDef> columnDefList) {
+        return columns(columnDefList.toArray(new ColumnDef[columnDefList.size()]));
+    }
+
     default InsertDefIntoValues columns(ColumnDef... columnDefs) {
         ListColumnStatement paramsListStatement = new ListColumnStatement(",");
         for (ColumnDef columnDef : columnDefs) {
