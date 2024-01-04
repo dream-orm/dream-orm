@@ -3,9 +3,12 @@ package com.dream.boot.share;
 import com.dream.boot.autoconfigure.DreamProperties;
 import com.dream.mate.share.datasource.ShareDataSource;
 import com.dream.mate.share.session.ShareMapperInvokerFactory;
+import com.dream.mate.share.trategy.DefaultShardStrategy;
+import com.dream.mate.share.trategy.ShardStrategy;
 import com.dream.system.mapper.MapperInvokeFactory;
 import com.dream.util.exception.DreamRunTimeException;
 import com.dream.util.reflect.ReflectUtil;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportAware;
@@ -36,8 +39,14 @@ public class DataSourceConfiguration implements ImportAware {
     }
 
     @Bean
-    public MapperInvokeFactory mapperInvokeFactory() {
-        return new ShareMapperInvokerFactory();
+    @ConditionalOnMissingBean
+    public ShardStrategy shardStrategy() {
+        return new DefaultShardStrategy();
+    }
+
+    @Bean
+    public MapperInvokeFactory mapperInvokeFactory(ShardStrategy shardStrategy) {
+        return new ShareMapperInvokerFactory(shardStrategy);
     }
 
     @Override

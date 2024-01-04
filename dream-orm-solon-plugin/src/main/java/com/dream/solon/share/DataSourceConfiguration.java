@@ -2,11 +2,14 @@ package com.dream.solon.share;
 
 import com.dream.mate.share.datasource.ShareDataSource;
 import com.dream.mate.share.session.ShareMapperInvokerFactory;
+import com.dream.mate.share.trategy.DefaultShardStrategy;
+import com.dream.mate.share.trategy.ShardStrategy;
 import com.dream.solon.plugin.DreamProperties;
 import com.dream.system.mapper.MapperInvokeFactory;
 import com.dream.util.exception.DreamRunTimeException;
 import org.noear.solon.Solon;
 import org.noear.solon.annotation.Bean;
+import org.noear.solon.annotation.Condition;
 import org.noear.solon.annotation.Configuration;
 import org.noear.solon.core.wrap.ClassWrap;
 
@@ -39,7 +42,13 @@ public class DataSourceConfiguration {
     }
 
     @Bean
-    public MapperInvokeFactory mapperInvokeFactory() {
-        return new ShareMapperInvokerFactory();
+    @Condition(onMissingBean = ShardStrategy.class)
+    public ShardStrategy shardStrategy() {
+        return new DefaultShardStrategy();
+    }
+
+    @Bean
+    public MapperInvokeFactory mapperInvokeFactory(ShardStrategy shardStrategy) {
+        return new ShareMapperInvokerFactory(shardStrategy);
     }
 }
