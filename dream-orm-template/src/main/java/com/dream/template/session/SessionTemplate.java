@@ -5,9 +5,7 @@ import com.dream.system.config.MappedStatement;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.core.session.Session;
 import com.dream.system.core.session.SessionFactory;
-import com.dream.system.mapper.DefaultMapperInvokeFactory;
 import com.dream.system.mapper.MapperFactory;
-import com.dream.system.mapper.MapperInvokeFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -20,26 +18,19 @@ public class SessionTemplate implements Session {
     private Configuration configuration;
     private MapperFactory mapperFactory;
     private SessionHolder sessionHolder;
-    private MapperInvokeFactory mapperInvokeFactory;
-
-    public SessionTemplate(SessionHolder sessionHolder, SessionFactory sessionFactory) {
-        this(sessionHolder, sessionFactory, new DefaultMapperInvokeFactory());
-    }
 
     public SessionTemplate(SessionHolder sessionHolder,
-                           SessionFactory sessionFactory,
-                           MapperInvokeFactory mapperInvokeFactory) {
+                           SessionFactory sessionFactory) {
         this.configuration = sessionFactory.getConfiguration();
         this.mapperFactory = configuration.getMapperFactory();
         this.sessionHolder = sessionHolder;
         this.sessionProxy = (Session) Proxy.newProxyInstance(SessionFactory.class.getClassLoader(),
-                new Class[]{Session.class}, new SessionInterceptor());
-        this.mapperInvokeFactory = mapperInvokeFactory;
+                new Class[]{Session.class}, new SessionInvocationHandler());
     }
 
     @Override
     public <T> T getMapper(Class<T> type) {
-        return mapperFactory.getMapper(type, mapperInvokeFactory.getMapperInvoke(this));
+        return mapperFactory.getMapper(type, this);
     }
 
     @Override
@@ -74,7 +65,7 @@ public class SessionTemplate implements Session {
         return this.configuration;
     }
 
-    private class SessionInterceptor implements InvocationHandler {
+    private class SessionInvocationHandler implements InvocationHandler {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             Session session = sessionHolder.getSession();

@@ -2,14 +2,16 @@ package com.dream.boot.share;
 
 import com.dream.boot.autoconfigure.DreamProperties;
 import com.dream.mate.share.datasource.ShareDataSource;
-import com.dream.mate.share.session.ShareMapperInvokerFactory;
-import com.dream.mate.share.trategy.DefaultShardStrategy;
-import com.dream.mate.share.trategy.ShardStrategy;
-import com.dream.system.mapper.MapperInvokeFactory;
+import com.dream.mate.share.listener.ShardListener;
+import com.dream.system.core.listener.Listener;
+import com.dream.system.core.listener.factory.ListenerFactory;
+import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
 import com.dream.util.reflect.ReflectUtil;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.beans.BeansException;
 import org.springframework.cglib.beans.BeanMap;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportAware;
 import org.springframework.core.type.AnnotationMetadata;
@@ -18,7 +20,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataSourceConfiguration implements ImportAware {
+public class DataSourceConfiguration implements ImportAware, ApplicationContextAware {
     private Class<? extends DataSource> dataSourceType;
 
 
@@ -38,20 +40,24 @@ public class DataSourceConfiguration implements ImportAware {
         return new ShareDataSource(dataSourceMap);
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public ShardStrategy shardStrategy() {
-        return new DefaultShardStrategy();
-    }
-
-    @Bean
-    public MapperInvokeFactory mapperInvokeFactory(ShardStrategy shardStrategy) {
-        return new ShareMapperInvokerFactory(shardStrategy);
-    }
-
     @Override
     public void setImportMetadata(AnnotationMetadata importMetadata) {
         Map<String, Object> annotationAttributes = importMetadata.getAnnotationAttributes(EnableShare.class.getName());
         this.dataSourceType = (Class<? extends DataSource>) annotationAttributes.get("value");
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        ListenerFactory listenerFactory = applicationContext.getBean(ListenerFactory.class);
+        Listener[] listeners = listenerFactory.getListeners();
+        if (!ObjectUtil.isNull(listeners)) {
+            for (Listener listener : listeners) {
+                if (listener instanceof ShardListener) {
+                    return;
+                }
+            }
+        }
+        listeners = ObjectUtil.merge(listeners, new Listener[]{new ShardListener()});
+        listenerFactory.listeners(listeners);
     }
 }

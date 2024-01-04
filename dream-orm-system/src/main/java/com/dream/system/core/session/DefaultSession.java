@@ -5,9 +5,7 @@ import com.dream.system.config.MappedStatement;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.core.executor.Executor;
 import com.dream.system.dialect.DialectFactory;
-import com.dream.system.mapper.DefaultMapperInvokeFactory;
 import com.dream.system.mapper.MapperFactory;
-import com.dream.system.mapper.MapperInvokeFactory;
 import com.dream.util.exception.DreamRunTimeException;
 
 import java.sql.SQLException;
@@ -18,23 +16,17 @@ public class DefaultSession implements Session {
     protected Executor executor;
     protected MapperFactory mapperFactory;
     protected DialectFactory dialectFactory;
-    protected MapperInvokeFactory mapperInvokeFactory;
 
     public DefaultSession(Configuration configuration, Executor executor) {
-        this(configuration, executor, new DefaultMapperInvokeFactory());
-    }
-
-    public DefaultSession(Configuration configuration, Executor executor, MapperInvokeFactory mapperInvokeFactory) {
         this.configuration = configuration;
         this.executor = executor;
         this.mapperFactory = configuration.getMapperFactory();
         this.dialectFactory = configuration.getDialectFactory();
-        this.mapperInvokeFactory = mapperInvokeFactory;
     }
 
     @Override
     public <T> T getMapper(Class<T> type) {
-        return mapperFactory.getMapper(type, mapperInvokeFactory.getMapperInvoke(this));
+        return mapperFactory.getMapper(type, this);
     }
 
     @Override

@@ -41,8 +41,6 @@ import com.dream.system.inject.Inject;
 import com.dream.system.inject.factory.DefaultInjectFactory;
 import com.dream.system.inject.factory.InjectFactory;
 import com.dream.system.mapper.DefaultMapperFactory;
-import com.dream.system.mapper.DefaultMapperInvokeFactory;
-import com.dream.system.mapper.MapperInvokeFactory;
 import com.dream.system.plugin.factory.PluginFactory;
 import com.dream.system.plugin.factory.ProxyPluginFactory;
 import com.dream.system.plugin.interceptor.Interceptor;
@@ -87,7 +85,7 @@ public class DefaultDriveFactory implements DriveFactory {
         this.driveProperties = driveProperties;
         this.toSQL = toSQL();
         this.sessionFactory = sessionFactory(dataSource, tablePackages, mapperPackages);
-        this.sessionTemplate = sessionTemplate(sessionHolder(), this.sessionFactory, mapperInvokeFactory());
+        this.sessionTemplate = sessionTemplate(sessionHolder(), this.sessionFactory);
         this.templateMapper = templateMapper(sessionTemplate, sequence());
         this.flexMapper = flexMapper(sessionTemplate, toSQL);
         this.flexChainMapper = flexChainMapper(this.flexMapper);
@@ -431,26 +429,15 @@ public class DefaultDriveFactory implements DriveFactory {
     }
 
     /**
-     * MapperInvoke对象创建工厂
-     *
-     * @return
-     */
-    protected MapperInvokeFactory mapperInvokeFactory() {
-        return new DefaultMapperInvokeFactory();
-    }
-
-    /**
      * SQL操作会话
      *
-     * @param sessionHolder       SQL操作会话获取
-     * @param sessionFactory      SQL操作会话创建工厂
-     * @param mapperInvokeFactory MapperInvoke对象创建工厂
+     * @param sessionHolder  SQL操作会话获取
+     * @param sessionFactory SQL操作会话创建工厂
      * @return
      */
     protected SessionTemplate sessionTemplate(SessionHolder sessionHolder
-            , SessionFactory sessionFactory
-            , MapperInvokeFactory mapperInvokeFactory) {
-        return new SessionTemplate(sessionHolder, sessionFactory, mapperInvokeFactory);
+            , SessionFactory sessionFactory) {
+        return new SessionTemplate(sessionHolder, sessionFactory);
     }
 
     /**

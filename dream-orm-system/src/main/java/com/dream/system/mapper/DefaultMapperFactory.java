@@ -12,6 +12,7 @@ import com.dream.system.core.action.DestroyAction;
 import com.dream.system.core.action.InitAction;
 import com.dream.system.core.action.LoopAction;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
+import com.dream.system.core.session.Session;
 import com.dream.system.core.statementhandler.StatementHandler;
 import com.dream.util.common.NonCollection;
 import com.dream.util.common.ObjectMap;
@@ -311,7 +312,7 @@ public class DefaultMapperFactory implements MapperFactory {
     }
 
     @Override
-    public <T> T getMapper(Class<T> type, MapperInvoke mapperInvoke) {
+    public <T> T getMapper(Class<T> type, Session session) {
         Class[] typeList = mapperTypeMap.get(type);
         if (typeList == null) {
             return null;
@@ -320,7 +321,7 @@ public class DefaultMapperFactory implements MapperFactory {
             MethodInfo methodInfo = methodInfoMap.get(method);
             if (methodInfo != null) {
                 Map<String, Object> argMap = getArg(methodInfo, args);
-                return mapperInvoke.invoke(methodInfo, argMap, type);
+                return session.execute(methodInfo, argMap);
             } else {
                 return invoke(type, proxy, method, args);
             }
