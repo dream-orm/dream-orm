@@ -46,7 +46,6 @@ public class DefaultFlexMapper implements FlexMapper {
         if (pageInject != null) {
             this.offset = pageInject.isOffset();
         }
-
     }
 
     @Override
