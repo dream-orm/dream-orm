@@ -27,7 +27,7 @@ public abstract class AbstractCacheExecutor implements Executor {
 
     protected Object query(MappedStatement mappedStatement, Session session) throws SQLException {
         Object result;
-        if (mappedStatement.isCache()) {
+        if (cache(mappedStatement)) {
             result = queryFromCache(mappedStatement);
             if (result == null) {
                 result = nextExecutor.execute(mappedStatement, session);
@@ -54,6 +54,11 @@ public abstract class AbstractCacheExecutor implements Executor {
     }
 
     @Override
+    public boolean isAutoCommit() {
+        return nextExecutor.isAutoCommit();
+    }
+
+    @Override
     public void commit() {
         nextExecutor.commit();
     }
@@ -68,7 +73,7 @@ public abstract class AbstractCacheExecutor implements Executor {
         nextExecutor.close();
     }
 
-    public abstract void clear();
+    protected abstract boolean cache(MappedStatement mappedStatement);
 
     protected abstract Object queryFromCache(MappedStatement mappedStatement);
 
@@ -76,8 +81,5 @@ public abstract class AbstractCacheExecutor implements Executor {
 
     protected abstract void clearObject(MappedStatement mappedStatement);
 
-    @Override
-    public boolean isAutoCommit() {
-        return nextExecutor.isAutoCommit();
-    }
+    public abstract void clear();
 }

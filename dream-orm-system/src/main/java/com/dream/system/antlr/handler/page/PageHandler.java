@@ -71,7 +71,6 @@ public class PageHandler extends AbstractHandler {
                 .setConfiguration(this.methodInfo.getConfiguration())
                 .setRowType(NonCollection.class)
                 .setColType(Long.class)
-                .setCache(this.methodInfo.isCache())
                 .setSql("SELECT COUNT(*)FROM(" + this.methodInfo.getSql() + ")t_mp")
                 .setStatement(packageStatement);
         PageAction pageAction = new PageAction(methodInfo, property);

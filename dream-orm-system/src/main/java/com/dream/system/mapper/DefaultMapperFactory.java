@@ -74,7 +74,6 @@ public class DefaultMapperFactory implements MapperFactory {
         MethodParam[] methodParamList = getMethodParamList(method);
         Class<? extends Collection> rowType = getRowType(mapperClass, method, actionProvider);
         Class colType = getColType(mapperClass, method, actionProvider);
-        boolean cache = isCache(mapperClass, method, actionProvider);
         int timeOut = getTimeOut(mapperClass, method, actionProvider);
         StatementHandler statementHandler = statementHandler(mapperClass, method, actionProvider);
         ResultSetHandler resultSetHandler = resultSetHandler(mapperClass, method, actionProvider);
@@ -86,7 +85,6 @@ public class DefaultMapperFactory implements MapperFactory {
                 .setId(method.getDeclaringClass().getName() + "." + method.getName())
                 .setRowType(rowType)
                 .setColType(colType)
-                .setCache(cache)
                 .setMethodParamList(methodParamList)
                 .setSql(sql)
                 .setTimeOut(timeOut)
@@ -224,22 +222,6 @@ public class DefaultMapperFactory implements MapperFactory {
             colType = ReflectUtil.getColType(mapperClass, method);
         }
         return colType;
-    }
-
-    protected boolean isCache(Class mapperClass, Method method, ActionProvider actionProvider) {
-        Boolean cache = null;
-        if (actionProvider != null) {
-            cache = actionProvider.cache();
-        }
-        if (cache == null) {
-            Sql sqlAnnotation = method.getDeclaredAnnotation(Sql.class);
-            if (sqlAnnotation != null) {
-                cache = sqlAnnotation.cache();
-            } else {
-                cache = false;
-            }
-        }
-        return cache;
     }
 
     protected InitAction[] initActions(Class mapperClass, Method method, ActionProvider actionProvider) {

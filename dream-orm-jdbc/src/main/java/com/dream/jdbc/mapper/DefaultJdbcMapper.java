@@ -26,7 +26,6 @@ public class DefaultJdbcMapper implements JdbcMapper {
     public int execute(String sql, StatementSetter statementSetter) {
         JdbcStatementHandler jdbcStatementHandler = new JdbcStatementHandler(statementSetter);
         MethodInfo methodInfo = new MethodInfo();
-        methodInfo.setCache(false);
         methodInfo.setStatementHandler(jdbcStatementHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
@@ -44,7 +43,6 @@ public class DefaultJdbcMapper implements JdbcMapper {
         }
         JdbcStatementHandler jdbcStatementHandler = new JdbcStatementHandler(statementSetter);
         MethodInfo methodInfo = new MethodInfo();
-        methodInfo.setCache(false);
         methodInfo.setStatementHandler(jdbcStatementHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
@@ -58,7 +56,6 @@ public class DefaultJdbcMapper implements JdbcMapper {
         JdbcStatementHandler jdbcStatementHandler = new JdbcStatementHandler(statementSetter);
         JdbcResultSetHandler jdbcResultSetHandler = new JdbcResultSetHandler(rowMapping);
         MethodInfo methodInfo = new MethodInfo();
-        methodInfo.setCache(false);
         methodInfo.setStatementHandler(jdbcStatementHandler);
         methodInfo.setResultSetHandler(jdbcResultSetHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);

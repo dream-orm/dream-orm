@@ -14,7 +14,6 @@ public abstract class BatchMappedStatement<T extends BatchMappedStatement> exten
 
     public BatchMappedStatement(MethodInfo methodInfo) {
         this.methodInfo = methodInfo;
-        this.cache = methodInfo.cache;
     }
 
     @Override

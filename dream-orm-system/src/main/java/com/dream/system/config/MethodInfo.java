@@ -23,7 +23,6 @@ public class MethodInfo {
     protected Class colType;
     protected String[] columnNames;
     protected TypeHandler[] columnTypeHandlers;
-    protected boolean cache = true;
     protected Compile compile = Compile.ANTLR_COMPILE;
     protected String sql;
     protected int timeOut;
@@ -88,15 +87,6 @@ public class MethodInfo {
 
     public MethodInfo setColumnTypeHandlers(TypeHandler[] columnTypeHandlers) {
         this.columnTypeHandlers = columnTypeHandlers;
-        return this;
-    }
-
-    public boolean isCache() {
-        return cache;
-    }
-
-    public MethodInfo setCache(boolean cache) {
-        this.cache = cache;
         return this;
     }
 

@@ -66,15 +66,6 @@ public interface ActionProvider {
     }
 
     /**
-     * 是否应用缓存
-     *
-     * @return
-     */
-    default Boolean cache() {
-        return null;
-    }
-
-    /**
      * 查询超时设置
      *
      * @return

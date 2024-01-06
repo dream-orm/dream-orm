@@ -16,13 +16,6 @@ public @interface Sql {
     String value();
 
     /**
-     * 是否应用缓存
-     *
-     * @return
-     */
-    boolean cache() default true;
-
-    /**
      * 超时时长，只应用于查询
      *
      * @return

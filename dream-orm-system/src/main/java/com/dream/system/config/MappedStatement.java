@@ -19,7 +19,6 @@ public class MappedStatement {
     protected MethodInfo methodInfo;
     protected CacheKey uniqueKey;
     protected Object arg;
-    protected boolean cache;
     protected Map<String, Object> envMap;
 
     protected MappedStatement() {
@@ -68,15 +67,6 @@ public class MappedStatement {
 
     public TypeHandler[] getColumnTypeHandlers() {
         return methodInfo.getColumnTypeHandlers();
-    }
-
-    public boolean isCache() {
-        return cache;
-    }
-
-    public MappedStatement setCache(boolean cache) {
-        this.cache = cache;
-        return this;
     }
 
     public Method getMethod() {
@@ -153,7 +143,6 @@ public class MappedStatement {
 
         public Builder methodInfo(MethodInfo methodInfo) {
             mappedStatement.methodInfo = methodInfo;
-            mappedStatement.cache = methodInfo.isCache();
             return this;
         }
 

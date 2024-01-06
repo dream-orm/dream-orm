@@ -17,6 +17,11 @@ public class CacheExecutor extends AbstractCacheExecutor {
     }
 
     @Override
+    protected boolean cache(MappedStatement mappedStatement) {
+        return cache.cache(mappedStatement);
+    }
+
+    @Override
     protected Object queryFromCache(MappedStatement mappedStatement) {
         return cache.get(mappedStatement);
     }

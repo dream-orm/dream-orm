@@ -38,4 +38,9 @@ public class SessionCacheExecutor extends AbstractCacheExecutor {
         super.close();
         clear();
     }
+
+    @Override
+    protected boolean cache(MappedStatement mappedStatement) {
+        return true;
+    }
 }
