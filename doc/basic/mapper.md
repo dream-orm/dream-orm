@@ -46,13 +46,6 @@ public @interface Sql {
     String value();
 
     /**
-     * 是否应用缓存
-     *
-     * @return
-     */
-    boolean cache() default true;
-
-    /**
      * 超时时长，只应用于查询
      *
      * @return
@@ -64,7 +57,6 @@ public @interface Sql {
 | 属性名 | 描述                   |
 | ------ | ---------------------- |
 | value  | 接口方法对应的SQL语句  |
-| cache  | 是否应用缓存           |
 | time   | 超时时长，只应用于查询 |
 
 ## PageQuery注解
@@ -167,15 +159,6 @@ public interface ActionProvider {
     }
 
     /**
-     * 是否应用缓存
-     *
-     * @return
-     */
-    default Boolean cache() {
-        return null;
-    }
-
-    /**
      * 查询超时设置
      *
      * @return
@@ -212,7 +195,6 @@ public interface ActionProvider {
 | destroyAction      | SQL执行后行为                      |
 | rowType            | 接受的集合类型，一般系统判断即可   |
 | colType            | 接受的对象类型，一般系统判断即可   |
-| cache              | 是否使用缓存                       |
 | timeOut            | 超时设置                           |
 | statementHandler   | SQL操作最终类                      |
 | resultSetHandler   | 映射数据库查询数据与java对象       |

@@ -8,6 +8,15 @@
  */
 public interface Cache {
     /**
+     * 是否开启缓存
+     *
+     * @param mappedStatement 编译后的接口方法详尽信息
+     * @return 是否开启缓存
+     */
+    default boolean cache(MappedStatement mappedStatement){
+        return true;
+    }
+    /**
      * 缓存数据
      *
      * @param mappedStatement 编译后的接口方法详尽信息
@@ -73,3 +82,4 @@ public interface Cache {
 dream:
   cache: com.dream.system.cache.MemoryCache
 ```
+
