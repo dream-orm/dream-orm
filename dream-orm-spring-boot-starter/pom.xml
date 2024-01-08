@@ -5,14 +5,14 @@
     <parent>
         <groupId>com.dream-orm</groupId>
         <artifactId>dream-orm</artifactId>
-        <version>1.2.9</version>
+        <version>1.2.10</version>
     </parent>
     <artifactId>dream-orm-spring-boot-starter</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-drive</artifactId>
-            <version>1.2.9</version>
+            <version>1.2.10</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.dream-orm</groupId>
         <artifactId>dream-orm</artifactId>
-        <version>1.2.9</version>
+        <version>1.2.10</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,42 +14,42 @@
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-antlr</artifactId>
-            <version>1.2.9</version>
+            <version>1.2.10</version>
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-util</artifactId>
-            <version>1.2.9</version>
+            <version>1.2.10</version>
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-system</artifactId>
-            <version>1.2.9</version>
+            <version>1.2.10</version>
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-template</artifactId>
-            <version>1.2.9</version>
+            <version>1.2.10</version>
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-mate</artifactId>
-            <version>1.2.9</version>
+            <version>1.2.10</version>
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-flex</artifactId>
-            <version>1.2.9</version>
+            <version>1.2.10</version>
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-chain</artifactId>
-            <version>1.2.9</version>
+            <version>1.2.10</version>
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-jdbc</artifactId>
-            <version>1.2.9</version>
+            <version>1.2.10</version>
         </dependency>
     </dependencies>
 
