@@ -1,4 +1,4 @@
-package com.dream.mate.tenant.invoker;
+package com.dream.mate.version.invoker;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
@@ -7,16 +7,17 @@ import com.dream.antlr.invoker.AbstractInvoker;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.sql.ToSQL;
-import com.dream.mate.tenant.inject.TenantHandler;
+import com.dream.mate.version.inject.VersionHandler;
+import com.dream.util.common.ObjectWrapper;
 
 import java.util.List;
 
-public class TenantGetInvoker extends AbstractInvoker {
-    public static final String FUNCTION = "dream_mate_tenant_get";
-    private TenantHandler tenantHandler;
+public class NextVersionGetInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "dream_mate_next_version_get";
+    private VersionHandler versionHandler;
 
-    public TenantGetInvoker(TenantHandler tenantHandler) {
-        this.tenantHandler = tenantHandler;
+    public NextVersionGetInvoker(VersionHandler versionHandler) {
+        this.versionHandler = versionHandler;
     }
 
     @Override
@@ -31,14 +32,9 @@ public class TenantGetInvoker extends AbstractInvoker {
 
     @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
-        Object tenantObject = tenantHandler.getTenantObject();
-        if (tenantObject instanceof Number) {
-            return String.valueOf(tenantObject);
-        } else if (tenantObject instanceof String) {
-            return "'" + tenantObject + "'";
-        } else {
-            return tenantObject.toString();
-        }
+        ObjectWrapper objectWrapper = assist.getCustom(ObjectWrapper.class);
+        Object versionObject = versionHandler.getNextVersion(objectWrapper);
+        return String.valueOf(versionObject);
     }
 
     @Override
