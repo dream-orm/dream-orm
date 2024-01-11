@@ -12,6 +12,10 @@ import com.dream.mate.permission.invoker.PermissionInjectInvoker;
 import com.dream.mate.tenant.inject.TenantHandler;
 import com.dream.mate.tenant.invoker.TenantGetInvoker;
 import com.dream.mate.tenant.invoker.TenantInjectInvoker;
+import com.dream.mate.version.inject.VersionHandler;
+import com.dream.mate.version.invoker.CurVersionGetInvoker;
+import com.dream.mate.version.invoker.NextVersionGetInvoker;
+import com.dream.mate.version.invoker.VersionInvoker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +25,7 @@ public class DefaultFlexDialect extends AbstractFlexDialect {
     private TenantHandler tenantHandler;
     private PermissionHandler permissionHandler;
     private LogicHandler logicHandler;
+    private VersionHandler versionHandler;
 
     public DefaultFlexDialect() {
         this(new ToMySQL());
@@ -45,6 +50,11 @@ public class DefaultFlexDialect extends AbstractFlexDialect {
         return this;
     }
 
+    public DefaultFlexDialect versionHandler(VersionHandler versionHandler) {
+        this.versionHandler = versionHandler;
+        return this;
+    }
+
     @Override
     protected List<Invoker> invokerList() {
         List<Invoker> invokerList = new ArrayList<>(3);
@@ -56,6 +66,9 @@ public class DefaultFlexDialect extends AbstractFlexDialect {
         }
         if (logicHandler != null) {
             invokerList.add(new LogicInvoker(logicHandler));
+        }
+        if (versionHandler != null) {
+            invokerList.add(new VersionInvoker(versionHandler));
         }
         return invokerList;
     }
@@ -70,6 +83,10 @@ public class DefaultFlexDialect extends AbstractFlexDialect {
         }
         if (permissionHandler != null) {
             invokerList.add(new PermissionGetInvoker(permissionHandler));
+        }
+        if (versionHandler != null) {
+            invokerList.add(new CurVersionGetInvoker(versionHandler));
+            invokerList.add(new NextVersionGetInvoker(versionHandler));
         }
         return invokerList.toArray(new Invoker[invokerList.size()]);
     }
