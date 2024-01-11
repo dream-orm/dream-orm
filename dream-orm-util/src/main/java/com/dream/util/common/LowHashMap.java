@@ -5,6 +5,14 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class LowHashMap<T> extends HashMap<String, T> {
+    public LowHashMap() {
+
+    }
+
+    public LowHashMap(int initialCapacity) {
+        super(initialCapacity);
+    }
+
     @Override
     public T put(String key, T value) {
         return super.put(key.toLowerCase(Locale.ENGLISH), value);

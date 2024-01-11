@@ -11,6 +11,7 @@ import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
 import com.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
+import com.dream.system.typehandler.handler.ObjectTypeHandler;
 import com.dream.system.typehandler.handler.TypeHandler;
 import com.dream.system.util.SystemUtil;
 import com.dream.util.common.LowHashSet;
@@ -234,7 +235,10 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     if (mappingField) {
                         if (fieldName.equalsIgnoreCase(property)) {
                             builder.property(fieldName);
-                            TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), builder.getJdbcType());
+                            TypeHandler typeHandler = builder.getTypeHandler();
+                            if (typeHandler == null || typeHandler instanceof ObjectTypeHandler) {
+                                typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), builder.getJdbcType());
+                            }
                             builder.field(field).typeHandler(typeHandler);
                             if (!ObjectUtil.isNull(curTableName)) {
                                 mappedResult.add(builder.build());

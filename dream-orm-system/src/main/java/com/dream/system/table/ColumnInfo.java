@@ -1,6 +1,7 @@
 package com.dream.system.table;
 
 import com.dream.system.annotation.Id;
+import com.dream.system.typehandler.handler.TypeHandler;
 
 import java.lang.reflect.Field;
 
@@ -10,13 +11,15 @@ public class ColumnInfo {
     private String name;
     private Field field;
     private int jdbcType;
+    private TypeHandler typeHandler;
 
-    public ColumnInfo(String table, String column, Field field, int jdbcType) {
+    public ColumnInfo(String table, String column, Field field, int jdbcType, TypeHandler typeHandler) {
         this.table = table;
         this.column = column;
         this.field = field;
         this.jdbcType = jdbcType;
         this.name = field.getName();
+        this.typeHandler = typeHandler;
 
     }
 
@@ -30,6 +33,10 @@ public class ColumnInfo {
 
     public int getJdbcType() {
         return jdbcType;
+    }
+
+    public TypeHandler getTypeHandler() {
+        return typeHandler;
     }
 
     public String getName() {

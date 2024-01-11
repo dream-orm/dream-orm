@@ -5,6 +5,8 @@ import com.dream.system.annotation.Column;
 import com.dream.system.annotation.Table;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
+import com.dream.system.typehandler.handler.ObjectTypeHandler;
+import com.dream.system.typehandler.handler.TypeHandler;
 import com.dream.system.util.SystemUtil;
 import com.dream.util.common.LowHashMap;
 import com.dream.util.common.ObjectUtil;
@@ -12,7 +14,6 @@ import com.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ public class DefaultTableFactory implements TableFactory {
         if (ObjectUtil.isNull(table) || tableInfoMap.get(table) != null) {
             return null;
         }
-        Map<String, ColumnInfo> columnInfoMap = new HashMap<>(8);
+        Map<String, ColumnInfo> columnInfoMap = new LowHashMap<>(8);
         List<Field> fieldList = ReflectUtil.findField(tableClass);
         List<ColumnInfo> primKeys = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {
@@ -64,7 +65,12 @@ public class DefaultTableFactory implements TableFactory {
         if (ObjectUtil.isNull(column)) {
             column = SystemUtil.camelToUnderline(field.getName());
         }
-        return new ColumnInfo(table, column, field, columnAnnotation.jdbcType());
+        Class<? extends TypeHandler> typeHandlerClass = columnAnnotation.typeHandler();
+        TypeHandler typeHandler = null;
+        if (typeHandlerClass != ObjectTypeHandler.class) {
+            typeHandler = ReflectUtil.create(typeHandlerClass);
+        }
+        return new ColumnInfo(table, column, field, columnAnnotation.jdbcType(), typeHandler);
     }
 
     @Override

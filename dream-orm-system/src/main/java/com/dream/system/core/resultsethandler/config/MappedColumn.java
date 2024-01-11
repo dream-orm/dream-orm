@@ -120,6 +120,11 @@ public class MappedColumn {
             return mappedColumn.getTable();
         }
 
+        public TypeHandler getTypeHandler() {
+            ColumnInfo columnInfo = getColumnInfo();
+            return columnInfo != null ? columnInfo.getTypeHandler() : null;
+        }
+
         public ColumnInfo getColumnInfo() {
             return mappedColumn.getColumnInfo();
         }

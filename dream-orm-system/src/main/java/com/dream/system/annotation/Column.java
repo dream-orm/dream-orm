@@ -1,6 +1,9 @@
 package com.dream.system.annotation;
 
 
+import com.dream.system.typehandler.handler.ObjectTypeHandler;
+import com.dream.system.typehandler.handler.TypeHandler;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -26,4 +29,11 @@ public @interface Column {
      * @return
      */
     int jdbcType() default Types.NULL;
+
+    /**
+     * 自定义类型转换器
+     *
+     * @return
+     */
+    Class<? extends TypeHandler> typeHandler() default ObjectTypeHandler.class;
 }

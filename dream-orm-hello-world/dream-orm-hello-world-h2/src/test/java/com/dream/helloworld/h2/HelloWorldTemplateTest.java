@@ -83,6 +83,7 @@ public class HelloWorldTemplateTest {
         accountView.setId(1);
         accountView.setName("哈哈");
         accountView.setAge(11);
+        accountView.setEmail("email123");
         templateMapper.updateById(accountView);
     }
 

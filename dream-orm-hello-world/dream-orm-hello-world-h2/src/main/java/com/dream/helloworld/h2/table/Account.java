@@ -13,7 +13,7 @@ public class Account {
     private String name;
     @Column("age")
     private Integer age;
-    @Column("email")
+    @Column(value = "email")
     private String email;
     @Column("tenant_id")
     private Integer tenantId;

@@ -12,7 +12,7 @@ public interface Cache {
      * @param mappedStatement 编译后的接口方法详尽信息
      * @return 是否开启缓存
      */
-    default boolean cache(MappedStatement mappedStatement){
+    default boolean cache(MappedStatement mappedStatement) {
         return true;
     }
 

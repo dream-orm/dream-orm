@@ -150,13 +150,18 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
             }
             int jdbcType = Types.NULL;
             ColumnInfo columnInfo = null;
+            TypeHandler typeHandler = null;
             if (tableInfo != null) {
                 columnInfo = tableInfo.getColumnInfo(column);
                 if (columnInfo != null) {
                     jdbcType = columnInfo.getJdbcType();
+                    typeHandler = columnInfo.getTypeHandler();
                 }
             }
-            return new ParamType(columnInfo, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), jdbcType));
+            if (typeHandler == null) {
+                typeHandler = typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), jdbcType);
+            }
+            return new ParamType(columnInfo, typeHandler);
         } else {
             return new ParamType(null, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), Types.NULL));
         }
