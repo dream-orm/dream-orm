@@ -14,6 +14,10 @@ const sidebar: DefaultTheme.Sidebar = {
                     link: '/guide/quick-start',
                 },
                 {
+                    text: '功能对比',
+                    link: '/guide/comparison',
+                },
+                {
                     text: '性能对比',
                     link: '/guide/benchmark',
                 },
