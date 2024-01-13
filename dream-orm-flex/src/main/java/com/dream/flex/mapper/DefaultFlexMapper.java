@@ -10,6 +10,8 @@ import com.dream.flex.def.UpdateDef;
 import com.dream.flex.dialect.FlexDialect;
 import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.system.config.*;
+import com.dream.system.core.resultsethandler.ResultSetHandler;
+import com.dream.system.core.resultsethandler.SimpleResultSetHandler;
 import com.dream.system.core.session.Session;
 import com.dream.system.inject.PageInject;
 import com.dream.system.inject.factory.InjectFactory;
@@ -33,12 +35,17 @@ public class DefaultFlexMapper implements FlexMapper {
     private Configuration configuration;
     private TypeHandlerFactory typeHandlerFactory;
     private boolean offset;
-
     private FlexDialect flexDialect;
+    private ResultSetHandler resultSetHandler;
 
     public DefaultFlexMapper(Session session, FlexDialect flexDialect) {
+        this(session, flexDialect, new SimpleResultSetHandler());
+    }
+
+    public DefaultFlexMapper(Session session, FlexDialect flexDialect, ResultSetHandler resultSetHandler) {
         this.session = session;
         this.flexDialect = flexDialect;
+        this.resultSetHandler = resultSetHandler;
         this.configuration = session.getConfiguration();
         typeHandlerFactory = configuration.getTypeHandlerFactory();
         InjectFactory injectFactory = configuration.getInjectFactory();
@@ -211,6 +218,7 @@ public class DefaultFlexMapper implements FlexMapper {
         methodInfo.setConfiguration(configuration);
         methodInfo.setRowType(rowType);
         methodInfo.setColType(colType);
+        methodInfo.setResultSetHandler(resultSetHandler);
         return methodInfo;
     }
 

@@ -20,7 +20,18 @@ public class ObjectWrapper {
     }
 
     public static ObjectWrapper wrapper(Object target, boolean cache) {
-        Class<?> type = target.getClass();
+        return wrapper(target.getClass(), target, cache);
+    }
+
+    public static ObjectWrapper wrapper(Class type) {
+        return wrapper(type, true);
+    }
+
+    public static ObjectWrapper wrapper(Class type, boolean cache) {
+        return wrapper(type, null, cache);
+    }
+
+    private static ObjectWrapper wrapper(Class type, Object target, boolean cache) {
         ObjectFactoryWrapper factoryWrapper = factoryWrapperMap.get(type);
         if (factoryWrapper == null) {
             synchronized (factoryWrapperMap) {

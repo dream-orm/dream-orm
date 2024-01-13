@@ -5,10 +5,9 @@ import com.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.dream.system.typehandler.handler.TypeHandler;
 import com.dream.system.util.SystemUtil;
+import com.dream.util.common.ObjectWrapper;
 import com.dream.util.exception.DreamRunTimeException;
 import com.dream.util.reflect.ReflectUtil;
-import com.dream.util.reflection.factory.ObjectFactory;
-import com.dream.util.reflection.wrapper.ObjectFactoryWrapper;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -40,7 +39,6 @@ public class SimpleResultSetHandler implements ResultSetHandler {
             for (int i = 0; i < columnCount; i++) {
                 int columnType = metaData.getColumnType(i + 1);
                 String columnLabel = metaData.getColumnLabel(i + 1);
-                columnLabel = SystemUtil.underlineToCamel(columnLabel);
                 try {
                     TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(Object.class, columnType);
                     columnList.add(new Column(i + 1, typeHandler, columnLabel, columnType));
@@ -74,17 +72,15 @@ public class SimpleResultSetHandler implements ResultSetHandler {
                 }
             }
         }
-        ObjectFactoryWrapper rowWrapper = ObjectFactoryWrapper.wrapper(rowType);
-        ObjectFactory rowObjectFactory = rowWrapper.newObjectFactory();
-        ObjectFactoryWrapper colWrapper = ObjectFactoryWrapper.wrapper(colType);
+        ObjectWrapper rowWrapper = ObjectWrapper.wrapper(rowType);
         while (resultSet.next()) {
-            ObjectFactory objectFactory = colWrapper.newObjectFactory();
+            ObjectWrapper colWrapper = ObjectWrapper.wrapper(colType);
             for (Column column : columnList) {
-                objectFactory.set(column.columnLabel, column.getValue(resultSet));
+                colWrapper.set(column.columnLabel, column.getValue(resultSet));
             }
-            rowObjectFactory.set(null, objectFactory.getObject());
+            rowWrapper.set(null, colWrapper.getObject());
         }
-        return rowObjectFactory.getObject();
+        return rowWrapper.getObject();
     }
 
     class Column {

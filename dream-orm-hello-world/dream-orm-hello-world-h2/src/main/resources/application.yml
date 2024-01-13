@@ -1,7 +1,5 @@
 dream:
   cache: com.dream.system.cache.MemoryCache
-  listeners:
-    - com.dream.drive.listener.DebugListener
   mapperPackages:
     - com.dream.helloworld
   tablePackages:

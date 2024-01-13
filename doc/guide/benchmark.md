@@ -337,6 +337,4 @@ JMHMain.woodInsert               thrpt    3   48.096 ±  41.743  ops/ms
 JMHMain.woodLambdaQuery          thrpt    3   82.854 ±  39.809  ops/ms
 JMHMain.woodPageQuery            thrpt    3   88.134 ± 495.298  ops/ms
 JMHMain.woodSelectById           thrpt    3   82.157 ±  14.562  ops/ms
-
 ```
-

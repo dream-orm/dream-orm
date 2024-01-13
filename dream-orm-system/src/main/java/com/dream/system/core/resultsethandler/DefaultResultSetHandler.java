@@ -31,9 +31,6 @@ import java.util.*;
 
 public class DefaultResultSetHandler implements ResultSetHandler {
 
-    public DefaultResultSetHandler() {
-    }
-
     @Override
     public Object result(ResultSet resultSet, MappedStatement mappedStatement) throws SQLException {
         MappedResult mappedResult = getMappedResult(resultSet, mappedStatement);
