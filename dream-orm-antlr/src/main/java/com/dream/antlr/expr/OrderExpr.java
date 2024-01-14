@@ -45,7 +45,7 @@ public class OrderExpr extends HelperExpr {
     protected Statement exprHelp(Statement statement) throws AntlrException {
         orderStatement.setStatement(statement);
         setExprTypes(ExprType.NIL);
-        return null;
+        return expr();
     }
 
     static class AscDescExpr extends HelperExpr {
