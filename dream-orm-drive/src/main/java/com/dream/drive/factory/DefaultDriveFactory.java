@@ -412,19 +412,18 @@ public class DefaultDriveFactory implements DriveFactory {
         defaultConfig.setTablePackages(tablePackages);
         defaultConfig.setMapperPackages(mapperPackages);
         Configuration configuration = defaultConfig.toConfiguration();
-        PluginFactory pluginFactory = pluginFactory();
         configuration.setPluginFactory(pluginFactory());
-        configuration.setInvokerFactory(pluginFactory.plugin(invokerFactory()));
-        configuration.setDialectFactory(pluginFactory.plugin(dialectFactory()));
-        configuration.setCacheFactory(pluginFactory.plugin(cacheFactory()));
-        configuration.setTypeHandlerFactory(pluginFactory.plugin(typeHandlerFactory()));
-        configuration.setCompileFactory(pluginFactory.plugin(compileFactory()));
-        configuration.setInjectFactory(pluginFactory.plugin(injectFactory()));
-        configuration.setListenerFactory(pluginFactory.plugin(listenerFactory()));
-        configuration.setDataSourceFactory(pluginFactory.plugin(dataSourceFactory(dataSource)));
-        configuration.setTransactionFactory(pluginFactory.plugin(transactionFactory()));
-        configuration.setStatementHandler(pluginFactory.plugin(statementHandler()));
-        configuration.setResultSetHandler(pluginFactory.plugin(resultSetHandler()));
+        configuration.setInvokerFactory(invokerFactory());
+        configuration.setDialectFactory(dialectFactory());
+        configuration.setCacheFactory(cacheFactory());
+        configuration.setTypeHandlerFactory(typeHandlerFactory());
+        configuration.setCompileFactory(compileFactory());
+        configuration.setInjectFactory(injectFactory());
+        configuration.setListenerFactory(listenerFactory());
+        configuration.setDataSourceFactory(dataSourceFactory(dataSource));
+        configuration.setTransactionFactory(transactionFactory());
+        configuration.setStatementHandler(statementHandler());
+        configuration.setResultSetHandler(resultSetHandler());
         return sessionFactoryBuilder().build(configuration);
     }
 

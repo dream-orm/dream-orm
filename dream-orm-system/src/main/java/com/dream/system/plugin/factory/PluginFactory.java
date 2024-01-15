@@ -3,7 +3,7 @@ package com.dream.system.plugin.factory;
 import com.dream.system.plugin.interceptor.Interceptor;
 
 /**
- * 代理工厂类，不建议用，反射牺牲性能，建议采用com.dream.system.inject.Inject
+ * 代理工厂类，反射实现，暂时未使用
  */
 public interface PluginFactory {
 

@@ -60,8 +60,11 @@ public class SimpleResultSetHandler implements ResultSetHandler {
             for (int i = 0; i < columnCount; i++) {
                 int columnType = metaData.getColumnType(i + 1);
                 String columnLabel = metaData.getColumnLabel(i + 1);
-                columnLabel = SystemUtil.underlineToCamel(columnLabel);
                 Class type = fieldMap.get(columnLabel);
+                if (type == null) {
+                    columnLabel = SystemUtil.underlineToCamel(columnLabel);
+                    type = fieldMap.get(columnLabel);
+                }
                 if (type != null) {
                     try {
                         TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(type, columnType);
