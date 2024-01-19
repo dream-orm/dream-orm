@@ -124,8 +124,8 @@ const sidebar: DefaultTheme.Sidebar = {
                     link: '/advance/dynamic'
                 },
                 {
-                    text: '代理插件',
-                    link: '/advance/proxy-plugin'
+                    text: '乐观锁插件',
+                    link: '/advance/version'
                 }
             ]
         },
