@@ -93,7 +93,19 @@ public class HelloWorldFlexQueryTest {
     @Test
     public void testFromJoin() {
         AccountDef account2 = new AccountDef("account2");
-        QueryDef queryDef = select(account.id).from(account.leftJoin(account2, account2.id, account2.id));
+        QueryDef queryDef = select(account.id).from(account.leftJoin(account2, account.id, account2.id));
+        Statement statement = queryDef.statement();
+        SqlInfo sqlInfo = flexDialect.toSQL(statement);
+        System.out.println(sqlInfo.getSql());
+    }
+
+    /**
+     * 测试关联查询2
+     */
+    @Test
+    public void testFromJoin2() {
+        AccountDef account2 = new AccountDef("account2");
+        QueryDef queryDef = select(account.id).from(account.leftJoin(account2).on( account.id.eq(account2.id)));
         Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDialect.toSQL(statement);
         System.out.println(sqlInfo.getSql());

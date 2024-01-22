@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.dream-orm</groupId>
         <artifactId>dream-orm</artifactId>
-        <version>1.2.10</version>
+        <version>1.2.11</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dream-orm</groupId>
@@ -14,13 +14,13 @@
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-util</artifactId>
-            <version>1.2.10</version>
+            <version>1.2.11</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-antlr</artifactId>
-            <version>1.2.10</version>
+            <version>1.2.11</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

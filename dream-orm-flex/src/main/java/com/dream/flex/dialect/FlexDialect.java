@@ -10,19 +10,19 @@ import com.dream.flex.def.UpdateDef;
 
 public interface FlexDialect {
     default SqlInfo toSQL(QueryDef queryDef) {
-        return toSQL(queryDef.statement());
+        return toSQL(queryDef.statement().clone());
     }
 
     default SqlInfo toSQL(InsertDef insertDef) {
-        return toSQL(insertDef.statement());
+        return toSQL(insertDef.statement().clone());
     }
 
     default SqlInfo toSQL(DeleteDef deleteDef) {
-        return toSQL(deleteDef.statement());
+        return toSQL(deleteDef.statement().clone());
     }
 
     default SqlInfo toSQL(UpdateDef updateDef) {
-        return toSQL(updateDef.statement());
+        return toSQL(updateDef.statement().clone());
     }
 
     SqlInfo toSQL(Statement statement);
