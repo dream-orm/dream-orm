@@ -748,11 +748,11 @@ public class FunctionDef {
         return new AliasTableDef(aliasStatement);
     }
 
-    protected static ColumnDef functionDef(FunctionStatement functionStatement, ColumnDef... columnDefs) {
+    public static ColumnDef functionDef(FunctionStatement functionStatement, ColumnDef... columnDefs) {
         return functionDef(functionStatement, ",", columnDefs);
     }
 
-    protected static ColumnDef functionDef(FunctionStatement functionStatement, String split, ColumnDef... columnDefs) {
+    public static ColumnDef functionDef(FunctionStatement functionStatement, String split, ColumnDef... columnDefs) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(split);
         for (ColumnDef columnDef : columnDefs) {
             listColumnStatement.add(columnDef.getStatement());
@@ -772,7 +772,7 @@ public class FunctionDef {
         return not(exists(queryDef));
     }
 
-    protected static ConditionDef not(ConditionDef conditionDef) {
+    public static ConditionDef not(ConditionDef conditionDef) {
         ConditionStatement statement = conditionDef.getStatement();
         Statement left = statement.getLeft();
         statement.setLeft(null);

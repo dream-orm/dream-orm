@@ -1,17 +1,16 @@
-package com.dream.tdengine.statement;
+package com.dream.antlr.smt;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.invoker.Invoker;
-import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.sql.ToSQL;
 
 import java.util.List;
 
-public class TdMyFunctionStatement extends MyFunctionStatement {
+public class DefaultMyFunctionStatement extends MyFunctionStatement {
     private String functionName;
 
-    public TdMyFunctionStatement(String functionName) {
+    public DefaultMyFunctionStatement(String functionName) {
         setFunctionName(functionName);
     }
 
@@ -26,9 +25,10 @@ public class TdMyFunctionStatement extends MyFunctionStatement {
     }
 
     @Override
-    public TdMyFunctionStatement clone() {
-        TdMyFunctionStatement tdMyFunctionStatement = (TdMyFunctionStatement) super.clone();
-        tdMyFunctionStatement.setFunctionName(functionName);
-        return tdMyFunctionStatement;
+    public DefaultMyFunctionStatement clone() {
+        DefaultMyFunctionStatement defaultMyFunctionStatement = (DefaultMyFunctionStatement) super.clone();
+        defaultMyFunctionStatement.setFunctionName(functionName);
+        return defaultMyFunctionStatement;
     }
 }
+

@@ -1,38 +1,41 @@
 package com.dream.tdengine.def;
 
+import com.dream.antlr.smt.DefaultMyFunctionStatement;
 import com.dream.antlr.smt.SymbolStatement;
 import com.dream.flex.def.ColumnDef;
-import com.dream.flex.def.FunctionDef;
-import com.dream.tdengine.statement.TdMyFunctionStatement;
 
-public class TdFunctionDef extends FunctionDef {
+import static com.dream.flex.def.FunctionDef.col;
+import static com.dream.flex.def.FunctionDef.functionDef;
+
+
+public class TdFunctionDef {
 
     public static ColumnDef database() {
-        return functionDef(new TdMyFunctionStatement("DATABASE"));
+        return functionDef(new DefaultMyFunctionStatement("DATABASE"));
     }
 
     public static ColumnDef client_version() {
-        return functionDef(new TdMyFunctionStatement("CLIENT_VERSION"));
+        return functionDef(new DefaultMyFunctionStatement("CLIENT_VERSION"));
     }
 
     public static ColumnDef server_version() {
-        return functionDef(new TdMyFunctionStatement("SERVER_VERSION"));
+        return functionDef(new DefaultMyFunctionStatement("SERVER_VERSION"));
     }
 
     public static ColumnDef server_status() {
-        return functionDef(new TdMyFunctionStatement("SERVER_STATUS"));
+        return functionDef(new DefaultMyFunctionStatement("SERVER_STATUS"));
     }
 
     public static ColumnDef today() {
-        return functionDef(new TdMyFunctionStatement("TODAY"));
+        return functionDef(new DefaultMyFunctionStatement("TODAY"));
     }
 
     public static ColumnDef timezone() {
-        return functionDef(new TdMyFunctionStatement("TIMEZONE"));
+        return functionDef(new DefaultMyFunctionStatement("TIMEZONE"));
     }
 
     public static ColumnDef current_user() {
-        return functionDef(new TdMyFunctionStatement("CURRENT_USER"));
+        return functionDef(new DefaultMyFunctionStatement("CURRENT_USER"));
     }
 
     public static ColumnDef to_iso8601(String column) {
@@ -44,11 +47,11 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef to_iso8601(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("TO_ISO8601"), columnDef);
+        return functionDef(new DefaultMyFunctionStatement("TO_ISO8601"), columnDef);
     }
 
     public static ColumnDef to_iso8601(ColumnDef columnDef, String timezone) {
-        return functionDef(new TdMyFunctionStatement("TO_ISO8601"), columnDef, new ColumnDef(new SymbolStatement.StrStatement(timezone)));
+        return functionDef(new DefaultMyFunctionStatement("TO_ISO8601"), columnDef, new ColumnDef(new SymbolStatement.StrStatement(timezone)));
     }
 
     public static ColumnDef to_json(String column) {
@@ -56,7 +59,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef to_json(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("TO_JSON"), columnDef);
+        return functionDef(new DefaultMyFunctionStatement("TO_JSON"), columnDef);
     }
 
     public static ColumnDef timediff_1b(String column, ColumnDef column2) {
@@ -128,11 +131,11 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef timediff(ColumnDef columnDef, ColumnDef columnDef2) {
-        return functionDef(new TdMyFunctionStatement("TIMEDIFF"), columnDef, columnDef2);
+        return functionDef(new DefaultMyFunctionStatement("TIMEDIFF"), columnDef, columnDef2);
     }
 
     public static ColumnDef timediff(ColumnDef columnDef, ColumnDef columnDef2, String timeUnit) {
-        return functionDef(new TdMyFunctionStatement("TIMEDIFF"), columnDef, columnDef2, col(timeUnit));
+        return functionDef(new DefaultMyFunctionStatement("TIMEDIFF"), columnDef, columnDef2, col(timeUnit));
     }
 
     public static ColumnDef apercentile(String column, int p) {
@@ -140,7 +143,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef apercentile(ColumnDef columnDef, int p) {
-        return functionDef(new TdMyFunctionStatement("APERCENTILE"), columnDef, col(p));
+        return functionDef(new DefaultMyFunctionStatement("APERCENTILE"), columnDef, col(p));
     }
 
     public static ColumnDef apercentile(String column, int p, String algoType) {
@@ -164,7 +167,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef apercentile(ColumnDef columnDef, int p, String algoType) {
-        return functionDef(new TdMyFunctionStatement("APERCENTILE"), columnDef, col(p), new ColumnDef(new SymbolStatement.StrStatement(algoType)));
+        return functionDef(new DefaultMyFunctionStatement("APERCENTILE"), columnDef, col(p), new ColumnDef(new SymbolStatement.StrStatement(algoType)));
     }
 
     public static ColumnDef elapsed(String column, String timeUnit) {
@@ -236,7 +239,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef elapsed(ColumnDef columnDef, String timeUnit) {
-        return functionDef(new TdMyFunctionStatement("ELAPSED"), columnDef, col(timeUnit));
+        return functionDef(new DefaultMyFunctionStatement("ELAPSED"), columnDef, col(timeUnit));
     }
 
     public static ColumnDef leastsquares(String column, double startVal, double stepVal) {
@@ -244,7 +247,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef leastsquares(ColumnDef columnDef, double startVal, double stepVal) {
-        return functionDef(new TdMyFunctionStatement("LEASTSQUARES"), columnDef, col(startVal), col(startVal));
+        return functionDef(new DefaultMyFunctionStatement("LEASTSQUARES"), columnDef, col(startVal), col(startVal));
     }
 
     public static ColumnDef spread(String column) {
@@ -252,7 +255,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef spread(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("SPREAD"), columnDef);
+        return functionDef(new DefaultMyFunctionStatement("SPREAD"), columnDef);
     }
 
     public static ColumnDef stddev(String column) {
@@ -260,7 +263,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef stddev(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("STDDEV"), columnDef);
+        return functionDef(new DefaultMyFunctionStatement("STDDEV"), columnDef);
     }
 
     public static ColumnDef hyperloglog(String column) {
@@ -268,7 +271,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef hyperloglog(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("HYPERLOGLOG"), columnDef);
+        return functionDef(new DefaultMyFunctionStatement("HYPERLOGLOG"), columnDef);
     }
 
     public static ColumnDef bottom(String column, int k) {
@@ -276,7 +279,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef bottom(ColumnDef columnDef, int k) {
-        return functionDef(new TdMyFunctionStatement("BOTTOM"), columnDef, col(k));
+        return functionDef(new DefaultMyFunctionStatement("BOTTOM"), columnDef, col(k));
     }
 
     public static ColumnDef first(String col) {
@@ -284,7 +287,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef first(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("FIRST"), columnDef);
+        return functionDef(new DefaultMyFunctionStatement("FIRST"), columnDef);
     }
 
     public static ColumnDef last(String col) {
@@ -292,7 +295,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef last(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("LAST"), columnDef);
+        return functionDef(new DefaultMyFunctionStatement("LAST"), columnDef);
     }
 
     public static ColumnDef last_row(String col) {
@@ -300,7 +303,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef last_row(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("LAST_ROW"), columnDef);
+        return functionDef(new DefaultMyFunctionStatement("LAST_ROW"), columnDef);
     }
 
     public static ColumnDef mode(String col) {
@@ -308,7 +311,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef mode(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("LAST_ROW"), columnDef);
+        return functionDef(new DefaultMyFunctionStatement("LAST_ROW"), columnDef);
     }
 
     public static ColumnDef sample(String col, int k) {
@@ -316,7 +319,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef sample(ColumnDef columnDef, int k) {
-        return functionDef(new TdMyFunctionStatement("LAST_ROW"), columnDef, col(k));
+        return functionDef(new DefaultMyFunctionStatement("LAST_ROW"), columnDef, col(k));
     }
 
     public static ColumnDef tail(String col, int k) {
@@ -328,11 +331,11 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef tail(ColumnDef columnDef, int k) {
-        return functionDef(new TdMyFunctionStatement("TAIL"), columnDef, col(k));
+        return functionDef(new DefaultMyFunctionStatement("TAIL"), columnDef, col(k));
     }
 
     public static ColumnDef tail(ColumnDef columnDef, int k, Integer offset) {
-        return functionDef(new TdMyFunctionStatement("TAIL"), columnDef, col(k), col(offset));
+        return functionDef(new DefaultMyFunctionStatement("TAIL"), columnDef, col(k), col(offset));
     }
 
     public static ColumnDef top(String col, int k) {
@@ -340,7 +343,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef top(ColumnDef columnDef, int k) {
-        return functionDef(new TdMyFunctionStatement("TOP"), columnDef, col(k));
+        return functionDef(new DefaultMyFunctionStatement("TOP"), columnDef, col(k));
     }
 
     public static ColumnDef unique(String col) {
@@ -348,7 +351,7 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef unique(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("UNIQUE"), columnDef);
+        return functionDef(new DefaultMyFunctionStatement("UNIQUE"), columnDef);
     }
 
     public static ColumnDef csum(String col) {
@@ -356,6 +359,6 @@ public class TdFunctionDef extends FunctionDef {
     }
 
     public static ColumnDef csum(ColumnDef columnDef) {
-        return functionDef(new TdMyFunctionStatement("CSUM"), columnDef);
+        return functionDef(new DefaultMyFunctionStatement("CSUM"), columnDef);
     }
 }
