@@ -1,7 +1,6 @@
 package com.dream.helloworld.h2.def;
 
 import com.dream.antlr.smt.DefaultMyFunctionStatement;
-import com.dream.antlr.smt.SymbolStatement;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.FunctionDef;
 
@@ -9,9 +8,10 @@ import static com.dream.flex.def.FunctionDef.col;
 import static com.dream.flex.def.FunctionDef.functionDef;
 
 public class ClickhouseFunctionDef {
-    public static ColumnDef column2(String table,String column) {
-        return new ColumnDef(FunctionDef.table(table),column);
+    public static ColumnDef column2(String table, String column) {
+        return new ColumnDef(FunctionDef.table(table), column);
     }
+
     public static ColumnDef toTypeName(ColumnDef columnDef) {
         return functionDef(new DefaultMyFunctionStatement("toTypeName"), columnDef);
     }

@@ -12,6 +12,10 @@ public interface FromDef<
         ForUpdate extends ForUpdateDef<Query>,
         Query extends QueryDef>
         extends QueryDef, WhereDef<Group, Having, OrderBy, Limit, Union, ForUpdate, Query> {
+    default Where from(String table) {
+        return from(FunctionDef.table(table));
+    }
+
     default Where from(TableDef tableDef) {
         FromStatement fromStatement = new FromStatement();
         fromStatement.setMainTable(tableDef.getStatement());

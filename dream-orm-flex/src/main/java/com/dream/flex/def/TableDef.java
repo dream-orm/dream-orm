@@ -42,24 +42,48 @@ public class TableDef {
         return this;
     }
 
+    public JoinOnDef leftJoin(String table) {
+        return leftJoin(FunctionDef.table(table));
+    }
+
     public JoinOnDef leftJoin(TableDef tableDef) {
         return new JoinOnDef(this, new JoinStatement.LeftJoinStatement(), tableDef.getStatement());
+    }
+
+    public JoinOnDef rightJoin(String table) {
+        return rightJoin(FunctionDef.table(table));
     }
 
     public JoinOnDef rightJoin(TableDef tableDef) {
         return new JoinOnDef(this, new JoinStatement.RightJoinStatement(), tableDef.getStatement());
     }
 
+    public JoinOnDef innerJoin(String table) {
+        return innerJoin(FunctionDef.table(table));
+    }
+
     public JoinOnDef innerJoin(TableDef tableDef) {
         return new JoinOnDef(this, new JoinStatement.InnerJoinStatement(), tableDef.getStatement());
+    }
+
+    public TableDef leftJoin(String table, String column, String column2) {
+        return leftJoin(FunctionDef.table(table), FunctionDef.column(column), FunctionDef.column(column2));
     }
 
     public TableDef leftJoin(TableDef tableDef, ColumnDef columnDef, ColumnDef columnDef2) {
         return join(new JoinStatement.LeftJoinStatement(), tableDef.getStatement(), columnDef.getStatement(), columnDef2.getStatement());
     }
 
+    public TableDef rightJoin(String table, String column, String column2) {
+        return rightJoin(FunctionDef.table(table), FunctionDef.column(column), FunctionDef.column(column2));
+    }
+
     public TableDef rightJoin(TableDef tableDef, ColumnDef columnDef, ColumnDef columnDef2) {
         return join(new JoinStatement.RightJoinStatement(), tableDef.getStatement(), columnDef.getStatement(), columnDef2.getStatement());
+    }
+
+    public TableDef innerJoin(String table, String column, String column2) {
+        return innerJoin(FunctionDef.table(table), FunctionDef.column(column), FunctionDef.column(column2));
     }
 
     public TableDef innerJoin(TableDef tableDef, ColumnDef columnDef, ColumnDef columnDef2) {

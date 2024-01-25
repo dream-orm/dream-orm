@@ -243,4 +243,11 @@ public class HelloWorldFlexQueryTest {
         SqlInfo sqlInfo = flexDialect.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }
+
+    @Test
+    public void testSelectStr() {
+        QueryDef queryDef = select("id", "name").from("user");
+        SqlInfo sqlInfo = flexDialect.toSQL(queryDef);
+        System.out.println(sqlInfo.getSql());
+    }
 }
