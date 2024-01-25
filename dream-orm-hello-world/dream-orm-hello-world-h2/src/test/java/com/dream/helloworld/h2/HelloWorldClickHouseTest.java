@@ -7,17 +7,15 @@ import com.dream.flex.def.QueryDef;
 import com.dream.flex.dialect.FlexDialect;
 import org.junit.Test;
 
-import static com.dream.flex.def.FunctionDef.col;
-import static com.dream.flex.def.FunctionDef.select;
-import static com.dream.helloworld.h2.def.ClickhouseFunctionDef.plus;
-import static com.dream.helloworld.h2.def.ClickhouseFunctionDef.toTypeName;
+import static com.dream.flex.def.FunctionDef.*;
+import static com.dream.helloworld.h2.def.ClickhouseFunctionDef.*;
 
 public class HelloWorldClickHouseTest {
     FlexDialect flexDialect = new DefaultFlexDialect(new ToClickHouse());
 
     @Test
     public void testSelect() {
-        QueryDef queryDef = select(plus(col(1), col(2)), toTypeName(col(122)));
+        QueryDef queryDef = select(col("user_name")).from(table("ais_audit_log_all").as("log").leftJoin(table("qudit_ueba_user_all").as("user")).on(column2("user","user_id").eq(column2("log","id"))));
         SqlInfo sqlInfo = flexDialect.toSQL(queryDef);
         System.out.println(sqlInfo.getSql());
     }
