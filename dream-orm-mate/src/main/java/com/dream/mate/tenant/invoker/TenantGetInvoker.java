@@ -32,13 +32,16 @@ public class TenantGetInvoker extends AbstractInvoker {
     @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Object tenantObject = tenantHandler.getTenantObject();
-        if (tenantObject instanceof Number) {
-            return String.valueOf(tenantObject);
-        } else if (tenantObject instanceof String) {
-            return "'" + tenantObject + "'";
-        } else {
-            return tenantObject.toString();
+        if (tenantObject != null) {
+            if (tenantObject instanceof Number) {
+                return String.valueOf(tenantObject);
+            } else if (tenantObject instanceof String) {
+                return "'" + tenantObject + "'";
+            } else {
+                return tenantObject.toString();
+            }
         }
+        return "NULL";
     }
 
     @Override

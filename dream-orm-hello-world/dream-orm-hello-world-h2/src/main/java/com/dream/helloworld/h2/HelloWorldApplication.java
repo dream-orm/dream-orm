@@ -108,24 +108,24 @@ public class HelloWorldApplication {
 //                        return alias + ".dept_id=1";
 //                    }
 //                }),
-                /**
-                 * 开启多租户插件
-                */
-                new TenantInject(new TenantHandler() {
-//                    public boolean isTenant(MethodInfo methodInfo, TableInfo tableInfo) {
-//                        return tableInfo.getFieldName(getTenantColumn()) != null;
-//                    }
-
+//                /**
+//                 * 开启多租户插件
+//                */
+//                new TenantInject(new TenantHandler() {
+////                    public boolean isTenant(MethodInfo methodInfo, TableInfo tableInfo) {
+////                        return tableInfo.getFieldName(getTenantColumn()) != null;
+////                    }
+//
+////                    @Override
+////                    public String getTenantColumn() {
+////                        return "tenant_id";
+////                    }
+//
 //                    @Override
-//                    public String getTenantColumn() {
-//                        return "tenant_id";
+//                    public Object getTenantObject() {
+//                        return 1;
 //                    }
-
-                    @Override
-                    public Object getTenantObject() {
-                        return 1;
-                    }
-                }),
+//                }),
 //                /**
 //                 * 开启逻辑删除插件
 //                */
