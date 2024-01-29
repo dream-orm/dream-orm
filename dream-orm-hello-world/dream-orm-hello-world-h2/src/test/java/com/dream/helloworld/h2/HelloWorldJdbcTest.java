@@ -81,6 +81,22 @@ public class HelloWorldJdbcTest {
         jdbcMapper.execute("update account set name=? where id=?", "accountName", 1);
     }
 
+    @Test
+    public void testUpdateView() {
+        AccountView accountView = new AccountView();
+        accountView.setName("accountName");
+        accountView.setId(1);
+        jdbcMapper.updateById(accountView);
+    }
+
+    @Test
+    public void testUpdateNonView() {
+        AccountView accountView = new AccountView();
+        accountView.setName("accountName");
+        accountView.setId(1);
+        jdbcMapper.updateNonById(accountView);
+    }
+
     /**
      * 更新操作且手动设置参数
      */
@@ -104,6 +120,15 @@ public class HelloWorldJdbcTest {
     @Test
     public void testInsert() {
         jdbcMapper.execute("insert into account(id,name)values(?,?)", 400, "accountName");
+    }
+
+    @Test
+    public void testInsertView() {
+        Account account=new Account();
+        account.setId(401);
+        account.setName("accountName401");
+        jdbcMapper.insert(account);
+
     }
 
     /**
@@ -169,5 +194,31 @@ public class HelloWorldJdbcTest {
                 ps.setInt(3, account.getAge());
             }
         });
+    }
+
+    @Test
+    public void testInsertViewBatch() {
+        List<Account> accountList = new ArrayList<>();
+        for (int i = 10; i < 20; i++) {
+            Account account = new Account();
+            account.setId(100 + i);
+            account.setName("name" + i);
+            account.setAge(20 + i);
+            accountList.add(account);
+        }
+        jdbcMapper.batchInsert(accountList);
+    }
+
+    @Test
+    public void testUpdateViewBatch() {
+        List<Account> accountList = new ArrayList<>();
+        for (int i = 10; i < 20; i++) {
+            Account account = new Account();
+            account.setId(100 + i);
+            account.setName("name" + i);
+            account.setAge(20 + i);
+            accountList.add(account);
+        }
+        jdbcMapper.batchUpdateById(accountList);
     }
 }

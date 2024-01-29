@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class AbstractFlexDialect implements FlexDialect {
-    private ToSQL toSQL;
+    protected ToSQL toSQL;
 
     public AbstractFlexDialect(ToSQL toSQL) {
         this.toSQL = toSQL;

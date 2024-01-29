@@ -68,6 +68,7 @@ public class DefaultDriveFactory implements DriveFactory {
     protected SessionTemplate sessionTemplate;
     protected TemplateMapper templateMapper;
     protected FlexMapper flexMapper;
+    protected FlexDialect flexDialect;
     protected FlexChainMapper flexChainMapper;
     protected JdbcMapper jdbcMapper;
     protected ToSQL toSQL;
@@ -87,7 +88,8 @@ public class DefaultDriveFactory implements DriveFactory {
         this.sessionFactory = sessionFactory(dataSource, tablePackages, mapperPackages);
         this.sessionTemplate = sessionTemplate(sessionHolder(), this.sessionFactory);
         this.templateMapper = templateMapper(sessionTemplate, sequence());
-        this.flexMapper = flexMapper(sessionTemplate, toSQL);
+        this.flexDialect = flexDialect(toSQL);
+        this.flexMapper = flexMapper(sessionTemplate, flexDialect);
         this.flexChainMapper = flexChainMapper(this.flexMapper);
         this.jdbcMapper = jdbcMapper(this.sessionTemplate);
     }
@@ -125,8 +127,8 @@ public class DefaultDriveFactory implements DriveFactory {
         return new DefaultFlexDialect(toSQL);
     }
 
-    protected FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
-        return new DefaultFlexMapper(sessionTemplate, flexDialect(toSQL));
+    protected FlexMapper flexMapper(SessionTemplate sessionTemplate, FlexDialect flexDialect) {
+        return new DefaultFlexMapper(sessionTemplate, flexDialect);
     }
 
     protected FlexChainMapper flexChainMapper(FlexMapper flexMapper) {

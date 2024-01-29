@@ -3,6 +3,9 @@ package com.dream.flex.def;
 import com.dream.antlr.smt.*;
 import com.dream.flex.invoker.FlexMarkInvokerStatement;
 
+import java.util.Map;
+import java.util.Set;
+
 
 public interface UpdateColumnDef<UpdateColumn extends UpdateColumnDef, Update extends UpdateDef> extends UpdateDef {
     default UpdateColumn set(ColumnDef columnDef, ColumnDef columnDef2) {
@@ -28,6 +31,16 @@ public interface UpdateColumnDef<UpdateColumn extends UpdateColumnDef, Update ex
     default UpdateColumn set(ColumnDef columnDef, QueryDef queryDef) {
         BraceStatement braceStatement = new BraceStatement(queryDef.statement());
         set(columnDef, new ColumnDef(braceStatement));
+        return (UpdateColumn) this;
+    }
+
+    default UpdateColumn setMap(Map<ColumnDef, Object> valueMap) {
+        if (valueMap != null && !valueMap.isEmpty()) {
+            Set<Map.Entry<ColumnDef, Object>> entries = valueMap.entrySet();
+            for (Map.Entry<ColumnDef, Object> entry : entries) {
+                set(entry.getKey(), entry.getValue());
+            }
+        }
         return (UpdateColumn) this;
     }
 
