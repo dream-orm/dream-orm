@@ -100,9 +100,11 @@ public class LogicQueryHandler extends AbstractHandler {
                         conditionStatement.setOper(new OperStatement.EQStatement());
                         conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNormalValue()));
                         Statement joinOnStatement = joinStatement.getOn();
-                        BraceStatement braceStatement = new BraceStatement(joinOnStatement);
+                        if(joinOnStatement instanceof ConditionStatement&&((ConditionStatement) joinOnStatement).getOper() instanceof OperStatement.ORStatement){
+                            joinOnStatement = new BraceStatement(joinOnStatement);
+                        }
                         ConditionStatement joinConditionStatement = new ConditionStatement();
-                        joinConditionStatement.setLeft(braceStatement);
+                        joinConditionStatement.setLeft(joinOnStatement);
                         joinConditionStatement.setOper(new OperStatement.ANDStatement());
                         joinConditionStatement.setRight(conditionStatement);
                         joinStatement.setOn(joinConditionStatement);

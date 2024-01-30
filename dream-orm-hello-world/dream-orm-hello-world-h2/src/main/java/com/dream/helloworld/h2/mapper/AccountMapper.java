@@ -11,7 +11,7 @@ import java.util.List;
 
 @Mapper
 public interface AccountMapper {
-    @Sql("select @*() from account where id=@?(id)")
+    @Sql("select @*() from account left join account a on account.id=a.id or 1=1 where id=@?(id)")
     AccountView selectById(@Param("id") long id);
 
     @Sql("select @*() from account where id>@?(id)")

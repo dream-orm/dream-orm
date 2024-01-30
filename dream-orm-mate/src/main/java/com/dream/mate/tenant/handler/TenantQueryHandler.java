@@ -103,9 +103,11 @@ public class TenantQueryHandler extends AbstractHandler {
                         conditionStatement.setOper(new OperStatement.EQStatement());
                         conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                         Statement joinOnStatement = joinStatement.getOn();
-                        BraceStatement braceStatement = new BraceStatement(joinOnStatement);
+                        if(joinOnStatement instanceof ConditionStatement&&((ConditionStatement) joinOnStatement).getOper() instanceof OperStatement.ORStatement){
+                            joinOnStatement = new BraceStatement(joinOnStatement);
+                        }
                         ConditionStatement joinConditionStatement = new ConditionStatement();
-                        joinConditionStatement.setLeft(braceStatement);
+                        joinConditionStatement.setLeft(joinOnStatement);
                         joinConditionStatement.setOper(new OperStatement.ANDStatement());
                         joinConditionStatement.setRight(conditionStatement);
                         joinStatement.setOn(joinConditionStatement);

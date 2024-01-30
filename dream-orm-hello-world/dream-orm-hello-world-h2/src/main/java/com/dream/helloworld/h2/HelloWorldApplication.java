@@ -97,8 +97,8 @@ public class HelloWorldApplication {
 //                */
 //                new PermissionInject(new PermissionHandler() {
 //                    @Override
-//                    public boolean isPermissionInject(MethodInfo methodInfo, TableInfo tableInfo) {
-//                        return tableInfo.getFieldName("field_id") != null;
+//                    public boolean isPermissionInject(MethodInfo methodInfo, String table) {
+//                        return true;
 //                    }
 //
 //                    @Override
@@ -110,10 +110,10 @@ public class HelloWorldApplication {
 //                 * 开启多租户插件
 //                */
 //                new TenantInject(new TenantHandler() {
-////                    public boolean isTenant(MethodInfo methodInfo, TableInfo tableInfo) {
-////                        return tableInfo.getFieldName(getTenantColumn()) != null;
-////                    }
-//
+//                    @Override
+//                    public boolean isTenant(MethodInfo methodInfo, String table) {
+//                        return true;
+//                    }
 ////                    @Override
 ////                    public String getTenantColumn() {
 ////                        return "tenant_id";
@@ -129,8 +129,8 @@ public class HelloWorldApplication {
 //                */
 //                new LogicInject(new LogicHandler() {
 //                    @Override
-//                    public boolean isLogic(MethodInfo methodInfo, TableInfo tableInfo) {
-//                        return tableInfo.getFieldName(getLogicColumn()) != null;
+//                    public boolean isLogic(MethodInfo methodInfo, String table) {
+//                        return true;
 //                    }
 //
 //                    @Override
