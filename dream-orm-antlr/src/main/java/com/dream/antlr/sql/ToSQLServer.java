@@ -220,7 +220,7 @@ public class ToSQLServer extends ToPubSQL {
     @Override
     protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         LimitStatement limitStatement = statement.getLimitStatement();
-        if (limitStatement != null && limitStatement.isOffset()) {
+        if (limitStatement != null) {
             OrderStatement orderStatement = statement.getOrderStatement();
             if (orderStatement == null) {
                 orderStatement = new OrderStatement();
