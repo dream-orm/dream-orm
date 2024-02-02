@@ -134,7 +134,7 @@ public class ConditionHandler extends AbstractHandler {
     }
 
     @Override
-    protected boolean interest(Statement statement, Assist sqlAssist) {
+    protected boolean interest(Statement statement, Assist assist) {
         return statement instanceof ConditionStatement;
     }
 }

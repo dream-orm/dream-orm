@@ -36,7 +36,7 @@ public class TenantQueryHandler extends AbstractHandler {
     }
 
     @Override
-    protected boolean interest(Statement statement, Assist sqlAssist) {
+    protected boolean interest(Statement statement, Assist assist) {
         return statement instanceof QueryStatement;
     }
 
@@ -80,7 +80,7 @@ public class TenantQueryHandler extends AbstractHandler {
         }
 
         @Override
-        protected boolean interest(Statement statement, Assist sqlAssist) {
+        protected boolean interest(Statement statement, Assist assist) {
             return statement instanceof FromStatement;
         }
 
@@ -103,7 +103,7 @@ public class TenantQueryHandler extends AbstractHandler {
                         conditionStatement.setOper(new OperStatement.EQStatement());
                         conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                         Statement joinOnStatement = joinStatement.getOn();
-                        if(joinOnStatement instanceof ConditionStatement&&((ConditionStatement) joinOnStatement).getOper() instanceof OperStatement.ORStatement){
+                        if (joinOnStatement instanceof ConditionStatement && ((ConditionStatement) joinOnStatement).getOper() instanceof OperStatement.ORStatement) {
                             joinOnStatement = new BraceStatement(joinOnStatement);
                         }
                         ConditionStatement joinConditionStatement = new ConditionStatement();
@@ -117,7 +117,7 @@ public class TenantQueryHandler extends AbstractHandler {
             }
 
             @Override
-            protected boolean interest(Statement statement, Assist sqlAssist) {
+            protected boolean interest(Statement statement, Assist assist) {
                 return statement instanceof JoinStatement;
             }
         }

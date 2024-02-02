@@ -23,7 +23,7 @@ public class InvokerScanHandler extends AbstractHandler {
     }
 
     @Override
-    protected boolean interest(Statement statement, Assist sqlAssist) {
+    protected boolean interest(Statement statement, Assist assist) {
         return statement instanceof InvokerStatement;
     }
 }

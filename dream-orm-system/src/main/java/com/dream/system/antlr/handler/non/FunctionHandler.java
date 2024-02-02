@@ -27,7 +27,7 @@ public class FunctionHandler extends AbstractHandler {
     }
 
     @Override
-    protected boolean interest(Statement statement, Assist sqlAssist) {
+    protected boolean interest(Statement statement, Assist assist) {
         return statement instanceof FunctionStatement;
     }
 
@@ -64,7 +64,7 @@ public class FunctionHandler extends AbstractHandler {
         }
 
         @Override
-        protected boolean interest(Statement statement, Assist sqlAssist) {
+        protected boolean interest(Statement statement, Assist assist) {
             return statement instanceof ListColumnStatement;
         }
     }

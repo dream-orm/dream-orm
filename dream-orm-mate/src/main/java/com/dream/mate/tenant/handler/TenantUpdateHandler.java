@@ -16,7 +16,7 @@ import java.util.List;
 
 public class TenantUpdateHandler extends AbstractHandler {
     private TenantInjectInvoker tenantInjectInvoker;
-    private boolean openTenant = false;
+    private Handler[] handlers;
 
     public TenantUpdateHandler(TenantInjectInvoker tenantInjectInvoker) {
         this.tenantInjectInvoker = tenantInjectInvoker;
@@ -28,7 +28,8 @@ public class TenantUpdateHandler extends AbstractHandler {
         Statement tableStatement = updateStatement.getTable();
         SymbolStatement symbolStatement = (SymbolStatement) tableStatement;
         String table = symbolStatement.getValue();
-        if (openTenant = tenantInjectInvoker.isTenant(table)) {
+        if (tenantInjectInvoker.isTenant(table)) {
+            handlers = new Handler[]{new ConditionHandler()};
             String tenantColumn = tenantInjectInvoker.getTenantColumn();
             ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.LetterStatement(tenantColumn));
@@ -43,17 +44,15 @@ public class TenantUpdateHandler extends AbstractHandler {
             } else {
                 MateUtil.appendWhere(whereStatement, conditionStatement);
             }
+        } else {
+            handlers = new Handler[0];
         }
         return statement;
     }
 
     @Override
     protected Handler[] handlerBound() {
-        if (openTenant) {
-            return new Handler[]{new ConditionHandler()};
-        } else {
-            return new Handler[0];
-        }
+        return handlers;
     }
 
 
@@ -63,25 +62,22 @@ public class TenantUpdateHandler extends AbstractHandler {
     }
 
     class ConditionHandler extends AbstractHandler {
-
         @Override
         protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
-            if(openTenant) {
-                ConditionStatement conditionStatement = (ConditionStatement) statement;
-                Statement columnStatement = conditionStatement.getLeft();
-                if (columnStatement instanceof SymbolStatement) {
-                    String column = ((SymbolStatement) columnStatement).getValue();
-                    String tenantColumn = tenantInjectInvoker.getTenantColumn();
-                    if (tenantColumn.equalsIgnoreCase(column)) {
-                        conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
-                    }
+            ConditionStatement conditionStatement = (ConditionStatement) statement;
+            Statement columnStatement = conditionStatement.getLeft();
+            if (columnStatement instanceof SymbolStatement) {
+                String column = ((SymbolStatement) columnStatement).getValue();
+                String tenantColumn = tenantInjectInvoker.getTenantColumn();
+                if (tenantColumn.equalsIgnoreCase(column)) {
+                    conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                 }
             }
             return statement;
         }
 
         @Override
-        protected boolean interest(Statement statement, Assist sqlAssist) {
+        protected boolean interest(Statement statement, Assist assist) {
             return statement instanceof ConditionStatement;
         }
     }

@@ -124,7 +124,7 @@ public class HelloWorldJdbcTest {
 
     @Test
     public void testInsertView() {
-        Account account=new Account();
+        Account account = new Account();
         account.setId(401);
         account.setName("accountName401");
         jdbcMapper.insert(account);
@@ -138,7 +138,7 @@ public class HelloWorldJdbcTest {
     public void testInsert2() {
         AccountView accountView = new AccountView();
         accountView.setName("accountName");
-        accountView.setId(401);
+        accountView.setId(501);
         jdbcMapper.execute("insert into account(id,name)values(?,?)", new StatementSetter() {
             @Override
             public void setter(PreparedStatement ps, MappedStatement mappedStatement) throws SQLException {

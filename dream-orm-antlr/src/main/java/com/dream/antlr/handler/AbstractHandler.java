@@ -69,7 +69,7 @@ public abstract class AbstractHandler implements Handler {
         return life > 0;
     }
 
-    protected abstract boolean interest(Statement statement, Assist sqlAssist);
+    protected abstract boolean interest(Statement statement, Assist assist);
 
     private void setParentHandler(Handler parentHandler) {
         this.parentHandler = parentHandler;

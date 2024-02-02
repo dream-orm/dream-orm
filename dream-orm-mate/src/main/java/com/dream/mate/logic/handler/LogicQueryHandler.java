@@ -24,7 +24,6 @@ public class LogicQueryHandler extends AbstractHandler {
 
     public LogicQueryHandler(LogicInvoker logicInvoker) {
         this.logicInvoker = logicInvoker;
-
     }
 
     @Override
@@ -34,7 +33,7 @@ public class LogicQueryHandler extends AbstractHandler {
     }
 
     @Override
-    protected boolean interest(Statement statement, Assist sqlAssist) {
+    protected boolean interest(Statement statement, Assist assist) {
         return statement instanceof QueryStatement;
     }
 
@@ -77,7 +76,7 @@ public class LogicQueryHandler extends AbstractHandler {
         }
 
         @Override
-        protected boolean interest(Statement statement, Assist sqlAssist) {
+        protected boolean interest(Statement statement, Assist assist) {
             return statement instanceof FromStatement;
         }
 
@@ -100,7 +99,7 @@ public class LogicQueryHandler extends AbstractHandler {
                         conditionStatement.setOper(new OperStatement.EQStatement());
                         conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNormalValue()));
                         Statement joinOnStatement = joinStatement.getOn();
-                        if(joinOnStatement instanceof ConditionStatement&&((ConditionStatement) joinOnStatement).getOper() instanceof OperStatement.ORStatement){
+                        if (joinOnStatement instanceof ConditionStatement && ((ConditionStatement) joinOnStatement).getOper() instanceof OperStatement.ORStatement) {
                             joinOnStatement = new BraceStatement(joinOnStatement);
                         }
                         ConditionStatement joinConditionStatement = new ConditionStatement();
@@ -114,7 +113,7 @@ public class LogicQueryHandler extends AbstractHandler {
             }
 
             @Override
-            protected boolean interest(Statement statement, Assist sqlAssist) {
+            protected boolean interest(Statement statement, Assist assist) {
                 return statement instanceof JoinStatement;
             }
         }

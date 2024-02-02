@@ -33,7 +33,7 @@ public class ParamScanHandler extends AbstractHandler {
     }
 
     @Override
-    protected boolean interest(Statement statement, Assist sqlAssist) {
+    protected boolean interest(Statement statement, Assist assist) {
         return statement instanceof InsertStatement || statement instanceof ConditionStatement;
     }
 
@@ -104,7 +104,7 @@ public class ParamScanHandler extends AbstractHandler {
         }
 
         @Override
-        protected boolean interest(Statement statement, Assist sqlAssist) {
+        protected boolean interest(Statement statement, Assist assist) {
             return statement instanceof ConditionStatement;
         }
     }
@@ -148,7 +148,7 @@ public class ParamScanHandler extends AbstractHandler {
         }
 
         @Override
-        protected boolean interest(Statement statement, Assist sqlAssist) {
+        protected boolean interest(Statement statement, Assist assist) {
             return statement instanceof InsertStatement;
         }
 
@@ -160,7 +160,7 @@ public class ParamScanHandler extends AbstractHandler {
 
 
             @Override
-            protected boolean interest(Statement statement, Assist sqlAssist) {
+            protected boolean interest(Statement statement, Assist assist) {
                 return statement instanceof InsertStatement.ValuesStatement;
             }
 
@@ -182,7 +182,7 @@ public class ParamScanHandler extends AbstractHandler {
                 }
 
                 @Override
-                protected boolean interest(Statement statement, Assist sqlAssist) {
+                protected boolean interest(Statement statement, Assist assist) {
                     return statement instanceof BraceStatement;
                 }
             }

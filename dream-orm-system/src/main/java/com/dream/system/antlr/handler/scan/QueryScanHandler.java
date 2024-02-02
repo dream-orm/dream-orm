@@ -28,7 +28,7 @@ public class QueryScanHandler extends AbstractHandler {
     }
 
     @Override
-    protected boolean interest(Statement statement, Assist sqlAssist) {
+    protected boolean interest(Statement statement, Assist assist) {
         return statement instanceof QueryStatement;
     }
 
@@ -81,7 +81,7 @@ public class QueryScanHandler extends AbstractHandler {
         }
 
         @Override
-        protected boolean interest(Statement statement, Assist sqlAssist) {
+        protected boolean interest(Statement statement, Assist assist) {
             return statement instanceof FromStatement;
         }
     }
@@ -101,7 +101,7 @@ public class QueryScanHandler extends AbstractHandler {
         }
 
         @Override
-        protected boolean interest(Statement statement, Assist sqlAssist) {
+        protected boolean interest(Statement statement, Assist assist) {
             return statement instanceof JoinStatement;
         }
     }
