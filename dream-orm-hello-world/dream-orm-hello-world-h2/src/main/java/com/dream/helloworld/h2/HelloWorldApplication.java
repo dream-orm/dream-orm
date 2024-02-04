@@ -1,6 +1,9 @@
 package com.dream.helloworld.h2;
 
 import com.dream.flex.annotation.FlexAPT;
+import com.dream.mate.permission.inject.PermissionHandler;
+import com.dream.mate.permission.inject.PermissionInject;
+import com.dream.system.config.MethodInfo;
 import com.dream.system.inject.Inject;
 import com.dream.system.table.ColumnInfo;
 import com.dream.template.sequence.AbstractSequence;
@@ -102,7 +105,7 @@ public class HelloWorldApplication {
 //                    }
 //
 //                    @Override
-//                    public String getPermission(String alias) {
+//                    public String getPermission(String table,String alias) {
 //                        return alias + ".dept_id=1";
 //                    }
 //                }),

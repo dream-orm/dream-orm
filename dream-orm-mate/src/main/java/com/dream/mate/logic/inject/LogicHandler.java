@@ -15,7 +15,7 @@ public interface LogicHandler {
     default boolean isLogic(MethodInfo methodInfo, String table) {
         if (methodInfo != null) {
             TableInfo tableInfo = methodInfo.getConfiguration().getTableFactory().getTableInfo(table);
-            return tableInfo != null && tableInfo.getColumnInfo(getLogicColumn()) != null;
+            return tableInfo != null && tableInfo.getColumnInfo(getLogicColumn(table)) != null;
         }
         return false;
     }
@@ -41,9 +41,10 @@ public interface LogicHandler {
     /**
      * 逻辑删除字段
      *
+     * @param table 主表
      * @return
      */
-    String getLogicColumn();
+    String getLogicColumn(String table);
 
 
 }

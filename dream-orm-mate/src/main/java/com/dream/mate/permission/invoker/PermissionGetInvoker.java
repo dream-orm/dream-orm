@@ -34,7 +34,8 @@ public class PermissionGetInvoker extends AbstractInvoker {
     @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
+        String table = ((SymbolStatement.LetterStatement) columnList[0]).getValue();
         String alias = ((SymbolStatement.LetterStatement) columnList[1]).getValue();
-        return permissionHandler.getPermission(alias);
+        return permissionHandler.getPermission(table, alias);
     }
 }

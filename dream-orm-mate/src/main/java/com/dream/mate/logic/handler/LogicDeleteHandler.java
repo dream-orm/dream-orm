@@ -24,7 +24,7 @@ public class LogicDeleteHandler extends AbstractHandler {
         String table = tableSymbolStatement.getValue();
         if (logicInvoker.isLogicDelete(table)) {
             ConditionStatement conditionStatement = new ConditionStatement();
-            conditionStatement.setLeft(new SymbolStatement.LetterStatement(logicInvoker.getLogicColumn()));
+            conditionStatement.setLeft(new SymbolStatement.LetterStatement(logicInvoker.getLogicColumn(table)));
             conditionStatement.setOper(new OperStatement.EQStatement());
             conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getDeletedValue()));
             UpdateStatement updateStatement = new UpdateStatement();

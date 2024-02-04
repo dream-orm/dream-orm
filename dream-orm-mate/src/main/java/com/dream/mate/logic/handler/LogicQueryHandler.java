@@ -56,7 +56,7 @@ public class LogicQueryHandler extends AbstractHandler {
             if (tableScanInfo != null) {
                 String table = tableScanInfo.getTable();
                 if (logicInvoker.isLogicDelete(table)) {
-                    String logicColumn = logicInvoker.getLogicColumn();
+                    String logicColumn = logicInvoker.getLogicColumn(table);
                     ConditionStatement conditionStatement = new ConditionStatement();
                     conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + logicColumn)).expr());
                     conditionStatement.setOper(new OperStatement.EQStatement());
@@ -93,7 +93,7 @@ public class LogicQueryHandler extends AbstractHandler {
                 if (tableScanInfo != null) {
                     String table = tableScanInfo.getTable();
                     if (logicInvoker.isLogicDelete(table)) {
-                        String logicColumn = logicInvoker.getLogicColumn();
+                        String logicColumn = logicInvoker.getLogicColumn(table);
                         ConditionStatement conditionStatement = new ConditionStatement();
                         conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + logicColumn)).expr());
                         conditionStatement.setOper(new OperStatement.EQStatement());

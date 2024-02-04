@@ -55,8 +55,8 @@ public class LogicInvoker extends AbstractInvoker {
         return logicHandler.isLogic(methodInfo, table);
     }
 
-    public String getLogicColumn() {
-        return logicHandler.getLogicColumn();
+    public String getLogicColumn(String table) {
+        return logicHandler.getLogicColumn(table);
     }
 
     public String getDeletedValue() {
