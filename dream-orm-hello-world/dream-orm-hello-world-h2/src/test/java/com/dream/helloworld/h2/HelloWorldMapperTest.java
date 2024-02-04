@@ -46,15 +46,10 @@ public class HelloWorldMapperTest {
      */
     @Test
     public void testSelectNotList() {
-        long l = System.currentTimeMillis();
-        for (int i = 0; i < 10000; i++) {
-            AccountView accountView = new AccountView();
-            accountView.setId(3);
-            accountView.setName("");
-            List<AccountView> accountViews = accountMapper.selectNotList(accountView);
-        }
-        System.out.println(System.currentTimeMillis() - l);
-//        System.out.println("查询结果：" + accountViews);
+        AccountView accountView = new AccountView();
+        accountView.setId(3);
+        accountView.setName("");
+        List<AccountView> accountViews = accountMapper.selectNotList(accountView);
     }
 
     /**

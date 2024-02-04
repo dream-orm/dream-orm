@@ -3,7 +3,6 @@ package com.dream.mate.tenant.handler;
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.handler.AbstractHandler;
-import com.dream.antlr.handler.Handler;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToSQL;
@@ -16,7 +15,6 @@ import java.util.List;
 
 public class TenantUpdateHandler extends AbstractHandler {
     private TenantInjectInvoker tenantInjectInvoker;
-    private Handler[] handlers;
 
     public TenantUpdateHandler(TenantInjectInvoker tenantInjectInvoker) {
         this.tenantInjectInvoker = tenantInjectInvoker;
@@ -29,8 +27,7 @@ public class TenantUpdateHandler extends AbstractHandler {
         SymbolStatement symbolStatement = (SymbolStatement) tableStatement;
         String table = symbolStatement.getValue();
         if (tenantInjectInvoker.isTenant(table)) {
-            handlers = new Handler[]{new ConditionHandler()};
-            String tenantColumn = tenantInjectInvoker.getTenantColumn();
+            String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
             ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.LetterStatement(tenantColumn));
             conditionStatement.setOper(new OperStatement.EQStatement());
@@ -44,41 +41,13 @@ public class TenantUpdateHandler extends AbstractHandler {
             } else {
                 MateUtil.appendWhere(whereStatement, conditionStatement);
             }
-        } else {
-            handlers = new Handler[0];
         }
         return statement;
-    }
-
-    @Override
-    protected Handler[] handlerBound() {
-        return handlers;
     }
 
 
     @Override
     protected boolean interest(Statement statement, Assist sqlAssist) {
         return statement instanceof UpdateStatement;
-    }
-
-    class ConditionHandler extends AbstractHandler {
-        @Override
-        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
-            ConditionStatement conditionStatement = (ConditionStatement) statement;
-            Statement columnStatement = conditionStatement.getLeft();
-            if (columnStatement instanceof SymbolStatement) {
-                String column = ((SymbolStatement) columnStatement).getValue();
-                String tenantColumn = tenantInjectInvoker.getTenantColumn();
-                if (tenantColumn.equalsIgnoreCase(column)) {
-                    conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
-                }
-            }
-            return statement;
-        }
-
-        @Override
-        protected boolean interest(Statement statement, Assist assist) {
-            return statement instanceof ConditionStatement;
-        }
     }
 }

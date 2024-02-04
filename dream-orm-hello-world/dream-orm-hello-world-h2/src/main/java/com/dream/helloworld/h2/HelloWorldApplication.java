@@ -1,9 +1,6 @@
 package com.dream.helloworld.h2;
 
 import com.dream.flex.annotation.FlexAPT;
-import com.dream.mate.permission.inject.PermissionHandler;
-import com.dream.mate.permission.inject.PermissionInject;
-import com.dream.system.config.MethodInfo;
 import com.dream.system.inject.Inject;
 import com.dream.system.table.ColumnInfo;
 import com.dream.template.sequence.AbstractSequence;

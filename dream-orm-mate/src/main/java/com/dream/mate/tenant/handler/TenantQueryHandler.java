@@ -60,7 +60,7 @@ public class TenantQueryHandler extends AbstractHandler {
             if (tableScanInfo != null) {
                 String table = tableScanInfo.getTable();
                 if (tenantInjectInvoker.isTenant(table)) {
-                    String tenantColumn = tenantInjectInvoker.getTenantColumn();
+                    String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
                     ConditionStatement conditionStatement = new ConditionStatement();
                     conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                     conditionStatement.setOper(new OperStatement.EQStatement());
@@ -97,7 +97,7 @@ public class TenantQueryHandler extends AbstractHandler {
                 if (tableScanInfo != null) {
                     String table = tableScanInfo.getTable();
                     if (tenantInjectInvoker.isTenant(table)) {
-                        String tenantColumn = tenantInjectInvoker.getTenantColumn();
+                        String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
                         ConditionStatement conditionStatement = new ConditionStatement();
                         conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
                         conditionStatement.setOper(new OperStatement.EQStatement());

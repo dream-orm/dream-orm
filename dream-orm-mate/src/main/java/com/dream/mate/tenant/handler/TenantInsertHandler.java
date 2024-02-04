@@ -36,7 +36,7 @@ public class TenantInsertHandler extends AbstractHandler {
                 ListColumnStatement valuesListStatement = (ListColumnStatement) valuesBraceStatement.getStatement();
                 Statement[] valuesColumnList = valuesListStatement.getColumnList();
                 int i = 0;
-                String tenantColumn = tenantInjectInvoker.getTenantColumn();
+                String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
                 for (; i < paramColumnList.length; i++) {
                     SymbolStatement symbolStatement = (SymbolStatement) paramColumnList[i];
                     String column = symbolStatement.getValue();

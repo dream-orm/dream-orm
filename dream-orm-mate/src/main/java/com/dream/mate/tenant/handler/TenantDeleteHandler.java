@@ -27,7 +27,7 @@ public class TenantDeleteHandler extends AbstractHandler {
         SymbolStatement symbolStatement = (SymbolStatement) tableStatement;
         String table = symbolStatement.getValue();
         if (tenantInjectInvoker.isTenant(table)) {
-            String tenantColumn = tenantInjectInvoker.getTenantColumn();
+            String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
             ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.LetterStatement(tenantColumn));
             conditionStatement.setOper(new OperStatement.EQStatement());

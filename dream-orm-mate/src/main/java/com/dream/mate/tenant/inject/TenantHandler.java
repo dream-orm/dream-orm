@@ -14,7 +14,7 @@ public interface TenantHandler {
     default boolean isTenant(MethodInfo methodInfo, String table) {
         if (methodInfo != null) {
             TableInfo tableInfo = methodInfo.getConfiguration().getTableFactory().getTableInfo(table);
-            return tableInfo != null && tableInfo.getColumnInfo(getTenantColumn()) != null;
+            return tableInfo != null && tableInfo.getColumnInfo(getTenantColumn(table)) != null;
         }
         return false;
     }
@@ -24,7 +24,7 @@ public interface TenantHandler {
      *
      * @return
      */
-    default String getTenantColumn() {
+    default String getTenantColumn(String table) {
         return "tenant_id";
     }
 

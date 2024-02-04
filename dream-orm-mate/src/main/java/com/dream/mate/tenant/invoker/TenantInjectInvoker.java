@@ -56,7 +56,7 @@ public class TenantInjectInvoker extends AbstractInvoker {
         return tenantHandler.isTenant(methodInfo, table);
     }
 
-    public String getTenantColumn() {
-        return tenantHandler.getTenantColumn();
+    public String getTenantColumn(String table) {
+        return tenantHandler.getTenantColumn(table);
     }
 }
