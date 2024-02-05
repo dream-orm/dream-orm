@@ -34,7 +34,6 @@ public class TenantInsertHandler extends AbstractHandler {
                 InsertStatement.ValuesStatement valuesStatement = (InsertStatement.ValuesStatement) values;
                 BraceStatement valuesBraceStatement = (BraceStatement) valuesStatement.getStatement();
                 ListColumnStatement valuesListStatement = (ListColumnStatement) valuesBraceStatement.getStatement();
-                Statement[] valuesColumnList = valuesListStatement.getColumnList();
                 int i = 0;
                 String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
                 for (; i < paramColumnList.length; i++) {
@@ -44,10 +43,8 @@ public class TenantInsertHandler extends AbstractHandler {
                         break;
                     }
                 }
-                InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
-                if (i < paramColumnList.length) {
-                    valuesColumnList[i] = invokerStatement;
-                } else {
+                if (i == paramColumnList.length) {
+                    InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
                     paramListStatement.add(new SymbolStatement.LetterStatement(tenantColumn));
                     valuesListStatement.add(invokerStatement);
                 }

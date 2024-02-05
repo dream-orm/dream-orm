@@ -114,10 +114,6 @@ public class HelloWorldApplication {
 //                    public boolean isTenant(MethodInfo methodInfo, String table) {
 //                        return true;
 //                    }
-////                    @Override
-////                    public String getTenantColumn() {
-////                        return "tenant_id";
-////                    }
 //
 //                    @Override
 //                    public Object getTenantObject() {
