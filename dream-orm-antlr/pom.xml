@@ -11,10 +11,4 @@
 
     <groupId>com.dream-orm</groupId>
     <artifactId>dream-orm-antlr</artifactId>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
-
 </project>

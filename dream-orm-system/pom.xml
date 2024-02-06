@@ -8,8 +8,9 @@
         <version>1.2.11</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.dream-orm</groupId>
+
     <artifactId>dream-orm-system</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>com.dream-orm</groupId>
@@ -24,9 +25,4 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
-
 </project>

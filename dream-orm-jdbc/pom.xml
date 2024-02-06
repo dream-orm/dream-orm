@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>dream-orm-jdbc</artifactId>
-
     <dependencies>
         <dependency>
             <groupId>com.dream-orm</groupId>
@@ -18,10 +17,4 @@
             <version>1.2.11</version>
         </dependency>
     </dependencies>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
-
 </project>

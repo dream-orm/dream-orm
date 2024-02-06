@@ -51,7 +51,6 @@
         <module>dream-orm-tdengine</module>
         <module>dream-orm-generator</module>
     </modules>
-
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -95,7 +94,6 @@
             </plugin>
         </plugins>
     </build>
-
     <profiles>
         <profile>
             <id>release</id>
