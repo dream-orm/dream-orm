@@ -199,7 +199,7 @@ public class HelloWorldApplication {
 //        return new DefaultFlexDialect(toSQL).tenantHandler(new TenantHandler() {
 //            @Override
 //            public boolean isTenant(MethodInfo methodInfo, String table) {
-//                return true;
+//                return TenantHandler.super.isTenant(methodInfo, table);
 //            }
 //
 //            @Override
@@ -213,7 +213,7 @@ public class HelloWorldApplication {
 //            }
 //
 //            @Override
-//            public String getPermission(String alias) {
+//            public String getPermission(String table, String alias) {
 //                return "1=1";
 //            }
 //        }).logicHandler(new LogicHandler() {
@@ -223,7 +223,7 @@ public class HelloWorldApplication {
 //            }
 //
 //            @Override
-//            public String getLogicColumn() {
+//            public String getLogicColumn(String table) {
 //                return "del_flag";
 //            }
 //        });

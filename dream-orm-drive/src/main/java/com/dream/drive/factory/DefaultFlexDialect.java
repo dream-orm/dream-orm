@@ -57,7 +57,7 @@ public class DefaultFlexDialect extends AbstractFlexDialect {
 
     @Override
     protected List<Invoker> invokerList() {
-        List<Invoker> invokerList = new ArrayList<>(3);
+        List<Invoker> invokerList = new ArrayList<>(4);
         if (tenantHandler != null) {
             invokerList.add(new TenantInjectInvoker(tenantHandler));
         }
@@ -75,7 +75,7 @@ public class DefaultFlexDialect extends AbstractFlexDialect {
 
     @Override
     protected Invoker[] defaultInvokers() {
-        List<Invoker> invokerList = new ArrayList<>(4);
+        List<Invoker> invokerList = new ArrayList<>(6);
         Invoker[] invokers = super.defaultInvokers();
         invokerList.addAll(Arrays.asList(invokers));
         if (tenantHandler != null) {

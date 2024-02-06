@@ -4,6 +4,7 @@ import com.dream.flex.def.DeleteDef;
 import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
+import com.dream.flex.dialect.FlexDialect;
 import com.dream.system.config.Page;
 import com.dream.util.tree.Tree;
 
@@ -13,6 +14,14 @@ import java.util.List;
  * 链式操作接口
  */
 public interface FlexMapper {
+
+    /**
+     * flex方言
+     *
+     * @param flexDialect
+     * @return
+     */
+    FlexMapper use(FlexDialect flexDialect);
 
     /**
      * 查询并返回一条

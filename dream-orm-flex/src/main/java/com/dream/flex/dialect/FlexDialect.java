@@ -7,7 +7,9 @@ import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
 
-
+/**
+ * flex方言
+ */
 public interface FlexDialect {
     default SqlInfo toSQL(QueryDef queryDef) {
         return toSQL(queryDef.statement().clone());

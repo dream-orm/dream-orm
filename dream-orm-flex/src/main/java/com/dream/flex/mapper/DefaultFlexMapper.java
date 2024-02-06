@@ -34,7 +34,7 @@ public class DefaultFlexMapper implements FlexMapper {
     private Session session;
     private Configuration configuration;
     private TypeHandlerFactory typeHandlerFactory;
-    private boolean offset;
+    private boolean offset = true;
     private FlexDialect flexDialect;
     private ResultSetHandler resultSetHandler;
 
@@ -53,6 +53,11 @@ public class DefaultFlexMapper implements FlexMapper {
         if (pageInject != null) {
             this.offset = pageInject.isOffset();
         }
+    }
+
+    @Override
+    public FlexMapper use(FlexDialect flexDialect) {
+        return new DefaultFlexMapper(session, flexDialect, resultSetHandler);
     }
 
     @Override
