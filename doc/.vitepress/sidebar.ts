@@ -151,14 +151,20 @@ const sidebar: DefaultTheme.Sidebar = {
     ],
     '/neighbor': [
         {
-            text: '问题',
+            text: '生态',
             link: '/neighbor/'
         }
     ],
     '/change-log': [
         {
-            text: '问题',
+            text: '升级日志',
             link: '/change-log/'
+        }
+    ],
+    '/users': [
+        {
+            text: '用户',
+            link: '/users/'
         }
     ]
 };

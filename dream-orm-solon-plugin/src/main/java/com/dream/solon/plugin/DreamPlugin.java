@@ -4,7 +4,7 @@ import com.dream.solon.bean.ConfigurationBean;
 import com.dream.system.config.Configuration;
 import com.dream.system.mapper.MapperFactory;
 import com.dream.template.session.SessionTemplate;
-import org.noear.solon.core.AopContext;
+import org.noear.solon.core.AppContext;
 import org.noear.solon.core.BeanWrap;
 import org.noear.solon.core.Plugin;
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DreamPlugin implements Plugin {
     @Override
-    public void start(AopContext context) {
+    public void start(AppContext context) {
         context.lifecycle(() -> {
             if (context.hasWrap(ConfigurationBean.class) == false) {
                 context.putWrap(ConfigurationBean.class, new BeanWrap(context, ConfigurationBean.class, new ConfigurationBean()));

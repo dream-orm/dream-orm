@@ -10,7 +10,7 @@ import com.dream.util.exception.DreamRunTimeException;
 import org.noear.solon.Solon;
 import org.noear.solon.annotation.Bean;
 import org.noear.solon.annotation.Configuration;
-import org.noear.solon.core.AopContext;
+import org.noear.solon.core.AppContext;
 import org.noear.solon.core.Plugin;
 import org.noear.solon.core.wrap.ClassWrap;
 
@@ -43,7 +43,7 @@ public class DataSourceConfiguration implements Plugin {
     }
 
     @Override
-    public void start(AopContext context) throws Throwable {
+    public void start(AppContext context) throws Throwable {
         context.getBeanAsync(ListenerFactory.class, listenerFactory -> {
             Listener[] listeners = listenerFactory.getListeners();
             if (!ObjectUtil.isNull(listeners)) {

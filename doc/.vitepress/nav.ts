@@ -22,6 +22,10 @@ const nav: DefaultTheme.NavItem[] = [
         link: '/change-log/'
     },
     {
+        text: '用户',
+        link: '/users/'
+    },
+    {
         text: '获取源码',
         items: [
             {
