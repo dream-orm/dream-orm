@@ -714,8 +714,8 @@ public class FunctionExpr extends SqlExpr {
     @Override
     protected Statement exprMyFunction(ExprInfo exprInfo) throws AntlrException {
         MyFunctionStatement myFunctionStatement = (MyFunctionStatement) exprInfo.getObjInfo();
-        CustomFunctionExpr customFunctionExpr = new CustomFunctionExpr(exprReader, myFunctionStatement.getHelper(exprReader));
-        functionStatement = customFunctionExpr.expr();
+        MyFunctionExpr myFunctionExpr = new MyFunctionExpr(exprReader, myFunctionStatement.getHelper(exprReader));
+        functionStatement = myFunctionExpr.expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }
@@ -1258,10 +1258,10 @@ public class FunctionExpr extends SqlExpr {
         }
     }
 
-    public static class CustomFunctionExpr extends HelperExpr {
+    public static class MyFunctionExpr extends HelperExpr {
         private MyFunctionStatement myFunctionStatement;
 
-        public CustomFunctionExpr(ExprReader exprReader, Helper helper) {
+        public MyFunctionExpr(ExprReader exprReader, Helper helper) {
             super(exprReader, helper);
             setExprTypes(ExprType.MY_FUNCTION);
         }

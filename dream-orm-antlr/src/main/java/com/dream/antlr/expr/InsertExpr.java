@@ -38,7 +38,6 @@ public class InsertExpr extends HelperExpr {
         return expr();
     }
 
-
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
         BraceExpr braceExpr = new BraceExpr(exprReader);
