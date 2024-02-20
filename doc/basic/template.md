@@ -6,8 +6,8 @@
 
 | 方法名                                                       | 描述                                   |
 | ------------------------------------------------------------ | -------------------------------------- |
-| selectById(Class&lt;T&gt; type, Object id)                   | 主键查询（支持多表关联查询）           |
-| selectByIds(Class&lt;T&gt; type, Collection&lt;?&gt; idList) | 主键批量查询(支持多表关联查询)         |
+| selectById(Class&lt;T&gt; type, Object id)                   | 主键查询                               |
+| selectByIds(Class&lt;T&gt; type, Collection&lt;?&gt; idList) | 主键批量查询                           |
 | selectOne(Class&lt;T&gt; type, Object conditionObject)       | 根据注解生成条件，查询一条             |
 | selectList(Class&lt;T&gt; type, Object conditionObject)      | 根据注解生成条件，查询多条             |
 | selectTree(Class&lt;T&gt; type, Object conditionObject)      | 根据注解生成条件，查询，并返回树形结构 |
@@ -20,8 +20,8 @@
 | deleteByIds(Class&lt;?&gt; type, Collection&lt;?&gt; idList) | 主键批量删除                           |
 | existById(Class&lt;?&gt; type, Object id)                    | 判断主键是否存在                       |
 | exist(Class&lt;?&gt; type, Object conditionObject)           | 根据注解生成条件，判断是否存在         |
-| batchInsert(Collection&lt;?&gt; viewList)                    | 批量插入，默认一千作为一个批次         |
-| batchUpdateById(Collection&lt;?&gt; viewList)                | 批量主键更新，默认一千作为一个批次     |
+| batchInsert(Collection&lt;?&gt; viewList)                    | 批量插入，一千作为一个批次             |
+| batchUpdateById(Collection&lt;?&gt; viewList)                | 批量主键更新，一千作为一个批次         |
 
 
 
@@ -88,7 +88,7 @@ public void testSelectAnnotationCondition() {
 
 ```java
 public @interface Conditional {
-    String table() default "";
+    String column() default "";
 
     boolean nullFlag() default true;
 
@@ -100,7 +100,7 @@ public @interface Conditional {
 
 | 属性名   | 描述                         |
 | -------- | ---------------------------- |
-| table    | 条件的表名                   |
+| column   | 字段名                       |
 | nullFlag | 为空是否剔除（空字符串为空） |
 | or       | 是否采用or，默认and          |
 | value    | 生成条件的实现类             |
@@ -119,22 +119,21 @@ public interface Condition {
 
 **已实现的Condition类**
 
-| Condition类        | 描述            |
-| ------------------ | --------------- |
-| ContainsCondition  | like '%?%'      |
-| EndWithCondition   | like '?%'       |
-| EqCondition        | =?              |
-| GeqCondition       | > =?            |
-| GtCondition        | > ?             |
-| InCondition        | in(?,?)         |
-| NotInCondition     | not in (?,?)    |
-| LeqCondition       | <=?             |
-| LtCondition        | <?              |
-| NeqCondition       | <>?             |
-| NotNullCondition   | is not null     |
-| NullCondition      | is null         |
-| StartWithCondition | like '%?'       |
-| BetweenCondition   | between ? and ? |
+| Condition类        | 描述         |
+| ------------------ | ------------ |
+| ContainsCondition  | like '%?%'   |
+| EndWithCondition   | like '?%'    |
+| EqCondition        | =?           |
+| GeqCondition       | > =?         |
+| GtCondition        | > ?          |
+| InCondition        | in(?,?)      |
+| NotInCondition     | not in (?,?) |
+| LeqCondition       | <=?          |
+| LtCondition        | <?           |
+| NeqCondition       | <>?          |
+| NotNullCondition   | is not null  |
+| NullCondition      | is null      |
+| StartWithCondition | like '%?     |
 
 **当然，也可以基于接口实现自己的条件类，除了生成条件外，也可以对参数值校验、参数值修改、默认值填充以及指定排序字段。**
 
@@ -377,7 +376,7 @@ public void testSelectOrder() {
 
 ```java
 public @interface Sort {
-    String table() default "";
+    String column() default "";
 
     Order value() default Order.ASC;
 
@@ -387,6 +386,6 @@ public @interface Sort {
 
 | 属性名 | 描述                                           |
 | ------ | ---------------------------------------------- |
-| table  | 表名称                                         |
+| column | 字段名称                                       |
 | value  | 排序方式                                       |
 | order  | 指定多个排序字段时，显示优先级，越小优先级越高 |

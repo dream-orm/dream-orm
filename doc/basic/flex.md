@@ -1,6 +1,6 @@
 # 链式操作
 
-在 dream-orm中，内置了 `QueryDef` 、`UpdateDef`、`deleteDef`、insertDef 用于对数据进行查询、修改、删除和插入操作，链式依赖APT在编译时生成对应代码，默认处于关闭状态。
+在 dream-orm中，内置了 `QueryDef` 、`UpdateDef`、`DeleteDef`、`InsertDef` 用于对数据进行查询、修改、删除和插入操作，链式依赖APT在编译时生成对应代码，默认处于关闭状态。
 
 ## **开启链式操作**
 

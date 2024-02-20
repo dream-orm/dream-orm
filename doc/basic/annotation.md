@@ -11,7 +11,7 @@ public @interface Table {
      *
      * @return
      */
-    String value();
+    String value() default "";
 }
 
 ```
@@ -43,7 +43,7 @@ public @interface Column {
      *
      * @return
      */
-    String value();
+    String value() default "";
 
     /**
      * 对应的数据库表字段类型
@@ -51,48 +51,21 @@ public @interface Column {
      * @return
      */
     int jdbcType() default Types.NULL;
+
+    /**
+     * 自定义类型转换器
+     *
+     * @return
+     */
+    Class<? extends TypeHandler> typeHandler() default ObjectTypeHandler.class;
 }
 ```
 
-| 注解属性 | 描述                   |
-| -------- | ---------------------- |
-| value    | 对应的数据库表字段名称 |
-| jdbcType | 对应的数据库表字段类型 |
-
-## Join
-
-**在 Entity 类中， 使用 `@Join` 注解来标识数据表之间联系。**
-
-```java
-public @interface Join {
-    /**
-     * 当前表关联的字段名
-     *
-     * @return
-     */
-    String column();
-
-    /**
-     * 关联的目标表字段名
-     *
-     * @return
-     */
-    String joinColumn();
-
-    /**
-     * 关联类型
-     *
-     * @return
-     */
-    JoinType joinType() default JoinType.LEFT_JOIN;
-}
-```
-
-| 注解属性   | 描述           |
-| ---------- | -------------- |
-| column     | 该表字段名     |
-| joinColumn | 关联表的字段名 |
-| joinType   | 关联类型       |
+| 注解属性    | 描述                   |
+| ----------- | ---------------------- |
+| value       | 对应的数据库表字段名称 |
+| jdbcType    | 对应的数据库表字段类型 |
+| typeHandler | 自定义类型转换器       |
 
 ## View
 

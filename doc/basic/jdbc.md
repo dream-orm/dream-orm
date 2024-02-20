@@ -185,7 +185,58 @@ public interface JdbcMapper {
      * @return 查询的数据
      */
     <T> List<T> queryForList(String sql, StatementSetter statementSetter, RowMapping<T> rowMapping);
+
+    default <T> T getOne(List<T> list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        if (list.size() == 1) {
+            return list.get(0);
+        }
+        throw new DreamRunTimeException("数据存在多条");
     }
+
+    /**
+     * 根据主键更新
+     *
+     * @param view 更新对象
+     * @return
+     */
+    int updateById(Object view);
+
+    /**
+     * 根据主键非空更新
+     *
+     * @param view 更新对象
+     * @return
+     */
+    int updateNonById(Object view);
+
+    /**
+     * 插入数据
+     *
+     * @param view 插入对象
+     * @return
+     */
+    int insert(Object view);
+
+    /**
+     * 批量插入
+     *
+     * @param viewList 数据集合
+     * @return
+     */
+    <T> List<Object> batchInsert(List<T> viewList);
+
+    /**
+     * 批量更新
+     *
+     * @param viewList 数据集合
+     * @return
+     */
+    <T> List<Object> batchUpdateById(List<T> viewList);
+}
+
 ```
 ## 测试一：查询单条
 
