@@ -16,8 +16,11 @@ import java.util.Set;
  */
 public abstract class SqlExpr {
 
+    //可解析的单词类型
     protected Set<ExprType> acceptSet = new HashSet<>();
+    //单词读取流
     protected ExprReader exprReader;
+    //本语法器是否可解析单词
     protected boolean self;
 
     public SqlExpr(ExprReader exprReader) {
@@ -43,11 +46,14 @@ public abstract class SqlExpr {
      * @throws AntlrException
      */
     public Statement expr() throws AntlrException {
+        //获取最后读入的单词信息
         ExprInfo exprInfo = exprReader.getLastInfo();
         if (exprInfo == null) {
             exprInfo = push();
         }
+        //获取单词类型
         ExprType exprType = exprInfo.getExprType();
+        //判断本语法器是否可解析单词
         if (!(self = exprBefore(exprInfo))) {
             exprInfo.setExprType(ExprType.NIL);
         }
@@ -1418,6 +1424,15 @@ public abstract class SqlExpr {
         return exprNil(exprInfo);
     }
 
+    /**
+     * 规约，如果本语法器可以解析单词，调用解析单词函数，
+     * 否则如果本次可以规约，则进行规约，
+     * 否则抛异常
+     *
+     * @param exprInfo 单词信息
+     * @return 抽象树
+     * @throws AntlrException
+     */
     protected Statement exprNil(ExprInfo exprInfo) throws AntlrException {
         if (self) {
             return exprSelf(exprInfo);

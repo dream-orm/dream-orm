@@ -1,5 +1,8 @@
 package com.dream.antlr.config;
 
+/**
+ * 单词类型
+ */
 public enum ExprType {
     TINYINT,
     SMALLINT,

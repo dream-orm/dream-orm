@@ -2,7 +2,7 @@
 
 ## v1.2.11
 
-- 修复：TransManager rollback判断connection进行空判断
+- 修复：TransManager rollback时对connection进行空判断
 
 ## v1.2.11
 

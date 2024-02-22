@@ -10,6 +10,7 @@ import com.dream.antlr.smt.*;
  * 查询语法解析器
  */
 public class QueryExpr extends SqlExpr {
+    //查询抽象树
     private final QueryStatement queryStatement = new QueryStatement();
 
 
