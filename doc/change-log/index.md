@@ -2,6 +2,10 @@
 
 ## v1.2.11
 
+- 修复：TransManager rollback判断connection进行空判断
+
+## v1.2.11
+
 - 优化：flex支持接受字符串参数
 - 新增：jdbcMapper支持基础新增（批量）、修改（批量）
 - 优化：注入多租户或数据权限时，自动判断是否需要加括号

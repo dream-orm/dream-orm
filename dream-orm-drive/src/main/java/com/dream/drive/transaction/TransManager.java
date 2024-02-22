@@ -148,14 +148,16 @@ public class TransManager {
 
     static void rollback(String xid) throws SQLException {
         Connection connection = getConnection(xid);
-        try {
-            connection.rollback();
-        } finally {
+        if (connection != null) {
             try {
-                connection.close();
+                connection.rollback();
             } finally {
-                CONNECTION_HOLDER.remove();
-                TransactionContext.release();
+                try {
+                    connection.close();
+                } finally {
+                    CONNECTION_HOLDER.remove();
+                    TransactionContext.release();
+                }
             }
         }
     }
