@@ -3,6 +3,8 @@
 ## v1.2.11
 
 - 修复：TransManager rollback时对connection进行空判断
+- 修复：解决oracle分页报错
+- 优化：细分数据库分页，oracle分成12之前和以及之后版本，sqlserver分为2012之前和以及之后版本
 
 ## v1.2.11
 

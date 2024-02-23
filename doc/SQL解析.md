@@ -34,21 +34,17 @@ select name,avg(age) from users where dept_id=1001 group by name
 ```java
 @Test
 public void testQuery() {
-    ExprReader exprReader = new ExprReader("select name,avg(age) from users where dept_id=1001 group by name");
-    ExprInfo exprInfo;
-    while (true){
+        ExprReader exprReader = new ExprReader("select name,avg(age) from users where dept_id=1001 group by name");
+        ExprInfo exprInfo;
+        while (true){
         exprInfo=exprReader.push();
         if(exprInfo.getExprType()== ExprType.ACC){
-            break;
+        break;
         }
         System.out.println("单词："+exprInfo.getInfo()+"\t\t单词类型："+exprInfo.getExprType());
-    }
-}
+        }
+        }
 ```
-
-### 运行截图
-
-![image-20240222195501158](C:\Users\halu110\AppData\Roaming\Typora\typora-user-images\image-20240222195501158.png)
 
 ## 语法分析
 
@@ -70,9 +66,9 @@ public void testQuery() {
 ```java
 @Test
 public void testSelect() throws AntlrException {
-    ExprReader exprReader = new ExprReader("select name,avg(age)");
-    Statement statement = new SelectExpr(exprReader).expr();
-}
+        ExprReader exprReader = new ExprReader("select name,avg(age)");
+        Statement statement = new SelectExpr(exprReader).expr();
+        }
 ```
 
 ### from语法解析
@@ -80,9 +76,9 @@ public void testSelect() throws AntlrException {
 ```java
 @Test
 public void testFrom() throws AntlrException {
-    ExprReader exprReader = new ExprReader("from users");
-    Statement statement = new FromExpr(exprReader).expr();
-}
+        ExprReader exprReader = new ExprReader("from users");
+        Statement statement = new FromExpr(exprReader).expr();
+        }
 ```
 
 ### where语法解析
@@ -90,9 +86,9 @@ public void testFrom() throws AntlrException {
 ```java
 @Test
 public void testWhere() throws AntlrException {
-    ExprReader exprReader = new ExprReader("where dept_id=1001");
-    Statement statement = new FromExpr(exprReader).expr();
-}
+        ExprReader exprReader = new ExprReader("where dept_id=1001");
+        Statement statement = new WhereExpr(exprReader).expr();
+        }
 ```
 
 ### group语法解析
@@ -100,9 +96,9 @@ public void testWhere() throws AntlrException {
 ```java
 @Test
 public void testGroup() throws AntlrException {
-    ExprReader exprReader = new ExprReader("group by name");
-    Statement statement = new FromExpr(exprReader).expr();
-}
+        ExprReader exprReader = new ExprReader("group by name");
+        Statement statement = new GroupExpr(exprReader).expr();
+        }
 ```
 
 。。。。更多
@@ -112,9 +108,9 @@ public void testGroup() throws AntlrException {
 ```java
 @Test
 public void testFunc() throws AntlrException {
-    ExprReader exprReader = new ExprReader("avg(age)");
-    Statement statement = new FunctionExpr(exprReader).expr();
-}
+        ExprReader exprReader = new ExprReader("avg(age)");
+        Statement statement = new FunctionExpr(exprReader).expr();
+        }
 ```
 
 ### 比较语法解析
@@ -122,7 +118,7 @@ public void testFunc() throws AntlrException {
 ```java
 @Test
 public void testCompare() throws AntlrException {
-    ExprReader exprReader = new ExprReader("dept_id=1001");
-    Statement statement = new CompareExpr(exprReader).expr();
-}
+        ExprReader exprReader = new ExprReader("dept_id=1001");
+        Statement statement = new CompareExpr(exprReader).expr();
+        }
 ```

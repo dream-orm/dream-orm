@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class HelloWorldAntlrTest {
-    static List<ToSQL> toSQLList = Arrays.asList(new ToMySQL(), new ToPostgreSQL(), new ToSQLServer(), new ToOracle(), new ToDM(), new ToClickHouse());
+    static List<ToSQL> toSQLList = Arrays.asList(new ToMySQL(), new ToPostgreSQL(), new ToSQLServer(), new ToSQLServer2005(), new ToOracle(), new ToOracle11(), new ToDM(), new ToClickHouse());
 
     @Test
     public void testStr() {

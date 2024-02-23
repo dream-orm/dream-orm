@@ -39,11 +39,6 @@ public class ToPostgreSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return super.toStringForRowNumber(statement, assist, invokerList);
-    }
-
-    @Override
     protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "\"" + statement.getValue() + "\"";
     }
@@ -281,6 +276,25 @@ public class ToPostgreSQL extends ToPubSQL {
             res = res.substring(1, res.length() - 1);
         }
         return "INTERVAL '" + res + " SECOND'";
+    }
+
+    @Override
+    protected String toString(LimitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        StringBuilder builder = new StringBuilder();
+        if (statement.isOffset()) {
+            builder.append(" LIMIT " + toStr(statement.getFirst(), assist, invokerList));
+            if (statement.getSecond() != null) {
+                builder.append(" OFFSET " + toStr(statement.getSecond(), assist, invokerList));
+            }
+        } else {
+            if (statement.getSecond() != null) {
+                builder.append(" LIMIT " + toStr(statement.getSecond(), assist, invokerList));
+                builder.append(" OFFSET " + toStr(statement.getFirst(), assist, invokerList));
+            } else {
+                builder.append(" LIMIT " + toStr(statement.getFirst(), assist, invokerList));
+            }
+        }
+        return builder.toString();
     }
 
     @Override

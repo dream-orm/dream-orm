@@ -6,13 +6,8 @@ import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.expr.*;
 import com.dream.antlr.read.ExprReader;
-import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.smt.Statement;
-import com.dream.antlr.sql.*;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class HelloWorldStudyTest {
 
@@ -44,13 +39,13 @@ public class HelloWorldStudyTest {
     @Test
     public void testWhere() throws AntlrException {
         ExprReader exprReader = new ExprReader("where dept_id=1001");
-        Statement statement = new FromExpr(exprReader).expr();
+        Statement statement = new WhereExpr(exprReader).expr();
     }
 
     @Test
     public void testGroup() throws AntlrException {
         ExprReader exprReader = new ExprReader("group by name");
-        Statement statement = new FromExpr(exprReader).expr();
+        Statement statement = new GroupExpr(exprReader).expr();
     }
 
     @Test
@@ -58,6 +53,7 @@ public class HelloWorldStudyTest {
         ExprReader exprReader = new ExprReader("avg(age)");
         Statement statement = new FunctionExpr(exprReader).expr();
     }
+
     @Test
     public void testCompare() throws AntlrException {
         ExprReader exprReader = new ExprReader("dept_id=1001");

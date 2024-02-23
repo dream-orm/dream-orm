@@ -243,7 +243,6 @@ public class ToClickHouse extends ToPubSQL {
             }
         }
         return "toDecimal64(" + toStr(statement.getStatement(), assist, invokerList) + "," + (decimalStatement == null ? "0" : toStr(decimalStatement, assist, invokerList)) + ")";
-
     }
 
     @Override

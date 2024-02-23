@@ -3,15 +3,13 @@ package com.dream.antlr.sql;
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
-import com.dream.antlr.expr.BraceExpr;
 import com.dream.antlr.invoker.Invoker;
-import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.*;
 
 import java.util.List;
 
 /**
- * mssql方言
+ * sqlserver方言
  */
 public class ToSQLServer extends ToPubSQL {
 
@@ -182,7 +180,6 @@ public class ToSQLServer extends ToPubSQL {
         return "CONVERT(VARCHAR," + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
-
     @Override
     protected String toString(LimitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         if (statement.isOffset()) {
@@ -193,7 +190,12 @@ public class ToSQLServer extends ToPubSQL {
             builder.append(" ROWS FETCH NEXT " + toStr(statement.getFirst(), assist, invokerList) + " ROWS ONLY");
             return builder.toString();
         } else {
-            throw new AntlrException("不支持非offset分页");
+            StringBuilder builder = new StringBuilder();
+            if (statement.getSecond() != null) {
+                builder.append(" OFFSET " + toStr(statement.getFirst(), assist, invokerList));
+            }
+            builder.append(" ROWS FETCH NEXT " + toStr(statement.getSecond(), assist, invokerList) + " ROWS ONLY");
+            return builder.toString();
         }
     }
 
@@ -208,27 +210,12 @@ public class ToSQLServer extends ToPubSQL {
         } else {
             num2 = toStr(columnList[2], assist, invokerList);
         }
-
         return "SUBSTRING(" + str + "," + start + "," + num2 + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.TrimStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "RTRIM(LTRIM(" + toStr(statement.getParamsStatement(), assist, invokerList) + "))";
-    }
-
-    @Override
-    protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        LimitStatement limitStatement = statement.getLimitStatement();
-        if (limitStatement != null) {
-            OrderStatement orderStatement = statement.getOrderStatement();
-            if (orderStatement == null) {
-                orderStatement = new OrderStatement();
-                orderStatement.setStatement(new BraceExpr(new ExprReader("(select 0)")).expr());
-                statement.setOrderStatement(orderStatement);
-            }
-        }
-        return super.toStringForRowNumber(statement, assist, invokerList);
     }
 
     @Override
