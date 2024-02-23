@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * oracle11方言
  */
-public class ToOracle11 extends ToPubSQL {
+public class ToOracle11 extends ToOracle {
     @Override
     protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         LimitStatement limitStatement = statement.getLimitStatement();

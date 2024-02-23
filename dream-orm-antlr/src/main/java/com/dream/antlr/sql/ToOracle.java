@@ -160,24 +160,22 @@ public class ToOracle extends ToPubSQL {
 
     @Override
     protected String toString(LimitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        StringBuilder builder = new StringBuilder();
         if (statement.isOffset()) {
-            StringBuilder builder = new StringBuilder();
             if (statement.getSecond() != null) {
                 builder.append(" OFFSET " + toStr(statement.getSecond(), assist, invokerList));
             }
             builder.append(" ROWS FETCH NEXT " + toStr(statement.getFirst(), assist, invokerList) + " ROWS ONLY");
-            return builder.toString();
         } else {
-            StringBuilder builder = new StringBuilder();
             if (statement.getSecond() != null) {
                 builder.append(" OFFSET " + toStr(statement.getFirst(), assist, invokerList));
                 builder.append(" ROWS FETCH NEXT " + toStr(statement.getSecond(), assist, invokerList) + " ROWS ONLY");
-            }else{
+            } else {
                 builder.append(" OFFSET 0");
                 builder.append(" ROWS FETCH NEXT " + toStr(statement.getFirst(), assist, invokerList) + " ROWS ONLY");
             }
-            return builder.toString();
         }
+        return builder.toString();
     }
 
     @Override
