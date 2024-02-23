@@ -195,6 +195,7 @@ public class ToSQLServer extends ToPubSQL {
                 builder.append(" OFFSET " + toStr(statement.getFirst(), assist, invokerList));
                 builder.append(" ROWS FETCH NEXT " + toStr(statement.getSecond(), assist, invokerList) + " ROWS ONLY");
             }else{
+                builder.append(" OFFSET 0");
                 builder.append(" ROWS FETCH NEXT " + toStr(statement.getFirst(), assist, invokerList) + " ROWS ONLY");
             }
             return builder.toString();
