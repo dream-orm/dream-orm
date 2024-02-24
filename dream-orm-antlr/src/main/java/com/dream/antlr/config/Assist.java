@@ -39,7 +39,6 @@ public class Assist {
             if (!invokerName.equals(name)) {
                 invokerMap.put(invokerName, invoker);
             }
-            invoker.init(this);
         }
         return invoker;
     }

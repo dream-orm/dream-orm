@@ -18,21 +18,10 @@ import java.util.List;
 
 public class TenantInjectInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_tenant_inject";
-    private MethodInfo methodInfo;
     private TenantHandler tenantHandler;
 
     public TenantInjectInvoker(TenantHandler tenantHandler) {
         this.tenantHandler = tenantHandler;
-    }
-
-    @Override
-    public void init(Assist assist) {
-        this.methodInfo = assist.getCustom(MethodInfo.class);
-    }
-
-    @Override
-    public Invoker newInstance() {
-        return new TenantInjectInvoker(tenantHandler);
     }
 
     @Override
@@ -52,7 +41,8 @@ public class TenantInjectInvoker extends AbstractInvoker {
         return new Handler[]{new TenantQueryHandler(this), new TenantInsertHandler(this), new TenantUpdateHandler(this), new TenantDeleteHandler(this)};
     }
 
-    public boolean isTenant(String table) {
+    public boolean isTenant(Assist assist, String table) {
+        MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         return tenantHandler.isTenant(methodInfo, table);
     }
 

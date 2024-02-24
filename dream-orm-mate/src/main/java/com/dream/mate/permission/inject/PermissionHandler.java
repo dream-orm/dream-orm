@@ -16,10 +16,8 @@ public interface PermissionHandler {
     /**
      * 获取数据权限SQL
      *
-     * @param table 主表
      * @param alias 主表别名
      * @return
      */
-    String getPermission(String table, String alias);
-
+    String getPermission(String alias);
 }

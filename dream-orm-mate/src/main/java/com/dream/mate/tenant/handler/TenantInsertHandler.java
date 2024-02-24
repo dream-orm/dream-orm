@@ -24,7 +24,7 @@ public class TenantInsertHandler extends AbstractHandler {
         InsertStatement insertStatement = (InsertStatement) statement;
         Statement tableStatement = insertStatement.getTable();
         String table = ((SymbolStatement) tableStatement).getValue();
-        if (tenantInjectInvoker.isTenant(table)) {
+        if (tenantInjectInvoker.isTenant(assist, table)) {
             Statement columns = insertStatement.getColumns();
             Statement values = insertStatement.getValues();
             if (columns instanceof BraceStatement && values instanceof InsertStatement.ValuesStatement) {

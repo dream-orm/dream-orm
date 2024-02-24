@@ -17,21 +17,10 @@ import java.util.List;
 
 public class LogicInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_logic";
-    private MethodInfo methodInfo;
     private LogicHandler logicHandler;
 
     public LogicInvoker(LogicHandler logicHandler) {
         this.logicHandler = logicHandler;
-    }
-
-    @Override
-    public void init(Assist assist) {
-        this.methodInfo = assist.getCustom(MethodInfo.class);
-    }
-
-    @Override
-    public Invoker newInstance() {
-        return new LogicInvoker(logicHandler);
     }
 
     @Override
@@ -51,7 +40,8 @@ public class LogicInvoker extends AbstractInvoker {
         return new Handler[]{new LogicQueryHandler(this), new LogicDeleteHandler(this), new LogicUpdateHandler(this)};
     }
 
-    public boolean isLogicDelete(String table) {
+    public boolean isLogicDelete(Assist assist, String table) {
+        MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         return logicHandler.isLogic(methodInfo, table);
     }
 

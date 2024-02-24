@@ -10,6 +10,7 @@ import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.config.SqlInfo;
 import com.dream.flex.invoker.FlexMarkInvoker;
 import com.dream.flex.invoker.FlexTableInvoker;
+import com.dream.system.config.MethodInfo;
 import com.dream.util.exception.DreamRunTimeException;
 
 import java.util.HashMap;
@@ -24,8 +25,8 @@ public abstract class AbstractFlexDialect implements FlexDialect {
     }
 
     @Override
-    public SqlInfo toSQL(Statement statement) {
-        Assist assist = getAssist();
+    public SqlInfo toSQL(Statement statement, MethodInfo methodInfo) {
+        Assist assist = getAssist(methodInfo);
         String sql;
         try {
             sql = toSQL.toStr(statement, assist, invokerList());
@@ -39,10 +40,14 @@ public abstract class AbstractFlexDialect implements FlexDialect {
         return new SqlInfo(sql, paramList, tableSet);
     }
 
-    protected Assist getAssist() {
+    protected Assist getAssist(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = new AntlrInvokerFactory();
         invokerFactory.addInvokers(defaultInvokers());
-        return new Assist(invokerFactory, new HashMap<>());
+        Assist assist = new Assist(invokerFactory, new HashMap<>());
+        if (methodInfo != null) {
+            assist.setCustom(MethodInfo.class, methodInfo);
+        }
+        return assist;
     }
 
     protected Invoker[] defaultInvokers() {

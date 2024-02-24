@@ -13,8 +13,6 @@ import com.dream.system.config.*;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.resultsethandler.SimpleResultSetHandler;
 import com.dream.system.core.session.Session;
-import com.dream.system.inject.PageInject;
-import com.dream.system.inject.factory.InjectFactory;
 import com.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.dream.system.typehandler.handler.ObjectTypeHandler;
@@ -29,14 +27,16 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class DefaultFlexMapper implements FlexMapper {
     private Session session;
     private Configuration configuration;
     private TypeHandlerFactory typeHandlerFactory;
-    private boolean offset = true;
+    private boolean offset = false;
     private FlexDialect flexDialect;
     private ResultSetHandler resultSetHandler;
+    private Consumer<MethodInfo> consumer;
 
     public DefaultFlexMapper(Session session, FlexDialect flexDialect) {
         this(session, flexDialect, new SimpleResultSetHandler());
@@ -48,16 +48,18 @@ public class DefaultFlexMapper implements FlexMapper {
         this.resultSetHandler = resultSetHandler;
         this.configuration = session.getConfiguration();
         typeHandlerFactory = configuration.getTypeHandlerFactory();
-        InjectFactory injectFactory = configuration.getInjectFactory();
-        PageInject pageInject = injectFactory.getInject(PageInject.class);
-        if (pageInject != null) {
-            this.offset = pageInject.isOffset();
-        }
     }
 
     @Override
-    public FlexMapper use(FlexDialect flexDialect) {
+    public FlexMapper useDialect(FlexDialect flexDialect) {
         return new DefaultFlexMapper(session, flexDialect, resultSetHandler);
+    }
+
+    @Override
+    public FlexMapper useMethodInfo(Consumer<MethodInfo> consumer) {
+        DefaultFlexMapper flexMapper = new DefaultFlexMapper(session, flexDialect, resultSetHandler);
+        flexMapper.consumer = consumer;
+        return flexMapper;
     }
 
     @Override
@@ -66,24 +68,24 @@ public class DefaultFlexMapper implements FlexMapper {
     }
 
     public <T> T selectOne(QueryStatement statement, Class<T> type) {
-        SqlInfo sqlInfo = flexDialect.toSQL(statement);
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, type);
+        SqlInfo sqlInfo = flexDialect.toSQL(statement, methodInfo);
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.QUERY, methodInfo);
         return (T) session.execute(mappedStatement);
     }
 
     @Override
     public <T> List<T> selectList(QueryDef queryDef, Class<T> type) {
-        SqlInfo sqlInfo = flexDialect.toSQL(queryDef.statement());
         MethodInfo methodInfo = getMethodInfo(List.class, type);
+        SqlInfo sqlInfo = flexDialect.toSQL(queryDef.statement(), methodInfo);
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.QUERY, methodInfo);
         return (List<T>) session.execute(mappedStatement);
     }
 
     @Override
     public <T extends Tree> List<T> selectTree(QueryDef queryDef, Class<T> type) {
-        SqlInfo sqlInfo = flexDialect.toSQL(queryDef.statement());
         MethodInfo methodInfo = getMethodInfo(List.class, type);
+        SqlInfo sqlInfo = flexDialect.toSQL(queryDef.statement(), methodInfo);
         methodInfo.addDestroyAction((result, mappedStatement, session) -> TreeUtil.toTree((Collection<? extends Tree>) result));
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.QUERY, methodInfo);
         return (List<T>) session.execute(mappedStatement);
@@ -94,20 +96,20 @@ public class DefaultFlexMapper implements FlexMapper {
         QueryStatement statement = queryDef.statement();
         if (page.getTotal() == 0) {
             MethodInfo countMethodInfo = getMethodInfo(NonCollection.class, Long.class);
-            MappedStatement countMappedStatement = getMappedStatement(flexDialect.toSQL(countQueryStatement(statement.clone())), Command.QUERY, countMethodInfo);
+            MappedStatement countMappedStatement = getMappedStatement(flexDialect.toSQL(countQueryStatement(statement.clone()), countMethodInfo), Command.QUERY, countMethodInfo);
             page.setTotal((long) session.execute(countMappedStatement));
         }
         MethodInfo methodInfo = getMethodInfo(Collection.class, type);
         QueryStatement queryStatement = pageQueryStatement(statement, page.getStartRow(), page.getPageSize());
-        MappedStatement mappedStatement = getMappedStatement(flexDialect.toSQL(queryStatement), Command.QUERY, methodInfo);
+        MappedStatement mappedStatement = getMappedStatement(flexDialect.toSQL(queryStatement, methodInfo), Command.QUERY, methodInfo);
         page.setRows((Collection) session.execute(mappedStatement));
         return page;
     }
 
     @Override
     public int update(UpdateDef updateDef) {
-        SqlInfo sqlInfo = flexDialect.toSQL(updateDef.statement());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
+        SqlInfo sqlInfo = flexDialect.toSQL(updateDef.statement(), methodInfo);
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.UPDATE, methodInfo);
         return (int) session.execute(mappedStatement);
     }
@@ -120,7 +122,7 @@ public class DefaultFlexMapper implements FlexMapper {
         List<MappedStatement> mappedStatementList = new ArrayList<>(updateDefList.size());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer[].class);
         for (UpdateDef updateDef : updateDefList) {
-            SqlInfo sqlInfo = flexDialect.toSQL(updateDef.statement());
+            SqlInfo sqlInfo = flexDialect.toSQL(updateDef.statement(), methodInfo);
             MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.UPDATE, methodInfo);
             mappedStatementList.add(mappedStatement);
         }
@@ -131,16 +133,16 @@ public class DefaultFlexMapper implements FlexMapper {
 
     @Override
     public int delete(DeleteDef deleteDef) {
-        SqlInfo sqlInfo = flexDialect.toSQL(deleteDef.statement());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
+        SqlInfo sqlInfo = flexDialect.toSQL(deleteDef.statement(), methodInfo);
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.DELETE, methodInfo);
         return (int) session.execute(mappedStatement);
     }
 
     @Override
     public int insert(InsertDef insertDef) {
-        SqlInfo sqlInfo = flexDialect.toSQL(insertDef.statement());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
+        SqlInfo sqlInfo = flexDialect.toSQL(insertDef.statement(), methodInfo);
         MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.INSERT, methodInfo);
         return (int) session.execute(mappedStatement);
     }
@@ -153,7 +155,7 @@ public class DefaultFlexMapper implements FlexMapper {
         List<MappedStatement> mappedStatementList = new ArrayList<>(insertDefList.size());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer[].class);
         for (InsertDef insertDef : insertDefList) {
-            SqlInfo sqlInfo = flexDialect.toSQL(insertDef.statement());
+            SqlInfo sqlInfo = flexDialect.toSQL(insertDef.statement(), methodInfo);
             MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.INSERT, methodInfo);
             mappedStatementList.add(mappedStatement);
         }
@@ -224,6 +226,9 @@ public class DefaultFlexMapper implements FlexMapper {
         methodInfo.setRowType(rowType);
         methodInfo.setColType(colType);
         methodInfo.setResultSetHandler(resultSetHandler);
+        if (consumer != null) {
+            consumer.accept(methodInfo);
+        }
         return methodInfo;
     }
 

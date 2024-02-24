@@ -15,15 +15,10 @@ import java.util.List;
 
 public class PermissionGetInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_permission_get";
-    private PermissionHandler permissionHandler;
+    protected PermissionHandler permissionHandler;
 
     public PermissionGetInvoker(PermissionHandler permissionHandler) {
         this.permissionHandler = permissionHandler;
-    }
-
-    @Override
-    public Invoker newInstance() {
-        return this;
     }
 
     @Override
@@ -34,8 +29,7 @@ public class PermissionGetInvoker extends AbstractInvoker {
     @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
-        String table = ((SymbolStatement.LetterStatement) columnList[0]).getValue();
-        String alias = ((SymbolStatement.LetterStatement) columnList[1]).getValue();
-        return permissionHandler.getPermission(table, alias);
+        String alias = ((SymbolStatement.LetterStatement) columnList[0]).getValue();
+        return permissionHandler.getPermission(alias);
     }
 }

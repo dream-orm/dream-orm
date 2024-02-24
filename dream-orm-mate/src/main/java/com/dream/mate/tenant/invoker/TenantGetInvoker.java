@@ -20,11 +20,6 @@ public class TenantGetInvoker extends AbstractInvoker {
     }
 
     @Override
-    public Invoker newInstance() {
-        return this;
-    }
-
-    @Override
     public String function() {
         return FUNCTION;
     }

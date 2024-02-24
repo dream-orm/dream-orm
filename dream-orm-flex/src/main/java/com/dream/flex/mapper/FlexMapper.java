@@ -5,10 +5,12 @@ import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
 import com.dream.flex.dialect.FlexDialect;
+import com.dream.system.config.MethodInfo;
 import com.dream.system.config.Page;
 import com.dream.util.tree.Tree;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * 链式操作接口
@@ -21,7 +23,15 @@ public interface FlexMapper {
      * @param flexDialect
      * @return
      */
-    FlexMapper use(FlexDialect flexDialect);
+    FlexMapper useDialect(FlexDialect flexDialect);
+
+    /**
+     * flex方言
+     *
+     * @param consumer
+     * @return
+     */
+    FlexMapper useMethodInfo(Consumer<MethodInfo> consumer);
 
     /**
      * 查询并返回一条

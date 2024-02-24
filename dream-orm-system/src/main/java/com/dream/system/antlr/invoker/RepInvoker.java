@@ -16,11 +16,6 @@ public class RepInvoker extends AbstractInvoker {
     ObjectWrapper paramWrapper;
 
     @Override
-    public void init(Assist assist) {
-        paramWrapper = assist.getCustom(ObjectWrapper.class);
-    }
-
-    @Override
     public Invoker newInstance() {
         return new RepInvoker();
     }
@@ -32,6 +27,9 @@ public class RepInvoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
+        if (paramWrapper == null) {
+            paramWrapper = assist.getCustom(ObjectWrapper.class);
+        }
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         if (columnList.length != 1) {
             throw new AntlrException("函数@" + this.function() + "参数个数错误");

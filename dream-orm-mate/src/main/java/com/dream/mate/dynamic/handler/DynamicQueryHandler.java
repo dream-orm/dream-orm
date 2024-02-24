@@ -42,7 +42,7 @@ public class DynamicQueryHandler extends AbstractHandler {
             ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(fromStatement.getMainTable(), true);
             if (tableScanInfo != null) {
                 String table = tableScanInfo.getTable();
-                if (dynamicInvoker.isDynamic(table)) {
+                if (dynamicInvoker.isDynamic(assist, table)) {
                     InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
                             DynamicGetInvoker.FUNCTION,
                             Invoker.DEFAULT_NAMESPACE,
@@ -70,7 +70,7 @@ public class DynamicQueryHandler extends AbstractHandler {
             ScanInvoker.TableScanInfo tableScanInfo = new QueryScanHandler(null).getTableScanInfo(joinStatement.getJoinTable(), false);
             if (tableScanInfo != null) {
                 String table = tableScanInfo.getTable();
-                if (dynamicInvoker.isDynamic(table)) {
+                if (dynamicInvoker.isDynamic(assist, table)) {
                     InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
                             PermissionGetInvoker.FUNCTION,
                             Invoker.DEFAULT_NAMESPACE,

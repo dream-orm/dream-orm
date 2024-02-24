@@ -26,7 +26,7 @@ public class VersionUpdateHandler extends AbstractHandler {
         UpdateStatement updateStatement = (UpdateStatement) statement;
         SymbolStatement tableSymbolStatement = (SymbolStatement) updateStatement.getTable();
         String table = tableSymbolStatement.getValue();
-        if (versionInvoker.isVersion(table)) {
+        if (versionInvoker.isVersion(assist, table)) {
             ListColumnStatement columnStatement = (ListColumnStatement) updateStatement.getConditionList();
             Statement[] columnList = columnStatement.getColumnList();
             String versionColumn = versionInvoker.getVersionColumn();

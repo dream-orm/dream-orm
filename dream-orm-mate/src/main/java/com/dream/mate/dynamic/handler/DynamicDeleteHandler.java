@@ -33,7 +33,7 @@ public class DynamicDeleteHandler extends AbstractHandler {
         Statement tableStatement = deleteStatement.getTable();
         if (tableStatement instanceof SymbolStatement) {
             String table = ((SymbolStatement) tableStatement).getValue();
-            if (dynamicInvoker.isDynamic(table)) {
+            if (dynamicInvoker.isDynamic(assist, table)) {
                 InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
                         DynamicGetInvoker.FUNCTION,
                         Invoker.DEFAULT_NAMESPACE,

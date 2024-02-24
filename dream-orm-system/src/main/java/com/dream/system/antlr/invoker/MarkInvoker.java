@@ -17,10 +17,6 @@ public class MarkInvoker extends AbstractInvoker {
     private final List<ParamInfo> paramInfoList = new ArrayList<>();
     ObjectWrapper paramWrapper;
 
-    @Override
-    public void init(Assist assist) {
-        paramWrapper = assist.getCustom(ObjectWrapper.class);
-    }
 
     @Override
     public Invoker newInstance() {
@@ -34,6 +30,9 @@ public class MarkInvoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
+        if (paramWrapper == null) {
+            paramWrapper = assist.getCustom(ObjectWrapper.class);
+        }
         String paramName = toSQL.toStr(invokerStatement.getParamStatement(), assist, null);
         ParamInfo paramInfo = new ParamInfo(paramName, paramWrapper.get(paramName));
         paramInfoList.add(paramInfo);

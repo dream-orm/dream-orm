@@ -26,7 +26,7 @@ public class TenantUpdateHandler extends AbstractHandler {
         Statement tableStatement = updateStatement.getTable();
         SymbolStatement symbolStatement = (SymbolStatement) tableStatement;
         String table = symbolStatement.getValue();
-        if (tenantInjectInvoker.isTenant(table)) {
+        if (tenantInjectInvoker.isTenant(assist, table)) {
             String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
             ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.LetterStatement(tenantColumn));

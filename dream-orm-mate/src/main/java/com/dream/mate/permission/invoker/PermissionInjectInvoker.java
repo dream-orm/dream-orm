@@ -15,21 +15,10 @@ import java.util.List;
 
 public class PermissionInjectInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_permission_inject";
-    private MethodInfo methodInfo;
     private PermissionHandler permissionHandler;
 
     public PermissionInjectInvoker(PermissionHandler permissionHandler) {
         this.permissionHandler = permissionHandler;
-    }
-
-    @Override
-    public void init(Assist assist) {
-        this.methodInfo = assist.getCustom(MethodInfo.class);
-    }
-
-    @Override
-    public Invoker newInstance() {
-        return new PermissionInjectInvoker(permissionHandler);
     }
 
     @Override
@@ -49,7 +38,8 @@ public class PermissionInjectInvoker extends AbstractInvoker {
         return new Handler[]{new PermissionQueryHandler(this)};
     }
 
-    public boolean isPermissionInject(String table) {
+    public boolean isPermissionInject(Assist assist, String table) {
+        MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         return permissionHandler.isPermissionInject(methodInfo, table);
     }
 }

@@ -233,10 +233,6 @@ public class StarInvoker extends AbstractInvoker {
         return queryColumnInfoList;
     }
 
-    @Override
-    public Invoker newInstance() {
-        return this;
-    }
 
     @Override
     public String function() {

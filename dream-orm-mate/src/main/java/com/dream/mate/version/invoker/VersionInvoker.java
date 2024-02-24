@@ -15,22 +15,12 @@ import java.util.List;
 
 public class VersionInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_version";
-    private MethodInfo methodInfo;
     private VersionHandler versionHandler;
 
     public VersionInvoker(VersionHandler versionHandler) {
         this.versionHandler = versionHandler;
     }
 
-    @Override
-    public void init(Assist assist) {
-        this.methodInfo = assist.getCustom(MethodInfo.class);
-    }
-
-    @Override
-    public Invoker newInstance() {
-        return new VersionInvoker(versionHandler);
-    }
 
     @Override
     public String function() {
@@ -49,7 +39,8 @@ public class VersionInvoker extends AbstractInvoker {
         return new Handler[]{new VersionUpdateHandler(this)};
     }
 
-    public boolean isVersion(String table) {
+    public boolean isVersion(Assist assist, String table) {
+        MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         return versionHandler.isVersion(methodInfo, table);
     }
 

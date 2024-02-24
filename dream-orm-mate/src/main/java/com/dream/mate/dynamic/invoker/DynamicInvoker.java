@@ -18,7 +18,6 @@ import java.util.List;
 
 public class DynamicInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_dynamic";
-    private MethodInfo methodInfo;
     private DynamicHandler dynamicHandler;
 
     public DynamicInvoker(DynamicHandler dynamicHandler) {
@@ -26,20 +25,10 @@ public class DynamicInvoker extends AbstractInvoker {
     }
 
     @Override
-    public void init(Assist assist) {
-        methodInfo = assist.getCustom(MethodInfo.class);
-    }
-
-    @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         String sql = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
         invokerStatement.replaceWith(invokerStatement.getParamStatement());
         return sql;
-    }
-
-    @Override
-    public Invoker newInstance() {
-        return new DynamicInvoker(dynamicHandler);
     }
 
     @Override
@@ -52,7 +41,8 @@ public class DynamicInvoker extends AbstractInvoker {
         return new Handler[]{new DynamicQueryHandler(this), new DynamicUpdateHandler(this), new DynamicInsertHandler(this), new DynamicDeleteHandler(this)};
     }
 
-    public boolean isDynamic(String table) {
+    public boolean isDynamic(Assist assist, String table) {
+        MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         return dynamicHandler.isDynamic(methodInfo, table);
     }
 }
