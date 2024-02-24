@@ -46,5 +46,4 @@ public interface LogicHandler {
      */
     String getLogicColumn(String table);
 
-
 }

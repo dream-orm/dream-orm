@@ -12,14 +12,6 @@ public interface Invoker {
     String DEFAULT_NAMESPACE = "dream";
 
     /**
-     * @param assist 翻译辅助工具
-     * @函数初始化
-     */
-    default void init(Assist assist) {
-
-    }
-
-    /**
      * 翻译@函数抽象树
      *
      * @param invokerStatement @函数抽象树
@@ -57,7 +49,9 @@ public interface Invoker {
      *
      * @return
      */
-    Invoker newInstance();
+    default Invoker newInstance() {
+        return this;
+    }
 
     /**
      * @return
