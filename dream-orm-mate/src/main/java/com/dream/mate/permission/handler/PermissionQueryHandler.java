@@ -63,7 +63,9 @@ public class PermissionQueryHandler extends AbstractHandler {
                     InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
                             PermissionGetInvoker.FUNCTION,
                             Invoker.DEFAULT_NAMESPACE,
-                            new SymbolStatement.LetterStatement(tableScanInfo.getAlias()));
+                            new SymbolStatement.LetterStatement(tableScanInfo.getTable()),
+                            new SymbolStatement.LetterStatement(tableScanInfo.getAlias())
+                    );
                     if (whereStatement == null) {
                         whereStatement = new WhereStatement();
                         whereStatement.setStatement(invokerStatement);
