@@ -24,59 +24,56 @@ public class ToOracle11 extends ToOracle {
                 first = limitStatement.getFirst();
                 second = limitStatement.getSecond();
             }
+            if (second == null) {
+                second = first;
+                first = new SymbolStatement.LetterStatement("0");
+            }
             statement.setLimitStatement(null);
-            ListColumnStatement selectList = statement.getSelectStatement().getSelectList();
-            Statement[] columnList = selectList.getColumnList();
-            Statement[] newColumnList = new Statement[columnList.length + 1];
-            AliasStatement aliasStatement = new AliasStatement();
-            aliasStatement.setColumn(new SymbolStatement.LetterStatement("ROWNUM"));
-            aliasStatement.setAlias(new SymbolStatement.LetterStatement("rn"));
-            newColumnList[0] = aliasStatement;
-            System.arraycopy(columnList, 0, newColumnList, 1, columnList.length);
-            selectList.setColumnList(newColumnList);
 
             QueryStatement queryStatement = new QueryStatement();
             SelectStatement selectStatement = new SelectStatement();
             ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-            listColumnStatement.add(new SymbolStatement.LetterStatement("t_tmp.*"));
+            listColumnStatement.add(new SymbolStatement.LetterStatement("ROWNUM V_R_N"));
+            listColumnStatement.add(new SymbolStatement.LetterStatement("V_T0.*"));
             selectStatement.setSelectList(listColumnStatement);
             queryStatement.setSelectStatement(selectStatement);
             AliasStatement tableAliasStatement = new AliasStatement();
             tableAliasStatement.setColumn(new BraceStatement(statement));
-            tableAliasStatement.setAlias(new SymbolStatement.LetterStatement("t_tmp"));
+            tableAliasStatement.setAlias(new SymbolStatement.LetterStatement("V_T0"));
             FromStatement fromStatement = new FromStatement();
             fromStatement.setMainTable(tableAliasStatement);
             queryStatement.setFromStatement(fromStatement);
             ConditionStatement conditionStatement;
-            if (second == null) {
-                conditionStatement = new ConditionStatement();
-                conditionStatement.setLeft(new SymbolStatement.LetterStatement("rn"));
-                conditionStatement.setOper(new OperStatement.LEQStatement());
-                conditionStatement.setRight(first);
-            } else {
-                ConditionStatement leftConditionStatement = new ConditionStatement();
-                leftConditionStatement.setLeft(new SymbolStatement.LetterStatement("rn"));
-                leftConditionStatement.setOper(new OperStatement.GTStatement());
-                leftConditionStatement.setRight(first);
-
-                ConditionStatement rightConditionStatement = new ConditionStatement();
-                rightConditionStatement.setLeft(new SymbolStatement.LetterStatement("rn"));
-                rightConditionStatement.setOper(new OperStatement.LEQStatement());
-                ConditionStatement plusConditionStatement = new ConditionStatement();
-                plusConditionStatement.setLeft(first);
-                plusConditionStatement.setOper(new OperStatement.ADDStatement());
-                plusConditionStatement.setRight(second);
-                rightConditionStatement.setRight(plusConditionStatement);
-
-                conditionStatement = new ConditionStatement();
-                conditionStatement.setLeft(leftConditionStatement);
-                conditionStatement.setOper(new OperStatement.ANDStatement());
-                conditionStatement.setRight(rightConditionStatement);
-            }
+            conditionStatement = new ConditionStatement();
+            conditionStatement.setLeft(new SymbolStatement.LetterStatement("ROWNUM"));
+            conditionStatement.setOper(new OperStatement.LEQStatement());
+            conditionStatement.setRight(second);
             WhereStatement whereStatement = new WhereStatement();
             whereStatement.setStatement(conditionStatement);
             queryStatement.setWhereStatement(whereStatement);
-            statement = queryStatement;
+
+
+            // 再包装一层
+            QueryStatement queryStatement1 = new QueryStatement();
+            SelectStatement selectStatement1 = new SelectStatement();
+            ListColumnStatement listColumnStatement1 = new ListColumnStatement(",");
+            listColumnStatement1.add(new SymbolStatement.LetterStatement("* "));
+            selectStatement1.setSelectList(listColumnStatement1);
+            queryStatement1.setSelectStatement(selectStatement1);
+            AliasStatement tableAliasStatement1 = new AliasStatement();
+            tableAliasStatement1.setColumn(new BraceStatement(queryStatement));
+            FromStatement fromStatement1 = new FromStatement();
+            fromStatement1.setMainTable(tableAliasStatement1);
+            queryStatement1.setFromStatement(fromStatement1);
+            ConditionStatement conditionStatement1;
+            conditionStatement1 = new ConditionStatement();
+            conditionStatement1.setLeft(new SymbolStatement.LetterStatement("V_R_N"));
+            conditionStatement1.setOper(new OperStatement.GTStatement());
+            conditionStatement1.setRight(first);
+            WhereStatement whereStatement1 = new WhereStatement();
+            whereStatement1.setStatement(conditionStatement1);
+            queryStatement1.setWhereStatement(whereStatement1);
+            statement = queryStatement1;
         }
         return super.toString(statement, assist, invokerList);
     }
