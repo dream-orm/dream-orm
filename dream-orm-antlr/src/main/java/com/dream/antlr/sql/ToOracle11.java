@@ -33,13 +33,19 @@ public class ToOracle11 extends ToOracle {
             QueryStatement queryStatement = new QueryStatement();
             SelectStatement selectStatement = new SelectStatement();
             ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-            listColumnStatement.add(new SymbolStatement.LetterStatement("ROWNUM V_R_N"));
-            listColumnStatement.add(new SymbolStatement.LetterStatement("V_T0.*"));
+            AliasStatement aliasStatement = new AliasStatement();
+            aliasStatement.setColumn(new SymbolStatement.LetterStatement("ROWNUM"));
+            aliasStatement.setAlias(new SymbolStatement.LetterStatement("V_R_N"));
+            listColumnStatement.add(aliasStatement);
+            ListColumnStatement listColumnStatement1 = new ListColumnStatement(".");
+            listColumnStatement1.add(new SymbolStatement.LetterStatement("V_T"));
+            listColumnStatement1.add(new SymbolStatement.LetterStatement("*"));
+            listColumnStatement.add(listColumnStatement1);
             selectStatement.setSelectList(listColumnStatement);
             queryStatement.setSelectStatement(selectStatement);
             AliasStatement tableAliasStatement = new AliasStatement();
             tableAliasStatement.setColumn(new BraceStatement(statement));
-            tableAliasStatement.setAlias(new SymbolStatement.LetterStatement("V_T0"));
+            tableAliasStatement.setAlias(new SymbolStatement.LetterStatement("V_T"));
             FromStatement fromStatement = new FromStatement();
             fromStatement.setMainTable(tableAliasStatement);
             queryStatement.setFromStatement(fromStatement);
@@ -55,17 +61,15 @@ public class ToOracle11 extends ToOracle {
             whereStatement.setStatement(conditionStatement);
             queryStatement.setWhereStatement(whereStatement);
 
-
             // 再包装一层
             QueryStatement queryStatement1 = new QueryStatement();
             SelectStatement selectStatement1 = new SelectStatement();
-            ListColumnStatement listColumnStatement1 = new ListColumnStatement(",");
-            listColumnStatement1.add(new SymbolStatement.LetterStatement("* "));
-            selectStatement1.setSelectList(listColumnStatement1);
+            ListColumnStatement listColumnStatement2 = new ListColumnStatement(",");
+            listColumnStatement2.add(new SymbolStatement.LetterStatement("*"));
+            selectStatement1.setSelectList(listColumnStatement2);
             queryStatement1.setSelectStatement(selectStatement1);
             AliasStatement tableAliasStatement1 = new AliasStatement();
             tableAliasStatement1.setColumn(new BraceStatement(queryStatement));
-            tableAliasStatement1.setAlias(new SymbolStatement.LetterStatement("V_T1"));
             FromStatement fromStatement1 = new FromStatement();
             fromStatement1.setMainTable(tableAliasStatement1);
             queryStatement1.setFromStatement(fromStatement1);

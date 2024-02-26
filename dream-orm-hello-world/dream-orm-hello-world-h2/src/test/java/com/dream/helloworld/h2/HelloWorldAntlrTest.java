@@ -66,13 +66,13 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testLimit() {
-        testSqlForMany("SELECT 1 FROM DUAL ORDER BY ID LIMIT 3000,6000");
-        testSqlForMany("SELECT 1 FROM DUAL ORDER BY ID LIMIT 10");
+        testSqlForMany("SELECT * FROM DUAL ORDER BY ID LIMIT 3000,6000");
+        testSqlForMany("SELECT * FROM DUAL ORDER BY ID LIMIT 10");
     }
 
     @Test
     public void testOffset() {
-        testSqlForMany("SELECT 1 FROM DUAL LIMIT 20 OFFSET 10");
+        testSqlForMany("SELECT * FROM DUAL LIMIT 20 OFFSET 10");
     }
 
     @Test
