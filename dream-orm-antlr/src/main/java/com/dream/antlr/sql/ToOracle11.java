@@ -43,11 +43,14 @@ public class ToOracle11 extends ToOracle {
             FromStatement fromStatement = new FromStatement();
             fromStatement.setMainTable(tableAliasStatement);
             queryStatement.setFromStatement(fromStatement);
-            ConditionStatement conditionStatement;
-            conditionStatement = new ConditionStatement();
+            ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.LetterStatement("ROWNUM"));
             conditionStatement.setOper(new OperStatement.LEQStatement());
-            conditionStatement.setRight(second);
+            ConditionStatement plusConditionStatement = new ConditionStatement();
+            plusConditionStatement.setLeft(first);
+            plusConditionStatement.setOper(new OperStatement.ADDStatement());
+            plusConditionStatement.setRight(second);
+            conditionStatement.setRight(plusConditionStatement);
             WhereStatement whereStatement = new WhereStatement();
             whereStatement.setStatement(conditionStatement);
             queryStatement.setWhereStatement(whereStatement);
