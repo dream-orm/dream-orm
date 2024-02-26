@@ -65,6 +65,7 @@ public class ToOracle11 extends ToOracle {
             queryStatement1.setSelectStatement(selectStatement1);
             AliasStatement tableAliasStatement1 = new AliasStatement();
             tableAliasStatement1.setColumn(new BraceStatement(queryStatement));
+            tableAliasStatement1.setAlias(new SymbolStatement.LetterStatement("V_T1"));
             FromStatement fromStatement1 = new FromStatement();
             fromStatement1.setMainTable(tableAliasStatement1);
             queryStatement1.setFromStatement(fromStatement1);

@@ -31,6 +31,6 @@ public class PermissionGetInvoker extends AbstractInvoker {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         String table = ((SymbolStatement.LetterStatement) columnList[0]).getValue();
         String alias = ((SymbolStatement.LetterStatement) columnList[1]).getValue();
-        return permissionHandler.getPermission(table,alias);
+        return permissionHandler.getPermission(table, alias);
     }
 }
