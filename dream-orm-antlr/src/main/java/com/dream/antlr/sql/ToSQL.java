@@ -473,7 +473,6 @@ public abstract class ToSQL {
             case 199426367://DecimalCastStatement
                 sql = toString((CastTypeStatement.DecimalCastStatement) statement, assist, invokerList);
                 break;
-
             case 6301980://ConvertStatement
                 sql = toString((FunctionStatement.ConvertStatement) statement, assist, invokerList);
                 break;

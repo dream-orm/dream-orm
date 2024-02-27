@@ -497,7 +497,7 @@ public class ToOracle extends ToPubSQL {
 
     @Override
     protected String toString(AliasStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getColumn(), assist, invokerList) + "  " + toStr(statement.getAlias(), assist, invokerList);
+        return toStr(statement.getColumn(), assist, invokerList) + " " + toStr(statement.getAlias(), assist, invokerList);
     }
 
     @Override

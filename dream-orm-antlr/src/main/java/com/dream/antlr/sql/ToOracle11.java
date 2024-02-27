@@ -25,12 +25,8 @@ public class ToOracle11 extends ToOracle {
                 first = limitStatement.getFirst();
                 second = limitStatement.getSecond();
             }
-            if (second == null) {
-                second = first;
-                first = null;
-            }
             statement.setLimitStatement(null);
-            if (first != null) {
+            if (second != null) {
                 //查询字段
                 ListColumnStatement listColumnStatement = AntlrUtil.listColumnStatement(",", AntlrUtil.aliasStatement("ROWNUM", "V_R_N"), AntlrUtil.listColumnStatement(".", "V_T", "*"));
                 //查询表
@@ -54,7 +50,7 @@ public class ToOracle11 extends ToOracle {
                 //查询表
                 AliasStatement tableAliasStatement = AntlrUtil.aliasStatement(new BraceStatement(statement), null);
                 //查询条件
-                ConditionStatement conditionStatement = AntlrUtil.conditionStatement(new SymbolStatement.LetterStatement("ROWNUM"), new OperStatement.LEQStatement(), second);
+                ConditionStatement conditionStatement = AntlrUtil.conditionStatement(new SymbolStatement.LetterStatement("ROWNUM"), new OperStatement.LEQStatement(), first);
                 //构建查询
                 statement = AntlrUtil.queryStatement(listColumnStatement, tableAliasStatement, conditionStatement);
             }
