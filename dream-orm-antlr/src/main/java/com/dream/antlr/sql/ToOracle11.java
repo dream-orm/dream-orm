@@ -45,7 +45,7 @@ public class ToOracle11 extends ToOracle {
                 //构建查询
                 statement = AntlrUtil.queryStatement(listColumnStatement1, tableAliasStatement1, conditionStatement1);
             } else {
-                //查询表
+                //查询字段
                 ListColumnStatement listColumnStatement = AntlrUtil.listColumnStatement(",", "*");
                 //查询表
                 AliasStatement tableAliasStatement = AntlrUtil.aliasStatement(new BraceStatement(statement), null);

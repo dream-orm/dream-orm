@@ -164,6 +164,8 @@ public class ToOracle extends ToPubSQL {
         if (statement.isOffset()) {
             if (statement.getSecond() != null) {
                 builder.append(" OFFSET " + toStr(statement.getSecond(), assist, invokerList));
+            } else {
+                builder.append(" OFFSET 0");
             }
             builder.append(" ROWS FETCH NEXT " + toStr(statement.getFirst(), assist, invokerList) + " ROWS ONLY");
         } else {

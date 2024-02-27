@@ -1,5 +1,9 @@
 # dream-orm 升级日志
 
+## v1.2.14
+
+- 修复：解决oracle表别名存在as报错
+
 ## v1.2.13
 
 - 修复：解决oracle在select *情况下分页报错
