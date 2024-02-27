@@ -33,7 +33,7 @@ public class DefaultFlexMapper implements FlexMapper {
     private Session session;
     private Configuration configuration;
     private TypeHandlerFactory typeHandlerFactory;
-    private boolean offset = false;
+    private boolean offset = true;
     private FlexDialect flexDialect;
     private ResultSetHandler resultSetHandler;
     private Consumer<MethodInfo> consumer;

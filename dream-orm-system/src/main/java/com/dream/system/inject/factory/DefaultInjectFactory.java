@@ -13,7 +13,7 @@ public class DefaultInjectFactory implements InjectFactory {
     public DefaultInjectFactory() {
         injectMap.put(ActionInject.class, new ActionInject());
         injectMap.put(AnnotationInject.class, new AnnotationInject());
-        injectMap.put(PageInject.class, new PageInject(false));
+        injectMap.put(PageInject.class, new PageInject(true));
         injectMap.put(EmitInject.class, new EmitInject());
         injectMap.put(ScanInject.class, new ScanInject());
     }
