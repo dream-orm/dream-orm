@@ -27,6 +27,11 @@ public class HelloWorldAntlrTest {
     }
 
     @Test
+    public void testAs() {
+        testSqlForMany("SELECT d.name as ddd FROM (select * from table1) as d");
+    }
+
+    @Test
     public void testInterval() {
         testSqlForMany("select CURDATE()+INTERVAL 1 YEAR-INTERVAL 1 QUARTER+INTERVAL 1 second");
     }
