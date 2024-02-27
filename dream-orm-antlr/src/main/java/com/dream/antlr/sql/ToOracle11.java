@@ -4,6 +4,7 @@ import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
+import com.dream.antlr.util.AntlrUtil;
 
 import java.util.List;
 
@@ -26,62 +27,37 @@ public class ToOracle11 extends ToOracle {
             }
             if (second == null) {
                 second = first;
-                first = new SymbolStatement.LetterStatement("0");
+                first = null;
             }
             statement.setLimitStatement(null);
-
-            QueryStatement queryStatement = new QueryStatement();
-            SelectStatement selectStatement = new SelectStatement();
-            ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-            AliasStatement aliasStatement = new AliasStatement();
-            aliasStatement.setColumn(new SymbolStatement.LetterStatement("ROWNUM"));
-            aliasStatement.setAlias(new SymbolStatement.LetterStatement("V_R_N"));
-            listColumnStatement.add(aliasStatement);
-            ListColumnStatement listColumnStatement1 = new ListColumnStatement(".");
-            listColumnStatement1.add(new SymbolStatement.LetterStatement("V_T"));
-            listColumnStatement1.add(new SymbolStatement.LetterStatement("*"));
-            listColumnStatement.add(listColumnStatement1);
-            selectStatement.setSelectList(listColumnStatement);
-            queryStatement.setSelectStatement(selectStatement);
-            AliasStatement tableAliasStatement = new AliasStatement();
-            tableAliasStatement.setColumn(new BraceStatement(statement));
-            tableAliasStatement.setAlias(new SymbolStatement.LetterStatement("V_T"));
-            FromStatement fromStatement = new FromStatement();
-            fromStatement.setMainTable(tableAliasStatement);
-            queryStatement.setFromStatement(fromStatement);
-            ConditionStatement conditionStatement = new ConditionStatement();
-            conditionStatement.setLeft(new SymbolStatement.LetterStatement("ROWNUM"));
-            conditionStatement.setOper(new OperStatement.LEQStatement());
-            ConditionStatement plusConditionStatement = new ConditionStatement();
-            plusConditionStatement.setLeft(first);
-            plusConditionStatement.setOper(new OperStatement.ADDStatement());
-            plusConditionStatement.setRight(second);
-            conditionStatement.setRight(plusConditionStatement);
-            WhereStatement whereStatement = new WhereStatement();
-            whereStatement.setStatement(conditionStatement);
-            queryStatement.setWhereStatement(whereStatement);
-
-            // 再包装一层
-            QueryStatement queryStatement1 = new QueryStatement();
-            SelectStatement selectStatement1 = new SelectStatement();
-            ListColumnStatement listColumnStatement2 = new ListColumnStatement(",");
-            listColumnStatement2.add(new SymbolStatement.LetterStatement("*"));
-            selectStatement1.setSelectList(listColumnStatement2);
-            queryStatement1.setSelectStatement(selectStatement1);
-            AliasStatement tableAliasStatement1 = new AliasStatement();
-            tableAliasStatement1.setColumn(new BraceStatement(queryStatement));
-            FromStatement fromStatement1 = new FromStatement();
-            fromStatement1.setMainTable(tableAliasStatement1);
-            queryStatement1.setFromStatement(fromStatement1);
-            ConditionStatement conditionStatement1;
-            conditionStatement1 = new ConditionStatement();
-            conditionStatement1.setLeft(new SymbolStatement.LetterStatement("V_R_N"));
-            conditionStatement1.setOper(new OperStatement.GTStatement());
-            conditionStatement1.setRight(first);
-            WhereStatement whereStatement1 = new WhereStatement();
-            whereStatement1.setStatement(conditionStatement1);
-            queryStatement1.setWhereStatement(whereStatement1);
-            statement = queryStatement1;
+            if (first != null) {
+                //查询字段
+                ListColumnStatement listColumnStatement = AntlrUtil.listColumnStatement(",", AntlrUtil.aliasStatement("ROWNUM", "V_R_N"), AntlrUtil.listColumnStatement(".", "V_T", "*"));
+                //查询表
+                AliasStatement tableAliasStatement = AntlrUtil.aliasStatement(new BraceStatement(statement), new SymbolStatement.LetterStatement("V_T"));
+                //查询条件
+                ConditionStatement conditionStatement = AntlrUtil.conditionStatement(new SymbolStatement.LetterStatement("ROWNUM"), new OperStatement.LEQStatement(), AntlrUtil.conditionStatement(first, new OperStatement.ADDStatement(), second));
+                //构建查询
+                QueryStatement queryStatement = AntlrUtil.queryStatement(listColumnStatement, tableAliasStatement, conditionStatement);
+                // 再包装一层
+                //查询字段
+                ListColumnStatement listColumnStatement1 = AntlrUtil.listColumnStatement(",", "*");
+                //查询表
+                AliasStatement tableAliasStatement1 = AntlrUtil.aliasStatement(new BraceStatement(queryStatement), null);
+                //查询条件
+                ConditionStatement conditionStatement1 = AntlrUtil.conditionStatement(new SymbolStatement.LetterStatement("V_R_N"), new OperStatement.GTStatement(), first);
+                //构建查询
+                statement = AntlrUtil.queryStatement(listColumnStatement1, tableAliasStatement1, conditionStatement1);
+            } else {
+                //查询表
+                ListColumnStatement listColumnStatement = AntlrUtil.listColumnStatement(",", "*");
+                //查询表
+                AliasStatement tableAliasStatement = AntlrUtil.aliasStatement(new BraceStatement(statement), null);
+                //查询条件
+                ConditionStatement conditionStatement = AntlrUtil.conditionStatement(new SymbolStatement.LetterStatement("ROWNUM"), new OperStatement.LEQStatement(), second);
+                //构建查询
+                statement = AntlrUtil.queryStatement(listColumnStatement, tableAliasStatement, conditionStatement);
+            }
         }
         return super.toString(statement, assist, invokerList);
     }

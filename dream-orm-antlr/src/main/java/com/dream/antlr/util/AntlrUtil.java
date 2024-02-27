@@ -1,42 +1,10 @@
 package com.dream.antlr.util;
 
-import com.dream.antlr.exception.AntlrException;
-import com.dream.antlr.smt.InvokerStatement;
-import com.dream.antlr.smt.ListColumnStatement;
-import com.dream.antlr.smt.Statement;
+import com.dream.antlr.smt.*;
 
-import java.lang.reflect.Field;
 import java.util.Map;
 
 public class AntlrUtil {
-    public static <T extends Statement> void copy(T target, T source) throws AntlrException {
-        Field[] fieldList = source.getClass().getDeclaredFields();
-        if (fieldList != null && fieldList.length > 0) {
-            for (Field field : fieldList) {
-                try {
-                    field.setAccessible(true);
-                    Object value = field.get(source);
-                    field.set(target, value);
-                } catch (Exception e) {
-                    throw new AntlrException("抽象树复制失败" + e.getMessage(), e);
-                }
-            }
-        }
-    }
-
-    public static InvokerStatement invokerStatement(String function, String namespace, Statement... statements) {
-        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        if (statements != null) {
-            for (Statement statement : statements) {
-                listColumnStatement.add(statement);
-            }
-        }
-        InvokerStatement invokerStatement = new InvokerStatement();
-        invokerStatement.setFunction(function);
-        invokerStatement.setNamespace(namespace);
-        invokerStatement.setParamStatement(listColumnStatement);
-        return invokerStatement;
-    }
 
     public static String invokerSQL(String function, String namespace, String... args) {
         StringBuilder paramBuilder = new StringBuilder();
@@ -77,5 +45,78 @@ public class AntlrUtil {
             }
         }
         return builder.toString();
+    }
+
+    public static InvokerStatement invokerStatement(String function, String namespace, Statement... statements) {
+        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
+        if (statements != null) {
+            for (Statement statement : statements) {
+                listColumnStatement.add(statement);
+            }
+        }
+        InvokerStatement invokerStatement = new InvokerStatement();
+        invokerStatement.setFunction(function);
+        invokerStatement.setNamespace(namespace);
+        invokerStatement.setParamStatement(listColumnStatement);
+        return invokerStatement;
+    }
+
+    public static AliasStatement aliasStatement(String column, String alias) {
+        return aliasStatement(new SymbolStatement.LetterStatement(column), new SymbolStatement.LetterStatement(alias));
+    }
+
+    public static AliasStatement aliasStatement(Statement column, Statement alias) {
+        AliasStatement aliasStatement = new AliasStatement();
+        aliasStatement.setColumn(column);
+        aliasStatement.setAlias(alias);
+        return aliasStatement;
+    }
+
+    public static ListColumnStatement listColumnStatement(String cut, String... strs) {
+        if (strs != null && strs.length > 0) {
+            Statement[] statements = new Statement[strs.length];
+            for (int i = 0; i < strs.length; i++) {
+                statements[i] = new SymbolStatement.LetterStatement(strs[i]);
+            }
+            return listColumnStatement(cut, statements);
+        } else {
+            return new ListColumnStatement(cut);
+        }
+    }
+
+    public static ListColumnStatement listColumnStatement(String cut, Statement... statements) {
+        ListColumnStatement listColumnStatement = new ListColumnStatement(cut);
+        if (statements != null && statements.length > 0) {
+            for (Statement statement : statements) {
+                listColumnStatement.add(statement);
+            }
+        }
+        return listColumnStatement;
+    }
+
+    public static ConditionStatement conditionStatement(Statement left, OperStatement operStatement, Statement right) {
+        ConditionStatement conditionStatement = new ConditionStatement();
+        conditionStatement.setLeft(left);
+        conditionStatement.setOper(operStatement);
+        conditionStatement.setRight(right);
+        return conditionStatement;
+    }
+
+    public static QueryStatement queryStatement(ListColumnStatement selectListColumnStatement, AliasStatement aliasStatement, ConditionStatement conditionStatement) {
+        QueryStatement queryStatement = new QueryStatement();
+        SelectStatement selectStatement = new SelectStatement();
+        selectStatement.setSelectList(selectListColumnStatement);
+        queryStatement.setSelectStatement(selectStatement);
+
+        FromStatement fromStatement = new FromStatement();
+        fromStatement.setMainTable(aliasStatement);
+        queryStatement.setFromStatement(fromStatement);
+
+        if (conditionStatement != null) {
+            WhereStatement whereStatement = new WhereStatement();
+            whereStatement.setStatement(conditionStatement);
+            queryStatement.setWhereStatement(whereStatement);
+        }
+        return queryStatement;
     }
 }
