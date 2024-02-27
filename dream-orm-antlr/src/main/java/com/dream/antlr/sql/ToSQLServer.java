@@ -262,12 +262,12 @@ public class ToSQLServer extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.Log2Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LOG(2," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "LOG(2," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.Log10Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LOG10(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "LOG10(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -288,7 +288,7 @@ public class ToSQLServer extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.RoundStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1) {
-            return "ROUND(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",0)";
+            return "ROUND(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",0)";
         } else {
             return "ROUND(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
         }
@@ -391,38 +391,38 @@ public class ToSQLServer extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.DayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEPART(" + "dd," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "dd," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DayOfWeekStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEPART(" + "w," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "w," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DayOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEPART(" + "dy," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "dy," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.HourStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEPART(" + "hh," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "hh," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.MinuteStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEPART(" + "mi," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "mi," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.LastDayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        String s = toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList);
+        String s = toStr(statement.getParamsStatement(), assist, invokerList);
         return "DATEADD(dd,-DAY(" + s + "),DATEADD(m,1," + s + "))";
     }
 
     @Override
     protected String toString(FunctionStatement.MonthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEPART(" + "m," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "m," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -437,22 +437,22 @@ public class ToSQLServer extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.QuarterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEPART(" + "q," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "q," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.SecondStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEPART(" + "s," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "s," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.WeekOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEPART(" + "ww," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "ww," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.YearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DATEPART(" + "yy," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "DATEPART(" + "yy," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override

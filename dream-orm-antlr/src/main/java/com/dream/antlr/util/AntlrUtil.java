@@ -104,6 +104,7 @@ public class AntlrUtil {
 
     public static QueryStatement queryStatement(ListColumnStatement selectListColumnStatement, AliasStatement aliasStatement, ConditionStatement conditionStatement) {
         QueryStatement queryStatement = new QueryStatement();
+
         SelectStatement selectStatement = new SelectStatement();
         selectStatement.setSelectList(selectListColumnStatement);
         queryStatement.setSelectStatement(selectStatement);

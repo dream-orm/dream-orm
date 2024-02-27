@@ -168,7 +168,7 @@ public class ToPostgreSQL extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.LogStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         if (((ListColumnStatement) statement.getParamsStatement()).getColumnList().length == 1) {
-            return "LN(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+            return "LN(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
         } else {
             return "LOG(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
         }
@@ -176,12 +176,12 @@ public class ToPostgreSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.Log2Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LOG(2," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "LOG(2," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.Log10Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LOG(10," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "LOG(10," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -339,7 +339,7 @@ public class ToPostgreSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.DayOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ddd') AS INTEGER)";
+        return "CAST(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ddd') AS INTEGER)";
     }
 
     @Override
@@ -349,38 +349,38 @@ public class ToPostgreSQL extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.MinuteStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'mi')) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'mi')) AS INTEGER)";
     }
 
     @Override
     protected String toString(FunctionStatement.LastDayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "(DATE_TRUNC('month', " + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ") + INTERVAL '1 month - 1 day')::date";
+        return "(DATE_TRUNC('month', " + toStr(statement.getParamsStatement(), assist, invokerList) + ") + INTERVAL '1 month - 1 day')::date";
     }
 
     @Override
     protected String toString(FunctionStatement.MonthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'mm')) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'mm')) AS INTEGER)";
     }
 
 
     @Override
     protected String toString(FunctionStatement.QuarterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'q')) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'q')) AS INTEGER)";
     }
 
     @Override
     protected String toString(FunctionStatement.SecondStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ss')) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ss')) AS INTEGER)";
     }
 
     @Override
     protected String toString(FunctionStatement.WeekOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ww'" + ")) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ww'" + ")) AS INTEGER)";
     }
 
     @Override
     protected String toString(FunctionStatement.YearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST((TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'yyyy'" + ")) AS INTEGER)";
+        return "CAST((TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'yyyy'" + ")) AS INTEGER)";
     }
 
     @Override

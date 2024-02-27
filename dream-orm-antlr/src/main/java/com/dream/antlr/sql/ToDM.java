@@ -208,7 +208,7 @@ public class ToDM extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.SpaceStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LPAD(' '," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",' ')";
+        return "LPAD(' '," + toStr(statement.getParamsStatement(), assist, invokerList) + ",' ')";
     }
 
     @Override
@@ -218,7 +218,7 @@ public class ToDM extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.Log2Statement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "LOG(2," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ")";
+        return "LOG(2," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -247,7 +247,7 @@ public class ToDM extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.WeekOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",'ww'" + "))";
+        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ww'" + "))";
     }
 
     @Override
