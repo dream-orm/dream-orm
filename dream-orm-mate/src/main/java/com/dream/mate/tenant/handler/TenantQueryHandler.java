@@ -2,11 +2,9 @@ package com.dream.mate.tenant.handler;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
-import com.dream.antlr.expr.SymbolExpr;
 import com.dream.antlr.handler.AbstractHandler;
 import com.dream.antlr.handler.Handler;
 import com.dream.antlr.invoker.Invoker;
-import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.antlr.util.AntlrUtil;
@@ -62,7 +60,7 @@ public class TenantQueryHandler extends AbstractHandler {
                 if (tenantInjectInvoker.isTenant(assist, table)) {
                     String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
                     ConditionStatement conditionStatement = new ConditionStatement();
-                    conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
+                    conditionStatement.setLeft(AntlrUtil.listColumnStatement(".", tableScanInfo.getAlias(), tenantColumn));
                     conditionStatement.setOper(new OperStatement.EQStatement());
                     conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                     QueryStatement queryStatement = queryDeque.peek();
@@ -99,7 +97,7 @@ public class TenantQueryHandler extends AbstractHandler {
                     if (tenantInjectInvoker.isTenant(assist, table)) {
                         String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
                         ConditionStatement conditionStatement = new ConditionStatement();
-                        conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + tenantColumn)).expr());
+                        conditionStatement.setLeft(AntlrUtil.listColumnStatement(".", tableScanInfo.getAlias(), tenantColumn));
                         conditionStatement.setOper(new OperStatement.EQStatement());
                         conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                         Statement joinOnStatement = joinStatement.getOn();

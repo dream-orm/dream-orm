@@ -1,6 +1,9 @@
 package com.dream.drive.factory;
 
+import com.dream.antlr.config.Assist;
+import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.invoker.Invoker;
+import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.sql.ToMySQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.dialect.AbstractFlexDialect;
@@ -59,16 +62,36 @@ public class DefaultFlexDialect extends AbstractFlexDialect {
     protected List<Invoker> invokerList() {
         List<Invoker> invokerList = new ArrayList<>(4);
         if (tenantHandler != null) {
-            invokerList.add(new TenantInjectInvoker(tenantHandler));
+            invokerList.add(new TenantInjectInvoker(tenantHandler) {
+                @Override
+                public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
+                    return toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
+                }
+            });
         }
         if (permissionHandler != null) {
-            invokerList.add(new PermissionInjectInvoker(permissionHandler));
+            invokerList.add(new PermissionInjectInvoker(permissionHandler) {
+                @Override
+                public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
+                    return toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
+                }
+            });
         }
         if (logicHandler != null) {
-            invokerList.add(new LogicInvoker(logicHandler));
+            invokerList.add(new LogicInvoker(logicHandler) {
+                @Override
+                public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
+                    return toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
+                }
+            });
         }
         if (versionHandler != null) {
-            invokerList.add(new VersionInvoker(versionHandler));
+            invokerList.add(new VersionInvoker(versionHandler) {
+                @Override
+                public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
+                    return toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
+                }
+            });
         }
         return invokerList;
     }

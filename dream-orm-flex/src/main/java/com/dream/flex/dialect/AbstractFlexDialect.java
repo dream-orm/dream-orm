@@ -33,7 +33,7 @@ public abstract class AbstractFlexDialect implements FlexDialect {
         } catch (AntlrException e) {
             throw new DreamRunTimeException(e);
         }
-        FlexMarkInvoker flexMarkInvoker = (FlexMarkInvoker) assist.getInvoker(FlexMarkInvoker.FUNCTION, FlexMarkInvoker.DEFAULT_NAMESPACE);
+        FlexMarkInvoker flexMarkInvoker = (FlexMarkInvoker) assist.getInvoker(FlexMarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
         FlexTableInvoker flexTableInvoker = (FlexTableInvoker) assist.getInvoker(FlexTableInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
         List<Object> paramList = flexMarkInvoker.getParamList();
         Set<String> tableSet = flexTableInvoker.getTableSet();
