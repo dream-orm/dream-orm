@@ -6,6 +6,9 @@ import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.Statement;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 辅助语法器，复杂SQL翻译抽象树的核心
  */
@@ -17,7 +20,8 @@ public abstract class HelperExpr extends SqlExpr {
     //本语法器是否可以解析单词
     private boolean accept0;
     //辅助语法器是否可以解析单词
-    private boolean accept1;
+    private Boolean accept1;
+    public static Map<String, Boolean> accept1Map = new HashMap<>();
 
     public HelperExpr(ExprReader exprReader, Helper helper) {
         super(exprReader);
@@ -29,24 +33,29 @@ public abstract class HelperExpr extends SqlExpr {
     /**
      * 获取本次语法器与请的辅助语法器是否可解析单词（辅助语法器可以继续请辅助）
      *
-     * @param exprInfo
+     * @param exprType
      * @return
      */
     @Override
-    protected boolean exprBefore(ExprInfo exprInfo) {
-        accept0 = super.exprBefore(exprInfo);
+    protected boolean exprBefore(ExprType exprType) {
+        accept0 = super.exprBefore(exprType);
         SqlExpr helpExpr0 = helpExpr;
-        accept1 = false;
-        while (true) {
-            accept1 |= helpExpr0.exprBefore(exprInfo);
-            if (accept1) {
-                break;
+        String key = this.getClass().getSimpleName() + ":" + exprType.name();
+        accept1 = accept1Map.get(key);
+        if (accept1 == null) {
+            accept1 = false;
+            while (true) {
+                accept1 |= helpExpr0.exprBefore(exprType);
+                if (accept1) {
+                    break;
+                }
+                if (helpExpr0 instanceof HelperExpr) {
+                    helpExpr0 = ((HelperExpr) helpExpr0).helper.helper();
+                } else {
+                    break;
+                }
             }
-            if (helpExpr0 instanceof HelperExpr) {
-                helpExpr0 = ((HelperExpr) helpExpr0).helper.helper();
-            } else {
-                break;
-            }
+            accept1Map.put(key, accept1);
         }
         return accept0;
     }

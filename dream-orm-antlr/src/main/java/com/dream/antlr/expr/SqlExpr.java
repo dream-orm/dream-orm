@@ -54,7 +54,7 @@ public abstract class SqlExpr {
         //获取单词类型
         ExprType exprType = exprInfo.getExprType();
         //判断本语法器是否可解析单词
-        if (!(self = exprBefore(exprInfo))) {
+        if (!(self = exprBefore(exprType))) {
             exprInfo.setExprType(ExprType.NIL);
         }
         Statement statement;
@@ -1543,8 +1543,8 @@ public abstract class SqlExpr {
 
     protected abstract Statement nil();
 
-    protected boolean exprBefore(ExprInfo exprInfo) {
-        return self = acceptSet.contains(exprInfo.getExprType());
+    protected boolean exprBefore(ExprType exprType) {
+        return self = acceptSet.contains(exprType);
     }
 
     public SqlExpr setExprTypes(ExprType... exprTypes) {
