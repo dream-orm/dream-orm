@@ -53,10 +53,17 @@ public abstract class SqlExpr {
         }
         //获取单词类型
         ExprType exprType = exprInfo.getExprType();
+        Statement statement;
         //判断本语法器是否可解析单词
-        if (!(self = exprBefore(exprType))) {
-            exprInfo.setExprType(ExprType.NIL);
+        if (exprBefore(exprType)) {
+            statement = expr(exprInfo);
+        } else {
+            statement = exprNil(exprInfo);
         }
+        return statement;
+    }
+
+    protected Statement expr(ExprInfo exprInfo) throws AntlrException {
         Statement statement;
         switch (exprInfo.getExprType()) {
             case TINYINT:
@@ -676,7 +683,6 @@ public abstract class SqlExpr {
                 statement = exprAcc(exprInfo);
                 break;
             default:
-                exprInfo.setExprType(exprType);
                 statement = exprNil(exprInfo);
                 break;
         }

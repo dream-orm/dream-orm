@@ -16,11 +16,11 @@ public class AliasColumnExpr extends HelperExpr {
 
     public AliasColumnExpr(ExprReader exprReader) {
         this(exprReader, () -> new CompareExpr(exprReader));
-        setExprTypes(ExprType.HELP, ExprType.STAR);
     }
 
     public AliasColumnExpr(ExprReader exprReader, Helper helper) {
         super(exprReader, helper);
+        setExprTypes(ExprType.HELP, ExprType.STAR);
     }
 
     @Override

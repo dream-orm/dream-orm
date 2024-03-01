@@ -19,12 +19,10 @@ public abstract class HelperExpr extends SqlExpr {
     protected Helper helper;
     //辅助语法器
     protected SqlExpr helpExpr;
-    //本语法器是否可以解析单词
-    private boolean accept0;
     //辅助语法器是否可以解析单词
-    private Boolean accept1;
-    //accept1缓存
-    public static Map<String, Boolean> accept1Map = new HashMap<>();
+    private Boolean accept;
+    //accept缓存
+    public static Map<String, Boolean> acceptMap = new HashMap<>();
 
     public HelperExpr(ExprReader exprReader, Helper helper) {
         super(exprReader);
@@ -41,26 +39,28 @@ public abstract class HelperExpr extends SqlExpr {
      */
     @Override
     protected boolean exprBefore(ExprType exprType) {
-        accept0 = super.exprBefore(exprType);
-        SqlExpr helpExpr0 = helpExpr;
-        String key = this.name() + ":" + exprType.name();
-        accept1 = accept1Map.get(key);
-        if (accept1 == null) {
-            accept1 = false;
-            while (true) {
-                accept1 |= helpExpr0.exprBefore(exprType);
-                if (accept1) {
-                    break;
+        boolean exprBefore = super.exprBefore(exprType);
+        if (!exprBefore) {
+            SqlExpr helpExpr0 = helpExpr;
+            String key = this.name() + ":" + exprType.name();
+            accept = acceptMap.get(key);
+            if (accept == null) {
+                accept = false;
+                while (true) {
+                    accept |= helpExpr0.exprBefore(exprType);
+                    if (accept) {
+                        break;
+                    }
+                    if (helpExpr0 instanceof HelperExpr) {
+                        helpExpr0 = ((HelperExpr) helpExpr0).helper.helper();
+                    } else {
+                        break;
+                    }
                 }
-                if (helpExpr0 instanceof HelperExpr) {
-                    helpExpr0 = ((HelperExpr) helpExpr0).helper.helper();
-                } else {
-                    break;
-                }
+                acceptMap.put(key, accept);
             }
-            accept1Map.put(key, accept1);
         }
-        return accept0;
+        return exprBefore;
     }
 
     /**
@@ -74,10 +74,10 @@ public abstract class HelperExpr extends SqlExpr {
      */
     @Override
     public Statement exprNil(ExprInfo exprInfo) throws AntlrException {
-        if (accept0) {
+        if (self) {
             return exprSelf(exprInfo);
         }
-        if (acceptSet.contains(ExprType.HELP) && accept1) {
+        if (acceptSet.contains(ExprType.HELP) && accept) {
             Statement statement = helpExpr.expr();
             helpExpr = helper.helper();
             return exprHelp(statement);
