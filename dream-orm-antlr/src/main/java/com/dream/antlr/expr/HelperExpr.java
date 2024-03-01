@@ -13,16 +13,16 @@ import java.util.Map;
  * 辅助语法器，复杂SQL翻译抽象树的核心
  */
 public abstract class HelperExpr extends SqlExpr {
-    //解析器名称
-    private String name;
+    //accept缓存
+    public static Map<String, Boolean> acceptMap = new HashMap<>();
     //辅助语法器生成类
     protected Helper helper;
     //辅助语法器
     protected SqlExpr helpExpr;
+    //解析器名称
+    private String name;
     //辅助语法器是否可以解析单词
     private Boolean accept;
-    //accept缓存
-    public static Map<String, Boolean> acceptMap = new HashMap<>();
 
     public HelperExpr(ExprReader exprReader, Helper helper) {
         super(exprReader);

@@ -175,5 +175,4 @@ public final class Constant {
             ExprType.TRUNCATE,
             ExprType.DROP
     };
-
 }

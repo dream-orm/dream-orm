@@ -2,12 +2,14 @@ package com.dream.antlr.read;
 
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
+import com.dream.antlr.factory.ExprFactory;
 import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.util.ExprUtil;
 
 public class ExprReader extends StringReader {
     private final MyFunctionFactory myFunctionFactory;
+    public ExprFactory exprFactory;
     private ExprInfo lastInfo;
 
     public ExprReader(String sql) {

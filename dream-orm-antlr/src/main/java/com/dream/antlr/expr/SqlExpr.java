@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.ExprFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.Statement;
 
@@ -34,6 +35,7 @@ public abstract class SqlExpr {
      */
     public ExprInfo push() throws AntlrException {
         ExprInfo exprInfo = exprReader.push();
+        exprReader.exprFactory = exprFactory(exprInfo);
         return exprInfo;
     }
 
@@ -51,640 +53,638 @@ public abstract class SqlExpr {
         }
         //获取单词类型
         ExprType exprType = exprInfo.getExprType();
-        Statement statement;
         //判断本语法器是否可解析单词
         if (exprBefore(exprType)) {
-            statement = expr(exprInfo);
+            return exprReader.exprFactory.apply(this);
         } else {
-            statement = exprNil(exprInfo);
+            return exprNil(exprInfo);
         }
-        return statement;
     }
 
-    protected Statement expr(ExprInfo exprInfo) throws AntlrException {
-        Statement statement;
+    protected ExprFactory exprFactory(ExprInfo exprInfo) {
+        ExprFactory exprFactory;
         switch (exprInfo.getExprType()) {
             case TINYINT:
-                statement = exprTinyInt(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprTinyInt(exprInfo);
                 break;
             case SMALLINT:
-                statement = exprSmallInt(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSmallInt(exprInfo);
                 break;
             case MEDIUMINT:
-                statement = exprMediumInt(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprMediumInt(exprInfo);
                 break;
             case INT:
-                statement = exprInt(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprInt(exprInfo);
                 break;
             case BIGINT:
-                statement = exprBigInt(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprBigInt(exprInfo);
                 break;
             case LONG:
-                statement = exprLong(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLong(exprInfo);
                 break;
             case FLOAT:
-                statement = exprFloat(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprFloat(exprInfo);
                 break;
             case DOUBLE:
-                statement = exprDouble(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDouble(exprInfo);
                 break;
             case DOT:
-                statement = exprDot(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDot(exprInfo);
                 break;
             case STR:
-                statement = exprStr(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprStr(exprInfo);
                 break;
             case JAVA_STR:
-                statement = exprJavaStr(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprJavaStr(exprInfo);
                 break;
             case LETTER:
-                statement = exprLetter(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLetter(exprInfo);
                 break;
             case NUMBER:
-                statement = exprNumber(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprNumber(exprInfo);
                 break;
             case LIKE:
-                statement = exprLike(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLike(exprInfo);
                 break;
             case BETWEEN:
-                statement = exprBetween(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprBetween(exprInfo);
                 break;
             case LBRACE:
-                statement = exprLBrace(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLBrace(exprInfo);
                 break;
             case RBRACE:
-                statement = exprRBrace(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprRBrace(exprInfo);
                 break;
             case INTERVAL:
-                statement = exprInterval(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprInterval(exprInfo);
                 break;
             case COMMA:
-                statement = exprComma(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprComma(exprInfo);
                 break;
             case SINGLE_MARK:
-                statement = exprSingleMark(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSingleMark(exprInfo);
                 break;
             case MARK:
-                statement = exprMark(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprMark(exprInfo);
                 break;
             case ON:
-                statement = exprOn(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprOn(exprInfo);
                 break;
             case AS:
-                statement = exprAs(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAs(exprInfo);
                 break;
             case ASC:
-                statement = exprAsc(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAsc(exprInfo);
                 break;
             case DESC:
-                statement = exprDesc(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDesc(exprInfo);
                 break;
             case ASCII:
-                statement = exprAscii(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAscii(exprInfo);
                 break;
             case CHARACTER_LENGTH:
             case CHAR_LENGTH:
-                statement = exprCharLength(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCharLength(exprInfo);
                 break;
             case LENGTH:
-                statement = exprLength(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLength(exprInfo);
                 break;
             case CONCAT_WS:
-                statement = exprConcatWs(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprConcatWs(exprInfo);
                 break;
             case INSTR:
-                statement = exprInstr(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprInstr(exprInfo);
                 break;
             case LOCATE:
-                statement = exprLocate(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLocate(exprInfo);
                 break;
             case LCASE:
-                statement = exprLcase(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLcase(exprInfo);
                 break;
             case LOWER:
-                statement = exprLower(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLower(exprInfo);
                 break;
             case LTRIM:
-                statement = exprLtrim(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLtrim(exprInfo);
                 break;
             case REPEAT:
-                statement = exprRepeat(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprRepeat(exprInfo);
                 break;
             case REVERSE:
-                statement = exprReverse(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprReverse(exprInfo);
                 break;
             case REPLACE:
-                statement = exprReplace(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprReplace(exprInfo);
                 break;
             case RTRIM:
-                statement = exprRtrim(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprRtrim(exprInfo);
                 break;
             case STRCMP:
-                statement = exprStrcmp(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprStrcmp(exprInfo);
                 break;
             case SEPARATOR:
-                statement = exprSeparator(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSeparator(exprInfo);
                 break;
             case SUBSTR:
             case SUBSTRING:
-                statement = exprSubStr(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSubStr(exprInfo);
                 break;
             case SPACE:
-                statement = exprSpace(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSpace(exprInfo);
                 break;
             case TRIM:
-                statement = exprTrim(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprTrim(exprInfo);
                 break;
             case UCASE:
             case UPPER:
-                statement = exprUpper(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprUpper(exprInfo);
                 break;
             case LPAD:
-                statement = exprLpad(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLpad(exprInfo);
                 break;
             case RPAD:
-                statement = exprRpad(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprRpad(exprInfo);
                 break;
             case DATABASE:
-                statement = exprDatabase(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDatabase(exprInfo);
                 break;
             case TABLE:
-                statement = exprTable(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprTable(exprInfo);
                 break;
             case ABS:
-                statement = exprAbs(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAbs(exprInfo);
                 break;
             case AVG:
-                statement = exprAvg(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAvg(exprInfo);
                 break;
             case ACOS:
-                statement = exprAcos(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAcos(exprInfo);
                 break;
             case ASIN:
-                statement = exprAsin(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAsin(exprInfo);
                 break;
             case SIN:
-                statement = exprSin(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSin(exprInfo);
                 break;
             case ATAN:
-                statement = exprAtan(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAtan(exprInfo);
                 break;
             case ALL:
-                statement = exprAll(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAll(exprInfo);
                 break;
             case CEIL:
-                statement = exprCeil(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCeil(exprInfo);
                 break;
             case CEILING:
-                statement = exprCeiling(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCeiling(exprInfo);
                 break;
             case COS:
-                statement = exprCos(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCos(exprInfo);
                 break;
             case COT:
-                statement = exprCot(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCot(exprInfo);
                 break;
             case COUNT:
-                statement = exprCount(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCount(exprInfo);
                 break;
             case EXP:
-                statement = exprExp(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprExp(exprInfo);
                 break;
             case FLOOR:
-                statement = exprFloor(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprFloor(exprInfo);
                 break;
             case LN:
-                statement = exprLn(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLn(exprInfo);
                 break;
             case LOG:
-                statement = exprLog(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLog(exprInfo);
                 break;
             case LOG10:
-                statement = exprLog10(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLog10(exprInfo);
                 break;
             case LOG2:
-                statement = exprLog2(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLog2(exprInfo);
                 break;
             case MAX:
-                statement = exprMax(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprMax(exprInfo);
                 break;
             case MIN:
-                statement = exprMin(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprMin(exprInfo);
                 break;
             case PI:
-                statement = exprPi(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprPi(exprInfo);
                 break;
             case POW:
-                statement = exprPow(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprPow(exprInfo);
                 break;
             case POWER:
-                statement = exprPower(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprPower(exprInfo);
                 break;
             case RAND:
-                statement = exprRand(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprRand(exprInfo);
                 break;
             case ROUND:
-                statement = exprRound(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprRound(exprInfo);
                 break;
             case SIGN:
-                statement = exprSign(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSign(exprInfo);
                 break;
             case SQRT:
-                statement = exprSqrt(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSqrt(exprInfo);
                 break;
             case SUM:
-                statement = exprSum(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSum(exprInfo);
                 break;
             case TAN:
-                statement = exprTan(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprTan(exprInfo);
                 break;
             case CREATE:
-                statement = exprCreate(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCreate(exprInfo);
                 break;
             case ALTER:
-                statement = exprAlter(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAlter(exprInfo);
                 break;
             case TRUNCATE:
-                statement = exprTruncate(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprTruncate(exprInfo);
                 break;
             case DROP:
-                statement = exprDrop(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDrop(exprInfo);
                 break;
             case COLUMN:
-                statement = exprColumn(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprColumn(exprInfo);
                 break;
             case RENAME:
-                statement = exprRename(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprRename(exprInfo);
                 break;
             case TO:
-                statement = exprTo(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprTo(exprInfo);
                 break;
             case MODIFY:
-                statement = exprModify(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprModify(exprInfo);
                 break;
             case ORDER:
-                statement = exprOrder(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprOrder(exprInfo);
                 break;
             case CURDATE:
-                statement = exprCurDate(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCurDate(exprInfo);
                 break;
             case DATEDIFF:
-                statement = exprDateDiff(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDateDiff(exprInfo);
                 break;
             case DATE_ADD:
-                statement = exprDateAdd(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDateAdd(exprInfo);
                 break;
             case DATE_SUB:
-                statement = exprDateSub(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDateSub(exprInfo);
                 break;
             case DATE_FORMAT:
-                statement = exprDateFormat(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDateFormat(exprInfo);
                 break;
             case DAY:
             case DAYOFMONTH:
-                statement = exprDay(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDay(exprInfo);
                 break;
             case DAYOFWEEK:
-                statement = exprDayOfWeek(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDayOfWeek(exprInfo);
                 break;
             case DAYOFYEAR:
-                statement = exprDayOfYear(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDayOfYear(exprInfo);
                 break;
             case HOUR:
-                statement = exprHour(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprHour(exprInfo);
                 break;
             case LAST_DAY:
-                statement = exprLastDay(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLastDay(exprInfo);
                 break;
             case MINUTE:
-                statement = exprMinute(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprMinute(exprInfo);
                 break;
             case MONTH:
-                statement = exprMonth(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprMonth(exprInfo);
                 break;
             case NOW:
-                statement = exprNow(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprNow(exprInfo);
                 break;
             case SYSDATE:
-                statement = exprSysDate(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSysDate(exprInfo);
                 break;
             case QUARTER:
-                statement = exprQuarter(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprQuarter(exprInfo);
                 break;
             case SECOND:
-                statement = exprSecond(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSecond(exprInfo);
                 break;
             case TIME:
-                statement = exprTime(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprTime(exprInfo);
                 break;
             case WEEK:
-                statement = exprWeek(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprWeek(exprInfo);
                 break;
             case WEEKOFYEAR:
-                statement = exprWeekOfYear(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprWeekOfYear(exprInfo);
                 break;
             case YEAR:
-                statement = exprYear(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprYear(exprInfo);
                 break;
             case STR_TO_DATE:
-                statement = exprStrToDate(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprStrToDate(exprInfo);
                 break;
             case MY_FUNCTION:
-                statement = exprMyFunction(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprMyFunction(exprInfo);
                 break;
             case CONVERT:
-                statement = exprConvert(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprConvert(exprInfo);
                 break;
             case CAST:
-                statement = exprCast(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCast(exprInfo);
                 break;
             case CHAR:
-                statement = exprChar(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprChar(exprInfo);
                 break;
             case VARCHAR:
-                statement = exprVarChar(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprVarChar(exprInfo);
                 break;
             case TEXT:
-                statement = exprText(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprText(exprInfo);
                 break;
             case BLOB:
-                statement = exprBlob(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprBlob(exprInfo);
                 break;
             case UNIX_TIMESTAMP:
-                statement = exprUnixTimeStamp(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprUnixTimeStamp(exprInfo);
                 break;
             case FROM_UNIXTIME:
-                statement = exprFromUnixTime(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprFromUnixTime(exprInfo);
                 break;
             case DATE:
-                statement = exprDate(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDate(exprInfo);
                 break;
             case DATETIME:
-                statement = exprDateTime(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDateTime(exprInfo);
                 break;
             case TIMESTAMP:
-                statement = exprTimeStamp(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprTimeStamp(exprInfo);
                 break;
             case SIGNED:
-                statement = exprSigned(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSigned(exprInfo);
                 break;
             case INTEGER:
-                statement = exprInteger(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprInteger(exprInfo);
                 break;
             case DECIMAL:
-                statement = exprDecimal(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDecimal(exprInfo);
                 break;
             case COALESCE:
-                statement = exprCoalesce(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCoalesce(exprInfo);
                 break;
             case CONCAT:
-                statement = exprConcat(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprConcat(exprInfo);
                 break;
             case GROUP_CONCAT:
-                statement = exprGroupConcat(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprGroupConcat(exprInfo);
                 break;
             case FIND_IN_SET:
-                statement = exprFindInSet(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprFindInSet(exprInfo);
                 break;
             case IFNULL:
-                statement = exprIfNull(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprIfNull(exprInfo);
                 break;
             case IF:
-                statement = exprIf(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprIf(exprInfo);
                 break;
             case NULLIF:
-                statement = exprNullIf(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprNullIf(exprInfo);
                 break;
             case OFFSET:
-                statement = exprOffSet(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprOffSet(exprInfo);
                 break;
             case UNION:
-                statement = exprUnion(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprUnion(exprInfo);
                 break;
             case FOR:
-                statement = exprFor(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprFor(exprInfo);
                 break;
             case NOWAIT:
-                statement = exprNoWait(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprNoWait(exprInfo);
                 break;
             case ISNULL:
-                statement = exprIsNull(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprIsNull(exprInfo);
                 break;
             case CASE:
-                statement = exprCase(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCase(exprInfo);
                 break;
             case WHEN:
-                statement = exprWhen(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprWhen(exprInfo);
                 break;
             case THEN:
-                statement = exprThen(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprThen(exprInfo);
                 break;
             case ELSE:
-                statement = exprElse(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprElse(exprInfo);
                 break;
             case END:
-                statement = exprEnd(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprEnd(exprInfo);
                 break;
             case SELECT:
-                statement = exprSelect(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSelect(exprInfo);
                 break;
             case FROM:
-                statement = exprFrom(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprFrom(exprInfo);
                 break;
             case WHERE:
-                statement = exprWhere(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprWhere(exprInfo);
                 break;
             case HAVING:
-                statement = exprHaving(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprHaving(exprInfo);
                 break;
             case LIMIT:
-                statement = exprLimit(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLimit(exprInfo);
                 break;
             case DISTINCT:
-                statement = exprDistinct(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDistinct(exprInfo);
                 break;
             case AND:
-                statement = exprAnd(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAnd(exprInfo);
                 break;
             case BITAND://&
-                statement = exprBitAnd(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprBitAnd(exprInfo);
                 break;
             case BITOR://|
-                statement = exprBitOr(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprBitOr(exprInfo);
                 break;
             case BITXOR://^
-                statement = exprBitXor(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprBitXor(exprInfo);
                 break;
             case OR:
-                statement = exprOr(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprOr(exprInfo);
                 break;
             case EQ:
-                statement = exprEq(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprEq(exprInfo);
                 break;
             case IS:
-                statement = exprIs(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprIs(exprInfo);
                 break;
             case IN:
-                statement = exprIn(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprIn(exprInfo);
                 break;
             case NOT:
-                statement = exprNot(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprNot(exprInfo);
                 break;
             case NULL:
-                statement = exprNull(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprNull(exprInfo);
                 break;
             case EXISTS:
-                statement = exprExists(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprExists(exprInfo);
                 break;
             case LT:
-                statement = exprLt(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLt(exprInfo);
                 break;
             case LLM:
-                statement = exprLlm(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLlm(exprInfo);
                 break;
             case RRM:
-                statement = exprRrm(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprRrm(exprInfo);
                 break;
             case GT:
-                statement = exprGt(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprGt(exprInfo);
                 break;
             case LEQ:
-                statement = exprLeq(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLeq(exprInfo);
                 break;
             case GEQ:
-                statement = exprGeq(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprGeq(exprInfo);
                 break;
             case NEQ:
-                statement = exprNeq(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprNeq(exprInfo);
                 break;
             case LEFT:
-                statement = exprLeft(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprLeft(exprInfo);
                 break;
             case GROUP:
-                statement = exprGroup(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprGroup(exprInfo);
                 break;
             case BY:
-                statement = exprBy(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprBy(exprInfo);
                 break;
             case INNER:
-                statement = exprInner(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprInner(exprInfo);
                 break;
             case RIGHT:
-                statement = exprRight(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprRight(exprInfo);
                 break;
             case CROSS:
-                statement = exprCross(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCross(exprInfo);
                 break;
             case OUTER:
-                statement = exprOuter(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprOuter(exprInfo);
                 break;
             case JOIN:
-                statement = exprJoin(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprJoin(exprInfo);
                 break;
             case ADD:
-                statement = exprAdd(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAdd(exprInfo);
                 break;
             case SUB:
-                statement = exprSub(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSub(exprInfo);
                 break;
             case STAR:
-                statement = exprStar(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprStar(exprInfo);
                 break;
             case DIVIDE:
-                statement = exprDivide(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDivide(exprInfo);
                 break;
             case MOD:
-                statement = exprMod(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprMod(exprInfo);
                 break;
             case INSERT:
-                statement = exprInsert(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprInsert(exprInfo);
                 break;
             case INTO:
-                statement = exprInto(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprInto(exprInfo);
                 break;
             case VALUES:
-                statement = exprValues(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprValues(exprInfo);
                 break;
             case DELETE:
-                statement = exprDelete(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDelete(exprInfo);
                 break;
             case UPDATE:
-                statement = exprUpdate(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprUpdate(exprInfo);
                 break;
             case SET:
-                statement = exprSet(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSet(exprInfo);
                 break;
             case ROW_NUMBER:
-                statement = exprRowNumber(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprRowNumber(exprInfo);
                 break;
             case OVER:
-                statement = exprOver(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprOver(exprInfo);
                 break;
             case PARTITION:
-                statement = exprPartition(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprPartition(exprInfo);
                 break;
             case INVOKER:
-                statement = exprInvoker(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprInvoker(exprInfo);
                 break;
             case COLON:
-                statement = exprColon(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprColon(exprInfo);
                 break;
             case DOLLAR:
-                statement = exprDollar(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDollar(exprInfo);
                 break;
             case SHARP:
-                statement = exprSharp(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprSharp(exprInfo);
                 break;
             case TO_CHAR:
-                statement = exprToChar(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprToChar(exprInfo);
                 break;
             case TO_NUMBER:
-                statement = exprToNumber(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprToNumber(exprInfo);
                 break;
             case TO_DATE:
-                statement = exprToDate(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprToDate(exprInfo);
                 break;
             case TO_TIMESTAMP:
-                statement = exprToTimeStamp(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprToTimeStamp(exprInfo);
                 break;
             case AUTO_INCREMENT:
-                statement = exprAutoIncrement(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAutoIncrement(exprInfo);
                 break;
             case CONSTRAINT:
-                statement = exprConstraint(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprConstraint(exprInfo);
                 break;
             case PRIMARY:
-                statement = exprPrimary(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprPrimary(exprInfo);
                 break;
             case FOREIGN:
-                statement = exprForeign(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprForeign(exprInfo);
                 break;
             case REFERENCES:
-                statement = exprReferences(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprReferences(exprInfo);
                 break;
             case KEY:
-                statement = exprKey(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprKey(exprInfo);
                 break;
             case ENGINE:
-                statement = exprEngine(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprEngine(exprInfo);
                 break;
             case CHARSET:
-                statement = exprCharset(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprCharset(exprInfo);
                 break;
             case COMMENT:
-                statement = exprComment(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprComment(exprInfo);
                 break;
             case DEFAULT:
-                statement = exprDefault(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprDefault(exprInfo);
                 break;
             case ACC:
-                statement = exprAcc(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprAcc(exprInfo);
                 break;
             default:
-                statement = exprNil(exprInfo);
+                exprFactory = sqlExpr -> sqlExpr.exprNil(exprInfo);
                 break;
         }
-        return statement;
+        return exprFactory;
     }
 
     protected Statement exprSingleMark(ExprInfo exprInfo) throws AntlrException {
