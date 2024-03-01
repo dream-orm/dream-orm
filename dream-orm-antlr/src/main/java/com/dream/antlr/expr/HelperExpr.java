@@ -13,6 +13,8 @@ import java.util.Map;
  * 辅助语法器，复杂SQL翻译抽象树的核心
  */
 public abstract class HelperExpr extends SqlExpr {
+    //解析器名称
+    private String name;
     //辅助语法器生成类
     protected Helper helper;
     //辅助语法器
@@ -21,6 +23,7 @@ public abstract class HelperExpr extends SqlExpr {
     private boolean accept0;
     //辅助语法器是否可以解析单词
     private Boolean accept1;
+    //accept1缓存
     public static Map<String, Boolean> accept1Map = new HashMap<>();
 
     public HelperExpr(ExprReader exprReader, Helper helper) {
@@ -40,7 +43,7 @@ public abstract class HelperExpr extends SqlExpr {
     protected boolean exprBefore(ExprType exprType) {
         accept0 = super.exprBefore(exprType);
         SqlExpr helpExpr0 = helpExpr;
-        String key = this.getClass().getSimpleName() + ":" + exprType.name();
+        String key = this.name() + ":" + exprType.name();
         accept1 = accept1Map.get(key);
         if (accept1 == null) {
             accept1 = false;
@@ -91,6 +94,13 @@ public abstract class HelperExpr extends SqlExpr {
      * @throws AntlrException
      */
     protected abstract Statement exprHelp(Statement statement) throws AntlrException;
+
+    protected String name() {
+        if (name == null) {
+            name = super.name() + ":" + helpExpr.name();
+        }
+        return name;
+    }
 
     public interface Helper {
         SqlExpr helper();

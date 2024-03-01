@@ -1561,4 +1561,8 @@ public abstract class SqlExpr {
     public Set<ExprType> getAcceptSet() {
         return acceptSet;
     }
+
+    protected String name() {
+        return this.getClass().getSimpleName();
+    }
 }
