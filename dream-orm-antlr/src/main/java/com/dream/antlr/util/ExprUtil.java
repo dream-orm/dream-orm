@@ -1,10 +1,6 @@
 package com.dream.antlr.util;
 
-import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
-import com.dream.antlr.read.ExprReader;
-
-import java.util.Stack;
 
 public class ExprUtil {
     public static boolean isLetter(int c) {
@@ -394,18 +390,6 @@ public class ExprUtil {
             default:
                 return ExprType.LETTER;
         }
-    }
-
-    public static String wrapper(ExprReader exprReader) {
-        Stack<ExprInfo> exprInfoStack = exprReader.getExprInfoStack();
-        StringBuilder builder = new StringBuilder();
-        builder.append("编译SQL：'" + exprReader.getSql() + "'失败，已解析类型:\n");
-        int size = exprInfoStack.size();
-        while (!exprInfoStack.isEmpty()) {
-            ExprInfo exprInfo = exprInfoStack.pop();
-            builder.append((size--) + "\t" + "类型:" + exprInfo.getExprType() + ",字符:" + exprInfo.getInfo() + ",位置:(" + exprInfo.getStart() + "-" + exprInfo.getEnd() + ")\n");
-        }
-        return builder.toString();
     }
 
     public static boolean isLBrace(int c) {

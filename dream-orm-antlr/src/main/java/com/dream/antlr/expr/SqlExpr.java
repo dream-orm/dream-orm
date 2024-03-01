@@ -5,7 +5,6 @@ import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.Statement;
-import com.dream.antlr.util.ExprUtil;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -35,7 +34,6 @@ public abstract class SqlExpr {
      */
     public ExprInfo push() throws AntlrException {
         ExprInfo exprInfo = exprReader.push();
-        exprReader.push(exprInfo);
         return exprInfo;
     }
 
@@ -1446,7 +1444,19 @@ public abstract class SqlExpr {
             Statement statement = nil();
             return statement;
         } else {
-            throw new AntlrException(ExprUtil.wrapper(exprReader));
+            Set<ExprType> acceptSet = this.getAcceptSet();
+            SqlExpr sqlExpr = this;
+            while (sqlExpr instanceof HelperExpr) {
+                if (sqlExpr.acceptSet.contains(ExprType.HELP)) {
+                    HelperExpr helperExpr = (HelperExpr) sqlExpr;
+                    acceptSet.addAll(helperExpr.getAcceptSet());
+                    sqlExpr = helperExpr.helper.helper();
+                } else {
+                    break;
+                }
+            }
+            acceptSet.remove(ExprType.HELP);
+            throw new AntlrException("未正确识别:\n单词：" + exprInfo.getInfo() + "\n类型：" + exprInfo.getExprType() + "\n语法：" + this.getClass().getName() + "\n可识别类型：" + acceptSet);
         }
     }
 

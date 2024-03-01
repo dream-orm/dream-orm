@@ -6,11 +6,7 @@ import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.util.ExprUtil;
 
-import java.util.Stack;
-
 public class ExprReader extends StringReader {
-
-    private final Stack<ExprInfo> exprInfoStack = new Stack<>();
     private final MyFunctionFactory myFunctionFactory;
     private ExprInfo lastInfo;
 
@@ -314,14 +310,6 @@ public class ExprReader extends StringReader {
         String info = new String(chars, 0, len);
         return new ExprInfo(ExprType.NUMBER, info, getStart(), getEnd());
 
-    }
-
-    public Stack<ExprInfo> getExprInfoStack() {
-        return exprInfoStack;
-    }
-
-    public void push(ExprInfo exprInfo) {
-        exprInfoStack.push(exprInfo);
     }
 
     public ExprInfo getLastInfo() {
