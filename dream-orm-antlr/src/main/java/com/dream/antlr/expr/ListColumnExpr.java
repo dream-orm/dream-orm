@@ -21,9 +21,6 @@ public class ListColumnExpr extends HelperExpr {
 
     public ListColumnExpr(ExprReader exprReader, Helper helper, ExprInfo exprInfo) {
         super(exprReader, helper);
-        if (exprInfo == null) {
-            exprInfo = new ExprInfo(ExprType.BLANK, " ");
-        }
         this.cut = exprInfo.getExprType();
         listColumnStatement.setCut(new SymbolStatement.LetterStatement(exprInfo.getInfo()));
     }

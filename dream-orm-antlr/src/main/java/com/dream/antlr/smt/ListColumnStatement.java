@@ -1,10 +1,11 @@
 package com.dream.antlr.smt;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListColumnStatement extends Statement {
     private SymbolStatement.LetterStatement cut;
-    private Statement[] columnList = new Statement[0];
+    private List<Statement> columnList = new ArrayList<>(8);
 
     public ListColumnStatement() {
         this(",");
@@ -16,8 +17,7 @@ public class ListColumnStatement extends Statement {
 
     public void add(Statement column) {
         if (column != null) {
-            columnList = Arrays.copyOf(columnList, columnList.length + 1);
-            columnList[columnList.length - 1] = wrapParent(column);
+            columnList.add(wrapParent(column));
         }
     }
 
@@ -30,10 +30,10 @@ public class ListColumnStatement extends Statement {
     }
 
     public Statement[] getColumnList() {
-        return columnList;
+        return columnList.toArray(new Statement[columnList.size()]);
     }
 
-    public void setColumnList(Statement[] columnList) {
+    public void setColumnList(List<Statement> columnList) {
         if (columnList != null) {
             this.columnList = columnList;
             for (Statement statement : columnList) {
@@ -44,17 +44,14 @@ public class ListColumnStatement extends Statement {
 
     @Override
     protected Boolean isNeedInnerCache() {
-        return isNeedInnerCache(columnList);
+        return isNeedInnerCache(getColumnList());
     }
 
     @Override
     public ListColumnStatement clone() {
         ListColumnStatement listColumnStatement = (ListColumnStatement) super.clone();
         listColumnStatement.setCut((SymbolStatement.LetterStatement) clone(cut));
-        Statement[] columnList = new Statement[this.columnList.length];
-        for (int i = 0; i < columnList.length; i++) {
-            columnList[i] = clone(this.columnList[i]);
-        }
+        List<Statement> columnList = new ArrayList<>(this.columnList);
         listColumnStatement.setColumnList(columnList);
         return listColumnStatement;
     }

@@ -1563,7 +1563,9 @@ public abstract class SqlExpr {
     }
 
     public SqlExpr setExprTypes(ExprType... exprTypes) {
-        acceptList.clear();
+        if(!acceptList.isEmpty()){
+            acceptList.clear();
+        }
         acceptList.addAll(Arrays.asList(exprTypes));
         return this;
     }
