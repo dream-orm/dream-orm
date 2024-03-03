@@ -77,7 +77,7 @@ public abstract class HelperExpr extends SqlExpr {
         if (self) {
             return exprSelf(exprInfo);
         }
-        if (acceptSet.contains(ExprType.HELP) && accept) {
+        if (accept && acceptList.contains(ExprType.HELP)) {
             Statement statement = helpExpr.expr();
             helpExpr = helper.helper();
             return exprHelp(statement);

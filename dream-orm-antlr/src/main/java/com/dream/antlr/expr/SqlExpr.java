@@ -7,21 +7,21 @@ import com.dream.antlr.factory.ExprFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.Statement;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * 翻译顶级抽象语法解析类
  */
 public abstract class SqlExpr {
 
-    //可解析的单词类型
-    protected Set<ExprType> acceptSet = new HashSet<>();
     //单词读取流
     protected ExprReader exprReader;
     //本语法器是否可解析单词
     protected boolean self;
+    //可解析的单词类型
+    protected List<ExprType> acceptList = new ArrayList<>(16);
 
     public SqlExpr(ExprReader exprReader) {
         this.exprReader = exprReader;
@@ -1440,23 +1440,22 @@ public abstract class SqlExpr {
     protected Statement exprNil(ExprInfo exprInfo) throws AntlrException {
         if (self) {
             return exprSelf(exprInfo);
-        } else if (acceptSet.contains(ExprType.NIL)) {
+        } else if (acceptList.contains(ExprType.NIL)) {
             Statement statement = nil();
             return statement;
         } else {
-            Set<ExprType> acceptSet = this.getAcceptSet();
             SqlExpr sqlExpr = this;
             while (sqlExpr instanceof HelperExpr) {
-                if (sqlExpr.acceptSet.contains(ExprType.HELP)) {
+                if (sqlExpr.acceptList.contains(ExprType.HELP)) {
                     HelperExpr helperExpr = (HelperExpr) sqlExpr;
-                    acceptSet.addAll(helperExpr.getAcceptSet());
+                    acceptList.addAll(helperExpr.acceptList);
                     sqlExpr = helperExpr.helper.helper();
                 } else {
                     break;
                 }
             }
-            acceptSet.remove(ExprType.HELP);
-            throw new AntlrException("未正确识别:\n单词：" + exprInfo.getInfo() + "\n类型：" + exprInfo.getExprType() + "\n语法：" + this.getClass().getName() + "\n可识别类型：" + acceptSet);
+            acceptList.remove(ExprType.HELP);
+            throw new AntlrException("未正确识别:\n单词：" + exprInfo.getInfo() + "\n类型：" + exprInfo.getExprType() + "\n语法：" + this.getClass().getName() + "\n可识别类型：" + acceptList);
         }
     }
 
@@ -1560,22 +1559,18 @@ public abstract class SqlExpr {
     protected abstract Statement nil();
 
     protected boolean exprBefore(ExprType exprType) {
-        return self = acceptSet.contains(exprType);
+        return self = acceptList.contains(exprType);
     }
 
     public SqlExpr setExprTypes(ExprType... exprTypes) {
-        acceptSet.clear();
-        acceptSet.addAll(Arrays.asList(exprTypes));
+        acceptList.clear();
+        acceptList.addAll(Arrays.asList(exprTypes));
         return this;
     }
 
     protected SqlExpr addExprTypes(ExprType... exprTypes) {
-        acceptSet.addAll(Arrays.asList(exprTypes));
+        acceptList.addAll(Arrays.asList(exprTypes));
         return this;
-    }
-
-    public Set<ExprType> getAcceptSet() {
-        return acceptSet;
     }
 
     protected String name() {
