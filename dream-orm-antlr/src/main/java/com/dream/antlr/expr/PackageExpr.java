@@ -11,7 +11,7 @@ import com.dream.antlr.smt.Statement;
 /**
  * 语法编译器入口，该类继承HelperExpr，表示本语法器可以请求其他语法器辅助解析，进而完成复杂解析
  */
-public class PackageExpr extends HelperExpr {
+public class PackageExpr extends SqlExpr {
     private final PackageStatement statement = new PackageStatement();
 
     /**
@@ -20,13 +20,8 @@ public class PackageExpr extends HelperExpr {
      * @param exprReader
      */
     public PackageExpr(ExprReader exprReader) {
-        this(exprReader, () -> new CrudExpr(exprReader));
-    }
-
-    public PackageExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
-        //设置本语法器解析的类型包含ExprType.HELP，则表示允许辅助语法器解析
-        setExprTypes(ExprType.LBRACE, ExprType.INVOKER, ExprType.CREATE, ExprType.ALTER, ExprType.TRUNCATE, ExprType.DROP, ExprType.HELP, ExprType.ACC);
+        super(exprReader);
+        setExprTypes(ExprType.LBRACE, ExprType.INVOKER, ExprType.SELECT, ExprType.INSERT, ExprType.UPDATE, ExprType.DELETE, ExprType.CREATE, ExprType.ALTER, ExprType.TRUNCATE, ExprType.DROP, ExprType.ACC);
     }
 
     @Override
@@ -48,35 +43,62 @@ public class PackageExpr extends HelperExpr {
 
     @Override
     protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
-        statement.setStatement(new InvokerExpr(exprReader).expr());
+        InvokerExpr invokerExpr = new InvokerExpr(exprReader);
+        statement.setStatement(invokerExpr.expr());
+        setExprTypes(ExprType.ACC);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprSelect(ExprInfo exprInfo) throws AntlrException {
+        return exprDML(exprInfo);
+    }
+
+    @Override
+    protected Statement exprInsert(ExprInfo exprInfo) throws AntlrException {
+        return exprDML(exprInfo);
+    }
+
+    @Override
+    protected Statement exprUpdate(ExprInfo exprInfo) throws AntlrException {
+        return exprDML(exprInfo);
+    }
+
+    @Override
+    protected Statement exprDelete(ExprInfo exprInfo) throws AntlrException {
+        return exprDML(exprInfo);
+    }
+
+    protected Statement exprDML(ExprInfo exprInfo) throws AntlrException {
+        DMLExpr dmlExpr = new DMLExpr(exprReader);
+        statement.setStatement(dmlExpr.expr());
         setExprTypes(ExprType.ACC);
         return expr();
     }
 
     @Override
     protected Statement exprCreate(ExprInfo exprInfo) throws AntlrException {
-        statement.setStatement(new DDLCreateExpr(exprReader).expr());
-        setExprTypes(ExprType.ACC);
-        return expr();
+        return exprDDL(exprInfo);
     }
 
     @Override
     protected Statement exprAlter(ExprInfo exprInfo) throws AntlrException {
-        statement.setStatement(new DDLAlterExpr(exprReader).expr());
-        setExprTypes(ExprType.ACC);
-        return expr();
+        return exprDDL(exprInfo);
     }
 
     @Override
     protected Statement exprTruncate(ExprInfo exprInfo) throws AntlrException {
-        statement.setStatement(new DDLTruncateExpr(exprReader).expr());
-        setExprTypes(ExprType.ACC);
-        return expr();
+        return exprDDL(exprInfo);
     }
 
     @Override
     protected Statement exprDrop(ExprInfo exprInfo) throws AntlrException {
-        statement.setStatement(new DDLDropExpr(exprReader).expr());
+        return exprDDL(exprInfo);
+    }
+
+    protected Statement exprDDL(ExprInfo exprInfo) throws AntlrException {
+        DDLExpr ddlExpr = new DDLExpr(exprReader);
+        statement.setStatement(ddlExpr.expr());
         setExprTypes(ExprType.ACC);
         return expr();
     }
@@ -84,13 +106,6 @@ public class PackageExpr extends HelperExpr {
     @Override
     protected Statement exprAcc(ExprInfo exprInfo) throws AntlrException {
         setExprTypes(ExprType.NIL);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprHelp(Statement statement) throws AntlrException {
-        this.statement.setStatement(statement);
-        setExprTypes(ExprType.ACC);
         return expr();
     }
 

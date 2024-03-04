@@ -9,10 +9,10 @@ import com.dream.antlr.smt.Statement;
 /**
  * 增删改查语法解析器
  */
-public class CrudExpr extends SqlExpr {
+public class DMLExpr extends SqlExpr {
     private Statement statement;
 
-    public CrudExpr(ExprReader exprReader) {
+    public DMLExpr(ExprReader exprReader) {
         super(exprReader);
         setExprTypes(ExprType.SELECT, ExprType.INSERT, ExprType.UPDATE, ExprType.DELETE);
     }
