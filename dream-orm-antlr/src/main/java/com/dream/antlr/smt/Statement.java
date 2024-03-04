@@ -4,6 +4,7 @@ import com.dream.antlr.exception.AntlrException;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.List;
 
 /**
  * SQL语句对应的抽象树顶级类
@@ -86,6 +87,23 @@ public abstract class Statement implements Serializable, Cloneable {
                                 }
                                 this.parentStatement = null;
                                 return;
+                            }
+                        } else if (child instanceof List) {
+                            List columnList = (List) child;
+                            for (int i = 0; i < columnList.size(); i++) {
+                                Object column = columnList.get(i);
+                                if (column != null && column instanceof Statement && column == this) {
+                                    columnList.set(i, statement);
+                                    Statement parentStatement
+                                            = statement.parentStatement
+                                            = this.parentStatement;
+                                    while (parentStatement != null) {
+                                        parentStatement.needCache = null;
+                                        parentStatement = parentStatement.getParentStatement();
+                                    }
+                                    this.parentStatement = null;
+                                    return;
+                                }
                             }
                         } else if (child instanceof Statement[]) {
                             Statement[] columnList = (Statement[]) child;
