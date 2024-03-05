@@ -305,7 +305,7 @@ public class ToSQLServer extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.DateAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ListColumnStatement listColumnStatement = (ListColumnStatement) statement.getParentStatement();
+        ListColumnStatement listColumnStatement = (ListColumnStatement) statement.getParamsStatement();
         Statement[] columnList = listColumnStatement.getColumnList();
         Statement rightStatement = columnList[1];
         if (rightStatement instanceof IntervalStatement) {
@@ -342,7 +342,7 @@ public class ToSQLServer extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.DateSubStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ListColumnStatement listColumnStatement = (ListColumnStatement) statement.getParentStatement();
+        ListColumnStatement listColumnStatement = (ListColumnStatement) statement.getParamsStatement();
         Statement[] columnList = listColumnStatement.getColumnList();
         Statement rightStatement = columnList[1];
         if (rightStatement instanceof IntervalStatement) {
