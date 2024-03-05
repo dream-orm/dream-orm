@@ -127,6 +127,7 @@ public enum ExprType {
     DATE_ADD,
     DATE_SUB,
     DATE_FORMAT,
+    EXTRACT,
     DAY,
     DAYOFMONTH,
     DAYOFWEEK,

@@ -365,6 +365,30 @@ public abstract class ToSQL {
             case -954783318://DateForMatStatement
                 sql = toString((FunctionStatement.DateForMatStatement) statement, assist, invokerList);
                 break;
+            case -1214524309://YearExtractStatement
+                sql = toString((FunctionStatement.ExtractStatement.YearExtractStatement) statement, assist, invokerList);
+                break;
+            case 812766362://QuarterExtractStatement
+                sql = toString((FunctionStatement.ExtractStatement.QuarterExtractStatement) statement, assist, invokerList);
+                break;
+            case 347382894://MonthExtractStatement
+                sql = toString((FunctionStatement.ExtractStatement.MonthExtractStatement) statement, assist, invokerList);
+                break;
+            case -973431262://WeekExtractStatement
+                sql = toString((FunctionStatement.ExtractStatement.WeekExtractStatement) statement, assist, invokerList);
+                break;
+            case -502872694://DayExtractStatement
+                sql = toString((FunctionStatement.ExtractStatement.DayExtractStatement) statement, assist, invokerList);
+                break;
+            case -1175841774://HourExtractStatement
+                sql = toString((FunctionStatement.ExtractStatement.HourExtractStatement) statement, assist, invokerList);
+                break;
+            case -1313743806://MinuteExtractStatement
+                sql = toString((FunctionStatement.ExtractStatement.MinuteExtractStatement) statement, assist, invokerList);
+                break;
+            case -194463070://SecondExtractStatement
+                sql = toString((FunctionStatement.ExtractStatement.SecondExtractStatement) statement, assist, invokerList);
+                break;
             case 1095504383://DayOfYearStatement
                 sql = toString((FunctionStatement.DayOfYearStatement) statement, assist, invokerList);
                 break;
@@ -630,6 +654,22 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.LocateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.DateForMatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.ExtractStatement.YearExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.ExtractStatement.QuarterExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.ExtractStatement.MonthExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.ExtractStatement.WeekExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.ExtractStatement.DayExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.ExtractStatement.HourExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.ExtractStatement.MinuteExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.ExtractStatement.SecondExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.StrToDateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

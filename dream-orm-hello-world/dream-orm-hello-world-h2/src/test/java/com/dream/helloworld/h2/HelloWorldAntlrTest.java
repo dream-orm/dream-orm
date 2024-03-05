@@ -57,6 +57,7 @@ public class HelloWorldAntlrTest {
                 ",DAYOFYEAR(s),year(s),month(s),now(),day(s),DAYOFWEEK(s),hour(s),last_day(s),minute(s),quarter(s),second(s),weekofyear(s)" +
                 ",date_format(s,'%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j'),str_to_date(s,'%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j')");
         testSqlForMany("select date_format(now(),'%T-%W-%a-%M-%M-%b-%v')");
+        testSqlForMany("select EXTRACT(year from now()),EXTRACT(QUARTER from now()),EXTRACT(month from now()),EXTRACT(week from now()),EXTRACT(day from now()),EXTRACT(hour from now()),EXTRACT(minute from now()),EXTRACT(second from now())");
     }
 
     @Test

@@ -97,6 +97,16 @@ public class FunctionExpr extends SqlExpr {
     }
 
     @Override
+    protected Statement exprExtract(ExprInfo exprInfo) throws AntlrException {
+        FunctionStatement func = new FunctionStatement.CastStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func, () -> new ListColumnExpr(exprReader, () ->
+                new FunctionParamExpr.ExtractExpr(exprReader)
+                , new ExprInfo(ExprType.COMMA, ","))).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     protected Statement exprStrToDate(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.StrToDateStatement();
         functionStatement = new FunctionParamExpr(exprReader, func).expr();
@@ -1122,6 +1132,101 @@ public class FunctionExpr extends SqlExpr {
             }
         }
 
+        public static class ExtractExpr extends HelperExpr {
+            private FunctionStatement.ExtractStatement extractStatement;
+
+            public ExtractExpr(ExprReader exprReader) {
+                this(exprReader, () -> new CompareExpr(exprReader));
+            }
+
+            public ExtractExpr(ExprReader exprReader, Helper helper) {
+                super(exprReader, helper);
+                setExprTypes(ExprType.YEAR, ExprType.QUARTER, ExprType.MONTH, ExprType.WEEK, ExprType.DAY, ExprType.HOUR, ExprType.MINUTE, ExprType.SECOND);
+            }
+
+            @Override
+            protected Statement exprYear(ExprInfo exprInfo) throws AntlrException {
+                extractStatement = new FunctionStatement.ExtractStatement.YearExtractStatement();
+                push();
+                setExprTypes(ExprType.FROM);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprQuarter(ExprInfo exprInfo) throws AntlrException {
+                extractStatement = new FunctionStatement.ExtractStatement.QuarterExtractStatement();
+                push();
+                setExprTypes(ExprType.FROM);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprMonth(ExprInfo exprInfo) throws AntlrException {
+                extractStatement = new FunctionStatement.ExtractStatement.MonthExtractStatement();
+                push();
+                setExprTypes(ExprType.FROM);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprWeek(ExprInfo exprInfo) throws AntlrException {
+                extractStatement = new FunctionStatement.ExtractStatement.WeekExtractStatement();
+                push();
+                setExprTypes(ExprType.FROM);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprDay(ExprInfo exprInfo) throws AntlrException {
+                extractStatement = new FunctionStatement.ExtractStatement.DayExtractStatement();
+                push();
+                setExprTypes(ExprType.FROM);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprHour(ExprInfo exprInfo) throws AntlrException {
+                extractStatement = new FunctionStatement.ExtractStatement.HourExtractStatement();
+                push();
+                setExprTypes(ExprType.FROM);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprMinute(ExprInfo exprInfo) throws AntlrException {
+                extractStatement = new FunctionStatement.ExtractStatement.MinuteExtractStatement();
+                push();
+                setExprTypes(ExprType.FROM);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprSecond(ExprInfo exprInfo) throws AntlrException {
+                extractStatement = new FunctionStatement.ExtractStatement.SecondExtractStatement();
+                push();
+                setExprTypes(ExprType.FROM);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprFrom(ExprInfo exprInfo) throws AntlrException {
+                push();
+                setExprTypes(ExprType.HELP);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprHelp(Statement statement) throws AntlrException {
+                this.extractStatement.setStatement(statement);
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement nil() {
+                return extractStatement;
+            }
+        }
     }
 
     public static class RowNumberExpr extends SqlExpr {

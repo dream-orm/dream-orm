@@ -60,6 +60,46 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.ExtractStatement.YearExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "EXTRACT(YEAR FROM " + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.QuarterExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "EXTRACT(QUARTER FROM " + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.MonthExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "EXTRACT(MONTH FROM " + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.WeekExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "EXTRACT(WEEK FROM " + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.DayExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "EXTRACT(DAY FROM " + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.HourExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "EXTRACT(HOUR FROM " + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.MinuteExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "EXTRACT(MINUTE FROM " + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.SecondExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "EXTRACT(SECOND FROM " + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.StrToDateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "STR_TO_DATE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

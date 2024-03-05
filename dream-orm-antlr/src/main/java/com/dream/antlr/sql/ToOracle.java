@@ -104,6 +104,16 @@ public class ToOracle extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.ExtractStatement.QuarterExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_CHAR(" + toStr(statement.getStatement(), assist, invokerList) + ",'q')";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.WeekExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_CHAR(" + toStr(statement.getStatement(), assist, invokerList) + ",'ww')";
+    }
+
+    @Override
     protected String toString(FunctionStatement.StrToDateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String pattern = statement.getPattern();

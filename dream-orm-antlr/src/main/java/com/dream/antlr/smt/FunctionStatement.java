@@ -332,6 +332,57 @@ public abstract class FunctionStatement extends Statement {
         }
     }
 
+    public static class ExtractStatement extends FunctionStatement {
+        private Statement statement;
+
+        public Statement getStatement() {
+            return statement;
+        }
+
+        public void setStatement(Statement statement) {
+            this.statement = statement;
+        }
+
+        @Override
+        public ExtractStatement clone() {
+            ExtractStatement extractStatement = (ExtractStatement) super.clone();
+            extractStatement.setStatement(clone(statement));
+            return extractStatement;
+        }
+
+        public static class YearExtractStatement extends ExtractStatement {
+
+        }
+
+        public static class QuarterExtractStatement extends ExtractStatement {
+
+        }
+
+        public static class MonthExtractStatement extends ExtractStatement {
+
+        }
+
+        public static class WeekExtractStatement extends ExtractStatement {
+
+        }
+
+        public static class DayExtractStatement extends ExtractStatement {
+
+        }
+
+        public static class HourExtractStatement extends ExtractStatement {
+
+        }
+
+        public static class MinuteExtractStatement extends ExtractStatement {
+
+        }
+
+        public static class SecondExtractStatement extends ExtractStatement {
+
+        }
+    }
+
     public static class StrToDateStatement extends FunctionStatement {
         private String pattern;
 

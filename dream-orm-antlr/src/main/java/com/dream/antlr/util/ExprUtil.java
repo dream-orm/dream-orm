@@ -237,6 +237,8 @@ public class ExprUtil {
                 return ExprType.DATE_ADD;
             case 1458413992://DATE_FORMAT
                 return ExprType.DATE_FORMAT;
+            case -587306911://EXTRACT
+                return ExprType.EXTRACT;
             case 67452://DAY
                 return ExprType.DAY;
             case 1963754477://DAYOFMONTH

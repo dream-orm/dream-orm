@@ -337,6 +337,9 @@ public abstract class SqlExpr {
             case DATE_FORMAT:
                 exprFactory = sqlExpr -> sqlExpr.exprDateFormat(exprInfo);
                 break;
+            case EXTRACT:
+                exprFactory = sqlExpr -> sqlExpr.exprExtract(exprInfo);
+                break;
             case DAY:
             case DAYOFMONTH:
                 exprFactory = sqlExpr -> sqlExpr.exprDay(exprInfo);
@@ -1081,6 +1084,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprDateFormat(ExprInfo exprInfo) throws AntlrException {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprExtract(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 

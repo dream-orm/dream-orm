@@ -64,6 +64,7 @@ public final class Constant {
             ExprType.DATE_ADD,
             ExprType.DATE_SUB,
             ExprType.DATE_FORMAT,
+            ExprType.EXTRACT,
             ExprType.DAY,
             ExprType.DAYOFMONTH,
             ExprType.DAYOFWEEK,
