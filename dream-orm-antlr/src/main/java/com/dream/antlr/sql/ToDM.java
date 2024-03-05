@@ -20,18 +20,24 @@ public class ToDM extends ToPubSQL {
     public ToDM() {
         replaceMap.put("%Y", "yyyy");
         replaceMap.put("%y", "yy");
-        replaceMap.put("%c", "MM");
-        replaceMap.put("%m", "MM");
+        replaceMap.put("%c", "mm");
+        replaceMap.put("%m", "mm");
         replaceMap.put("%d", "dd");
         replaceMap.put("%e", "dd");
-        replaceMap.put("%H", "HH24");
-        replaceMap.put("%k", "HH24");
+        replaceMap.put("%H", "hh24");
+        replaceMap.put("%k", "hh24");
         replaceMap.put("%h", "hh");
         replaceMap.put("%l", "hh");
         replaceMap.put("%i", "mi");
         replaceMap.put("%S", "ss");
         replaceMap.put("%s", "ss");
         replaceMap.put("%j", "ddd");
+        replaceMap.put("%T", "hh24:mi:ss");
+        replaceMap.put("%W", "Day");
+        replaceMap.put("%a", "Dy");
+        replaceMap.put("%M", "Month");
+        replaceMap.put("%b", "Mon");
+        replaceMap.put("%v", "iw");
     }
 
     private String getPattern(String pattern) {

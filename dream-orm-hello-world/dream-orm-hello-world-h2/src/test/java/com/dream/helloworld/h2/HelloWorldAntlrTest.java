@@ -56,6 +56,7 @@ public class HelloWorldAntlrTest {
                 ",date_add(s1,interval 3 week),date_add(s1,interval 4 day),date_add(s1,interval 4 hour),date_add(s1,interval 4 minute),date_add(s1,interval 4 second)" +
                 ",DAYOFYEAR(s),year(s),month(s),now(),day(s),DAYOFWEEK(s),hour(s),last_day(s),minute(s),quarter(s),second(s),weekofyear(s)" +
                 ",date_format(s,'%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j'),str_to_date(s,'%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j')");
+        testSqlForMany("select date_format(now(),'%T-%W-%a-%M-%M-%b-%v')");
     }
 
     @Test

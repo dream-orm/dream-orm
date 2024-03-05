@@ -32,6 +32,12 @@ public class ToOracle extends ToPubSQL {
         replaceMap.put("%S", "ss");
         replaceMap.put("%s", "ss");
         replaceMap.put("%j", "ddd");
+        replaceMap.put("%T", "hh24:mi:ss");
+        replaceMap.put("%W", "Day");
+        replaceMap.put("%a", "Dy");
+        replaceMap.put("%M", "Month");
+        replaceMap.put("%b", "Mon");
+        replaceMap.put("%v", "iw");
     }
 
     private String getPattern(String pattern) {
