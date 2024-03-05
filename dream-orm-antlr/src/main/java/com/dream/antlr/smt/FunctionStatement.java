@@ -340,7 +340,7 @@ public abstract class FunctionStatement extends Statement {
         }
 
         public void setStatement(Statement statement) {
-            this.statement = statement;
+            this.statement = wrapParent(statement);
         }
 
         @Override
