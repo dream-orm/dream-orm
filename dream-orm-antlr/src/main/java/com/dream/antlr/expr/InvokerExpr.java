@@ -44,10 +44,10 @@ public class InvokerExpr extends HelperExpr {
         String functionName = myFunctionStatement.getFunctionName();
         if (invokerStatement.getFunction() == null) {
             invokerStatement.setFunction(functionName);
-            setExprTypes(ExprType.COLON, ExprType.LBRACE);
+            setExprTypes(ExprType.COLON, ExprType.LBRACE, ExprType.NIL);
         } else {
             invokerStatement.setNamespace(functionName);
-            setExprTypes(ExprType.LBRACE);
+            setExprTypes(ExprType.LBRACE, ExprType.NIL);
         }
         return expr();
     }
@@ -81,10 +81,10 @@ public class InvokerExpr extends HelperExpr {
         push();
         if (invokerStatement.getFunction() == null) {
             invokerStatement.setFunction(exprInfo.getInfo());
-            setExprTypes(ExprType.COLON, ExprType.LBRACE);
+            setExprTypes(ExprType.COLON, ExprType.LBRACE, ExprType.NIL);
         } else {
             invokerStatement.setNamespace(exprInfo.getInfo());
-            setExprTypes(ExprType.LBRACE);
+            setExprTypes(ExprType.LBRACE, ExprType.NIL);
         }
         return expr();
     }
@@ -111,14 +111,14 @@ public class InvokerExpr extends HelperExpr {
     }
 
     @Override
-    public Statement nil() {
-        return invokerStatement;
-    }
-
-    @Override
     protected Statement exprHelp(Statement statement) throws AntlrException {
         invokerStatement.setParamStatement(statement);
         setExprTypes(ExprType.RBRACE);
         return expr();
+    }
+
+    @Override
+    public Statement nil() {
+        return invokerStatement;
     }
 }

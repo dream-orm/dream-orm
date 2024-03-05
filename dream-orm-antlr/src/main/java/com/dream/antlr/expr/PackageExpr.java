@@ -9,16 +9,11 @@ import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.smt.Statement;
 
 /**
- * 语法编译器入口，该类继承HelperExpr，表示本语法器可以请求其他语法器辅助解析，进而完成复杂解析
+ * 语法编译器入口
  */
 public class PackageExpr extends SqlExpr {
     private final PackageStatement statement = new PackageStatement();
 
-    /**
-     * 本语法器可以让CrudExpr语法器辅助解析
-     *
-     * @param exprReader
-     */
     public PackageExpr(ExprReader exprReader) {
         super(exprReader);
         setExprTypes(ExprType.LBRACE, ExprType.INVOKER, ExprType.SELECT, ExprType.INSERT, ExprType.UPDATE, ExprType.DELETE, ExprType.CREATE, ExprType.ALTER, ExprType.TRUNCATE, ExprType.DROP, ExprType.ACC);

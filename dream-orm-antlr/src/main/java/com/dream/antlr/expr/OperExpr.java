@@ -96,19 +96,6 @@ public class OperExpr extends TreeExpr {
     }
 
     @Override
-    public Statement nil() {
-        if (compareExpr == null) {
-            if (top.getOper() != null) {
-                return top;
-            } else {
-                return top.getLeft();
-            }
-        } else {
-            return compareExpr.nil();
-        }
-    }
-
-    @Override
     protected Statement exprAnd(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.ANDStatement());
@@ -229,6 +216,19 @@ public class OperExpr extends TreeExpr {
             super.exprTree(statement);
         } else {
             compareExpr.exprTree(statement);
+        }
+    }
+
+    @Override
+    public Statement nil() {
+        if (compareExpr == null) {
+            if (top.getOper() != null) {
+                return top;
+            } else {
+                return top.getLeft();
+            }
+        } else {
+            return compareExpr.nil();
         }
     }
 }

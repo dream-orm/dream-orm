@@ -13,6 +13,7 @@ import com.dream.util.common.ObjectWrapper;
 import java.util.List;
 
 public class RepInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "rep";
     ObjectWrapper paramWrapper;
 
     @Override
@@ -22,7 +23,7 @@ public class RepInvoker extends AbstractInvoker {
 
     @Override
     public String function() {
-        return "rep";
+        return FUNCTION;
     }
 
     @Override

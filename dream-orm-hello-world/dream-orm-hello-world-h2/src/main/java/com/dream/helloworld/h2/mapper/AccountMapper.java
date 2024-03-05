@@ -14,7 +14,7 @@ public interface AccountMapper {
     @Sql("select @*() from account where id=@?(id)")
     AccountView selectById(@Param("id") long id);
 
-    @Sql("select @*() from account where id>@?(id)")
+    @Sql("select @* from account where id>@?(id)")
     List<AccountView> selectList(@Param("id") long id);
 
     @Sql("select @*() from account where @not(id>@?(account.id) and name like concat('%',:account.name,'%'))")

@@ -22,7 +22,6 @@ public class LimitExpr extends HelperExpr {
         setExprTypes(ExprType.LIMIT);
     }
 
-
     @Override
     protected Statement exprLimit(ExprInfo exprInfo) throws AntlrException {
         push();
@@ -36,7 +35,6 @@ public class LimitExpr extends HelperExpr {
         setExprTypes(ExprType.HELP);
         return expr();
     }
-
 
     @Override
     public Statement nil() {

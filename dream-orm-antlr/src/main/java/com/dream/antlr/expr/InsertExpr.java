@@ -69,7 +69,6 @@ public class InsertExpr extends HelperExpr {
         return insertStatement;
     }
 
-
     @Override
     protected Statement exprHelp(Statement statement) throws AntlrException {
         insertStatement.setTable(statement);
