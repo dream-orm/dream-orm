@@ -23,6 +23,11 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testAlias() {
+        testSqlForMany("SELECT a.'a', a.`b` 'b',c `c`,e as e,f as 'f',g as 'g'");
+    }
+
+    @Test
+    public void testChina() {
         testSqlForMany("SELECT \n" +
                 "  DATE_FORMAT(DATART_VTABLE.NO1, '%Y-%m-%d') AS NO1（按日） \n" +
                 "FROM\n" +
