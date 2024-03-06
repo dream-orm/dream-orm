@@ -112,7 +112,7 @@ public class ScanInvoker extends AbstractInvoker {
 
     @Override
     public String function() {
-        return "scan";
+        return FUNCTION;
     }
 
     public static class ScanInfo {

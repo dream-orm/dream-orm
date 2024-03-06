@@ -1,17 +1,13 @@
 package com.dream.system.antlr.invoker;
 
 import com.dream.antlr.config.Assist;
-import com.dream.antlr.config.ExprInfo;
-import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
-import com.dream.antlr.expr.AliasColumnExpr;
-import com.dream.antlr.expr.ListColumnExpr;
 import com.dream.antlr.invoker.AbstractInvoker;
 import com.dream.antlr.invoker.Invoker;
-import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToNativeSQL;
 import com.dream.antlr.sql.ToSQL;
+import com.dream.antlr.util.AntlrUtil;
 import com.dream.system.annotation.Ignore;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
@@ -74,12 +70,9 @@ public class StarInvoker extends AbstractInvoker {
         }
         List<String> queryColumnList = new ArrayList<>();
         getQuery(tableFactory, colType, lowHashMap, getQueryColumnInfoList(assist, toSQL, invokerList, invokerStatement), queryColumnList);
-        String selectColumn = String.join(",", queryColumnList);
-        ExprReader exprReader = new ExprReader(selectColumn);
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new AliasColumnExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
-        Statement statement = listColumnExpr.expr();
-        invokerStatement.replaceWith(statement);
-        return toSQL.toStr(statement, assist, invokerList);
+        ListColumnStatement selectListColumnStatement = AntlrUtil.listColumnStatement(",", queryColumnList.toArray(new String[queryColumnList.size()]));
+        invokerStatement.replaceWith(selectListColumnStatement);
+        return toSQL.toStr(selectListColumnStatement, assist, invokerList);
     }
 
     protected void getQuery(TableFactory tableFactory, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) throws AntlrException {
