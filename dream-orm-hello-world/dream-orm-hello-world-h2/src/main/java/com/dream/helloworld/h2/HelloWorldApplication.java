@@ -102,7 +102,7 @@ public class HelloWorldApplication {
 //                    }
 //
 //                    @Override
-//                    public String getPermission(String table,String alias) {
+//                    public String getPermission(String table, String alias) {
 //                        return alias + ".dept_id=1";
 //                    }
 //                }),
@@ -135,7 +135,7 @@ public class HelloWorldApplication {
 //                    }
 //
 //                    @Override
-//                    public String getLogicColumn() {
+//                    public String getLogicColumn(String table) {
 //                        return "del_flag";
 //                    }
 //                }),

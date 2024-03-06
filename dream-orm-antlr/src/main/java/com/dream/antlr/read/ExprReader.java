@@ -223,7 +223,13 @@ public class ExprReader extends StringReader {
                 lastInfo = new ExprInfo(ExprType.ACC, "ACC", getStart(), getEnd());
                 break;
             default:
-                lastInfo = new ExprInfo(ExprType.ERR, String.valueOf((char) c), getStart(), getEnd());
+                if (c >= 19968) {
+                    reset();
+                    lastInfo = pushLetter();
+                    break;
+                } else {
+                    lastInfo = new ExprInfo(ExprType.ERR, String.valueOf((char) c), getStart(), getEnd());
+                }
                 break;
         }
         return lastInfo;

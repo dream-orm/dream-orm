@@ -4,7 +4,7 @@ import com.dream.antlr.config.ExprType;
 
 public class ExprUtil {
     public static boolean isLetter(int c) {
-        return 65 <= c && c <= 90 || 97 <= c && c <= 122 || c == 95 || c == 83;
+        return 65 <= c && c <= 90 || 97 <= c && c <= 122 || c == 95 || c == 83 || c >= 19968;
     }
 
     public static boolean isStr(int c) {

@@ -23,7 +23,28 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testAlias() {
-        testSqlForMany("SELECT a.'a', a.`b` 'b',c `c`,e as e,f as 'f',g as 'g'");
+        testSqlForMany("SELECT \n" +
+                "  DATE_FORMAT(DATART_VTABLE.NO1, '%Y-%m-%d') AS NO1（按日） \n" +
+                "FROM\n" +
+                "  (SELECT \n" +
+                "    id,\n" +
+                "    rel_name,\n" +
+                "    NAME,\n" +
+                "    rel_id,\n" +
+                "    create_time,\n" +
+                "    NOW() AS no1,\n" +
+                "    DATE_ADD(create_time, INTERVAL 2 YEAR) \n" +
+                "  FROM\n" +
+                "    DASHBOARD) AS DATART_VTABLE \n" +
+                "WHERE CREATE_TIME >= STR_TO_DATE(\n" +
+                "    '2024-02-01 00:00:00',\n" +
+                "    '%Y-%m-%d %H:%i:%s'\n" +
+                "  ) \n" +
+                "  AND CREATE_TIME < STR_TO_DATE(\n" +
+                "    '2024-07-01 00:00:00',\n" +
+                "    '%Y-%m-%d %H:%i:%s'\n" +
+                "  ) \n" +
+                "LIMIT 100 OFFSET 0 ");
     }
 
     @Test
