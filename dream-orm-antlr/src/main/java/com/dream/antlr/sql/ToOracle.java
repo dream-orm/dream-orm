@@ -233,6 +233,11 @@ public class ToOracle extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.LcaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "LOWER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.LeftStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "SUBSTR(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + ",1," + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList) + ")";
     }
