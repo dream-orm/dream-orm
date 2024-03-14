@@ -492,6 +492,22 @@ public class ToOracle extends ToPubSQL {
     }
 
     @Override
+    protected String toString(CaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement caseColumn = statement.getCaseColumn();
+        if (caseColumn != null) {
+            statement.setCaseColumn(null);
+            ListColumnStatement whenthenList = (ListColumnStatement) statement.getWhenthenList();
+            Statement[] columnList = whenthenList.getColumnList();
+            for (Statement column : columnList) {
+                CaseStatement.WhenThenStatement whenThenStatement = (CaseStatement.WhenThenStatement) column;
+                Statement when = whenThenStatement.getWhen();
+                whenThenStatement.setWhen(AntlrUtil.conditionStatement(caseColumn, new OperStatement.EQStatement(), when));
+            }
+        }
+        return super.toString(statement, assist, invokerList);
+    }
+
+    @Override
     protected String toString(OperStatement.BITANDStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
         return "BITAND(" + toStr(conditionStatement.getLeft(), assist, invokerList) + "," + toStr(conditionStatement.getRight(), assist, invokerList) + ")";
