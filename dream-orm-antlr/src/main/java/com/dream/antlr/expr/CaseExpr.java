@@ -30,7 +30,7 @@ public class CaseExpr extends SqlExpr {
     @Override
     protected Statement exprWhen(ExprInfo exprInfo) throws AntlrException {
         ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new WhenThenExpr(exprReader), new ExprInfo(ExprType.BLANK, " "));
-        caseStatement.setWhenthenList(listColumnExpr.expr());
+        caseStatement.setWhenThenList(listColumnExpr.expr());
         setExprTypes(ExprType.ELSE, ExprType.END);
         return expr();
     }

@@ -2,15 +2,15 @@ package com.dream.antlr.smt;
 
 public class CaseStatement extends Statement {
     private Statement caseColumn;
-    private Statement whenthenList;
+    private Statement whenThenList;
     private Statement elseColumn;
 
-    public Statement getWhenthenList() {
-        return whenthenList;
+    public Statement getWhenThenList() {
+        return whenThenList;
     }
 
-    public void setWhenthenList(Statement whenthenList) {
-        this.whenthenList = wrapParent(whenthenList);
+    public void setWhenThenList(Statement whenThenList) {
+        this.whenThenList = wrapParent(whenThenList);
     }
 
     public Statement getCaseColumn() {
@@ -32,14 +32,14 @@ public class CaseStatement extends Statement {
 
     @Override
     protected Boolean isNeedInnerCache() {
-        return isNeedInnerCache(caseColumn, whenthenList, elseColumn);
+        return isNeedInnerCache(caseColumn, whenThenList, elseColumn);
     }
 
     @Override
     public Statement clone() {
         CaseStatement caseStatement = (CaseStatement) super.clone();
         caseStatement.setCaseColumn(clone(caseColumn));
-        caseStatement.setWhenthenList(clone(whenthenList));
+        caseStatement.setWhenThenList(clone(whenThenList));
         caseStatement.setElseColumn(clone(elseColumn));
         return caseStatement;
     }

@@ -906,7 +906,7 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(CaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CASE " + toStr(statement.getCaseColumn(), assist, invokerList) + " " + toStr(statement.getWhenthenList(), assist, invokerList) + " " + (statement.getElseColumn() != null ? "ELSE " + toStr(statement.getElseColumn(), assist, invokerList) : "") + " END";
+        return "CASE " + toStr(statement.getCaseColumn(), assist, invokerList) + " " + toStr(statement.getWhenThenList(), assist, invokerList) + " " + (statement.getElseColumn() != null ? "ELSE " + toStr(statement.getElseColumn(), assist, invokerList) : "") + " END";
     }
 
     @Override

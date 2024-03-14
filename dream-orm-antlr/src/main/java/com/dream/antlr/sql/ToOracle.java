@@ -496,7 +496,7 @@ public class ToOracle extends ToPubSQL {
         Statement caseColumn = statement.getCaseColumn();
         if (caseColumn != null) {
             statement.setCaseColumn(null);
-            ListColumnStatement whenthenList = (ListColumnStatement) statement.getWhenthenList();
+            ListColumnStatement whenthenList = (ListColumnStatement) statement.getWhenThenList();
             Statement[] columnList = whenthenList.getColumnList();
             for (Statement column : columnList) {
                 CaseStatement.WhenThenStatement whenThenStatement = (CaseStatement.WhenThenStatement) column;

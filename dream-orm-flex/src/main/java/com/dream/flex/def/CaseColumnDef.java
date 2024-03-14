@@ -49,7 +49,7 @@ public class CaseColumnDef extends ColumnDef {
         }
 
         public CaseColumnDef end() {
-            caseStatement.setWhenthenList(listColumnStatement);
+            caseStatement.setWhenThenList(listColumnStatement);
             return new CaseColumnDef(caseStatement);
         }
 
