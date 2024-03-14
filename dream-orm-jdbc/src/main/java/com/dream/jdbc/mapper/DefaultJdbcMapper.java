@@ -84,6 +84,35 @@ public class DefaultJdbcMapper implements JdbcMapper {
     }
 
     @Override
+    public <T> List<T> selectList(Class<T> type, String sql, Object... args) {
+        String tableName = SystemUtil.getTableName(type);
+        TableInfo tableInfo = tableFactory.getTableInfo(tableName);
+        if (tableInfo == null) {
+            throw new DreamRunTimeException("表'" + tableName + "'未在TableFactory注册");
+        }
+        List<Field> fieldList = ReflectUtil.findField(type);
+        StringJoiner joiner = new StringJoiner(",");
+        for (Field field : fieldList) {
+            String fieldName = field.getName();
+            ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
+            if (columnInfo != null) {
+                String column = columnInfo.getColumn();
+                String name = columnInfo.getName();
+                if(name.equals(column)){
+                    joiner.add(column);
+                }else{
+                    joiner.add(column+" "+name);
+                }
+            }
+        }
+        if(sql!=null){
+            return queryForList("select " + joiner + " from " + tableName + " where " + sql, type, args);
+        }else{
+            return queryForList("select " + joiner + " from " + tableName, type, args);
+        }
+    }
+
+    @Override
     public int updateById(Object view) {
         return updateById(view, false);
     }

@@ -206,6 +206,28 @@ public interface JdbcMapper {
     }
 
     /**
+     *
+     * @param type 查询的对象，自动构建select+from语句
+     * @param whereSql where语句
+     * @param args 参数
+     * @param <T>
+     * @return
+     */
+    default <T> T selectOne(Class<T> type, String whereSql, Object... args) {
+        return getOne(selectList(type, whereSql, args));
+    }
+
+    /**
+     *
+     * @param type 查询的对象，自动构建select+from语句
+     * @param whereSql where语句
+     * @param args 参数
+     * @param <T>
+     * @return
+     */
+    <T> List<T> selectList(Class<T> type, String whereSql, Object... args);
+
+    /**
      * 根据主键更新
      *
      * @param view 更新对象

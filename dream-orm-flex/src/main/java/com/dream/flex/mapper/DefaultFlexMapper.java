@@ -172,8 +172,9 @@ public class DefaultFlexMapper implements FlexMapper {
         listColumnStatement.add(new SymbolStatement.NumberStatement("1"));
         selectStatement.setSelectList(listColumnStatement);
         LimitStatement limitStatement = new LimitStatement();
-        limitStatement.setFirst(new SymbolStatement.NumberStatement("0"));
-        limitStatement.setSecond(new SymbolStatement.NumberStatement("1"));
+        limitStatement.setOffset(true);
+        limitStatement.setFirst(new SymbolStatement.NumberStatement("1"));
+        limitStatement.setSecond(new SymbolStatement.NumberStatement("0"));
         statement.setLimitStatement(limitStatement);
         Integer result = selectOne(statement, Integer.class);
         return result != null;

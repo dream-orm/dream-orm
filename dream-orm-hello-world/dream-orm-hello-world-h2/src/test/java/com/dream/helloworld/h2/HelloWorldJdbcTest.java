@@ -82,6 +82,11 @@ public class HelloWorldJdbcTest {
     }
 
     @Test
+    public void testQuery() {
+        List<AccountView> accountViews = jdbcMapper.selectList(AccountView.class, "1=1");
+    }
+
+    @Test
     public void testUpdateView() {
         AccountView accountView = new AccountView();
         accountView.setName("accountName");
