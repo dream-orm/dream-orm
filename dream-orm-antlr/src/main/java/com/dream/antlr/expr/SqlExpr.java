@@ -193,6 +193,8 @@ public abstract class SqlExpr {
                 exprFactory = sqlExpr -> sqlExpr.exprTrim(exprInfo);
                 break;
             case UCASE:
+                exprFactory = sqlExpr -> sqlExpr.exprUcase(exprInfo);
+                break;
             case UPPER:
                 exprFactory = sqlExpr -> sqlExpr.exprUpper(exprInfo);
                 break;
@@ -1252,6 +1254,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprAbs(ExprInfo exprInfo) throws AntlrException {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprUcase(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 

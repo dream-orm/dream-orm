@@ -239,6 +239,9 @@ public abstract class ToSQL {
             case 1864297257://SpaceStatement
                 sql = toString((FunctionStatement.SpaceStatement) statement, assist, invokerList);
                 break;
+            case 1686001130://UcaseStatement
+                sql = toString((FunctionStatement.UcaseStatement) statement, assist, invokerList);
+                break;
             case 935809805://UpperStatement
                 sql = toString((FunctionStatement.UpperStatement) statement, assist, invokerList);
                 break;
@@ -796,6 +799,8 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.TrimStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.SpaceStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.UcaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.UpperStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

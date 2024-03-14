@@ -170,6 +170,10 @@ public abstract class FunctionStatement extends Statement {
 
     }
 
+    public static class UcaseStatement extends FunctionStatement {
+
+    }
+
     public static class UpperStatement extends FunctionStatement {
 
     }

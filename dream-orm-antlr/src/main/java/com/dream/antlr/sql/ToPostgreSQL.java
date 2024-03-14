@@ -79,6 +79,10 @@ public class ToPostgreSQL extends ToPubSQL {
         return "LOWER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
+    @Override
+    protected String toString(FunctionStatement.UcaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "UPPER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
 
     @Override
     protected String toString(FunctionStatement.RepeatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {

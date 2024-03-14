@@ -50,6 +50,11 @@ public class ToSQLServer extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.UcaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "UPPER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.RepeatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "REPLICATE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

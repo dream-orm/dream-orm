@@ -227,6 +227,14 @@ public class FunctionExpr extends SqlExpr {
     }
 
     @Override
+    protected Statement exprUcase(ExprInfo exprInfo) throws AntlrException {
+        FunctionStatement func = new FunctionStatement.UcaseStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     protected Statement exprUpper(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.UpperStatement();
         functionStatement = new FunctionParamExpr(exprReader, func).expr();
