@@ -98,16 +98,16 @@ public class DefaultJdbcMapper implements JdbcMapper {
             if (columnInfo != null) {
                 String column = columnInfo.getColumn();
                 String name = columnInfo.getName();
-                if(name.equals(column)){
+                if (name.equals(column)) {
                     joiner.add(column);
-                }else{
-                    joiner.add(column+" "+name);
+                } else {
+                    joiner.add(column + " " + name);
                 }
             }
         }
-        if(sql!=null){
+        if (sql != null) {
             return queryForList("select " + joiner + " from " + tableName + " where " + sql, type, args);
-        }else{
+        } else {
             return queryForList("select " + joiner + " from " + tableName, type, args);
         }
     }

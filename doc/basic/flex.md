@@ -221,8 +221,8 @@ SELECT `account`.`id` FROM `account`
 **测试关联查询以及表别名**
 
 ```sql
-AccountTableDef account2=new AccountTableDef("account2");
-select(account.id).from(account).leftJoin(account2).on(account2.id.eq(account.id));
+AccountTableDef account2=new AccountTableDef("account2")
+select(account.id).from(account).leftJoin(account2).on(account2.id.eq(account.id))
 ```
 
 **AccountTableDef是APT自动生成的，传入一个字符串表示表的别名**
@@ -238,7 +238,7 @@ SELECT `account`.`id` FROM `account`  LEFT JOIN `account` `account2` ON `account
 **测试**
 
 ```sql
-select(account.id).from(account).where(account.name.like("a"));
+select(account.id).from(account).where(account.name.like("a"))
 ```
 
 **SQL输出**
@@ -250,7 +250,7 @@ SELECT `account`.`id` FROM `account`  WHERE `account`.`name` LIKE CONCAT('%',?,'
 **测试动态条件1**
 
 ```sql
-select(account.id).from(account).where(account.name.like("a", Objects::isNull));
+select(account.id).from(account).where(account.name.like("a", Objects::isNull))
 ```
 
 **SQL输出**
@@ -269,6 +269,34 @@ select(account.id).from(account).where(account.name.like("a").when(false))
 
 ```sql
 SELECT `account`.`id` FROM `account` 
+```
+
+### and
+
+**测试**
+
+```sql
+account.name.like("a").and(account.age.eq(11))
+```
+
+**SQL输出**
+
+```sql
+`account`.`name` LIKE CONCAT('%',?,'%') AND `account`.`age`=?
+```
+
+### or
+
+**测试**
+
+```sql
+account.name.like("a").or(account.age.eq(11))
+```
+
+**SQL输出**
+
+```sql
+`account`.`name` LIKE CONCAT('%',?,'%') OR `account`.`age`=?
 ```
 
 ### groupBy
@@ -304,7 +332,7 @@ SELECT COUNT(`account`.`id`) FROM `account`  GROUP BY `account`.`age` HAVING `ac
 **测试**
 
 ```sql
-select(count(account.id)).from(account).orderBy(account.age.desc(),account.name.asc());
+select(count(account.id)).from(account).orderBy(account.age.desc(),account.name.asc())
 ```
 
 **SQL输出**
@@ -318,7 +346,7 @@ SELECT COUNT(`account`.`id`) FROM `account`  ORDER BY `account`.`age` DESC,`acco
 **测试**
 
 ```sql
-select(count(account.id)).from(account).limit(5,10);
+select(count(account.id)).from(account).limit(5,10)
 ```
 
 **SQL输出**
@@ -332,7 +360,7 @@ SELECT COUNT(`account`.`id`) FROM `account`  LIMIT ?,?
 **测试**
 
 ```sql
-select(count(account.id)).from(account).offset(10,5);
+select(count(account.id)).from(account).offset(10,5)
 ```
 
 **SQL输出**
@@ -346,7 +374,7 @@ SELECT COUNT(`account`.`id`) FROM `account`  LIMIT ? OFFSET ?
 **测试**
 
 ```sql
-select(count(account.id)).from(account).union(select(count(account.id)).from(account));
+select(count(account.id)).from(account).union(select(count(account.id)).from(account))
 ```
 
 **SQL输出**
@@ -360,7 +388,7 @@ SELECT COUNT(`account`.`id`) FROM `account`  UNION SELECT COUNT(`account`.`id`) 
 **测试**
 
 ```sql
-select(count(account.id)).from(account).unionAll(select(count(account.id)).from(account));
+select(count(account.id)).from(account).unionAll(select(count(account.id)).from(account))
 ```
 
 **SQL输出**
@@ -374,7 +402,7 @@ SELECT COUNT(`account`.`id`) FROM `account`  UNION ALL SELECT COUNT(`account`.`i
 **测试**
 
 ```sql
-select(count(account.id)).from(account).forUpdate();
+select(count(account.id)).from(account).forUpdate()
 ```
 
 **SQL输出**
@@ -388,7 +416,7 @@ SELECT COUNT(`account`.`id`) FROM `account`  FOR UPDATE
 **测试**
 
 ```sql
-select(count(account.id)).from(account).forUpdateNoWait();
+select(count(account.id)).from(account).forUpdateNoWait()
 ```
 
 **SQL输出**
@@ -402,7 +430,7 @@ SELECT COUNT(`account`.`id`) FROM `account`  FOR UPDATE NOWAIT
 **测试**
 
 ```sql
-update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
+update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1))
 ```
 
 **SQL输出**
@@ -416,7 +444,7 @@ UPDATE `account`  SET `account`.`age`=`account`.`age`+1,`account`.`name`=?  WHER
 **测试**
 
 ```sql
-insertInto(account).columns(account.name, account.age).values("accountName", 12);
+insertInto(account).columns(account.name, account.age).values("accountName", 12)
 ```
 
 **SQL输出**
@@ -430,7 +458,7 @@ INSERT INTO `account` (`name`,`age`)VALUES(?,?)
 **测试**
 
 ```sql
-delete(account).where(account.id.eq(1));
+delete(account).where(account.id.eq(1))
 ```
 
 **SQL输出**

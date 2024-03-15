@@ -206,10 +206,9 @@ public interface JdbcMapper {
     }
 
     /**
-     *
-     * @param type 查询的对象，自动构建select+from语句
+     * @param type     查询的对象，自动构建select+from语句
      * @param whereSql where语句
-     * @param args 参数
+     * @param args     参数
      * @param <T>
      * @return
      */
@@ -218,10 +217,9 @@ public interface JdbcMapper {
     }
 
     /**
-     *
-     * @param type 查询的对象，自动构建select+from语句
+     * @param type     查询的对象，自动构建select+from语句
      * @param whereSql where语句
-     * @param args 参数
+     * @param args     参数
      * @param <T>
      * @return
      */

@@ -5,6 +5,7 @@ import com.dream.drive.factory.DefaultFlexDialect;
 import com.dream.flex.config.SqlInfo;
 import com.dream.flex.def.CaseColumnDef;
 import com.dream.flex.def.ColumnDef;
+import com.dream.flex.def.ConditionDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.dialect.FlexDialect;
 import com.dream.helloworld.h2.def.AccountDef;
@@ -118,6 +119,28 @@ public class HelloWorldFlexQueryTest {
     public void testWhere() {
         QueryDef queryDef = select(account.id).from(account).where(account.name.like("a"));
         Statement statement = queryDef.statement();
+        SqlInfo sqlInfo = flexDialect.toSQL(statement);
+        System.out.println(sqlInfo.getSql());
+    }
+
+    /**
+     * 测试 and
+     */
+    @Test
+    public void testAnd() {
+        ConditionDef conditionDef = account.name.like("a").and(account.age.eq(11));
+        Statement statement = conditionDef.getStatement();
+        SqlInfo sqlInfo = flexDialect.toSQL(statement);
+        System.out.println(sqlInfo.getSql());
+    }
+
+    /**
+     * 测试 or
+     */
+    @Test
+    public void testOr() {
+        ConditionDef conditionDef = account.name.like("a").or(account.age.eq(11));
+        Statement statement = conditionDef.getStatement();
         SqlInfo sqlInfo = flexDialect.toSQL(statement);
         System.out.println(sqlInfo.getSql());
     }

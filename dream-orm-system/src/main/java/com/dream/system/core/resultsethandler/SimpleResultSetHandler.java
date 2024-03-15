@@ -30,7 +30,7 @@ public class SimpleResultSetHandler implements ResultSetHandler {
             }
             int columnType = metaData.getColumnType(1);
             try {
-                TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(Object.class, columnType);
+                TypeHandler typeHandler = typeHandlerFactory.getTypeHandler(colType, columnType);
                 columnList.add(new Column(1, typeHandler, null, columnType));
             } catch (TypeHandlerNotFoundException e) {
                 throw new DreamRunTimeException(e);
