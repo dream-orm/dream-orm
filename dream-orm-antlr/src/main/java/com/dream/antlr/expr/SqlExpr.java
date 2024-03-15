@@ -327,6 +327,9 @@ public abstract class SqlExpr {
             case CURDATE:
                 exprFactory = sqlExpr -> sqlExpr.exprCurDate(exprInfo);
                 break;
+            case CURRENT_DATE:
+                exprFactory = sqlExpr -> sqlExpr.exprCurrentDate(exprInfo);
+                break;
             case DATEDIFF:
                 exprFactory = sqlExpr -> sqlExpr.exprDateDiff(exprInfo);
                 break;
@@ -1106,6 +1109,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprCurDate(ExprInfo exprInfo) throws AntlrException {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprCurrentDate(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 

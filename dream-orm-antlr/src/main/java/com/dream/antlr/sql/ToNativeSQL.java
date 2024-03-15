@@ -676,6 +676,11 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.CurrentDateStatement statement, Assist assist, List<Invoker> invokerList) {
+        return "CURRENT_DATE()";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "DATEDIFF(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

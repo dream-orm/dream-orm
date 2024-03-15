@@ -96,6 +96,11 @@ public class ToClickHouse extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.InStrStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "positionUTF8(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.LocateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         if (columnList.length == 2) {
@@ -114,6 +119,11 @@ public class ToClickHouse extends ToPubSQL {
             statement.setPattern(pattern);
         }
         return "formatDateTime(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.WeekExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toWeek(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -361,6 +371,11 @@ public class ToClickHouse extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.CurrentDateStatement statement, Assist assist, List<Invoker> invokerList) {
+        return "today()";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CEIL(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + "-" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList) + ")";
     }
@@ -388,6 +403,11 @@ public class ToClickHouse extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.MinuteStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "toMinute(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.LastDayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "minus(toStartOfMonth(plus(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",toIntervalMonth(1))),toIntervalDay(1))";
     }
 
     @Override

@@ -5,6 +5,7 @@
 - 修复：解决lcase函数在其他数据库报错
 - 修复：解决oracle环境下case语句报错
 - 优化：jdbcMapper查询增强
+- 修复：oracle、clickhouse适配
 
 ## v1.2.14
 

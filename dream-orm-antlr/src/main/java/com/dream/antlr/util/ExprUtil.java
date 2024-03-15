@@ -231,6 +231,8 @@ public class ExprUtil {
                 return ExprType.DATE_SUB;
             case 1844501966://CURDATE
                 return ExprType.CURDATE;
+            case -479705388://CURRENT_DATE
+                return ExprType.CURRENT_DATE;
             case -1719114573://DATEDIFF
                 return ExprType.DATEDIFF;
             case -1718317968://DATE_ADD

@@ -57,6 +57,7 @@ public final class Constant {
             ExprType.TAN,
             ExprType.TRUNCATE,
             ExprType.CURDATE,
+            ExprType.CURRENT_DATE,
             ExprType.DATEDIFF,
             ExprType.UNIX_TIMESTAMP,
             ExprType.FROM_UNIXTIME,

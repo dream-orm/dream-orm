@@ -10,6 +10,7 @@ import com.dream.antlr.util.AntlrUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * oracle方言
@@ -111,6 +112,21 @@ public class ToOracle extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.ExtractStatement.WeekExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "TO_CHAR(" + toStr(statement.getStatement(), assist, invokerList) + ",'ww')";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.HourExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_CHAR(" + toStr(statement.getStatement(), assist, invokerList) + ",'hh24'" + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.MinuteExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_CHAR(" + toStr(statement.getStatement(), assist, invokerList) + ",'mi'" + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.ExtractStatement.SecondExtractStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_CHAR(" + toStr(statement.getStatement(), assist, invokerList) + ",'ss'" + ")";
     }
 
     @Override
@@ -405,38 +421,43 @@ public class ToOracle extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.CurrentDateStatement statement, Assist assist, List<Invoker> invokerList) {
+        return "SYSDATE";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CEIL(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + "-" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList) + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.DayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'dd'))";
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'dd')";
     }
 
     @Override
     protected String toString(FunctionStatement.DayOfWeekStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'d'))";
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'d')";
     }
 
     @Override
     protected String toString(FunctionStatement.DayOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ddd'))";
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ddd')";
     }
 
     @Override
     protected String toString(FunctionStatement.HourStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'hh24'))";
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'hh24')";
     }
 
     @Override
     protected String toString(FunctionStatement.MinuteStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'mi'))";
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'mi')";
     }
 
     @Override
     protected String toString(FunctionStatement.MonthStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'mm'))";
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'mm')";
     }
 
     @Override
@@ -451,27 +472,37 @@ public class ToOracle extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.QuarterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'q'))";
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'q')";
     }
 
     @Override
     protected String toString(FunctionStatement.SecondStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ss'))";
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ss')";
     }
 
     @Override
     protected String toString(FunctionStatement.WeekOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ww'" + "))";
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ww'" + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.YearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'yyyy'" + "))";
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'yyyy'" + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.IsNullStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DECODE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ", null,1,0)";
     }
 
     @Override
     protected String toString(FunctionStatement.IfNullStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "NVL(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.NullIfStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DECODE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ", null,1)";
     }
 
     @Override
@@ -500,14 +531,19 @@ public class ToOracle extends ToPubSQL {
     protected String toString(CaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement caseColumn = statement.getCaseColumn();
         if (caseColumn != null) {
-            statement.setCaseColumn(null);
-            ListColumnStatement whenthenList = (ListColumnStatement) statement.getWhenThenList();
-            Statement[] columnList = whenthenList.getColumnList();
+            ListColumnStatement whenThenList = (ListColumnStatement) statement.getWhenThenList();
+            Statement[] columnList = whenThenList.getColumnList();
+            StringJoiner joiner = new StringJoiner(",");
+            joiner.add(toStr(caseColumn, assist, invokerList));
             for (Statement column : columnList) {
                 CaseStatement.WhenThenStatement whenThenStatement = (CaseStatement.WhenThenStatement) column;
-                Statement when = whenThenStatement.getWhen();
-                whenThenStatement.setWhen(AntlrUtil.conditionStatement(caseColumn, new OperStatement.EQStatement(), when));
+                joiner.add(toStr(whenThenStatement.getWhen(), assist, invokerList) + "," + toStr(whenThenStatement.getThen(), assist, invokerList));
             }
+            Statement elseColumn = statement.getElseColumn();
+            if (elseColumn != null) {
+                joiner.add(toStr(elseColumn, assist, invokerList));
+            }
+            return "DECODE(" + joiner + ")";
         }
         return super.toString(statement, assist, invokerList);
     }
@@ -532,6 +568,17 @@ public class ToOracle extends ToPubSQL {
         String left = toStr(conditionStatement.getLeft(), assist, invokerList);
         String right = toStr(conditionStatement.getRight(), assist, invokerList);
         return left + right + "-2*BITAND(" + left + "," + right + ")";
+    }
+
+    @Override
+    protected String toString(RowNumberStatement.OverStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement orderStatement = statement.getOrderStatement();
+        if (orderStatement == null) {
+            orderStatement = new OrderStatement();
+            ((OrderStatement) orderStatement).setStatement(new SymbolStatement.LetterStatement("null"));
+            statement.setOrderStatement(orderStatement);
+        }
+        return super.toString(statement, assist, invokerList);
     }
 
     @Override

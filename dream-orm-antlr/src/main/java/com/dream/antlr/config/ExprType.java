@@ -121,6 +121,7 @@ public enum ExprType {
     TRUNCATE,
     DROP,
     CURDATE,
+    CURRENT_DATE,
     UNIX_TIMESTAMP,
     FROM_UNIXTIME,
     DATEDIFF,

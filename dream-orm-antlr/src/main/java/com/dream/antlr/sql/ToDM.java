@@ -263,7 +263,7 @@ public class ToDM extends ToPubSQL {
 
     @Override
     protected String toString(FunctionStatement.WeekOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TO_NUMBER(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ww'" + "))";
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ww'" + ")";
     }
 
     @Override

@@ -337,6 +337,11 @@ public class ToPostgreSQL extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.CurrentDateStatement statement, Assist assist, List<Invoker> invokerList) {
+        return "CURRENT_DATE";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         return "DATE_PART('day'," + toStr(columnList[0], assist, invokerList) + "-" + toStr(columnList[1], assist, invokerList) + ")";

@@ -410,6 +410,10 @@ public abstract class FunctionStatement extends Statement {
 
     }
 
+    public static class CurrentDateStatement extends FunctionStatement {
+
+    }
+
     public static class DateDiffStatement extends FunctionStatement {
 
     }
