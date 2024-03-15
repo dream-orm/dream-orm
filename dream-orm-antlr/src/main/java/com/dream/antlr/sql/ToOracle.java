@@ -508,7 +508,13 @@ public class ToOracle extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.IfStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        return "CASE WHEN " + toStr(columnList[0], assist, invokerList) + " THEN " + toStr(columnList[1], assist, invokerList) + " ELSE " + toStr(columnList[2], assist, invokerList) + " END";
+        String condition;
+        if (columnList[0] instanceof ConditionStatement) {
+            condition = toStr(columnList[0], assist, invokerList);
+        } else {
+            condition = "SIGN(" + toStr(columnList[0], assist, invokerList) + ")<>0";
+        }
+        return "CASE WHEN " + condition + " THEN " + toStr(columnList[1], assist, invokerList) + " ELSE " + toStr(columnList[2], assist, invokerList) + " END";
     }
 
     @Override
