@@ -175,13 +175,18 @@ public class ToSQLServer extends ToPubSQL {
     }
 
     @Override
-    protected String toString(CastTypeStatement.DateTimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS DATETIME)";
+    protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CONVERT(INT," + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CONVERT(INT," + toStr(statement.getStatement(), assist, invokerList) + ")";
+    protected String toString(ConvertTypeStatement.FloatConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CONVERT(FLOAT," + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.DoubleConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CONVERT(DOUBLE," + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
     @Override
