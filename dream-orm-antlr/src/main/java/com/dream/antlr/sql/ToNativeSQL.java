@@ -1,7 +1,6 @@
 package com.dream.antlr.sql;
 
 import com.dream.antlr.config.Assist;
-import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
@@ -826,6 +825,11 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(CastTypeStatement.DoubleCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS DOUBLE)";
+    }
+
+    @Override
     protected String toString(CastTypeStatement.CharCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS CHAR)";
     }
@@ -863,6 +867,11 @@ public class ToNativeSQL extends ToSQL {
     @Override
     protected String toString(ConvertTypeStatement.FloatConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CONVERT(" + toStr(statement.getStatement(), assist, invokerList) + ",FLOAT)";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.DoubleConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CONVERT(" + toStr(statement.getStatement(), assist, invokerList) + ",DOUBLE)";
     }
 
     @Override
@@ -1030,151 +1039,5 @@ public class ToNativeSQL extends ToSQL {
     @Override
     public String toString(FunctionStatement.ReturnParameterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return toStr(statement.getParamsStatement(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(TruncateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "TRUNCATE TABLE " + toStr(statement.getTable(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(DDLCreateStatement.DDLCreateDatabaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        boolean existCreate = statement.isExistCreate();
-        return "CREATE TABLE " + (existCreate ? "" : "IF NOT EXISTS ") + toStr(statement.getStatement(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(DDLCreateStatement.DDLCreateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        Statement engine = statement.getEngine();
-        Statement defaultCharset = statement.getDefaultCharset();
-        Statement comment = statement.getComment();
-        StringBuilder builder = new StringBuilder();
-        if (engine != null) {
-            builder.append(" ENGINE=" + toStr(engine, assist, invokerList));
-        }
-        if (defaultCharset != null) {
-            builder.append(" DEFAULT CHARSET=" + toStr(defaultCharset, assist, invokerList));
-        }
-        if (comment != null) {
-            builder.append(" COMMENT=" + toStr(comment, assist, invokerList));
-        }
-        ListColumnStatement columnDefineList = statement.getColumnDefineList();
-        boolean existCreate = statement.isExistCreate();
-        return "CREATE TABLE " + (existCreate ? "" : "IF NOT EXISTS ") + toStr(statement.getStatement(), assist, invokerList) + "(" +
-                toStr(columnDefineList, assist, invokerList)
-                + ")" + builder;
-    }
-
-    @Override
-    protected String toString(DDLDefineStatement.DDLColumnDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        Statement column = statement.getColumn();
-        ExprType columnType = statement.getColumnType();
-        ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
-        Statement comment = statement.getComment();
-        Statement defaultValue = statement.getDefaultValue();
-        boolean autoIncrement = statement.isAutoIncrement();
-        boolean nullFlag = statement.isNullFlag();
-        boolean primaryKey = statement.isPrimaryKey();
-        StringBuilder builder = new StringBuilder();
-        if (columnTypeParamList != null) {
-            builder.append("(" + toStr(columnTypeParamList, assist, invokerList) + ")");
-        }
-        if (!nullFlag) {
-            builder.append(" NOT NULL");
-        }
-        if (autoIncrement) {
-            builder.append(" AUTO_INCREMENT");
-        }
-        if (primaryKey) {
-            builder.append(" PRIMARY KEY");
-        }
-        if (defaultValue != null) {
-            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
-        }
-        if (comment != null) {
-            builder.append(" COMMENT " + toStr(comment, assist, invokerList));
-        }
-        return toStr(column, assist, invokerList) + " " + columnType.name() + builder;
-    }
-
-    @Override
-    protected String toString(DDLDefineStatement.DDLPrimaryKeyDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        StringBuilder builder = new StringBuilder();
-        Statement constraint = statement.getConstraint();
-        if (constraint != null) {
-            builder.append("CONSTRAINT " + toStr(constraint, assist, invokerList) + " ");
-        }
-        ListColumnStatement primaryKeys = statement.getPrimaryKeys();
-        builder.append("PRIMARY KEY(" + toStr(primaryKeys, assist, invokerList) + ")");
-        return builder.toString();
-    }
-
-    @Override
-    protected String toString(DDLDefineStatement.DDLForeignKeyDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        StringBuilder builder = new StringBuilder();
-        Statement constraint = statement.getConstraint();
-        if (constraint != null) {
-            builder.append("CONSTRAINT " + toStr(constraint, assist, invokerList) + " ");
-        }
-        Statement foreignKey = statement.getForeignKey();
-        Statement foreignTable = statement.getForeignTable();
-        Statement foreignColumn = statement.getForeignColumn();
-        builder.append("FOREIGN KEY(" + toStr(foreignKey, assist, invokerList) + ")");
-        builder.append(" REFERENCES " + toStr(foreignTable, assist, invokerList) + "(" + toStr(foreignColumn, assist, invokerList) + ")");
-        return builder.toString();
-    }
-
-    @Override
-    protected String toString(DDLDropStatement.DDLDropDatabaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DROP DATABASE " + toStr(statement.getStatement(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(DDLDropStatement.DDLDropTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "DROP TABLE " + toStr(statement.getStatement(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(DDLAlterStatement.DDLAlterRenameStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "ALTER TABLE " + toStr(statement.getTable(), assist, invokerList) + " RENAME TO " + toStr(statement.getNewTable(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(DDLAlterStatement.DDLAlterDropStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "ALTER TABLE " + toStr(statement.getTable(), assist, invokerList) + " DROP COLUMN " + toStr(statement.getColumn(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(DDLAlterStatement.DDLAlterAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
-        StringBuilder builder = new StringBuilder();
-        if (columnTypeParamList != null) {
-            builder.append("(" + toStr(columnTypeParamList, assist, invokerList) + ")");
-        }
-        Statement defaultValue = statement.getDefaultValue();
-        if (!statement.isNullFlag()) {
-            builder.append(" NOT NULL");
-        }
-        if (defaultValue != null) {
-            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
-        }
-        return "ALTER TABLE " + toStr(statement.getTable(), assist, invokerList) + " ADD COLUMN " + toStr(statement.getColumn(), assist, invokerList) + " " + statement.getColumnType().name() + builder;
-    }
-
-    @Override
-    protected String toString(DDLAlterStatement.DDLAlterModifyStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
-        StringBuilder builder = new StringBuilder();
-        if (columnTypeParamList != null) {
-            builder.append("(" + toStr(columnTypeParamList, assist, invokerList) + ")");
-        }
-        Statement defaultValue = statement.getDefaultValue();
-        if (!statement.isNullFlag()) {
-            builder.append(" NOT NULL");
-        }
-        if (defaultValue != null) {
-            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
-        }
-        return "ALTER TABLE " + toStr(statement.getTable(), assist, invokerList) + " MODIFY COLUMN " + toStr(statement.getColumn(), assist, invokerList) + " " + statement.getColumnType().name() + builder;
     }
 }

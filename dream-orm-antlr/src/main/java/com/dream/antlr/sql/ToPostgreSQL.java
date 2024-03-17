@@ -1,7 +1,6 @@
 package com.dream.antlr.sql;
 
 import com.dream.antlr.config.Assist;
-import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
@@ -146,6 +145,11 @@ public class ToPostgreSQL extends ToPubSQL {
     }
 
     @Override
+    protected String toString(CastTypeStatement.DoubleCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS NUMERIC)";
+    }
+
+    @Override
     protected String toString(CastTypeStatement.DateTimeCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS TIMESTAMP)";
     }
@@ -158,6 +162,16 @@ public class ToPostgreSQL extends ToPubSQL {
     @Override
     protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS INT)";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.FloatConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS FLOAT)";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.DoubleConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS NUMERIC)";
     }
 
     @Override
@@ -439,38 +453,4 @@ public class ToPostgreSQL extends ToPubSQL {
         ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
         return toStr(conditionStatement.getLeft(), assist, invokerList) + "#" + toStr(conditionStatement.getRight(), assist, invokerList);
     }
-
-    @Override
-    protected String toString(DDLCreateStatement.DDLCreateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStringForCreateTable(statement, assist, invokerList);
-    }
-
-    @Override
-    protected String toString(DDLDefineStatement.DDLColumnDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        Statement column = statement.getColumn();
-        ExprType columnType = statement.getColumnType();
-        ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
-        Statement defaultValue = statement.getDefaultValue();
-        String columnTypeName = columnType.name();
-        boolean autoIncrement = statement.isAutoIncrement();
-        boolean nullFlag = statement.isNullFlag();
-        boolean primaryKey = statement.isPrimaryKey();
-        StringBuilder builder = new StringBuilder();
-        if (autoIncrement) {
-            columnTypeName = "serial";
-        } else if (columnTypeParamList != null) {
-            builder.append("(" + toStr(columnTypeParamList, assist, invokerList) + ")");
-        }
-        if (!nullFlag) {
-            builder.append(" NOT NULL");
-        }
-        if (primaryKey) {
-            builder.append(" PRIMARY KEY");
-        }
-        if (defaultValue != null) {
-            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
-        }
-        return toStr(column, assist, invokerList) + " " + columnTypeName + builder;
-    }
-
 }

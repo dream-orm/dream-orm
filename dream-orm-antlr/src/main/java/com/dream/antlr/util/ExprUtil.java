@@ -145,20 +145,6 @@ public class ExprUtil {
                 return ExprType.LPAD;
             case 2521825://RPAD
                 return ExprType.RPAD;
-            case -1722875525://DATABASE
-                return ExprType.DATABASE;
-            case 79578030://TABLE
-                return ExprType.TABLE;
-            case 2107119://DROP
-                return ExprType.DROP;
-            case 1993459542://COLUMN
-                return ExprType.COLUMN;
-            case -2015466310://MODIFY
-                return ExprType.MODIFY;
-            case -1881265346://RENAME
-                return ExprType.RENAME;
-            case 2683://TO
-                return ExprType.TO;
             case 64594://ABS
                 return ExprType.ABS;
             case 65202://AVG
@@ -221,10 +207,6 @@ public class ExprUtil {
                 return ExprType.SUM;
             case 82817://TAN
                 return ExprType.TAN;
-            case 1996002556://CREATE
-                return ExprType.CREATE;
-            case 62375926://ALTER
-                return ExprType.ALTER;
             case -1659355802://TRUNCATE
                 return ExprType.TRUNCATE;
             case -1718300145://DATE_SUB
@@ -287,30 +269,16 @@ public class ExprUtil {
                 return ExprType.CAST;
             case -1849138404://SIGNED
                 return ExprType.SIGNED;
-            case 176095624://SMALLINT
-                return ExprType.SMALLINT;
-            case -594415409://TINYINT
-                return ExprType.TINYINT;
-            case 651290682://MEDIUMINT
-                return ExprType.MEDIUMINT;
             case 72655://INT
                 return ExprType.INT;
             case -1618932450://INTEGER
                 return ExprType.INTEGER;
-            case 1959128815://BIGINT
-                return ExprType.BIGINT;
             case 66988604://FLOAT
                 return ExprType.FLOAT;
             case 2022338513://DOUBLE
                 return ExprType.DOUBLE;
             case 2067286://CHAR
                 return ExprType.CHAR;
-            case 954596061://VARCHAR
-                return ExprType.VARCHAR;
-            case 2571565://TEXT
-                return ExprType.TEXT;
-            case 2041757://BLOB
-                return ExprType.BLOB;
             case 1534573311://UNIX_TIMESTAMP
                 return ExprType.UNIX_TIMESTAMP;
             case 1044724042://FROM_UNIXTIME
@@ -319,8 +287,6 @@ public class ExprUtil {
                 return ExprType.DATE;
             case -1718637701://DATETIME
                 return ExprType.DATETIME;
-            case -1453246218://
-                return ExprType.TIMESTAMP;
             case -2034720975://DECIMAL
                 return ExprType.DECIMAL;
             case -164257881://COALESCE
@@ -371,26 +337,6 @@ public class ExprUtil {
                 return ExprType.TO_DATE;
             case -914382798://TO_TIMESTAMP
                 return ExprType.TO_TIMESTAMP;
-            case 19815615://AUTO_INCREMENT
-                return ExprType.AUTO_INCREMENT;
-            case 294715869://CONSTRAINT
-                return ExprType.CONSTRAINT;
-            case 403216866://PRIMARY
-                return ExprType.PRIMARY;
-            case 40307892://FOREIGN
-                return ExprType.FOREIGN;
-            case 1870042760://REFERENCES
-                return ExprType.REFERENCES;
-            case 74303://KEY
-                return ExprType.KEY;
-            case 2049633858://ENGINE
-                return ExprType.ENGINE;
-            case 1457057068://CHARSET
-                return ExprType.CHARSET;
-            case 1668381247://COMMENT
-                return ExprType.COMMENT;
-            case -2032180703://DEFAULT
-                return ExprType.DEFAULT;
             default:
                 return ExprType.LETTER;
         }

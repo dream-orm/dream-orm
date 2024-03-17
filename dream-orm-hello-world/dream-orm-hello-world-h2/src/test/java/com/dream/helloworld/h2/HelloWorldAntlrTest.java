@@ -88,7 +88,7 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testOther() {
-        testSqlForMany("SELECT cast(s as decimal(s1,b)),convert(s,decimal(s,b)),convert(s,date),convert(s,time),convert(s,datetime),cast(s as date),cast(s as time),cast(s as datetime),row_number() over(),row_number() over(partition by p),row_number() over(partition by p order by o),row_number() over(order by o),convert(s,signed),convert(s,signed int),convert(s,signed integer),convert(s,float),convert(s,char),convert(s,decimal),convert(s,decimal(s)),convert(s,decimal(s,b)),cast(s as signed),cast(s as signed int),cast(s as signed integer),cast(s as float),cast(s as decimal)," +
+        testSqlForMany("SELECT cast(s as double),cast(s as decimal(s1,b)),convert(s,decimal(s,b)),convert(s,date),convert(s,time),convert(s,datetime),cast(s as date),cast(s as time),cast(s as datetime),row_number() over(),row_number() over(partition by p),row_number() over(partition by p order by o),row_number() over(order by o),convert(s,signed),convert(s,signed int),convert(s,signed integer),convert(s,float),convert(s,double),convert(s,char),convert(s,decimal),convert(s,decimal(s)),convert(s,decimal(s,b)),cast(s as signed),cast(s as signed int),cast(s as signed integer),cast(s as float),cast(s as decimal)," +
                 "cast(s as decimal(s)),cast(s as decimal(s,b)),isnull(a),ifnull(s1,s2),IF(s1,s2,s3),nullif(s1,s2)");
     }
 
@@ -136,84 +136,6 @@ public class HelloWorldAntlrTest {
     @Test
     public void testInsert() {
         testSqlForMany("insert into dual(id,name)values(id,name)");
-    }
-
-    @Test
-    public void testTruncate() {
-        testSqlForMany("truncate table `aaa`");
-    }
-
-    @Test
-    public void testDropTable() {
-        testSqlForMany("drop table `aaa`");
-    }
-
-    @Test
-    public void testDropDatabase() {
-        testSqlForMany("drop database `aaa`");
-    }
-
-    @Test
-    public void testCreateDatabase() {
-        testSqlForMany("CREATE database demo");
-    }
-
-    @Test
-    public void testCreateTable() {
-        testSqlForMany("CREATE TABLE IF NOT EXISTS `runoob_tbl`(\n" +
-                "   `runoob_title` VARCHAR(100) NOT NULL comment '111',\n" +
-                "   `runoob_id` INT(11)  AUTO_INCREMENT,\n" +
-                "   `runoob_author` VARCHAR(40) NOT NULL,\n" +
-                "   `submission_date` DATE,\n" +
-                "   PRIMARY KEY ( `runoob_id` )\n" +
-                ")engine=innodb default charset=utf8 comment='hello'");
-    }
-
-    @Test
-    public void testCreateTable2() {
-        testSqlForMany("CREATE TABLE Orders (\n" +
-                "    OrderID int NOT NULL,\n" +
-                "    OrderNumber int NOT NULL,\n" +
-                "    PersonID int,\n" +
-                "  CONSTRAINT PK_OrderID  PRIMARY KEY (OrderID),\n" +
-                "    CONSTRAINT FK_PersonOrder FOREIGN KEY (PersonID)\n" +
-                "    REFERENCES Persons(PersonID)\n" +
-                ")");
-    }
-
-    @Test
-    public void testAlterRename1() {
-        testSqlForMany("alter table a rename b");
-    }
-
-    @Test
-    public void testAlterRename2() {
-        testSqlForMany("alter table a rename to b");
-    }
-
-    @Test
-    public void testAlterDrop() {
-        testSqlForMany("alter table a drop  b");
-    }
-
-    @Test
-    public void testAlterDrop2() {
-        testSqlForMany("alter table a drop  column b");
-    }
-
-    @Test
-    public void testAlterAdd() {
-        testSqlForMany("alter table a add  column b int  default 11 not null");
-    }
-
-    @Test
-    public void testAlterAdd1() {
-        testSqlForMany("alter table a add   b int  not null default 11");
-    }
-
-    @Test
-    public void testAlterModify1() {
-        testSqlForMany("alter table a  modify  column b int  not null default 11");
     }
 
     protected void testSqlForMany(String sql) {

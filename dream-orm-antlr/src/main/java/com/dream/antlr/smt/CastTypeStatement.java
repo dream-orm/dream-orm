@@ -69,6 +69,13 @@ public abstract class CastTypeStatement extends Statement {
         }
     }
 
+    public static class DoubleCastStatement extends CastTypeStatement {
+
+        public DoubleCastStatement(Statement statement) {
+            super(statement);
+        }
+    }
+
     public static class DecimalCastStatement extends CastTypeStatement {
         public Statement paramStatement;
 

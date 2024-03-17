@@ -106,7 +106,6 @@ public final class Constant {
 
     public static final ExprType[] KEYWORD = {
             ExprType.CHAR,
-            ExprType.VARCHAR,
             ExprType.UNION,
             ExprType.FOR,
             ExprType.NOWAIT,
@@ -169,12 +168,6 @@ public final class Constant {
             ExprType.FROM,
             ExprType.SELECT,
             ExprType.SEPARATOR,
-            ExprType.AS,
-            ExprType.TABLE,
-            ExprType.DATABASE,
-            ExprType.CREATE,
-            ExprType.ALTER,
-            ExprType.TRUNCATE,
-            ExprType.DROP
+            ExprType.AS
     };
 }

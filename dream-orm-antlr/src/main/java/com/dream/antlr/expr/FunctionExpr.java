@@ -886,7 +886,7 @@ public class FunctionExpr extends SqlExpr {
             @Override
             protected Statement exprComma(ExprInfo exprInfo) throws AntlrException {
                 push();
-                setExprTypes(ExprType.CHAR, ExprType.SIGNED, ExprType.FLOAT, ExprType.DATE, ExprType.TIME, ExprType.DATETIME, ExprType.DECIMAL);
+                setExprTypes(ExprType.CHAR, ExprType.SIGNED, ExprType.FLOAT, ExprType.DOUBLE, ExprType.DATE, ExprType.TIME, ExprType.DATETIME, ExprType.DECIMAL);
                 return expr();
             }
 
@@ -933,6 +933,14 @@ public class FunctionExpr extends SqlExpr {
             @Override
             protected Statement exprFloat(ExprInfo exprInfo) throws AntlrException {
                 convertTypeStatement = new ConvertTypeStatement.FloatConvertStatement(statement);
+                push();
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprDouble(ExprInfo exprInfo) throws AntlrException {
+                convertTypeStatement = new ConvertTypeStatement.DoubleConvertStatement(statement);
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -995,7 +1003,7 @@ public class FunctionExpr extends SqlExpr {
             @Override
             protected Statement exprAs(ExprInfo exprInfo) throws AntlrException {
                 push();
-                setExprTypes(ExprType.CHAR, ExprType.SIGNED, ExprType.FLOAT, ExprType.DATE, ExprType.TIME, ExprType.DATETIME, ExprType.DECIMAL);
+                setExprTypes(ExprType.CHAR, ExprType.SIGNED, ExprType.FLOAT, ExprType.DOUBLE, ExprType.DATE, ExprType.TIME, ExprType.DATETIME, ExprType.DECIMAL);
                 return expr();
             }
 
@@ -1042,6 +1050,14 @@ public class FunctionExpr extends SqlExpr {
             @Override
             protected Statement exprFloat(ExprInfo exprInfo) throws AntlrException {
                 castTypeStatement = new CastTypeStatement.FloatCastStatement(statement);
+                push();
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprDouble(ExprInfo exprInfo) throws AntlrException {
+                castTypeStatement = new CastTypeStatement.DoubleCastStatement(statement);
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();

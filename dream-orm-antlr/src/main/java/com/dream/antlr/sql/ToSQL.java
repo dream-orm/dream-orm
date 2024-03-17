@@ -488,6 +488,9 @@ public abstract class ToSQL {
             case -533298156://FloatCastStatement
                 sql = toString((CastTypeStatement.FloatCastStatement) statement, assist, invokerList);
                 break;
+            case -19596161://DoubleCastStatement
+                sql = toString((CastTypeStatement.DoubleCastStatement) statement, assist, invokerList);
+                break;
             case 1181056282://CharCastStatement
                 sql = toString((CastTypeStatement.CharCastStatement) statement, assist, invokerList);
                 break;
@@ -511,6 +514,9 @@ public abstract class ToSQL {
                 break;
             case 1603887960://FloatConvertStatement
                 sql = toString((ConvertTypeStatement.FloatConvertStatement) statement, assist, invokerList);
+                break;
+            case -1963421939://
+                sql = toString((ConvertTypeStatement.DoubleConvertStatement) statement, assist, invokerList);
                 break;
             case -1814133614://CharConvertStatement
                 sql = toString((ConvertTypeStatement.CharConvertStatement) statement, assist, invokerList);
@@ -598,42 +604,6 @@ public abstract class ToSQL {
                 break;
             case -90385098://ReturnParameterStatement
                 sql = toString((FunctionStatement.ReturnParameterStatement) statement, assist, invokerList);
-                break;
-            case -710422425://TruncateTableStatement
-                sql = toString((TruncateTableStatement) statement, assist, invokerList);
-                break;
-            case -500452564://DDLCreateDatabaseStatement
-                sql = toString((DDLCreateStatement.DDLCreateDatabaseStatement) statement, assist, invokerList);
-                break;
-            case -973744311://DDLCreateTableStatement
-                sql = toString((DDLCreateStatement.DDLCreateTableStatement) statement, assist, invokerList);
-                break;
-            case -1320247470://DDLColumnDefineStatement
-                sql = toString((DDLDefineStatement.DDLColumnDefineStatement) statement, assist, invokerList);
-                break;
-            case -1524013877://DDLPrimaryKeyDefineStatement
-                sql = toString((DDLDefineStatement.DDLPrimaryKeyDefineStatement) statement, assist, invokerList);
-                break;
-            case -1991014627://DDLForeignKeyDefineStatement
-                sql = toString((DDLDefineStatement.DDLForeignKeyDefineStatement) statement, assist, invokerList);
-                break;
-            case -371130727://DDLDropDatabaseStatement
-                sql = toString((DDLDropStatement.DDLDropDatabaseStatement) statement, assist, invokerList);
-                break;
-            case -907998468://DDLDropTableStatement
-                sql = toString((DDLDropStatement.DDLDropTableStatement) statement, assist, invokerList);
-                break;
-            case 655343303://DDLAlterRenameStatement
-                sql = toString((DDLAlterStatement.DDLAlterRenameStatement) statement, assist, invokerList);
-                break;
-            case 1337074614://DDLAlterDropStatement
-                sql = toString((DDLAlterStatement.DDLAlterDropStatement) statement, assist, invokerList);
-                break;
-            case -1211571560://DDLAlterAddStatement
-                sql = toString((DDLAlterStatement.DDLAlterAddStatement) statement, assist, invokerList);
-                break;
-            case 677079243://DDLAlterModifyStatement
-                sql = toString((DDLAlterStatement.DDLAlterModifyStatement) statement, assist, invokerList);
                 break;
             default:
                 if (statement instanceof IStatement) {
@@ -939,6 +909,8 @@ public abstract class ToSQL {
 
     protected abstract String toString(CastTypeStatement.FloatCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
+    protected abstract String toString(CastTypeStatement.DoubleCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
     protected abstract String toString(CastTypeStatement.CharCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(CastTypeStatement.DateCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
@@ -954,6 +926,8 @@ public abstract class ToSQL {
     protected abstract String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(ConvertTypeStatement.FloatConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(ConvertTypeStatement.DoubleConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(ConvertTypeStatement.CharConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
@@ -1016,29 +990,4 @@ public abstract class ToSQL {
     protected abstract String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.ReturnParameterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(TruncateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DDLCreateStatement.DDLCreateDatabaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DDLCreateStatement.DDLCreateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DDLDefineStatement.DDLColumnDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DDLDefineStatement.DDLPrimaryKeyDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DDLDefineStatement.DDLForeignKeyDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DDLDropStatement.DDLDropDatabaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DDLDropStatement.DDLDropTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DDLAlterStatement.DDLAlterRenameStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DDLAlterStatement.DDLAlterDropStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DDLAlterStatement.DDLAlterAddStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(DDLAlterStatement.DDLAlterModifyStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
 }

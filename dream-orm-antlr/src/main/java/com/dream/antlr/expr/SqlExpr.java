@@ -61,23 +61,8 @@ public abstract class SqlExpr {
     protected ExprFactory exprFactory(ExprInfo exprInfo) {
         ExprFactory exprFactory;
         switch (exprInfo.getExprType()) {
-            case TINYINT:
-                exprFactory = sqlExpr -> sqlExpr.exprTinyInt(exprInfo);
-                break;
-            case SMALLINT:
-                exprFactory = sqlExpr -> sqlExpr.exprSmallInt(exprInfo);
-                break;
-            case MEDIUMINT:
-                exprFactory = sqlExpr -> sqlExpr.exprMediumInt(exprInfo);
-                break;
             case INT:
                 exprFactory = sqlExpr -> sqlExpr.exprInt(exprInfo);
-                break;
-            case BIGINT:
-                exprFactory = sqlExpr -> sqlExpr.exprBigInt(exprInfo);
-                break;
-            case LONG:
-                exprFactory = sqlExpr -> sqlExpr.exprLong(exprInfo);
                 break;
             case FLOAT:
                 exprFactory = sqlExpr -> sqlExpr.exprFloat(exprInfo);
@@ -204,12 +189,6 @@ public abstract class SqlExpr {
             case RPAD:
                 exprFactory = sqlExpr -> sqlExpr.exprRpad(exprInfo);
                 break;
-            case DATABASE:
-                exprFactory = sqlExpr -> sqlExpr.exprDatabase(exprInfo);
-                break;
-            case TABLE:
-                exprFactory = sqlExpr -> sqlExpr.exprTable(exprInfo);
-                break;
             case ABS:
                 exprFactory = sqlExpr -> sqlExpr.exprAbs(exprInfo);
                 break;
@@ -227,6 +206,9 @@ public abstract class SqlExpr {
                 break;
             case ATAN:
                 exprFactory = sqlExpr -> sqlExpr.exprAtan(exprInfo);
+                break;
+            case TRUNCATE:
+                exprFactory = sqlExpr -> sqlExpr.exprTruncate(exprInfo);
                 break;
             case ALL:
                 exprFactory = sqlExpr -> sqlExpr.exprAll(exprInfo);
@@ -296,30 +278,6 @@ public abstract class SqlExpr {
                 break;
             case TAN:
                 exprFactory = sqlExpr -> sqlExpr.exprTan(exprInfo);
-                break;
-            case CREATE:
-                exprFactory = sqlExpr -> sqlExpr.exprCreate(exprInfo);
-                break;
-            case ALTER:
-                exprFactory = sqlExpr -> sqlExpr.exprAlter(exprInfo);
-                break;
-            case TRUNCATE:
-                exprFactory = sqlExpr -> sqlExpr.exprTruncate(exprInfo);
-                break;
-            case DROP:
-                exprFactory = sqlExpr -> sqlExpr.exprDrop(exprInfo);
-                break;
-            case COLUMN:
-                exprFactory = sqlExpr -> sqlExpr.exprColumn(exprInfo);
-                break;
-            case RENAME:
-                exprFactory = sqlExpr -> sqlExpr.exprRename(exprInfo);
-                break;
-            case TO:
-                exprFactory = sqlExpr -> sqlExpr.exprTo(exprInfo);
-                break;
-            case MODIFY:
-                exprFactory = sqlExpr -> sqlExpr.exprModify(exprInfo);
                 break;
             case ORDER:
                 exprFactory = sqlExpr -> sqlExpr.exprOrder(exprInfo);
@@ -406,15 +364,6 @@ public abstract class SqlExpr {
             case CHAR:
                 exprFactory = sqlExpr -> sqlExpr.exprChar(exprInfo);
                 break;
-            case VARCHAR:
-                exprFactory = sqlExpr -> sqlExpr.exprVarChar(exprInfo);
-                break;
-            case TEXT:
-                exprFactory = sqlExpr -> sqlExpr.exprText(exprInfo);
-                break;
-            case BLOB:
-                exprFactory = sqlExpr -> sqlExpr.exprBlob(exprInfo);
-                break;
             case UNIX_TIMESTAMP:
                 exprFactory = sqlExpr -> sqlExpr.exprUnixTimeStamp(exprInfo);
                 break;
@@ -426,9 +375,6 @@ public abstract class SqlExpr {
                 break;
             case DATETIME:
                 exprFactory = sqlExpr -> sqlExpr.exprDateTime(exprInfo);
-                break;
-            case TIMESTAMP:
-                exprFactory = sqlExpr -> sqlExpr.exprTimeStamp(exprInfo);
                 break;
             case SIGNED:
                 exprFactory = sqlExpr -> sqlExpr.exprSigned(exprInfo);
@@ -652,36 +598,6 @@ public abstract class SqlExpr {
             case TO_TIMESTAMP:
                 exprFactory = sqlExpr -> sqlExpr.exprToTimeStamp(exprInfo);
                 break;
-            case AUTO_INCREMENT:
-                exprFactory = sqlExpr -> sqlExpr.exprAutoIncrement(exprInfo);
-                break;
-            case CONSTRAINT:
-                exprFactory = sqlExpr -> sqlExpr.exprConstraint(exprInfo);
-                break;
-            case PRIMARY:
-                exprFactory = sqlExpr -> sqlExpr.exprPrimary(exprInfo);
-                break;
-            case FOREIGN:
-                exprFactory = sqlExpr -> sqlExpr.exprForeign(exprInfo);
-                break;
-            case REFERENCES:
-                exprFactory = sqlExpr -> sqlExpr.exprReferences(exprInfo);
-                break;
-            case KEY:
-                exprFactory = sqlExpr -> sqlExpr.exprKey(exprInfo);
-                break;
-            case ENGINE:
-                exprFactory = sqlExpr -> sqlExpr.exprEngine(exprInfo);
-                break;
-            case CHARSET:
-                exprFactory = sqlExpr -> sqlExpr.exprCharset(exprInfo);
-                break;
-            case COMMENT:
-                exprFactory = sqlExpr -> sqlExpr.exprComment(exprInfo);
-                break;
-            case DEFAULT:
-                exprFactory = sqlExpr -> sqlExpr.exprDefault(exprInfo);
-                break;
             case ACC:
                 exprFactory = sqlExpr -> sqlExpr.exprAcc(exprInfo);
                 break;
@@ -714,46 +630,6 @@ public abstract class SqlExpr {
 
     protected Statement exprOffSet(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
-    }
-
-    protected Statement exprAutoIncrement(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprConstraint(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprPrimary(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprForeign(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprReferences(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprKey(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprEngine(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprCharset(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprComment(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprDefault(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
     }
 
     protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
@@ -790,14 +666,6 @@ public abstract class SqlExpr {
 
     protected Statement exprRpad(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
-    }
-
-    protected Statement exprDatabase(ExprInfo exprInfo) throws AntlrException {
-        return exprKeyWord(exprInfo);
-    }
-
-    protected Statement exprTable(ExprInfo exprInfo) throws AntlrException {
-        return exprKeyWord(exprInfo);
     }
 
     protected Statement exprInterval(ExprInfo exprInfo) throws AntlrException {
@@ -980,18 +848,6 @@ public abstract class SqlExpr {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprVarChar(ExprInfo exprInfo) throws AntlrException {
-        return exprKeyWord(exprInfo);
-    }
-
-    protected Statement exprText(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprBlob(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
     protected Statement exprUnixTimeStamp(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
@@ -1006,10 +862,6 @@ public abstract class SqlExpr {
 
     protected Statement exprDateTime(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
-    }
-
-    protected Statement exprTimeStamp(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
     }
 
     protected Statement exprSigned(ExprInfo exprInfo) throws AntlrException {
@@ -1120,36 +972,8 @@ public abstract class SqlExpr {
         return exprFunction(exprInfo);
     }
 
-    protected Statement exprCreate(ExprInfo exprInfo) throws AntlrException {
-        return exprKeyWord(exprInfo);
-    }
-
-    protected Statement exprAlter(ExprInfo exprInfo) throws AntlrException {
-        return exprKeyWord(exprInfo);
-    }
-
     protected Statement exprTruncate(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
-    }
-
-    protected Statement exprDrop(ExprInfo exprInfo) throws AntlrException {
-        return exprKeyWord(exprInfo);
-    }
-
-    protected Statement exprColumn(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprRename(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprTo(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprModify(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
     }
 
     protected Statement exprTan(ExprInfo exprInfo) throws AntlrException {
@@ -1524,27 +1348,7 @@ public abstract class SqlExpr {
         return exprNil(exprInfo);
     }
 
-    protected Statement exprTinyInt(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprSmallInt(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprMediumInt(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
     protected Statement exprInt(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprBigInt(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprLong(ExprInfo exprInfo) throws AntlrException {
         return exprNil(exprInfo);
     }
 

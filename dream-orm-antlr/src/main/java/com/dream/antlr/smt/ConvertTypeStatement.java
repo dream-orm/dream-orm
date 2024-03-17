@@ -69,6 +69,13 @@ public abstract class ConvertTypeStatement extends Statement {
         }
     }
 
+    public static class DoubleConvertStatement extends ConvertTypeStatement {
+
+        public DoubleConvertStatement(Statement statement) {
+            super(statement);
+        }
+    }
+
     public static class DecimalConvertStatement extends ConvertTypeStatement {
         public Statement paramStatement;
 

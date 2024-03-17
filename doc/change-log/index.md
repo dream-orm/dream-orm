@@ -6,6 +6,7 @@
 - 修复：解决oracle环境下case语句报错
 - 优化：jdbcMapper查询增强
 - 修复：oracle、clickhouse适配
+- 废弃：去除ddl支持
 
 ## v1.2.14
 

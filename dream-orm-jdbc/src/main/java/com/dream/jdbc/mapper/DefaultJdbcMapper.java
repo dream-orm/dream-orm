@@ -305,7 +305,6 @@ public class DefaultJdbcMapper implements JdbcMapper {
             case DELETE:
                 exprInfo = exprReader.push();
                 break;
-            case DROP:
             case INSERT:
                 exprReader.push();
                 exprInfo = exprReader.push();

@@ -1,7 +1,6 @@
 package com.dream.antlr.sql;
 
 import com.dream.antlr.config.Assist;
-import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
@@ -238,6 +237,11 @@ public class ToClickHouse extends ToPubSQL {
     }
 
     @Override
+    protected String toString(CastTypeStatement.DoubleCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toFloat64(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(CastTypeStatement.DecimalCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement paramStatement = statement.getParamStatement();
         Statement decimalStatement = null;
@@ -282,6 +286,11 @@ public class ToClickHouse extends ToPubSQL {
 
     @Override
     protected String toString(ConvertTypeStatement.FloatConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toFloat64(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.DoubleConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "toFloat64(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
@@ -472,65 +481,5 @@ public class ToClickHouse extends ToPubSQL {
     protected String toString(OperStatement.BITXORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
         return "bitXor(" + toStr(conditionStatement.getLeft(), assist, invokerList) + "," + toStr(conditionStatement.getRight(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(DDLCreateStatement.DDLCreateTableStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        Statement comment = statement.getComment();
-        StringBuilder builder = new StringBuilder();
-        builder.append(" engine=MergeTree() ");
-        if (comment != null) {
-            builder.append(" COMMENT " + toStr(comment, assist, invokerList));
-        }
-        ListColumnStatement columnDefineList = statement.getColumnDefineList();
-        boolean existCreate = statement.isExistCreate();
-        return "CREATE TABLE " + (existCreate ? "" : "IF NOT EXISTS ") + toStr(statement.getStatement(), assist, invokerList) + "(" +
-                toStr(columnDefineList, assist, invokerList)
-                + ")" + builder;
-    }
-
-    @Override
-    protected String toString(DDLDefineStatement.DDLColumnDefineStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        Statement column = statement.getColumn();
-        Statement comment = statement.getComment();
-        ExprType columnType = statement.getColumnType();
-        String columnTypeName;
-        if (columnType.equals(ExprType.VARCHAR)) {
-            columnTypeName = "String";
-        } else if (columnType.equals(ExprType.INT) || column.equals(ExprType.INTEGER)) {
-            columnTypeName = "Int32";
-        } else if (columnType.equals(ExprType.BIGINT)) {
-            columnTypeName = "Int64";
-        } else if (columnType.equals(ExprType.FLOAT)) {
-            columnTypeName = "Float32";
-        } else if (columnType.equals(ExprType.DOUBLE)) {
-            columnTypeName = "Float64";
-        } else if (columnType.equals(ExprType.DECIMAL)) {
-            ListColumnStatement columnTypeParamList = statement.getColumnTypeParamList();
-            columnTypeName = "Decimal(" + toStr(columnTypeParamList, assist, invokerList) + ")";
-        } else if (columnType.equals(ExprType.DATE)) {
-            columnTypeName = "Date32";
-        } else if (columnType.equals(ExprType.DATETIME)) {
-            columnTypeName = "DateTime64";
-        } else {
-            columnTypeName = columnType.name();
-        }
-        Statement defaultValue = statement.getDefaultValue();
-        boolean nullFlag = statement.isNullFlag();
-        boolean primaryKey = statement.isPrimaryKey();
-        StringBuilder builder = new StringBuilder();
-        if (!nullFlag) {
-            builder.append(" NOT NULL");
-        }
-        if (primaryKey) {
-            builder.append(" PRIMARY KEY");
-        }
-        if (defaultValue != null) {
-            builder.append(" DEFAULT " + toStr(defaultValue, assist, invokerList));
-        }
-        if (comment != null) {
-            builder.append(" COMMENT " + toStr(comment, assist, invokerList));
-        }
-        return toStr(column, assist, invokerList) + " " + columnTypeName + builder;
     }
 }

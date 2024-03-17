@@ -16,7 +16,7 @@ public class PackageExpr extends SqlExpr {
 
     public PackageExpr(ExprReader exprReader) {
         super(exprReader);
-        setExprTypes(ExprType.LBRACE, ExprType.INVOKER, ExprType.SELECT, ExprType.INSERT, ExprType.UPDATE, ExprType.DELETE, ExprType.CREATE, ExprType.ALTER, ExprType.TRUNCATE, ExprType.DROP, ExprType.ACC);
+        setExprTypes(ExprType.LBRACE, ExprType.INVOKER, ExprType.SELECT, ExprType.INSERT, ExprType.UPDATE, ExprType.DELETE, ExprType.ACC);
     }
 
     @Override
@@ -67,33 +67,6 @@ public class PackageExpr extends SqlExpr {
     protected Statement exprDML(ExprInfo exprInfo) throws AntlrException {
         DMLExpr dmlExpr = new DMLExpr(exprReader);
         statement.setStatement(dmlExpr.expr());
-        setExprTypes(ExprType.ACC);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprCreate(ExprInfo exprInfo) throws AntlrException {
-        return exprDDL(exprInfo);
-    }
-
-    @Override
-    protected Statement exprAlter(ExprInfo exprInfo) throws AntlrException {
-        return exprDDL(exprInfo);
-    }
-
-    @Override
-    protected Statement exprTruncate(ExprInfo exprInfo) throws AntlrException {
-        return exprDDL(exprInfo);
-    }
-
-    @Override
-    protected Statement exprDrop(ExprInfo exprInfo) throws AntlrException {
-        return exprDDL(exprInfo);
-    }
-
-    protected Statement exprDDL(ExprInfo exprInfo) throws AntlrException {
-        DDLExpr ddlExpr = new DDLExpr(exprReader);
-        statement.setStatement(ddlExpr.expr());
         setExprTypes(ExprType.ACC);
         return expr();
     }
