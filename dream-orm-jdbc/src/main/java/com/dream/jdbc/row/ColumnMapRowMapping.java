@@ -26,7 +26,6 @@ public class ColumnMapRowMapping implements RowMapping<Map<String, Object>> {
         for (int i = 0; i < columnCount; i++) {
             int jdbcType = metaData.getColumnType(i + 1);
             String columnLabel = metaData.getColumnLabel(i + 1);
-            columnLabel = SystemUtil.underlineToCamel(columnLabel);
             TypeHandler typeHandler;
             try {
                 typeHandler = typeHandlerFactory.getTypeHandler(Object.class, jdbcType);

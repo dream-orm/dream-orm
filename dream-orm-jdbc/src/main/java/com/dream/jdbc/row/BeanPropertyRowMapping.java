@@ -36,17 +36,19 @@ public class BeanPropertyRowMapping<T> implements RowMapping<T> {
         for (int i = 0; i < columnCount; i++) {
             int jdbcType = metaData.getColumnType(i + 1);
             String columnLabel = metaData.getColumnLabel(i + 1);
-            columnLabel = SystemUtil.underlineToCamel(columnLabel);
             Method method = methodMap.get(columnLabel);
             if (method == null) {
-                throw new DreamRunTimeException("属性" + columnLabel + "，没有setter方法");
+                method = methodMap.get(SystemUtil.underlineToCamel(columnLabel));
+                if (method == null) {
+                    throw new DreamRunTimeException("属性" + columnLabel + "，没有setter方法");
+                }
             }
             Class<?>[] parameterTypes = method.getParameterTypes();
             TypeHandler typeHandler;
             try {
                 typeHandler = typeHandlerFactory.getTypeHandler(parameterTypes[0], jdbcType);
             } catch (TypeHandlerNotFoundException e) {
-                typeHandler = new ObjectTypeHandler();
+                throw new DreamRunTimeException(e);
             }
             columnList.add(new Column(i + 1, jdbcType, columnLabel, typeHandler, method));
         }
