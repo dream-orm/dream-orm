@@ -77,7 +77,7 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testDate() {
-        testSqlForMany("SELECT curdate(),datediff(s1,s2),date_sub(s1,interval 2 year)" +
+        testSqlForMany("SELECT CURTIME(),CURRENT_TIME(),curdate(),datediff(s1,s2),date_sub(s1,interval 2 year)" +
                 ",date_add(s1,interval 2 year),date_add(s1,interval 4 quarter),date_add(s1,interval 4 month)" +
                 ",date_add(s1,interval 3 week),date_add(s1,interval 4 day),date_add(s1,interval 4 hour),date_add(s1,interval 4 minute),date_add(s1,interval 4 second)" +
                 ",DAYOFYEAR(s),year(s),month(s),now(),day(s),DAYOFWEEK(s),hour(s),last_day(s),minute(s),quarter(s),second(s),weekofyear(s)" +

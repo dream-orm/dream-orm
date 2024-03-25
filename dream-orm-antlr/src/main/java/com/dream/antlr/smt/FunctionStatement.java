@@ -414,6 +414,14 @@ public abstract class FunctionStatement extends Statement {
 
     }
 
+    public static class CurTimeStatement extends FunctionStatement {
+
+    }
+
+    public static class CurrentTimeStatement extends FunctionStatement {
+
+    }
+
     public static class DateDiffStatement extends FunctionStatement {
 
     }

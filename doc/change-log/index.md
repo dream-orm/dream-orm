@@ -1,5 +1,10 @@
 # dream-orm 升级日志
 
+
+## v1.2.16
+
+- 优化：支持curtime和current_time函数
+
 ## v1.2.15
 
 - 修复：解决lcase函数在其他数据库报错

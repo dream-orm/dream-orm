@@ -552,6 +552,22 @@ public class FunctionExpr extends SqlExpr {
     }
 
     @Override
+    protected Statement exprCurTime(ExprInfo exprInfo) throws AntlrException {
+        FunctionStatement func = new FunctionStatement.CurTimeStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprCurrentTime(ExprInfo exprInfo) throws AntlrException {
+        FunctionStatement func = new FunctionStatement.CurrentTimeStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     protected Statement exprDateDiff(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.DateDiffStatement();
         functionStatement = new FunctionParamExpr(exprReader, func).expr();

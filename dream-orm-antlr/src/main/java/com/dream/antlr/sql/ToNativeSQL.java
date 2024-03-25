@@ -680,6 +680,16 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.CurTimeStatement statement, Assist assist, List<Invoker> invokerList) {
+        return "CURTIME()";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.CurrentTimeStatement statement, Assist assist, List<Invoker> invokerList) {
+        return "CURRENT_TIME()";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "DATEDIFF(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

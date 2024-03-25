@@ -392,9 +392,13 @@ public class ToSQLServer extends ToPubSQL {
         return super.toString(statement, assist, invokerList);
     }
 
-
     @Override
     protected String toString(FunctionStatement.CurDateStatement statement, Assist assist, List<Invoker> invokerList) {
+        return "GETDATE()";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.CurrentDateStatement statement, Assist assist, List<Invoker> invokerList) {
         return "GETDATE()";
     }
 

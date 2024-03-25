@@ -5,7 +5,6 @@ import com.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.dream.system.typehandler.handler.ObjectTypeHandler;
 import com.dream.system.typehandler.handler.TypeHandler;
-import com.dream.system.util.SystemUtil;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

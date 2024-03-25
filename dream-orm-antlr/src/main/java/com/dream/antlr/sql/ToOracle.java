@@ -435,6 +435,16 @@ public class ToOracle extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.CurTimeStatement statement, Assist assist, List<Invoker> invokerList) {
+        return "SYSDATE";
+    }
+
+    @Override
+    protected String toString(FunctionStatement.CurrentTimeStatement statement, Assist assist, List<Invoker> invokerList) {
+        return "SYSDATE";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CEIL(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + "-" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList) + ")";
     }

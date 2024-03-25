@@ -359,6 +359,12 @@ public abstract class ToSQL {
             case 520761480://CurrentDateStatement
                 sql = toString((FunctionStatement.CurrentDateStatement) statement, assist, invokerList);
                 break;
+            case -610900254://CurTimeStatement
+                sql = toString((FunctionStatement.CurTimeStatement) statement, assist, invokerList);
+                break;
+            case 847700041://CurrentTimeStatement
+                sql = toString((FunctionStatement.CurrentTimeStatement) statement, assist, invokerList);
+                break;
             case -544809540://DateDiffStatement
                 sql = toString((FunctionStatement.DateDiffStatement) statement, assist, invokerList);
                 break;
@@ -850,6 +856,10 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.CurDateStatement statement, Assist assist, List<Invoker> invokerList);
 
     protected abstract String toString(FunctionStatement.CurrentDateStatement statement, Assist assist, List<Invoker> invokerList);
+
+    protected abstract String toString(FunctionStatement.CurTimeStatement statement, Assist assist, List<Invoker> invokerList);
+
+    protected abstract String toString(FunctionStatement.CurrentTimeStatement statement, Assist assist, List<Invoker> invokerList);
 
     protected abstract String toString(FunctionStatement.DateDiffStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

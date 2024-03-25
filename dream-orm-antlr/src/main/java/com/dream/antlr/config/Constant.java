@@ -58,6 +58,8 @@ public final class Constant {
             ExprType.TRUNCATE,
             ExprType.CURDATE,
             ExprType.CURRENT_DATE,
+            ExprType.CURTIME,
+            ExprType.CURRENT_TIME,
             ExprType.DATEDIFF,
             ExprType.UNIX_TIMESTAMP,
             ExprType.FROM_UNIXTIME,
