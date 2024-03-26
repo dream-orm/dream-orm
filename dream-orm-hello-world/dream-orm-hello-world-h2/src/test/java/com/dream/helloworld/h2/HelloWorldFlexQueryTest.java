@@ -183,7 +183,7 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testHaving() {
-        QueryDef queryDef = select(count(account.id)).from(account).groupBy(account.age).having(account.name.likeLeft("a"));
+        QueryDef queryDef = select(count(account.id)).from(account).groupBy(account.age).having(account.name.likeLeft("a").and(account.name.likeRight("b")));
         Statement statement = queryDef.statement();
         SqlInfo sqlInfo = flexDialect.toSQL(statement);
         System.out.println(sqlInfo.getSql());

@@ -169,8 +169,8 @@ public class ColumnDef {
     public ConditionDef likeLeft(Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         listColumnStatement.add(new FlexMarkInvokerStatement(value));
+        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         concatStatement.setParamsStatement(listColumnStatement);
         return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
     }
@@ -182,8 +182,8 @@ public class ColumnDef {
     public ConditionDef likeRight(Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new FlexMarkInvokerStatement(value));
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
+        listColumnStatement.add(new FlexMarkInvokerStatement(value));
         concatStatement.setParamsStatement(listColumnStatement);
         return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
     }

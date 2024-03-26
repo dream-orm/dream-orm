@@ -4,6 +4,7 @@
 ## v1.2.16
 
 - 优化：支持curtime和current_time函数
+- 优化：flex写法likeLeft:LIKE CONCAT(?,'%')，likeRight:LIKE CONCAT('%',?)
 
 ## v1.2.15
 
