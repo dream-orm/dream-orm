@@ -48,11 +48,11 @@ public class ToOracle11 extends ToOracle {
                 //查询字段
                 ListColumnStatement listColumnStatement = AntlrUtil.listColumnStatement(",", "*");
                 //查询表
-                AliasStatement tableAliasStatement = AntlrUtil.aliasStatement(new BraceStatement(statement), null);
+                BraceStatement braceStatement=new BraceStatement(statement);
                 //查询条件
                 ConditionStatement conditionStatement = AntlrUtil.conditionStatement(new SymbolStatement.LetterStatement("ROWNUM"), new OperStatement.LEQStatement(), first);
                 //构建查询
-                statement = AntlrUtil.queryStatement(listColumnStatement, tableAliasStatement, conditionStatement);
+                statement = AntlrUtil.queryStatement(listColumnStatement, braceStatement, conditionStatement);
             }
         }
         return super.toString(statement, assist, invokerList);

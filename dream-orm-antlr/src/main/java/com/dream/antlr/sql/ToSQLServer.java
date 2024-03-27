@@ -199,15 +199,15 @@ public class ToSQLServer extends ToPubSQL {
         StringBuilder builder = new StringBuilder();
         if (statement.isOffset()) {
             if (statement.getSecond() != null) {
-                builder.append(" OFFSET " + toStr(statement.getSecond(), assist, invokerList));
+                builder.append("OFFSET " + toStr(statement.getSecond(), assist, invokerList));
             }
             builder.append(" ROWS FETCH NEXT " + toStr(statement.getFirst(), assist, invokerList) + " ROWS ONLY");
         } else {
             if (statement.getSecond() != null) {
-                builder.append(" OFFSET " + toStr(statement.getFirst(), assist, invokerList));
+                builder.append("OFFSET " + toStr(statement.getFirst(), assist, invokerList));
                 builder.append(" ROWS FETCH NEXT " + toStr(statement.getSecond(), assist, invokerList) + " ROWS ONLY");
             } else {
-                builder.append(" OFFSET 0");
+                builder.append("OFFSET 0");
                 builder.append(" ROWS FETCH NEXT " + toStr(statement.getFirst(), assist, invokerList) + " ROWS ONLY");
             }
         }

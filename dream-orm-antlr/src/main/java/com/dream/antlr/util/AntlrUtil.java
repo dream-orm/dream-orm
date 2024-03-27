@@ -102,7 +102,7 @@ public class AntlrUtil {
         return conditionStatement;
     }
 
-    public static QueryStatement queryStatement(ListColumnStatement selectListColumnStatement, AliasStatement aliasStatement, ConditionStatement conditionStatement) {
+    public static QueryStatement queryStatement(ListColumnStatement selectListColumnStatement, Statement tableStatement, ConditionStatement conditionStatement) {
         QueryStatement queryStatement = new QueryStatement();
 
         SelectStatement selectStatement = new SelectStatement();
@@ -110,7 +110,7 @@ public class AntlrUtil {
         queryStatement.setSelectStatement(selectStatement);
 
         FromStatement fromStatement = new FromStatement();
-        fromStatement.setMainTable(aliasStatement);
+        fromStatement.setMainTable(tableStatement);
         queryStatement.setFromStatement(fromStatement);
 
         if (conditionStatement != null) {

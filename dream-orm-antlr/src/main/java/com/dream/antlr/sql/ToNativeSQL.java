@@ -6,6 +6,7 @@ import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * SQL原始字符串
@@ -105,17 +106,17 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(UnionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " UNION" + (statement.isAll() ? " ALL " : " ") + toStr(statement.getStatement(), assist, invokerList);
+        return "UNION" + (statement.isAll() ? " ALL " : " ") + toStr(statement.getStatement(), assist, invokerList);
     }
 
     @Override
     protected String toString(ForUpdateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " FOR UPDATE";
+        return "FOR UPDATE";
     }
 
     @Override
     protected String toString(ForUpdateNoWaitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " FOR UPDATE NOWAIT";
+        return "FOR UPDATE NOWAIT";
     }
 
     @Override
@@ -188,12 +189,12 @@ public class ToNativeSQL extends ToSQL {
     protected String toString(LimitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         StringBuilder builder = new StringBuilder();
         if (statement.isOffset()) {
-            builder.append(" LIMIT " + toStr(statement.getFirst(), assist, invokerList));
+            builder.append("LIMIT " + toStr(statement.getFirst(), assist, invokerList));
             if (statement.getSecond() != null) {
                 builder.append(" OFFSET " + toStr(statement.getSecond(), assist, invokerList));
             }
         } else {
-            builder.append(" LIMIT " + toStr(statement.getFirst(), assist, invokerList));
+            builder.append("LIMIT " + toStr(statement.getFirst(), assist, invokerList));
             if (statement.getSecond() != null) {
                 builder.append("," + toStr(statement.getSecond(), assist, invokerList));
             }
@@ -203,7 +204,7 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(OrderStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " ORDER BY " + toStr(statement.getStatement(), assist, invokerList);
+        return "ORDER BY " + toStr(statement.getStatement(), assist, invokerList);
     }
 
     @Override
@@ -218,18 +219,18 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(HavingStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " HAVING " + toStr(statement.getCondition(), assist, invokerList);
+        return "HAVING " + toStr(statement.getCondition(), assist, invokerList);
     }
 
     @Override
     protected String toString(GroupStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return " GROUP BY " + toStr(statement.getGroup(), assist, invokerList);
+        return "GROUP BY " + toStr(statement.getGroup(), assist, invokerList);
     }
 
     @Override
     protected String toString(WhereStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String condition = toStr(statement.getStatement(), assist, invokerList);
-        return " WHERE " + condition;
+        return "WHERE " + condition;
     }
 
     @Override
@@ -363,7 +364,35 @@ public class ToNativeSQL extends ToSQL {
         String limit = toStr(statement.getLimitStatement(), assist, invokerList);
         String union = toStr(statement.getUnionStatement(), assist, invokerList);
         String forUpdate = toStr(statement.getForUpdateStatement(), assist, invokerList);
-        return select + from + where + groupBy + having + orderBy + limit + union + forUpdate;
+        StringJoiner joiner = new StringJoiner(" ");
+        if (!select.isEmpty()) {
+            joiner.add(select);
+        }
+        if (!from.isEmpty()) {
+            joiner.add(from);
+        }
+        if (!where.isEmpty()) {
+            joiner.add(where);
+        }
+        if (!groupBy.isEmpty()) {
+            joiner.add(groupBy);
+        }
+        if (!having.isEmpty()) {
+            joiner.add(having);
+        }
+        if (!orderBy.isEmpty()) {
+            joiner.add(orderBy);
+        }
+        if (!limit.isEmpty()) {
+            joiner.add(limit);
+        }
+        if (!union.isEmpty()) {
+            joiner.add(union);
+        }
+        if (!forUpdate.isEmpty()) {
+            joiner.add(forUpdate);
+        }
+        return joiner.toString();
     }
 
     @Override
@@ -983,7 +1012,7 @@ public class ToNativeSQL extends ToSQL {
     protected String toString(FromStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String table = toStr(statement.getMainTable(), assist, invokerList);
         String joins = toStr(statement.getJoinList(), assist, invokerList);
-        return " FROM " + table + ("".equals(joins) ? "" : " " + joins);
+        return "FROM " + table + ("".equals(joins) ? "" : " " + joins);
     }
 
     @Override
