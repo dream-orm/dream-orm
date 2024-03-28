@@ -7,7 +7,7 @@
     <groupId>com.dream-orm</groupId>
     <artifactId>dream-orm</artifactId>
     <packaging>pom</packaging>
-    <version>1.2.16</version>
+    <version>1.3.0</version>
     <name>dream-orm</name>
     <description>dream-orm is a translation based orm framework</description>
     <url>https://github.com/dream-orm/dream-orm</url>
@@ -48,6 +48,7 @@
         <module>dream-orm-spring-boot-starter</module>
         <module>dream-orm-solon-plugin</module>
         <module>dream-orm-jdbc</module>
+        <module>dream-orm-lambda</module>
         <module>dream-orm-tdengine</module>
         <module>dream-orm-generator</module>
     </modules>

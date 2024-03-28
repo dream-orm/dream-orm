@@ -1,6 +1,9 @@
 package com.dream.helloworld.h2;
 
+import com.dream.chain.mapper.DefaultFlexChainMapper;
+import com.dream.chain.mapper.FlexChainMapper;
 import com.dream.flex.annotation.FlexAPT;
+import com.dream.flex.mapper.FlexMapper;
 import com.dream.system.inject.Inject;
 import com.dream.system.table.ColumnInfo;
 import com.dream.template.sequence.AbstractSequence;
@@ -228,6 +231,11 @@ public class HelloWorldApplication {
 //            }
 //        });
 //    }
+
+    @Bean
+    public FlexChainMapper flexChainMapper(FlexMapper flexMapper) {
+        return new DefaultFlexChainMapper(flexMapper);
+    }
 
     /**
      * 主键序列

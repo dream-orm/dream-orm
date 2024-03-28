@@ -8,8 +8,6 @@ import com.dream.antlr.sql.ToMySQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.boot.factory.SpringTransactionFactory;
 import com.dream.boot.holder.SpringSessionHolder;
-import com.dream.chain.mapper.DefaultFlexChainMapper;
-import com.dream.chain.mapper.FlexChainMapper;
 import com.dream.drive.build.DefaultSessionFactoryBuilder;
 import com.dream.drive.build.SessionFactoryBuilder;
 import com.dream.drive.factory.DefaultFlexDialect;
@@ -468,18 +466,6 @@ public class DreamAutoConfiguration {
     @ConditionalOnMissingBean
     public FlexMapper flexMapper(SessionTemplate sessionTemplate, FlexDialect flexDialect) {
         return new DefaultFlexMapper(sessionTemplate, flexDialect);
-    }
-
-    /**
-     * 链式操作接口包装版
-     *
-     * @param flexMapper 链式操作接口
-     * @return
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public FlexChainMapper flexChainMapper(FlexMapper flexMapper) {
-        return new DefaultFlexChainMapper(flexMapper);
     }
 
     /**

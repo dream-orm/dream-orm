@@ -1,6 +1,5 @@
 package com.dream.drive.factory;
 
-import com.dream.chain.mapper.FlexChainMapper;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.jdbc.mapper.JdbcMapper;
 import com.dream.system.core.session.Session;
@@ -27,13 +26,6 @@ public interface DriveFactory {
      * @return 链式操作接口
      */
     FlexMapper flexMapper();
-
-    /**
-     * 链式强化接口
-     *
-     * @return 链式强化接口
-     */
-    FlexChainMapper flexChainMapper();
 
     /**
      * 不翻译直接执行SQL接口

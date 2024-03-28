@@ -6,8 +6,6 @@ import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.sql.ToMySQL;
 import com.dream.antlr.sql.ToSQL;
-import com.dream.chain.mapper.DefaultFlexChainMapper;
-import com.dream.chain.mapper.FlexChainMapper;
 import com.dream.drive.build.DefaultSessionFactoryBuilder;
 import com.dream.drive.build.SessionFactoryBuilder;
 import com.dream.drive.config.DefaultConfig;
@@ -69,7 +67,6 @@ public class DefaultDriveFactory implements DriveFactory {
     protected TemplateMapper templateMapper;
     protected FlexMapper flexMapper;
     protected FlexDialect flexDialect;
-    protected FlexChainMapper flexChainMapper;
     protected JdbcMapper jdbcMapper;
     protected ToSQL toSQL;
     protected DriveProperties driveProperties;
@@ -90,7 +87,6 @@ public class DefaultDriveFactory implements DriveFactory {
         this.templateMapper = templateMapper(sessionTemplate, sequence());
         this.flexDialect = flexDialect(toSQL);
         this.flexMapper = flexMapper(sessionTemplate, flexDialect);
-        this.flexChainMapper = flexChainMapper(this.flexMapper);
         this.jdbcMapper = jdbcMapper(this.sessionTemplate);
     }
 
@@ -110,11 +106,6 @@ public class DefaultDriveFactory implements DriveFactory {
     }
 
     @Override
-    public FlexChainMapper flexChainMapper() {
-        return flexChainMapper;
-    }
-
-    @Override
     public JdbcMapper jdbcMapper() {
         return jdbcMapper;
     }
@@ -129,10 +120,6 @@ public class DefaultDriveFactory implements DriveFactory {
 
     protected FlexMapper flexMapper(SessionTemplate sessionTemplate, FlexDialect flexDialect) {
         return new DefaultFlexMapper(sessionTemplate, flexDialect);
-    }
-
-    protected FlexChainMapper flexChainMapper(FlexMapper flexMapper) {
-        return new DefaultFlexChainMapper(flexMapper);
     }
 
     protected JdbcMapper jdbcMapper(Session session) {

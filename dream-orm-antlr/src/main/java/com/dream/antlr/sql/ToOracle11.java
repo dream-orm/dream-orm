@@ -48,7 +48,7 @@ public class ToOracle11 extends ToOracle {
                 //查询字段
                 ListColumnStatement listColumnStatement = AntlrUtil.listColumnStatement(",", "*");
                 //查询表
-                BraceStatement braceStatement=new BraceStatement(statement);
+                BraceStatement braceStatement = new BraceStatement(statement);
                 //查询条件
                 ConditionStatement conditionStatement = AntlrUtil.conditionStatement(new SymbolStatement.LetterStatement("ROWNUM"), new OperStatement.LEQStatement(), first);
                 //构建查询
