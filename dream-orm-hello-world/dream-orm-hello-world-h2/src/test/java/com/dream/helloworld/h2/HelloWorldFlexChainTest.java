@@ -30,7 +30,7 @@ public class HelloWorldFlexChainTest {
     @Test
     public void testSelectById() {
         AccountView accountView = flexChainMapper
-                .select(account.accountView)
+                .select()
                 .from(account)
                 .where(account.id.eq(1))
                 .one(AccountView.class);
@@ -42,7 +42,7 @@ public class HelloWorldFlexChainTest {
      */
     @Test
     public void testSelectList() {
-        List<AccountView> accountViews = flexChainMapper.select(account.accountView).from(account)
+        List<AccountView> accountViews = flexChainMapper.select().from(account)
                 .where(account.id.gt(3)).list(AccountView.class);
         System.out.println("查询结果：" + accountViews);
     }
@@ -53,7 +53,7 @@ public class HelloWorldFlexChainTest {
     @Test
     public void testSelectPage() {
         Page page = new Page(1, 2);
-        page = flexChainMapper.select(account.accountView).from(account).where(account.id.gt(1)).page(AccountView.class, page);
+        page = flexChainMapper.select().from(account).where(account.id.gt(1)).page(AccountView.class, page);
         System.out.println("总数：" + page.getTotal() + "\n查询结果：" + page.getRows());
     }
 
@@ -107,7 +107,7 @@ public class HelloWorldFlexChainTest {
      */
     @Test
     public void testTree() {
-        List<TreeAccountView> treeAccountViews = flexChainMapper.select(account.treeAccountView).from(account).tree(TreeAccountView.class);
+        List<TreeAccountView> treeAccountViews = flexChainMapper.select().from(account).tree(TreeAccountView.class);
         System.out.println("查询结果：" + treeAccountViews);
     }
 }

@@ -39,7 +39,7 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testSelectArray() {
-        QueryDef queryDef = select(account.accountView);
+        QueryDef queryDef = select();
         SqlInfo sqlInfo = flexDialect.toSQL(queryDef);
         System.out.println(sqlInfo.getSql());
     }

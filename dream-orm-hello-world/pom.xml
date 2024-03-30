@@ -46,7 +46,7 @@
             </dependency>
             <dependency>
                 <groupId>com.dream-orm</groupId>
-                <artifactId>dream-orm-lambda</artifactId>
+                <artifactId>dream-orm-wrap</artifactId>
                 <version>${dream-orm.version}</version>
             </dependency>
             <dependency>

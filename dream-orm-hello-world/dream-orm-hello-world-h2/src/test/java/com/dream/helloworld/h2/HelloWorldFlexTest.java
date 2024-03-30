@@ -32,7 +32,7 @@ public class HelloWorldFlexTest {
      */
     @Test
     public void testSelectById() {
-        QueryDef queryDef = select(account.accountView).from(account).where(account.id.eq(1));
+        QueryDef queryDef = select().from(account).where(account.id.eq(1));
         AccountView accountView = flexMapper.selectOne(queryDef, AccountView.class);
         System.out.println("查询结果：" + accountView);
     }
@@ -42,14 +42,14 @@ public class HelloWorldFlexTest {
      */
     @Test
     public void testSelectList() {
-        QueryDef queryDef = select(account.accountView).from(account).where(account.id.gt(3));
+        QueryDef queryDef = select().from(account).where(account.id.gt(3));
         List<AccountView> accountViews = flexMapper.selectList(queryDef, AccountView.class);
         System.out.println("查询结果：" + accountViews);
     }
 
     @Test
     public void testSelectList2() {
-        QueryDef queryDef = select(account.accountView).from(account);
+        QueryDef queryDef = select().from(account);
         List<List> accountViews = flexMapper.selectList(queryDef, List.class);
         System.out.println("查询结果：" + accountViews);
     }
@@ -59,7 +59,7 @@ public class HelloWorldFlexTest {
      */
     @Test
     public void testSelectPage() {
-        QueryDef queryDef = select(account.accountView).from(account).where(account.id.gt(1));
+        QueryDef queryDef = select().from(account).where(account.id.gt(1));
         Page page = new Page(1, 2);
         page = flexMapper.selectPage(queryDef, AccountView.class, page);
         System.out.println("总数：" + page.getTotal() + "\n查询结果：" + page.getRows());
@@ -149,7 +149,7 @@ public class HelloWorldFlexTest {
      */
     @Test
     public void testTree() {
-        QueryDef queryDef = select(account.treeAccountView).from(account);
+        QueryDef queryDef = select().from(account);
         List<TreeAccountView> treeAccountViews = flexMapper.selectTree(queryDef, TreeAccountView.class);
         System.out.println("查询结果：" + treeAccountViews);
     }

@@ -35,7 +35,7 @@ public class SimpleResultSetHandler implements ResultSetHandler {
             } catch (TypeHandlerNotFoundException e) {
                 throw new DreamRunTimeException(e);
             }
-        } else if (Map.class.isAssignableFrom(colType)) {
+        } else if (Map.class.isAssignableFrom(colType) || Collection.class.isAssignableFrom(colType)) {
             for (int i = 0; i < columnCount; i++) {
                 int columnType = metaData.getColumnType(i + 1);
                 String columnLabel = metaData.getColumnLabel(i + 1);

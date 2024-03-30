@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
-            <artifactId>dream-orm-lambda</artifactId>
+            <artifactId>dream-orm-wrap</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

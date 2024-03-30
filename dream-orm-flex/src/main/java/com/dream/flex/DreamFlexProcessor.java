@@ -1,10 +1,8 @@
 package com.dream.flex;
 
-import com.dream.flex.annotation.FlexAPT;
+import com.dream.flex.annotation.EnableFlexAPT;
 import com.dream.system.annotation.Column;
-import com.dream.system.annotation.Ignore;
 import com.dream.system.annotation.Table;
-import com.dream.system.annotation.View;
 import com.dream.system.util.SystemUtil;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
@@ -41,19 +39,18 @@ public class DreamFlexProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (!roundEnv.processingOver()) {
-            Set<? extends Element> flexAptElements = roundEnv.getElementsAnnotatedWith(FlexAPT.class);
+            Set<? extends Element> flexAptElements = roundEnv.getElementsAnnotatedWith(EnableFlexAPT.class);
             if (flexAptElements == null || flexAptElements.isEmpty()) {
                 return true;
             } else if (flexAptElements.size() > 1) {
-                throw new DreamRunTimeException("注解" + FlexAPT.class.getName() + "存在多个");
+                throw new DreamRunTimeException("注解" + EnableFlexAPT.class.getName() + "存在多个");
             }
             Element flexAPTElement = flexAptElements.iterator().next();
-            FlexAPT flexAPT = flexAPTElement.getAnnotation(FlexAPT.class);
-            if (flexAPT.enable()) {
-                String classSuffix = flexAPT.classSuffix();
-                String dir = flexAPT.dir();
+            EnableFlexAPT enableFlexAPT = flexAPTElement.getAnnotation(EnableFlexAPT.class);
+            if (enableFlexAPT != null) {
+                String classSuffix = enableFlexAPT.classSuffix();
+                String dir = enableFlexAPT.dir();
                 Set<? extends Element> tableElements = roundEnv.getElementsAnnotatedWith(Table.class);
-                Map<String, Map<String, Set<String>>> tableFieldMap = tableFieldMap(roundEnv);
                 for (Element tableElement : tableElements) {
                     String entityClass = tableElement.toString();
                     String className = getClassName(entityClass);
@@ -61,31 +58,17 @@ public class DreamFlexProcessor extends AbstractProcessor {
                     String tableDefClassName = className.concat(classSuffix);
                     Table table = tableElement.getAnnotation(Table.class);
                     String tableName = ObjectUtil.isNull(table.value()) ? SystemUtil.camelToUnderline(className) : table.value();
-                    Map<String, Set<String>> fieldMap = tableFieldMap.get(entityClass);
-                    Map<String, List<String>> columnMap = new HashMap<>();
                     List<String> columnList = columnInfoList((TypeElement) tableElement, fieldElement -> {
                         Column column = fieldElement.getAnnotation(Column.class);
                         if (column != null) {
                             String fieldName = fieldElement.toString();
                             String columnName = ObjectUtil.isNull(column.value()) ? SystemUtil.camelToUnderline(fieldName) : column.value();
-                            if (fieldMap != null && !fieldMap.isEmpty()) {
-                                fieldMap.forEach((k, v) -> {
-                                    if (v.contains(fieldName)) {
-                                        List<String> columns = columnMap.get(k);
-                                        if (columns == null) {
-                                            columns = new ArrayList<>();
-                                            columnMap.put(k, columns);
-                                        }
-                                        columns.add(columnName);
-                                    }
-                                });
-                            }
                             return columnName;
                         } else {
                             return null;
                         }
                     });
-                    String content = buildTableDef(tableName, tableDefPackage, tableDefClassName, columnList, columnMap);
+                    String content = buildTableDef(tableName, tableDefPackage, tableDefClassName, columnList);
                     try {
                         processGenClass(tableDefPackage, tableDefClassName, content);
                     } catch (IOException e) {
@@ -153,7 +136,7 @@ public class DreamFlexProcessor extends AbstractProcessor {
         return String.join(".", deque);
     }
 
-    private String buildTableDef(String table, String tableDefPackage, String tableDefClassName, List<String> columnList, Map<String, List<String>> columnMap) {
+    private String buildTableDef(String table, String tableDefPackage, String tableDefClassName, List<String> columnList) {
         StringBuilder content = new StringBuilder("package ");
         content.append(tableDefPackage).append(";\n\n");
         content.append("import com.dream.flex.def.ColumnDef;\n");
@@ -177,17 +160,6 @@ public class DreamFlexProcessor extends AbstractProcessor {
                 .append(" = new ColumnDef[]{")
                 .append(String.join(",", columnList))
                 .append("};\n");
-        if (columnMap != null && !columnMap.isEmpty()) {
-            columnMap.forEach((k, v) -> {
-                if (!v.isEmpty()) {
-                    content.append("    public final ColumnDef[]")
-                            .append(k)
-                            .append(" = new ColumnDef[]{")
-                            .append(String.join(",", v))
-                            .append("};\n");
-                }
-            });
-        }
         content
                 .append("\n    public ").append(tableDefClassName).append("() {\n")
                 .append("        this").append("(null);\n")
@@ -213,33 +185,6 @@ public class DreamFlexProcessor extends AbstractProcessor {
                 writer.close();
             }
         }
-    }
-
-    private Map<String, Map<String, Set<String>>> tableFieldMap(RoundEnvironment roundEnv) {
-        Map<String, Map<String, Set<String>>> tableFieldMap = new HashMap<>();
-        Set<? extends Element> viewElements = roundEnv.getElementsAnnotatedWith(View.class);
-        for (Element viewElement : viewElements) {
-            String entityClass = viewElement.toString();
-            String className = getClassName(entityClass);
-            View view = viewElement.getAnnotation(View.class);
-            String viewStr = view.toString();
-            String tableClassName = getTableClassName(viewStr);
-            List<String> columnInfoList = columnInfoList((TypeElement) viewElement, fieldElement -> {
-                if (fieldElement.getAnnotation(Ignore.class) != null) {
-                    return null;
-                }
-                return fieldElement.toString();
-            });
-            Set<String> columnSet = new HashSet<>(columnInfoList);
-            Map<String, Set<String>> fieldMap = tableFieldMap.get(tableClassName);
-            if (fieldMap == null) {
-                fieldMap = new HashMap<>();
-                tableFieldMap.put(tableClassName, fieldMap);
-            }
-            String lowClassName = String.valueOf(Character.toLowerCase(className.charAt(0))).concat(className.substring(1));
-            fieldMap.put(lowClassName, columnSet);
-        }
-        return tableFieldMap;
     }
 
     private String getClassName(String str) {
