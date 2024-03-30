@@ -1,7 +1,7 @@
 package com.dream.flex.def;
 
 import com.dream.antlr.smt.LimitStatement;
-import com.dream.flex.invoker.FlexMarkInvokerStatement;
+import com.dream.regular.invoker.TakeMarkInvokerStatement;
 
 public interface LimitDef<
         Union extends UnionDef<ForUpdate, Query>,
@@ -12,8 +12,8 @@ public interface LimitDef<
     default Union limit(Integer offset, Integer rows) {
         LimitStatement limitStatement = new LimitStatement();
         limitStatement.setOffset(false);
-        limitStatement.setFirst(new FlexMarkInvokerStatement(offset));
-        limitStatement.setSecond(new FlexMarkInvokerStatement(rows));
+        limitStatement.setFirst(new TakeMarkInvokerStatement(offset));
+        limitStatement.setSecond(new TakeMarkInvokerStatement(rows));
         statement().setLimitStatement(limitStatement);
         return (Union) creatorFactory().newUnionDef(statement());
     }
@@ -21,8 +21,8 @@ public interface LimitDef<
     default Union offset(Integer offset, Integer rows) {
         LimitStatement limitStatement = new LimitStatement();
         limitStatement.setOffset(true);
-        limitStatement.setFirst(new FlexMarkInvokerStatement(rows));
-        limitStatement.setSecond(new FlexMarkInvokerStatement(offset));
+        limitStatement.setFirst(new TakeMarkInvokerStatement(rows));
+        limitStatement.setSecond(new TakeMarkInvokerStatement(offset));
         statement().setLimitStatement(limitStatement);
         return (Union) creatorFactory().newUnionDef(statement());
     }

@@ -3,7 +3,7 @@ package com.dream.flex.def;
 import com.dream.antlr.smt.BraceStatement;
 import com.dream.antlr.smt.InsertStatement;
 import com.dream.antlr.smt.ListColumnStatement;
-import com.dream.flex.invoker.FlexMarkInvokerStatement;
+import com.dream.regular.invoker.TakeMarkInvokerStatement;
 
 import java.util.List;
 import java.util.function.Function;
@@ -17,7 +17,7 @@ public interface InsertIntoValuesDef<Insert extends InsertDef> extends InsertDef
     default Insert values(Object... values) {
         ListColumnStatement valueListStatement = new ListColumnStatement(",");
         for (Object value : values) {
-            valueListStatement.add(new FlexMarkInvokerStatement(value));
+            valueListStatement.add(new TakeMarkInvokerStatement(value));
         }
         InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
         valuesStatement.setStatement(new BraceStatement(valueListStatement));
@@ -31,7 +31,7 @@ public interface InsertIntoValuesDef<Insert extends InsertDef> extends InsertDef
             Object[] objects = fn.apply(value);
             ListColumnStatement listColumnStatement = new ListColumnStatement(",");
             for (Object object : objects) {
-                listColumnStatement.add(new FlexMarkInvokerStatement(object));
+                listColumnStatement.add(new TakeMarkInvokerStatement(object));
             }
             valueListStatement.add(new BraceStatement(listColumnStatement));
         }

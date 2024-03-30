@@ -1,4 +1,4 @@
-package com.dream.flex.invoker;
+package com.dream.regular.invoker;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
@@ -13,13 +13,13 @@ import com.dream.util.common.LowHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class FlexTableInvoker extends AbstractInvoker {
-    public static final String FUNCTION = "dream_flex_table";
+public class TakeTableInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "dream_regular_take_table";
     private final Set<String> tableSet = new LowHashSet();
 
     @Override
     public Invoker newInstance() {
-        return new FlexTableInvoker();
+        return new TakeTableInvoker();
     }
 
     @Override
@@ -29,8 +29,8 @@ public class FlexTableInvoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
-        FlexTableInvokerStatement flexTableInvokerStatement = (FlexTableInvokerStatement) invokerStatement;
-        String table = flexTableInvokerStatement.getTable();
+        TakeTableInvokerStatement takeTableInvokerStatement = (TakeTableInvokerStatement) invokerStatement;
+        String table = takeTableInvokerStatement.getTable();
         tableSet.add(table);
         return toSQL.toStr(new SymbolStatement.SingleMarkStatement(table), assist, invokerList);
     }

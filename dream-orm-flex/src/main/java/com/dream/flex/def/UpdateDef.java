@@ -1,11 +1,9 @@
 package com.dream.flex.def;
 
-import com.dream.antlr.smt.UpdateStatement;
 import com.dream.flex.factory.FlexUpdateFactory;
+import com.dream.regular.command.Update;
 
 
-public interface UpdateDef {
-    UpdateStatement statement();
-
+public interface UpdateDef extends Update {
     FlexUpdateFactory creatorFactory();
 }

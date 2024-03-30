@@ -29,10 +29,8 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                                 methodInfo.setStatement(statement);
                             }
                             CacheKey methodKey = SystemUtil.cacheKey(sql, 5, true);
-                            if (methodKey != null) {
-                                methodKey.update(methodInfo.getId());
-                                methodInfo.setMethodKey(methodKey);
-                            }
+                            methodKey.update(methodInfo.getId());
+                            methodInfo.setMethodKey(methodKey);
                             InjectFactory injectFactory = configuration.getInjectFactory();
                             injectFactory.inject(methodInfo);
                             methodInfo.setCompile(Compile.ANTLR_COMPILED);

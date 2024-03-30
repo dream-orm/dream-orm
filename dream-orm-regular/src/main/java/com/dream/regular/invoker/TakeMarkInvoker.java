@@ -1,4 +1,4 @@
-package com.dream.flex.invoker;
+package com.dream.regular.invoker;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
@@ -11,13 +11,13 @@ import com.dream.antlr.sql.ToSQL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlexMarkInvoker extends AbstractInvoker {
-    public static final String FUNCTION = "dream_flex_mark";
+public class TakeMarkInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "dream_regular_take_mark";
     private final List<Object> paramList = new ArrayList<>();
 
     @Override
     public Invoker newInstance() {
-        return new FlexMarkInvoker();
+        return new TakeMarkInvoker();
     }
 
     @Override
@@ -27,8 +27,8 @@ public class FlexMarkInvoker extends AbstractInvoker {
 
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
-        FlexMarkInvokerStatement flexMarkInvokerStatement = (FlexMarkInvokerStatement) invokerStatement;
-        Object value = flexMarkInvokerStatement.getValue();
+        TakeMarkInvokerStatement takeMarkInvokerStatement = (TakeMarkInvokerStatement) invokerStatement;
+        Object value = takeMarkInvokerStatement.getValue();
         paramList.add(value);
         return "?";
     }

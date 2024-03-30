@@ -1,29 +1,26 @@
 package com.dream.flex.mapper;
 
 import com.dream.antlr.smt.*;
+import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.config.FlexBatchMappedStatement;
-import com.dream.flex.config.SqlInfo;
 import com.dream.flex.def.DeleteDef;
 import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
-import com.dream.flex.dialect.FlexDialect;
-import com.dream.flex.invoker.FlexMarkInvokerStatement;
+import com.dream.regular.factory.CommandDialectFactory;
+import com.dream.regular.factory.DefaultCommandDialectFactory;
+import com.dream.regular.invoker.TakeMarkInvokerStatement;
 import com.dream.system.config.*;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.resultsethandler.SimpleResultSetHandler;
 import com.dream.system.core.session.Session;
-import com.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
-import com.dream.system.typehandler.handler.ObjectTypeHandler;
-import com.dream.system.typehandler.handler.TypeHandler;
 import com.dream.util.common.NonCollection;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
 import com.dream.util.tree.Tree;
 import com.dream.util.tree.TreeUtil;
 
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,62 +29,57 @@ import java.util.function.Consumer;
 public class DefaultFlexMapper implements FlexMapper {
     private Session session;
     private Configuration configuration;
-    private TypeHandlerFactory typeHandlerFactory;
     private boolean offset = true;
-    private FlexDialect flexDialect;
+    private CommandDialectFactory dialectFactory;
     private ResultSetHandler resultSetHandler;
     private Consumer<MethodInfo> consumer;
 
-    public DefaultFlexMapper(Session session, FlexDialect flexDialect) {
-        this(session, flexDialect, new SimpleResultSetHandler());
+    public DefaultFlexMapper(Session session, ToSQL toSQL) {
+        this(session, new DefaultCommandDialectFactory(toSQL));
     }
 
-    public DefaultFlexMapper(Session session, FlexDialect flexDialect, ResultSetHandler resultSetHandler) {
+    public DefaultFlexMapper(Session session, CommandDialectFactory dialectFactory) {
+        this(session, dialectFactory, new SimpleResultSetHandler());
+    }
+
+    public DefaultFlexMapper(Session session, CommandDialectFactory dialectFactory, ResultSetHandler resultSetHandler) {
         this.session = session;
-        this.flexDialect = flexDialect;
+        this.dialectFactory = dialectFactory;
         this.resultSetHandler = resultSetHandler;
         this.configuration = session.getConfiguration();
-        typeHandlerFactory = configuration.getTypeHandlerFactory();
     }
 
     @Override
-    public FlexMapper useDialect(FlexDialect flexDialect) {
-        return new DefaultFlexMapper(session, flexDialect, resultSetHandler);
+    public FlexMapper useDialect(CommandDialectFactory dialectFactory) {
+        return new DefaultFlexMapper(session, dialectFactory, resultSetHandler);
     }
 
     @Override
     public FlexMapper useMethodInfo(Consumer<MethodInfo> consumer) {
-        DefaultFlexMapper flexMapper = new DefaultFlexMapper(session, flexDialect, resultSetHandler);
+        DefaultFlexMapper flexMapper = new DefaultFlexMapper(session, dialectFactory, resultSetHandler);
         flexMapper.consumer = consumer;
         return flexMapper;
     }
 
     @Override
     public <T> T selectOne(QueryDef queryDef, Class<T> type) {
-        return selectOne(queryDef.statement(), type);
-    }
-
-    public <T> T selectOne(QueryStatement statement, Class<T> type) {
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, type);
-        SqlInfo sqlInfo = flexDialect.toSQL(statement, methodInfo);
-        MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.QUERY, methodInfo);
+        MappedStatement mappedStatement = dialectFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
         return (T) session.execute(mappedStatement);
     }
 
     @Override
     public <T> List<T> selectList(QueryDef queryDef, Class<T> type) {
         MethodInfo methodInfo = getMethodInfo(List.class, type);
-        SqlInfo sqlInfo = flexDialect.toSQL(queryDef.statement(), methodInfo);
-        MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.QUERY, methodInfo);
+        MappedStatement mappedStatement = dialectFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
         return (List<T>) session.execute(mappedStatement);
     }
 
     @Override
     public <T extends Tree> List<T> selectTree(QueryDef queryDef, Class<T> type) {
         MethodInfo methodInfo = getMethodInfo(List.class, type);
-        SqlInfo sqlInfo = flexDialect.toSQL(queryDef.statement(), methodInfo);
         methodInfo.addDestroyAction((result, mappedStatement, session) -> TreeUtil.toTree((Collection<? extends Tree>) result));
-        MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.QUERY, methodInfo);
+        MappedStatement mappedStatement = dialectFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
         return (List<T>) session.execute(mappedStatement);
     }
 
@@ -96,12 +88,12 @@ public class DefaultFlexMapper implements FlexMapper {
         QueryStatement statement = queryDef.statement();
         if (page.getTotal() == 0) {
             MethodInfo countMethodInfo = getMethodInfo(NonCollection.class, Long.class);
-            MappedStatement countMappedStatement = getMappedStatement(flexDialect.toSQL(countQueryStatement(statement.clone()), countMethodInfo), Command.QUERY, countMethodInfo);
+            MappedStatement countMappedStatement = dialectFactory.compile(Command.QUERY, countQueryStatement(queryDef.statement().clone()), countMethodInfo);
             page.setTotal((long) session.execute(countMappedStatement));
         }
         MethodInfo methodInfo = getMethodInfo(Collection.class, type);
         QueryStatement queryStatement = pageQueryStatement(statement, page.getStartRow(), page.getPageSize());
-        MappedStatement mappedStatement = getMappedStatement(flexDialect.toSQL(queryStatement, methodInfo), Command.QUERY, methodInfo);
+        MappedStatement mappedStatement = dialectFactory.compile(Command.QUERY, queryStatement, methodInfo);
         page.setRows((Collection) session.execute(mappedStatement));
         return page;
     }
@@ -109,8 +101,7 @@ public class DefaultFlexMapper implements FlexMapper {
     @Override
     public int update(UpdateDef updateDef) {
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
-        SqlInfo sqlInfo = flexDialect.toSQL(updateDef.statement(), methodInfo);
-        MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.UPDATE, methodInfo);
+        MappedStatement mappedStatement = dialectFactory.compile(Command.UPDATE, updateDef.statement(), methodInfo);
         return (int) session.execute(mappedStatement);
     }
 
@@ -122,8 +113,7 @@ public class DefaultFlexMapper implements FlexMapper {
         List<MappedStatement> mappedStatementList = new ArrayList<>(updateDefList.size());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer[].class);
         for (UpdateDef updateDef : updateDefList) {
-            SqlInfo sqlInfo = flexDialect.toSQL(updateDef.statement(), methodInfo);
-            MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.UPDATE, methodInfo);
+            MappedStatement mappedStatement = dialectFactory.compile(Command.UPDATE, updateDef.statement(), methodInfo);
             mappedStatementList.add(mappedStatement);
         }
         FlexBatchMappedStatement batchMappedStatement = new FlexBatchMappedStatement(methodInfo, mappedStatementList);
@@ -134,16 +124,14 @@ public class DefaultFlexMapper implements FlexMapper {
     @Override
     public int delete(DeleteDef deleteDef) {
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
-        SqlInfo sqlInfo = flexDialect.toSQL(deleteDef.statement(), methodInfo);
-        MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.DELETE, methodInfo);
+        MappedStatement mappedStatement = dialectFactory.compile(Command.UPDATE, deleteDef.statement(), methodInfo);
         return (int) session.execute(mappedStatement);
     }
 
     @Override
     public int insert(InsertDef insertDef) {
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
-        SqlInfo sqlInfo = flexDialect.toSQL(insertDef.statement(), methodInfo);
-        MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.INSERT, methodInfo);
+        MappedStatement mappedStatement = dialectFactory.compile(Command.INSERT, insertDef.statement(), methodInfo);
         return (int) session.execute(mappedStatement);
     }
 
@@ -155,8 +143,7 @@ public class DefaultFlexMapper implements FlexMapper {
         List<MappedStatement> mappedStatementList = new ArrayList<>(insertDefList.size());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer[].class);
         for (InsertDef insertDef : insertDefList) {
-            SqlInfo sqlInfo = flexDialect.toSQL(insertDef.statement(), methodInfo);
-            MappedStatement mappedStatement = getMappedStatement(sqlInfo, Command.INSERT, methodInfo);
+            MappedStatement mappedStatement = dialectFactory.compile(Command.INSERT, insertDef.statement(), methodInfo);
             mappedStatementList.add(mappedStatement);
         }
         FlexBatchMappedStatement batchMappedStatement = new FlexBatchMappedStatement(methodInfo, mappedStatementList);
@@ -176,7 +163,9 @@ public class DefaultFlexMapper implements FlexMapper {
         limitStatement.setFirst(new SymbolStatement.NumberStatement("1"));
         limitStatement.setSecond(new SymbolStatement.NumberStatement("0"));
         statement.setLimitStatement(limitStatement);
-        Integer result = selectOne(statement, Integer.class);
+        MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
+        MappedStatement mappedStatement = dialectFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
+        Integer result = (Integer) session.execute(mappedStatement);
         return result != null;
     }
 
@@ -186,12 +175,12 @@ public class DefaultFlexMapper implements FlexMapper {
             limitStatement = new LimitStatement();
             if (offset) {
                 limitStatement.setOffset(true);
-                limitStatement.setFirst(new FlexMarkInvokerStatement(pageNum));
-                limitStatement.setSecond(new FlexMarkInvokerStatement(startRow));
+                limitStatement.setFirst(new TakeMarkInvokerStatement(pageNum));
+                limitStatement.setSecond(new TakeMarkInvokerStatement(startRow));
             } else {
                 limitStatement.setOffset(false);
-                limitStatement.setFirst(new FlexMarkInvokerStatement(startRow));
-                limitStatement.setSecond(new FlexMarkInvokerStatement(pageNum));
+                limitStatement.setFirst(new TakeMarkInvokerStatement(startRow));
+                limitStatement.setSecond(new TakeMarkInvokerStatement(pageNum));
             }
             queryStatement.setLimitStatement(limitStatement);
         } else {
@@ -231,35 +220,5 @@ public class DefaultFlexMapper implements FlexMapper {
             consumer.accept(methodInfo);
         }
         return methodInfo;
-    }
-
-    protected MappedStatement getMappedStatement(SqlInfo sqlInfo, Command command, MethodInfo methodInfo) {
-        List<Object> paramList = sqlInfo.getParamList();
-        List<MappedParam> mappedParamList = null;
-        if (!ObjectUtil.isNull(paramList)) {
-            mappedParamList = new ArrayList<>(paramList.size());
-            for (Object param : paramList) {
-                TypeHandler typeHandler;
-                if (param == null) {
-                    typeHandler = new ObjectTypeHandler();
-                } else {
-                    try {
-                        typeHandler = typeHandlerFactory.getTypeHandler(param.getClass(), Types.NULL);
-                    } catch (TypeHandlerNotFoundException e) {
-                        throw new DreamRunTimeException(e);
-                    }
-                }
-                mappedParamList.add(new MappedParam().setParamValue(param).setTypeHandler(typeHandler));
-            }
-        }
-        MappedStatement mappedStatement = new MappedStatement
-                .Builder()
-                .methodInfo(methodInfo)
-                .mappedParamList(mappedParamList)
-                .command(command)
-                .sql(sqlInfo.getSql())
-                .tableSet(sqlInfo.getTableSet())
-                .build();
-        return mappedStatement;
     }
 }

@@ -1,10 +1,10 @@
 package com.dream.helloworld.h2;
 
-import com.dream.drive.factory.DefaultFlexDialect;
-import com.dream.flex.config.SqlInfo;
+import com.dream.antlr.sql.ToClickHouse;
 import com.dream.flex.def.InsertDef;
-import com.dream.flex.dialect.FlexDialect;
 import com.dream.helloworld.h2.table.Account;
+import com.dream.regular.factory.DefaultCommandDialectFactory;
+import com.dream.system.config.MappedStatement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +19,9 @@ import static com.dream.helloworld.h2.def.AccountDef.account;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldFlexInsertTest {
-    FlexDialect flexDialect = new DefaultFlexDialect();
+
+    DefaultCommandDialectFactory dialectFactory = new DefaultCommandDialectFactory(new ToClickHouse());
+
 
     /**
      * 普通插入sql
@@ -27,8 +29,8 @@ public class HelloWorldFlexInsertTest {
     @Test
     public void testInsert() {
         InsertDef insertDef = insertInto(account).columns(account.name, account.age).values("accountName", 12);
-        SqlInfo sqlInfo = flexDialect.toSQL(insertDef);
-        System.out.println(sqlInfo.getSql());
+        MappedStatement mappedStatement = dialectFactory.compile(insertDef, null);
+        System.out.println(mappedStatement.getSql());
     }
 
     /**
@@ -37,8 +39,8 @@ public class HelloWorldFlexInsertTest {
     @Test
     public void testInsert2() {
         InsertDef insertDef = insertInto(account).values("accountName", 13);
-        SqlInfo sqlInfo = flexDialect.toSQL(insertDef);
-        System.out.println(sqlInfo.getSql());
+        MappedStatement mappedStatement = dialectFactory.compile(insertDef, null);
+        System.out.println(mappedStatement.getSql());
     }
 
     /**
@@ -58,8 +60,8 @@ public class HelloWorldFlexInsertTest {
             Account account = (Account) acc;
             return new Object[]{account.getId(), account.getName(), account.getAge()};
         });
-        SqlInfo sqlInfo = flexDialect.toSQL(insertDef);
-        System.out.println(sqlInfo.getSql());
+        MappedStatement mappedStatement = dialectFactory.compile(insertDef, null);
+        System.out.println(mappedStatement.getSql());
     }
 
 }

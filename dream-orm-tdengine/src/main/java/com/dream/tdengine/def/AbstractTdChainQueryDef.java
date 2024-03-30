@@ -8,8 +8,8 @@ import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.factory.FlexQueryFactory;
-import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.mapper.FlexMapper;
+import com.dream.regular.invoker.TakeMarkInvokerStatement;
 import com.dream.system.config.Page;
 import com.dream.tdengine.statement.TdQueryStatement;
 import com.dream.tdengine.statement.TdSLimitStatement;
@@ -44,8 +44,8 @@ public abstract class AbstractTdChainQueryDef extends AbstractQueryDef implement
     protected TdChainLimitDef sLimit(Integer offset, Integer rows) {
         TdSLimitStatement tdSLimitStatement = new TdSLimitStatement();
         tdSLimitStatement.setOffset(false);
-        tdSLimitStatement.setFirst(new FlexMarkInvokerStatement(offset));
-        tdSLimitStatement.setSecond(new FlexMarkInvokerStatement(rows));
+        tdSLimitStatement.setFirst(new TakeMarkInvokerStatement(offset));
+        tdSLimitStatement.setSecond(new TakeMarkInvokerStatement(rows));
         ((TdQueryStatement) statement()).setSlimit(tdSLimitStatement);
         return (TdChainLimitDef) creatorFactory().newLimitDef(statement());
     }
@@ -53,8 +53,8 @@ public abstract class AbstractTdChainQueryDef extends AbstractQueryDef implement
     protected TdChainLimitDef sOffset(Integer offset, Integer rows) {
         TdSLimitStatement tdSLimitStatement = new TdSLimitStatement();
         tdSLimitStatement.setOffset(true);
-        tdSLimitStatement.setFirst(new FlexMarkInvokerStatement(rows));
-        tdSLimitStatement.setSecond(new FlexMarkInvokerStatement(offset));
+        tdSLimitStatement.setFirst(new TakeMarkInvokerStatement(rows));
+        tdSLimitStatement.setSecond(new TakeMarkInvokerStatement(offset));
         ((TdQueryStatement) statement()).setSlimit(tdSLimitStatement);
         return (TdChainLimitDef) creatorFactory().newLimitDef(statement());
     }

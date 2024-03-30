@@ -11,7 +11,6 @@ import com.dream.drive.build.SessionFactoryBuilder;
 import com.dream.drive.config.DefaultConfig;
 import com.dream.drive.config.DriveProperties;
 import com.dream.drive.holder.DriveSessionHolder;
-import com.dream.flex.dialect.FlexDialect;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.jdbc.mapper.DefaultJdbcMapper;
@@ -66,7 +65,6 @@ public class DefaultDriveFactory implements DriveFactory {
     protected SessionTemplate sessionTemplate;
     protected TemplateMapper templateMapper;
     protected FlexMapper flexMapper;
-    protected FlexDialect flexDialect;
     protected JdbcMapper jdbcMapper;
     protected ToSQL toSQL;
     protected DriveProperties driveProperties;
@@ -85,8 +83,7 @@ public class DefaultDriveFactory implements DriveFactory {
         this.sessionFactory = sessionFactory(dataSource, tablePackages, mapperPackages);
         this.sessionTemplate = sessionTemplate(sessionHolder(), this.sessionFactory);
         this.templateMapper = templateMapper(sessionTemplate, sequence());
-        this.flexDialect = flexDialect(toSQL);
-        this.flexMapper = flexMapper(sessionTemplate, flexDialect);
+        this.flexMapper = flexMapper(sessionTemplate, toSQL);
         this.jdbcMapper = jdbcMapper(this.sessionTemplate);
     }
 
@@ -114,12 +111,8 @@ public class DefaultDriveFactory implements DriveFactory {
         return new DefaultTemplateMapper(sessionTemplate, sequence);
     }
 
-    protected FlexDialect flexDialect(ToSQL toSQL) {
-        return new DefaultFlexDialect(toSQL);
-    }
-
-    protected FlexMapper flexMapper(SessionTemplate sessionTemplate, FlexDialect flexDialect) {
-        return new DefaultFlexMapper(sessionTemplate, flexDialect);
+    protected FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
+        return new DefaultFlexMapper(sessionTemplate, toSQL);
     }
 
     protected JdbcMapper jdbcMapper(Session session) {

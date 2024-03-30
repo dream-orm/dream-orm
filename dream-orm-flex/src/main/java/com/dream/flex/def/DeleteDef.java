@@ -1,10 +1,8 @@
 package com.dream.flex.def;
 
-import com.dream.antlr.smt.DeleteStatement;
 import com.dream.flex.factory.FlexDeleteFactory;
+import com.dream.regular.command.Delete;
 
-public interface DeleteDef {
-    DeleteStatement statement();
-
+public interface DeleteDef extends Delete {
     FlexDeleteFactory creatorFactory();
 }

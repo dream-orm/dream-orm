@@ -5,8 +5,8 @@ import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.InsertIntoTableDef;
 import com.dream.flex.def.TableDef;
 import com.dream.flex.factory.FlexInsertFactory;
-import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.mapper.FlexMapper;
+import com.dream.regular.invoker.TakeMarkInvokerStatement;
 import com.dream.tdengine.statement.TdInsertStatement;
 
 public class TdChainInsertIntoTableDef extends AbstractTdChainInsertDef implements InsertIntoTableDef<TdChainInsertIntoColumnsDef> {
@@ -28,7 +28,7 @@ public class TdChainInsertIntoTableDef extends AbstractTdChainInsertDef implemen
         TdInsertStatement tdInsertStatement = (TdInsertStatement) statement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         for (Object value : values) {
-            listColumnStatement.add(new FlexMarkInvokerStatement(value));
+            listColumnStatement.add(new TakeMarkInvokerStatement(value));
         }
         tdInsertStatement.setTags(listColumnStatement);
         return this;

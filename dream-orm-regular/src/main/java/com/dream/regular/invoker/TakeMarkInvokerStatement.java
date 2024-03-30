@@ -1,11 +1,11 @@
-package com.dream.flex.invoker;
+package com.dream.regular.invoker;
 
 import com.dream.antlr.smt.InvokerStatement;
 
-public class FlexMarkInvokerStatement extends InvokerStatement {
+public class TakeMarkInvokerStatement extends InvokerStatement {
     private Object value;
 
-    public FlexMarkInvokerStatement(Object value) {
+    public TakeMarkInvokerStatement(Object value) {
         this.value = value;
     }
 
@@ -19,11 +19,11 @@ public class FlexMarkInvokerStatement extends InvokerStatement {
 
     @Override
     public String getNamespace() {
-        return FlexMarkInvoker.DEFAULT_NAMESPACE;
+        return TakeMarkInvoker.DEFAULT_NAMESPACE;
     }
 
     @Override
     public String getFunction() {
-        return FlexMarkInvoker.FUNCTION;
+        return TakeMarkInvoker.FUNCTION;
     }
 }

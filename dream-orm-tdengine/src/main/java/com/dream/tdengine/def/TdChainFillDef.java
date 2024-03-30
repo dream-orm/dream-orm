@@ -4,8 +4,8 @@ import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.QueryStatement;
 import com.dream.antlr.smt.SymbolStatement;
 import com.dream.flex.factory.FlexQueryFactory;
-import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.mapper.FlexMapper;
+import com.dream.regular.invoker.TakeMarkInvokerStatement;
 import com.dream.tdengine.statement.TdFillStatement;
 import com.dream.tdengine.statement.TdQueryStatement;
 import com.dream.tdengine.statement.TdWindowStatement;
@@ -46,7 +46,7 @@ public class TdChainFillDef extends TdChainOrderByDef {
         }
         if (values != null && values.length > 0) {
             for (Object value : values) {
-                listColumnStatement.add(new FlexMarkInvokerStatement(value));
+                listColumnStatement.add(new TakeMarkInvokerStatement(value));
             }
         }
         TdFillStatement tdFillStatement = new TdFillStatement();

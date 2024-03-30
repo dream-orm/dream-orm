@@ -1,9 +1,9 @@
 package com.dream.helloworld.h2;
 
-import com.dream.drive.factory.DefaultFlexDialect;
-import com.dream.flex.config.SqlInfo;
+import com.dream.antlr.sql.ToClickHouse;
 import com.dream.flex.def.DeleteDef;
-import com.dream.flex.dialect.FlexDialect;
+import com.dream.regular.factory.DefaultCommandDialectFactory;
+import com.dream.system.config.MappedStatement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,12 +15,14 @@ import static com.dream.helloworld.h2.def.AccountDef.account;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldFlexDeleteTest {
-    FlexDialect flexDialect = new DefaultFlexDialect();
+
+    DefaultCommandDialectFactory dialectFactory = new DefaultCommandDialectFactory(new ToClickHouse());
+
 
     @Test
     public void testDelete() {
         DeleteDef deleteDef = delete(account).where(account.id.eq(1));
-        SqlInfo sqlInfo = flexDialect.toSQL(deleteDef);
-        System.out.println(sqlInfo.getSql());
+        MappedStatement mappedStatement = dialectFactory.compile(deleteDef, null);
+        System.out.println(mappedStatement.getSql());
     }
 }

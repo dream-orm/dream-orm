@@ -1,7 +1,7 @@
 package com.dream.flex.def;
 
 import com.dream.antlr.smt.*;
-import com.dream.flex.invoker.FlexTableSymbolStatement;
+import com.dream.regular.invoker.TakeTableInvokerStatement;
 
 public class TableDef {
     private AliasStatement statement;
@@ -13,7 +13,7 @@ public class TableDef {
 
     public TableDef(String table, String alias) {
         AliasStatement aliasStatement = new AliasStatement();
-        aliasStatement.setColumn(new FlexTableSymbolStatement(table));
+        aliasStatement.setColumn(new TakeTableInvokerStatement(table));
         this.statement = aliasStatement;
         if (alias != null && !alias.isEmpty()) {
             this.as(alias);

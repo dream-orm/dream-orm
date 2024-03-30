@@ -10,9 +10,7 @@ import com.dream.boot.factory.SpringTransactionFactory;
 import com.dream.boot.holder.SpringSessionHolder;
 import com.dream.drive.build.DefaultSessionFactoryBuilder;
 import com.dream.drive.build.SessionFactoryBuilder;
-import com.dream.drive.factory.DefaultFlexDialect;
 import com.dream.drive.factory.DriveDataSourceFactory;
-import com.dream.flex.dialect.FlexDialect;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.jdbc.mapper.DefaultJdbcMapper;
@@ -444,28 +442,16 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 方言转换操作接口
-     *
-     * @param toSQL 目标数据库方言
-     * @return
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public FlexDialect flexDialect(ToSQL toSQL) {
-        return new DefaultFlexDialect(toSQL);
-    }
-
-    /**
      * 链式操作接口
      *
      * @param sessionTemplate SQL操作会话
-     * @param flexDialect     方言转换
+     * @param toSQL           方言转换
      * @return
      */
     @Bean
     @ConditionalOnMissingBean
-    public FlexMapper flexMapper(SessionTemplate sessionTemplate, FlexDialect flexDialect) {
-        return new DefaultFlexMapper(sessionTemplate, flexDialect);
+    public FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
+        return new DefaultFlexMapper(sessionTemplate, toSQL);
     }
 
     /**

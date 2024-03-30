@@ -7,7 +7,6 @@ import com.dream.system.config.MethodInfo;
  * 编译工厂
  */
 public interface DialectFactory {
-
     /**
      * 编译接口方法
      *

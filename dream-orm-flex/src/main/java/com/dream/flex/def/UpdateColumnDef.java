@@ -1,7 +1,7 @@
 package com.dream.flex.def;
 
 import com.dream.antlr.smt.*;
-import com.dream.flex.invoker.FlexMarkInvokerStatement;
+import com.dream.regular.invoker.TakeMarkInvokerStatement;
 
 import java.util.Map;
 import java.util.Set;
@@ -24,7 +24,7 @@ public interface UpdateColumnDef<UpdateColumn extends UpdateColumnDef, Update ex
     }
 
     default UpdateColumn set(ColumnDef columnDef, Object value) {
-        set(columnDef, new ColumnDef(new FlexMarkInvokerStatement(value)));
+        set(columnDef, new ColumnDef(new TakeMarkInvokerStatement(value)));
         return (UpdateColumn) this;
     }
 

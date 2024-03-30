@@ -51,6 +51,7 @@
         <module>dream-orm-wrap</module>
         <module>dream-orm-tdengine</module>
         <module>dream-orm-generator</module>
+        <module>dream-orm-regular</module>
     </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

@@ -1,11 +1,9 @@
 package com.dream.tdengine.mapper;
 
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.TableDef;
-import com.dream.flex.dialect.AbstractFlexDialect;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.system.core.session.Session;
@@ -19,8 +17,6 @@ import com.dream.tdengine.factory.TdChainFlexQueryFactory;
 import com.dream.tdengine.factory.TdChainFlexUpdateFactory;
 import com.dream.tdengine.sql.ToTdEngine;
 
-import java.util.List;
-
 public class DefaultFlexTdChainMapper implements FlexTdChainMapper {
     private FlexMapper flexMapper;
 
@@ -29,12 +25,7 @@ public class DefaultFlexTdChainMapper implements FlexTdChainMapper {
     }
 
     public DefaultFlexTdChainMapper(Session session, ToSQL toSQL) {
-        this.flexMapper = new DefaultFlexMapper(session, new AbstractFlexDialect(toSQL) {
-            @Override
-            protected List<Invoker> invokerList() {
-                return null;
-            }
-        });
+        this.flexMapper = new DefaultFlexMapper(session, toSQL);
     }
 
     @Override

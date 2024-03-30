@@ -2,7 +2,7 @@ package com.dream.flex.def;
 
 import com.dream.antlr.smt.*;
 import com.dream.flex.function.LazyFunctionStatement;
-import com.dream.flex.invoker.FlexMarkInvokerStatement;
+import com.dream.regular.invoker.TakeMarkInvokerStatement;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -117,7 +117,7 @@ public class ColumnDef {
         Iterator<?> iterator = values.iterator();
         while (iterator.hasNext()) {
             Object value = iterator.next();
-            listColumnStatement.add(new FlexMarkInvokerStatement(value));
+            listColumnStatement.add(new TakeMarkInvokerStatement(value));
         }
         BraceStatement braceStatement = new BraceStatement(listColumnStatement);
         return conditionDef(new OperStatement.INStatement(), braceStatement);
@@ -156,7 +156,7 @@ public class ColumnDef {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new FlexMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(value));
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         concatStatement.setParamsStatement(listColumnStatement);
         return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
@@ -169,7 +169,7 @@ public class ColumnDef {
     public ConditionDef likeLeft(Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new FlexMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(value));
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         concatStatement.setParamsStatement(listColumnStatement);
         return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
@@ -183,7 +183,7 @@ public class ColumnDef {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new FlexMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(value));
         concatStatement.setParamsStatement(listColumnStatement);
         return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
     }
@@ -221,9 +221,9 @@ public class ColumnDef {
         conditionStatement.setLeft(this.getStatement());
         conditionStatement.setOper(new OperStatement.BETWEENStatement());
         ConditionStatement rightConditionStatement = new ConditionStatement();
-        rightConditionStatement.setLeft(new FlexMarkInvokerStatement(start));
+        rightConditionStatement.setLeft(new TakeMarkInvokerStatement(start));
         rightConditionStatement.setOper(new OperStatement.ANDStatement());
-        rightConditionStatement.setRight(new FlexMarkInvokerStatement(end));
+        rightConditionStatement.setRight(new TakeMarkInvokerStatement(end));
         conditionStatement.setRight(rightConditionStatement);
         return new ConditionDef(conditionStatement);
     }
@@ -292,7 +292,7 @@ public class ColumnDef {
     }
 
     protected ConditionDef conditionDef(OperStatement operStatement, Object value) {
-        return conditionDef(operStatement, new FlexMarkInvokerStatement(value));
+        return conditionDef(operStatement, new TakeMarkInvokerStatement(value));
     }
 
     protected ConditionDef conditionDef(OperStatement operStatement, Statement statement) {

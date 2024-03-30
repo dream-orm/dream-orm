@@ -1,4 +1,4 @@
-package com.dream.flex.invoker;
+package com.dream.regular.invoker;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
@@ -10,17 +10,17 @@ import com.dream.antlr.sql.ToSQL;
 
 import java.util.List;
 
-public class FlexTableSymbolStatement extends SymbolStatement implements IStatement {
+public class TakeTableSymbolStatement extends SymbolStatement implements IStatement {
     private Statement statement;
 
-    public FlexTableSymbolStatement(String table) {
+    public TakeTableSymbolStatement(String table) {
         super(table);
-        this.statement = new FlexTableInvokerStatement(table);
+        this.statement = new TakeTableInvokerStatement(table);
     }
 
     @Override
     public int getNameId() {
-        return FlexTableSymbolStatement.class.getSimpleName().hashCode();
+        return TakeTableSymbolStatement.class.getSimpleName().hashCode();
     }
 
     @Override

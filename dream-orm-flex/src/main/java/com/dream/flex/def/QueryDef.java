@@ -1,10 +1,8 @@
 package com.dream.flex.def;
 
-import com.dream.antlr.smt.QueryStatement;
 import com.dream.flex.factory.FlexQueryFactory;
+import com.dream.regular.command.Query;
 
-public interface QueryDef {
-    QueryStatement statement();
-
+public interface QueryDef extends Query {
     FlexQueryFactory creatorFactory();
 }

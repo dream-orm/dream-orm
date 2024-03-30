@@ -1,11 +1,11 @@
-package com.dream.flex.invoker;
+package com.dream.regular.invoker;
 
 import com.dream.antlr.smt.InvokerStatement;
 
-public class FlexTableInvokerStatement extends InvokerStatement {
+public class TakeTableInvokerStatement extends InvokerStatement {
     private String table;
 
-    public FlexTableInvokerStatement(String table) {
+    public TakeTableInvokerStatement(String table) {
         this.table = table;
     }
 
@@ -15,12 +15,12 @@ public class FlexTableInvokerStatement extends InvokerStatement {
 
     @Override
     public String getNamespace() {
-        return FlexTableInvoker.DEFAULT_NAMESPACE;
+        return TakeTableInvoker.DEFAULT_NAMESPACE;
     }
 
     @Override
     public String getFunction() {
-        return FlexTableInvoker.FUNCTION;
+        return TakeTableInvoker.FUNCTION;
     }
 
     public String getTable() {
