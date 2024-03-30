@@ -5,7 +5,7 @@ import com.dream.flex.def.UpdateColumnDef;
 import com.dream.flex.def.UpdateDef;
 import com.dream.flex.def.UpdateTableDef;
 
-public interface UpdateCreatorFactory
+public interface FlexUpdateFactory
         <UpdateTable extends UpdateTableDef<UpdateColumn>,
                 UpdateColumn extends UpdateColumnDef<UpdateColumn, Update>,
                 Update extends UpdateDef> {

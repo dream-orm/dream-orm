@@ -14,7 +14,9 @@ import java.util.*;
 
 public class MappedStatement {
 
-    protected MappedSql mappedSql;
+    protected Command command;
+    protected String sql;
+    protected Set<String> tableSet;
     protected List<MappedParam> mappedParamList;
     protected MethodInfo methodInfo;
     protected CacheKey uniqueKey;
@@ -30,7 +32,7 @@ public class MappedStatement {
     }
 
     public Command getCommand() {
-        return mappedSql.getCommand();
+        return command;
     }
 
     public String getId() {
@@ -46,7 +48,7 @@ public class MappedStatement {
     }
 
     public String getSql() {
-        return mappedSql.getSql();
+        return sql;
     }
 
     public CacheKey getUniqueKey() {
@@ -78,7 +80,7 @@ public class MappedStatement {
     }
 
     public Set<String> getTableSet() {
-        return mappedSql.getTableSet();
+        return tableSet;
     }
 
     public int getTimeOut() {
@@ -146,8 +148,18 @@ public class MappedStatement {
             return this;
         }
 
-        public Builder mappedSql(MappedSql mappedSql) {
-            mappedStatement.mappedSql = mappedSql;
+        public Builder command(Command command) {
+            mappedStatement.command = command;
+            return this;
+        }
+
+        public Builder sql(String sql) {
+            mappedStatement.sql = sql;
+            return this;
+        }
+
+        public Builder tableSet(Set<String> tableSet) {
+            mappedStatement.tableSet = tableSet;
             return this;
         }
 

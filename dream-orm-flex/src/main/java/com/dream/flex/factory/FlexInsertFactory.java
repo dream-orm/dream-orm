@@ -6,7 +6,7 @@ import com.dream.flex.def.InsertIntoColumnsDef;
 import com.dream.flex.def.InsertIntoTableDef;
 import com.dream.flex.def.InsertIntoValuesDef;
 
-public interface InsertCreatorFactory
+public interface FlexInsertFactory
         <InsertIntoTable extends InsertIntoTableDef<InsertIntoColumns>,
                 InsertIntoColumns extends InsertIntoColumnsDef<InsertIntoValues, Insert>,
                 InsertIntoValues extends InsertIntoValuesDef<Insert>,

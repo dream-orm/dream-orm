@@ -1,13 +1,13 @@
 package com.dream.flex.def;
 
 import com.dream.antlr.smt.InsertStatement;
-import com.dream.flex.factory.InsertCreatorFactory;
+import com.dream.flex.factory.FlexInsertFactory;
 
 public abstract class AbstractInsertDef implements InsertDef {
     private InsertStatement statement;
-    private InsertCreatorFactory creatorFactory;
+    private FlexInsertFactory creatorFactory;
 
-    public AbstractInsertDef(InsertStatement statement, InsertCreatorFactory creatorFactory) {
+    public AbstractInsertDef(InsertStatement statement, FlexInsertFactory creatorFactory) {
         this.statement = statement;
         this.creatorFactory = creatorFactory;
     }
@@ -18,7 +18,7 @@ public abstract class AbstractInsertDef implements InsertDef {
     }
 
     @Override
-    public InsertCreatorFactory creatorFactory() {
+    public FlexInsertFactory creatorFactory() {
         return creatorFactory;
     }
 }

@@ -1,13 +1,13 @@
 package com.dream.flex.def;
 
 import com.dream.antlr.smt.DeleteStatement;
-import com.dream.flex.factory.DeleteCreatorFactory;
+import com.dream.flex.factory.FlexDeleteFactory;
 
 public abstract class AbstractDeleteDef implements DeleteDef {
     private DeleteStatement statement;
-    private DeleteCreatorFactory creatorFactory;
+    private FlexDeleteFactory creatorFactory;
 
-    public AbstractDeleteDef(DeleteStatement statement, DeleteCreatorFactory creatorFactory) {
+    public AbstractDeleteDef(DeleteStatement statement, FlexDeleteFactory creatorFactory) {
         this.statement = statement;
         this.creatorFactory = creatorFactory;
     }
@@ -18,7 +18,7 @@ public abstract class AbstractDeleteDef implements DeleteDef {
     }
 
     @Override
-    public DeleteCreatorFactory creatorFactory() {
+    public FlexDeleteFactory creatorFactory() {
         return creatorFactory;
     }
 }

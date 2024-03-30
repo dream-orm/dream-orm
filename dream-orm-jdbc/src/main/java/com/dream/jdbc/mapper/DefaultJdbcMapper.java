@@ -7,7 +7,10 @@ import com.dream.jdbc.core.JdbcResultSetHandler;
 import com.dream.jdbc.core.JdbcStatementHandler;
 import com.dream.jdbc.core.StatementSetter;
 import com.dream.jdbc.row.RowMapping;
-import com.dream.system.config.*;
+import com.dream.system.config.Command;
+import com.dream.system.config.Compile;
+import com.dream.system.config.MappedStatement;
+import com.dream.system.config.MethodInfo;
 import com.dream.system.core.session.Session;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
@@ -28,9 +31,9 @@ import java.util.stream.Collectors;
 
 
 public class DefaultJdbcMapper implements JdbcMapper {
-    private Session session;
-    private TableFactory tableFactory;
-    private TypeHandlerFactory typeHandlerFactory;
+    private final Session session;
+    private final TableFactory tableFactory;
+    private final TypeHandlerFactory typeHandlerFactory;
 
     public DefaultJdbcMapper(Session session) {
         this.session = session;
@@ -45,10 +48,12 @@ public class DefaultJdbcMapper implements JdbcMapper {
         methodInfo.setStatementHandler(jdbcStatementHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
-        MappedSql mappedSql = new MappedSql(Command.UPDATE, sql, tableSet(sql));
         MappedStatement mappedStatement = new MappedStatement.Builder()
                 .methodInfo(methodInfo)
-                .mappedSql(mappedSql).build();
+                .command(Command.UPDATE)
+                .sql(sql)
+                .tableSet(tableSet(sql))
+                .build();
         return (int) session.execute(mappedStatement);
     }
 
@@ -62,8 +67,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
         methodInfo.setStatementHandler(jdbcStatementHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
-        MappedSql mappedSql = new MappedSql(Command.BATCH, sql, tableSet(sql));
-        JdbcBatchMappedStatement jdbcBatchMappedStatement = new JdbcBatchMappedStatement(methodInfo, argList, mappedSql);
+        JdbcBatchMappedStatement jdbcBatchMappedStatement = new JdbcBatchMappedStatement(methodInfo, argList, Command.BATCH, sql, tableSet(sql));
         return (List<Object>) session.execute(jdbcBatchMappedStatement);
     }
 
@@ -76,10 +80,10 @@ public class DefaultJdbcMapper implements JdbcMapper {
         methodInfo.setResultSetHandler(jdbcResultSetHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
-        MappedSql mappedSql = new MappedSql(Command.QUERY, sql, null);
         MappedStatement mappedStatement = new MappedStatement.Builder()
                 .methodInfo(methodInfo)
-                .mappedSql(mappedSql).build();
+                .command(Command.QUERY)
+                .sql(sql).tableSet(tableSet(sql)).build();
         return (List<T>) session.execute(mappedStatement);
     }
 

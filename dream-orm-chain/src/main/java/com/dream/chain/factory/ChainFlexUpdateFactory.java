@@ -4,13 +4,13 @@ import com.dream.antlr.smt.UpdateStatement;
 import com.dream.chain.def.ChainUpdateColumnDef;
 import com.dream.chain.def.ChainUpdateDef;
 import com.dream.chain.def.ChainUpdateTableDef;
-import com.dream.flex.factory.UpdateCreatorFactory;
+import com.dream.flex.factory.FlexUpdateFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public class ChainUpdateCreatorFactory implements UpdateCreatorFactory<ChainUpdateTableDef, ChainUpdateColumnDef, ChainUpdateDef> {
+public class ChainFlexUpdateFactory implements FlexUpdateFactory<ChainUpdateTableDef, ChainUpdateColumnDef, ChainUpdateDef> {
     private FlexMapper flexMapper;
 
-    public ChainUpdateCreatorFactory(FlexMapper flexMapper) {
+    public ChainFlexUpdateFactory(FlexMapper flexMapper) {
         this.flexMapper = flexMapper;
     }
 

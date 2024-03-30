@@ -3,10 +3,10 @@ package com.dream.flex.def;
 import com.dream.antlr.smt.*;
 import com.dream.flex.config.DataType;
 import com.dream.flex.config.DateType;
-import com.dream.flex.factory.DefaultDeleteCreatorFactory;
-import com.dream.flex.factory.DefaultInsertCreatorFactory;
-import com.dream.flex.factory.DefaultQueryCreatorFactory;
-import com.dream.flex.factory.DefaultUpdateCreatorFactory;
+import com.dream.flex.factory.DefaultFlexDeleteFactory;
+import com.dream.flex.factory.DefaultFlexInsertFactory;
+import com.dream.flex.factory.DefaultFlexQueryFactory;
+import com.dream.flex.factory.DefaultFlexUpdateFactory;
 
 
 public class FunctionDef {
@@ -1079,7 +1079,7 @@ public class FunctionDef {
     }
 
     public static FromDef select(ColumnDef... columnDefs) {
-        return new DefaultQueryCreatorFactory().newSelectDef().select(columnDefs);
+        return new DefaultFlexQueryFactory().newSelectDef().select(columnDefs);
     }
 
     public static UpdateColumnDef update(String table) {
@@ -1087,7 +1087,7 @@ public class FunctionDef {
     }
 
     public static UpdateColumnDef update(TableDef tableDef) {
-        return new DefaultUpdateCreatorFactory().newUpdateTableDef().update(tableDef);
+        return new DefaultFlexUpdateFactory().newUpdateTableDef().update(tableDef);
     }
 
     public static DeleteWhereDef delete(String table) {
@@ -1095,7 +1095,7 @@ public class FunctionDef {
     }
 
     public static DeleteWhereDef delete(TableDef tableDef) {
-        return new DefaultDeleteCreatorFactory().newDeleteTableDef().delete(tableDef);
+        return new DefaultFlexDeleteFactory().newDeleteTableDef().delete(tableDef);
     }
 
     public static InsertIntoColumnsDef insertInto(String table) {
@@ -1103,7 +1103,7 @@ public class FunctionDef {
     }
 
     public static InsertIntoColumnsDef insertInto(TableDef tableDef) {
-        return new DefaultInsertCreatorFactory().newInsertIntoTableDef().insertInto(tableDef);
+        return new DefaultFlexInsertFactory().newInsertIntoTableDef().insertInto(tableDef);
     }
 
     public static ColumnDef col(Object column) {

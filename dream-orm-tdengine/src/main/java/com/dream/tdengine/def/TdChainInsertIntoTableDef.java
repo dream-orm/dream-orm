@@ -4,13 +4,13 @@ import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.InsertIntoTableDef;
 import com.dream.flex.def.TableDef;
-import com.dream.flex.factory.InsertCreatorFactory;
+import com.dream.flex.factory.FlexInsertFactory;
 import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.statement.TdInsertStatement;
 
 public class TdChainInsertIntoTableDef extends AbstractTdChainInsertDef implements InsertIntoTableDef<TdChainInsertIntoColumnsDef> {
-    public TdChainInsertIntoTableDef(InsertCreatorFactory creatorFactory, FlexMapper flexMapper) {
+    public TdChainInsertIntoTableDef(FlexInsertFactory creatorFactory, FlexMapper flexMapper) {
         super(new TdInsertStatement(), creatorFactory, flexMapper);
     }
 

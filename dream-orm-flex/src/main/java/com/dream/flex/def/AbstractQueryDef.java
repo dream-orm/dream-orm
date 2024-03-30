@@ -1,13 +1,13 @@
 package com.dream.flex.def;
 
 import com.dream.antlr.smt.QueryStatement;
-import com.dream.flex.factory.QueryCreatorFactory;
+import com.dream.flex.factory.FlexQueryFactory;
 
 public abstract class AbstractQueryDef implements QueryDef {
     private QueryStatement statement;
-    private QueryCreatorFactory creatorFactory;
+    private FlexQueryFactory creatorFactory;
 
-    public AbstractQueryDef(QueryStatement statement, QueryCreatorFactory creatorFactory) {
+    public AbstractQueryDef(QueryStatement statement, FlexQueryFactory creatorFactory) {
         this.statement = statement;
         this.creatorFactory = creatorFactory;
     }
@@ -18,7 +18,7 @@ public abstract class AbstractQueryDef implements QueryDef {
     }
 
     @Override
-    public QueryCreatorFactory creatorFactory() {
+    public FlexQueryFactory creatorFactory() {
         return creatorFactory;
     }
 }

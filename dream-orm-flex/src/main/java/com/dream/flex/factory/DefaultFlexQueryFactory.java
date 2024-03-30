@@ -4,7 +4,7 @@ import com.dream.antlr.smt.QueryStatement;
 import com.dream.flex.def.*;
 import com.dream.flex.def.defaults.DefaultQueryDef;
 
-public class DefaultQueryCreatorFactory implements QueryCreatorFactory {
+public class DefaultFlexQueryFactory implements FlexQueryFactory {
 
     @Override
     public SelectDef newSelectDef() {

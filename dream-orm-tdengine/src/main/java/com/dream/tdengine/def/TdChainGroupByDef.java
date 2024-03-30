@@ -3,12 +3,12 @@ package com.dream.tdengine.def;
 import com.dream.antlr.smt.QueryStatement;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.GroupByDef;
-import com.dream.flex.factory.QueryCreatorFactory;
+import com.dream.flex.factory.FlexQueryFactory;
 import com.dream.flex.mapper.FlexMapper;
 
 public class TdChainGroupByDef extends AbstractTdChainQueryDef implements GroupByDef<TdChainHavingDef, TdChainOrderByDef, TdChainLimitDef, TdChainUnionDef, TdChainForUpdateDef, TdChainQueryDef> {
-    public TdChainGroupByDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
-        super(queryStatement, queryCreatorFactory, flexMapper);
+    public TdChainGroupByDef(QueryStatement queryStatement, FlexQueryFactory flexQueryFactory, FlexMapper flexMapper) {
+        super(queryStatement, flexQueryFactory, flexMapper);
     }
 
     public TdChainGroupByDef partitionBy(ColumnDef... columnDefs) {

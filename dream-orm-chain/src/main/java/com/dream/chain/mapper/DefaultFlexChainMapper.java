@@ -4,10 +4,10 @@ import com.dream.chain.def.ChainDeleteWhereDef;
 import com.dream.chain.def.ChainFromDef;
 import com.dream.chain.def.ChainInsertIntoColumnsDef;
 import com.dream.chain.def.ChainUpdateColumnDef;
-import com.dream.chain.factory.ChainDeleteCreatorFactory;
-import com.dream.chain.factory.ChainInsertCreatorFactory;
-import com.dream.chain.factory.ChainQueryCreatorFactory;
-import com.dream.chain.factory.ChainUpdateCreatorFactory;
+import com.dream.chain.factory.ChainFlexDeleteFactory;
+import com.dream.chain.factory.ChainFlexInsertFactory;
+import com.dream.chain.factory.ChainFlexQueryFactory;
+import com.dream.chain.factory.ChainFlexUpdateFactory;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.TableDef;
 import com.dream.flex.mapper.FlexMapper;
@@ -21,21 +21,21 @@ public class DefaultFlexChainMapper implements FlexChainMapper {
 
     @Override
     public ChainFromDef select(boolean distinct, ColumnDef... columnDefs) {
-        return new ChainQueryCreatorFactory(flexMapper).newSelectDef().select(distinct, columnDefs);
+        return new ChainFlexQueryFactory(flexMapper).newSelectDef().select(distinct, columnDefs);
     }
 
     @Override
     public ChainUpdateColumnDef update(TableDef tableDef) {
-        return new ChainUpdateCreatorFactory(flexMapper).newUpdateTableDef().update(tableDef);
+        return new ChainFlexUpdateFactory(flexMapper).newUpdateTableDef().update(tableDef);
     }
 
     @Override
     public ChainInsertIntoColumnsDef insertInto(TableDef tableDef) {
-        return new ChainInsertCreatorFactory(flexMapper).newInsertIntoTableDef().insertInto(tableDef);
+        return new ChainFlexInsertFactory(flexMapper).newInsertIntoTableDef().insertInto(tableDef);
     }
 
     @Override
     public ChainDeleteWhereDef delete(TableDef tableDef) {
-        return new ChainDeleteCreatorFactory(flexMapper).newDeleteTableDef().delete(tableDef);
+        return new ChainFlexDeleteFactory(flexMapper).newDeleteTableDef().delete(tableDef);
     }
 }

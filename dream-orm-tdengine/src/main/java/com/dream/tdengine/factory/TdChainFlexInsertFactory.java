@@ -1,17 +1,17 @@
 package com.dream.tdengine.factory;
 
 import com.dream.antlr.smt.InsertStatement;
-import com.dream.flex.factory.InsertCreatorFactory;
+import com.dream.flex.factory.FlexInsertFactory;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.def.TdChainInsertDef;
 import com.dream.tdengine.def.TdChainInsertIntoColumnsDef;
 import com.dream.tdengine.def.TdChainInsertIntoTableDef;
 import com.dream.tdengine.def.TdChainInsertIntoValuesDef;
 
-public class TdChainInsertCreatorFactory implements InsertCreatorFactory<TdChainInsertIntoTableDef, TdChainInsertIntoColumnsDef, TdChainInsertIntoValuesDef, TdChainInsertDef> {
+public class TdChainFlexInsertFactory implements FlexInsertFactory<TdChainInsertIntoTableDef, TdChainInsertIntoColumnsDef, TdChainInsertIntoValuesDef, TdChainInsertDef> {
     private FlexMapper flexMapper;
 
-    public TdChainInsertCreatorFactory(FlexMapper flexMapper) {
+    public TdChainFlexInsertFactory(FlexMapper flexMapper) {
         this.flexMapper = flexMapper;
     }
 

@@ -5,7 +5,7 @@ import com.dream.flex.def.DeleteDef;
 import com.dream.flex.def.DeleteTableDef;
 import com.dream.flex.def.DeleteWhereDef;
 
-public interface DeleteCreatorFactory
+public interface FlexDeleteFactory
         <DeleteTable extends DeleteTableDef<DeleteWhere>,
                 DeleteWhere extends DeleteWhereDef,
                 Delete extends DeleteDef> {

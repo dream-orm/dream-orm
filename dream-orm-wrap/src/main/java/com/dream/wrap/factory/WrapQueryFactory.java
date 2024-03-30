@@ -3,7 +3,7 @@ package com.dream.wrap.factory;
 import com.dream.antlr.smt.QueryStatement;
 import com.dream.wrap.wrapper.*;
 
-public interface QueryCreatorFactory
+public interface WrapQueryFactory
         <Select extends SelectWrapper<From, Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
                 From extends FromWrapper<Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
                 Where extends WhereWrapper<GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,

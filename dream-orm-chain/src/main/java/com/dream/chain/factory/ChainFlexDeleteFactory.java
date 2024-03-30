@@ -4,13 +4,13 @@ import com.dream.antlr.smt.DeleteStatement;
 import com.dream.chain.def.ChainDeleteDef;
 import com.dream.chain.def.ChainDeleteTableDef;
 import com.dream.chain.def.ChainDeleteWhereDef;
-import com.dream.flex.factory.DeleteCreatorFactory;
+import com.dream.flex.factory.FlexDeleteFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public class ChainDeleteCreatorFactory implements DeleteCreatorFactory<ChainDeleteTableDef, ChainDeleteWhereDef, ChainDeleteDef> {
+public class ChainFlexDeleteFactory implements FlexDeleteFactory<ChainDeleteTableDef, ChainDeleteWhereDef, ChainDeleteDef> {
     private FlexMapper flexMapper;
 
-    public ChainDeleteCreatorFactory(FlexMapper flexMapper) {
+    public ChainFlexDeleteFactory(FlexMapper flexMapper) {
         this.flexMapper = flexMapper;
     }
 

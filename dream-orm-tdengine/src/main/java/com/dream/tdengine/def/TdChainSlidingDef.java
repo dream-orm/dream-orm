@@ -3,15 +3,15 @@ package com.dream.tdengine.def;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.QueryStatement;
 import com.dream.antlr.smt.SymbolStatement;
-import com.dream.flex.factory.QueryCreatorFactory;
+import com.dream.flex.factory.FlexQueryFactory;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.statement.TdQueryStatement;
 import com.dream.tdengine.statement.TdSlidingStatement;
 import com.dream.tdengine.statement.TdWindowStatement;
 
 public class TdChainSlidingDef extends TdChainFillDef {
-    public TdChainSlidingDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
-        super(queryStatement, queryCreatorFactory, flexMapper);
+    public TdChainSlidingDef(QueryStatement queryStatement, FlexQueryFactory flexQueryFactory, FlexMapper flexMapper) {
+        super(queryStatement, flexQueryFactory, flexMapper);
     }
 
     public TdChainFillDef sliding(String slidingVal) {

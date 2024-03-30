@@ -10,7 +10,7 @@ import com.dream.flex.def.defaults.DefaultInsertIntoColumnsDef;
 import com.dream.flex.def.defaults.DefaultInsertIntoTableDef;
 import com.dream.flex.def.defaults.DefaultInsertIntoValuesDef;
 
-public class DefaultInsertCreatorFactory implements InsertCreatorFactory {
+public class DefaultFlexInsertFactory implements FlexInsertFactory {
 
     @Override
     public InsertIntoTableDef newInsertIntoTableDef() {

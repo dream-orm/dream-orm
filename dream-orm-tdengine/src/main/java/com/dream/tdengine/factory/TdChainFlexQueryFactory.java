@@ -1,14 +1,14 @@
 package com.dream.tdengine.factory;
 
 import com.dream.antlr.smt.QueryStatement;
-import com.dream.flex.factory.QueryCreatorFactory;
+import com.dream.flex.factory.FlexQueryFactory;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.def.*;
 
-public class TdChainQueryCreatorFactory implements QueryCreatorFactory<TdChainSelectDef, TdChainFromDef, TdChainWhereDef, TdChainGroupByDef, TdChainHavingDef, TdChainOrderByDef, TdChainLimitDef, TdChainUnionDef, TdChainForUpdateDef, TdChainQueryDef> {
+public class TdChainFlexQueryFactory implements FlexQueryFactory<TdChainSelectDef, TdChainFromDef, TdChainWhereDef, TdChainGroupByDef, TdChainHavingDef, TdChainOrderByDef, TdChainLimitDef, TdChainUnionDef, TdChainForUpdateDef, TdChainQueryDef> {
     private FlexMapper flexMapper;
 
-    public TdChainQueryCreatorFactory(FlexMapper flexMapper) {
+    public TdChainFlexQueryFactory(FlexMapper flexMapper) {
         this.flexMapper = flexMapper;
     }
 

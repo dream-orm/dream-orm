@@ -3,7 +3,7 @@ package com.dream.wrap.factory;
 import com.dream.antlr.smt.QueryStatement;
 import com.dream.wrap.wrapper.defaults.*;
 
-public class DefaultQueryCreatorFactory implements QueryCreatorFactory<DefaultSelectWrapper, DefaultFromWrapper, DefaultWhereWrapper, DefaultGroupByWrapper, DefaultHavingWrapper, DefaultOrderByWrapper, DefaultLimitWrapper, DefaultUnionWrapper, DefaultForUpdateWrapper, DefaultQueryWrapper> {
+public class DefaultWrapQueryFactory implements WrapQueryFactory<DefaultSelectWrapper, DefaultFromWrapper, DefaultWhereWrapper, DefaultGroupByWrapper, DefaultHavingWrapper, DefaultOrderByWrapper, DefaultLimitWrapper, DefaultUnionWrapper, DefaultForUpdateWrapper, DefaultQueryWrapper> {
 
     @Override
     public DefaultSelectWrapper newSelectWrapper(Class<?> entityType) {

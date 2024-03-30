@@ -4,20 +4,21 @@ import com.dream.system.config.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class JdbcBatchMappedStatement extends BatchMappedStatement {
     protected List<?> argList;
 
-    public JdbcBatchMappedStatement(MethodInfo methodInfo, List<?> argList, MappedSql mappedSql) {
+    public <T> JdbcBatchMappedStatement(MethodInfo methodInfo, List<T> argList, Command command, String sql, Set<String> tableSet) {
         super(methodInfo);
         this.argList = argList;
-        this.mappedStatementList = compile(mappedSql);
+        this.mappedStatementList = compile(command, sql, tableSet);
     }
 
-    protected List<MappedStatement> compile(MappedSql mappedSql) {
+    protected List<MappedStatement> compile(Command command, String sql, Set<String> tableSet) {
         List<MappedStatement> mappedStatementList = new ArrayList<>(argList.size());
         for (Object arg : argList) {
-            MappedStatement mappedStatement = new Builder().methodInfo(methodInfo).mappedSql(mappedSql).arg(arg).build();
+            MappedStatement mappedStatement = new Builder().methodInfo(methodInfo).command(command).sql(sql).tableSet(tableSet).arg(arg).build();
             mappedStatementList.add(mappedStatement);
         }
         return mappedStatementList;

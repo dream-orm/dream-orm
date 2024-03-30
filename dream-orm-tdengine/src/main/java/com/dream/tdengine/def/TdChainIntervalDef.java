@@ -3,15 +3,15 @@ package com.dream.tdengine.def;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.QueryStatement;
 import com.dream.antlr.smt.SymbolStatement;
-import com.dream.flex.factory.QueryCreatorFactory;
+import com.dream.flex.factory.FlexQueryFactory;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.statement.TdIntervalStatement;
 import com.dream.tdengine.statement.TdQueryStatement;
 import com.dream.tdengine.statement.TdWindowStatement;
 
 public class TdChainIntervalDef extends TdChainSlidingDef {
-    public TdChainIntervalDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
-        super(queryStatement, queryCreatorFactory, flexMapper);
+    public TdChainIntervalDef(QueryStatement queryStatement, FlexQueryFactory flexQueryFactory, FlexMapper flexMapper) {
+        super(queryStatement, flexQueryFactory, flexMapper);
     }
 
     protected TdChainSlidingDef interval(String intervalVal) {

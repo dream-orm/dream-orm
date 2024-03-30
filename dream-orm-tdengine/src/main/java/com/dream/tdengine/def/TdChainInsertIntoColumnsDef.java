@@ -8,7 +8,7 @@ import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.InsertIntoColumnsDef;
 import com.dream.flex.def.TableDef;
-import com.dream.flex.factory.InsertCreatorFactory;
+import com.dream.flex.factory.FlexInsertFactory;
 import com.dream.flex.invoker.FlexMarkInvokerStatement;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.statement.TdInsertStatement;
@@ -16,7 +16,7 @@ import com.dream.tdengine.statement.TdInsertStatement;
 import java.util.*;
 
 public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implements InsertIntoColumnsDef<TdChainInsertIntoValuesDef, TdChainInsertDef> {
-    public TdChainInsertIntoColumnsDef(InsertStatement statement, InsertCreatorFactory creatorFactory, FlexMapper flexMapper) {
+    public TdChainInsertIntoColumnsDef(InsertStatement statement, FlexInsertFactory creatorFactory, FlexMapper flexMapper) {
         super(statement, creatorFactory, flexMapper);
     }
 

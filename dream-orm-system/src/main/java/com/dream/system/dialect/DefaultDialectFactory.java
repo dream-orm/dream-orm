@@ -79,7 +79,9 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
         return new MappedStatement
                 .Builder()
                 .methodInfo(methodInfo)
-                .mappedSql(new MappedSql(Command.valueOf(scanInfo.getCommand().name()), sql, scanInfo.getTableScanInfoMap().keySet()))
+                .command(Command.valueOf(scanInfo.getCommand().name()))
+                .sql(sql)
+                .tableSet(scanInfo.getTableScanInfoMap().keySet())
                 .mappedParamList(mappedParamList)
                 .arg(arg)
                 .uniqueKey(uniqueKey)

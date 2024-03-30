@@ -8,7 +8,7 @@ import com.dream.flex.def.defaults.DefaultUpdateColumnDef;
 import com.dream.flex.def.defaults.DefaultUpdateDef;
 import com.dream.flex.def.defaults.DefaultUpdateTable0Def;
 
-public class DefaultUpdateCreatorFactory implements UpdateCreatorFactory {
+public class DefaultFlexUpdateFactory implements FlexUpdateFactory {
     @Override
     public UpdateTableDef newUpdateTableDef() {
         return new DefaultUpdateTable0Def(this);

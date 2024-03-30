@@ -4,14 +4,14 @@ import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.QueryStatement;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.FunctionDef;
-import com.dream.flex.factory.QueryCreatorFactory;
+import com.dream.flex.factory.FlexQueryFactory;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.tdengine.statement.TdPartitionStatement;
 import com.dream.tdengine.statement.TdQueryStatement;
 
 public class TdChainPartitionDef extends TdChainIntervalDef {
-    public TdChainPartitionDef(QueryStatement queryStatement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
-        super(queryStatement, queryCreatorFactory, flexMapper);
+    public TdChainPartitionDef(QueryStatement queryStatement, FlexQueryFactory flexQueryFactory, FlexMapper flexMapper) {
+        super(queryStatement, flexQueryFactory, flexMapper);
     }
 
     public TdChainGroupByDef partitionBy(String... columns) {

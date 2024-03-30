@@ -3,7 +3,7 @@ package com.dream.flex.factory;
 import com.dream.antlr.smt.QueryStatement;
 import com.dream.flex.def.*;
 
-public interface QueryCreatorFactory
+public interface FlexQueryFactory
         <Select extends SelectDef<From, Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
                 From extends FromDef<Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
                 Where extends WhereDef<GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,

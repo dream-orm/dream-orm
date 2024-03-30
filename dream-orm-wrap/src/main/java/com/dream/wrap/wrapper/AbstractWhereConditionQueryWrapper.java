@@ -2,13 +2,13 @@ package com.dream.wrap.wrapper;
 
 import com.dream.antlr.smt.*;
 import com.dream.antlr.util.AntlrUtil;
-import com.dream.wrap.factory.QueryCreatorFactory;
+import com.dream.wrap.factory.WrapQueryFactory;
 
 public class AbstractWhereConditionQueryWrapper<Children extends ConditionWrapper> extends ConditionWrapper<Children> implements QueryWrapper {
     private QueryStatement statement;
-    private QueryCreatorFactory creatorFactory;
+    private WrapQueryFactory creatorFactory;
 
-    public AbstractWhereConditionQueryWrapper(QueryStatement statement, QueryCreatorFactory creatorFactory) {
+    public AbstractWhereConditionQueryWrapper(QueryStatement statement, WrapQueryFactory creatorFactory) {
         this.statement = statement;
         this.creatorFactory = creatorFactory;
     }
@@ -19,7 +19,7 @@ public class AbstractWhereConditionQueryWrapper<Children extends ConditionWrappe
     }
 
     @Override
-    public QueryCreatorFactory creatorFactory() {
+    public WrapQueryFactory creatorFactory() {
         return creatorFactory;
     }
 

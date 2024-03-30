@@ -3,7 +3,7 @@ package com.dream.chain.def;
 import com.dream.antlr.smt.QueryStatement;
 import com.dream.flex.def.AbstractQueryDef;
 import com.dream.flex.def.QueryDef;
-import com.dream.flex.factory.QueryCreatorFactory;
+import com.dream.flex.factory.FlexQueryFactory;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.system.config.Page;
 
@@ -12,8 +12,8 @@ import java.util.List;
 public class ChainQueryDef extends AbstractQueryDef implements QueryDef {
     protected FlexMapper flexMapper;
 
-    public ChainQueryDef(QueryStatement statement, QueryCreatorFactory queryCreatorFactory, FlexMapper flexMapper) {
-        super(statement, queryCreatorFactory);
+    public ChainQueryDef(QueryStatement statement, FlexQueryFactory flexQueryFactory, FlexMapper flexMapper) {
+        super(statement, flexQueryFactory);
         this.flexMapper = flexMapper;
     }
 

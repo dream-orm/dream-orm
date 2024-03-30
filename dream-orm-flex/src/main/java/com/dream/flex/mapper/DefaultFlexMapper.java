@@ -252,12 +252,13 @@ public class DefaultFlexMapper implements FlexMapper {
                 mappedParamList.add(new MappedParam().setParamValue(param).setTypeHandler(typeHandler));
             }
         }
-        MappedSql mappedSql = new MappedSql(command, sqlInfo.getSql(), sqlInfo.getTableSet());
         MappedStatement mappedStatement = new MappedStatement
                 .Builder()
                 .methodInfo(methodInfo)
                 .mappedParamList(mappedParamList)
-                .mappedSql(mappedSql)
+                .command(command)
+                .sql(sqlInfo.getSql())
+                .tableSet(sqlInfo.getTableSet())
                 .build();
         return mappedStatement;
     }

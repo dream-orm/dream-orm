@@ -8,7 +8,7 @@ import com.dream.flex.def.defaults.DefaultDeleteDef;
 import com.dream.flex.def.defaults.DefaultDeleteTableDef;
 import com.dream.flex.def.defaults.DefaultDeleteWhereDef;
 
-public class DefaultDeleteCreatorFactory implements DeleteCreatorFactory {
+public class DefaultFlexDeleteFactory implements FlexDeleteFactory {
     @Override
     public DeleteTableDef newDeleteTableDef() {
         return new DefaultDeleteTableDef(this);

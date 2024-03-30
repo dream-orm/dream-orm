@@ -2,13 +2,13 @@ package com.dream.chain.factory;
 
 import com.dream.antlr.smt.QueryStatement;
 import com.dream.chain.def.*;
-import com.dream.flex.factory.QueryCreatorFactory;
+import com.dream.flex.factory.FlexQueryFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public class ChainQueryCreatorFactory implements QueryCreatorFactory<ChainSelectDef, ChainFromDef, ChainWhereDef, ChainGroupByDef, ChainHavingDef, ChainOrderByDef, ChainLimitDef, ChainUnionDef, ChainForUpdateDef, ChainQueryDef> {
+public class ChainFlexQueryFactory implements FlexQueryFactory<ChainSelectDef, ChainFromDef, ChainWhereDef, ChainGroupByDef, ChainHavingDef, ChainOrderByDef, ChainLimitDef, ChainUnionDef, ChainForUpdateDef, ChainQueryDef> {
     private FlexMapper flexMapper;
 
-    public ChainQueryCreatorFactory(FlexMapper flexMapper) {
+    public ChainFlexQueryFactory(FlexMapper flexMapper) {
         this.flexMapper = flexMapper;
     }
 

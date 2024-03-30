@@ -8,12 +8,12 @@ import com.dream.antlr.util.AntlrUtil;
 import com.dream.system.util.SystemUtil;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
-import com.dream.wrap.factory.QueryCreatorFactory;
+import com.dream.wrap.factory.WrapQueryFactory;
 import com.dream.wrap.wrapper.AbstractWhereConditionQueryWrapper;
 import com.dream.wrap.wrapper.SelectWrapper;
 
 public class DefaultSelectWrapper extends AbstractWhereConditionQueryWrapper<DefaultSelectWrapper> implements SelectWrapper<DefaultFromWrapper, DefaultWhereWrapper, DefaultGroupByWrapper, DefaultHavingWrapper, DefaultOrderByWrapper, DefaultLimitWrapper, DefaultUnionWrapper, DefaultForUpdateWrapper, DefaultQueryWrapper> {
-    public DefaultSelectWrapper(Class<?> entityType, QueryCreatorFactory creatorFactory) {
+    public DefaultSelectWrapper(Class<?> entityType, WrapQueryFactory creatorFactory) {
         super(new QueryStatement(), creatorFactory);
         if (entityType == null) {
             throw new DreamRunTimeException("参数'entityType'不能为空");

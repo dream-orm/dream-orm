@@ -13,10 +13,10 @@ import com.dream.tdengine.def.TdChainDeleteWhereDef;
 import com.dream.tdengine.def.TdChainFromDef;
 import com.dream.tdengine.def.TdChainInsertIntoColumnsDef;
 import com.dream.tdengine.def.TdChainUpdateColumnDef;
-import com.dream.tdengine.factory.TdChainDeleteCreatorFactory;
-import com.dream.tdengine.factory.TdChainInsertCreatorFactory;
-import com.dream.tdengine.factory.TdChainQueryCreatorFactory;
-import com.dream.tdengine.factory.TdChainUpdateCreatorFactory;
+import com.dream.tdengine.factory.TdChainFlexDeleteFactory;
+import com.dream.tdengine.factory.TdChainFlexInsertFactory;
+import com.dream.tdengine.factory.TdChainFlexQueryFactory;
+import com.dream.tdengine.factory.TdChainFlexUpdateFactory;
 import com.dream.tdengine.sql.ToTdEngine;
 
 import java.util.List;
@@ -39,26 +39,26 @@ public class DefaultFlexTdChainMapper implements FlexTdChainMapper {
 
     @Override
     public TdChainFromDef select(ColumnDef... columnDefs) {
-        return new TdChainQueryCreatorFactory(flexMapper).newSelectDef().select(columnDefs);
+        return new TdChainFlexQueryFactory(flexMapper).newSelectDef().select(columnDefs);
     }
 
     @Override
     public TdChainFromDef select(boolean distinct, ColumnDef... columnDefs) {
-        return new TdChainQueryCreatorFactory(flexMapper).newSelectDef().select(distinct, columnDefs);
+        return new TdChainFlexQueryFactory(flexMapper).newSelectDef().select(distinct, columnDefs);
     }
 
     @Override
     public TdChainUpdateColumnDef update(TableDef tableDef) {
-        return new TdChainUpdateCreatorFactory(flexMapper).newUpdateTableDef().update(tableDef);
+        return new TdChainFlexUpdateFactory(flexMapper).newUpdateTableDef().update(tableDef);
     }
 
     @Override
     public TdChainInsertIntoColumnsDef insertInto(String subTableName) {
-        return new TdChainInsertCreatorFactory(flexMapper).newInsertIntoTableDef().insertInto(FunctionDef.table(subTableName));
+        return new TdChainFlexInsertFactory(flexMapper).newInsertIntoTableDef().insertInto(FunctionDef.table(subTableName));
     }
 
     @Override
     public TdChainDeleteWhereDef delete(TableDef tableDef) {
-        return new TdChainDeleteCreatorFactory(flexMapper).newDeleteTableDef().delete(tableDef);
+        return new TdChainFlexDeleteFactory(flexMapper).newDeleteTableDef().delete(tableDef);
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
-public class HelloWorldLambdaQueryTest {
+public class HelloWorldWrapQueryTest {
 
     private final ToSQL toSQL = new ToMySQL();
 

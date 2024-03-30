@@ -5,13 +5,13 @@ import com.dream.chain.def.ChainInsertDef;
 import com.dream.chain.def.ChainInsertIntoColumnsDef;
 import com.dream.chain.def.ChainInsertIntoTableDef;
 import com.dream.chain.def.ChainInsertIntoValuesDef;
-import com.dream.flex.factory.InsertCreatorFactory;
+import com.dream.flex.factory.FlexInsertFactory;
 import com.dream.flex.mapper.FlexMapper;
 
-public class ChainInsertCreatorFactory implements InsertCreatorFactory<ChainInsertIntoTableDef, ChainInsertIntoColumnsDef, ChainInsertIntoValuesDef, ChainInsertDef> {
+public class ChainFlexInsertFactory implements FlexInsertFactory<ChainInsertIntoTableDef, ChainInsertIntoColumnsDef, ChainInsertIntoValuesDef, ChainInsertDef> {
     private FlexMapper flexMapper;
 
-    public ChainInsertCreatorFactory(FlexMapper flexMapper) {
+    public ChainFlexInsertFactory(FlexMapper flexMapper) {
         this.flexMapper = flexMapper;
     }
 
