@@ -7,7 +7,7 @@ import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.ConditionDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.helloworld.h2.def.AccountDef;
-import com.dream.regular.factory.DefaultCommandDialectFactory;
+import com.dream.instruct.factory.DefaultCommandDialectFactory;
 import com.dream.system.config.MappedStatement;
 import org.junit.Test;
 import org.junit.runner.RunWith;

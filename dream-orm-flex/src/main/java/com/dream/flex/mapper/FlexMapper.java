@@ -4,7 +4,7 @@ import com.dream.flex.def.DeleteDef;
 import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
-import com.dream.regular.factory.CommandDialectFactory;
+import com.dream.instruct.factory.CommandDialectFactory;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.config.Page;
 import com.dream.util.tree.Tree;

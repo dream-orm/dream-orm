@@ -17,7 +17,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         protected String basePackage() {
-            return "com.sooth.micro";
+            return "com.sooth.system.serial";
         }
 
         @Override
@@ -32,7 +32,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         public boolean support(String table) {
-            return table.contains("oss");
+            return table.contains("serial");
         }
     }
 }

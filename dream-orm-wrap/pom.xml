@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>com.dream-orm</groupId>
-            <artifactId>dream-orm-system</artifactId>
+            <artifactId>dream-orm-instruct</artifactId>
             <version>1.3.0</version>
         </dependency>
     </dependencies>

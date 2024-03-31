@@ -1,29 +1,29 @@
-package com.dream.regular.factory;
+package com.dream.instruct.factory;
 
 import com.dream.antlr.smt.*;
-import com.dream.regular.command.Delete;
-import com.dream.regular.command.Insert;
-import com.dream.regular.command.Query;
-import com.dream.regular.command.Update;
+import com.dream.instruct.command.Delete;
+import com.dream.instruct.command.Insert;
+import com.dream.instruct.command.Query;
+import com.dream.instruct.command.Update;
 import com.dream.system.config.Command;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.config.MethodInfo;
 
 public interface CommandDialectFactory {
     default MappedStatement compile(Query query, MethodInfo methodInfo) {
-        return compile(Command.QUERY, query.statement().clone(), methodInfo);
+        return compile(Command.QUERY, query.statement(), methodInfo);
     }
 
     default MappedStatement compile(Update update, MethodInfo methodInfo) {
-        return compile(Command.UPDATE, update.statement().clone(), methodInfo);
+        return compile(Command.UPDATE, update.statement(), methodInfo);
     }
 
     default MappedStatement compile(Insert insert, MethodInfo methodInfo) {
-        return compile(Command.INSERT, insert.statement().clone(), methodInfo);
+        return compile(Command.INSERT, insert.statement(), methodInfo);
     }
 
     default MappedStatement compile(Delete delete, MethodInfo methodInfo) {
-        return compile(Command.DELETE, delete.statement().clone(), methodInfo);
+        return compile(Command.DELETE, delete.statement(), methodInfo);
     }
 
     default MappedStatement compile(Statement statement, MethodInfo methodInfo) {

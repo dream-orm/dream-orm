@@ -1,10 +1,8 @@
 package com.dream.wrap.wrapper;
 
-import com.dream.antlr.smt.QueryStatement;
+import com.dream.instruct.command.Query;
 import com.dream.wrap.factory.WrapQueryFactory;
 
-public interface QueryWrapper {
-    QueryStatement statement();
-
+public interface QueryWrapper extends Query {
     WrapQueryFactory creatorFactory();
 }

@@ -2,8 +2,11 @@
 //
 //import com.dream.antlr.config.Assist;
 //import com.dream.antlr.exception.AntlrException;
+//import com.dream.antlr.factory.AntlrInvokerFactory;
+//import com.dream.antlr.factory.InvokerFactory;
 //import com.dream.antlr.invoker.Invoker;
 //import com.dream.antlr.smt.InvokerStatement;
+//import com.dream.antlr.smt.Statement;
 //import com.dream.antlr.sql.ToMySQL;
 //import com.dream.antlr.sql.ToSQL;
 //import com.dream.mate.logic.inject.LogicHandler;
@@ -18,24 +21,27 @@
 //import com.dream.mate.version.invoker.CurVersionGetInvoker;
 //import com.dream.mate.version.invoker.NextVersionGetInvoker;
 //import com.dream.mate.version.invoker.VersionInvoker;
+//import com.dream.regular.factory.CommandDialectFactory;
+//import com.dream.regular.invoker.TakeMarkInvoker;
+//import com.dream.regular.invoker.TakeTableInvoker;
+//import com.dream.system.config.Command;
+//import com.dream.system.config.MappedParam;
+//import com.dream.system.config.MappedStatement;
+//import com.dream.system.config.MethodInfo;
+//import com.dream.system.typehandler.TypeHandlerNotFoundException;
+//import com.dream.system.typehandler.factory.DefaultTypeHandlerFactory;
+//import com.dream.system.typehandler.factory.TypeHandlerFactory;
+//import com.dream.util.exception.DreamRunTimeException;
 //
-//import java.util.ArrayList;
-//import java.util.Arrays;
-//import java.util.List;
+//import java.sql.Types;
+//import java.util.*;
 //
-//public class DefaultFlexDialect extends AbstractFlexDialect {
+//public class DefaultFlexDialect implements CommandDialectFactory {
 //    private TenantHandler tenantHandler;
 //    private PermissionHandler permissionHandler;
 //    private LogicHandler logicHandler;
 //    private VersionHandler versionHandler;
 //
-//    public DefaultFlexDialect() {
-//        this(new ToMySQL());
-//    }
-//
-//    public DefaultFlexDialect(ToSQL toSQL) {
-//        super(toSQL);
-//    }
 //
 //    public DefaultFlexDialect tenantHandler(TenantHandler tenantHandler) {
 //        this.tenantHandler = tenantHandler;
@@ -111,5 +117,44 @@
 //            invokerList.add(new NextVersionGetInvoker(versionHandler));
 //        }
 //        return invokerList.toArray(new Invoker[invokerList.size()]);
+//    }
+//
+//    @Override
+//    public MappedStatement compile(Command command, Statement statement, MethodInfo methodInfo) {
+//        InvokerFactory invokerFactory = new AntlrInvokerFactory();
+//        invokerFactory.addInvokers(defaultInvokers());
+//        Assist assist = new Assist(invokerFactory, new HashMap<>());
+//        String sql;
+//        try {
+//            sql = toSQL.toStr(statement, assist, null);
+//        } catch (AntlrException e) {
+//            throw new DreamRunTimeException(e);
+//        }
+//        TakeMarkInvoker takeMarkInvoker = (TakeMarkInvoker) assist.getInvoker(TakeMarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+//        TakeTableInvoker takeTableInvoker = (TakeTableInvoker) assist.getInvoker(TakeTableInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+//        List<Object> paramList = takeMarkInvoker.getParamList();
+//        List<MappedParam> mappedParamList = null;
+//        if (paramList != null && !paramList.isEmpty()) {
+//            mappedParamList = new ArrayList<>(paramList.size());
+//            for (Object param : paramList) {
+//                MappedParam mappedParam = new MappedParam();
+//                try {
+//                    mappedParam.setTypeHandler(typeHandlerFactory.getTypeHandler(param != null ? param.getClass() : Object.class, Types.NULL));
+//                } catch (TypeHandlerNotFoundException e) {
+//                    throw new DreamRunTimeException(e);
+//                }
+//                mappedParam.setParamValue(param);
+//                mappedParamList.add(mappedParam);
+//            }
+//        }
+//        Set<String> tableSet = takeTableInvoker.getTableSet();
+//        return new MappedStatement
+//                .Builder()
+//                .methodInfo(methodInfo)
+//                .command(command)
+//                .sql(sql)
+//                .tableSet(tableSet)
+//                .mappedParamList(mappedParamList)
+//                .build();
 //    }
 //}

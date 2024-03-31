@@ -1,7 +1,7 @@
 package com.dream.wrap.wrapper;
 
 import com.dream.antlr.smt.*;
-import com.dream.wrap.invoker.LambdaMarkInvokerStatement;
+import com.dream.instruct.invoker.TakeMarkInvokerStatement;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -51,7 +51,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper> {
         Iterator<?> iterator = values.iterator();
         while (iterator.hasNext()) {
             Object value = iterator.next();
-            listColumnStatement.add(new LambdaMarkInvokerStatement(value));
+            listColumnStatement.add(new TakeMarkInvokerStatement(value));
         }
         BraceStatement braceStatement = new BraceStatement(listColumnStatement);
         return condition(column, new OperStatement.INStatement(), braceStatement);
@@ -81,7 +81,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper> {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new LambdaMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(value));
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         concatStatement.setParamsStatement(listColumnStatement);
         return condition(column, new OperStatement.LIKEStatement(), concatStatement);
@@ -90,7 +90,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper> {
     public Children likeLeft(String column, Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new LambdaMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(value));
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         concatStatement.setParamsStatement(listColumnStatement);
         return condition(column, new OperStatement.LIKEStatement(), concatStatement);
@@ -101,7 +101,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper> {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new LambdaMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(value));
         concatStatement.setParamsStatement(listColumnStatement);
         return condition(column, new OperStatement.LIKEStatement(), concatStatement);
     }
@@ -127,9 +127,9 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper> {
         conditionStatement.setLeft(new SymbolStatement.SingleMarkStatement(column));
         conditionStatement.setOper(new OperStatement.BETWEENStatement());
         ConditionStatement rightConditionStatement = new ConditionStatement();
-        rightConditionStatement.setLeft(new LambdaMarkInvokerStatement(start));
+        rightConditionStatement.setLeft(new TakeMarkInvokerStatement(start));
         rightConditionStatement.setOper(new OperStatement.ANDStatement());
-        rightConditionStatement.setRight(new LambdaMarkInvokerStatement(end));
+        rightConditionStatement.setRight(new TakeMarkInvokerStatement(end));
         conditionStatement.setRight(rightConditionStatement);
 //        return new Children(this, conditionStatement);
         return null;
@@ -171,7 +171,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper> {
     }
 
     protected Children condition(String column, OperStatement operStatement, Object value) {
-        return condition(new SymbolStatement.SingleMarkStatement(column), operStatement, new LambdaMarkInvokerStatement(value));
+        return condition(new SymbolStatement.SingleMarkStatement(column), operStatement, new TakeMarkInvokerStatement(value));
     }
 
     protected Children condition(Statement columnStatement, OperStatement operStatement, Statement valueStatement) {

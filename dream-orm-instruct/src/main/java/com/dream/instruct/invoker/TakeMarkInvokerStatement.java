@@ -1,12 +1,11 @@
-package com.dream.wrap.invoker;
+package com.dream.instruct.invoker;
 
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 
-public class LambdaMarkInvokerStatement extends InvokerStatement {
+public class TakeMarkInvokerStatement extends InvokerStatement {
     private Object value;
 
-    public LambdaMarkInvokerStatement(Object value) {
+    public TakeMarkInvokerStatement(Object value) {
         this.value = value;
     }
 
@@ -20,11 +19,11 @@ public class LambdaMarkInvokerStatement extends InvokerStatement {
 
     @Override
     public String getNamespace() {
-        return Invoker.DEFAULT_NAMESPACE;
+        return TakeMarkInvoker.DEFAULT_NAMESPACE;
     }
 
     @Override
     public String getFunction() {
-        return LambdaMarkInvoker.FUNCTION;
+        return TakeMarkInvoker.FUNCTION;
     }
 }

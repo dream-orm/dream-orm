@@ -1,7 +1,7 @@
 package com.dream.flex.def;
 
 import com.dream.flex.factory.FlexUpdateFactory;
-import com.dream.regular.command.Update;
+import com.dream.instruct.command.Update;
 
 
 public interface UpdateDef extends Update {
