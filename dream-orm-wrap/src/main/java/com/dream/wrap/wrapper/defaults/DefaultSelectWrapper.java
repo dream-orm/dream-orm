@@ -5,6 +5,7 @@ import com.dream.antlr.smt.QueryStatement;
 import com.dream.antlr.smt.SelectStatement;
 import com.dream.antlr.smt.SymbolStatement;
 import com.dream.antlr.util.AntlrUtil;
+import com.dream.instruct.invoker.TakeColumnInvokerStatement;
 import com.dream.system.util.SystemUtil;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
@@ -26,7 +27,7 @@ public class DefaultSelectWrapper extends AbstractWhereConditionQueryWrapper<Def
         fromStatement.setMainTable(new SymbolStatement.SingleMarkStatement(tableName));
         statement().setFromStatement(fromStatement);
         SelectStatement selectStatement = new SelectStatement();
-        selectStatement.setSelectList(AntlrUtil.listColumnStatement(",", "*"));
+        selectStatement.setSelectList(AntlrUtil.listColumnStatement(",", new TakeColumnInvokerStatement(entityType)));
         statement().setSelectStatement(selectStatement);
     }
 }

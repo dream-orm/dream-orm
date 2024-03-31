@@ -8,6 +8,9 @@ import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToSQL;
+import com.dream.instruct.invoker.TakeColumnInvoker;
+import com.dream.instruct.invoker.TakeMarkInvoker;
+import com.dream.instruct.invoker.TakeTableInvoker;
 import com.dream.mate.logic.inject.LogicHandler;
 import com.dream.mate.logic.invoker.LogicInvoker;
 import com.dream.mate.permission.inject.PermissionHandler;
@@ -16,8 +19,6 @@ import com.dream.mate.permission.invoker.PermissionInjectInvoker;
 import com.dream.mate.tenant.inject.TenantHandler;
 import com.dream.mate.tenant.invoker.TenantGetInvoker;
 import com.dream.mate.tenant.invoker.TenantInjectInvoker;
-import com.dream.instruct.invoker.TakeMarkInvoker;
-import com.dream.instruct.invoker.TakeTableInvoker;
 import com.dream.system.config.Command;
 import com.dream.system.config.MappedParam;
 import com.dream.system.config.MappedStatement;
@@ -81,6 +82,9 @@ public abstract class AbstractCommandDialectFactory implements CommandDialectFac
             });
         }
         Assist assist = new Assist(invokerFactory, new HashMap<>());
+        if (methodInfo != null) {
+            assist.setCustom(MethodInfo.class, methodInfo);
+        }
         String sql;
         try {
             sql = toSQL.toStr(statement, assist, invokerList);
@@ -116,7 +120,7 @@ public abstract class AbstractCommandDialectFactory implements CommandDialectFac
     }
 
     protected Invoker[] defaultInvokers() {
-        return new Invoker[]{new TakeMarkInvoker(), new TakeTableInvoker()};
+        return new Invoker[]{new TakeMarkInvoker(), new TakeColumnInvoker(), new TakeTableInvoker()};
     }
 
     protected abstract TenantHandler tenantHandler();

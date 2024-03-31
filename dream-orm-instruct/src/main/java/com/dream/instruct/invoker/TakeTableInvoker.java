@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 public class TakeTableInvoker extends AbstractInvoker {
-    public static final String FUNCTION = "dream_regular_take_table";
+    public static final String FUNCTION = "dream_instruct_take_table";
     private final Set<String> tableSet = new LowHashSet();
 
     @Override

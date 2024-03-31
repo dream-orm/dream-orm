@@ -1,6 +1,7 @@
 package com.dream.system.util;
 
 
+import com.dream.system.annotation.Ignore;
 import com.dream.system.cache.CacheKey;
 
 import java.lang.reflect.Field;
@@ -16,7 +17,7 @@ public class SystemUtil {
     public static boolean ignoreField(Field field) {
         int modifier = field.getModifiers();
         if (Modifier.isStatic(modifier)
-                || Modifier.isFinal(modifier)) {
+                || Modifier.isFinal(modifier) || field.isAnnotationPresent(Ignore.class)) {
             return true;
         }
         return false;

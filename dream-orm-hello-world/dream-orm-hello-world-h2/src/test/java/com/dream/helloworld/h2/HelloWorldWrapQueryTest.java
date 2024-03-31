@@ -18,7 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldWrapQueryTest {
-    private CommandDialectFactory dialectFactory=new DefaultCommandDialectFactory(new ToMySQL());
+    private CommandDialectFactory dialectFactory = new DefaultCommandDialectFactory(new ToMySQL());
+
     /**
      * 测试select多个字段
      */

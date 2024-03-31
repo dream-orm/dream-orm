@@ -1,6 +1,5 @@
 package com.dream.system.core.resultsethandler;
 
-import com.dream.system.annotation.Ignore;
 import com.dream.system.cache.CacheKey;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MappedStatement;
@@ -279,10 +278,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
     protected boolean ignore(Field field) {
-        if (SystemUtil.ignoreField(field)) {
-            return true;
-        }
-        return field.isAnnotationPresent(Ignore.class);
+        return SystemUtil.ignoreField(field);
     }
 
     protected String getTableName(Class<?> type) {

@@ -8,7 +8,6 @@ import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToNativeSQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.antlr.util.AntlrUtil;
-import com.dream.system.annotation.Ignore;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.table.ColumnInfo;
@@ -179,10 +178,7 @@ public class StarInvoker extends AbstractInvoker {
     }
 
     protected boolean ignore(Field field) {
-        if (SystemUtil.ignoreField(field)) {
-            return true;
-        }
-        return field.isAnnotationPresent(Ignore.class);
+        return SystemUtil.ignoreField(field);
     }
 
     protected String getTableName(Class<?> type) {
