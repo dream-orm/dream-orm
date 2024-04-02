@@ -25,7 +25,9 @@ public class HelloWorldWrapQueryTest {
      */
     @Test
     public void testSelect() throws AntlrException {
-        QueryWrapper wrapper = Wrappers.query(Account.class).leq("b", 11).and(a -> a.leq("age", 11).or(b -> b.like("a", "11")));
+        QueryWrapper wrapper = Wrappers.query(Account.class).select(i -> i.len("a").ascii("b").length("c"))
+                .leq("b", 11).and(a -> a.leq("age", 11).or(b -> b.like("a", "11")))
+                .where(i -> i.leq("age", 11)).groupBy("a").leq("a",11).having(i->i.leq("b","12"));
         MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
         System.out.println(mappedStatement.getSql());
     }

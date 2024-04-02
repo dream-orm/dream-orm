@@ -4,6 +4,8 @@ import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.SelectStatement;
 import com.dream.antlr.smt.SymbolStatement;
 
+import java.util.function.Consumer;
+
 public interface SelectWrapper<
         From extends FromWrapper<Where, Group, Having, OrderBy, Limit, Union, ForUpdate, Query>,
         Where extends WhereWrapper<Group, Having, OrderBy, Limit, Union, ForUpdate, Query>,
@@ -27,6 +29,14 @@ public interface SelectWrapper<
         }
         selectStatement.setSelectList(listColumnStatement);
         statement().setSelectStatement(selectStatement);
+        return (From) creatorFactory().newFromWrapper(statement());
+    }
+
+    default From select(Consumer<FunctionWrapper> fn) {
+        FunctionWrapper functionWrapper = new FunctionWrapper();
+        fn.accept(functionWrapper);
+        ListColumnStatement columnStatement = functionWrapper.getColumnStatement();
+        statement().getSelectStatement().setSelectList(columnStatement);
         return (From) creatorFactory().newFromWrapper(statement());
     }
 }
