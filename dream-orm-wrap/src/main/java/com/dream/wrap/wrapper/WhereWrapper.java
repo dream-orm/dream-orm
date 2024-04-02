@@ -17,7 +17,6 @@ public interface WhereWrapper<
         ConditionWrapper.StatementConditionWrapper conditionWrapper = new ConditionWrapper.StatementConditionWrapper();
         fn.accept(conditionWrapper);
         Statement statement = conditionWrapper.statement();
-        statement().getWhereStatement().setStatement(statement);
         WhereStatement whereStatement = statement().getWhereStatement();
         if (whereStatement == null) {
             whereStatement = new WhereStatement();

@@ -9,6 +9,5 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.dream-orm</groupId>
     <artifactId>dream-orm-antlr</artifactId>
 </project>

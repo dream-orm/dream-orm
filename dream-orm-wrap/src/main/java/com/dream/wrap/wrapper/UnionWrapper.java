@@ -6,18 +6,18 @@ public interface UnionWrapper<
         ForUpdate extends ForUpdateWrapper<Query>,
         Query extends QueryWrapper> extends ForUpdateWrapper<Query> {
 
-    default ForUpdate union(SelectWrapper selectWrapper) {
+    default ForUpdate union(QueryWrapper queryWrapper) {
         UnionStatement unionStatement = new UnionStatement();
         unionStatement.setAll(false);
-        unionStatement.setStatement(selectWrapper.statement());
+        unionStatement.setStatement(queryWrapper.statement());
         statement().setUnionStatement(unionStatement);
         return (ForUpdate) creatorFactory().newForUpdateWrapper(statement());
     }
 
-    default ForUpdate unionAll(SelectWrapper selectWrapper) {
+    default ForUpdate unionAll(QueryWrapper queryWrapper) {
         UnionStatement unionStatement = new UnionStatement();
         unionStatement.setAll(true);
-        unionStatement.setStatement(selectWrapper.statement());
+        unionStatement.setStatement(queryWrapper.statement());
         statement().setUnionStatement(unionStatement);
         return (ForUpdate) creatorFactory().newForUpdateWrapper(statement());
     }

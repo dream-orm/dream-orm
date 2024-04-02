@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-public abstract class ConditionWrapper<Children extends ConditionWrapper> {
+public abstract class ConditionWrapper<Children extends ConditionWrapper<Children>> {
 
     public Children eq(String column, Object value) {
         return condition(column, new OperStatement.EQStatement(), value);

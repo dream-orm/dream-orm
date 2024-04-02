@@ -24,16 +24,18 @@ public class HelloWorldWrapQueryTest {
      */
     @Test
     public void testSelectColumn() {
-        QueryWrapper wrapper = Wrappers.query(Account.class).select("a","b","c");
+        QueryWrapper wrapper = Wrappers.query(Account.class).select("a", "b", "c");
         MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
         System.out.println(mappedStatement.getSql());
     }
+
     @Test
     public void testSelectFunc() {
         QueryWrapper wrapper = Wrappers.query(Account.class).select(i -> i.len("a").ascii("b").length("c"));
         MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
         System.out.println(mappedStatement.getSql());
     }
+
     @Test
     public void testWhere() {
         QueryWrapper wrapper = Wrappers.query(Account.class)

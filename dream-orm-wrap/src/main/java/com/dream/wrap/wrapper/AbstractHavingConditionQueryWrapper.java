@@ -7,7 +7,7 @@ import com.dream.antlr.smt.Statement;
 import com.dream.antlr.util.AntlrUtil;
 import com.dream.wrap.factory.WrapQueryFactory;
 
-public class AbstractHavingConditionQueryWrapper<Children extends ConditionWrapper> extends ConditionWrapper<Children> implements QueryWrapper {
+public class AbstractHavingConditionQueryWrapper<Children extends ConditionWrapper<Children>> extends ConditionWrapper<Children> implements QueryWrapper {
     private QueryStatement statement;
     private WrapQueryFactory creatorFactory;
 
