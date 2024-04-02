@@ -1,7 +1,6 @@
 package com.dream.helloworld.h2;
 
 
-import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.sql.ToMySQL;
 import com.dream.helloworld.h2.table.Account;
 import com.dream.instruct.factory.CommandDialectFactory;
@@ -24,10 +23,49 @@ public class HelloWorldWrapQueryTest {
      * 测试select多个字段
      */
     @Test
-    public void testSelect() throws AntlrException {
-        QueryWrapper wrapper = Wrappers.query(Account.class).select(i -> i.len("a").ascii("b").length("c"))
-                .leq("b", 11).and(a -> a.leq("age", 11).or(b -> b.like("a", "11")))
-                .where(i -> i.leq("age", 11)).groupBy("a").leq("a",11).having(i->i.leq("b","12"));
+    public void testSelectColumn() {
+        QueryWrapper wrapper = Wrappers.query(Account.class).select("a","b","c");
+        MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
+        System.out.println(mappedStatement.getSql());
+    }
+    @Test
+    public void testSelectFunc() {
+        QueryWrapper wrapper = Wrappers.query(Account.class).select(i -> i.len("a").ascii("b").length("c"));
+        MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
+        System.out.println(mappedStatement.getSql());
+    }
+    @Test
+    public void testWhere() {
+        QueryWrapper wrapper = Wrappers.query(Account.class)
+                .leq("b", 11).and(a -> a.leq("age", 11).or(b -> b.like("a", "11")));
+        MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
+        System.out.println(mappedStatement.getSql());
+    }
+
+    @Test
+    public void testWhere2() {
+        QueryWrapper wrapper = Wrappers.query(Account.class).where(i -> i.leq("b", 11).and(a -> a.leq("age", 11).or(b -> b.like("a", "11"))));
+        MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
+        System.out.println(mappedStatement.getSql());
+    }
+
+    @Test
+    public void testGroup() {
+        QueryWrapper wrapper = Wrappers.query(Account.class).groupBy("a");
+        MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
+        System.out.println(mappedStatement.getSql());
+    }
+
+    @Test
+    public void testHaving() {
+        QueryWrapper wrapper = Wrappers.query(Account.class).groupBy("a").leq("b", 11).and(a -> a.leq("age", 11).or(b -> b.like("a", "11")));
+        MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
+        System.out.println(mappedStatement.getSql());
+    }
+
+    @Test
+    public void testHaving2() {
+        QueryWrapper wrapper = Wrappers.query(Account.class).groupBy("a").having(i -> i.leq("b", 11).and(a -> a.leq("age", 11).or(b -> b.like("a", "11"))));
         MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
         System.out.println(mappedStatement.getSql());
     }
