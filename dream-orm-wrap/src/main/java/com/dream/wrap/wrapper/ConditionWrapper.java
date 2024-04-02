@@ -1,6 +1,7 @@
 package com.dream.wrap.wrapper;
 
 import com.dream.antlr.smt.*;
+import com.dream.antlr.util.AntlrUtil;
 import com.dream.instruct.invoker.TakeMarkInvokerStatement;
 
 import java.util.Arrays;
@@ -9,7 +10,6 @@ import java.util.Iterator;
 import java.util.function.Consumer;
 
 public abstract class ConditionWrapper<Children extends ConditionWrapper> {
-    protected ConditionStatement conditionStatement = null;
 
     public Children eq(String column, Object value) {
         return condition(column, new OperStatement.EQStatement(), value);
@@ -84,7 +84,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper> {
         listColumnStatement.add(new TakeMarkInvokerStatement(value));
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         concatStatement.setParamsStatement(listColumnStatement);
-        return condition(column, new OperStatement.LIKEStatement(), concatStatement);
+        return condition(new SymbolStatement.SingleMarkStatement(column), new OperStatement.LIKEStatement(), concatStatement);
     }
 
     public Children likeLeft(String column, Object value) {
@@ -161,13 +161,25 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper> {
         return null;
     }
 
-    public Children and(Consumer<Children> fn) {
-//        return condition(fn.apply(columnWrapper), new OperStatement.ANDStatement());
-        return (Children) this;
+    public Children and(Consumer<StatementConditionWrapper> fn) {
+        StatementConditionWrapper statementConditionWrapper = new StatementConditionWrapper();
+        fn.accept(statementConditionWrapper);
+        Statement statement = statementConditionWrapper.statement();
+        OperStatement.ANDStatement andStatement = new OperStatement.ANDStatement();
+        if (statement instanceof ConditionStatement) {
+            ConditionStatement conditionStatement = (ConditionStatement) statement;
+            if (conditionStatement.getOper().getLevel() < andStatement.getLevel()) {
+                return condition(andStatement, new BraceStatement(conditionStatement));
+            }
+        }
+        return condition(andStatement, statement);
+
     }
 
-    public Children or(Consumer<Children> fn) {
-        return condition(true, null, null, null);
+    public Children or(Consumer<StatementConditionWrapper> fn) {
+        StatementConditionWrapper statementConditionWrapper = new StatementConditionWrapper();
+        fn.accept(statementConditionWrapper);
+        return condition(new OperStatement.ORStatement(), statementConditionWrapper.statement());
     }
 
     protected Children condition(String column, OperStatement operStatement, Object value) {
@@ -175,9 +187,26 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper> {
     }
 
     protected Children condition(Statement columnStatement, OperStatement operStatement, Statement valueStatement) {
-        return condition(false, columnStatement, operStatement, valueStatement);
+        return condition(new OperStatement.ANDStatement(), AntlrUtil.conditionStatement(columnStatement, operStatement, valueStatement));
     }
 
-    protected abstract Children condition(boolean or, Statement columnStatement, OperStatement operStatement, Statement valueStatement);
+    protected abstract Children condition(OperStatement operStatement, Statement statement);
 
+    public static class StatementConditionWrapper extends ConditionWrapper<StatementConditionWrapper> {
+        private Statement statement;
+
+        @Override
+        protected StatementConditionWrapper condition(OperStatement operStatement, Statement statement) {
+            if (this.statement == null) {
+                this.statement = statement;
+            } else {
+                this.statement = AntlrUtil.conditionStatement(this.statement, operStatement, statement);
+            }
+            return this;
+        }
+
+        public Statement statement() {
+            return this.statement;
+        }
+    }
 }

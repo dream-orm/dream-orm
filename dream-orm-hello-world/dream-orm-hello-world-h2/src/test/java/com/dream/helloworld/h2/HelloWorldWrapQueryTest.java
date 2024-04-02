@@ -8,7 +8,7 @@ import com.dream.instruct.factory.CommandDialectFactory;
 import com.dream.instruct.factory.DefaultCommandDialectFactory;
 import com.dream.system.config.MappedStatement;
 import com.dream.wrap.support.Wrappers;
-import com.dream.wrap.wrapper.defaults.DefaultHavingWrapper;
+import com.dream.wrap.wrapper.QueryWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +25,7 @@ public class HelloWorldWrapQueryTest {
      */
     @Test
     public void testSelect() throws AntlrException {
-        DefaultHavingWrapper wrapper = Wrappers.query(Account.class).groupBy("a").leq("age", 11);
+        QueryWrapper wrapper = Wrappers.query(Account.class).leq("b", 11).and(a -> a.leq("age", 11).or(b -> b.like("a", "11")));
         MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
         System.out.println(mappedStatement.getSql());
     }

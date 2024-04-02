@@ -1,6 +1,9 @@
 package com.dream.wrap.wrapper;
 
-import com.dream.antlr.smt.*;
+import com.dream.antlr.smt.OperStatement;
+import com.dream.antlr.smt.QueryStatement;
+import com.dream.antlr.smt.Statement;
+import com.dream.antlr.smt.WhereStatement;
 import com.dream.antlr.util.AntlrUtil;
 import com.dream.wrap.factory.WrapQueryFactory;
 
@@ -24,18 +27,15 @@ public class AbstractWhereConditionQueryWrapper<Children extends ConditionWrappe
     }
 
     @Override
-    protected Children condition(boolean or, Statement columnStatement, OperStatement operStatement, Statement valueStatement) {
-        ConditionStatement conditionStatement = AntlrUtil.conditionStatement(columnStatement, operStatement, valueStatement);
-        WhereStatement whereStatement = this.statement.getWhereStatement();
+    protected Children condition(OperStatement operStatement, Statement valueStatement) {
+        WhereStatement whereStatement = this.statement().getWhereStatement();
         if (whereStatement == null) {
             whereStatement = new WhereStatement();
-            this.statement.setWhereStatement(whereStatement);
-        } else if (or) {
-            conditionStatement = AntlrUtil.conditionStatement(whereStatement.getStatement(), new OperStatement.ORStatement(), conditionStatement);
+            whereStatement.setStatement(valueStatement);
+            this.statement().setWhereStatement(whereStatement);
         } else {
-            conditionStatement = AntlrUtil.conditionStatement(whereStatement.getStatement(), new OperStatement.ANDStatement(), conditionStatement);
+            whereStatement.setStatement(AntlrUtil.conditionStatement(whereStatement.getStatement(), operStatement, valueStatement));
         }
-        whereStatement.setStatement(conditionStatement);
         return (Children) this;
     }
 }
