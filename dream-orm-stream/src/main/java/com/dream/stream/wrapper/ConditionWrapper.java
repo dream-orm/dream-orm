@@ -84,7 +84,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
         listColumnStatement.add(new TakeMarkInvokerStatement(value));
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         concatStatement.setParamsStatement(listColumnStatement);
-        return condition(new SymbolStatement.SingleMarkStatement(column), new OperStatement.LIKEStatement(), concatStatement);
+        return condition(new SymbolStatement.LetterStatement(column), new OperStatement.LIKEStatement(), concatStatement);
     }
 
     public Children likeLeft(String column, Object value) {
@@ -124,7 +124,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
 
     public Children between(String column, Object start, Object end) {
         ConditionStatement conditionStatement = new ConditionStatement();
-        conditionStatement.setLeft(new SymbolStatement.SingleMarkStatement(column));
+        conditionStatement.setLeft(new SymbolStatement.LetterStatement(column));
         conditionStatement.setOper(new OperStatement.BETWEENStatement());
         ConditionStatement rightConditionStatement = new ConditionStatement();
         rightConditionStatement.setLeft(new TakeMarkInvokerStatement(start));
@@ -146,7 +146,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
 
     public Children isNotNull(String column) {
         ConditionStatement conditionStatement = new ConditionStatement();
-        conditionStatement.setLeft(new SymbolStatement.SingleMarkStatement(column));
+        conditionStatement.setLeft(new SymbolStatement.LetterStatement(column));
         conditionStatement.setOper(new OperStatement.ISStatement());
         ConditionStatement rightConditionStatement = new ConditionStatement();
         rightConditionStatement.setOper(new OperStatement.NOTStatement());
@@ -183,7 +183,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     }
 
     protected Children condition(String column, OperStatement operStatement, Object value) {
-        return condition(new SymbolStatement.SingleMarkStatement(column), operStatement, new TakeMarkInvokerStatement(value));
+        return condition(new SymbolStatement.LetterStatement(column), operStatement, new TakeMarkInvokerStatement(value));
     }
 
     protected Children condition(Statement columnStatement, OperStatement operStatement, Statement valueStatement) {

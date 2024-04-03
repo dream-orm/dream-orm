@@ -9,19 +9,19 @@ public class FunctionWrapper {
     private ListColumnStatement columnStatement = new ListColumnStatement(",");
 
     public FunctionWrapper ascii(String column) {
-        return functionWrapper(new FunctionStatement.AsciiStatement(), column(column));
+        return functionWrapper(new FunctionStatement.AsciiStatement(), col(column));
     }
 
     public FunctionWrapper len(String column) {
-        return functionWrapper(new FunctionStatement.CharLengthStatement(), column(column));
+        return functionWrapper(new FunctionStatement.CharLengthStatement(), col(column));
     }
 
     public FunctionWrapper length(String column) {
-        return functionWrapper(new FunctionStatement.LengthStatement(), column(column));
+        return functionWrapper(new FunctionStatement.LengthStatement(), col(column));
     }
 
-    protected Statement column(String column) {
-        return new SymbolStatement.SingleMarkStatement(String.valueOf(column));
+    protected Statement col(String column) {
+        return new SymbolStatement.LetterStatement(String.valueOf(column));
     }
 
     protected FunctionWrapper functionWrapper(FunctionStatement functionStatement, Statement... statements) {

@@ -1,4 +1,4 @@
-import {DefaultTheme} from 'vitepress';
+import { DefaultTheme } from 'vitepress';
 
 const sidebar: DefaultTheme.Sidebar = {
     '/': [
@@ -35,6 +35,10 @@ const sidebar: DefaultTheme.Sidebar = {
             text: '基础功能',
             items: [
                 {
+                    text: 'mapper接口操作',
+                    link: '/basic/mapper',
+                },
+                {
                     text: '模板操作',
                     link: '/basic/template',
                 },
@@ -47,8 +51,8 @@ const sidebar: DefaultTheme.Sidebar = {
                     link: '/basic/flex-chain',
                 },
                 {
-                    text: 'mapper接口操作',
-                    link: '/basic/mapper',
+                    text: 'Stream操作',
+                    link: '/basic/stream',
                 },
                 {
                     text: '不翻译SQL操作',

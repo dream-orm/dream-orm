@@ -15,7 +15,7 @@ public interface GroupByWrapper<
         GroupStatement groupStatement = new GroupStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         for (String column : columns) {
-            listColumnStatement.add(new SymbolStatement.SingleMarkStatement(column));
+            listColumnStatement.add(new SymbolStatement.LetterStatement(column));
         }
         groupStatement.setGroup(listColumnStatement);
         statement().setGroupStatement(groupStatement);
