@@ -1,4 +1,4 @@
-package com.dream.instruct.invoker;
+package com.dream.struct.invoker;
 
 import com.dream.antlr.smt.InvokerStatement;
 

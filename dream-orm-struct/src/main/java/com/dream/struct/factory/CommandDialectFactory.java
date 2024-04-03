@@ -1,10 +1,10 @@
-package com.dream.instruct.factory;
+package com.dream.struct.factory;
 
 import com.dream.antlr.smt.*;
-import com.dream.instruct.command.Delete;
-import com.dream.instruct.command.Insert;
-import com.dream.instruct.command.Query;
-import com.dream.instruct.command.Update;
+import com.dream.struct.command.Delete;
+import com.dream.struct.command.Insert;
+import com.dream.struct.command.Query;
+import com.dream.struct.command.Update;
 import com.dream.system.config.Command;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.config.MethodInfo;

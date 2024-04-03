@@ -1,4 +1,4 @@
-package com.dream.instruct.command;
+package com.dream.struct.command;
 
 import com.dream.antlr.smt.DeleteStatement;
 

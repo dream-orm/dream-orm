@@ -11,6 +11,7 @@ public class LambdaUtil {
 
     private static final Map<Class<?>, SerializedLambda> lambdaMap = new ConcurrentHashMap<>();
     private static final Map<String, Class<?>> classMap = new ConcurrentHashMap<>();
+
     private LambdaUtil() {
     }
 

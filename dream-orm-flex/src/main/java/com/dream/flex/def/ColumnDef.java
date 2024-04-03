@@ -2,7 +2,7 @@ package com.dream.flex.def;
 
 import com.dream.antlr.smt.*;
 import com.dream.flex.function.LazyFunctionStatement;
-import com.dream.instruct.invoker.TakeMarkInvokerStatement;
+import com.dream.struct.invoker.TakeMarkInvokerStatement;
 
 import java.util.Arrays;
 import java.util.Collection;

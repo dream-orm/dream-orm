@@ -2,7 +2,7 @@ package com.dream.wrap.wrapper;
 
 import com.dream.antlr.smt.*;
 import com.dream.antlr.util.AntlrUtil;
-import com.dream.instruct.invoker.TakeMarkInvokerStatement;
+import com.dream.struct.invoker.TakeMarkInvokerStatement;
 
 import java.util.Arrays;
 import java.util.Collection;

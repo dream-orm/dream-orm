@@ -1,7 +1,7 @@
 package com.dream.wrap.wrapper;
 
 import com.dream.antlr.smt.LimitStatement;
-import com.dream.instruct.invoker.TakeMarkInvokerStatement;
+import com.dream.struct.invoker.TakeMarkInvokerStatement;
 
 public interface LimitWrapper<Union extends UnionWrapper<ForUpdate, Query>,
         ForUpdate extends ForUpdateWrapper<Query>,

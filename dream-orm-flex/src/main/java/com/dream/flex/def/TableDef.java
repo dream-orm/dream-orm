@@ -1,7 +1,7 @@
 package com.dream.flex.def;
 
 import com.dream.antlr.smt.*;
-import com.dream.instruct.invoker.TakeTableInvokerStatement;
+import com.dream.struct.invoker.TakeTableInvokerStatement;
 
 public class TableDef {
     private AliasStatement statement;

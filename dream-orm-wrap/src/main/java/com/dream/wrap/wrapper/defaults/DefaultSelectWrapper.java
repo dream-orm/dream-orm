@@ -5,7 +5,7 @@ import com.dream.antlr.smt.QueryStatement;
 import com.dream.antlr.smt.SelectStatement;
 import com.dream.antlr.smt.SymbolStatement;
 import com.dream.antlr.util.AntlrUtil;
-import com.dream.instruct.invoker.TakeColumnInvokerStatement;
+import com.dream.struct.invoker.TakeColumnInvokerStatement;
 import com.dream.system.util.SystemUtil;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;

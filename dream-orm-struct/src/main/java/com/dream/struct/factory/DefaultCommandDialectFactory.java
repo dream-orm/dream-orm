@@ -1,4 +1,4 @@
-package com.dream.instruct.factory;
+package com.dream.struct.factory;
 
 import com.dream.antlr.sql.ToSQL;
 import com.dream.mate.logic.inject.LogicHandler;

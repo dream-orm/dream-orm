@@ -1,7 +1,7 @@
 package com.dream.flex.def;
 
 import com.dream.antlr.smt.*;
-import com.dream.instruct.invoker.TakeMarkInvokerStatement;
+import com.dream.struct.invoker.TakeMarkInvokerStatement;
 
 import java.util.Map;
 import java.util.Set;

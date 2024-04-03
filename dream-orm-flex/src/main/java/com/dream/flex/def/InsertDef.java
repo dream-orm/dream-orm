@@ -1,7 +1,7 @@
 package com.dream.flex.def;
 
 import com.dream.flex.factory.FlexInsertFactory;
-import com.dream.instruct.command.Insert;
+import com.dream.struct.command.Insert;
 
 
 public interface InsertDef extends Insert {

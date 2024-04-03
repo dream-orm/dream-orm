@@ -1,4 +1,4 @@
-package com.dream.instruct.invoker;
+package com.dream.struct.invoker;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;

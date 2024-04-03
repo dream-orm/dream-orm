@@ -1,7 +1,7 @@
 package com.dream.flex.def;
 
 import com.dream.antlr.smt.LimitStatement;
-import com.dream.instruct.invoker.TakeMarkInvokerStatement;
+import com.dream.struct.invoker.TakeMarkInvokerStatement;
 
 public interface LimitDef<
         Union extends UnionDef<ForUpdate, Query>,

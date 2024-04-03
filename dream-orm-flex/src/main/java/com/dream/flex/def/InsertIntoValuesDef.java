@@ -3,7 +3,7 @@ package com.dream.flex.def;
 import com.dream.antlr.smt.BraceStatement;
 import com.dream.antlr.smt.InsertStatement;
 import com.dream.antlr.smt.ListColumnStatement;
-import com.dream.instruct.invoker.TakeMarkInvokerStatement;
+import com.dream.struct.invoker.TakeMarkInvokerStatement;
 
 import java.util.List;
 import java.util.function.Function;

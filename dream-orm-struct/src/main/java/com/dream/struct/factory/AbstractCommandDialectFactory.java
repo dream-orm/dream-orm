@@ -1,4 +1,4 @@
-package com.dream.instruct.factory;
+package com.dream.struct.factory;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
@@ -8,9 +8,6 @@ import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToSQL;
-import com.dream.instruct.invoker.TakeColumnInvoker;
-import com.dream.instruct.invoker.TakeMarkInvoker;
-import com.dream.instruct.invoker.TakeTableInvoker;
 import com.dream.mate.logic.inject.LogicHandler;
 import com.dream.mate.logic.invoker.LogicInvoker;
 import com.dream.mate.permission.inject.PermissionHandler;
@@ -19,6 +16,9 @@ import com.dream.mate.permission.invoker.PermissionInjectInvoker;
 import com.dream.mate.tenant.inject.TenantHandler;
 import com.dream.mate.tenant.invoker.TenantGetInvoker;
 import com.dream.mate.tenant.invoker.TenantInjectInvoker;
+import com.dream.struct.invoker.TakeColumnInvoker;
+import com.dream.struct.invoker.TakeMarkInvoker;
+import com.dream.struct.invoker.TakeTableInvoker;
 import com.dream.system.config.Command;
 import com.dream.system.config.MappedParam;
 import com.dream.system.config.MappedStatement;

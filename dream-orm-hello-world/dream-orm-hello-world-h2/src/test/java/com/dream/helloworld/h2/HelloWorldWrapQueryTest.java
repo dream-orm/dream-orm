@@ -3,8 +3,8 @@ package com.dream.helloworld.h2;
 
 import com.dream.antlr.sql.ToMySQL;
 import com.dream.helloworld.h2.table.Account;
-import com.dream.instruct.factory.CommandDialectFactory;
-import com.dream.instruct.factory.DefaultCommandDialectFactory;
+import com.dream.struct.factory.CommandDialectFactory;
+import com.dream.struct.factory.DefaultCommandDialectFactory;
 import com.dream.system.config.MappedStatement;
 import com.dream.wrap.support.Wrappers;
 import com.dream.wrap.wrapper.QueryWrapper;

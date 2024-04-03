@@ -6,7 +6,7 @@ import com.dream.flex.def.InsertIntoTableDef;
 import com.dream.flex.def.TableDef;
 import com.dream.flex.factory.FlexInsertFactory;
 import com.dream.flex.mapper.FlexMapper;
-import com.dream.instruct.invoker.TakeMarkInvokerStatement;
+import com.dream.struct.invoker.TakeMarkInvokerStatement;
 import com.dream.tdengine.statement.TdInsertStatement;
 
 public class TdChainInsertIntoTableDef extends AbstractTdChainInsertDef implements InsertIntoTableDef<TdChainInsertIntoColumnsDef> {

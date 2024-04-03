@@ -2,7 +2,7 @@ package com.dream.helloworld.h2;
 
 import com.dream.antlr.sql.ToClickHouse;
 import com.dream.flex.def.QueryDef;
-import com.dream.instruct.factory.DefaultCommandDialectFactory;
+import com.dream.struct.factory.DefaultCommandDialectFactory;
 import com.dream.system.config.MappedStatement;
 import org.junit.Test;
 
