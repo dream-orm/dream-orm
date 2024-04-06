@@ -5,17 +5,17 @@ import com.dream.antlr.smt.QueryStatement;
 import com.dream.antlr.smt.SelectStatement;
 import com.dream.antlr.smt.SymbolStatement;
 import com.dream.antlr.util.AntlrUtil;
+import com.dream.stream.factory.StreamQueryFactory;
+import com.dream.stream.wrapper.AbstractWhereConditionQueryWrapper;
+import com.dream.stream.wrapper.SelectWrapper;
 import com.dream.struct.invoker.TakeColumnInvokerStatement;
 import com.dream.system.util.SystemUtil;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
-import com.dream.stream.factory.StreamQueryFactory;
-import com.dream.stream.wrapper.AbstractWhereConditionQueryWrapper;
-import com.dream.stream.wrapper.SelectWrapper;
 
-public class DefaultSelectWrapper extends AbstractWhereConditionQueryWrapper<DefaultSelectWrapper> implements SelectWrapper<DefaultFromWrapper, DefaultWhereWrapper, DefaultGroupByWrapper, DefaultHavingWrapper, DefaultOrderByWrapper, DefaultLimitWrapper, DefaultUnionWrapper, DefaultForUpdateWrapper, DefaultQueryWrapper> {
-    public DefaultSelectWrapper(Class<?> entityType, StreamQueryFactory creatorFactory) {
-        super(new QueryStatement(), creatorFactory);
+public class DefaultSelectWrapper<T> extends AbstractWhereConditionQueryWrapper<T, DefaultSelectWrapper<T>> implements SelectWrapper<T, DefaultFromWrapper<T>, DefaultWhereWrapper<T>, DefaultGroupByWrapper<T>, DefaultHavingWrapper<T>, DefaultOrderByWrapper<T>, DefaultLimitWrapper<T>, DefaultUnionWrapper<T>, DefaultForUpdateWrapper<T>, DefaultQueryWrapper<T>> {
+    public DefaultSelectWrapper(Class<T> entityType, StreamQueryFactory creatorFactory) {
+        super(entityType, new QueryStatement(), creatorFactory);
         if (entityType == null) {
             throw new DreamRunTimeException("参数'entityType'不能为空");
         }

@@ -5,8 +5,9 @@ import com.dream.stream.factory.StreamQueryFactory;
 import com.dream.stream.wrapper.AbstractHavingConditionQueryWrapper;
 import com.dream.stream.wrapper.GroupByWrapper;
 
-public class DefaultGroupByWrapper extends AbstractHavingConditionQueryWrapper<DefaultGroupByWrapper> implements GroupByWrapper<DefaultHavingWrapper, DefaultOrderByWrapper, DefaultLimitWrapper, DefaultUnionWrapper, DefaultForUpdateWrapper, DefaultQueryWrapper> {
-    public DefaultGroupByWrapper(QueryStatement statement, StreamQueryFactory creatorFactory) {
-        super(statement, creatorFactory);
+public class DefaultGroupByWrapper<T> extends AbstractHavingConditionQueryWrapper<T, DefaultGroupByWrapper<T>> implements GroupByWrapper<T, DefaultHavingWrapper<T>, DefaultOrderByWrapper<T>, DefaultLimitWrapper<T>, DefaultUnionWrapper<T>, DefaultForUpdateWrapper<T>, DefaultQueryWrapper<T>> {
+
+    public DefaultGroupByWrapper(Class<T> entityType, QueryStatement statement, StreamQueryFactory creatorFactory) {
+        super(entityType, statement, creatorFactory);
     }
 }

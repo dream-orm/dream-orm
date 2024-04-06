@@ -15,6 +15,8 @@ import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.jdbc.mapper.DefaultJdbcMapper;
 import com.dream.jdbc.mapper.JdbcMapper;
+import com.dream.stream.mapper.DefaultStreamMapper;
+import com.dream.stream.mapper.StreamMapper;
 import com.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.dream.system.cache.Cache;
 import com.dream.system.cache.CacheFactory;
@@ -442,7 +444,7 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 链式操作接口
+     * Flex操作接口
      *
      * @param sessionTemplate SQL操作会话
      * @param toSQL           方言转换
@@ -452,6 +454,19 @@ public class DreamAutoConfiguration {
     @ConditionalOnMissingBean
     public FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
         return new DefaultFlexMapper(sessionTemplate, toSQL);
+    }
+
+    /**
+     * Stream操作接口
+     *
+     * @param sessionTemplate SQL操作会话
+     * @param toSQL           方言转换
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public StreamMapper streamMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
+        return new DefaultStreamMapper(sessionTemplate, toSQL);
     }
 
     /**

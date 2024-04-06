@@ -5,9 +5,9 @@ import com.dream.stream.factory.StreamQueryFactory;
 import com.dream.stream.wrapper.AbstractQueryWrapper;
 import com.dream.stream.wrapper.QueryWrapper;
 
-public class DefaultQueryWrapper extends AbstractQueryWrapper implements QueryWrapper {
+public class DefaultQueryWrapper<T> extends AbstractQueryWrapper<T> implements QueryWrapper<T> {
 
-    public DefaultQueryWrapper(QueryStatement statement, StreamQueryFactory creatorFactory) {
-        super(statement, creatorFactory);
+    public DefaultQueryWrapper(Class<T> entityType, QueryStatement statement, StreamQueryFactory creatorFactory) {
+        super(entityType, statement, creatorFactory);
     }
 }

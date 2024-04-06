@@ -5,9 +5,9 @@ import com.dream.stream.factory.StreamQueryFactory;
 import com.dream.stream.wrapper.AbstractWhereConditionQueryWrapper;
 import com.dream.stream.wrapper.WhereWrapper;
 
-public class DefaultWhereWrapper extends AbstractWhereConditionQueryWrapper<DefaultWhereWrapper> implements WhereWrapper<DefaultGroupByWrapper, DefaultHavingWrapper, DefaultOrderByWrapper, DefaultLimitWrapper, DefaultUnionWrapper, DefaultForUpdateWrapper, DefaultQueryWrapper> {
+public class DefaultWhereWrapper<T> extends AbstractWhereConditionQueryWrapper<T, DefaultWhereWrapper<T>> implements WhereWrapper<T, DefaultGroupByWrapper<T>, DefaultHavingWrapper<T>, DefaultOrderByWrapper<T>, DefaultLimitWrapper<T>, DefaultUnionWrapper<T>, DefaultForUpdateWrapper<T>, DefaultQueryWrapper<T>> {
 
-    public DefaultWhereWrapper(QueryStatement statement, StreamQueryFactory creatorFactory) {
-        super(statement, creatorFactory);
+    public DefaultWhereWrapper(Class<T> entityType, QueryStatement statement, StreamQueryFactory creatorFactory) {
+        super(entityType, statement, creatorFactory);
     }
 }

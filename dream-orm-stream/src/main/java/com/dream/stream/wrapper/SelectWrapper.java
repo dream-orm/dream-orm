@@ -6,16 +6,16 @@ import com.dream.antlr.smt.SymbolStatement;
 
 import java.util.function.Consumer;
 
-public interface SelectWrapper<
-        From extends FromWrapper<Where, Group, Having, OrderBy, Limit, Union, ForUpdate, Query>,
-        Where extends WhereWrapper<Group, Having, OrderBy, Limit, Union, ForUpdate, Query>,
-        Group extends GroupByWrapper<Having, OrderBy, Limit, Union, ForUpdate, Query>,
-        Having extends HavingWrapper<OrderBy, Limit, Union, ForUpdate, Query>,
-        OrderBy extends OrderByWrapper<Limit, Union, ForUpdate, Query>,
-        Limit extends LimitWrapper<Union, ForUpdate, Query>,
-        Union extends UnionWrapper<ForUpdate, Query>,
-        ForUpdate extends ForUpdateWrapper<Query>,
-        Query extends QueryWrapper> extends FromWrapper<Where, Group, Having, OrderBy, Limit, Union, ForUpdate, Query> {
+public interface SelectWrapper<T,
+        From extends FromWrapper<T, Where, Group, Having, OrderBy, Limit, Union, ForUpdate, Query>,
+        Where extends WhereWrapper<T, Group, Having, OrderBy, Limit, Union, ForUpdate, Query>,
+        Group extends GroupByWrapper<T, Having, OrderBy, Limit, Union, ForUpdate, Query>,
+        Having extends HavingWrapper<T, OrderBy, Limit, Union, ForUpdate, Query>,
+        OrderBy extends OrderByWrapper<T, Limit, Union, ForUpdate, Query>,
+        Limit extends LimitWrapper<T, Union, ForUpdate, Query>,
+        Union extends UnionWrapper<T, ForUpdate, Query>,
+        ForUpdate extends ForUpdateWrapper<T, Query>,
+        Query extends QueryWrapper<T>> extends FromWrapper<T, Where, Group, Having, OrderBy, Limit, Union, ForUpdate, Query> {
 
     default From select(String... columns) {
         SelectStatement selectStatement = new SelectStatement();
@@ -29,7 +29,7 @@ public interface SelectWrapper<
         }
         selectStatement.setSelectList(listColumnStatement);
         statement().setSelectStatement(selectStatement);
-        return (From) creatorFactory().newFromWrapper(statement());
+        return (From) creatorFactory().newFromWrapper(entityType(), statement());
     }
 
     default From select(Consumer<FunctionWrapper> fn) {
@@ -37,6 +37,6 @@ public interface SelectWrapper<
         fn.accept(functionWrapper);
         ListColumnStatement columnStatement = functionWrapper.getColumnStatement();
         statement().getSelectStatement().setSelectList(columnStatement);
-        return (From) creatorFactory().newFromWrapper(statement());
+        return (From) creatorFactory().newFromWrapper(entityType(), statement());
     }
 }

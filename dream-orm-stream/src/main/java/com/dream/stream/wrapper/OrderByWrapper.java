@@ -6,11 +6,11 @@ import com.dream.antlr.smt.SymbolStatement;
 
 import java.util.function.Consumer;
 
-public interface OrderByWrapper<
-        Limit extends LimitWrapper<Union, ForUpdate, Query>,
-        Union extends UnionWrapper<ForUpdate, Query>,
-        ForUpdate extends ForUpdateWrapper<Query>,
-        Query extends QueryWrapper> extends LimitWrapper<Union, ForUpdate, Query> {
+public interface OrderByWrapper<T,
+        Limit extends LimitWrapper<T, Union, ForUpdate, Query>,
+        Union extends UnionWrapper<T, ForUpdate, Query>,
+        ForUpdate extends ForUpdateWrapper<T, Query>,
+        Query extends QueryWrapper<T>> extends LimitWrapper<T, Union, ForUpdate, Query> {
 
     default Limit orderBy(String... columns) {
         ListColumnStatement columnStatement = new ListColumnStatement(",");
@@ -20,15 +20,15 @@ public interface OrderByWrapper<
         OrderStatement orderStatement = new OrderStatement();
         orderStatement.setStatement(columnStatement);
         statement().setOrderStatement(orderStatement);
-        return (Limit) creatorFactory().newLimitWrapper(statement());
+        return (Limit) creatorFactory().newLimitWrapper(entityType(), statement());
     }
 
-    default Limit orderBy(Consumer<SortWrapper>fn) {
+    default Limit orderBy(Consumer<SortWrapper> fn) {
         SortWrapper sortWrapper = new SortWrapper();
         fn.accept(sortWrapper);
         OrderStatement orderStatement = new OrderStatement();
         orderStatement.setStatement(sortWrapper.getColumnStatement());
         statement().setOrderStatement(orderStatement);
-        return (Limit) creatorFactory().newLimitWrapper(statement());
+        return (Limit) creatorFactory().newLimitWrapper(entityType(), statement());
     }
 }

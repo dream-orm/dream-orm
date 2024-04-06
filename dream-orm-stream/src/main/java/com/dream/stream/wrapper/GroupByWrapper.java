@@ -4,13 +4,13 @@ import com.dream.antlr.smt.GroupStatement;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.SymbolStatement;
 
-public interface GroupByWrapper<
-        Having extends HavingWrapper<OrderBy, Limit, Union, ForUpdate, Query>,
-        OrderBy extends OrderByWrapper<Limit, Union, ForUpdate, Query>,
-        Limit extends LimitWrapper<Union, ForUpdate, Query>,
-        Union extends UnionWrapper<ForUpdate, Query>,
-        ForUpdate extends ForUpdateWrapper<Query>,
-        Query extends QueryWrapper> extends HavingWrapper<OrderBy, Limit, Union, ForUpdate, Query> {
+public interface GroupByWrapper<T,
+        Having extends HavingWrapper<T, OrderBy, Limit, Union, ForUpdate, Query>,
+        OrderBy extends OrderByWrapper<T, Limit, Union, ForUpdate, Query>,
+        Limit extends LimitWrapper<T, Union, ForUpdate, Query>,
+        Union extends UnionWrapper<T, ForUpdate, Query>,
+        ForUpdate extends ForUpdateWrapper<T, Query>,
+        Query extends QueryWrapper<T>> extends HavingWrapper<T, OrderBy, Limit, Union, ForUpdate, Query> {
     default Having groupBy(String... columns) {
         GroupStatement groupStatement = new GroupStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
@@ -19,6 +19,6 @@ public interface GroupByWrapper<
         }
         groupStatement.setGroup(listColumnStatement);
         statement().setGroupStatement(groupStatement);
-        return (Having) creatorFactory().newHavingWrapper(statement());
+        return (Having) creatorFactory().newHavingWrapper(entityType(), statement());
     }
 }

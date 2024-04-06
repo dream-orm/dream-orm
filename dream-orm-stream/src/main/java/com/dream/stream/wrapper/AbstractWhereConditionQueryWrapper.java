@@ -7,13 +7,20 @@ import com.dream.antlr.smt.WhereStatement;
 import com.dream.antlr.util.AntlrUtil;
 import com.dream.stream.factory.StreamQueryFactory;
 
-public class AbstractWhereConditionQueryWrapper<Children extends ConditionWrapper<Children>> extends ConditionWrapper<Children> implements QueryWrapper {
+public class AbstractWhereConditionQueryWrapper<T, Children extends ConditionWrapper<Children>> extends ConditionWrapper<Children> implements QueryWrapper<T> {
+    private Class<T> entityType;
     private QueryStatement statement;
     private StreamQueryFactory creatorFactory;
 
-    public AbstractWhereConditionQueryWrapper(QueryStatement statement, StreamQueryFactory creatorFactory) {
+    public AbstractWhereConditionQueryWrapper(Class<T> entityType, QueryStatement statement, StreamQueryFactory creatorFactory) {
+        this.entityType = entityType;
         this.statement = statement;
         this.creatorFactory = creatorFactory;
+    }
+
+    @Override
+    public Class<T> entityType() {
+        return entityType;
     }
 
     @Override

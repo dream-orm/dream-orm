@@ -5,8 +5,9 @@ import com.dream.stream.factory.StreamQueryFactory;
 import com.dream.stream.wrapper.AbstractQueryWrapper;
 import com.dream.stream.wrapper.ForUpdateWrapper;
 
-public class DefaultForUpdateWrapper extends AbstractQueryWrapper implements ForUpdateWrapper<DefaultQueryWrapper> {
-    public DefaultForUpdateWrapper(QueryStatement statement, StreamQueryFactory creatorFactory) {
-        super(statement, creatorFactory);
+public class DefaultForUpdateWrapper<T> extends AbstractQueryWrapper<T> implements ForUpdateWrapper<T, DefaultQueryWrapper<T>> {
+
+    public DefaultForUpdateWrapper(Class<T> entityType, QueryStatement statement, StreamQueryFactory creatorFactory) {
+        super(entityType, statement, creatorFactory);
     }
 }

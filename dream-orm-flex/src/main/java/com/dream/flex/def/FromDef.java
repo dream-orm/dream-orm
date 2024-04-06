@@ -11,7 +11,7 @@ public interface FromDef<
         Union extends UnionDef<ForUpdate, Query>,
         ForUpdate extends ForUpdateDef<Query>,
         Query extends QueryDef>
-        extends QueryDef, WhereDef<Group, Having, OrderBy, Limit, Union, ForUpdate, Query> {
+        extends WhereDef<Group, Having, OrderBy, Limit, Union, ForUpdate, Query> {
     default Where from(String table) {
         return from(FunctionDef.table(table));
     }

@@ -4,35 +4,35 @@ import com.dream.antlr.smt.QueryStatement;
 import com.dream.stream.wrapper.*;
 
 public interface StreamQueryFactory
-        <Select extends SelectWrapper<From, Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
-                From extends FromWrapper<Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
-                Where extends WhereWrapper<GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
-                GroupBy extends GroupByWrapper<Having, OrderBy, Limit, Union, ForUpdate, Query>,
-                Having extends HavingWrapper<OrderBy, Limit, Union, ForUpdate, Query>,
-                OrderBy extends OrderByWrapper<Limit, Union, ForUpdate, Query>,
-                Limit extends LimitWrapper<Union, ForUpdate, Query>,
-                Union extends UnionWrapper<ForUpdate, Query>,
-                ForUpdate extends ForUpdateWrapper<Query>,
-                Query extends QueryWrapper> {
+        <T, Select extends SelectWrapper<T, From, Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
+                From extends FromWrapper<T, Where, GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
+                Where extends WhereWrapper<T, GroupBy, Having, OrderBy, Limit, Union, ForUpdate, Query>,
+                GroupBy extends GroupByWrapper<T, Having, OrderBy, Limit, Union, ForUpdate, Query>,
+                Having extends HavingWrapper<T, OrderBy, Limit, Union, ForUpdate, Query>,
+                OrderBy extends OrderByWrapper<T, Limit, Union, ForUpdate, Query>,
+                Limit extends LimitWrapper<T, Union, ForUpdate, Query>,
+                Union extends UnionWrapper<T, ForUpdate, Query>,
+                ForUpdate extends ForUpdateWrapper<T, Query>,
+                Query extends QueryWrapper<T>> {
 
-    Select newSelectWrapper(Class<?> entityType);
+    Select newSelectWrapper(Class<T> entityType);
 
-    From newFromWrapper(QueryStatement statement);
+    From newFromWrapper(Class<T> entityType, QueryStatement statement);
 
-    Where newWhereWrapper(QueryStatement statement);
+    Where newWhereWrapper(Class<T> entityType, QueryStatement statement);
 
-    GroupBy newGroupByWrapper(QueryStatement statement);
+    GroupBy newGroupByWrapper(Class<T> entityType, QueryStatement statement);
 
-    Having newHavingWrapper(QueryStatement statement);
+    Having newHavingWrapper(Class<T> entityType, QueryStatement statement);
 
-    OrderBy newOrderByWrapper(QueryStatement statement);
+    OrderBy newOrderByWrapper(Class<T> entityType, QueryStatement statement);
 
-    Limit newLimitWrapper(QueryStatement statement);
+    Limit newLimitWrapper(Class<T> entityType, QueryStatement statement);
 
-    Union newUnionWrapper(QueryStatement statement);
+    Union newUnionWrapper(Class<T> entityType, QueryStatement statement);
 
-    ForUpdate newForUpdateWrapper(QueryStatement statement);
+    ForUpdate newForUpdateWrapper(Class<T> entityType, QueryStatement statement);
 
-    Query newQueryWrapper(QueryStatement statement);
+    Query newQueryWrapper(Class<T> entityType, QueryStatement statement);
 
 }
