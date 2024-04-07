@@ -114,9 +114,7 @@ public class ColumnDef {
 
     public ConditionDef in(Collection<?> values) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        Iterator<?> iterator = values.iterator();
-        while (iterator.hasNext()) {
-            Object value = iterator.next();
+        for (Object value : values) {
             listColumnStatement.add(new TakeMarkInvokerStatement(value));
         }
         BraceStatement braceStatement = new BraceStatement(listColumnStatement);

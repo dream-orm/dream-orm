@@ -58,6 +58,18 @@ public class HelloWorldStreamQueryMapperTest {
     }
 
     @Test
+    public void testWhereNot() {
+        QueryWrapper<Account> wrapper = Wrappers.query(Account.class)
+                .notIn("age", 1, 2, 3)
+                .notIn("age", Wrappers.query(Account.class).select("age"))
+                .notLike("name", "a")
+                .notLikeLeft("name", "b")
+                .notLikeRight("name", "c")
+                .notBetween("age", 11, 34);
+        List<Account> accounts = streamMapper.selectList(wrapper);
+    }
+
+    @Test
     public void testGroup() {
         QueryWrapper<Account> wrapper = Wrappers.query(Account.class).select("avg(age) age", "name").groupBy("name");
         List<Account> accounts = streamMapper.selectList(wrapper);
