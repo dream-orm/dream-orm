@@ -5,7 +5,6 @@ import com.dream.helloworld.h2.table.Account;
 import com.dream.stream.mapper.StreamMapper;
 import com.dream.stream.support.Wrappers;
 import com.dream.stream.wrapper.QueryWrapper;
-import com.dream.stream.wrapper.defaults.DefaultFromWrapper;
 import com.dream.stream.wrapper.defaults.DefaultSelectWrapper;
 import com.dream.system.config.Page;
 import org.junit.Test;
@@ -23,6 +22,9 @@ public class HelloWorldStreamQueryMapperTest {
     @Autowired
     private StreamMapper streamMapper;
 
+    /**
+     * 测试select
+     */
     @Test
     public void testSelectAll() {
         DefaultSelectWrapper<Account> wrapper = Wrappers.query(Account.class);
@@ -34,7 +36,7 @@ public class HelloWorldStreamQueryMapperTest {
      */
     @Test
     public void testSelectColumn() {
-        DefaultFromWrapper<Account> wrapper = Wrappers.query(Account.class).select("id", "name", "age");
+        QueryWrapper<Account> wrapper = Wrappers.query(Account.class).select("id", "name", "age");
         Page<Account> accountPage = streamMapper.selectPage(wrapper, new Page<>(1, 10));
     }
 
@@ -77,13 +79,13 @@ public class HelloWorldStreamQueryMapperTest {
 
     @Test
     public void testHaving() {
-        QueryWrapper<Account> wrapper = Wrappers.query(Account.class).select("avg(age) age", "name").groupBy("name").leq("age", 11).and(a -> a.leq("age", 11).or(b -> b.like("name", "11")));
+        QueryWrapper<Account> wrapper = Wrappers.query(Account.class).select("avg(age) age", "name").groupBy("name").leq("avg(age)", 11).and(a -> a.leq("avg(age)", 11).or(b -> b.like("name", "11")));
         List<Account> accounts = streamMapper.selectList(wrapper);
     }
 
     @Test
     public void testHaving2() {
-        QueryWrapper<Account> wrapper = Wrappers.query(Account.class).select("avg(age) age", "name").groupBy("name").having(i -> i.leq("age", 11).and(a -> a.leq("age", 11).or(b -> b.like("name", "11"))));
+        QueryWrapper<Account> wrapper = Wrappers.query(Account.class).select("avg(age) age", "name").groupBy("name").having(i -> i.leq("avg(age)", 11).and(a -> a.leq("avg(age)", 11).or(b -> b.like("name", "11"))));
         List<Account> accounts = streamMapper.selectList(wrapper);
     }
 

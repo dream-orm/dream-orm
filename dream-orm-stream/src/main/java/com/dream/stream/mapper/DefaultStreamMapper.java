@@ -3,8 +3,8 @@ package com.dream.stream.mapper;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.stream.wrapper.QueryWrapper;
-import com.dream.struct.factory.CommandDialectFactory;
-import com.dream.struct.factory.DefaultCommandDialectFactory;
+import com.dream.struct.factory.StructFactory;
+import com.dream.struct.factory.DefaultStructFactory;
 import com.dream.struct.invoker.TakeMarkInvokerStatement;
 import com.dream.system.config.*;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
@@ -15,27 +15,41 @@ import com.dream.util.exception.DreamRunTimeException;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class DefaultStreamMapper implements StreamMapper {
     private Session session;
     private Configuration configuration;
     private boolean offset = true;
-    private CommandDialectFactory dialectFactory;
+    private StructFactory dialectFactory;
     private ResultSetHandler resultSetHandler;
+    private Consumer<MethodInfo> consumer;
 
     public DefaultStreamMapper(Session session, ToSQL toSQL) {
-        this(session, new DefaultCommandDialectFactory(toSQL));
+        this(session, new DefaultStructFactory(toSQL));
     }
 
-    public DefaultStreamMapper(Session session, CommandDialectFactory dialectFactory) {
+    public DefaultStreamMapper(Session session, StructFactory dialectFactory) {
         this(session, dialectFactory, new SimpleResultSetHandler());
     }
 
-    public DefaultStreamMapper(Session session, CommandDialectFactory dialectFactory, ResultSetHandler resultSetHandler) {
+    public DefaultStreamMapper(Session session, StructFactory dialectFactory, ResultSetHandler resultSetHandler) {
         this.session = session;
         this.dialectFactory = dialectFactory;
         this.resultSetHandler = resultSetHandler;
         this.configuration = session.getConfiguration();
+    }
+
+    @Override
+    public StreamMapper useDialect(StructFactory dialectFactory) {
+        return new DefaultStreamMapper(session, dialectFactory, resultSetHandler);
+    }
+
+    @Override
+    public StreamMapper useMethodInfo(Consumer<MethodInfo> consumer) {
+        DefaultStreamMapper streamMapper = new DefaultStreamMapper(session, dialectFactory, resultSetHandler);
+        streamMapper.consumer = consumer;
+        return streamMapper;
     }
 
     @Override
@@ -132,6 +146,9 @@ public class DefaultStreamMapper implements StreamMapper {
         methodInfo.setRowType(rowType);
         methodInfo.setColType(colType);
         methodInfo.setResultSetHandler(resultSetHandler);
+        if (consumer != null) {
+            consumer.accept(methodInfo);
+        }
         return methodInfo;
     }
 }

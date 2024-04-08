@@ -34,15 +34,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public abstract class AbstractCommandDialectFactory implements CommandDialectFactory {
+public abstract class AbstractStructFactory implements StructFactory {
     private TypeHandlerFactory typeHandlerFactory;
     private ToSQL toSQL;
 
-    public AbstractCommandDialectFactory(ToSQL toSQL) {
+    public AbstractStructFactory(ToSQL toSQL) {
         this(new DefaultTypeHandlerFactory(), toSQL);
     }
 
-    public AbstractCommandDialectFactory(TypeHandlerFactory typeHandlerFactory, ToSQL toSQL) {
+    public AbstractStructFactory(TypeHandlerFactory typeHandlerFactory, ToSQL toSQL) {
         this.typeHandlerFactory = typeHandlerFactory;
         this.toSQL = toSQL;
     }

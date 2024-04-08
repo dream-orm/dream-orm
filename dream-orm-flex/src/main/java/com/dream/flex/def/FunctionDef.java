@@ -45,9 +45,6 @@ public class FunctionDef {
     }
 
     public static ColumnDef concat(ColumnDef columnDef, ColumnDef... columnDefList) {
-        if (columnDefList == null) {
-            columnDefList = new ColumnDef[0];
-        }
         ColumnDef[] columnDefs = new ColumnDef[columnDefList.length + 1];
         columnDefs[0] = columnDef;
         System.arraycopy(columnDefList, 0, columnDefs, 1, columnDefList.length);

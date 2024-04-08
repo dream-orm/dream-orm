@@ -6,8 +6,8 @@ import com.dream.helloworld.h2.table.Account;
 import com.dream.stream.support.Wrappers;
 import com.dream.stream.wrapper.QueryWrapper;
 import com.dream.stream.wrapper.defaults.DefaultFromWrapper;
-import com.dream.struct.factory.CommandDialectFactory;
-import com.dream.struct.factory.DefaultCommandDialectFactory;
+import com.dream.struct.factory.StructFactory;
+import com.dream.struct.factory.DefaultStructFactory;
 import com.dream.system.config.MappedStatement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldStreamQueryTest {
-    private CommandDialectFactory dialectFactory = new DefaultCommandDialectFactory(new ToMySQL());
+    private StructFactory dialectFactory = new DefaultStructFactory(new ToMySQL());
 
     /**
      * 测试select多个字段
@@ -60,7 +60,7 @@ public class HelloWorldStreamQueryTest {
                 .notLike("name", "a")
                 .notLikeLeft("name", "b")
                 .notLikeRight("name", "c")
-                .notBetween("age",11,34);
+                .notBetween("age", 11, 34);
         MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
         System.out.println(mappedStatement.getSql());
     }

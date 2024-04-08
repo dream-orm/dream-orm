@@ -6,13 +6,13 @@ import com.dream.mate.permission.inject.PermissionHandler;
 import com.dream.mate.tenant.inject.TenantHandler;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
 
-public class DefaultCommandDialectFactory extends AbstractCommandDialectFactory {
+public class DefaultStructFactory extends AbstractStructFactory {
 
-    public DefaultCommandDialectFactory(ToSQL toSQL) {
+    public DefaultStructFactory(ToSQL toSQL) {
         super(toSQL);
     }
 
-    public DefaultCommandDialectFactory(TypeHandlerFactory typeHandlerFactory, ToSQL toSQL) {
+    public DefaultStructFactory(TypeHandlerFactory typeHandlerFactory, ToSQL toSQL) {
         super(typeHandlerFactory, toSQL);
     }
 

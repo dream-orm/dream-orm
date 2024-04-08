@@ -7,8 +7,8 @@ import com.dream.flex.def.DeleteDef;
 import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
-import com.dream.struct.factory.CommandDialectFactory;
-import com.dream.struct.factory.DefaultCommandDialectFactory;
+import com.dream.struct.factory.StructFactory;
+import com.dream.struct.factory.DefaultStructFactory;
 import com.dream.struct.invoker.TakeMarkInvokerStatement;
 import com.dream.system.config.*;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
@@ -29,19 +29,19 @@ public class DefaultFlexMapper implements FlexMapper {
     private Session session;
     private Configuration configuration;
     private boolean offset = true;
-    private CommandDialectFactory dialectFactory;
+    private StructFactory dialectFactory;
     private ResultSetHandler resultSetHandler;
     private Consumer<MethodInfo> consumer;
 
     public DefaultFlexMapper(Session session, ToSQL toSQL) {
-        this(session, new DefaultCommandDialectFactory(toSQL));
+        this(session, new DefaultStructFactory(toSQL));
     }
 
-    public DefaultFlexMapper(Session session, CommandDialectFactory dialectFactory) {
+    public DefaultFlexMapper(Session session, StructFactory dialectFactory) {
         this(session, dialectFactory, new SimpleResultSetHandler());
     }
 
-    public DefaultFlexMapper(Session session, CommandDialectFactory dialectFactory, ResultSetHandler resultSetHandler) {
+    public DefaultFlexMapper(Session session, StructFactory dialectFactory, ResultSetHandler resultSetHandler) {
         this.session = session;
         this.dialectFactory = dialectFactory;
         this.resultSetHandler = resultSetHandler;
@@ -49,7 +49,7 @@ public class DefaultFlexMapper implements FlexMapper {
     }
 
     @Override
-    public FlexMapper useDialect(CommandDialectFactory dialectFactory) {
+    public FlexMapper useDialect(StructFactory dialectFactory) {
         return new DefaultFlexMapper(session, dialectFactory, resultSetHandler);
     }
 

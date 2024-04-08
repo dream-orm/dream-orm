@@ -2,7 +2,7 @@ package com.dream.helloworld.h2;
 
 import com.dream.antlr.sql.ToClickHouse;
 import com.dream.flex.def.QueryDef;
-import com.dream.struct.factory.DefaultCommandDialectFactory;
+import com.dream.struct.factory.DefaultStructFactory;
 import com.dream.system.config.MappedStatement;
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ import static com.dream.flex.def.FunctionDef.table;
 import static com.dream.helloworld.h2.def.ClickhouseFunctionDef.column2;
 
 public class HelloWorldClickHouseTest {
-    DefaultCommandDialectFactory dialectFactory = new DefaultCommandDialectFactory(new ToClickHouse());
+    DefaultStructFactory dialectFactory = new DefaultStructFactory(new ToClickHouse());
 
     @Test
     public void testSelect() {

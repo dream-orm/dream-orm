@@ -7,7 +7,7 @@ import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.ConditionDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.helloworld.h2.def.AccountDef;
-import com.dream.struct.factory.DefaultCommandDialectFactory;
+import com.dream.struct.factory.DefaultStructFactory;
 import com.dream.system.config.MappedStatement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +22,7 @@ import static com.dream.helloworld.h2.def.AccountDef.account;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldFlexQueryTest {
-    DefaultCommandDialectFactory dialectFactory = new DefaultCommandDialectFactory(new ToClickHouse());
+    DefaultStructFactory dialectFactory = new DefaultStructFactory(new ToClickHouse());
 
     /**
      * 测试select多个字段

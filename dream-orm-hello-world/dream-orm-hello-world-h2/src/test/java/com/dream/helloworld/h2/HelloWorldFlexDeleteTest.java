@@ -2,7 +2,7 @@ package com.dream.helloworld.h2;
 
 import com.dream.antlr.sql.ToClickHouse;
 import com.dream.flex.def.DeleteDef;
-import com.dream.struct.factory.DefaultCommandDialectFactory;
+import com.dream.struct.factory.DefaultStructFactory;
 import com.dream.system.config.MappedStatement;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import static com.dream.helloworld.h2.def.AccountDef.account;
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldFlexDeleteTest {
 
-    DefaultCommandDialectFactory dialectFactory = new DefaultCommandDialectFactory(new ToClickHouse());
+    DefaultStructFactory dialectFactory = new DefaultStructFactory(new ToClickHouse());
 
 
     @Test

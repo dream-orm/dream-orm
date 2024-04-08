@@ -4,7 +4,7 @@ import com.dream.flex.def.DeleteDef;
 import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
-import com.dream.struct.factory.CommandDialectFactory;
+import com.dream.struct.factory.StructFactory;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.config.Page;
 import com.dream.util.tree.Tree;
@@ -17,20 +17,8 @@ import java.util.function.Consumer;
  */
 public interface FlexMapper {
 
-    /**
-     * flex方言
-     *
-     * @param dialectFactory
-     * @return
-     */
-    FlexMapper useDialect(CommandDialectFactory dialectFactory);
+    FlexMapper useDialect(StructFactory dialectFactory);
 
-    /**
-     * flex方言
-     *
-     * @param consumer
-     * @return
-     */
     FlexMapper useMethodInfo(Consumer<MethodInfo> consumer);
 
     /**

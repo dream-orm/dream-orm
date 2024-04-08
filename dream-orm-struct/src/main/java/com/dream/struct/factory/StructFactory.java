@@ -9,7 +9,7 @@ import com.dream.system.config.Command;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.config.MethodInfo;
 
-public interface CommandDialectFactory {
+public interface StructFactory {
     default MappedStatement compile(Query query, MethodInfo methodInfo) {
         return compile(Command.QUERY, query.statement(), methodInfo);
     }

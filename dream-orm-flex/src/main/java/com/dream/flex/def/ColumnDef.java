@@ -6,7 +6,6 @@ import com.dream.struct.invoker.TakeMarkInvokerStatement;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.function.Predicate;
 
 public class ColumnDef {
