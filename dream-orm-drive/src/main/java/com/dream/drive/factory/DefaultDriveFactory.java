@@ -9,7 +9,7 @@ import com.dream.antlr.sql.ToSQL;
 import com.dream.drive.build.DefaultSessionFactoryBuilder;
 import com.dream.drive.build.SessionFactoryBuilder;
 import com.dream.drive.config.DefaultConfig;
-import com.dream.drive.config.DriveProperties;
+import com.dream.drive.config.DreamProperties;
 import com.dream.drive.holder.DriveSessionHolder;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
@@ -70,18 +70,18 @@ public class DefaultDriveFactory implements DriveFactory {
     protected StreamMapper streamMapper;
     protected JdbcMapper jdbcMapper;
     protected ToSQL toSQL;
-    protected DriveProperties driveProperties;
+    protected DreamProperties dreamProperties;
 
     public DefaultDriveFactory(DataSource dataSource) {
         this(dataSource, null, null);
     }
 
     public DefaultDriveFactory(DataSource dataSource, List<String> tablePackages, List<String> mapperPackages) {
-        this(dataSource, tablePackages, mapperPackages, new DriveProperties());
+        this(dataSource, tablePackages, mapperPackages, new DreamProperties());
     }
 
-    public DefaultDriveFactory(DataSource dataSource, List<String> tablePackages, List<String> mapperPackages, DriveProperties driveProperties) {
-        this.driveProperties = driveProperties;
+    public DefaultDriveFactory(DataSource dataSource, List<String> tablePackages, List<String> mapperPackages, DreamProperties dreamProperties) {
+        this.dreamProperties = dreamProperties;
         this.toSQL = toSQL();
         this.sessionFactory = sessionFactory(dataSource, tablePackages, mapperPackages);
         this.sessionTemplate = sessionTemplate(sessionHolder(), this.sessionFactory);
@@ -175,7 +175,7 @@ public class DefaultDriveFactory implements DriveFactory {
      */
     protected ToSQL toSQL() {
         ToSQL toSQL;
-        String strToSQL = driveProperties.getToSQL();
+        String strToSQL = dreamProperties.getToSQL();
         if (!ObjectUtil.isNull(strToSQL)) {
             Class<? extends ToSQL> toSQLType = ReflectUtil.loadClass(strToSQL);
             toSQL = ReflectUtil.create(toSQLType);
@@ -197,7 +197,7 @@ public class DefaultDriveFactory implements DriveFactory {
     protected PluginFactory pluginFactory() {
         Interceptor[] interceptors = interceptors();
         PluginFactory pluginFactory = new ProxyPluginFactory();
-        String[] strInterceptors = driveProperties.getInterceptors();
+        String[] strInterceptors = dreamProperties.getInterceptors();
         if (!ObjectUtil.isNull(strInterceptors)) {
             Interceptor[] interceptorList = Arrays.stream(strInterceptors).map(interceptor -> {
                 Class<? extends Interceptor> interceptorType = ReflectUtil.loadClass(interceptor);
@@ -217,7 +217,7 @@ public class DefaultDriveFactory implements DriveFactory {
      * @return 自定义函数
      */
     protected MyFunctionFactory myFunctionFactory() {
-        String strMyFunctionFactory = driveProperties.getMyFunctionFactory();
+        String strMyFunctionFactory = dreamProperties.getMyFunctionFactory();
         MyFunctionFactory myFunctionFactory;
         if (!ObjectUtil.isNull(strMyFunctionFactory)) {
             Class<? extends MyFunctionFactory> myFunctionFactoryType = ReflectUtil.loadClass(strMyFunctionFactory);
@@ -251,7 +251,7 @@ public class DefaultDriveFactory implements DriveFactory {
     protected InjectFactory injectFactory() {
         Inject[] injects = injects();
         InjectFactory injectFactory = new DefaultInjectFactory();
-        String[] strInjects = driveProperties.getInjects();
+        String[] strInjects = dreamProperties.getInjects();
         if (!ObjectUtil.isNull(strInjects)) {
             Inject[] injectList = Arrays.stream(strInjects).map(inject -> {
                 Class<? extends Inject> injectType = ReflectUtil.loadClass(inject);
@@ -276,7 +276,7 @@ public class DefaultDriveFactory implements DriveFactory {
     protected InvokerFactory invokerFactory() {
         Invoker[] invokers = invokers();
         InvokerFactory invokerFactory = new DefaultInvokerFactory();
-        String[] strInvokers = driveProperties.getInvokers();
+        String[] strInvokers = dreamProperties.getInvokers();
         if (!ObjectUtil.isNull(strInvokers)) {
             Invoker[] invokerList = Arrays.stream(strInvokers).map(invoker -> {
                 Class<? extends Invoker> invokerType = ReflectUtil.loadClass(invoker);
@@ -313,7 +313,7 @@ public class DefaultDriveFactory implements DriveFactory {
     protected CacheFactory cacheFactory() {
         Cache cache = cache();
         DefaultCacheFactory defaultCacheFactory = new DefaultCacheFactory();
-        String strCache = driveProperties.getCache();
+        String strCache = dreamProperties.getCache();
         if (!ObjectUtil.isNull(strCache)) {
             Class<? extends Cache> cacheType = ReflectUtil.loadClass(strCache);
             cache = ReflectUtil.create(cacheType);
@@ -336,7 +336,7 @@ public class DefaultDriveFactory implements DriveFactory {
     protected TypeHandlerFactory typeHandlerFactory() {
         TypeHandlerWrapper[] typeHandlerWrappers = typeHandlerWrappers();
         TypeHandlerFactory typeHandlerFactory = new DefaultTypeHandlerFactory();
-        String[] strTypeHandlerWrappers = driveProperties.getTypeHandlerWrappers();
+        String[] strTypeHandlerWrappers = dreamProperties.getTypeHandlerWrappers();
         if (!ObjectUtil.isNull(strTypeHandlerWrappers)) {
             TypeHandlerWrapper[] typeHandlerWrapperList = Arrays.stream(strTypeHandlerWrappers).map(typeHandlerWrapper -> {
                 Class<? extends TypeHandlerWrapper> typeHandlerWrapperType = ReflectUtil.loadClass(typeHandlerWrapper);
@@ -362,7 +362,7 @@ public class DefaultDriveFactory implements DriveFactory {
     protected ListenerFactory listenerFactory() {
         Listener[] listeners = listeners();
         ListenerFactory listenerFactory = new DefaultListenerFactory();
-        String[] strListeners = driveProperties.getListeners();
+        String[] strListeners = dreamProperties.getListeners();
         if (!ObjectUtil.isNull(strListeners)) {
             Listener[] listenerList = Arrays.stream(strListeners).map(listener -> {
                 Class<? extends Listener> listenerType = ReflectUtil.loadClass(listener);

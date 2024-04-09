@@ -3,7 +3,7 @@ package com.dream.drive.config;
 import java.util.List;
 import java.util.Map;
 
-public class DriveProperties {
+public class DreamProperties {
 
     private String toSQL;
 

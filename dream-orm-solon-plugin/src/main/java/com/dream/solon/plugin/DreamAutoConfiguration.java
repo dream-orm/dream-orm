@@ -8,6 +8,7 @@ import com.dream.antlr.sql.ToMySQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.drive.build.DefaultSessionFactoryBuilder;
 import com.dream.drive.build.SessionFactoryBuilder;
+import com.dream.drive.config.DreamProperties;
 import com.dream.drive.factory.DriveDataSourceFactory;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;

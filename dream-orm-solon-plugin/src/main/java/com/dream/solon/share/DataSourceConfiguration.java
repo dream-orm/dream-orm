@@ -1,8 +1,8 @@
 package com.dream.solon.share;
 
+import com.dream.drive.config.DreamProperties;
 import com.dream.mate.share.datasource.ShareDataSource;
 import com.dream.mate.share.listener.ShardListener;
-import com.dream.solon.plugin.DreamProperties;
 import com.dream.system.core.listener.Listener;
 import com.dream.system.core.listener.factory.ListenerFactory;
 import com.dream.util.common.ObjectUtil;
