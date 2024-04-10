@@ -32,7 +32,30 @@ public class HelloWorldStreamQueryTest {
 
     @Test
     public void testSelectFunc() {
-        QueryWrapper<Account> wrapper = Wrappers.query(Account.class).select(i -> i.len("name").ascii("name").length("name"));
+        QueryWrapper<Account> wrapper = Wrappers.query(Account.class).select(i ->
+                i.len("name")
+                        .ascii("name")
+                        .length("name")
+                        .group_concat(false, "age", ",")
+                        .find_in_set("age", "1,2,3,4")
+                        .coalesce("age", "name")
+                        .concat_ws(",", "age", "name")
+                        .instr("age", "name")
+                        .locate("age", "name")
+                        .lcase("age")
+                        .lower("age")
+                        .upper("age")
+                        .left("name", 4)
+                        .repeat("name", 3)
+                        .right("name", 5)
+                        .ltrim("name")
+                        .rtrim("name")
+                        .trim("name")
+                        .reverse("name")
+                        .replace("name", "a", "*")
+                        .strcmp("name", "age")
+                        .substr("name", 1)
+        );
         MappedStatement mappedStatement = dialectFactory.compile(wrapper, null);
         System.out.println(mappedStatement.getSql());
     }

@@ -29,7 +29,7 @@ public class DefaultFlexMapper implements FlexMapper {
     private Session session;
     private Configuration configuration;
     private boolean offset = true;
-    private StructFactory dialectFactory;
+    private StructFactory structFactory;
     private ResultSetHandler resultSetHandler;
     private Consumer<MethodInfo> consumer;
 
@@ -37,25 +37,25 @@ public class DefaultFlexMapper implements FlexMapper {
         this(session, new DefaultStructFactory(toSQL));
     }
 
-    public DefaultFlexMapper(Session session, StructFactory dialectFactory) {
-        this(session, dialectFactory, new SimpleResultSetHandler());
+    public DefaultFlexMapper(Session session, StructFactory structFactory) {
+        this(session, structFactory, new SimpleResultSetHandler());
     }
 
-    public DefaultFlexMapper(Session session, StructFactory dialectFactory, ResultSetHandler resultSetHandler) {
+    public DefaultFlexMapper(Session session, StructFactory structFactory, ResultSetHandler resultSetHandler) {
         this.session = session;
-        this.dialectFactory = dialectFactory;
+        this.structFactory = structFactory;
         this.resultSetHandler = resultSetHandler;
         this.configuration = session.getConfiguration();
     }
 
     @Override
-    public FlexMapper useDialect(StructFactory dialectFactory) {
-        return new DefaultFlexMapper(session, dialectFactory, resultSetHandler);
+    public FlexMapper useStruct(StructFactory structFactory) {
+        return new DefaultFlexMapper(session, structFactory, resultSetHandler);
     }
 
     @Override
     public FlexMapper useMethodInfo(Consumer<MethodInfo> consumer) {
-        DefaultFlexMapper flexMapper = new DefaultFlexMapper(session, dialectFactory, resultSetHandler);
+        DefaultFlexMapper flexMapper = new DefaultFlexMapper(session, structFactory, resultSetHandler);
         flexMapper.consumer = consumer;
         return flexMapper;
     }
@@ -63,14 +63,14 @@ public class DefaultFlexMapper implements FlexMapper {
     @Override
     public <T> T selectOne(QueryDef queryDef, Class<T> type) {
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, type);
-        MappedStatement mappedStatement = dialectFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
+        MappedStatement mappedStatement = structFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
         return (T) session.execute(mappedStatement);
     }
 
     @Override
     public <T> List<T> selectList(QueryDef queryDef, Class<T> type) {
         MethodInfo methodInfo = getMethodInfo(List.class, type);
-        MappedStatement mappedStatement = dialectFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
+        MappedStatement mappedStatement = structFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
         return (List<T>) session.execute(mappedStatement);
     }
 
@@ -78,7 +78,7 @@ public class DefaultFlexMapper implements FlexMapper {
     public <T extends Tree> List<T> selectTree(QueryDef queryDef, Class<T> type) {
         MethodInfo methodInfo = getMethodInfo(List.class, type);
         methodInfo.addDestroyAction((result, mappedStatement, session) -> TreeUtil.toTree((Collection<? extends Tree>) result));
-        MappedStatement mappedStatement = dialectFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
+        MappedStatement mappedStatement = structFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
         return (List<T>) session.execute(mappedStatement);
     }
 
@@ -87,12 +87,12 @@ public class DefaultFlexMapper implements FlexMapper {
         QueryStatement statement = queryDef.statement();
         if (page.getTotal() == 0) {
             MethodInfo countMethodInfo = getMethodInfo(NonCollection.class, Long.class);
-            MappedStatement countMappedStatement = dialectFactory.compile(Command.QUERY, countQueryStatement(queryDef.statement().clone()), countMethodInfo);
+            MappedStatement countMappedStatement = structFactory.compile(Command.QUERY, countQueryStatement(queryDef.statement().clone()), countMethodInfo);
             page.setTotal((long) session.execute(countMappedStatement));
         }
         MethodInfo methodInfo = getMethodInfo(Collection.class, type);
         QueryStatement queryStatement = pageQueryStatement(statement, page.getStartRow(), page.getPageSize());
-        MappedStatement mappedStatement = dialectFactory.compile(Command.QUERY, queryStatement, methodInfo);
+        MappedStatement mappedStatement = structFactory.compile(Command.QUERY, queryStatement, methodInfo);
         page.setRows((Collection) session.execute(mappedStatement));
         return page;
     }
@@ -100,7 +100,7 @@ public class DefaultFlexMapper implements FlexMapper {
     @Override
     public int update(UpdateDef updateDef) {
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
-        MappedStatement mappedStatement = dialectFactory.compile(Command.UPDATE, updateDef.statement(), methodInfo);
+        MappedStatement mappedStatement = structFactory.compile(Command.UPDATE, updateDef.statement(), methodInfo);
         return (int) session.execute(mappedStatement);
     }
 
@@ -112,7 +112,7 @@ public class DefaultFlexMapper implements FlexMapper {
         List<MappedStatement> mappedStatementList = new ArrayList<>(updateDefList.size());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer[].class);
         for (UpdateDef updateDef : updateDefList) {
-            MappedStatement mappedStatement = dialectFactory.compile(Command.UPDATE, updateDef.statement(), methodInfo);
+            MappedStatement mappedStatement = structFactory.compile(Command.UPDATE, updateDef.statement(), methodInfo);
             mappedStatementList.add(mappedStatement);
         }
         FlexBatchMappedStatement batchMappedStatement = new FlexBatchMappedStatement(methodInfo, mappedStatementList);
@@ -123,14 +123,14 @@ public class DefaultFlexMapper implements FlexMapper {
     @Override
     public int delete(DeleteDef deleteDef) {
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
-        MappedStatement mappedStatement = dialectFactory.compile(Command.UPDATE, deleteDef.statement(), methodInfo);
+        MappedStatement mappedStatement = structFactory.compile(Command.UPDATE, deleteDef.statement(), methodInfo);
         return (int) session.execute(mappedStatement);
     }
 
     @Override
     public int insert(InsertDef insertDef) {
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
-        MappedStatement mappedStatement = dialectFactory.compile(Command.INSERT, insertDef.statement(), methodInfo);
+        MappedStatement mappedStatement = structFactory.compile(Command.INSERT, insertDef.statement(), methodInfo);
         return (int) session.execute(mappedStatement);
     }
 
@@ -142,7 +142,7 @@ public class DefaultFlexMapper implements FlexMapper {
         List<MappedStatement> mappedStatementList = new ArrayList<>(insertDefList.size());
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer[].class);
         for (InsertDef insertDef : insertDefList) {
-            MappedStatement mappedStatement = dialectFactory.compile(Command.INSERT, insertDef.statement(), methodInfo);
+            MappedStatement mappedStatement = structFactory.compile(Command.INSERT, insertDef.statement(), methodInfo);
             mappedStatementList.add(mappedStatement);
         }
         FlexBatchMappedStatement batchMappedStatement = new FlexBatchMappedStatement(methodInfo, mappedStatementList);
@@ -163,7 +163,7 @@ public class DefaultFlexMapper implements FlexMapper {
         limitStatement.setSecond(new SymbolStatement.NumberStatement("0"));
         statement.setLimitStatement(limitStatement);
         MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
-        MappedStatement mappedStatement = dialectFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
+        MappedStatement mappedStatement = structFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
         Integer result = (Integer) session.execute(mappedStatement);
         return result != null;
     }

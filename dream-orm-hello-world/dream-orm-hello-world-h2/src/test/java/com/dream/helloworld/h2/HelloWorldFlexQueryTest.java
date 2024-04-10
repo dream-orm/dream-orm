@@ -22,7 +22,7 @@ import static com.dream.helloworld.h2.def.AccountDef.account;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldFlexQueryTest {
-    DefaultStructFactory dialectFactory = new DefaultStructFactory(new ToClickHouse());
+    DefaultStructFactory structFactory = new DefaultStructFactory(new ToClickHouse());
 
     /**
      * 测试select多个字段
@@ -30,7 +30,7 @@ public class HelloWorldFlexQueryTest {
     @Test
     public void testSelect() {
         QueryDef queryDef = select(account.id, account.name);
-        MappedStatement mappedStatement = dialectFactory.compile(queryDef, null);
+        MappedStatement mappedStatement = structFactory.compile(queryDef, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -40,7 +40,7 @@ public class HelloWorldFlexQueryTest {
     @Test
     public void testSelectArray() {
         QueryDef queryDef = select();
-        MappedStatement mappedStatement = dialectFactory.compile(queryDef, null);
+        MappedStatement mappedStatement = structFactory.compile(queryDef, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -51,7 +51,7 @@ public class HelloWorldFlexQueryTest {
     public void testSelectColumnAs() {
         ColumnDef columnDef = account.name.as("uname");
         Statement statement = columnDef.getStatement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -62,7 +62,7 @@ public class HelloWorldFlexQueryTest {
     public void testCase() {
         CaseColumnDef columnDef = case_(account.age).when(11).then(11).when("11").then("字符串11").else_("默认值").end();
         Statement statement = columnDef.getStatement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -73,7 +73,7 @@ public class HelloWorldFlexQueryTest {
     public void testCaseCondition() {
         CaseColumnDef columnDef = case_().when(account.age.eq(11)).then(11).when(account.age.eq("11")).then("字符串11").else_("默认值").end();
         Statement statement = columnDef.getStatement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -82,9 +82,9 @@ public class HelloWorldFlexQueryTest {
      */
     @Test
     public void testFrom() {
-        QueryDef queryDef = select(account.id).from(account);
+        QueryDef queryDef = select(account.id, find_in_set(account.age, "12,34,56")).from(account);
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -96,7 +96,7 @@ public class HelloWorldFlexQueryTest {
         AccountDef account2 = new AccountDef("account2");
         QueryDef queryDef = select(account.id).from(account.leftJoin(account2, account.id, account2.id));
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -108,7 +108,7 @@ public class HelloWorldFlexQueryTest {
         AccountDef account2 = new AccountDef("account2");
         QueryDef queryDef = select(account.id).from(account.leftJoin(account2).on(account.id.eq(account2.id)));
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -119,7 +119,7 @@ public class HelloWorldFlexQueryTest {
     public void testWhere() {
         QueryDef queryDef = select(account.id).from(account).where(account.name.like("a"));
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -130,7 +130,7 @@ public class HelloWorldFlexQueryTest {
     public void testAnd() {
         ConditionDef conditionDef = account.name.like("a").and(account.age.eq(11));
         Statement statement = conditionDef.getStatement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -141,7 +141,7 @@ public class HelloWorldFlexQueryTest {
     public void testOr() {
         ConditionDef conditionDef = account.name.like("a").or(account.age.eq(11));
         Statement statement = conditionDef.getStatement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -152,7 +152,7 @@ public class HelloWorldFlexQueryTest {
     public void testWhereDynamic1() {
         QueryDef queryDef = select(account.id).from(account).where(account.name.like("a", Objects::isNull));
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -163,7 +163,7 @@ public class HelloWorldFlexQueryTest {
     public void testWhereDynamic2() {
         QueryDef queryDef = select(account.id).from(account).where(account.name.like("a").when(false));
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -174,7 +174,7 @@ public class HelloWorldFlexQueryTest {
     public void testGroup() {
         QueryDef queryDef = select(count(account.id)).from(account).groupBy(account.age);
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -185,7 +185,7 @@ public class HelloWorldFlexQueryTest {
     public void testHaving() {
         QueryDef queryDef = select(count(account.id)).from(account).groupBy(account.age).having(account.name.likeLeft("a").and(account.name.likeRight("b")));
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -196,7 +196,7 @@ public class HelloWorldFlexQueryTest {
     public void testOrderBy() {
         QueryDef queryDef = select(count(account.id)).from(account).orderBy(account.age.desc(), account.name.asc());
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -207,7 +207,7 @@ public class HelloWorldFlexQueryTest {
     public void testLimit() {
         QueryDef queryDef = select(count(account.id)).from(account).limit(5, 10);
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -219,7 +219,7 @@ public class HelloWorldFlexQueryTest {
     public void testOffset() {
         QueryDef queryDef = select(count(account.id)).from(account).offset(10, 5);
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -230,7 +230,7 @@ public class HelloWorldFlexQueryTest {
     public void testUnion() {
         QueryDef queryDef = select(count(account.id)).from(account).union(select(count(account.id)).from(account));
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -241,7 +241,7 @@ public class HelloWorldFlexQueryTest {
     public void testUnionAll() {
         QueryDef queryDef = select(count(account.id)).from(account).unionAll(select(count(account.id)).from(account));
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -252,7 +252,7 @@ public class HelloWorldFlexQueryTest {
     public void testforUpdate() {
         QueryDef queryDef = select(count(account.id)).from(account).forUpdate();
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
@@ -263,14 +263,14 @@ public class HelloWorldFlexQueryTest {
     public void forUpdateNoWait() {
         QueryDef queryDef = select(count(account.id)).from(account).forUpdateNoWait();
         Statement statement = queryDef.statement();
-        MappedStatement mappedStatement = dialectFactory.compile(statement, null);
+        MappedStatement mappedStatement = structFactory.compile(statement, null);
         System.out.println(mappedStatement.getSql());
     }
 
     @Test
     public void testSelectStr() {
         QueryDef queryDef = select("id", "name").from("user");
-        MappedStatement mappedStatement = dialectFactory.compile(queryDef, null);
+        MappedStatement mappedStatement = structFactory.compile(queryDef, null);
         System.out.println(mappedStatement.getSql());
     }
 }

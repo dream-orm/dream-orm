@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  */
 public interface FlexMapper {
 
-    FlexMapper useDialect(StructFactory dialectFactory);
+    FlexMapper useStruct(StructFactory structFactory);
 
     FlexMapper useMethodInfo(Consumer<MethodInfo> consumer);
 

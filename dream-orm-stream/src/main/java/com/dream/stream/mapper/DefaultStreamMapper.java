@@ -41,7 +41,7 @@ public class DefaultStreamMapper implements StreamMapper {
     }
 
     @Override
-    public StreamMapper useDialect(StructFactory dialectFactory) {
+    public StreamMapper useStruct(StructFactory dialectFactory) {
         return new DefaultStreamMapper(session, dialectFactory, resultSetHandler);
     }
 

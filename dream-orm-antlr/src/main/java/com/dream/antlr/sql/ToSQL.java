@@ -197,6 +197,9 @@ public abstract class ToSQL {
             case 231026207://ConcatWsStatement
                 sql = toString((FunctionStatement.ConcatWsStatement) statement, assist, invokerList);
                 break;
+            case -346453158://StrcmpStatement
+                sql = toString((FunctionStatement.StrcmpStatement) statement, assist, invokerList);
+                break;
             case -1446923477://FindInSetStatement
                 sql = toString((FunctionStatement.FindInSetStatement) statement, assist, invokerList);
                 break;
@@ -752,6 +755,8 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.GroupConcatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.ConcatWsStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.StrcmpStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.FindInSetStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

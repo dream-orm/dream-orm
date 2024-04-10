@@ -449,6 +449,11 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.StrcmpStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "STRCMP(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.FindInSetStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "FIND_IN_SET(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public interface StreamMapper {
-    StreamMapper useDialect(StructFactory dialectFactory);
+    StreamMapper useStruct(StructFactory dialectFactory);
 
     StreamMapper useMethodInfo(Consumer<MethodInfo> consumer);
 

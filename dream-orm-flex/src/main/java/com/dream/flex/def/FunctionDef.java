@@ -110,7 +110,7 @@ public class FunctionDef {
     }
 
     public static ColumnDef find_in_set(ColumnDef columnDef, String strList) {
-        return find_in_set(columnDef, col(strList));
+        return find_in_set(columnDef, new ColumnDef(new SymbolStatement.StrStatement(strList)));
     }
 
     public static ColumnDef find_in_set(ColumnDef columnDef, ColumnDef columnDef2) {
@@ -128,9 +128,6 @@ public class FunctionDef {
     }
 
     public static ColumnDef coalesce(ColumnDef columnDef, ColumnDef... columnDefList) {
-        if (columnDefList == null) {
-            columnDefList = new ColumnDef[0];
-        }
         ColumnDef[] columnDefs = new ColumnDef[columnDefList.length + 1];
         columnDefs[0] = columnDef;
         System.arraycopy(columnDefList, 0, columnDefs, 1, columnDefList.length);
@@ -148,9 +145,6 @@ public class FunctionDef {
     }
 
     public static ColumnDef concat_ws(String joiner, ColumnDef columnDef, ColumnDef... columnDefList) {
-        if (columnDefList == null) {
-            columnDefList = new ColumnDef[0];
-        }
         ColumnDef[] columnDefs = new ColumnDef[columnDefList.length + 2];
         columnDefs[0] = new ColumnDef(new SymbolStatement.StrStatement(joiner));
         columnDefs[1] = columnDef;
@@ -884,7 +878,7 @@ public class FunctionDef {
     }
 
     public static ColumnDef lpad(ColumnDef columnDef, Object length, String padStr) {
-        return lpad(columnDef, col(length), col(padStr));
+        return lpad(columnDef, col(length), new ColumnDef(new SymbolStatement.StrStatement(padStr)));
     }
 
     public static ColumnDef lpad(ColumnDef columnDef, ColumnDef columnDef2, ColumnDef columnDef3) {

@@ -1,10 +1,12 @@
 # dream-orm 升级日志
 
 
-## v1.2.16
+## v1.3.0
 
 - 优化：支持curtime和current_time函数
 - 优化：flex写法likeLeft:LIKE CONCAT(?,'%')，likeRight:LIKE CONCAT('%',?)
+- 新增：支持strcmp函数翻译
+- 新增：提供stream写法，兼容plus
 
 ## v1.2.15
 
