@@ -12,6 +12,7 @@ import com.dream.util.common.LowHashMap;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.reflect.ReflectUtil;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +69,13 @@ public class DefaultTableFactory implements TableFactory {
         Class<? extends TypeHandler> typeHandlerClass = columnAnnotation.typeHandler();
         TypeHandler typeHandler = null;
         if (typeHandlerClass != ObjectTypeHandler.class) {
-            typeHandler = ReflectUtil.create(typeHandlerClass);
+            try {
+                Constructor<? extends TypeHandler> constructor = typeHandlerClass.getConstructor(Class.class);
+                constructor.setAccessible(true);
+                typeHandler = constructor.newInstance(field.getType());
+            } catch (Exception e) {
+                typeHandler = ReflectUtil.create(typeHandlerClass);
+            }
         }
         return new ColumnInfo(table, column, field, columnAnnotation.jdbcType(), typeHandler);
     }
