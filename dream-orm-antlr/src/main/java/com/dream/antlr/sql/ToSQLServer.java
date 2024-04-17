@@ -72,12 +72,7 @@ public class ToSQLServer extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.DateForMatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        String pattern = statement.getPattern();
-        if (pattern == null) {
-            pattern = toStr(columnList[1], assist, invokerList);
-            statement.setPattern(pattern);
-        }
-        return "FORMAT(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")";
+        return "FORMAT(" + toStr(columnList[0], assist, invokerList) + "," + toStr(columnList[1], assist, invokerList) + ")";
     }
 
     @Override

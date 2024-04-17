@@ -39,10 +39,6 @@ public class ToDM extends ToPubSQL {
         replaceMap.put("%v", "iw");
     }
 
-    private String getPattern(String pattern) {
-        return AntlrUtil.replace(pattern, replaceMap);
-    }
-
     @Override
     protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "\"" + statement.getValue() + "\"";
@@ -96,11 +92,7 @@ public class ToDM extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.StrToDateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        String pattern = statement.getPattern();
-        if (pattern == null) {
-            pattern = getPattern(toStr(columnList[1], assist, invokerList));
-            statement.setPattern(pattern);
-        }
+        String pattern = AntlrUtil.replace(toStr(columnList[1], assist, invokerList), replaceMap);
         return "TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")";
     }
 

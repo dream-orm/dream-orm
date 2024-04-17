@@ -29,12 +29,13 @@ public class AntlrUtil {
         while (i < length) {
             int point = i;
             String replaceNewStr = null;
-            for (int j = i + 1; j <= length; j++) {
+            for (int j = length; j >=i + 1; j--) {
                 String subStr = value.substring(i, j);
                 String newStr = replaceMap.get(subStr);
                 if (newStr != null) {
                     point = j;
                     replaceNewStr = newStr;
+                    break;
                 }
             }
             if (replaceNewStr != null) {

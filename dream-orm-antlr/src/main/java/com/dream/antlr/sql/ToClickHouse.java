@@ -32,10 +32,6 @@ public class ToClickHouse extends ToPubSQL {
         replaceMap.put("%s", "%S");
     }
 
-    private String getPattern(String pattern) {
-        return AntlrUtil.replace(pattern, replaceMap);
-    }
-
     @Override
     protected String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "\"" + statement.getValue() + "\"";
@@ -112,11 +108,7 @@ public class ToClickHouse extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.DateForMatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        String pattern = statement.getPattern();
-        if (pattern == null) {
-            pattern = getPattern(toStr(columnList[1], assist, invokerList));
-            statement.setPattern(pattern);
-        }
+        String pattern = AntlrUtil.replace(toStr(columnList[1], assist, invokerList), replaceMap);
         return "formatDateTime(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")";
     }
 

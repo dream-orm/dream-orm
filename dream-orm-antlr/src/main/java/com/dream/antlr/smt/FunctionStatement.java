@@ -318,22 +318,7 @@ public abstract class FunctionStatement extends Statement {
     }
 
     public static class DateForMatStatement extends FunctionStatement {
-        private String pattern;
 
-        public String getPattern() {
-            return pattern;
-        }
-
-        public void setPattern(String pattern) {
-            this.pattern = pattern;
-        }
-
-        @Override
-        public DateForMatStatement clone() {
-            DateForMatStatement dateForMatStatement = (DateForMatStatement) super.clone();
-            dateForMatStatement.setPattern(pattern);
-            return dateForMatStatement;
-        }
     }
 
     public static class ExtractStatement extends FunctionStatement {
@@ -388,22 +373,7 @@ public abstract class FunctionStatement extends Statement {
     }
 
     public static class StrToDateStatement extends FunctionStatement {
-        private String pattern;
 
-        public String getPattern() {
-            return pattern;
-        }
-
-        public void setPattern(String pattern) {
-            this.pattern = pattern;
-        }
-
-        @Override
-        public StrToDateStatement clone() {
-            StrToDateStatement strToDateStatement = (StrToDateStatement) super.clone();
-            strToDateStatement.setPattern(pattern);
-            return strToDateStatement;
-        }
     }
 
     public static class CurDateStatement extends FunctionStatement {
@@ -530,42 +500,18 @@ public abstract class FunctionStatement extends Statement {
     }
 
     public static class ToCharStatement extends FunctionStatement {
-        private String pattern;
 
-        public String getPattern() {
-            return pattern;
-        }
-
-        public void setPattern(String pattern) {
-            this.pattern = pattern;
-        }
     }
 
     public static class ToNumberStatement extends FunctionStatement {
     }
 
     public static class ToDateStatement extends FunctionStatement {
-        private String pattern;
 
-        public String getPattern() {
-            return pattern;
-        }
-
-        public void setPattern(String pattern) {
-            this.pattern = pattern;
-        }
     }
 
     public static class ToTimeStampStatement extends FunctionStatement {
-        private String pattern;
 
-        public String getPattern() {
-            return pattern;
-        }
-
-        public void setPattern(String pattern) {
-            this.pattern = pattern;
-        }
     }
 
     /**

@@ -39,20 +39,11 @@ public class ToMySQL extends ToPubSQL {
         replaceMap.put("ddd", "%j");
     }
 
-    private String getPattern(String pattern) {
-        return AntlrUtil.replace(pattern, replaceMap);
-    }
-
-
     @Override
     protected String toString(FunctionStatement.ToCharStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         if (columnList.length > 1) {
-            String pattern = statement.getPattern();
-            if (pattern == null) {
-                pattern = getPattern(toStr(columnList[1], assist, invokerList));
-                statement.setPattern(pattern);
-            }
+            String pattern = AntlrUtil.replace(toStr(columnList[1], assist, invokerList), replaceMap);
             return "DATE_FORMAT(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")";
         } else {
             return "CONVERT(" + toStr(columnList[0], assist, invokerList) + ",CHAR)";
@@ -68,24 +59,14 @@ public class ToMySQL extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.ToDateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        String pattern = statement.getPattern();
-        if (pattern == null) {
-            pattern = getPattern(toStr(columnList[1], assist, invokerList));
-            statement.setPattern(pattern);
-        }
-
+        String pattern = AntlrUtil.replace(toStr(columnList[1], assist, invokerList), replaceMap);
         return "STR_TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")";
     }
 
     @Override
     protected String toString(FunctionStatement.ToTimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
-        String pattern = statement.getPattern();
-        if (pattern == null) {
-            pattern = getPattern(toStr(columnList[1], assist, invokerList));
-            statement.setPattern(pattern);
-        }
-
+        String pattern = AntlrUtil.replace(toStr(columnList[1], assist, invokerList), replaceMap);
         return "STR_TO_DATE(" + toStr(columnList[0], assist, invokerList) + "," + pattern + ")";
     }
 }
