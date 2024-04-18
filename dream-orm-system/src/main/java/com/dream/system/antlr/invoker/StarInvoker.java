@@ -143,7 +143,7 @@ public class StarInvoker extends AbstractInvoker {
                                         }
                                     }
                                     if (add) {
-                                        queryColumnList.add(alias + "." + columnInfo.getColumn());
+                                        queryColumnList.add(SystemUtil.transfer(alias) + "." + SystemUtil.transfer(columnInfo.getColumn()));
                                         break;
                                     }
                                 }
@@ -166,7 +166,7 @@ public class StarInvoker extends AbstractInvoker {
                                 }
                             }
                             if (add) {
-                                queryColumnList.add(alias + "." + columnInfo.getColumn());
+                                queryColumnList.add(SystemUtil.transfer(alias) + "." + SystemUtil.transfer(columnInfo.getColumn()));
                             }
                         }
                     } else {

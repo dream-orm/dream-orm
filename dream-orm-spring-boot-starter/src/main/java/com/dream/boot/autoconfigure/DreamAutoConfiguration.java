@@ -477,7 +477,7 @@ public class DreamAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public JdbcMapper jdbcMapper(SessionTemplate sessionTemplate) {
-        return new DefaultJdbcMapper(sessionTemplate);
+    public JdbcMapper jdbcMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
+        return new DefaultJdbcMapper(sessionTemplate, toSQL);
     }
 }

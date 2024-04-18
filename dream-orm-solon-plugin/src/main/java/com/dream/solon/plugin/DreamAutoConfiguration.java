@@ -505,8 +505,8 @@ public class DreamAutoConfiguration {
      */
     @Bean
     @Condition(onMissingBean = JdbcMapper.class)
-    public JdbcMapper jdbcMapper(SessionTemplate sessionTemplate) {
-        return new DefaultJdbcMapper(sessionTemplate);
+    public JdbcMapper jdbcMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
+        return new DefaultJdbcMapper(sessionTemplate, toSQL);
     }
 
     final class NoneCache implements Cache {

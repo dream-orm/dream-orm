@@ -88,7 +88,7 @@ public class DefaultDriveFactory implements DriveFactory {
         this.templateMapper = templateMapper(sessionTemplate, sequence());
         this.flexMapper = flexMapper(sessionTemplate, toSQL);
         this.streamMapper = streamMapper(sessionTemplate, toSQL);
-        this.jdbcMapper = jdbcMapper(this.sessionTemplate);
+        this.jdbcMapper = jdbcMapper(this.sessionTemplate, toSQL);
     }
 
     @Override
@@ -128,8 +128,8 @@ public class DefaultDriveFactory implements DriveFactory {
         return new DefaultStreamMapper(sessionTemplate, toSQL);
     }
 
-    protected JdbcMapper jdbcMapper(Session session) {
-        return new DefaultJdbcMapper(session);
+    protected JdbcMapper jdbcMapper(Session session, ToSQL toSQL) {
+        return new DefaultJdbcMapper(session, toSQL);
     }
 
     /**

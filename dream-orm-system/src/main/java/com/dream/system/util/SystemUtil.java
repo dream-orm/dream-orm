@@ -1,8 +1,12 @@
 package com.dream.system.util;
 
 
+import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.smt.SymbolStatement;
+import com.dream.antlr.sql.ToSQL;
 import com.dream.system.annotation.Ignore;
 import com.dream.system.cache.CacheKey;
+import com.dream.util.exception.DreamRunTimeException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -93,5 +97,17 @@ public class SystemUtil {
         CacheKey cacheKey = new CacheKey();
         cacheKey.update(updateList);
         return cacheKey;
+    }
+
+    public static String transfer(String column) {
+        return "`" + column + "`";
+    }
+
+    public static String transfer(String column, ToSQL toSQL) {
+        try {
+            return toSQL.toStr(new SymbolStatement.SingleMarkStatement(column), null, null);
+        } catch (AntlrException e) {
+            throw new DreamRunTimeException(e.getMessage());
+        }
     }
 }

@@ -49,7 +49,7 @@ public class NotExistValidator implements Validator<Object> {
             }
             methodInfo = new MethodInfo();
             methodInfo.setConfiguration(configuration);
-            methodInfo.setSql("select 1 from " + tableName + " where " + column + "=@?(v) limit 1");
+            methodInfo.setSql("select 1 from " + SystemUtil.transfer(tableName) + " where " + SystemUtil.transfer(column) + "=@?(v) limit 1");
             methodInfo.setRowType(NonCollection.class);
             methodInfo.setColType(Integer.class);
             this.session = session;

@@ -5,6 +5,7 @@ import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.core.session.Session;
 import com.dream.system.table.TableInfo;
+import com.dream.system.util.SystemUtil;
 import com.dream.util.common.NonCollection;
 
 public abstract class DeleteMapper extends ValidateMapper {
@@ -16,7 +17,7 @@ public abstract class DeleteMapper extends ValidateMapper {
     protected MethodInfo getValidateMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
         String table = tableInfo.getTable();
         String other = getOther(configuration, tableInfo, arg);
-        String sql = "delete from " + table + " " + other;
+        String sql = "delete from " + SystemUtil.transfer(table) + " " + other;
         return new MethodInfo()
                 .setConfiguration(configuration)
                 .setRowType(NonCollection.class)

@@ -15,6 +15,7 @@ import com.dream.system.table.TableInfo;
 import com.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.dream.system.typehandler.handler.TypeHandler;
+import com.dream.system.util.SystemUtil;
 import com.dream.template.annotation.WrapType;
 import com.dream.template.sequence.Sequence;
 import com.dream.template.sequence.SequenceWrapper;
@@ -45,7 +46,7 @@ public class InsertMapper extends WrapMapper {
         if (primKeys != null && !primKeys.isEmpty()) {
             for (ColumnInfo prim : primKeys) {
                 String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, prim.getName());
-                columnList.add(prim.getColumn());
+                columnList.add(SystemUtil.transfer(prim.getColumn()));
                 valueList.add(invokerSQL);
             }
         }
@@ -57,13 +58,13 @@ public class InsertMapper extends WrapMapper {
                     String column = columnInfo.getColumn();
                     String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName());
                     if (!columnInfo.isPrimary()) {
-                        columnList.add(column);
+                        columnList.add(SystemUtil.transfer(column));
                         valueList.add(invokerSQL);
                     }
                 }
             }
         }
-        String sql = "insert into " + table + "(" + String.join(",", columnList) + ")values(" + String.join(",", valueList) + ")";
+        String sql = "insert into " + SystemUtil.transfer(table) + "(" + String.join(",", columnList) + ")values(" + String.join(",", valueList) + ")";
         return getMethodInfo(configuration, tableInfo, sql);
     }
 

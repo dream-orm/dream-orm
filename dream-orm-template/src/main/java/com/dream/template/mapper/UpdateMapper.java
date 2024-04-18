@@ -9,6 +9,7 @@ import com.dream.system.config.MethodInfo;
 import com.dream.system.core.session.Session;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
+import com.dream.system.util.SystemUtil;
 import com.dream.template.annotation.WrapType;
 import com.dream.util.common.NonCollection;
 import com.dream.util.common.ObjectUtil;
@@ -43,7 +44,7 @@ public abstract class UpdateMapper extends WrapMapper {
                     String name = field.getName();
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
-                        setList.add(columnInfo.getColumn() + "=" +
+                        setList.add(SystemUtil.transfer(columnInfo.getColumn()) + "=" +
                                 AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName()));
                     }
                 }
@@ -51,7 +52,7 @@ public abstract class UpdateMapper extends WrapMapper {
         }
         String updateParam = getUpdateParam(setList);
         String other = getOther(configuration, tableInfo, arg);
-        String sql = "update " + table + " set " + updateParam + " " + other;
+        String sql = "update " + SystemUtil.transfer(table) + " set " + updateParam + " " + other;
         return new MethodInfo()
                 .setConfiguration(configuration)
                 .setRowType(NonCollection.class)

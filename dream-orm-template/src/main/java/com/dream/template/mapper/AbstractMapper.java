@@ -106,7 +106,7 @@ public abstract class AbstractMapper {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'存在多个主键");
         }
         ColumnInfo columnInfo = primKeys.get(0);
-        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + "=" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName());
+        return "where " + SystemUtil.transfer(tableInfo.getTable()) + "." + SystemUtil.transfer(columnInfo.getColumn()) + "=" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName());
     }
 
     protected String getIdsWhere(TableInfo tableInfo) {
@@ -118,7 +118,7 @@ public abstract class AbstractMapper {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'存在多个主键");
         }
         ColumnInfo columnInfo = primKeys.get(0);
-        return "where " + tableInfo.getTable() + "." + columnInfo.getColumn() + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, "null") + ")";
+        return "where " + SystemUtil.transfer(tableInfo.getTable()) + "." + SystemUtil.transfer(columnInfo.getColumn()) + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, "null") + ")";
     }
 
     protected String getId() {

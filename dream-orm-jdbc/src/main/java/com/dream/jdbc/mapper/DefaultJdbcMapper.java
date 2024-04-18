@@ -2,6 +2,7 @@ package com.dream.jdbc.mapper;
 
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.read.ExprReader;
+import com.dream.antlr.sql.ToSQL;
 import com.dream.jdbc.core.JdbcBatchMappedStatement;
 import com.dream.jdbc.core.JdbcResultSetHandler;
 import com.dream.jdbc.core.JdbcStatementHandler;
@@ -34,11 +35,13 @@ public class DefaultJdbcMapper implements JdbcMapper {
     private final Session session;
     private final TableFactory tableFactory;
     private final TypeHandlerFactory typeHandlerFactory;
+    private final ToSQL toSQL;
 
-    public DefaultJdbcMapper(Session session) {
+    public DefaultJdbcMapper(Session session, ToSQL toSQL) {
         this.session = session;
         this.tableFactory = session.getConfiguration().getTableFactory();
         this.typeHandlerFactory = session.getConfiguration().getTypeHandlerFactory();
+        this.toSQL = toSQL;
     }
 
     @Override
@@ -103,16 +106,16 @@ public class DefaultJdbcMapper implements JdbcMapper {
                 String column = columnInfo.getColumn();
                 String name = columnInfo.getName();
                 if (name.equals(column)) {
-                    joiner.add(column);
+                    joiner.add(SystemUtil.transfer(column, toSQL));
                 } else {
-                    joiner.add(column + " " + name);
+                    joiner.add(SystemUtil.transfer(column, toSQL) + " " + SystemUtil.transfer(name, toSQL));
                 }
             }
         }
         if (sql != null) {
-            return queryForList("select " + joiner + " from " + tableName + " where " + sql, type, args);
+            return queryForList("select " + joiner + " from " + SystemUtil.transfer(tableName, toSQL) + " where " + sql, type, args);
         } else {
-            return queryForList("select " + joiner + " from " + tableName, type, args);
+            return queryForList("select " + joiner + " from " + SystemUtil.transfer(tableName, toSQL), type, args);
         }
     }
 
@@ -158,14 +161,14 @@ public class DefaultJdbcMapper implements JdbcMapper {
                     primValue = value;
                 } else {
                     if (value != null || !filterNull) {
-                        joiner.add(columnInfo.getColumn() + "=?");
+                        joiner.add(SystemUtil.transfer(columnInfo.getColumn(), toSQL) + "=?");
                         valueList.add(value);
                     }
                 }
             }
         }
         valueList.add(primValue);
-        return execute("update " + tableName + " set " + joiner + " where " + primColumn.getColumn() + "=?", valueList.toArray(new Object[]{valueList.size()}));
+        return execute("update " + SystemUtil.transfer(tableName, toSQL) + " set " + joiner + " where " + SystemUtil.transfer(primColumn.getColumn(), toSQL) + "=?", valueList.toArray(new Object[]{valueList.size()}));
     }
 
     @Override
@@ -189,7 +192,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
             if (columnInfo != null) {
                 Object value = wrapper.get(fieldName);
                 if (value != null) {
-                    columnList.add(columnInfo.getColumn());
+                    columnList.add(SystemUtil.transfer(columnInfo.getColumn(), toSQL));
                     valueList.add(value);
                 }
             }
@@ -197,7 +200,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
         if (columnList.size() > 0) {
             String[] marks = new String[columnList.size()];
             Arrays.fill(marks, "?");
-            return execute("insert into " + tableName + "(" + String.join(",", columnList) + ")values(" + String.join(",", marks) + ")", valueList.toArray(new Object[]{valueList.size()}));
+            return execute("insert into " + SystemUtil.transfer(tableName, toSQL) + "(" + String.join(",", columnList) + ")values(" + String.join(",", marks) + ")", valueList.toArray(new Object[]{valueList.size()}));
         } else {
             return 0;
         }
@@ -234,7 +237,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
         }
         String[] marks = new String[columnList.size()];
         Arrays.fill(marks, "?");
-        return batchExecute("insert into " + tableName + "(" + columnList.stream().map(ColumnInfo::getColumn).collect(Collectors.joining(",")) + ")values(" + String.join(",", marks) + ")", viewList, (ps, mappedStatement) -> {
+        return batchExecute("insert into " + SystemUtil.transfer(tableName, toSQL) + "(" + columnList.stream().map(columnInfo -> SystemUtil.transfer(columnInfo.getColumn(), toSQL)).collect(Collectors.joining(",")) + ")values(" + String.join(",", marks) + ")", viewList, (ps, mappedStatement) -> {
             Object arg = mappedStatement.getArg();
             ObjectWrapper wrapper = ObjectWrapper.wrapper(arg);
             for (int i = 0; i < columnList.size(); i++) {
@@ -288,7 +291,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
         } catch (TypeHandlerNotFoundException e) {
             throw new DreamRunTimeException(e);
         }
-        return batchExecute("update " + tableName + " set " + columnList.stream().map(columnInfo -> columnInfo.getColumn() + "=?").collect(Collectors.joining(",")) + " where " + primColumn.getColumn() + "=?", viewList, (ps, mappedStatement) -> {
+        return batchExecute("update " + SystemUtil.transfer(tableName, toSQL) + " set " + columnList.stream().map(columnInfo -> SystemUtil.transfer(columnInfo.getColumn(), toSQL) + "=?").collect(Collectors.joining(",")) + " where " + primColumn.getColumn() + "=?", viewList, (ps, mappedStatement) -> {
             Object arg = mappedStatement.getArg();
             ObjectWrapper wrapper = ObjectWrapper.wrapper(arg);
             int size = columnList.size();
