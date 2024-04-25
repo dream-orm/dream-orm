@@ -1,5 +1,25 @@
-# 链式强化操作
+# 链式扩展操作
 
+该模块基于链式操作做了进一步封装，需引入以下依赖
+
+```xml
+<dependency>
+    <groupId>com.dream-orm</groupId>
+    <artifactId>dream-orm-chain</artifactId>
+    <version>${dream-orm.version}</version>
+</dependency>
+```
+
+## **必备步骤**
+
+- **创建FlexChainMapper对象**
+
+```java
+    @Bean
+    public FlexChainMapper flexChainMapper(FlexMapper flexMapper) {
+        return new DefaultFlexChainMapper(flexMapper);
+    }
+```
 **链式强化操作是基于链式操作扩展而来，继承了原有的功能，这里使用FlexChianMapper接口。**
 
 ```java

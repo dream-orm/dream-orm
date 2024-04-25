@@ -84,6 +84,7 @@ public class HelloWorldFlexTest {
             UpdateDef updateDef = update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
             updateDefList.add(updateDef);
         }
+        flexMapper.batchUpdate(updateDefList);
     }
 
     /**

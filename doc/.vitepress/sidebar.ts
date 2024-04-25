@@ -47,10 +47,6 @@ const sidebar: DefaultTheme.Sidebar = {
                     link: '/basic/flex',
                 },
                 {
-                    text: '链式强化操作',
-                    link: '/basic/flex-chain',
-                },
-                {
                     text: 'Stream操作',
                     link: '/basic/stream',
                 },
@@ -136,6 +132,10 @@ const sidebar: DefaultTheme.Sidebar = {
         {
             text: '扩充功能',
             items: [
+                {
+                    text: '链式扩展',
+                    link: '/expand/flex-chain',
+                },
                 {
                     text: '代码生成器',
                     link: '/expand/generator.md'
