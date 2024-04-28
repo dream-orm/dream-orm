@@ -79,9 +79,9 @@ public class HelloWorldTdTest {
 
     @Test
     public void testStrInsert() {
-        Map<String,Object>tagMap=new LinkedHashMap<>();
-        tagMap.put("a","a1");
-        tagMap.put("b","b1");
+        Map<String, Object> tagMap = new LinkedHashMap<>();
+        tagMap.put("a", "a1");
+        tagMap.put("b", "b1");
         flexTdMapper.insertInto("d1001").using("aa").tagMap(tagMap).columns("name", "age").values("accountName", 100).execute();
     }
 

@@ -1,6 +1,7 @@
 package com.dream.antlr.smt;
 
 public class InsertStatement extends Statement {
+    private boolean ignore = false;
     private Statement table;
     private Statement columns;
     private Statement values;
@@ -29,6 +30,14 @@ public class InsertStatement extends Statement {
         this.values = wrapParent(values);
     }
 
+    public boolean isIgnore() {
+        return ignore;
+    }
+
+    public void setIgnore(boolean ignore) {
+        this.ignore = ignore;
+    }
+
     @Override
     protected Boolean isNeedInnerCache() {
         return isNeedInnerCache(table, columns, values);
@@ -40,6 +49,7 @@ public class InsertStatement extends Statement {
         insertStatement.setTable(clone(table));
         insertStatement.setColumns(clone(columns));
         insertStatement.setValues(clone(values));
+        insertStatement.setIgnore(ignore);
         return insertStatement;
     }
 

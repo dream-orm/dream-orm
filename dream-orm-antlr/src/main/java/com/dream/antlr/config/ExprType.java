@@ -182,6 +182,7 @@ public enum ExprType {
     ERR,
     ACC,
     HELP,
+    IGNORE,
     ROW_NUMBER,
     OVER,
     PARTITION,

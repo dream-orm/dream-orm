@@ -5,6 +5,7 @@
 - 优化：枚举类型转换器支持
 - 优化：字段增加关键字标识
 - 优化：tdengine插入实体支持指定字段
+- 优化：支持语法insert ignore into,replace into
 
 ## v1.3.0
 

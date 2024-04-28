@@ -74,6 +74,9 @@ public abstract class ToSQL {
             case 1995025380://DeleteStatement
                 sql = toString((DeleteStatement) statement, assist, invokerList);
                 break;
+            case 1652540603://ReplaceIntoStatement
+                sql = toString((ReplaceIntoStatement) statement, assist, invokerList);
+                break;
             case 669165491://SelectStatement
                 sql = toString((SelectStatement) statement, assist, invokerList);
                 break;
@@ -689,6 +692,8 @@ public abstract class ToSQL {
     protected abstract String toString(InsertStatement.ValuesStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(DeleteStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(ReplaceIntoStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(LimitStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

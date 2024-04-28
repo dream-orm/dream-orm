@@ -592,6 +592,9 @@ public abstract class SqlExpr {
             case SHARP:
                 exprFactory = sqlExpr -> sqlExpr.exprSharp(exprInfo);
                 break;
+            case IGNORE:
+                exprFactory = sqlExpr -> sqlExpr.exprIgnore(exprInfo);
+                break;
             case TO_CHAR:
                 exprFactory = sqlExpr -> sqlExpr.exprToChar(exprInfo);
                 break;
@@ -1372,6 +1375,10 @@ public abstract class SqlExpr {
 
     protected Statement exprDot(ExprInfo exprInfo) throws AntlrException {
         return exprNil(exprInfo);
+    }
+
+    protected Statement exprIgnore(ExprInfo exprInfo) throws AntlrException {
+        return exprKeyWord(exprInfo);
     }
 
     protected Statement exprToChar(ExprInfo exprInfo) throws AntlrException {

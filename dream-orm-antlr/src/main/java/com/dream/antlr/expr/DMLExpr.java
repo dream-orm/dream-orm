@@ -14,7 +14,7 @@ public class DMLExpr extends SqlExpr {
 
     public DMLExpr(ExprReader exprReader) {
         super(exprReader);
-        setExprTypes(ExprType.SELECT, ExprType.INSERT, ExprType.UPDATE, ExprType.DELETE);
+        setExprTypes(ExprType.SELECT, ExprType.INSERT, ExprType.UPDATE, ExprType.DELETE, ExprType.REPLACE);
     }
 
     @Override
@@ -45,6 +45,14 @@ public class DMLExpr extends SqlExpr {
     protected Statement exprDelete(ExprInfo exprInfo) throws AntlrException {
         DeleteExpr deleteExpr = new DeleteExpr(exprReader);
         statement = deleteExpr.expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprReplace(ExprInfo exprInfo) throws AntlrException {
+        ReplaceIntoExpr replaceIntoExpr = new ReplaceIntoExpr(exprReader);
+        statement = replaceIntoExpr.expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }

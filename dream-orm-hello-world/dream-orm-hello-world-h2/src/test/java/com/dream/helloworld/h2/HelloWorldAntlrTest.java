@@ -138,6 +138,17 @@ public class HelloWorldAntlrTest {
         testSqlForMany("insert into dual(id,name)values(id,name)");
     }
 
+    @Test
+    public void testInsertIgnore() {
+        testSqlForMany("insert ignore into dual(id,name)values(id,name)");
+    }
+
+    @Test
+    public void testReplaceInto() {
+        testSqlForMany("replace into dual(id,name)values(id,name)");
+    }
+
+
     protected void testSqlForMany(String sql) {
         System.out.println();
         try {

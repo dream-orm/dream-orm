@@ -327,6 +327,8 @@ public class ExprUtil {
                 return ExprType.ADD;
             case 2531:
                 return ExprType.OR;
+            case -2137067054:
+                return ExprType.IGNORE;
             case 2038860142:
                 return ExprType.ROW_NUMBER;
             case 2438356:
