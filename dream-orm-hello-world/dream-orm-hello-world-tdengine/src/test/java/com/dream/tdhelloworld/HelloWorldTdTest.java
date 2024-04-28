@@ -79,7 +79,10 @@ public class HelloWorldTdTest {
 
     @Test
     public void testStrInsert() {
-        flexTdMapper.insertInto("d1001").using("aa").tags("a").columns("name", "age").values("accountName", 100).execute();
+        Map<String,Object>tagMap=new LinkedHashMap<>();
+        tagMap.put("a","a1");
+        tagMap.put("b","b1");
+        flexTdMapper.insertInto("d1001").using("aa").tagMap(tagMap).columns("name", "age").values("accountName", 100).execute();
     }
 
     @Test
@@ -145,9 +148,9 @@ public class HelloWorldTdTest {
         Meters meters = new Meters();
         meters.setTs(new Date());
         meters.setCurrent(1.23);
-        meters.setPhase(3.45);
+        meters.setPhaseId(3.45);
         meters.setVoltage(4);
-        meters.setGroupid(1);
+        meters.setGroupId(1);
         meters.setLocation("a");
         flexTdMapper.insert("d1001", meters);
     }

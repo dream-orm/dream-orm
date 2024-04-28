@@ -15,9 +15,9 @@ public class Meters {
     @Column
     private int voltage;
     @Column
-    private double phase;
+    private double phaseId;
     @Tag
-    private int groupid;
+    private int groupId;
     @Tag
     private String location;
 
@@ -45,20 +45,20 @@ public class Meters {
         this.voltage = voltage;
     }
 
-    public double getPhase() {
-        return phase;
+    public double getPhaseId() {
+        return phaseId;
     }
 
-    public void setPhase(double phase) {
-        this.phase = phase;
+    public void setPhaseId(double phaseId) {
+        this.phaseId = phaseId;
     }
 
-    public int getGroupid() {
-        return groupid;
+    public int getGroupId() {
+        return groupId;
     }
 
-    public void setGroupid(int groupid) {
-        this.groupid = groupid;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     public String getLocation() {

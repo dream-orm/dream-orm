@@ -11,8 +11,9 @@ import com.dream.util.exception.DreamRunTimeException;
 import com.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DefaultFlexTdMapper extends DefaultFlexTdChainMapper implements FlexTdMapper {
     public DefaultFlexTdMapper(Session session) {
@@ -34,22 +35,30 @@ public class DefaultFlexTdMapper extends DefaultFlexTdChainMapper implements Fle
         Class<?> tableClass = entity.getClass();
         String tableName = getTable(tableClass);
         List<Field> fieldList = ReflectUtil.findField(entity.getClass());
-        List<Object> tagList = new ArrayList<>();
-        List<Object> valueList = new ArrayList<>();
+        Map<String, Object> tagStrMap = new LinkedHashMap<>();
+        Map<String, Object> valueStrMap = new LinkedHashMap<>();
         for (Field field : fieldList) {
             if (isTag(field)) {
                 if (ObjectUtil.isNull(tableName)) {
                     throw new DreamRunTimeException("存在'tag'超级表不能为空");
                 }
-                tagList.add(getValue(field, entity));
+                String tagColumn = getTagColumn(field);
+                if (tagStrMap.containsKey(tagColumn)) {
+                    throw new DreamRunTimeException("标签名重复定义");
+                }
+                tagStrMap.put(tagColumn, getValue(field, entity));
             } else if (isColumn(field)) {
-                valueList.add(getValue(field, entity));
+                String column = getColumn(field);
+                if (valueStrMap.containsKey(column)) {
+                    throw new DreamRunTimeException("字段名重复定义");
+                }
+                valueStrMap.put(column, getValue(field, entity));
             }
         }
         if (ObjectUtil.isNull(tableName)) {
-            return insertInto(subTableName).values(valueList.toArray()).execute();
+            return insertInto(subTableName).valuesStrMap(valueStrMap).execute();
         } else {
-            return insertInto(subTableName).using(tableName).tags(tagList.toArray()).values(valueList.toArray()).execute();
+            return insertInto(subTableName).using(tableName).tagMap(tagStrMap).valuesStrMap(valueStrMap).execute();
         }
     }
 
@@ -69,8 +78,32 @@ public class DefaultFlexTdMapper extends DefaultFlexTdChainMapper implements Fle
         return field.isAnnotationPresent(Tag.class);
     }
 
+    protected String getTagColumn(Field field) {
+        Tag tagAnnotation = field.getAnnotation(Tag.class);
+        if (tagAnnotation != null) {
+            String tagColumn = tagAnnotation.value();
+            if (tagColumn == null || tagColumn.isEmpty()) {
+                tagColumn = SystemUtil.camelToUnderline(field.getName());
+            }
+            return tagColumn;
+        }
+        throw new DreamRunTimeException("获取字段名失败");
+    }
+
     protected boolean isColumn(Field field) {
         return field.isAnnotationPresent(Column.class);
+    }
+
+    protected String getColumn(Field field) {
+        Column tagAnnotation = field.getAnnotation(Column.class);
+        if (tagAnnotation != null) {
+            String tagColumn = tagAnnotation.value();
+            if (tagColumn == null || tagColumn.isEmpty()) {
+                tagColumn = SystemUtil.camelToUnderline(field.getName());
+            }
+            return tagColumn;
+        }
+        throw new DreamRunTimeException("获取字段名失败");
     }
 
     protected Object getValue(Field field, Object entity) {

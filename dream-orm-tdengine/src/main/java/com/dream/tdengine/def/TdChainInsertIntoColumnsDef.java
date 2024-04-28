@@ -72,7 +72,7 @@ public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implem
     }
 
     public TdChainInsertDef valuesStrMap(Map<String, Object> valueStrMap) {
-        Map<ColumnDef, Object> valueMap = new HashMap<>(valueStrMap.size());
+        Map<ColumnDef, Object> valueMap = new LinkedHashMap<>(valueStrMap.size());
         Iterator<Map.Entry<String, Object>> iterator = valueStrMap.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Object> entry = iterator.next();
