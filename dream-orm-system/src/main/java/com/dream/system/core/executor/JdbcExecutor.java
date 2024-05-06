@@ -48,7 +48,7 @@ public class JdbcExecutor implements Executor {
                     result = batch(statement, mappedStatement, session);
                     break;
                 default:
-                    result = executeNone(mappedStatement);
+                    result = executeNone(statement, mappedStatement, session);
                     break;
             }
         } finally {
@@ -109,7 +109,7 @@ public class JdbcExecutor implements Executor {
         }
     }
 
-    protected Object executeNone(MappedStatement mappedStatement) {
+    protected Object executeNone(Statement statement, MappedStatement mappedStatement, Session session) {
         throw new DreamRunTimeException("SQL类型" + mappedStatement.getCommand() + "不支持");
     }
 

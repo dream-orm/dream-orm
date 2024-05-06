@@ -6,6 +6,7 @@
 - 优化：字段增加关键字标识
 - 优化：tdengine插入实体支持指定字段
 - 优化：支持语法insert ignore into,replace into
+- 优化：代码生成器优化，支持自定义模板
 
 ## v1.3.0
 

@@ -172,7 +172,7 @@ public class ToNativeSQL extends ToSQL {
     @Override
     protected String toString(InsertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement columns = statement.getColumns();
-        return "INSERT "+(statement.isIgnore()?"IGNORE ":" ")+"INTO " + toStr(statement.getTable(), assist, invokerList) + (columns != null ? toStr(columns, assist, invokerList) : " ") + toStr(statement.getValues(), assist, invokerList);
+        return "INSERT " + (statement.isIgnore() ? "IGNORE " : " ") + "INTO " + toStr(statement.getTable(), assist, invokerList) + (columns != null ? toStr(columns, assist, invokerList) : " ") + toStr(statement.getValues(), assist, invokerList);
     }
 
     @Override

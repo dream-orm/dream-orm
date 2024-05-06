@@ -108,26 +108,26 @@ public class Generator {
                         dataModel.put("serviceImplPackageName", getPackageName(serviceImplClassName));
                         dataModel.put("serviceImplName", getName(serviceImplClassName));
                     }
+                    if (tableClassName != null && !tableClassName.isEmpty()) {
+                        generate(dataModel, generatorHandler.tableTemplate(), generatorHandler.sourceDir() + "\\" + tableClassName.replace(".", "\\") + ".java");
+                    }
                     if (boClassName != null && !boClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.BO.getPath(), generatorHandler.sourceDir() + "\\" + boClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.boTemplate(), generatorHandler.sourceDir() + "\\" + boClassName.replace(".", "\\") + ".java");
                     }
                     if (voClassName != null && !voClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.VO.getPath(), generatorHandler.sourceDir() + "\\" + voClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.voTemplate(), generatorHandler.sourceDir() + "\\" + voClassName.replace(".", "\\") + ".java");
                     }
                     if (dtoClassName != null && !dtoClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.DTO.getPath(), generatorHandler.sourceDir() + "\\" + dtoClassName.replace(".", "\\") + ".java");
-                    }
-                    if (tableClassName != null && !tableClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.TABLE.getPath(), generatorHandler.sourceDir() + "\\" + tableClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.dtoTemplate(), generatorHandler.sourceDir() + "\\" + dtoClassName.replace(".", "\\") + ".java");
                     }
                     if (serviceClassName != null && !serviceClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.SERVICE.getPath(), generatorHandler.sourceDir() + "\\" + serviceClassName.replace(".", "\\") + ".java");
-                    }
-                    if (controllerClassName != null && !controllerClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.CONTROLLER.getPath(), generatorHandler.sourceDir() + "\\" + controllerClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.serviceTemplate(), generatorHandler.sourceDir() + "\\" + serviceClassName.replace(".", "\\") + ".java");
                     }
                     if (serviceImplClassName != null && !serviceImplClassName.isEmpty()) {
-                        generate(dataModel, TemplateEnum.SERVICE_IMPL.getPath(), generatorHandler.sourceDir() + "\\" + serviceImplClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.serviceImplTemplate(), generatorHandler.sourceDir() + "\\" + serviceImplClassName.replace(".", "\\") + ".java");
+                    }
+                    if (controllerClassName != null && !controllerClassName.isEmpty()) {
+                        generate(dataModel, generatorHandler.controllerTemplate(), generatorHandler.sourceDir() + "\\" + controllerClassName.replace(".", "\\") + ".java");
                     }
                 }
             }
@@ -145,25 +145,15 @@ public class Generator {
         return className.substring(className.lastIndexOf(".") + 1);
     }
 
-
-    private void generate(Map<String, Object> dataModel, String path, String sourceFile) throws IOException, TemplateException {
-        try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(path)) {
-            try (InputStreamReader reader = new InputStreamReader(inputStream)) {
-                generate(dataModel, reader, sourceFile);
-            }
-        }
-    }
-
-    private void generate(Map<String, Object> dataModel, Reader reader, String sourceFile) throws IOException, TemplateException {
-        Template template = new Template((String) dataModel.get("name"), reader, null, "utf8");
+    private void generate(Map<String, Object> dataModel, InputStream inputStream, String sourceFile) throws IOException, TemplateException {
+        Template template = new Template((String) dataModel.get("name"), new InputStreamReader(inputStream), null, "utf8");
         File file = new File(sourceFile);
         if (!file.exists() || generatorHandler.override((String) dataModel.get("table"))) {
             File parentFile = file.getParentFile();
             if (!parentFile.exists()) {
                 parentFile.mkdirs();
             }
-            FileWriter fileWriter = new FileWriter(sourceFile);
-            template.process(dataModel, fileWriter);
+            template.process(dataModel, new FileWriter(file));
         }
     }
 
@@ -243,7 +233,7 @@ public class Generator {
         }
     }
 
-    class DataType {
+    static class DataType {
         private String jdbcType;
         private String javaType;
 

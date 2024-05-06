@@ -1,5 +1,6 @@
 package com.dream.generator;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -103,4 +104,67 @@ public interface GeneratorHandler {
      * @return 查询视图全类名
      */
     String dtoClassName(String table);
+
+    /**
+     * 生成table模板
+     *
+     * @return table模板
+     */
+    default InputStream tableTemplate() {
+        return getClass().getClassLoader().getResourceAsStream("./template/table.ftl");
+    }
+
+    /**
+     * 生成vo模板
+     *
+     * @return vo模板
+     */
+    default InputStream voTemplate() {
+        return getClass().getClassLoader().getResourceAsStream("./template/vo.ftl");
+    }
+
+    /**
+     * 生成bo模板
+     *
+     * @return bo模板
+     */
+    default InputStream boTemplate() {
+        return getClass().getClassLoader().getResourceAsStream("./template/bo.ftl");
+    }
+
+    /**
+     * 生成dto模板
+     *
+     * @return dto模板
+     */
+    default InputStream dtoTemplate() {
+        return getClass().getClassLoader().getResourceAsStream("./template/dto.ftl");
+    }
+
+    /**
+     * 生成service模板
+     *
+     * @return service模板
+     */
+    default InputStream serviceTemplate() {
+        return getClass().getClassLoader().getResourceAsStream("./template/service.ftl");
+    }
+
+    /**
+     * 生成serviceImpl模板
+     *
+     * @return serviceImpl模板
+     */
+    default InputStream serviceImplTemplate() {
+        return getClass().getClassLoader().getResourceAsStream("./template/serviceImpl.ftl");
+    }
+
+    /**
+     * 生成controller模板
+     *
+     * @return controller模板
+     */
+    default InputStream controllerTemplate() {
+        return getClass().getClassLoader().getResourceAsStream("./template/controller.ftl");
+    }
 }
