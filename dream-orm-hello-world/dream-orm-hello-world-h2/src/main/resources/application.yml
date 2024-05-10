@@ -1,6 +1,7 @@
 dream:
   listeners:
     - com.dream.drive.listener.DebugListener
+    - com.dream.helloworld.h2.DataAuditListener
   mapperPackages:
     - com.dream.helloworld
   tablePackages:

@@ -17,7 +17,7 @@ public interface InsertIntoValuesDef<Insert extends InsertDef> extends InsertDef
     default Insert values(Object... values) {
         ListColumnStatement valueListStatement = new ListColumnStatement(",");
         for (Object value : values) {
-            valueListStatement.add(new TakeMarkInvokerStatement(value));
+            valueListStatement.add(new TakeMarkInvokerStatement(null, value));
         }
         InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
         valuesStatement.setStatement(new BraceStatement(valueListStatement));
@@ -31,7 +31,7 @@ public interface InsertIntoValuesDef<Insert extends InsertDef> extends InsertDef
             Object[] objects = fn.apply(value);
             ListColumnStatement listColumnStatement = new ListColumnStatement(",");
             for (Object object : objects) {
-                listColumnStatement.add(new TakeMarkInvokerStatement(object));
+                listColumnStatement.add(new TakeMarkInvokerStatement(null, object));
             }
             valueListStatement.add(new BraceStatement(listColumnStatement));
         }

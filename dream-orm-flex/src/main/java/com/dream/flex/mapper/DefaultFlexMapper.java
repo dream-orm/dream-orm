@@ -174,12 +174,12 @@ public class DefaultFlexMapper implements FlexMapper {
             limitStatement = new LimitStatement();
             if (offset) {
                 limitStatement.setOffset(true);
-                limitStatement.setFirst(new TakeMarkInvokerStatement(pageNum));
-                limitStatement.setSecond(new TakeMarkInvokerStatement(startRow));
+                limitStatement.setFirst(new TakeMarkInvokerStatement(null, pageNum));
+                limitStatement.setSecond(new TakeMarkInvokerStatement(null, startRow));
             } else {
                 limitStatement.setOffset(false);
-                limitStatement.setFirst(new TakeMarkInvokerStatement(startRow));
-                limitStatement.setSecond(new TakeMarkInvokerStatement(pageNum));
+                limitStatement.setFirst(new TakeMarkInvokerStatement(null, startRow));
+                limitStatement.setSecond(new TakeMarkInvokerStatement(null, pageNum));
             }
             queryStatement.setLimitStatement(limitStatement);
         } else {

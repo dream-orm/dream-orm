@@ -44,8 +44,8 @@ public abstract class AbstractTdChainQueryDef extends AbstractQueryDef implement
     protected TdChainLimitDef sLimit(Integer offset, Integer rows) {
         TdSLimitStatement tdSLimitStatement = new TdSLimitStatement();
         tdSLimitStatement.setOffset(false);
-        tdSLimitStatement.setFirst(new TakeMarkInvokerStatement(offset));
-        tdSLimitStatement.setSecond(new TakeMarkInvokerStatement(rows));
+        tdSLimitStatement.setFirst(new TakeMarkInvokerStatement(null, offset));
+        tdSLimitStatement.setSecond(new TakeMarkInvokerStatement(null, rows));
         ((TdQueryStatement) statement()).setSlimit(tdSLimitStatement);
         return (TdChainLimitDef) creatorFactory().newLimitDef(statement());
     }
@@ -53,8 +53,8 @@ public abstract class AbstractTdChainQueryDef extends AbstractQueryDef implement
     protected TdChainLimitDef sOffset(Integer offset, Integer rows) {
         TdSLimitStatement tdSLimitStatement = new TdSLimitStatement();
         tdSLimitStatement.setOffset(true);
-        tdSLimitStatement.setFirst(new TakeMarkInvokerStatement(rows));
-        tdSLimitStatement.setSecond(new TakeMarkInvokerStatement(offset));
+        tdSLimitStatement.setFirst(new TakeMarkInvokerStatement(null, rows));
+        tdSLimitStatement.setSecond(new TakeMarkInvokerStatement(null, offset));
         ((TdQueryStatement) statement()).setSlimit(tdSLimitStatement);
         return (TdChainLimitDef) creatorFactory().newLimitDef(statement());
     }

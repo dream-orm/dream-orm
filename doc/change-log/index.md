@@ -7,6 +7,7 @@
 - 优化：tdengine插入实体支持指定字段
 - 优化：支持语法insert ignore into,replace into
 - 优化：代码生成器优化，支持自定义模板
+- 优化：flex写法支持解析参数名称
 
 ## v1.3.0
 

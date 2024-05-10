@@ -7,13 +7,14 @@ import com.dream.antlr.invoker.AbstractInvoker;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.sql.ToSQL;
+import com.dream.system.config.MappedParam;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TakeMarkInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_regular_take_mark";
-    private final List<Object> paramList = new ArrayList<>();
+    private final List<MappedParam> mappedParamList = new ArrayList<>();
 
     @Override
     public Invoker newInstance() {
@@ -28,8 +29,7 @@ public class TakeMarkInvoker extends AbstractInvoker {
     @Override
     public String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         TakeMarkInvokerStatement takeMarkInvokerStatement = (TakeMarkInvokerStatement) invokerStatement;
-        Object value = takeMarkInvokerStatement.getValue();
-        paramList.add(value);
+        mappedParamList.add(takeMarkInvokerStatement.getMappedParam());
         return "?";
     }
 
@@ -38,7 +38,7 @@ public class TakeMarkInvoker extends AbstractInvoker {
         return new Handler[0];
     }
 
-    public List<Object> getParamList() {
-        return paramList;
+    public List<MappedParam> getMappedParamList() {
+        return mappedParamList;
     }
 }

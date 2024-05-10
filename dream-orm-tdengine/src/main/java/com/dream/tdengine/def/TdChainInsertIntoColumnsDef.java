@@ -38,7 +38,7 @@ public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implem
         TdInsertStatement tdInsertStatement = (TdInsertStatement) statement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         for (Object value : values) {
-            listColumnStatement.add(new TakeMarkInvokerStatement(value));
+            listColumnStatement.add(new TakeMarkInvokerStatement(null, value));
         }
         tdInsertStatement.setTags(listColumnStatement);
         return this;
@@ -50,8 +50,9 @@ public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implem
         ListColumnStatement tagColumnStatement = new ListColumnStatement(",");
         ListColumnStatement tagValueStatement = new ListColumnStatement(",");
         for (Map.Entry<String, Object> entry : entrySet) {
-            tagColumnStatement.add(new SymbolStatement.SingleMarkStatement(entry.getKey()));
-            tagValueStatement.add(new TakeMarkInvokerStatement(entry.getValue()));
+            String key = entry.getKey();
+            tagColumnStatement.add(new SymbolStatement.SingleMarkStatement(key));
+            tagValueStatement.add(new TakeMarkInvokerStatement(key, entry.getValue()));
         }
         tdInsertStatement.setTagColumn(new BraceStatement(tagColumnStatement));
         tdInsertStatement.setTags(tagValueStatement);

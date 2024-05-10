@@ -28,7 +28,7 @@ public class TdChainInsertIntoTableDef extends AbstractTdChainInsertDef implemen
         TdInsertStatement tdInsertStatement = (TdInsertStatement) statement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         for (Object value : values) {
-            listColumnStatement.add(new TakeMarkInvokerStatement(value));
+            listColumnStatement.add(new TakeMarkInvokerStatement(null, value));
         }
         tdInsertStatement.setTags(listColumnStatement);
         return this;

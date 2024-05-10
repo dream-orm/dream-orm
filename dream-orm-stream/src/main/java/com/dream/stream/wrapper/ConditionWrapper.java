@@ -48,7 +48,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     public Children in(String column, Collection<?> values) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         for (Object value : values) {
-            listColumnStatement.add(new TakeMarkInvokerStatement(value));
+            listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
         }
         BraceStatement braceStatement = new BraceStatement(listColumnStatement);
         return condition(column, new OperStatement.INStatement(), braceStatement);
@@ -63,7 +63,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     public Children notIn(String column, Object... values) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         for (Object value : values) {
-            listColumnStatement.add(new TakeMarkInvokerStatement(value));
+            listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
         }
         BraceStatement braceStatement = new BraceStatement(listColumnStatement);
         ConditionStatement inConditionStatement = AntlrUtil.conditionStatement(null, new OperStatement.INStatement(), braceStatement);
@@ -74,7 +74,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     public Children notIn(String column, Collection<?> values) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         for (Object value : values) {
-            listColumnStatement.add(new TakeMarkInvokerStatement(value));
+            listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
         }
         BraceStatement braceStatement = new BraceStatement(listColumnStatement);
         ConditionStatement inConditionStatement = AntlrUtil.conditionStatement(null, new OperStatement.INStatement(), braceStatement);
@@ -92,7 +92,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new TakeMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         concatStatement.setParamsStatement(listColumnStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.LIKEStatement(), concatStatement);
@@ -101,7 +101,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     public Children likeLeft(String column, Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new TakeMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         concatStatement.setParamsStatement(listColumnStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.LIKEStatement(), concatStatement);
@@ -112,7 +112,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new TakeMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
         concatStatement.setParamsStatement(listColumnStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.LIKEStatement(), concatStatement);
     }
@@ -122,7 +122,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new TakeMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         concatStatement.setParamsStatement(listColumnStatement);
         ConditionStatement likeConditionStatement = AntlrUtil.conditionStatement(null, new OperStatement.LIKEStatement(), concatStatement);
@@ -133,7 +133,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     public Children notLikeLeft(String column, Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new TakeMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
         concatStatement.setParamsStatement(listColumnStatement);
         ConditionStatement likeLeftConditionStatement = AntlrUtil.conditionStatement(null, new OperStatement.LIKEStatement(), concatStatement);
@@ -145,7 +145,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new TakeMarkInvokerStatement(value));
+        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
         concatStatement.setParamsStatement(listColumnStatement);
         ConditionStatement likeRightConditionStatement = AntlrUtil.conditionStatement(null, new OperStatement.LIKEStatement(), concatStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.NOTStatement(), likeRightConditionStatement);
@@ -157,9 +157,9 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
         conditionStatement.setLeft(new SymbolStatement.LetterStatement(column));
         conditionStatement.setOper(new OperStatement.BETWEENStatement());
         ConditionStatement rightConditionStatement = new ConditionStatement();
-        rightConditionStatement.setLeft(new TakeMarkInvokerStatement(start));
+        rightConditionStatement.setLeft(new TakeMarkInvokerStatement(column, start));
         rightConditionStatement.setOper(new OperStatement.ANDStatement());
-        rightConditionStatement.setRight(new TakeMarkInvokerStatement(end));
+        rightConditionStatement.setRight(new TakeMarkInvokerStatement(column, end));
         conditionStatement.setRight(rightConditionStatement);
         return condition(new OperStatement.ANDStatement(), conditionStatement);
     }
@@ -168,9 +168,9 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
         ConditionStatement conditionStatement = new ConditionStatement();
         conditionStatement.setOper(new OperStatement.BETWEENStatement());
         ConditionStatement rightConditionStatement = new ConditionStatement();
-        rightConditionStatement.setLeft(new TakeMarkInvokerStatement(start));
+        rightConditionStatement.setLeft(new TakeMarkInvokerStatement(column, start));
         rightConditionStatement.setOper(new OperStatement.ANDStatement());
-        rightConditionStatement.setRight(new TakeMarkInvokerStatement(end));
+        rightConditionStatement.setRight(new TakeMarkInvokerStatement(column, end));
         conditionStatement.setRight(rightConditionStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.NOTStatement(), conditionStatement);
     }
@@ -206,7 +206,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     }
 
     protected Children condition(String column, OperStatement operStatement, Object value) {
-        return condition(new SymbolStatement.LetterStatement(column), operStatement, new TakeMarkInvokerStatement(value));
+        return condition(new SymbolStatement.LetterStatement(column), operStatement, new TakeMarkInvokerStatement(column, value));
     }
 
     protected Children condition(Statement columnStatement, OperStatement operStatement, Statement valueStatement) {

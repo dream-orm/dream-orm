@@ -24,7 +24,7 @@ public interface UpdateColumnDef<UpdateColumn extends UpdateColumnDef, Update ex
     }
 
     default UpdateColumn set(ColumnDef columnDef, Object value) {
-        set(columnDef, new ColumnDef(new TakeMarkInvokerStatement(value)));
+        set(columnDef, new ColumnDef(new TakeMarkInvokerStatement(columnDef.column(), value)));
         return (UpdateColumn) this;
     }
 

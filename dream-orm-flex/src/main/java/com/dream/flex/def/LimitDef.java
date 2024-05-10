@@ -12,8 +12,8 @@ public interface LimitDef<
     default Union limit(Integer offset, Integer rows) {
         LimitStatement limitStatement = new LimitStatement();
         limitStatement.setOffset(false);
-        limitStatement.setFirst(new TakeMarkInvokerStatement(offset));
-        limitStatement.setSecond(new TakeMarkInvokerStatement(rows));
+        limitStatement.setFirst(new TakeMarkInvokerStatement(null, offset));
+        limitStatement.setSecond(new TakeMarkInvokerStatement(null, rows));
         statement().setLimitStatement(limitStatement);
         return (Union) creatorFactory().newUnionDef(statement());
     }
@@ -21,8 +21,8 @@ public interface LimitDef<
     default Union offset(Integer offset, Integer rows) {
         LimitStatement limitStatement = new LimitStatement();
         limitStatement.setOffset(true);
-        limitStatement.setFirst(new TakeMarkInvokerStatement(rows));
-        limitStatement.setSecond(new TakeMarkInvokerStatement(offset));
+        limitStatement.setFirst(new TakeMarkInvokerStatement(null, rows));
+        limitStatement.setSecond(new TakeMarkInvokerStatement(null, offset));
         statement().setLimitStatement(limitStatement);
         return (Union) creatorFactory().newUnionDef(statement());
     }

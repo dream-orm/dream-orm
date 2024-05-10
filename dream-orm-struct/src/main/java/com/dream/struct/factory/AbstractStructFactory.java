@@ -93,19 +93,15 @@ public abstract class AbstractStructFactory implements StructFactory {
         }
         TakeMarkInvoker takeMarkInvoker = (TakeMarkInvoker) assist.getInvoker(TakeMarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
         TakeTableInvoker takeTableInvoker = (TakeTableInvoker) assist.getInvoker(TakeTableInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
-        List<Object> paramList = takeMarkInvoker.getParamList();
-        List<MappedParam> mappedParamList = null;
-        if (paramList != null && !paramList.isEmpty()) {
-            mappedParamList = new ArrayList<>(paramList.size());
-            for (Object param : paramList) {
-                MappedParam mappedParam = new MappedParam();
+        List<MappedParam> mappedParamList = takeMarkInvoker.getMappedParamList();
+        if (mappedParamList != null && !mappedParamList.isEmpty()) {
+            for (MappedParam mappedParam : mappedParamList) {
                 try {
+                    Object param = mappedParam.getParamValue();
                     mappedParam.setTypeHandler(typeHandlerFactory.getTypeHandler(param != null ? param.getClass() : Object.class, Types.NULL));
                 } catch (TypeHandlerNotFoundException e) {
                     throw new DreamRunTimeException(e);
                 }
-                mappedParam.setParamValue(param);
-                mappedParamList.add(mappedParam);
             }
         }
         Set<String> tableSet = takeTableInvoker.getTableSet();

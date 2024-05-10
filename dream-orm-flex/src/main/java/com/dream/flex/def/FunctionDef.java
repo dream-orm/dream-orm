@@ -1098,7 +1098,8 @@ public class FunctionDef {
     }
 
     public static ColumnDef col(Object column) {
-        return new ColumnDef(new SymbolStatement.LetterStatement(String.valueOf(column)));
+        String _column = String.valueOf(column);
+        return new ColumnDef(new SymbolStatement.LetterStatement(_column), _column);
     }
 
     public static ColumnDef[] cols(Object[] columns) {
@@ -1110,7 +1111,8 @@ public class FunctionDef {
     }
 
     public static ColumnDef column(Object column) {
-        return new ColumnDef(new SymbolStatement.SingleMarkStatement(String.valueOf(column)));
+        String _column = String.valueOf(column);
+        return new ColumnDef(new SymbolStatement.SingleMarkStatement(_column), _column);
     }
 
     public static ColumnDef[] columns(Object[] columns) {

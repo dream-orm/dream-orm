@@ -46,7 +46,7 @@ public class TdChainFillDef extends TdChainOrderByDef {
         }
         if (values != null && values.length > 0) {
             for (Object value : values) {
-                listColumnStatement.add(new TakeMarkInvokerStatement(value));
+                listColumnStatement.add(new TakeMarkInvokerStatement(null, value));
             }
         }
         TdFillStatement tdFillStatement = new TdFillStatement();
