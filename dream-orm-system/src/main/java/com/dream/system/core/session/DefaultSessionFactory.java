@@ -30,11 +30,11 @@ public class DefaultSessionFactory implements SessionFactory {
         Transaction transaction = configuration.getTransactionFactory().getTransaction(dataSource);
         transaction.setAutoCommit(autoCommit);
         Executor executor = new JdbcExecutor(transaction, configuration.getStatementHandler(), configuration.getResultSetHandler());
-        executor = new ActionExecutor(executor);
         if (this.cache != null) {
             executor = new CacheExecutor(executor, this.cache);
         }
         executor = new ListenerExecutor(executor, configuration.getListenerFactory());
+        executor = new ActionExecutor(executor);
         return openSession(executor);
     }
 

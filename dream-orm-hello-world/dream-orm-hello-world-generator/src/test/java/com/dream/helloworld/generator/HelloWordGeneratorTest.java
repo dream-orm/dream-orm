@@ -17,7 +17,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         protected String basePackage() {
-            return "com.sooth.system.serial";
+            return "com.sooth.module.system.log";
         }
 
         @Override
@@ -32,7 +32,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         public boolean support(String table) {
-            return table.contains("serial");
+            return table.contains("audit");
         }
     }
 }

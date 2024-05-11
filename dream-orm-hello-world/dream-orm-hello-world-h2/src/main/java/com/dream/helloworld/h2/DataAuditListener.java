@@ -12,12 +12,10 @@ import com.dream.system.core.listener.Listener;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
+import com.dream.util.common.LowHashMap;
 import com.dream.util.common.ObjectUtil;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.dream.flex.def.FunctionDef.column;
@@ -34,7 +32,7 @@ public class DataAuditListener implements Listener {
             if (tableInfo != null) {
                 List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
                 if (!ObjectUtil.isNull(primKeys)) {
-                    Map<String, Object> newValueMap = new HashMap<>();
+                    Map<String, Object> newValueMap = new LowHashMap<>();
                     List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
                     if (!ObjectUtil.isNull(mappedParamList)) {
                         for (MappedParam mappedParam : mappedParamList) {
@@ -67,13 +65,24 @@ public class DataAuditListener implements Listener {
                         ColumnDef[] columnDefs = newValueMap.keySet().stream().map(column -> column(column)).collect(Collectors.toList()).toArray(new ColumnDef[newValueMap.size()]);
                         FlexMapper flexMapper = SpringUtil.getBean(FlexMapper.class);
                         QueryDef queryDef = select(columnDefs).from(FunctionDef.table(table)).where(conditionDef);
-                        Map oldValueMap = flexMapper.selectOne(queryDef, Map.class);
+                        Map oldValueMap = flexMapper.selectOne(queryDef, LowHashMap.class);
                         System.out.println("=====数据更新=====");
                         System.out.println("操作表：" + table);
                         System.out.println("旧值：" + oldValueMap);
                         System.out.println("新值：" + newValueMap);
                     }
                 }
+            }
+        }
+        else if(Command.INSERT==mappedStatement.getCommand()){
+
+        }else if(Command.DELETE==mappedStatement.getCommand()){
+            Set<String> tableSet = mappedStatement.getTableSet();
+            String table = tableSet.toArray(new String[1])[0];
+            TableFactory tableFactory = mappedStatement.getConfiguration().getTableFactory();
+            TableInfo tableInfo = tableFactory.getTableInfo(table);
+            if (tableInfo != null) {
+                Collection<ColumnInfo> columnInfoList = tableInfo.getColumnInfoList();
             }
         }
     }
