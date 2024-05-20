@@ -14,7 +14,6 @@ import java.sql.Types;
 @Data
 @View(${tableName}.class)
 public class ${boName} {
-
 <#list columns as column>
 
     /**

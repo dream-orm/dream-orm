@@ -15,7 +15,6 @@ import java.sql.Types;
 @Data
 @Table("${table}")
 public class ${tableName} {
-
 <#list columns as column>
 
     /**
