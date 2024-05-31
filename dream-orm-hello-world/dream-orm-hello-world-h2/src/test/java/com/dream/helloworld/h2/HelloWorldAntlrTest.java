@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class HelloWorldAntlrTest {
-    static List<ToSQL> toSQLList = Arrays.asList(new ToMySQL(), new ToPostgreSQL(), new ToSQLServer(), new ToOracle(), new ToOracle11(), new ToDM(), new ToClickHouse());
+    static List<ToSQL> toSQLList = Arrays.asList(new ToMySQL(), new ToPostgreSQL(), new ToSQLServer(), new ToSQLServer08(), new ToOracle(), new ToOracle11(), new ToDM(), new ToClickHouse());
 
     @Test
     public void testStr() {
@@ -99,8 +99,8 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testLimit() {
-        testSqlForMany("SELECT * FROM DUAL ORDER BY ID LIMIT 3000,6000");
-        testSqlForMany("SELECT * FROM DUAL ORDER BY ID LIMIT 10");
+        testSqlForMany("SELECT * FROM customer_article_record order by custom_id  LIMIT 0,10");
+        testSqlForMany("SELECT * FROM customer_article_record  LIMIT 10");
     }
 
     @Test

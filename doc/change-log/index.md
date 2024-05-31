@@ -1,5 +1,10 @@
 # dream-orm 升级日志
 
+## v1.3.2
+
+- 优化：SQLserver分页，根据需要自动增加order by
+- 优化：支持SQLserver2008分页
+
 ## v1.3.1
 
 - 优化：枚举类型转换器支持

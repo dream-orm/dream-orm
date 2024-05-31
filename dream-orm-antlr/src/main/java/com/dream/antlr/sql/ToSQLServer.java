@@ -12,17 +12,29 @@ import java.util.List;
  */
 public class ToSQLServer extends ToPubSQL {
     @Override
+    protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        LimitStatement limitStatement = statement.getLimitStatement();
+        if(limitStatement!=null){
+            OrderStatement orderStatement = statement.getOrderStatement();
+            if(orderStatement==null){
+                orderStatement=new OrderStatement();
+                orderStatement.setStatement(new SymbolStatement.LetterStatement("(select 0)"));
+                statement.setOrderStatement(orderStatement);
+            }
+        }
+        return super.toString(statement,assist,invokerList);
+    }
+
+    @Override
     protected String toString(InsertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement columns = statement.getColumns();
         return "INSERT INTO " + toStr(statement.getTable(), assist, invokerList) + (columns != null ? toStr(columns, assist, invokerList) : " ") + toStr(statement.getValues(), assist, invokerList);
-
     }
 
     @Override
     protected String toString(ReplaceIntoStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement columns = statement.getColumns();
         return "INSERT INTO " + toStr(statement.getTable(), assist, invokerList) + (columns != null ? toStr(columns, assist, invokerList) : " ") + toStr(statement.getValues(), assist, invokerList);
-
     }
 
     @Override
