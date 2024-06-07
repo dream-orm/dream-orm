@@ -67,14 +67,14 @@ public class StarInvoker extends AbstractInvoker {
         for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {
             lowHashMap.put(tableScanInfo.getTable(), tableScanInfo);
         }
-        List<String> queryColumnList = new ArrayList<>();
+        List<Statement> queryColumnList = new ArrayList<>();
         getQuery(tableFactory, colType, lowHashMap, getQueryColumnInfoList(assist, toSQL, invokerList, invokerStatement), queryColumnList);
-        ListColumnStatement selectListColumnStatement = AntlrUtil.listColumnStatement(",", queryColumnList.toArray(new String[queryColumnList.size()]));
+        ListColumnStatement selectListColumnStatement = AntlrUtil.listColumnStatement(",", queryColumnList.toArray(new Statement[queryColumnList.size()]));
         invokerStatement.replaceWith(selectListColumnStatement);
         return toSQL.toStr(selectListColumnStatement, assist, invokerList);
     }
 
-    protected void getQuery(TableFactory tableFactory, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) throws AntlrException {
+    protected void getQuery(TableFactory tableFactory, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<Statement> queryColumnList) throws AntlrException {
         if (Map.class.isAssignableFrom(colType) || colType == Object.class) {
             getQueryFromMap(tableFactory, tableScanInfoMap, queryColumnInfoList, queryColumnList);
         } else {
@@ -83,7 +83,7 @@ public class StarInvoker extends AbstractInvoker {
         }
     }
 
-    protected void getQueryFromMap(TableFactory tableFactory, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) {
+    protected void getQueryFromMap(TableFactory tableFactory, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<Statement> queryColumnList) {
         Set<String> set = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getColumn()).collect(Collectors.toSet());
         LowHashSet columnSet = new LowHashSet(set);
         Set<String> aliasSet = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getAlias()).collect(Collectors.toSet());
@@ -97,16 +97,16 @@ public class StarInvoker extends AbstractInvoker {
                 throw new DreamRunTimeException("TableFactory不存在表" + table);
             }
             Collection<ColumnInfo> columnInfoList = tableInfo.getColumnInfoList();
-            List<String> columnList = columnInfoList.stream()
+            List<Statement> columnList = columnInfoList.stream()
                     .filter(columnInfo -> !columnSet.contains(columnInfo.getColumn())
                             && !fieldSet.contains(columnInfo.getName()))
-                    .map(columnInfo -> alias + "." + columnInfo.getColumn())
+                    .map(columnInfo -> AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())))
                     .collect(Collectors.toList());
             queryColumnList.addAll(columnList);
         }
     }
 
-    protected void getQueryFromBean(TableFactory tableFactory, String table, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<String> queryColumnList) throws AntlrException {
+    protected void getQueryFromBean(TableFactory tableFactory, String table, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<Statement> queryColumnList) throws AntlrException {
         TableInfo rootTableInfo = null;
         String alias = null;
         if (!ObjectUtil.isNull(table)) {
@@ -143,7 +143,7 @@ public class StarInvoker extends AbstractInvoker {
                                         }
                                     }
                                     if (add) {
-                                        queryColumnList.add(SystemUtil.transfer(alias) + "." + SystemUtil.transfer(columnInfo.getColumn()));
+                                        queryColumnList.add(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())));
                                         break;
                                     }
                                 }
@@ -166,7 +166,7 @@ public class StarInvoker extends AbstractInvoker {
                                 }
                             }
                             if (add) {
-                                queryColumnList.add(SystemUtil.transfer(alias) + "." + SystemUtil.transfer(columnInfo.getColumn()));
+                                queryColumnList.add(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())));
                             }
                         }
                     } else {

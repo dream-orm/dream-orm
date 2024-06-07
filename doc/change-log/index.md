@@ -4,6 +4,7 @@
 
 - 优化：SQLserver分页，根据需要自动增加order by
 - 优化：支持SQLserver2008分页
+- 修复：解决@*翻译
 
 ## v1.3.1
 
