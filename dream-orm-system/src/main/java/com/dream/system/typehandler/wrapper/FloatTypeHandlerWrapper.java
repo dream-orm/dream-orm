@@ -23,6 +23,10 @@ public class FloatTypeHandlerWrapper implements TypeHandlerWrapper {
                 TypeUtil.hash(Float.class, Types.REAL),
                 TypeUtil.hash(float.class, Types.NUMERIC),
                 TypeUtil.hash(Float.class, Types.NUMERIC),
+                TypeUtil.hash(float.class, Types.DOUBLE),
+                TypeUtil.hash(Float.class, Types.DOUBLE),
+                TypeUtil.hash(float.class, Types.DECIMAL),
+                TypeUtil.hash(Float.class, Types.DECIMAL),
                 TypeUtil.hash(float.class, Types.NULL),
                 TypeUtil.hash(Float.class, Types.NULL),
         };
