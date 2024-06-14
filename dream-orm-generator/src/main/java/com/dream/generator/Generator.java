@@ -109,25 +109,25 @@ public class Generator {
                         dataModel.put("serviceImplName", getName(serviceImplClassName));
                     }
                     if (tableClassName != null && !tableClassName.isEmpty()) {
-                        generate(dataModel, generatorHandler.tableTemplate(), generatorHandler.sourceDir() + "\\" + tableClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.tableTemplate(), generatorHandler.sourceDir() + File.separator + tableClassName.replace(".", File.separator) + ".java");
                     }
                     if (boClassName != null && !boClassName.isEmpty()) {
-                        generate(dataModel, generatorHandler.boTemplate(), generatorHandler.sourceDir() + "\\" + boClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.boTemplate(), generatorHandler.sourceDir() + File.separator + boClassName.replace(".", File.separator) + ".java");
                     }
                     if (voClassName != null && !voClassName.isEmpty()) {
-                        generate(dataModel, generatorHandler.voTemplate(), generatorHandler.sourceDir() + "\\" + voClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.voTemplate(), generatorHandler.sourceDir() + File.separator + voClassName.replace(".", File.separator) + ".java");
                     }
                     if (dtoClassName != null && !dtoClassName.isEmpty()) {
-                        generate(dataModel, generatorHandler.dtoTemplate(), generatorHandler.sourceDir() + "\\" + dtoClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.dtoTemplate(), generatorHandler.sourceDir() + File.separator + dtoClassName.replace(".", File.separator) + ".java");
                     }
                     if (serviceClassName != null && !serviceClassName.isEmpty()) {
-                        generate(dataModel, generatorHandler.serviceTemplate(), generatorHandler.sourceDir() + "\\" + serviceClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.serviceTemplate(), generatorHandler.sourceDir() + File.separator + serviceClassName.replace(".", File.separator) + ".java");
                     }
                     if (serviceImplClassName != null && !serviceImplClassName.isEmpty()) {
-                        generate(dataModel, generatorHandler.serviceImplTemplate(), generatorHandler.sourceDir() + "\\" + serviceImplClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.serviceImplTemplate(), generatorHandler.sourceDir() + File.separator + serviceImplClassName.replace(".", File.separator) + ".java");
                     }
                     if (controllerClassName != null && !controllerClassName.isEmpty()) {
-                        generate(dataModel, generatorHandler.controllerTemplate(), generatorHandler.sourceDir() + "\\" + controllerClassName.replace(".", "\\") + ".java");
+                        generate(dataModel, generatorHandler.controllerTemplate(), generatorHandler.sourceDir() + File.separator + controllerClassName.replace(".", File.separator) + ".java");
                     }
                 }
             }

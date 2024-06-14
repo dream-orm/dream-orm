@@ -4,12 +4,14 @@ import com.dream.generator.AbstractGeneratorHandler;
 import com.dream.generator.Generator;
 import com.zaxxer.hikari.HikariDataSource;
 
+import java.io.File;
+
 public class HelloWordGeneratorTest {
     public static void main(String[] args) {
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl("jdbc:mysql://192.168.0.242/sooth?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai");
+        dataSource.setJdbcUrl("jdbc:mysql://127.0.0.1/sooth?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai");
         dataSource.setUsername("root");
-        dataSource.setPassword("BMW#Halu@1234%");
+        dataSource.setPassword("moxa@sooth");
         new Generator(dataSource, new GeneratorHandlerImpl()).generate();
     }
 
@@ -17,7 +19,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         protected String basePackage() {
-            return "com.sooth.module.gpt.chat";
+            return "com.sooth.module.gpt.session";
         }
 
         @Override
@@ -27,12 +29,12 @@ public class HelloWordGeneratorTest {
 
         @Override
         public String sourceDir() {
-            return "D:\\projects\\dream-project\\dream-orm\\dream-orm-hello-world\\dream-orm-hello-world-generator\\src\\main\\java";
+            return "/Users/moxa/Desktop/Projects/dream-orm/dream-orm-hello-world/dream-orm-hello-world-generator/src/main/java";
         }
 
         @Override
         public boolean support(String table) {
-            return table.contains("llm");
+            return table.contains("session");
         }
     }
 }
