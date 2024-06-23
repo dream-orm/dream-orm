@@ -21,8 +21,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class UpdateMapper extends WrapMapper {
-    private final int CODE = 2;
-
 
     public UpdateMapper(Session session) {
         super(session);
@@ -62,6 +60,7 @@ public abstract class UpdateMapper extends WrapMapper {
 
     @Override
     protected boolean accept(WrapType wrapType) {
+        final int CODE = 2;
         return (CODE & wrapType.getCode()) > 0;
     }
 

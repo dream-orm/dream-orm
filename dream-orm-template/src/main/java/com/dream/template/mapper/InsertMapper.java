@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InsertMapper extends WrapMapper {
-    private final int CODE = 1;
     protected SequenceWrapper sequence;
 
     public InsertMapper(Session session, SequenceWrapper sequence) {
@@ -108,6 +107,7 @@ public class InsertMapper extends WrapMapper {
 
     @Override
     protected boolean accept(WrapType wrapType) {
+        final int CODE = 1;
         return (CODE & wrapType.getCode()) > 0;
     }
 
