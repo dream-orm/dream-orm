@@ -1,6 +1,7 @@
 package com.dream.helloworld.h2;
 
 import com.dream.antlr.sql.ToClickHouse;
+import com.dream.antlr.sql.ToMySQL;
 import com.dream.flex.def.InsertDef;
 import com.dream.helloworld.h2.table.Account;
 import com.dream.struct.factory.DefaultStructFactory;
@@ -20,7 +21,7 @@ import static com.dream.helloworld.h2.def.AccountDef.account;
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldFlexInsertTest {
 
-    DefaultStructFactory dialectFactory = new DefaultStructFactory(new ToClickHouse());
+    DefaultStructFactory dialectFactory = new DefaultStructFactory(new ToMySQL());
 
 
     /**

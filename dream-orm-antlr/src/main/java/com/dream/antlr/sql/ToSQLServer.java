@@ -14,15 +14,15 @@ public class ToSQLServer extends ToPubSQL {
     @Override
     protected String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         LimitStatement limitStatement = statement.getLimitStatement();
-        if(limitStatement!=null){
+        if (limitStatement != null) {
             OrderStatement orderStatement = statement.getOrderStatement();
-            if(orderStatement==null){
-                orderStatement=new OrderStatement();
+            if (orderStatement == null) {
+                orderStatement = new OrderStatement();
                 orderStatement.setStatement(new SymbolStatement.LetterStatement("(select 0)"));
                 statement.setOrderStatement(orderStatement);
             }
         }
-        return super.toString(statement,assist,invokerList);
+        return super.toString(statement, assist, invokerList);
     }
 
     @Override

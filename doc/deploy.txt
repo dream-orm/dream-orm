@@ -1,0 +1,2 @@
+gpg --keyserver hkp://keyserver.ubuntu.com:11371 --send-keys XXX
+gpg --keyserver hkp://keyserver.ubuntu.com:11371 --recv-keys XXX

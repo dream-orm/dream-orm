@@ -73,10 +73,9 @@ public class DataAuditListener implements Listener {
                     }
                 }
             }
-        }
-        else if(Command.INSERT==mappedStatement.getCommand()){
+        } else if (Command.INSERT == mappedStatement.getCommand()) {
 
-        }else if(Command.DELETE==mappedStatement.getCommand()){
+        } else if (Command.DELETE == mappedStatement.getCommand()) {
             Set<String> tableSet = mappedStatement.getTableSet();
             String table = tableSet.toArray(new String[1])[0];
             TableFactory tableFactory = mappedStatement.getConfiguration().getTableFactory();

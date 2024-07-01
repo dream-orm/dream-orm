@@ -2,6 +2,7 @@ package com.dream.helloworld.h2;
 
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToClickHouse;
+import com.dream.antlr.sql.ToMySQL;
 import com.dream.flex.def.CaseColumnDef;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.ConditionDef;
@@ -22,7 +23,7 @@ import static com.dream.helloworld.h2.def.AccountDef.account;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldFlexQueryTest {
-    DefaultStructFactory structFactory = new DefaultStructFactory(new ToClickHouse());
+    DefaultStructFactory structFactory = new DefaultStructFactory(new ToMySQL());
 
     /**
      * 测试select多个字段

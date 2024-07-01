@@ -1,6 +1,7 @@
 package com.dream.helloworld.h2;
 
 import com.dream.antlr.sql.ToClickHouse;
+import com.dream.antlr.sql.ToMySQL;
 import com.dream.flex.def.DeleteDef;
 import com.dream.struct.factory.DefaultStructFactory;
 import com.dream.system.config.MappedStatement;
@@ -16,7 +17,7 @@ import static com.dream.helloworld.h2.def.AccountDef.account;
 @SpringBootTest(classes = HelloWorldApplication.class)
 public class HelloWorldFlexDeleteTest {
 
-    DefaultStructFactory dialectFactory = new DefaultStructFactory(new ToClickHouse());
+    DefaultStructFactory dialectFactory = new DefaultStructFactory(new ToMySQL());
 
 
     @Test
