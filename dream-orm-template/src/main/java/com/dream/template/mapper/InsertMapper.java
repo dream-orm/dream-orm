@@ -45,7 +45,7 @@ public class InsertMapper extends WrapMapper {
         if (primKeys != null && !primKeys.isEmpty()) {
             for (ColumnInfo prim : primKeys) {
                 String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, prim.getName());
-                columnList.add(SystemUtil.transfer(prim.getColumn()));
+                columnList.add(SystemUtil.key(prim.getColumn()));
                 valueList.add(invokerSQL);
             }
         }
@@ -57,13 +57,13 @@ public class InsertMapper extends WrapMapper {
                     String column = columnInfo.getColumn();
                     String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName());
                     if (!columnInfo.isPrimary()) {
-                        columnList.add(SystemUtil.transfer(column));
+                        columnList.add(SystemUtil.key(column));
                         valueList.add(invokerSQL);
                     }
                 }
             }
         }
-        String sql = "insert into " + SystemUtil.transfer(table) + "(" + String.join(",", columnList) + ")values(" + String.join(",", valueList) + ")";
+        String sql = "insert into " + SystemUtil.key(table) + "(" + String.join(",", columnList) + ")values(" + String.join(",", valueList) + ")";
         return getMethodInfo(configuration, tableInfo, sql);
     }
 

@@ -99,11 +99,11 @@ public class SystemUtil {
         return cacheKey;
     }
 
-    public static String transfer(String column) {
+    public static String key(String column) {
         return "`" + column + "`";
     }
 
-    public static String transfer(String column, ToSQL toSQL) {
+    public static String key(String column, ToSQL toSQL) {
         try {
             return toSQL.toStr(new SymbolStatement.SingleMarkStatement(column), null, null);
         } catch (AntlrException e) {

@@ -9,6 +9,6 @@ public class EqCondition implements Condition {
 
     @Override
     public String getCondition(String table, String column, String field) {
-        return SystemUtil.transfer(table) + "." + SystemUtil.transfer(column) + "=" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, field);
+        return SystemUtil.key(table) + "." + SystemUtil.key(column) + "=" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, field);
     }
 }

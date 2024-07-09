@@ -4,8 +4,6 @@ import com.dream.generator.AbstractGeneratorHandler;
 import com.dream.generator.Generator;
 import com.zaxxer.hikari.HikariDataSource;
 
-import java.io.File;
-
 public class HelloWordGeneratorTest {
     public static void main(String[] args) {
         HikariDataSource dataSource = new HikariDataSource();

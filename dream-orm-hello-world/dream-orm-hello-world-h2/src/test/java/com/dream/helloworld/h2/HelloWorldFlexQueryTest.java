@@ -1,7 +1,6 @@
 package com.dream.helloworld.h2;
 
 import com.dream.antlr.smt.Statement;
-import com.dream.antlr.sql.ToClickHouse;
 import com.dream.antlr.sql.ToMySQL;
 import com.dream.flex.def.CaseColumnDef;
 import com.dream.flex.def.ColumnDef;

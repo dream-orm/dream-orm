@@ -96,6 +96,14 @@ public class HelloWorldMapperTest {
         accountMapper.insert(accountView);
     }
 
+    @Test
+    public void testInvokerInsert() {
+        AccountView accountView = new AccountView();
+        accountView.setId(301);
+        accountView.setName("accountName");
+        accountMapper.invokerInsert(accountView);
+    }
+
     /**
      * 测试删除
      */

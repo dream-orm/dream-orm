@@ -1,6 +1,5 @@
 package com.dream.helloworld.h2;
 
-import com.dream.antlr.sql.ToClickHouse;
 import com.dream.antlr.sql.ToMySQL;
 import com.dream.flex.def.InsertDef;
 import com.dream.helloworld.h2.table.Account;

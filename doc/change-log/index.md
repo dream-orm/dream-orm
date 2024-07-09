@@ -1,5 +1,9 @@
 # dream-orm 升级日志
 
+## v1.3.3
+
+- 新增：支持@insert函数
+
 ## v1.3.2
 
 - 优化：SQLserver分页，根据需要自动增加order by

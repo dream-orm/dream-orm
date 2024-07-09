@@ -24,7 +24,7 @@ public abstract class SelectMapper extends ValidateMapper {
     @Override
     protected MethodInfo getValidateMethodInfo(Configuration configuration, TableInfo tableInfo, Class type, Object arg) {
         String sql = "select " + getSelectColumn(type) + " from " +
-                SystemUtil.transfer(SystemUtil.getTableName(type)) + " " + getOther(configuration, tableInfo, type, arg);
+                SystemUtil.key(SystemUtil.getTableName(type)) + " " + getOther(configuration, tableInfo, type, arg);
         return new MethodInfo()
                 .setConfiguration(configuration)
                 .setRowType(getRowType())

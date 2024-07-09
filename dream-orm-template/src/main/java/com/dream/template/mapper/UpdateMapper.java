@@ -42,7 +42,7 @@ public abstract class UpdateMapper extends WrapMapper {
                     String name = field.getName();
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
-                        setList.add(SystemUtil.transfer(columnInfo.getColumn()) + "=" +
+                        setList.add(SystemUtil.key(columnInfo.getColumn()) + "=" +
                                 AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName()));
                     }
                 }
@@ -50,7 +50,7 @@ public abstract class UpdateMapper extends WrapMapper {
         }
         String updateParam = getUpdateParam(setList);
         String other = getOther(configuration, tableInfo, arg);
-        String sql = "update " + SystemUtil.transfer(table) + " set " + updateParam + " " + other;
+        String sql = "update " + SystemUtil.key(table) + " set " + updateParam + " " + other;
         return new MethodInfo()
                 .setConfiguration(configuration)
                 .setRowType(NonCollection.class)

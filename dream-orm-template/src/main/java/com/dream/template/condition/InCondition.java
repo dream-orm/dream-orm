@@ -9,6 +9,6 @@ public class InCondition implements Condition {
 
     @Override
     public String getCondition(String table, String column, String field) {
-        return SystemUtil.transfer(table) + "." + SystemUtil.transfer(column) + " in (" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, field) + ")";
+        return SystemUtil.key(table) + "." + SystemUtil.key(column) + " in (" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, field) + ")";
     }
 }

@@ -8,6 +8,6 @@ import com.dream.system.util.SystemUtil;
 public class ContainsCondition implements Condition {
     @Override
     public String getCondition(String table, String column, String field) {
-        return SystemUtil.transfer(table) + "." + SystemUtil.transfer(column) + " like concat('%'," + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, field) + ",'%')";
+        return SystemUtil.key(table) + "." + SystemUtil.key(column) + " like concat('%'," + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, field) + ",'%')";
     }
 }

@@ -33,6 +33,9 @@ public interface AccountMapper {
     @Sql("insert into account(id,name)values(:account.id,:account.name)")
     int insert(@Param("account") AccountView accountView);
 
+    @Sql("@insert(account)")
+    int invokerInsert(@Param("account") AccountView accountView);
+
     @Sql("delete from account where id=:id")
     int deleteById(@Param("id") long id);
 
