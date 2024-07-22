@@ -123,7 +123,7 @@ public class StarInvoker extends AbstractInvoker {
         List<Field> fieldList = ReflectUtil.findField(colType);
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
-                if (!ignore(field)) {
+                if (!SystemUtil.ignoreField(field)) {
                     String fieldName = field.getName();
                     Type genericType = field.getGenericType();
                     String fieldTable = getTableName(ReflectUtil.getColType(genericType));
@@ -175,10 +175,6 @@ public class StarInvoker extends AbstractInvoker {
                 }
             }
         }
-    }
-
-    protected boolean ignore(Field field) {
-        return SystemUtil.ignoreField(field);
     }
 
     protected String getTableName(Class<?> type) {

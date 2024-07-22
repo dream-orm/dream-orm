@@ -228,11 +228,15 @@ public class DefaultJdbcMapper implements JdbcMapper {
             ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
             if (columnInfo != null) {
                 columnList.add(columnInfo);
+                TypeHandler typeHandler = columnInfo.getTypeHandler();
                 try {
-                    typeHandlerList.add(typeHandlerFactory.getTypeHandler(field.getType(), columnInfo.getJdbcType()));
+                    if (typeHandler == null) {
+                        typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), columnInfo.getJdbcType());
+                    }
                 } catch (TypeHandlerNotFoundException e) {
                     throw new DreamRunTimeException(e);
                 }
+                typeHandlerList.add(typeHandler);
             }
         }
         String[] marks = new String[columnList.size()];
@@ -278,19 +282,27 @@ public class DefaultJdbcMapper implements JdbcMapper {
             if (columnInfo != null) {
                 if (!fieldName.equals(primColumn.getName())) {
                     columnList.add(columnInfo);
+                    TypeHandler typeHandler = columnInfo.getTypeHandler();
                     try {
-                        typeHandlerList.add(typeHandlerFactory.getTypeHandler(field.getType(), columnInfo.getJdbcType()));
+                        if (typeHandler == null) {
+                            typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), columnInfo.getJdbcType());
+                        }
                     } catch (TypeHandlerNotFoundException e) {
                         throw new DreamRunTimeException(e);
                     }
+                    typeHandlerList.add(typeHandler);
                 }
             }
         }
+        TypeHandler typeHandler = primColumn.getTypeHandler();
         try {
-            typeHandlerList.add(typeHandlerFactory.getTypeHandler(primColumn.getField().getType(), primColumn.getJdbcType()));
+            if (typeHandler == null) {
+                typeHandler = typeHandlerFactory.getTypeHandler(primColumn.getField().getType(), primColumn.getJdbcType());
+            }
         } catch (TypeHandlerNotFoundException e) {
             throw new DreamRunTimeException(e);
         }
+        typeHandlerList.add(typeHandler);
         return batchExecute("update " + SystemUtil.key(tableName, toSQL) + " set " + columnList.stream().map(columnInfo -> SystemUtil.key(columnInfo.getColumn(), toSQL) + "=?").collect(Collectors.joining(",")) + " where " + primColumn.getColumn() + "=?", viewList, (ps, mappedStatement) -> {
             Object arg = mappedStatement.getArg();
             ObjectWrapper wrapper = ObjectWrapper.wrapper(arg);

@@ -1,6 +1,9 @@
 package com.dream.jdbc.row;
 
 import com.dream.system.config.Configuration;
+import com.dream.system.table.ColumnInfo;
+import com.dream.system.table.TableInfo;
+import com.dream.system.table.factory.TableFactory;
 import com.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.dream.system.typehandler.handler.TypeHandler;
@@ -32,22 +35,34 @@ public class BeanPropertyRowMapping<T> implements RowMapping<T> {
         int columnCount = metaData.getColumnCount();
         columnList = new ArrayList<>(columnCount);
         TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
+        TableFactory tableFactory = configuration.getTableFactory();
         for (int i = 0; i < columnCount; i++) {
             int jdbcType = metaData.getColumnType(i + 1);
             String columnLabel = metaData.getColumnLabel(i + 1);
-            Method method = methodMap.get(columnLabel);
-            if (method == null) {
-                method = methodMap.get(SystemUtil.underlineToCamel(columnLabel));
+            String tableName = metaData.getTableName(i + 1);
+            TableInfo tableInfo = tableFactory.getTableInfo(tableName);
+            Method method;
+            TypeHandler typeHandler = null;
+            if (tableInfo != null) {
+                ColumnInfo columnInfo = tableInfo.getColumnInfo(columnLabel);
+                method = methodMap.get(columnInfo.getName());
+                typeHandler = columnInfo.getTypeHandler();
+            } else {
+                method = methodMap.get(columnLabel);
                 if (method == null) {
-                    throw new DreamRunTimeException("属性" + columnLabel + "，没有setter方法");
+                    method = methodMap.get(SystemUtil.underlineToCamel(columnLabel));
+                    if (method == null) {
+                        throw new DreamRunTimeException("属性" + columnLabel + "，没有setter方法");
+                    }
                 }
             }
             Class<?>[] parameterTypes = method.getParameterTypes();
-            TypeHandler typeHandler;
-            try {
-                typeHandler = typeHandlerFactory.getTypeHandler(parameterTypes[0], jdbcType);
-            } catch (TypeHandlerNotFoundException e) {
-                throw new DreamRunTimeException(e);
+            if (typeHandler == null) {
+                try {
+                    typeHandler = typeHandlerFactory.getTypeHandler(parameterTypes[0], jdbcType);
+                } catch (TypeHandlerNotFoundException e) {
+                    throw new DreamRunTimeException(e);
+                }
             }
             columnList.add(new Column(i + 1, jdbcType, columnLabel, typeHandler, method));
         }

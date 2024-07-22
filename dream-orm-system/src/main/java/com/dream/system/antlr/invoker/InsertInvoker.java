@@ -28,18 +28,18 @@ public class InsertInvoker extends AbstractInvoker {
         ObjectWrapper wrapper = assist.getCustom(ObjectWrapper.class);
         String property = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
         Object obj = wrapper.get(property);
-        if(obj == null) {
+        if (obj == null) {
             throw new DreamRunTimeException("插入对象不能为空");
         }
         Configuration configuration = assist.getCustom(Configuration.class);
         List<Field> fieldList = ReflectUtil.findField(obj.getClass());
         String tableName = SystemUtil.getTableName(obj.getClass());
-        if(ObjectUtil.isNull(tableName)){
+        if (ObjectUtil.isNull(tableName)) {
             throw new DreamRunTimeException(obj.getClass().getName() + "未绑定表");
         }
         TableFactory tableFactory = configuration.getTableFactory();
         TableInfo tableInfo = tableFactory.getTableInfo(tableName);
-        if(tableInfo == null) {
+        if (tableInfo == null) {
             throw new DreamRunTimeException("表'" + tableName + "'未在TableFactory注册");
         }
         InsertStatement insertStatement = new InsertStatement();

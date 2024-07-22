@@ -3,6 +3,7 @@
 ## v1.3.3
 
 - 新增：支持@insert函数
+- 优化：jdbcMapper类型选择器支持根据@Column注解判断
 
 ## v1.3.2
 

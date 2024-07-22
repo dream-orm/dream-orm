@@ -15,6 +15,7 @@ import com.dream.util.reflect.ReflectUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -91,6 +92,11 @@ public class DefaultTableFactory implements TableFactory {
     @Override
     public TableInfo getTableInfo(String table) {
         return tableInfoMap.get(table);
+    }
+
+    @Override
+    public Collection<TableInfo> tableInfos() {
+        return tableInfoMap.values();
     }
 
 }

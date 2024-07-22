@@ -13,6 +13,7 @@ import com.dream.util.common.ObjectWrapper;
 import com.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public abstract class WrapMapper extends ValidateMapper {
@@ -28,16 +29,19 @@ public abstract class WrapMapper extends ValidateMapper {
         List<Field> acceptList = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
-                if (field.isAnnotationPresent(Wrap.class)) {
-                    Wrap wrapAnnotation = field.getDeclaredAnnotation(Wrap.class);
-                    WrapType wrapType = wrapAnnotation.type();
-                    if (accept(wrapType)) {
+                int modifiers = field.getModifiers();
+                if (!Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)) {
+                    if (field.isAnnotationPresent(Wrap.class)) {
+                        Wrap wrapAnnotation = field.getDeclaredAnnotation(Wrap.class);
+                        WrapType wrapType = wrapAnnotation.type();
+                        if (accept(wrapType)) {
+                            acceptList.add(field);
+                            Wrapper wrapper = ReflectUtil.create(wrapAnnotation.value());
+                            wrapObjectMap.put(field.getName(), wrapper);
+                        }
+                    } else {
                         acceptList.add(field);
-                        Wrapper wrapper = ReflectUtil.create(wrapAnnotation.value());
-                        wrapObjectMap.put(field.getName(), wrapper);
                     }
-                } else {
-                    acceptList.add(field);
                 }
             }
         }

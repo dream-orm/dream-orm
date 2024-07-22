@@ -225,7 +225,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             String property = builder.getProperty();
             boolean lazyLoad = false;
             for (Field field : fieldList) {
-                if (!ignore(field)) {
+                if (!SystemUtil.ignoreField(field)) {
                     String fieldName = field.getName();
                     boolean mappingField = !lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(builder.getTable()) || curTableName.equalsIgnoreCase(builder.getTable()));
                     if (mappingField) {
@@ -275,10 +275,6 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             }
         }
         return false;
-    }
-
-    protected boolean ignore(Field field) {
-        return SystemUtil.ignoreField(field);
     }
 
     protected String getTableName(Class<?> type) {
