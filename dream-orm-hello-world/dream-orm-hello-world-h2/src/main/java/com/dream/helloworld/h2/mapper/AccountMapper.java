@@ -8,6 +8,7 @@ import com.dream.system.annotation.Sql;
 import com.dream.system.config.Page;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface AccountMapper {
@@ -35,6 +36,9 @@ public interface AccountMapper {
 
     @Sql("@insert(account)")
     int invokerInsert(@Param("account") AccountView accountView);
+
+    @Sql("@insertMap(account,map)")
+    int invokerInsertMap(@Param("map") Map<String, Object> map);
 
     @Sql("delete from account where id=:id")
     int deleteById(@Param("id") long id);

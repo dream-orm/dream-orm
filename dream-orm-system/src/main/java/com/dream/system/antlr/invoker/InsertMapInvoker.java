@@ -6,52 +6,57 @@ import com.dream.antlr.invoker.AbstractInvoker;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InsertStatement;
 import com.dream.antlr.smt.InvokerStatement;
+import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.antlr.smt.Statement;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.system.config.Configuration;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
 import com.dream.system.util.SystemUtil;
-import com.dream.util.common.ObjectUtil;
 import com.dream.util.common.ObjectWrapper;
 import com.dream.util.exception.DreamRunTimeException;
-import com.dream.util.reflect.ReflectUtil;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public class InsertInvoker extends AbstractInvoker {
-    public static final String FUNCTION = "insert";
+public class InsertMapInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "insertMap";
 
     @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
+        Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
+        if (columnList == null || columnList.length != 2) {
+            throw new DreamRunTimeException("@" + FUNCTION + "参数个数必须为2");
+        }
+        String tableName = toSQL.toStr(columnList[0], assist, invokerList);
+        String property = toSQL.toStr(columnList[1], assist, invokerList);
         ObjectWrapper wrapper = assist.getCustom(ObjectWrapper.class);
-        String property = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
         Object obj = wrapper.get(property);
         if (obj == null) {
             throw new DreamRunTimeException("插入对象不能为空");
+        } else if (!(obj instanceof Map)) {
+            throw new DreamRunTimeException("插入对象必须为Map");
         }
+        Map<String, Object> objMap = (Map<String, Object>) obj;
         Configuration configuration = assist.getCustom(Configuration.class);
-        List<Field> fieldList = ReflectUtil.findField(obj.getClass());
-        String tableName = SystemUtil.getTableName(obj.getClass());
-        if (ObjectUtil.isNull(tableName)) {
-            throw new DreamRunTimeException(obj.getClass().getName() + "未绑定表");
-        }
         TableFactory tableFactory = configuration.getTableFactory();
         TableInfo tableInfo = tableFactory.getTableInfo(tableName);
-        if (tableInfo == null) {
-            throw new DreamRunTimeException("表'" + tableName + "'未在TableFactory注册");
-        }
         List<String> columns = new ArrayList<>();
         List<String> columnRefs = new ArrayList<>();
-        for (Field field : fieldList) {
-            String name = field.getName();
-            ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
-            if (columnInfo != null) {
-                columns.add(columnInfo.getColumn());
-                columnRefs.add(columnInfo.getName());
+        Set<String> columnSet = objMap.keySet();
+        for (String column : columnSet) {
+            columnRefs.add(column);
+            if (tableInfo != null) {
+                ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
+                if (columnInfo == null) {
+                    throw new DreamRunTimeException("表" + tableName + "不存在字段" + column);
+                }
+                column = columnInfo.getColumn();
             }
+            columns.add(column);
         }
         InsertStatement insertStatement = SystemUtil.insertStatement(tableName, columns, property, columnRefs);
         String sql = toSQL.toStr(insertStatement, assist, invokerList);

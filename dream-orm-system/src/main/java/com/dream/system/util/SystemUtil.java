@@ -2,14 +2,17 @@ package com.dream.system.util;
 
 
 import com.dream.antlr.exception.AntlrException;
-import com.dream.antlr.smt.SymbolStatement;
+import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToSQL;
+import com.dream.antlr.util.AntlrUtil;
 import com.dream.system.annotation.Ignore;
+import com.dream.system.antlr.invoker.MarkInvoker;
 import com.dream.system.cache.CacheKey;
 import com.dream.util.exception.DreamRunTimeException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.List;
 
 public class SystemUtil {
     private static TableUtil tableUtil = new TableUtil();
@@ -109,5 +112,29 @@ public class SystemUtil {
         } catch (AntlrException e) {
             throw new DreamRunTimeException(e.getMessage());
         }
+    }
+
+    public static InsertStatement insertStatement(String table, List<String> columns, String ref, List<String> columnRefs) {
+        InsertStatement insertStatement = new InsertStatement();
+        insertStatement.setTable(new SymbolStatement.SingleMarkStatement(table));
+        ListColumnStatement columnStatements = new ListColumnStatement();
+        ListColumnStatement valueStatements = new ListColumnStatement();
+        for (int i = 0; i < columns.size(); i++) {
+            columnStatements.add(new SymbolStatement.SingleMarkStatement(columns.get(i)));
+            InvokerStatement markInvokerStatement = new InvokerStatement();
+            markInvokerStatement.setFunction(MarkInvoker.FUNCTION);
+            markInvokerStatement.setNamespace(MarkInvoker.DEFAULT_NAMESPACE);
+            if (ref != null && !ref.isEmpty()) {
+                markInvokerStatement.setParamStatement(AntlrUtil.listColumnStatement(".", ref, columnRefs.get(i)));
+            } else {
+                markInvokerStatement.setParamStatement(AntlrUtil.listColumnStatement(".", columnRefs.get(i)));
+            }
+            valueStatements.add(markInvokerStatement);
+        }
+        InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
+        valuesStatement.setStatement(new BraceStatement(valueStatements));
+        insertStatement.setColumns(new BraceStatement(columnStatements));
+        insertStatement.setValues(valuesStatement);
+        return insertStatement;
     }
 }
