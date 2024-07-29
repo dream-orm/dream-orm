@@ -48,4 +48,7 @@ public interface AccountMapper {
 
     @Sql("delete from account where id in (@foreach(accounts,:item.id))")
     int deleteByViews(@Param("accounts") List<AccountView> accountViews);
+
+    @Sql("insert into account(id,name)values @foreach(list,(:item.id,:item.name))")
+    void insertMany(@Param("list") List<AccountView> accountViews);
 }

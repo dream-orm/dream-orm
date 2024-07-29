@@ -93,25 +93,37 @@ public class InsertExpr extends HelperExpr {
         return expr();
     }
 
-    public static class ValuesExpr extends SqlExpr {
+    public static class ValuesExpr extends HelperExpr {
         private final InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
 
         public ValuesExpr(ExprReader exprReader) {
-            super(exprReader);
+            this(exprReader, () -> new ListColumnExpr(exprReader, () -> new BraceExpr(exprReader), new ExprInfo(ExprType.COMMA, ",")));
+        }
+
+        public ValuesExpr(ExprReader exprReader, Helper helper) {
+            super(exprReader, helper);
             setExprTypes(ExprType.VALUES);
         }
 
         @Override
         protected Statement exprValues(ExprInfo exprInfo) throws AntlrException {
             push();
-            setExprTypes(ExprType.LBRACE);
+            setExprTypes(ExprType.INVOKER, ExprType.HELP);
             return expr();
         }
 
         @Override
-        protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
-            BraceExpr braceExpr = new BraceExpr(exprReader);
-            valuesStatement.setStatement(braceExpr.expr());
+        protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
+            InvokerExpr invokerExpr = new InvokerExpr(exprReader);
+            Statement statement = invokerExpr.expr();
+            valuesStatement.setStatement(statement);
+            setExprTypes(ExprType.NIL);
+            return expr();
+        }
+
+        @Override
+        protected Statement exprHelp(Statement statement) throws AntlrException {
+            valuesStatement.setStatement(statement);
             setExprTypes(ExprType.NIL);
             return expr();
         }
@@ -120,5 +132,6 @@ public class InsertExpr extends HelperExpr {
         protected Statement nil() {
             return valuesStatement;
         }
+
     }
 }

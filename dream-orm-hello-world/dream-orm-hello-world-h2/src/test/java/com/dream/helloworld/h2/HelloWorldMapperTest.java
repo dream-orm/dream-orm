@@ -95,6 +95,18 @@ public class HelloWorldMapperTest {
     }
 
     @Test
+    public void testInsertMany() {
+        List<AccountView> accountViews = new ArrayList<>();
+        for(int i=0;i<10;i++){
+            AccountView accountView = new AccountView();
+            accountView.setId(400+i);
+            accountView.setName("accountName");
+            accountViews.add(accountView);
+        }
+        accountMapper.insertMany(accountViews);
+    }
+
+    @Test
     public void testInvokerInsert() {
         AccountView accountView = new AccountView();
         accountView.setId(301);
