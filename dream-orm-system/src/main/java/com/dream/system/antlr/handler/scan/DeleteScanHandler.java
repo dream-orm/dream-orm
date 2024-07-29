@@ -1,7 +1,6 @@
 package com.dream.system.antlr.handler.scan;
 
 import com.dream.antlr.config.Assist;
-import com.dream.antlr.config.Command;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.handler.AbstractHandler;
 import com.dream.antlr.smt.DeleteStatement;
@@ -18,7 +17,7 @@ public class DeleteScanHandler extends AbstractHandler {
 
     @Override
     protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
-        scanInfo.setCommand(Command.DELETE);
+        scanInfo.setCommand("DELETE");
         DeleteStatement deleteStatement = (DeleteStatement) statement;
         Statement table = deleteStatement.getTable();
         if (table instanceof SymbolStatement) {

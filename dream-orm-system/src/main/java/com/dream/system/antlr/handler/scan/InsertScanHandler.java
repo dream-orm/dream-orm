@@ -1,7 +1,6 @@
 package com.dream.system.antlr.handler.scan;
 
 import com.dream.antlr.config.Assist;
-import com.dream.antlr.config.Command;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.handler.AbstractHandler;
 import com.dream.antlr.smt.InsertStatement;
@@ -18,7 +17,7 @@ public class InsertScanHandler extends AbstractHandler {
 
     @Override
     protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
-        scanInfo.setCommand(Command.INSERT);
+        scanInfo.setCommand("INSERT");
         InsertStatement insertStatement = (InsertStatement) statement;
         Statement table = insertStatement.getTable();
         if (table instanceof SymbolStatement) {

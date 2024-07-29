@@ -1,7 +1,6 @@
 package com.dream.system.antlr.invoker;
 
 import com.dream.antlr.config.Assist;
-import com.dream.antlr.config.Command;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.handler.Handler;
 import com.dream.antlr.invoker.AbstractInvoker;
@@ -107,7 +106,7 @@ public class ScanInvoker extends AbstractInvoker {
         private final Map<String, TableScanInfo> tableScanInfoMap = new LowHashMap<>();
         private final Map<String, ParamScanInfo> paramScanInfoMap = new HashMap<>(4);
         private final List<InvokerStatement> invokerStatementList = new ArrayList<>();
-        private Command command = Command.NONE;
+        private String command = "NONE";
         private List<MarkInvoker.ParamInfo> paramInfoList;
         private String sql;
 
@@ -123,11 +122,11 @@ public class ScanInvoker extends AbstractInvoker {
             invokerStatementList.add(invokerStatement);
         }
 
-        public Command getCommand() {
+        public String getCommand() {
             return command;
         }
 
-        public void setCommand(Command command) {
+        public void setCommand(String command) {
             this.command = command;
         }
 

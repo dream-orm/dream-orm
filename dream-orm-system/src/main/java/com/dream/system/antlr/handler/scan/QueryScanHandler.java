@@ -1,7 +1,6 @@
 package com.dream.system.antlr.handler.scan;
 
 import com.dream.antlr.config.Assist;
-import com.dream.antlr.config.Command;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.handler.AbstractHandler;
 import com.dream.antlr.handler.Handler;
@@ -23,7 +22,7 @@ public class QueryScanHandler extends AbstractHandler {
 
     @Override
     protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
-        scanInfo.setCommand(Command.QUERY);
+        scanInfo.setCommand("QUERY");
         return super.handlerAfter(statement, assist, sql, life);
     }
 

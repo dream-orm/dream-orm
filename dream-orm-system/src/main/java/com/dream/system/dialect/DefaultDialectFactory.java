@@ -79,7 +79,7 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
         return new MappedStatement
                 .Builder()
                 .methodInfo(methodInfo)
-                .command(Command.valueOf(scanInfo.getCommand().name()))
+                .command(Command.valueOf(scanInfo.getCommand()))
                 .sql(sql)
                 .tableSet(scanInfo.getTableScanInfoMap().keySet())
                 .mappedParamList(mappedParamList)
