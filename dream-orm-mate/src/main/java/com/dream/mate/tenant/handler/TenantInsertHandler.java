@@ -32,8 +32,6 @@ public class TenantInsertHandler extends AbstractHandler {
                 ListColumnStatement paramListStatement = (ListColumnStatement) braceStatement.getStatement();
                 Statement[] paramColumnList = paramListStatement.getColumnList();
                 InsertStatement.ValuesStatement valuesStatement = (InsertStatement.ValuesStatement) values;
-                BraceStatement valuesBraceStatement = (BraceStatement) valuesStatement.getStatement();
-                ListColumnStatement valuesListStatement = (ListColumnStatement) valuesBraceStatement.getStatement();
                 int i = 0;
                 String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
                 for (; i < paramColumnList.length; i++) {
@@ -44,9 +42,15 @@ public class TenantInsertHandler extends AbstractHandler {
                     }
                 }
                 if (i == paramColumnList.length) {
-                    InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
-                    paramListStatement.add(new SymbolStatement.LetterStatement(tenantColumn));
-                    valuesListStatement.add(invokerStatement);
+                    ListColumnStatement listColumnStatement = (ListColumnStatement) valuesStatement.getStatement();
+                    Statement[] columnList = listColumnStatement.getColumnList();
+                    for (Statement columnStatement : columnList) {
+                        BraceStatement valuesBraceStatement = (BraceStatement) columnStatement;
+                        ListColumnStatement valuesListStatement = (ListColumnStatement) valuesBraceStatement.getStatement();
+                        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
+                        paramListStatement.add(new SymbolStatement.LetterStatement(tenantColumn));
+                        valuesListStatement.add(invokerStatement);
+                    }
                 }
             }
         }
