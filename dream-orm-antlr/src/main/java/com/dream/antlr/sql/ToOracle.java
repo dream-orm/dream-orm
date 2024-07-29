@@ -56,11 +56,11 @@ public class ToOracle extends ToPubSQL {
             if (valueParamstatement instanceof ListColumnStatement) {
                 Statement[] columnList = ((ListColumnStatement) valueParamstatement).getColumnList();
                 if (columnList.length > 1) {
-                    StringBuilder builder=new StringBuilder();
+                    StringBuilder builder = new StringBuilder();
                     for (Statement item : columnList) {
                         builder.append(" INTO ").append(table).append(column).append("VALUES").append(toStr(item, assist, invokerList));
                     }
-                    return "INSERT ALL" + builder+" SELECT 1 FROM DUAL";
+                    return "INSERT ALL" + builder + " SELECT 1 FROM DUAL";
                 }
             }
         }
