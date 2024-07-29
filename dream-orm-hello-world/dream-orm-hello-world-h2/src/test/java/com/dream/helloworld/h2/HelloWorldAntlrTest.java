@@ -139,6 +139,11 @@ public class HelloWorldAntlrTest {
     }
 
     @Test
+    public void testInsertMany() {
+        testSqlForMany("insert into dual(id,name)values(id,name),(id,name)");
+    }
+
+    @Test
     public void testInsertIgnore() {
         testSqlForMany("insert ignore into dual(id,name)values(id,name)");
     }

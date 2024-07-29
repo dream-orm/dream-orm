@@ -42,9 +42,29 @@ public class ToOracle extends ToPubSQL {
 
     @Override
     protected String toString(InsertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        Statement columns = statement.getColumns();
-        return "INSERT INTO " + toStr(statement.getTable(), assist, invokerList) + (columns != null ? toStr(columns, assist, invokerList) : " ") + toStr(statement.getValues(), assist, invokerList);
-
+        Statement tableStatement = statement.getTable();
+        Statement columnsStatement = statement.getColumns();
+        Statement valuesStatement = statement.getValues();
+        String table = toStr(tableStatement, assist, invokerList);
+        String column = toStr(columnsStatement, assist, invokerList);
+        String value = toStr(valuesStatement, assist, invokerList);
+        if ("".equals(column)) {
+            column = " ";
+        }
+        if (valuesStatement instanceof InsertStatement.ValuesStatement) {
+            Statement valueParamstatement = ((InsertStatement.ValuesStatement) valuesStatement).getStatement();
+            if (valueParamstatement instanceof ListColumnStatement) {
+                Statement[] columnList = ((ListColumnStatement) valueParamstatement).getColumnList();
+                if (columnList.length > 1) {
+                    StringBuilder builder=new StringBuilder();
+                    for (Statement item : columnList) {
+                        builder.append(" INTO ").append(table).append(column).append("VALUES").append(toStr(item, assist, invokerList));
+                    }
+                    return "INSERT ALL" + builder+" SELECT 1 FROM DUAL";
+                }
+            }
+        }
+        return "INSERT INTO " + table + column + value;
     }
 
     @Override
