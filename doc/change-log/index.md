@@ -4,7 +4,7 @@
 
 - 新增：支持@insert函数
 - 新增：支持@insertMap函数
-- 新增：支持insert into values多个
+- 新增：支持insert into values多个，并兼容oracle
 - 优化：jdbcMapper类型选择器支持根据@Column注解判断
 
 ## v1.3.2

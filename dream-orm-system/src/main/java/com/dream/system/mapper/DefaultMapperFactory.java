@@ -26,11 +26,25 @@ import java.util.*;
 
 
 public class DefaultMapperFactory implements MapperFactory {
-    protected Map<Method, MethodInfo> methodInfoMap = new HashMap<>(16);
+    protected Map<String, MethodInfo> methodInfoMap = new HashMap<>(16);
     protected Map<Class, Class[]> mapperTypeMap = new HashMap<>(8);
 
     @Override
-    public boolean addMapper(Configuration configuration, Class mapperClass) {
+    public void addMethodInfo(MethodInfo methodInfo) {
+        String id = methodInfo.getId();
+        if (this.methodInfoMap.containsKey(id)) {
+            throw new DreamRunTimeException(id + "已注入到Mapper");
+        }
+        this.methodInfoMap.put(id, methodInfo);
+    }
+
+    @Override
+    public MethodInfo getMethodInfo(String id) {
+        return methodInfoMap.get(id);
+    }
+
+    @Override
+    public boolean addMapper(Configuration configuration, Class<?> mapperClass) {
         if (!mapperTypeMap.containsKey(mapperClass) && isMapper(mapperClass)) {
             Map<String, MethodInfo> methodInfoMap = new HashMap<>(4);
             List<Method> methodList = ReflectUtil.findMethod(mapperClass);
@@ -51,7 +65,7 @@ public class DefaultMapperFactory implements MapperFactory {
                 if (ObjectUtil.isNull(methodInfo.getSql())) {
                     throw new DreamRunTimeException(methodInfo.getId() + "未绑定SQL");
                 }
-                this.methodInfoMap.put(methodInfo.getMethod(), methodInfo);
+                addMethodInfo(methodInfo);
             }
             this.mapperTypeMap.put(mapperClass, getAllInterface(mapperClass));
             return true;
@@ -61,7 +75,7 @@ public class DefaultMapperFactory implements MapperFactory {
     }
 
     protected MethodInfo createMethodInfo(Configuration configuration, Class mapperClass, Method method) {
-        ActionProvider actionProvider = null;
+        ActionProvider actionProvider;
         try {
             actionProvider = actionProvider(mapperClass, method);
         } catch (Exception e) {
@@ -82,7 +96,7 @@ public class DefaultMapperFactory implements MapperFactory {
         DestroyAction[] destroyActions = destroyActions(mapperClass, method, actionProvider);
         return new MethodInfo()
                 .setConfiguration(configuration)
-                .setId(method.getDeclaringClass().getName() + "." + method.getName())
+                .setId(getId(method))
                 .setRowType(rowType)
                 .setColType(colType)
                 .setMethodParamList(methodParamList)
@@ -300,7 +314,7 @@ public class DefaultMapperFactory implements MapperFactory {
             return null;
         }
         return (T) Proxy.newProxyInstance(type.getClassLoader(), typeList, (proxy, method, args) -> {
-            MethodInfo methodInfo = methodInfoMap.get(method);
+            MethodInfo methodInfo = methodInfoMap.get(getId(method));
             if (methodInfo != null) {
                 Map<String, Object> argMap = getArg(methodInfo, args);
                 return session.execute(methodInfo, argMap);
@@ -353,5 +367,9 @@ public class DefaultMapperFactory implements MapperFactory {
     @Override
     public Collection<Class> getMapperTypeList() {
         return mapperTypeMap.keySet();
+    }
+
+    protected String getId(Method method) {
+        return method.getDeclaringClass().getName() + "." + method.getName();
     }
 }

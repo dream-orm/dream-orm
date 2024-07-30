@@ -9,6 +9,7 @@ import com.dream.system.config.MappedStatement;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.core.session.Session;
 import com.dream.system.dialect.DialectFactory;
+import com.dream.system.mapper.MapperFactory;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
@@ -23,21 +24,22 @@ import java.util.Map;
 
 
 public abstract class AbstractMapper {
+    protected final MapperFactory mapperFactory;
     protected Session session;
-    protected Map<String, MethodInfo> methodInfoMap = new HashMap<>(4);
-    private DialectFactory dialectFactory;
+    protected DialectFactory dialectFactory;
 
     public AbstractMapper(Session session) {
         this.session = session;
-        this.dialectFactory = session.getConfiguration().getDialectFactory();
+        Configuration configuration = session.getConfiguration();
+        this.dialectFactory = configuration.getDialectFactory();
+        this.mapperFactory = configuration.getMapperFactory();
     }
 
-    public Object execute(Class<?> type, Object arg) {
-        String key = getKey(type, arg);
-        MethodInfo methodInfo = methodInfoMap.get(key);
+    public Object execute(String id, Class<?> type, Object arg) {
+        MethodInfo methodInfo = mapperFactory.getMethodInfo(id);
         if (methodInfo == null) {
             synchronized (this) {
-                methodInfo = methodInfoMap.get(key);
+                methodInfo = mapperFactory.getMethodInfo(id);
                 if (methodInfo == null) {
                     String table = getTableName(type);
                     if (ObjectUtil.isNull(table)) {
@@ -50,19 +52,12 @@ public abstract class AbstractMapper {
                         throw new DreamRunTimeException("表'" + table + "'未在TableFactory注册");
                     }
                     methodInfo = getMethodInfo(configuration, tableInfo, type, arg);
-                    String id = getId();
-                    if (!ObjectUtil.isNull(id)) {
-                        methodInfo.setId(id);
-                    }
-                    methodInfoMap.put(key, methodInfo);
+                    methodInfo.setId(id);
+                    mapperFactory.addMethodInfo(methodInfo);
                 }
             }
         }
         return execute(methodInfo, arg);
-    }
-
-    protected String getKey(Class<?> type, Object arg) {
-        return arg == null ? type.getName() : type.getName() + ":" + arg.getClass().getName();
     }
 
     protected Object execute(MethodInfo methodInfo, Object arg) {
@@ -119,17 +114,5 @@ public abstract class AbstractMapper {
         }
         ColumnInfo columnInfo = primKeys.get(0);
         return "where " + SystemUtil.key(tableInfo.getTable()) + "." + SystemUtil.key(columnInfo.getColumn()) + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, "null") + ")";
-    }
-
-    protected String getId() {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        String packageName = this.getClass().getPackage().getName();
-        for (int i = 1; i < stackTrace.length; i++) {
-            String className = stackTrace[i].getClassName();
-            if (!className.startsWith(packageName)) {
-                return className + "." + stackTrace[i].getMethodName();
-            }
-        }
-        return null;
     }
 }

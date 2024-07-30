@@ -36,6 +36,7 @@ public class DebugListener implements Listener {
         } else {
             paramList = new ArrayList<>();
         }
+        System.out.println("ID：" + mappedStatement.getId());
         System.out.println("语句：" + mappedStatement.getSql());
         System.out.println("参数：" + paramList);
         System.out.println("用时：" + (System.currentTimeMillis() - (long) mappedStatement.get(START_DATE)) + "ms");

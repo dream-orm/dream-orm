@@ -12,6 +12,23 @@ import java.util.Collection;
 import java.util.List;
 
 public class DefaultTemplateMapper implements TemplateMapper {
+    private final String selectById = TemplateMapper.class.getName() + ".selectById";
+    private final String selectByIds = TemplateMapper.class.getName() + ".selectByIds";
+    private final String selectOne = TemplateMapper.class.getName() + ".selectOne";
+    private final String selectList = TemplateMapper.class.getName() + ".selectList";
+    private final String selectTree = TemplateMapper.class.getName() + ".selectTree";
+    private final String selectPage = TemplateMapper.class.getName() + ".selectPage";
+    private final String deleteById = TemplateMapper.class.getName() + ".deleteById";
+    private final String delete = TemplateMapper.class.getName() + ".delete";
+    private final String deleteByIds = TemplateMapper.class.getName() + ".deleteByIds";
+    private final String existById = TemplateMapper.class.getName() + ".existById";
+    private final String exist = TemplateMapper.class.getName() + ".exist";
+    private final String updateById = TemplateMapper.class.getName() + ".updateById";
+    private final String batchUpdateById = TemplateMapper.class.getName() + ".batchUpdateById";
+    private final String updateNonById = TemplateMapper.class.getName() + ".updateNonById";
+    private final String insert = TemplateMapper.class.getName() + ".insert";
+    private final String insertFetchKey = TemplateMapper.class.getName() + ".insertFetchKey";
+    private final String batchInsert = TemplateMapper.class.getName() + ".batchInsert";
     private SelectByIdMapper selectByIdSqlMapper;
     private SelectByIdsMapper selectByIdsSqlMapper;
     private SelectOneMapper selectOneSqlMapper;
@@ -52,80 +69,103 @@ public class DefaultTemplateMapper implements TemplateMapper {
 
     @Override
     public <T> T selectById(Class<T> type, Object id) {
-        return (T) selectByIdSqlMapper.execute(type, id);
+        return (T) selectByIdSqlMapper.execute(selectById + ":" + type.getName(), type, id);
     }
 
     @Override
     public <T> List<T> selectByIds(Class<T> type, Collection<?> idList) {
-        return (List<T>) selectByIdsSqlMapper.execute(type, idList);
+        return (List<T>) selectByIdsSqlMapper.execute(selectByIds + ":" + type.getName(), type, idList);
     }
 
     @Override
     public <T> T selectOne(Class<T> type, Object conditionObject) {
-        return (T) selectOneSqlMapper.execute(type, conditionObject);
+        String id = selectOne + ":" + type.getName();
+        if (conditionObject != null) {
+            id += conditionObject.getClass().getName();
+        }
+        return (T) selectOneSqlMapper.execute(id, type, conditionObject);
     }
 
     @Override
     public <T> List<T> selectList(Class<T> type, Object conditionObject) {
-        return (List<T>) selectListMapper.execute(type, conditionObject);
+        String id = selectList + ":" + type.getName();
+        if (conditionObject != null) {
+            id += conditionObject.getClass().getName();
+        }
+        return (List<T>) selectListMapper.execute(id, type, conditionObject);
     }
 
     @Override
     public <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject) {
-        return (List<T>) selectTreeMapper.execute(type, conditionObject);
+        String id = selectTree + ":" + type.getName();
+        if (conditionObject != null) {
+            id += conditionObject.getClass().getName();
+        }
+        return (List<T>) selectTreeMapper.execute(id, type, conditionObject);
     }
 
     @Override
     public <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page) {
-        return (Page<T>) selectPageSqlMapper.execute(type, conditionObject, page);
+        String id = selectPage + ":" + type.getName();
+        if (conditionObject != null) {
+            id += conditionObject.getClass().getName();
+        }
+        return (Page<T>) selectPageSqlMapper.execute(id, type, conditionObject, page);
     }
 
     @Override
     public int updateById(Object view) {
-        return (int) updateByIdSqlMapper.execute(view.getClass(), view);
+        Class<?> type = view.getClass();
+        return (int) updateByIdSqlMapper.execute(updateById + ":" + type.getName(), type, view);
     }
 
     @Override
     public int updateNonById(Object view) {
-        return (int) updateNonByIdSqlMapper.execute(view.getClass(), view);
+        Class<?> type = view.getClass();
+        return (int) updateNonByIdSqlMapper.execute(updateNonById + ":" + type.getName(), type, view);
     }
 
     @Override
     public int insert(Object view) {
         Class<?> type = view.getClass();
-        return (int) insertSqlMapper.execute(type, view);
+        return (int) insertSqlMapper.execute(insert + ":" + type.getName(), type, view);
     }
 
     @Override
     public Object insertFetchKey(Object view) {
         Class<?> type = view.getClass();
-        return insertFetchKeyMapper.execute(type, view);
+        return insertFetchKeyMapper.execute(insertFetchKey + ":" + type.getName(), type, view);
     }
 
     @Override
     public int deleteById(Class<?> type, Object id) {
-        return (int) deleteByIdSqlMapper.execute(type, id);
+        return (int) deleteByIdSqlMapper.execute(deleteById + ":" + type.getName(), type, id);
     }
 
     @Override
     public int delete(Object view) {
-        return (int) deleteOneMapper.execute(view.getClass(), view);
+        Class<?> type = view.getClass();
+        return (int) deleteOneMapper.execute(delete + ":" + type.getName(), type, view);
     }
 
     @Override
     public int deleteByIds(Class<?> type, Collection<?> idList) {
-        return (int) deleteByIdsSqlMapper.execute(type, idList);
+        return (int) deleteByIdsSqlMapper.execute(deleteByIds + ":" + type.getName(), type, idList);
     }
 
     @Override
     public boolean existById(Class<?> type, Object id) {
-        Integer result = (Integer) existByIdMapper.execute(type, id);
+        Integer result = (Integer) existByIdMapper.execute(existById + ":" + type.getName(), type, id);
         return result != null;
     }
 
     @Override
     public boolean exist(Class<?> type, Object conditionObject) {
-        Integer result = (Integer) existMapper.execute(type, conditionObject);
+        String id = exist + ":" + type.getName();
+        if (conditionObject != null) {
+            id += conditionObject.getClass().getName();
+        }
+        Integer result = (Integer) existMapper.execute(id, type, conditionObject);
         return result != null;
     }
 
@@ -134,7 +174,8 @@ public class DefaultTemplateMapper implements TemplateMapper {
         if (viewList == null || viewList.isEmpty()) {
             return null;
         }
-        return (List<Object>) batchInsertMapper.execute(viewList.iterator().next().getClass(), viewList);
+        Class<?> type = viewList.iterator().next().getClass();
+        return (List<Object>) batchInsertMapper.execute(batchInsert + ":" + type.getName(), type, viewList);
     }
 
     @Override
@@ -142,6 +183,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
         if (viewList == null || viewList.isEmpty()) {
             return null;
         }
-        return (List<Object>) batchUpdateByIdMapper.execute(viewList.iterator().next().getClass(), viewList);
+        Class<?> type = viewList.iterator().next().getClass();
+        return (List<Object>) batchUpdateByIdMapper.execute(batchUpdateById + ":" + type.getName(), type, viewList);
     }
 }

@@ -7,7 +7,6 @@ import com.dream.system.config.Page;
 import com.dream.system.core.session.Session;
 import com.dream.system.table.factory.TableFactory;
 import com.dream.util.common.ObjectMap;
-import com.dream.util.common.ObjectUtil;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -21,28 +20,25 @@ public class SelectPageMapper extends SelectListMapper {
     }
 
     @Override
-    public Object execute(Class<?> type, Object arg) {
-        return execute(type, arg, null);
+    public Object execute(String id, Class<?> type, Object arg) {
+        return execute(id, type, arg, null);
     }
 
-    public Object execute(Class<?> type, Object arg, Page page) {
+    public Object execute(String id, Class<?> type, Object arg, Page page) {
         if (page == null) {
             page = new Page();
         }
-        String key = getKey(type, arg);
-        MethodInfo methodInfo = methodInfoMap.get(key);
+
+        MethodInfo methodInfo = mapperFactory.getMethodInfo(id);
         if (methodInfo == null) {
             synchronized (this) {
-                methodInfo = methodInfoMap.get(key);
+                methodInfo = mapperFactory.getMethodInfo(id);
                 if (methodInfo == null) {
                     Configuration configuration = this.session.getConfiguration();
                     TableFactory tableFactory = configuration.getTableFactory();
                     String tableName = getTableName(type);
                     methodInfo = getMethodInfo(configuration, tableFactory.getTableInfo(tableName), type, arg);
-                    String id = getId();
-                    if (!ObjectUtil.isNull(id)) {
-                        methodInfo.setId(id);
-                    }
+                    methodInfo.setId(id);
                     methodInfo.set(PageQuery.class, new PageQuery() {
                         @Override
                         public Class<? extends Annotation> annotationType() {
@@ -54,7 +50,7 @@ public class SelectPageMapper extends SelectListMapper {
                             return PAGE;
                         }
                     });
-                    methodInfoMap.put(key, methodInfo);
+                    mapperFactory.addMethodInfo(methodInfo);
                 }
             }
         }
