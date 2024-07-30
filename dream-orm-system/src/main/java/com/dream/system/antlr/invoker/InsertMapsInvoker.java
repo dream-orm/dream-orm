@@ -19,8 +19,8 @@ import com.dream.util.exception.DreamRunTimeException;
 
 import java.util.*;
 
-public class InsertMapInvoker extends AbstractInvoker {
-    public static final String FUNCTION = "insertMap";
+public class InsertMapsInvoker extends AbstractInvoker {
+    public static final String FUNCTION = "insertMaps";
 
     @Override
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
@@ -34,18 +34,17 @@ public class InsertMapInvoker extends AbstractInvoker {
         Object obj = wrapper.get(property);
         if (obj == null) {
             throw new DreamRunTimeException("插入对象不能为空");
-        } else if (!(obj instanceof Map)) {
-            throw new DreamRunTimeException("插入对象必须为Map");
+        } else if (!(obj instanceof Collection)) {
+            throw new DreamRunTimeException("插入对象必须为集合");
         }
-        Map<String, Object> objMap = (Map<String, Object>) obj;
+        Collection objList = (Collection) obj;
+        Map<String, Object> objMap = (Map<String, Object>) objList.iterator().next();
         Configuration configuration = assist.getCustom(Configuration.class);
         TableFactory tableFactory = configuration.getTableFactory();
         TableInfo tableInfo = tableFactory.getTableInfo(tableName);
         List<String> columns = new ArrayList<>();
-        List<String> columnRefs = new ArrayList<>();
         Set<String> columnSet = objMap.keySet();
         for (String column : columnSet) {
-            columnRefs.add(property + "." + column);
             if (tableInfo != null) {
                 ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
                 if (columnInfo == null) {
@@ -55,7 +54,15 @@ public class InsertMapInvoker extends AbstractInvoker {
             }
             columns.add(column);
         }
-        InsertStatement insertStatement = SystemUtil.insertStatement(tableName, columns, Collections.singletonList(columnRefs));
+        List<List<String>> columnRefsList = new ArrayList<>(objList.size());
+        for (int index = 0; index < objList.size(); index++) {
+            List<String> paramList = new ArrayList<>(columnSet.size());
+            for (String column : columnSet) {
+                paramList.add(property + "." + index + "." + column);
+            }
+            columnRefsList.add(paramList);
+        }
+        InsertStatement insertStatement = SystemUtil.insertStatement(tableName, columns, columnRefsList);
         String sql = toSQL.toStr(insertStatement, assist, invokerList);
         return sql;
     }

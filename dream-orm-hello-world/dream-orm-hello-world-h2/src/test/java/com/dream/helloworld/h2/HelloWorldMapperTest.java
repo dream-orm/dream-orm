@@ -122,6 +122,18 @@ public class HelloWorldMapperTest {
         accountMapper.invokerInsertMap(map);
     }
 
+    @Test
+    public void testInvokerInsertMaps() {
+        List<Map<String, Object>> maps = new ArrayList<>();
+        for (int i = 310; i < 320; i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", i);
+            map.put("name", "accountName");
+            maps.add(map);
+        }
+        accountMapper.invokerInsertMaps(maps);
+    }
+
     /**
      * 测试删除
      */

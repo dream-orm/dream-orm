@@ -4,7 +4,6 @@ package com.dream.system.util;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToSQL;
-import com.dream.antlr.util.AntlrUtil;
 import com.dream.system.annotation.Ignore;
 import com.dream.system.antlr.invoker.MarkInvoker;
 import com.dream.system.cache.CacheKey;
@@ -114,25 +113,27 @@ public class SystemUtil {
         }
     }
 
-    public static InsertStatement insertStatement(String table, List<String> columns, String ref, List<String> columnRefs) {
+    public static InsertStatement insertStatement(String table, List<String> columns, List<List<String>> columnRefsList) {
         InsertStatement insertStatement = new InsertStatement();
         insertStatement.setTable(new SymbolStatement.SingleMarkStatement(table));
         ListColumnStatement columnStatements = new ListColumnStatement();
         ListColumnStatement valueStatements = new ListColumnStatement();
-        for (int i = 0; i < columns.size(); i++) {
-            columnStatements.add(new SymbolStatement.SingleMarkStatement(columns.get(i)));
-            InvokerStatement markInvokerStatement = new InvokerStatement();
-            markInvokerStatement.setFunction(MarkInvoker.FUNCTION);
-            markInvokerStatement.setNamespace(MarkInvoker.DEFAULT_NAMESPACE);
-            if (ref != null && !ref.isEmpty()) {
-                markInvokerStatement.setParamStatement(AntlrUtil.listColumnStatement(".", ref, columnRefs.get(i)));
-            } else {
-                markInvokerStatement.setParamStatement(AntlrUtil.listColumnStatement(".", columnRefs.get(i)));
+        for (String column : columns) {
+            columnStatements.add(new SymbolStatement.SingleMarkStatement(column));
+        }
+        for (List<String> columnRefs : columnRefsList) {
+            ListColumnStatement paramStatements = new ListColumnStatement();
+            for (int i = 0; i < columns.size(); i++) {
+                InvokerStatement markInvokerStatement = new InvokerStatement();
+                markInvokerStatement.setFunction(MarkInvoker.FUNCTION);
+                markInvokerStatement.setNamespace(MarkInvoker.DEFAULT_NAMESPACE);
+                markInvokerStatement.setParamStatement(new SymbolStatement.LetterStatement(columnRefs.get(i)));
+                paramStatements.add(markInvokerStatement);
             }
-            valueStatements.add(markInvokerStatement);
+            valueStatements.add(new BraceStatement(paramStatements));
         }
         InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
-        valuesStatement.setStatement(new BraceStatement(valueStatements));
+        valuesStatement.setStatement(valueStatements);
         insertStatement.setColumns(new BraceStatement(columnStatements));
         insertStatement.setValues(valuesStatement);
         return insertStatement;

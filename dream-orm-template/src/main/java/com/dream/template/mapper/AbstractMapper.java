@@ -26,11 +26,12 @@ import java.util.Map;
 public abstract class AbstractMapper {
     protected final MapperFactory mapperFactory;
     protected Session session;
+    protected Configuration configuration;
     protected DialectFactory dialectFactory;
 
     public AbstractMapper(Session session) {
         this.session = session;
-        Configuration configuration = session.getConfiguration();
+        this.configuration = session.getConfiguration();
         this.dialectFactory = configuration.getDialectFactory();
         this.mapperFactory = configuration.getMapperFactory();
     }
@@ -45,7 +46,6 @@ public abstract class AbstractMapper {
                     if (ObjectUtil.isNull(table)) {
                         throw new DreamRunTimeException(type.getName() + "未绑定表");
                     }
-                    Configuration configuration = this.session.getConfiguration();
                     TableFactory tableFactory = configuration.getTableFactory();
                     TableInfo tableInfo = tableFactory.getTableInfo(table);
                     if (tableInfo == null) {

@@ -19,6 +19,7 @@ import com.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class InsertInvoker extends AbstractInvoker {
@@ -50,10 +51,10 @@ public class InsertInvoker extends AbstractInvoker {
             ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
             if (columnInfo != null) {
                 columns.add(columnInfo.getColumn());
-                columnRefs.add(columnInfo.getName());
+                columnRefs.add(property+"."+columnInfo.getName());
             }
         }
-        InsertStatement insertStatement = SystemUtil.insertStatement(tableName, columns, property, columnRefs);
+        InsertStatement insertStatement = SystemUtil.insertStatement(tableName, columns, Collections.singletonList(columnRefs));
         String sql = toSQL.toStr(insertStatement, assist, invokerList);
         invokerStatement.replaceWith(insertStatement);
         return sql;

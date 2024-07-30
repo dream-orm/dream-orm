@@ -17,5 +17,6 @@ public class DefaultInvokerFactory extends AntlrInvokerFactory {
         addInvoker(new EmitInvoker());
         addInvoker(new InsertInvoker());
         addInvoker(new InsertMapInvoker());
+        addInvoker(new InsertMapsInvoker());
     }
 }

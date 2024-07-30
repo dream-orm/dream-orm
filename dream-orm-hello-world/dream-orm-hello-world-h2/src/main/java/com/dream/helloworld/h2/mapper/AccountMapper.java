@@ -40,6 +40,9 @@ public interface AccountMapper {
     @Sql("@insertMap(account,map)")
     int invokerInsertMap(@Param("map") Map<String, Object> map);
 
+    @Sql("@insertMaps(account,map)")
+    void invokerInsertMaps(@Param("map") List<Map<String, Object>> maps);
+
     @Sql("delete from account where id=:id")
     int deleteById(@Param("id") long id);
 
@@ -51,4 +54,5 @@ public interface AccountMapper {
 
     @Sql("insert into account(id,name)values @foreach(list,(:item.id,:item.name))")
     void insertMany(@Param("list") List<AccountView> accountViews);
+
 }
