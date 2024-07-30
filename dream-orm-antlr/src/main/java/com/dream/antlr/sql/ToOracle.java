@@ -52,16 +52,14 @@ public class ToOracle extends ToPubSQL {
             column = " ";
         }
         if (valuesStatement instanceof InsertStatement.ValuesStatement) {
-            Statement valueParamstatement = ((InsertStatement.ValuesStatement) valuesStatement).getStatement();
-            if (valueParamstatement instanceof ListColumnStatement) {
-                Statement[] columnList = ((ListColumnStatement) valueParamstatement).getColumnList();
-                if (columnList.length > 1) {
-                    StringBuilder builder = new StringBuilder();
-                    for (Statement item : columnList) {
-                        builder.append(" INTO ").append(table).append(column).append("VALUES").append(toStr(item, assist, invokerList));
-                    }
-                    return "INSERT ALL" + builder + " SELECT 1 FROM DUAL";
+            String paramValue = value.substring(7, value.length() - 1);
+            String[] paramValueSplit = paramValue.split("\\),\\(");
+            if (paramValueSplit.length > 1) {
+                StringBuilder builder = new StringBuilder();
+                for (String item : paramValueSplit) {
+                    builder.append(" INTO ").append(table).append(column).append("VALUES").append("(").append(item).append(")");
                 }
+                return "INSERT ALL" + builder + " SELECT 1 FROM DUAL";
             }
         }
         return "INSERT INTO " + table + column + value;

@@ -43,14 +43,12 @@ public class ToPostgreSQL extends ToPubSQL {
     protected String toString(InsertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement columns = statement.getColumns();
         return "INSERT INTO " + toStr(statement.getTable(), assist, invokerList) + (columns != null ? toStr(columns, assist, invokerList) : " ") + toStr(statement.getValues(), assist, invokerList);
-
     }
 
     @Override
     protected String toString(ReplaceIntoStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement columns = statement.getColumns();
         return "INSERT INTO " + toStr(statement.getTable(), assist, invokerList) + (columns != null ? toStr(columns, assist, invokerList) : " ") + toStr(statement.getValues(), assist, invokerList);
-
     }
 
     @Override
