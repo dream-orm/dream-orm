@@ -42,14 +42,17 @@ public class TenantInsertHandler extends AbstractHandler {
                     }
                 }
                 if (i == paramColumnList.length) {
-                    ListColumnStatement listColumnStatement = (ListColumnStatement) valuesStatement.getStatement();
-                    Statement[] columnList = listColumnStatement.getColumnList();
-                    for (Statement columnStatement : columnList) {
-                        BraceStatement valuesBraceStatement = (BraceStatement) columnStatement;
-                        ListColumnStatement valuesListStatement = (ListColumnStatement) valuesBraceStatement.getStatement();
-                        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
-                        paramListStatement.add(new SymbolStatement.LetterStatement(tenantColumn));
-                        valuesListStatement.add(invokerStatement);
+                    Statement paramStatement = valuesStatement.getStatement();
+                    if (paramStatement instanceof ListColumnStatement) {
+                        ListColumnStatement listColumnStatement = (ListColumnStatement) paramStatement;
+                        Statement[] columnList = listColumnStatement.getColumnList();
+                        for (Statement columnStatement : columnList) {
+                            BraceStatement valuesBraceStatement = (BraceStatement) columnStatement;
+                            ListColumnStatement valuesListStatement = (ListColumnStatement) valuesBraceStatement.getStatement();
+                            InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
+                            paramListStatement.add(new SymbolStatement.LetterStatement(tenantColumn));
+                            valuesListStatement.add(invokerStatement);
+                        }
                     }
                 }
             }
