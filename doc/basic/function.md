@@ -24,6 +24,15 @@
 
 **根据返回值类型，自动推导查询字段。**
 
-## table
+## insert
 
-**自动配置的Join注解，自动将表关联在一起。**
+**根据参数对象转化为insert语句。**
+
+## insertMap
+
+**根据参数Map转化为insert语句。**
+
+## insertMaps
+
+**根据参数Map集合转化为insert语句。**
+

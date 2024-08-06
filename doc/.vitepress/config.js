@@ -17,7 +17,11 @@ module.exports = {
             label: '章节'
         },
         nav: nav,
-        sidebar: sidebar
+        sidebar: sidebar,
+        footer: {
+            message: '',
+            copyright: '<a href="https://beian.miit.gov.cn/" target="_blank">苏ICP备2023027543号-1</a>'
+        }
     }
 };
 
