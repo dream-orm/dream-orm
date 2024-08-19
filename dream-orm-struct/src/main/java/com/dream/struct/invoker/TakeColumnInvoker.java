@@ -67,7 +67,7 @@ public class TakeColumnInvoker extends AbstractInvoker {
         }
         if (statementList != null) {
             ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-            listColumnStatement.setColumnList(statementList);
+            listColumnStatement.setColumnList(statementList.toArray(new Statement[0]));
             return toSQL.toStr(listColumnStatement, assist, invokerList);
         } else {
             return "*";

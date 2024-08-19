@@ -1,11 +1,8 @@
 package com.dream.antlr.smt;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ListColumnStatement extends Statement {
     private SymbolStatement.LetterStatement cut;
-    private List<Statement> columnList = new ArrayList<>(8);
+    private Statement[] columnList = new Statement[0];
 
     public ListColumnStatement() {
         this(",");
@@ -17,7 +14,10 @@ public class ListColumnStatement extends Statement {
 
     public void add(Statement column) {
         if (column != null) {
-            columnList.add(wrapParent(column));
+            Statement[] tempColumnList = new Statement[columnList.length + 1];
+            System.arraycopy(columnList, 0, tempColumnList, 0, columnList.length);
+            tempColumnList[columnList.length] =wrapParent(column);
+            columnList = tempColumnList;
         }
     }
 
@@ -30,10 +30,10 @@ public class ListColumnStatement extends Statement {
     }
 
     public Statement[] getColumnList() {
-        return columnList.toArray(new Statement[columnList.size()]);
+        return columnList;
     }
 
-    public void setColumnList(List<Statement> columnList) {
+    public void setColumnList(Statement[] columnList) {
         if (columnList != null) {
             this.columnList = columnList;
             for (Statement statement : columnList) {
@@ -51,9 +51,10 @@ public class ListColumnStatement extends Statement {
     public ListColumnStatement clone() {
         ListColumnStatement listColumnStatement = (ListColumnStatement) super.clone();
         listColumnStatement.setCut((SymbolStatement.LetterStatement) clone(cut));
-        List<Statement> columnList = new ArrayList<>(this.columnList.size());
-        for (Statement column : this.columnList) {
-            columnList.add(clone(column));
+        Statement[] columnList = new Statement[this.columnList.length];
+        for (int i = 0; i < this.columnList.length; i++) {
+            Statement column = this.columnList[i];
+            columnList[i] = clone(column);
         }
         listColumnStatement.setColumnList(columnList);
         return listColumnStatement;

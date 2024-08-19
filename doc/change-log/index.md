@@ -3,7 +3,8 @@
 ## v1.3.4
 
 - 废弃：去除emit，由于在non函数无法做到空去除bug
-- 修复：解决cast语句out of range
+- 修复：解决postgres cast语句out of range
+- 修复：解决抽象树死循环情况
 
 ## v1.3.3
 
