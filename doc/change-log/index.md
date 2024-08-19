@@ -1,8 +1,9 @@
 # dream-orm 升级日志
 
-## v1.3.3
+## v1.3.4
 
 - 废弃：去除emit，由于在non函数无法做到空去除bug
+- 修复：解决cast语句out of range
 
 ## v1.3.3
 
