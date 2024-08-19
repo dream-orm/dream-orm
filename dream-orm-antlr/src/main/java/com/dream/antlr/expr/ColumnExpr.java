@@ -19,7 +19,7 @@ public class ColumnExpr extends HelperExpr {
 
     public ColumnExpr(ExprReader exprReader, Helper helper) {
         super(exprReader, helper);
-        setExprTypes(Constant.FUNCTION).addExprTypes(ExprType.CASE, ExprType.LBRACE, ExprType.COLON, ExprType.DOLLAR, ExprType.SHARP, ExprType.INVOKER, ExprType.INTERVAL, ExprType.HELP);
+        setExprTypes(Constant.FUNCTION).addExprTypes(ExprType.CASE, ExprType.LBRACE, ExprType.INVOKER, ExprType.INTERVAL, ExprType.HELP);
     }
 
     @Override
@@ -59,28 +59,6 @@ public class ColumnExpr extends HelperExpr {
     protected Statement exprInterval(ExprInfo exprInfo) throws AntlrException {
         IntervalExpr intervalExpr = new IntervalExpr(exprReader);
         statement = intervalExpr.expr();
-        setExprTypes(ExprType.NIL);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprColon(ExprInfo exprInfo) throws AntlrException {
-        return exprEmit(exprInfo);
-    }
-
-    @Override
-    protected Statement exprDollar(ExprInfo exprInfo) throws AntlrException {
-        return exprEmit(exprInfo);
-    }
-
-    @Override
-    protected Statement exprSharp(ExprInfo exprInfo) throws AntlrException {
-        return exprEmit(exprInfo);
-    }
-
-    protected Statement exprEmit(ExprInfo exprInfo) throws AntlrException {
-        EmitExpr emitExpr = new EmitExpr(exprReader);
-        this.statement = emitExpr.expr();
         setExprTypes(ExprType.NIL);
         return expr();
     }

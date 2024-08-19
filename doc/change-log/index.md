@@ -2,6 +2,10 @@
 
 ## v1.3.3
 
+- 废弃：去除emit，由于在non函数无法做到空去除bug
+
+## v1.3.3
+
 - 新增：@insert函数
 - 新增：@insertMap函数
 - 新增：@insertMaps函数

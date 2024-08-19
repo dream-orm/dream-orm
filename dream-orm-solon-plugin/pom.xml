@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.dream-orm</groupId>
         <artifactId>dream-orm</artifactId>
-        <version>1.3.3</version>
+        <version>1.3.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,7 +14,7 @@
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-drive</artifactId>
-            <version>1.3.3</version>
+            <version>1.3.4</version>
         </dependency>
         <dependency>
             <groupId>org.noear</groupId>

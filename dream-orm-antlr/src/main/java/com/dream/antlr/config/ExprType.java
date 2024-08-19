@@ -189,8 +189,6 @@ public enum ExprType {
     MARK,
     INVOKER,
     COLON,
-    DOLLAR,
-    SHARP,
     TO_CHAR,
     TO_NUMBER,
     TO_DATE,

@@ -590,15 +590,6 @@ public abstract class ToSQL {
             case 792918965://InvokerStatement
                 sql = toString((InvokerStatement) statement, assist, invokerList);
                 break;
-            case 1219412208://ColonStatement
-                sql = toString((EmitStatement.ColonStatement) statement, assist, invokerList);
-                break;
-            case -634352653://DollarStatement
-                sql = toString((EmitStatement.DollarStatement) statement, assist, invokerList);
-                break;
-            case 865406149://SharpStatement
-                sql = toString((EmitStatement.SharpStatement) statement, assist, invokerList);
-                break;
             case -1652936693://MyFunctionStatement
                 sql = toString((MyFunctionStatement) statement, assist, invokerList);
                 break;
@@ -1000,12 +991,6 @@ public abstract class ToSQL {
     protected abstract String toString(RowNumberStatement.OverStatement.PartitionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(InvokerStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(EmitStatement.ColonStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(EmitStatement.DollarStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
-
-    protected abstract String toString(EmitStatement.SharpStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

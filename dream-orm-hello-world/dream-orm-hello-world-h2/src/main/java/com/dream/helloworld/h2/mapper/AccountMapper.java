@@ -22,16 +22,16 @@ public interface AccountMapper {
     List<AccountView> selectNotList(@Param("account") AccountView accountView);
 
     @PageQuery
-    @Sql("select @*() from account where id>:id")
+    @Sql("select @*() from account where id>@?(id)")
     List<AccountView> selectPage(@Param("id") long id, @Param("page") Page page);
 
-    @Sql("update account set tenant_id=2,name=@?(account.name),age=:account.age where id=:account.id and tenant_id=3")
+    @Sql("update account set tenant_id=2,name=@?(account.name),age=@?(account.age) where id=@?(account.id) and tenant_id=3")
     int updateById(@Param("account") AccountView accountView);
 
     @Sql("update account set @non(name=@?(account.name),age=:account.age) where id=@?(account.id)")
     int updateNonById(@Param("account") AccountView accountView);
 
-    @Sql("insert into account(id,name)values(:account.id,:account.name)")
+    @Sql("insert into account(id,name)values(@?(account.id),@?(account.name))")
     int insert(@Param("account") AccountView accountView);
 
     @Sql("@insert(account)")
@@ -49,10 +49,10 @@ public interface AccountMapper {
     @Sql("delete from account where id in (@foreach(ids))")
     int deleteByIds(@Param("ids") List<Integer> ids);
 
-    @Sql("delete from account where id in (@foreach(accounts,:item.id))")
+    @Sql("delete from account where id in (@foreach(accounts,@?(item.id)))")
     int deleteByViews(@Param("accounts") List<AccountView> accountViews);
 
-    @Sql("insert into account(id,name)values @foreach(list,(:item.id,:item.name))")
+    @Sql("insert into account(id,name)values @foreach(list,(@?(item.id),@?(item.name)))")
     void insertMany(@Param("list") List<AccountView> accountViews);
 
 }

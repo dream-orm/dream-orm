@@ -586,12 +586,6 @@ public abstract class SqlExpr {
             case COLON:
                 exprFactory = sqlExpr -> sqlExpr.exprColon(exprInfo);
                 break;
-            case DOLLAR:
-                exprFactory = sqlExpr -> sqlExpr.exprDollar(exprInfo);
-                break;
-            case SHARP:
-                exprFactory = sqlExpr -> sqlExpr.exprSharp(exprInfo);
-                break;
             case IGNORE:
                 exprFactory = sqlExpr -> sqlExpr.exprIgnore(exprInfo);
                 break;
@@ -646,14 +640,6 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprColon(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprDollar(ExprInfo exprInfo) throws AntlrException {
-        return exprNil(exprInfo);
-    }
-
-    protected Statement exprSharp(ExprInfo exprInfo) throws AntlrException {
         return exprNil(exprInfo);
     }
 

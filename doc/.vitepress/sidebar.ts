@@ -63,10 +63,6 @@ const sidebar: DefaultTheme.Sidebar = {
                     link: '/basic/function',
                 },
                 {
-                    text: '特殊标识',
-                    link: '/basic/emit',
-                },
-                {
                     text: 'IService',
                     link: 'basic/service'
                 }

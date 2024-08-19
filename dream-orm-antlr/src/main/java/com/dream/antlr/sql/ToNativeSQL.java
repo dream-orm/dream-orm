@@ -1067,21 +1067,6 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
-    protected String toString(EmitStatement.ColonStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return ":" + toStr(statement.getStatement(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(EmitStatement.DollarStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "$" + toStr(statement.getStatement(), assist, invokerList);
-    }
-
-    @Override
-    protected String toString(EmitStatement.SharpStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "#" + toStr(statement.getStatement(), assist, invokerList);
-    }
-
-    @Override
     protected String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return statement.getFunctionName() + "(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

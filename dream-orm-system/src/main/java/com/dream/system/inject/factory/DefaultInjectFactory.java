@@ -14,7 +14,6 @@ public class DefaultInjectFactory implements InjectFactory {
         injectMap.put(ActionInject.class, new ActionInject());
         injectMap.put(AnnotationInject.class, new AnnotationInject());
         injectMap.put(PageInject.class, new PageInject(true));
-        injectMap.put(EmitInject.class, new EmitInject());
         injectMap.put(ScanInject.class, new ScanInject());
     }
 
@@ -25,10 +24,8 @@ public class DefaultInjectFactory implements InjectFactory {
                 injectMap.put(inject.getClass(), inject);
             }
             Inject pageInject = injectMap.remove(PageInject.class);
-            Inject emitInject = injectMap.remove(EmitInject.class);
             Inject scanInject = injectMap.remove(ScanInject.class);
             injectMap.put(PageInject.class, pageInject);
-            injectMap.put(EmitInject.class, emitInject);
             injectMap.put(ScanInject.class, scanInject);
         }
     }
