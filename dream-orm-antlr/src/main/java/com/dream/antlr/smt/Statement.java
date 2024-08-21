@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class Statement implements Serializable, Cloneable {
 
     protected Statement parentStatement;
-    Boolean needCache;
+    private Boolean needCache;
     private String quickValue;
 
     protected abstract Boolean isNeedInnerCache();
@@ -55,7 +55,7 @@ public abstract class Statement implements Serializable, Cloneable {
         needCache = true;
         for (Statement statement : statements) {
             if (statement != null) {
-                needCache &= statement.isNeedCache();
+                needCache = statement.isNeedCache();
                 if (!needCache) {
                     return false;
                 }
@@ -92,7 +92,7 @@ public abstract class Statement implements Serializable, Cloneable {
                             List columnList = (List) child;
                             for (int i = 0; i < columnList.size(); i++) {
                                 Object column = columnList.get(i);
-                                if (column != null && column instanceof Statement && column == this) {
+                                if (column == this) {
                                     columnList.set(i, statement);
                                     Statement parentStatement
                                             = statement.parentStatement
@@ -110,7 +110,7 @@ public abstract class Statement implements Serializable, Cloneable {
                             int i;
                             for (i = 0; i < columnList.length; i++) {
                                 Statement value = columnList[i];
-                                if (value != null && value == this) {
+                                if (value == this) {
                                     columnList[i] = statement;
                                     Statement parentStatement
                                             = statement.parentStatement

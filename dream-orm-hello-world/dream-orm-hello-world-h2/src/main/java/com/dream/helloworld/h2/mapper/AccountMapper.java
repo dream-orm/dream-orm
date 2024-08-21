@@ -18,7 +18,7 @@ public interface AccountMapper {
     @Sql("select @* from account where id>@?(id)")
     List<AccountView> selectList(@Param("id") long id);
 
-    @Sql("select @*() from account where @not(id>@?(account.id) and name like concat('%',:account.name,'%'))")
+    @Sql("select @*() from account where @not(id>@?(account.id) and name like concat('%',@?(account.name),'%'))")
     List<AccountView> selectNotList(@Param("account") AccountView accountView);
 
     @PageQuery
@@ -28,7 +28,7 @@ public interface AccountMapper {
     @Sql("update account set tenant_id=2,name=@?(account.name),age=@?(account.age) where id=@?(account.id) and tenant_id=3")
     int updateById(@Param("account") AccountView accountView);
 
-    @Sql("update account set @non(name=@?(account.name),age=:account.age) where id=@?(account.id)")
+    @Sql("update account set @non(name=@?(account.name),age=@?(account.age)) where id=@?(account.id)")
     int updateNonById(@Param("account") AccountView accountView);
 
     @Sql("insert into account(id,name)values(@?(account.id),@?(account.name))")
@@ -43,7 +43,7 @@ public interface AccountMapper {
     @Sql("@insertMaps(account,map)")
     void invokerInsertMaps(@Param("map") List<Map<String, Object>> maps);
 
-    @Sql("delete from account where id=:id")
+    @Sql("delete from account where id=@?(id)")
     int deleteById(@Param("id") long id);
 
     @Sql("delete from account where id in (@foreach(ids))")
