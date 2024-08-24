@@ -160,7 +160,7 @@ public class ToPostgreSQL extends ToPubSQL {
 
     @Override
     protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS INT)";
+        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS BIGINT)";
     }
 
     @Override

@@ -1285,21 +1285,24 @@ public abstract class SqlExpr {
         if (self) {
             return exprSelf(exprInfo);
         } else if (acceptList.lastIndexOf(ExprType.NIL) >= 0) {
-            Statement statement = nil();
-            return statement;
+            return nil();
         } else {
-            Set<ExprType> exprTypeSet = new HashSet<>(acceptList);
-            if (exprTypeSet.contains(ExprType.HELP)) {
-                SqlExpr sqlExpr = this;
-                while (sqlExpr instanceof HelperExpr) {
-                    HelperExpr helperExpr = (HelperExpr) sqlExpr;
-                    exprTypeSet.addAll(helperExpr.acceptList);
-                    sqlExpr = helperExpr.helper.helper();
-                }
-                exprTypeSet.remove(ExprType.HELP);
-            }
-            throw new AntlrException("未正确识别:\n单词：" + exprInfo.getInfo() + "\n类型：" + exprInfo.getExprType() + "\n语法：" + this.getClass().getName() + "\n可识别类型：" + exprTypeSet);
+            return exprErr(exprInfo);
         }
+    }
+
+    protected Statement exprErr(ExprInfo exprInfo) throws AntlrException {
+        Set<ExprType> exprTypeSet = new HashSet<>(acceptList);
+        if (exprTypeSet.contains(ExprType.HELP)) {
+            SqlExpr sqlExpr = this;
+            while (sqlExpr instanceof HelperExpr) {
+                HelperExpr helperExpr = (HelperExpr) sqlExpr;
+                exprTypeSet.addAll(helperExpr.acceptList);
+                sqlExpr = helperExpr.helper.helper();
+            }
+            exprTypeSet.remove(ExprType.HELP);
+        }
+        throw new AntlrException("未正确识别:\n单词：" + exprInfo.getInfo() + "\n类型：" + exprInfo.getExprType() + "\n语法：" + this.getClass().getName() + "\n可识别类型：" + exprTypeSet);
     }
 
     protected Statement exprSelf(ExprInfo exprInfo) throws AntlrException {
