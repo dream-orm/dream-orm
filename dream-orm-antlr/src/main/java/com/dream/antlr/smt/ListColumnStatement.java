@@ -16,7 +16,7 @@ public class ListColumnStatement extends Statement {
         if (column != null) {
             Statement[] tempColumnList = new Statement[columnList.length + 1];
             System.arraycopy(columnList, 0, tempColumnList, 0, columnList.length);
-            tempColumnList[columnList.length] =wrapParent(column);
+            tempColumnList[columnList.length] = wrapParent(column);
             columnList = tempColumnList;
         }
     }

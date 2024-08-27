@@ -1400,7 +1400,7 @@ public abstract class SqlExpr {
         return this;
     }
 
-    protected SqlExpr addExprTypes(ExprType... exprTypes) {
+    public SqlExpr addExprTypes(ExprType... exprTypes) {
         acceptList.addAll(Arrays.asList(exprTypes));
         return this;
     }

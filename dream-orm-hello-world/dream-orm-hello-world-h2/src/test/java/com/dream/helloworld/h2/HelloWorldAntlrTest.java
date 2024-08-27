@@ -167,6 +167,6 @@ public class HelloWorldAntlrTest {
     }
 
     protected PackageStatement createStatement(String sql) throws AntlrException {
-        return (PackageStatement) new PackageExpr(new ExprReader(sql, null)).expr();
+        return (PackageStatement) new PackageExpr(new ExprReader(sql)).expr();
     }
 }

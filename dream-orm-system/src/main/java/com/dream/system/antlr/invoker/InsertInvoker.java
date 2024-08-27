@@ -51,7 +51,7 @@ public class InsertInvoker extends AbstractInvoker {
             ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
             if (columnInfo != null) {
                 columns.add(columnInfo.getColumn());
-                columnRefs.add(property+"."+columnInfo.getName());
+                columnRefs.add(property + "." + columnInfo.getName());
             }
         }
         InsertStatement insertStatement = SystemUtil.insertStatement(tableName, columns, Collections.singletonList(columnRefs));

@@ -12,11 +12,15 @@ import com.dream.antlr.smt.SymbolStatement;
 /**
  * 字段语法解析器
  */
-public class SymbolExpr extends SqlExpr {
+public class SymbolExpr extends HelperExpr {
     Statement statement = null;
 
     public SymbolExpr(ExprReader exprReader) {
-        super(exprReader);
+        this(exprReader, exprReader.myExprFactory != null ? () -> exprReader.myExprFactory.newExpr(exprReader) : () -> new NoneExpr(exprReader));
+    }
+
+    public SymbolExpr(ExprReader exprReader, Helper helper) {
+        super(exprReader, helper);
         setExprTypes(ExprType.STR,
                 ExprType.JAVA_STR,
                 ExprType.MARK,
@@ -25,7 +29,8 @@ public class SymbolExpr extends SqlExpr {
                 ExprType.LETTER,
                 ExprType.NUMBER,
                 ExprType.STAR,
-                ExprType.NULL);
+                ExprType.NULL,
+                ExprType.HELP);
     }
 
     @Override
@@ -104,7 +109,14 @@ public class SymbolExpr extends SqlExpr {
         return expr();
     }
 
-    class LetterExpr extends SqlExpr {
+    @Override
+    protected Statement exprHelp(Statement statement) throws AntlrException {
+        this.statement = statement;
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    static class LetterExpr extends SqlExpr {
         Statement statement = null;
 
         public LetterExpr(ExprReader exprReader) {
