@@ -16,10 +16,10 @@ import java.util.Map;
  * mysql方言
  */
 public class ToMySQL extends ToPubSQL {
-    private Map<String, String> replaceMap = new HashMap<>();
+    private final Map<String, String> replaceMap = new HashMap<>();
 
     public ToMySQL() {
-        replaceMap.put("yyyy", "%Y");
+        replaceMap.put("YYYY", "%Y");
         replaceMap.put("yyyy", "%Y");
         replaceMap.put("YY", "%y");
         replaceMap.put("yy", "%y");

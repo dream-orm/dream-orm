@@ -15,7 +15,7 @@ import java.util.StringJoiner;
  * oracle方言
  */
 public class ToOracle extends ToPubSQL {
-    private Map<String, String> replaceMap = new HashMap<>();
+    private final Map<String, String> replaceMap = new HashMap<>();
 
     public ToOracle() {
         replaceMap.put("%Y", "yyyy");

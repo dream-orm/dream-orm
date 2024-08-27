@@ -14,7 +14,7 @@ import java.util.Map;
  * 达梦方言
  */
 public class ToDM extends ToPubSQL {
-    private Map<String, String> replaceMap = new HashMap<>();
+    private final Map<String, String> replaceMap = new HashMap<>();
 
     public ToDM() {
         replaceMap.put("%Y", "yyyy");

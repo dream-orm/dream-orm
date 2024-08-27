@@ -14,7 +14,7 @@ import java.util.Map;
  * clickhouse方言
  */
 public class ToClickHouse extends ToPubSQL {
-    private Map<String, String> replaceMap = new HashMap<>();
+    private final Map<String, String> replaceMap = new HashMap<>();
 
     public ToClickHouse() {
         replaceMap.put("%Y", "%Y");

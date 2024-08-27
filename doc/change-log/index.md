@@ -5,6 +5,7 @@
 - 废弃：去除emit，由于在non函数无法做到空去除bug
 - 修复：解决postgres cast语句out of range
 - 修复：解决抽象树死循环情况
+- 版本：升级solon版本2.6.6-->2.8.6
 
 ## v1.3.3
 
