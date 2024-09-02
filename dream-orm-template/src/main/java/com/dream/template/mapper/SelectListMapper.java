@@ -79,7 +79,7 @@ public class SelectListMapper extends SelectMapper {
                 Condition condition = conditionObject.getCondition();
                 TableInfo tableInfo = tableFactory.getTableInfo(tableName);
                 ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
-                String conditionSql = condition.getCondition(tableInfo.getTable(), columnInfo.getColumn(), conditionObject.getField());
+                String conditionSql = condition.getCondition(columnInfo.getColumn(), conditionObject.getField());
                 if (conditionObject.isOr()) {
                     orConditionList.add(conditionSql);
                 } else {

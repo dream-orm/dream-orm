@@ -5,10 +5,12 @@ import com.dream.antlr.util.AntlrUtil;
 import com.dream.system.antlr.invoker.ForEachInvoker;
 import com.dream.system.util.SystemUtil;
 
+import java.lang.reflect.Field;
+
 public class NotInCondition implements Condition {
 
     @Override
-    public String getCondition(String table, String column, String field) {
-        return SystemUtil.key(table) + "." + SystemUtil.key(column) + " not in (" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, field) + ")";
+    public String getCondition(String column, Field field) {
+        return SystemUtil.key(column) + " not in (" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, field.getName()) + ")";
     }
 }

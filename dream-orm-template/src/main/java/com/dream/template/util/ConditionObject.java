@@ -2,15 +2,16 @@ package com.dream.template.util;
 
 import com.dream.template.condition.Condition;
 
+import java.lang.reflect.Field;
+
 public class ConditionObject {
-    private String table;
     private String column;
-    private String field;
+    private Field field;
     private boolean filterNull;
     private boolean or;
     private Condition condition;
 
-    public ConditionObject(String column, String field, boolean filterNull, boolean or, Condition condition) {
+    public ConditionObject(String column, Field field, boolean filterNull, boolean or, Condition condition) {
         this.column = column;
         this.field = field;
         this.filterNull = filterNull;
@@ -22,7 +23,7 @@ public class ConditionObject {
         return column;
     }
 
-    public String getField() {
+    public Field getField() {
         return field;
     }
 
