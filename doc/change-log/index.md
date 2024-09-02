@@ -3,7 +3,7 @@
 ## v1.3.4
 
 - 废弃：去除emit，由于在non函数无法做到空去除bug
-- 修复：解决postgres cast语句out of range
+- 修复：解决cast语句out of range
 - 修复：解决抽象树死循环情况
 - 优化：重构冒号参数，支持non函数空去除
 - 优化：Condition接口调整

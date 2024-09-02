@@ -181,7 +181,7 @@ public class ToSQLServer extends ToPubSQL {
 
     @Override
     protected String toString(CastTypeStatement.SignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS INT)";
+        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS BIGINT)";
     }
 
     @Override
@@ -196,7 +196,7 @@ public class ToSQLServer extends ToPubSQL {
 
     @Override
     protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CONVERT(INT," + toStr(statement.getStatement(), assist, invokerList) + ")";
+        return "CONVERT(BIGINT," + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
     @Override

@@ -161,7 +161,7 @@ public class ToOracle extends ToPubSQL {
 
     @Override
     protected String toString(CastTypeStatement.SignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS INT)";
+        return "TO_NUMBER(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
     @Override
@@ -181,7 +181,7 @@ public class ToOracle extends ToPubSQL {
 
     @Override
     protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS INT)";
+        return "TO_NUMBER(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
     @Override
