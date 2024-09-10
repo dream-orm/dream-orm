@@ -12,13 +12,7 @@ public class ListColumnStatement extends Statement {
         setCut(new SymbolStatement.LetterStatement(cut));
     }
 
-    public void add(Statement column) {
-        if (column != null) {
-            add(new Statement[]{column});
-        }
-    }
-
-    public void add(Statement[] columns) {
+    public void add(Statement... columns) {
         if (columns != null && columns.length > 0) {
             Statement[] tempColumnList = new Statement[columnList.length + columns.length];
             System.arraycopy(columnList, 0, tempColumnList, 0, columnList.length);
