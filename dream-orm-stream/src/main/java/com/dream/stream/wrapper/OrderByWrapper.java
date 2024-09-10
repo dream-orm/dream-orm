@@ -2,8 +2,10 @@ package com.dream.stream.wrapper;
 
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.OrderStatement;
+import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.SymbolStatement;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public interface OrderByWrapper<T,
@@ -14,9 +16,7 @@ public interface OrderByWrapper<T,
 
     default Limit orderBy(String... columns) {
         ListColumnStatement columnStatement = new ListColumnStatement(",");
-        for (String column : columns) {
-            columnStatement.add(new SymbolStatement.LetterStatement(column));
-        }
+        columnStatement.add(Arrays.stream(columns).map(column -> new SymbolStatement.LetterStatement(column)).toArray(Statement[]::new));
         OrderStatement orderStatement = new OrderStatement();
         orderStatement.setStatement(columnStatement);
         statement().setOrderStatement(orderStatement);

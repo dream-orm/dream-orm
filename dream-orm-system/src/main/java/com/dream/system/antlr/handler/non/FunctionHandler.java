@@ -50,14 +50,16 @@ public class FunctionHandler extends AbstractHandler {
             if (!ObjectUtil.isNull(columnList)) {
                 String cut = toSQL.toStr(listColumnStatement.getCut(), assist, invokerList);
                 ListColumnStatement statementList = new ListColumnStatement(cut);
+                Statement[] statements = new Statement[columnList.length];
                 for (int i = 0; i < columnList.length; i++) {
                     String column = toSQL.toStr(columnList[i], assist, invokerList);
                     if ("".equals(column)) {
                         assist.setCustom(NullFlag.class, new NullFlag());
                         return null;
                     }
-                    statementList.add(new SymbolStatement.LetterStatement(column));
+                    statements[i] = new SymbolStatement.LetterStatement(column);
                 }
+                statementList.add(statements);
                 return statementList;
             }
             return statement;

@@ -6,6 +6,7 @@ import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.util.AntlrUtil;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -337,11 +338,8 @@ public class ToClickHouse extends ToPubSQL {
     protected String toString(FunctionStatement.ConcatWsStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String link = toStr(columnList[0], assist, invokerList);
-        int i;
         ListColumnStatement listColumnStatement = new ListColumnStatement("," + link + ",");
-        for (i = 1; i <= columnList.length - 1; i++) {
-            listColumnStatement.add(columnList[i]);
-        }
+        listColumnStatement.add(Arrays.copyOfRange(columnList, 1, columnList.length));
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         concatStatement.setParamsStatement(listColumnStatement);
         return toStr(concatStatement, assist, invokerList);

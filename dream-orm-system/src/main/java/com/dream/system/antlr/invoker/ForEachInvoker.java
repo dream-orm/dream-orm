@@ -47,22 +47,29 @@ public class ForEachInvoker extends AbstractInvoker {
             if (len == 2) {
                 int index = 0;
                 Map<String, Object> paramMap = (Map<String, Object>) paramWrapper.getObject();
+                Statement[] statements = new Statement[collection.size()];
                 for (Object item : collection) {
-                    paramMap.put(this.index, index++);
+                    paramMap.put(this.index, index);
                     paramMap.put(this.item, item);
                     String letterItem = toSQL.toStr(columnList[1], assist, invokerList);
-                    listColumnStatement.add(new SymbolStatement.LetterStatement(letterItem));
+                    statements[index] = new SymbolStatement.LetterStatement(letterItem);
+                    index++;
                 }
+                listColumnStatement.add(statements);
                 paramMap.remove(this.index);
                 paramMap.remove(this.item);
             } else {
                 MarkInvoker sqlInvoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
                 List<MarkInvoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
                 int index = 0;
+                Statement[] statements = new Statement[collection.size()];
                 for (Object item : collection) {
-                    paramInfoList.add(new MarkInvoker.ParamInfo(list + "[" + index++ + "]", item));
-                    listColumnStatement.add(new SymbolStatement.MarkStatement());
+                    statements[index] = new SymbolStatement.MarkStatement();
+                    paramInfoList.add(new MarkInvoker.ParamInfo(list + "[" + index + "]", item));
+                    index++;
                 }
+                listColumnStatement.add(statements);
+
             }
             listColumnStatement.setParentStatement(invokerStatement.getParentStatement());
             return toSQL.toStr(listColumnStatement, assist, invokerList);

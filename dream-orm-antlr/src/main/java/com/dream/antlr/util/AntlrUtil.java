@@ -51,9 +51,7 @@ public class AntlrUtil {
     public static InvokerStatement invokerStatement(String function, String namespace, Statement... statements) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         if (statements != null) {
-            for (Statement statement : statements) {
-                listColumnStatement.add(statement);
-            }
+            listColumnStatement.add(statements);
         }
         InvokerStatement invokerStatement = new InvokerStatement();
         invokerStatement.setFunction(function);

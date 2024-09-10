@@ -118,20 +118,23 @@ public class SystemUtil {
         insertStatement.setTable(new SymbolStatement.SingleMarkStatement(table));
         ListColumnStatement columnStatements = new ListColumnStatement();
         ListColumnStatement valueStatements = new ListColumnStatement();
-        for (String column : columns) {
-            columnStatements.add(new SymbolStatement.SingleMarkStatement(column));
-        }
-        for (List<String> columnRefs : columnRefsList) {
+        columnStatements.add(columns.stream().map(SymbolStatement.SingleMarkStatement::new).toArray(Statement[]::new));
+        Statement[] statementList = new Statement[columnRefsList.size()];
+        for (int index = 0; index < statementList.length; index++) {
+            List<String> columnRefs = columnRefsList.get(index);
             ListColumnStatement paramStatements = new ListColumnStatement();
+            Statement[] statements = new Statement[columns.size()];
             for (int i = 0; i < columns.size(); i++) {
                 InvokerStatement markInvokerStatement = new InvokerStatement();
                 markInvokerStatement.setFunction(MarkInvoker.FUNCTION);
                 markInvokerStatement.setNamespace(MarkInvoker.DEFAULT_NAMESPACE);
                 markInvokerStatement.setParamStatement(new SymbolStatement.LetterStatement(columnRefs.get(i)));
-                paramStatements.add(markInvokerStatement);
+                statements[i] = markInvokerStatement;
             }
-            valueStatements.add(new BraceStatement(paramStatements));
+            paramStatements.add(statements);
+            statementList[index] = new BraceStatement(paramStatements);
         }
+        valueStatements.add(statementList);
         InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
         valuesStatement.setStatement(valueStatements);
         insertStatement.setColumns(new BraceStatement(columnStatements));

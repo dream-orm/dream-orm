@@ -461,9 +461,7 @@ public class FunctionWrapper {
 
     protected FunctionWrapper functionWrapper(FunctionStatement functionStatement, String split, Statement... statements) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(split);
-        for (Statement statement : statements) {
-            listColumnStatement.add(statement);
-        }
+        listColumnStatement.add(statements);
         functionStatement.setParamsStatement(listColumnStatement);
         return wrap(functionStatement);
     }

@@ -120,9 +120,7 @@ public class ColumnDef {
 
     public ConditionDef in(Collection<?> values) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        for (Object value : values) {
-            listColumnStatement.add(new TakeMarkInvokerStatement(this.column(), value));
-        }
+        listColumnStatement.add(values.stream().map(value -> new TakeMarkInvokerStatement(this.column(), value)).toArray(Statement[]::new));
         BraceStatement braceStatement = new BraceStatement(listColumnStatement);
         return conditionDef(new OperStatement.INStatement(), braceStatement);
     }
@@ -159,9 +157,7 @@ public class ColumnDef {
     public ConditionDef like(Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new TakeMarkInvokerStatement(this.column(), value));
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
+        listColumnStatement.add(new Statement[]{new SymbolStatement.StrStatement("%"), new TakeMarkInvokerStatement(this.column(), value), new SymbolStatement.StrStatement("%")});
         concatStatement.setParamsStatement(listColumnStatement);
         return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
     }
@@ -173,8 +169,7 @@ public class ColumnDef {
     public ConditionDef likeLeft(Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new TakeMarkInvokerStatement(this.column(), value));
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
+        listColumnStatement.add(new Statement[]{new TakeMarkInvokerStatement(this.column(), value), new SymbolStatement.StrStatement("%")});
         concatStatement.setParamsStatement(listColumnStatement);
         return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
     }
@@ -186,8 +181,7 @@ public class ColumnDef {
     public ConditionDef likeRight(Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new TakeMarkInvokerStatement(this.column(), value));
+        listColumnStatement.add(new Statement[]{new SymbolStatement.StrStatement("%"), new TakeMarkInvokerStatement(this.column(), value)});
         concatStatement.setParamsStatement(listColumnStatement);
         return conditionDef(new OperStatement.LIKEStatement(), concatStatement);
     }

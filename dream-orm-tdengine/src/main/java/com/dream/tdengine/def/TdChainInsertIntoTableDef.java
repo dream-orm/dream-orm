@@ -1,6 +1,7 @@
 package com.dream.tdengine.def;
 
 import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.antlr.smt.Statement;
 import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.InsertIntoTableDef;
 import com.dream.flex.def.TableDef;
@@ -8,6 +9,8 @@ import com.dream.flex.factory.FlexInsertFactory;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.struct.invoker.TakeMarkInvokerStatement;
 import com.dream.tdengine.statement.TdInsertStatement;
+
+import java.util.Arrays;
 
 public class TdChainInsertIntoTableDef extends AbstractTdChainInsertDef implements InsertIntoTableDef<TdChainInsertIntoColumnsDef> {
     public TdChainInsertIntoTableDef(FlexInsertFactory creatorFactory, FlexMapper flexMapper) {
@@ -27,9 +30,7 @@ public class TdChainInsertIntoTableDef extends AbstractTdChainInsertDef implemen
     public TdChainInsertIntoTableDef tags(Object... values) {
         TdInsertStatement tdInsertStatement = (TdInsertStatement) statement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        for (Object value : values) {
-            listColumnStatement.add(new TakeMarkInvokerStatement(null, value));
-        }
+        listColumnStatement.add(Arrays.stream(values).map(value -> new TakeMarkInvokerStatement(null, value)).toArray(Statement[]::new));
         tdInsertStatement.setTags(listColumnStatement);
         return this;
     }

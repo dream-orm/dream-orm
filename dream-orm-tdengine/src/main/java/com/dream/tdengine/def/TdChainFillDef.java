@@ -2,6 +2,7 @@ package com.dream.tdengine.def;
 
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.QueryStatement;
+import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.SymbolStatement;
 import com.dream.flex.factory.FlexQueryFactory;
 import com.dream.flex.mapper.FlexMapper;
@@ -9,6 +10,8 @@ import com.dream.struct.invoker.TakeMarkInvokerStatement;
 import com.dream.tdengine.statement.TdFillStatement;
 import com.dream.tdengine.statement.TdQueryStatement;
 import com.dream.tdengine.statement.TdWindowStatement;
+
+import java.util.Arrays;
 
 public class TdChainFillDef extends TdChainOrderByDef {
     public TdChainFillDef(QueryStatement queryStatement, FlexQueryFactory flexQueryFactory, FlexMapper flexMapper) {
@@ -45,9 +48,7 @@ public class TdChainFillDef extends TdChainOrderByDef {
             listColumnStatement.add(new SymbolStatement.LetterStatement(flag));
         }
         if (values != null && values.length > 0) {
-            for (Object value : values) {
-                listColumnStatement.add(new TakeMarkInvokerStatement(null, value));
-            }
+            listColumnStatement.add(Arrays.stream(values).map(value -> new TakeMarkInvokerStatement(null, value)).toArray(Statement[]::new));
         }
         TdFillStatement tdFillStatement = new TdFillStatement();
         tdFillStatement.setParamsStatement(listColumnStatement);

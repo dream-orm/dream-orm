@@ -1,9 +1,6 @@
 package com.dream.tdengine.def;
 
-import com.dream.antlr.smt.BraceStatement;
-import com.dream.antlr.smt.InsertStatement;
-import com.dream.antlr.smt.ListColumnStatement;
-import com.dream.antlr.smt.SymbolStatement;
+import com.dream.antlr.smt.*;
 import com.dream.flex.def.ColumnDef;
 import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.InsertIntoColumnsDef;
@@ -37,9 +34,7 @@ public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implem
     public TdChainInsertIntoColumnsDef tags(Object... values) {
         TdInsertStatement tdInsertStatement = (TdInsertStatement) statement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        for (Object value : values) {
-            listColumnStatement.add(new TakeMarkInvokerStatement(null, value));
-        }
+        listColumnStatement.add(Arrays.stream(values).map(value -> new TakeMarkInvokerStatement(null, value)).toArray(Statement[]::new));
         tdInsertStatement.setTags(listColumnStatement);
         return this;
     }
@@ -49,11 +44,17 @@ public class TdChainInsertIntoColumnsDef extends AbstractTdChainInsertDef implem
         Set<Map.Entry<String, Object>> entrySet = tagMap.entrySet();
         ListColumnStatement tagColumnStatement = new ListColumnStatement(",");
         ListColumnStatement tagValueStatement = new ListColumnStatement(",");
+        Statement[] columns = new Statement[entrySet.size()];
+        Statement[] values = new Statement[entrySet.size()];
+        int index = 0;
         for (Map.Entry<String, Object> entry : entrySet) {
             String key = entry.getKey();
-            tagColumnStatement.add(new SymbolStatement.SingleMarkStatement(key));
-            tagValueStatement.add(new TakeMarkInvokerStatement(key, entry.getValue()));
+            columns[index] = new SymbolStatement.SingleMarkStatement(key);
+            values[index] = new TakeMarkInvokerStatement(key, entry.getValue());
+            index++;
         }
+        tagColumnStatement.add(columns);
+        tagValueStatement.add(values);
         tdInsertStatement.setTagColumn(new BraceStatement(tagColumnStatement));
         tdInsertStatement.setTags(tagValueStatement);
         return this;

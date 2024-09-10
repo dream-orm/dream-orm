@@ -6,10 +6,7 @@ import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.util.AntlrUtil;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * oracle方言
@@ -253,10 +250,7 @@ public class ToOracle extends ToPubSQL {
             return super.toString(statement, assist, invokerList);
         } else {
             ListColumnStatement listColumnStatement = new ListColumnStatement("||");
-            int i;
-            for (i = 0; i <= columnList.length - 1; i++) {
-                listColumnStatement.add(columnList[i]);
-            }
+            listColumnStatement.add(columnList);
             FunctionStatement.ReturnParameterStatement returnParameterStatement = new FunctionStatement.ReturnParameterStatement();
             returnParameterStatement.setParamsStatement(listColumnStatement);
             return toStr(returnParameterStatement, assist, invokerList);
@@ -267,11 +261,8 @@ public class ToOracle extends ToPubSQL {
     protected String toString(FunctionStatement.ConcatWsStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String link = toStr(columnList[0], assist, invokerList);
-        int i;
         ListColumnStatement listColumnStatement = new ListColumnStatement("||" + link + "||");
-        for (i = 1; i <= columnList.length - 1; i++) {
-            listColumnStatement.add(columnList[i]);
-        }
+        listColumnStatement.add(Arrays.copyOfRange(columnList, 1, columnList.length));
         FunctionStatement.ReturnParameterStatement returnParameterStatement = new FunctionStatement.ReturnParameterStatement();
         returnParameterStatement.setParamsStatement(listColumnStatement);
         return toStr(returnParameterStatement, assist, invokerList);

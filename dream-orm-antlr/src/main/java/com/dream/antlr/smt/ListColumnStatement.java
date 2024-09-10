@@ -14,9 +14,17 @@ public class ListColumnStatement extends Statement {
 
     public void add(Statement column) {
         if (column != null) {
-            Statement[] tempColumnList = new Statement[columnList.length + 1];
+            add(new Statement[]{column});
+        }
+    }
+
+    public void add(Statement[] columns) {
+        if (columns != null && columns.length > 0) {
+            Statement[] tempColumnList = new Statement[columnList.length + columns.length];
             System.arraycopy(columnList, 0, tempColumnList, 0, columnList.length);
-            tempColumnList[columnList.length] = wrapParent(column);
+            for (int i = 0; i < columns.length; i++) {
+                tempColumnList[columnList.length + i] = wrapParent(columns[i]);
+            }
             columnList = tempColumnList;
         }
     }

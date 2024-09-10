@@ -2,8 +2,10 @@ package com.dream.stream.wrapper;
 
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.SelectStatement;
+import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.SymbolStatement;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public interface SelectWrapper<T,
@@ -21,9 +23,7 @@ public interface SelectWrapper<T,
         SelectStatement selectStatement = new SelectStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         if (columns != null && columns.length > 0) {
-            for (String column : columns) {
-                listColumnStatement.add(new SymbolStatement.LetterStatement(column));
-            }
+            listColumnStatement.add(Arrays.stream(columns).map(SymbolStatement.LetterStatement::new).toArray(Statement[]::new));
         } else {
             listColumnStatement.add(new SymbolStatement.LetterStatement("*"));
         }

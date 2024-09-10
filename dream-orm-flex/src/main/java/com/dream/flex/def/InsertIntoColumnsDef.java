@@ -16,14 +16,17 @@ public interface InsertIntoColumnsDef<InsertDefIntoValues extends InsertIntoValu
 
     default InsertDefIntoValues columns(ColumnDef... columnDefs) {
         ListColumnStatement paramsListStatement = new ListColumnStatement(",");
-        for (ColumnDef columnDef : columnDefs) {
+        Statement[] statements = new Statement[columnDefs.length];
+        for (int i = 0; i < columnDefs.length; i++) {
+            ColumnDef columnDef = columnDefs[i];
             Statement statement = columnDef.getStatement();
             if (statement instanceof ListColumnStatement) {
                 Statement[] columnList = ((ListColumnStatement) statement).getColumnList();
                 statement = columnList[columnList.length - 1];
             }
-            paramsListStatement.add(statement);
+            statements[i] = statement;
         }
+        paramsListStatement.add(statements);
         statement().setColumns(new BraceStatement(paramsListStatement));
         return (InsertDefIntoValues) creatorFactory().newInsertIntoValuesDef(statement());
     }

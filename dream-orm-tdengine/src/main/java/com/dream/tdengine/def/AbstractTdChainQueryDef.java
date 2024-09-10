@@ -2,6 +2,7 @@ package com.dream.tdengine.def;
 
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.QueryStatement;
+import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.SymbolStatement;
 import com.dream.flex.def.AbstractQueryDef;
 import com.dream.flex.def.ColumnDef;
@@ -75,8 +76,7 @@ public abstract class AbstractTdChainQueryDef extends AbstractQueryDef implement
         TdQueryStatement tdQueryStatement = (TdQueryStatement) statement();
         TdWindowStatement.TdSessionWindowStatement tdSessionWindowStatement = new TdWindowStatement.TdSessionWindowStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(columnDef.getStatement());
-        listColumnStatement.add(new SymbolStatement.LetterStatement(tsVol));
+        listColumnStatement.add(new Statement[]{columnDef.getStatement(), new SymbolStatement.LetterStatement(tsVol)});
         tdSessionWindowStatement.setParamsStatement(listColumnStatement);
         tdQueryStatement.setWindnow(tdSessionWindowStatement);
         return (TdChainOrderByDef) creatorFactory().newOrderByDef(statement());

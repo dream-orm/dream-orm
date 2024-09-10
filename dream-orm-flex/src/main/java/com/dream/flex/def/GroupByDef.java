@@ -2,6 +2,9 @@ package com.dream.flex.def;
 
 import com.dream.antlr.smt.GroupStatement;
 import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.antlr.smt.Statement;
+
+import java.util.Arrays;
 
 public interface GroupByDef<
         Having extends HavingDef<OrderBy, Limit, Union, ForUpdate, Query>,
@@ -15,9 +18,7 @@ public interface GroupByDef<
     default Having groupBy(ColumnDef... columnDefs) {
         GroupStatement groupStatement = new GroupStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        for (ColumnDef columnDef : columnDefs) {
-            listColumnStatement.add(columnDef.getStatement());
-        }
+        listColumnStatement.add(Arrays.stream(columnDefs).map(ColumnDef::getStatement).toArray(Statement[]::new));
         groupStatement.setGroup(listColumnStatement);
         statement().setGroupStatement(groupStatement);
         return (Having) creatorFactory().newHavingDef(statement());

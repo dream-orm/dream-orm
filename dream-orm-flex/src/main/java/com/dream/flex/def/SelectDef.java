@@ -2,7 +2,10 @@ package com.dream.flex.def;
 
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.SelectStatement;
+import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.SymbolStatement;
+
+import java.util.Arrays;
 
 public interface SelectDef<
         From extends FromDef<Where, Group, Having, OrderBy, Limit, Union, ForUpdate, Query>,
@@ -24,9 +27,7 @@ public interface SelectDef<
         SelectStatement selectStatement = new SelectStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         if (columnDefs != null && columnDefs.length > 0) {
-            for (ColumnDef columnDef : columnDefs) {
-                listColumnStatement.add(columnDef.getStatement());
-            }
+            listColumnStatement.add(Arrays.stream(columnDefs).map(ColumnDef::getStatement).toArray(Statement[]::new));
         } else {
             listColumnStatement.add(new SymbolStatement.LetterStatement("*"));
         }

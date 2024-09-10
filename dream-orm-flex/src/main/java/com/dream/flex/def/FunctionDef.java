@@ -9,6 +9,8 @@ import com.dream.flex.factory.DefaultFlexQueryFactory;
 import com.dream.flex.factory.DefaultFlexUpdateFactory;
 import com.dream.struct.invoker.TakeTableSymbolStatement;
 
+import java.util.Arrays;
+
 
 public class FunctionDef {
     public static ColumnDef ascii(String column) {
@@ -92,9 +94,7 @@ public class FunctionDef {
         FunctionStatement.GroupConcatStatement groupConcatStatement = new FunctionStatement.GroupConcatStatement();
         if (sortDefs != null && sortDefs.length > 0) {
             ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-            for (SortDef sortDef : sortDefs) {
-                listColumnStatement.add(sortDef.getStatement());
-            }
+            listColumnStatement.add(Arrays.stream(sortDefs).map(SortDef::getStatement).toArray(Statement[]::new));
             OrderStatement orderStatement = new OrderStatement();
             orderStatement.setStatement(listColumnStatement);
             groupConcatStatement.setOrder(orderStatement);
@@ -661,8 +661,7 @@ public class FunctionDef {
         intervalStatement.setStatement(new SymbolStatement.LetterStatement(String.valueOf(number)));
         FunctionStatement.DateAddStatement dateAddStatement = new FunctionStatement.DateAddStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(columnDef.getStatement());
-        listColumnStatement.add(intervalStatement);
+        listColumnStatement.add(new Statement[]{columnDef.getStatement(), intervalStatement});
         dateAddStatement.setParamsStatement(listColumnStatement);
         return new ColumnDef(dateAddStatement);
     }
@@ -704,8 +703,7 @@ public class FunctionDef {
         intervalStatement.setStatement(new SymbolStatement.LetterStatement(String.valueOf(number)));
         FunctionStatement.DateSubStatement dateSubStatement = new FunctionStatement.DateSubStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(columnDef.getStatement());
-        listColumnStatement.add(intervalStatement);
+        listColumnStatement.add(new Statement[]{columnDef.getStatement(), intervalStatement});
         dateSubStatement.setParamsStatement(listColumnStatement);
         return new ColumnDef(dateSubStatement);
     }
@@ -1149,9 +1147,7 @@ public class FunctionDef {
 
     public static ColumnDef functionDef(FunctionStatement functionStatement, String split, ColumnDef... columnDefs) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(split);
-        for (ColumnDef columnDef : columnDefs) {
-            listColumnStatement.add(columnDef.getStatement());
-        }
+        listColumnStatement.add(Arrays.stream(columnDefs).map(ColumnDef::getStatement).toArray(Statement[]::new));
         functionStatement.setParamsStatement(listColumnStatement);
         return new ColumnDef(functionStatement);
     }

@@ -47,9 +47,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
 
     public Children in(String column, Collection<?> values) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        for (Object value : values) {
-            listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
-        }
+        listColumnStatement.add(values.stream().map(value -> new TakeMarkInvokerStatement(column, value)).toArray(Statement[]::new));
         BraceStatement braceStatement = new BraceStatement(listColumnStatement);
         return condition(column, new OperStatement.INStatement(), braceStatement);
     }
@@ -62,9 +60,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
 
     public Children notIn(String column, Object... values) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        for (Object value : values) {
-            listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
-        }
+        listColumnStatement.add(Arrays.stream(values).map(value -> new TakeMarkInvokerStatement(column, value)).toArray(Statement[]::new));
         BraceStatement braceStatement = new BraceStatement(listColumnStatement);
         ConditionStatement inConditionStatement = AntlrUtil.conditionStatement(null, new OperStatement.INStatement(), braceStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.NOTStatement(), inConditionStatement);
@@ -73,9 +69,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
 
     public Children notIn(String column, Collection<?> values) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        for (Object value : values) {
-            listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
-        }
+        listColumnStatement.add(values.stream().map(value -> new TakeMarkInvokerStatement(column, value)).toArray(Statement[]::new));
         BraceStatement braceStatement = new BraceStatement(listColumnStatement);
         ConditionStatement inConditionStatement = AntlrUtil.conditionStatement(null, new OperStatement.INStatement(), braceStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.NOTStatement(), inConditionStatement);
@@ -91,9 +85,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     public Children like(String column, Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
+        listColumnStatement.add(new Statement[]{new SymbolStatement.StrStatement("%"), new TakeMarkInvokerStatement(column, value), new SymbolStatement.StrStatement("%")});
         concatStatement.setParamsStatement(listColumnStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.LIKEStatement(), concatStatement);
     }
@@ -101,8 +93,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     public Children likeLeft(String column, Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
+        listColumnStatement.add(new Statement[]{new TakeMarkInvokerStatement(column, value), new SymbolStatement.StrStatement("%")});
         concatStatement.setParamsStatement(listColumnStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.LIKEStatement(), concatStatement);
     }
@@ -111,8 +102,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     public Children likeRight(String column, Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
+        listColumnStatement.add(new Statement[]{new SymbolStatement.StrStatement("%"), new TakeMarkInvokerStatement(column, value)});
         concatStatement.setParamsStatement(listColumnStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.LIKEStatement(), concatStatement);
     }
@@ -121,9 +111,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     public Children notLike(String column, Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
+        listColumnStatement.add(new Statement[]{new SymbolStatement.StrStatement("%"), new TakeMarkInvokerStatement(column, value), new SymbolStatement.StrStatement("%")});
         concatStatement.setParamsStatement(listColumnStatement);
         ConditionStatement likeConditionStatement = AntlrUtil.conditionStatement(null, new OperStatement.LIKEStatement(), concatStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.NOTStatement(), likeConditionStatement);
@@ -133,8 +121,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     public Children notLikeLeft(String column, Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
+        listColumnStatement.add(new Statement[]{new TakeMarkInvokerStatement(column, value), new SymbolStatement.StrStatement("%")});
         concatStatement.setParamsStatement(listColumnStatement);
         ConditionStatement likeLeftConditionStatement = AntlrUtil.conditionStatement(null, new OperStatement.LIKEStatement(), concatStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.NOTStatement(), likeLeftConditionStatement);
@@ -144,8 +131,7 @@ public abstract class ConditionWrapper<Children extends ConditionWrapper<Childre
     public Children notLikeRight(String column, Object value) {
         FunctionStatement.ConcatStatement concatStatement = new FunctionStatement.ConcatStatement();
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(new SymbolStatement.StrStatement("%"));
-        listColumnStatement.add(new TakeMarkInvokerStatement(column, value));
+        listColumnStatement.add(new Statement[]{new SymbolStatement.StrStatement("%"), new TakeMarkInvokerStatement(column, value)});
         concatStatement.setParamsStatement(listColumnStatement);
         ConditionStatement likeRightConditionStatement = AntlrUtil.conditionStatement(null, new OperStatement.LIKEStatement(), concatStatement);
         return condition(new SymbolStatement.LetterStatement(column), new OperStatement.NOTStatement(), likeRightConditionStatement);
