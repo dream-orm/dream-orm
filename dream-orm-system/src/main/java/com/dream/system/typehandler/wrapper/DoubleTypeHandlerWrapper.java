@@ -28,6 +28,8 @@ public class DoubleTypeHandlerWrapper implements TypeHandlerWrapper {
                 TypeUtil.hash(Double.class, Types.REAL),
                 TypeUtil.hash(double.class, Types.NULL),
                 TypeUtil.hash(Double.class, Types.NULL),
+                TypeUtil.hash(Object.class, Types.DECIMAL),
+                TypeUtil.hash(Object.class, Types.NUMERIC),
         };
     }
 

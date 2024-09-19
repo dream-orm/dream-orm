@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FetchKeySequence implements SequenceWrapper {
-    private Sequence sequence;
+    private final Sequence sequence;
 
     public FetchKeySequence(Sequence sequence) {
         this.sequence = sequence;
@@ -60,7 +60,7 @@ public class FetchKeySequence implements SequenceWrapper {
                 ObjectWrapper wrapper = argMap.wrapper();
                 List<String> columnList = primKeys.stream().map(ColumnInfo::getName).collect(Collectors.toList());
                 for (int i = 0; i < columnList.size(); i++) {
-                    wrapper.set(columnList.get(i), Array.get(result, 0));
+                    wrapper.set(columnList.get(i), Array.get(result, i));
                 }
             }
         }
