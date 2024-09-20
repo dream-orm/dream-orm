@@ -82,6 +82,14 @@ public class ToPostgreSQL extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.FindInSetStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        ListColumnStatement listColumnStatement = (ListColumnStatement) statement.getParamsStatement();
+        Statement[] columnList = listColumnStatement.getColumnList();
+        toStr(columnList[1], assist, invokerList);
+        return "COALESCE(ARRAY_POSITION( STRING_TO_ARRAY( " + toStr(columnList[1], assist, invokerList) + ", ',' ), " + toStr(columnList[0], assist, invokerList) + "),0)";
+    }
+
+    @Override
     protected String toString(FunctionStatement.LcaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "LOWER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
