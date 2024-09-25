@@ -10,6 +10,7 @@
 - 优化：listcolumnstatement.add性能优化
 - 修复：解决多租户环境，批量插入租户字段重复指定
 - 修复：postgres支持find_in_set
+- 修复：解决group by语句分页报错
 - 版本：升级solon版本2.6.6-->2.8.6
 
 ## v1.3.3

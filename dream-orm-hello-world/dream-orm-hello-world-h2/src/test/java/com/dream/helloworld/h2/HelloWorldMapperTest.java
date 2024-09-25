@@ -56,7 +56,7 @@ public class HelloWorldMapperTest {
     @Test
     public void testSelectPage() {
         Page page = new Page(1, 2);
-        List<AccountView> accountViews = accountMapper.selectPage(1, page);
+        List<Map> accountViews = accountMapper.selectPage(1, page);
         System.out.println("总数：" + page.getTotal() + "\n查询结果：" + accountViews);
     }
 

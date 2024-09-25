@@ -45,7 +45,7 @@ public class PageHandler extends AbstractHandler {
         countStatement.setParamsStatement(paramListColumnStatement);
         listColumnStatement.add(countStatement);
         selectStatement.setSelectList(listColumnStatement);
-        if (queryStatement.getUnionStatement() == null && !queryStatement.getSelectStatement().isDistinct()) {
+        if (queryStatement.getGroupStatement() == null && queryStatement.getUnionStatement() == null && !queryStatement.getSelectStatement().isDistinct()) {
             queryStatement.setSelectStatement(selectStatement);
             packageStatement.setStatement(queryStatement);
         } else {
