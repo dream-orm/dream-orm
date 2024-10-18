@@ -2,7 +2,7 @@ import nav from './nav';
 import sidebar from './sidebar';
 
 module.exports = {
-    base: '/',
+    base: '/orm/',
     title: 'dream-orm',
     description: '一个优雅、无依赖、高性能的orm框架',
     lang: 'zh-CN',
@@ -20,7 +20,7 @@ module.exports = {
         sidebar: sidebar,
         footer: {
             message: '',
-            copyright: '<a href="https://beian.miit.gov.cn/" target="_blank">苏ICP备2023027543号-1</a>'
+            copyright: '<a href="https://beian.miit.gov.cn/" target="_blank">苏ICP备2023027543号</a>'
         }
     }
 };

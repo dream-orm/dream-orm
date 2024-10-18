@@ -5,6 +5,6 @@
     "serve": "vitepress serve"
   },
   "devDependencies": {
-    "vitepress": "^1.0.0-rc.41"
+    "vitepress": "^1.4.0"
   }
 }
