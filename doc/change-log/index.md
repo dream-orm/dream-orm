@@ -1,5 +1,9 @@
 # dream-orm 升级日志
 
+## v1.3.5
+
+- 新增：支持full join语法
+
 ## v1.3.4
 
 - 废弃：去除emit，由于在non函数无法做到空去除bug
