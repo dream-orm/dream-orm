@@ -578,6 +578,9 @@ public abstract class ToSQL {
             case 1286625061://CrossJoinStatement
                 sql = toString((JoinStatement.CrossJoinStatement) statement, assist, invokerList);
                 break;
+            case -1532311306://FullJoinStatement
+                sql = toString((JoinStatement.FullJoinStatement) statement, assist, invokerList);
+                break;
             case 1749719820://RowNumberStatement
                 sql = toString((RowNumberStatement) statement, assist, invokerList);
                 break;
@@ -983,6 +986,8 @@ public abstract class ToSQL {
     protected abstract String toString(JoinStatement.InnerJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(JoinStatement.CrossJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(JoinStatement.FullJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(RowNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

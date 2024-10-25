@@ -1047,6 +1047,11 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(JoinStatement.FullJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "FULL JOIN " + toStr(statement.getJoinTable(), assist, invokerList) + (statement.getOn() != null ? (" ON " + toStr(statement.getOn(), assist, invokerList)) : "");
+    }
+
+    @Override
     protected String toString(RowNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "ROW_NUMBER()" + toStr(statement.getStatement(), assist, invokerList);
     }

@@ -532,6 +532,9 @@ public abstract class SqlExpr {
             case CROSS:
                 exprFactory = sqlExpr -> sqlExpr.exprCross(exprInfo);
                 break;
+            case FULL:
+                exprFactory = sqlExpr -> sqlExpr.exprFull(exprInfo);
+                break;
             case OUTER:
                 exprFactory = sqlExpr -> sqlExpr.exprOuter(exprInfo);
                 break;
@@ -1172,6 +1175,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprCross(ExprInfo exprInfo) throws AntlrException {
+        return exprKeyWord(exprInfo);
+    }
+
+    protected Statement exprFull(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 

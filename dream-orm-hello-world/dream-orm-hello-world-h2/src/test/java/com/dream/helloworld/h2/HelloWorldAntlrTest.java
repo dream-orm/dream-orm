@@ -64,7 +64,7 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testJoin() {
-        testSqlForMany("SELECT * from a left join a on 1=1 right join a on 1=1 inner join a  on 1=1");
+        testSqlForMany("SELECT * from a left join a on 1=1 right join b on 1=1 inner join c  on 1=1 full join d on 1=1");
     }
 
     @Test

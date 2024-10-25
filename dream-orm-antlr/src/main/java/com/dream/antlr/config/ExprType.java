@@ -31,6 +31,7 @@ public enum ExprType {
     LEFT,
     RIGHT,
     INNER,
+    FULL,
     CROSS,
     OUTER,
     JOIN,

@@ -16,7 +16,7 @@ public class JoinExpr extends SqlExpr {
 
     public JoinExpr(ExprReader exprReader) {
         super(exprReader);
-        setExprTypes(ExprType.LEFT, ExprType.RIGHT, ExprType.CROSS, ExprType.INNER, ExprType.JOIN, ExprType.NIL);
+        setExprTypes(ExprType.LEFT, ExprType.RIGHT, ExprType.CROSS, ExprType.INNER, ExprType.FULL, ExprType.JOIN, ExprType.NIL);
     }
 
     @Override
@@ -55,6 +55,14 @@ public class JoinExpr extends SqlExpr {
     protected Statement exprInner(ExprInfo exprInfo) throws AntlrException {
         push();
         joinStatement = new JoinStatement.InnerJoinStatement();
+        setExprTypes(ExprType.OUTER, ExprType.JOIN);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprFull(ExprInfo exprInfo) throws AntlrException {
+        push();
+        joinStatement = new JoinStatement.FullJoinStatement();
         setExprTypes(ExprType.OUTER, ExprType.JOIN);
         return expr();
     }

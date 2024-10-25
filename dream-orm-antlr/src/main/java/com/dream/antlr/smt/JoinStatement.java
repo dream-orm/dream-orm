@@ -49,5 +49,8 @@ public abstract class JoinStatement extends Statement {
 
     }
 
+    public static class FullJoinStatement extends JoinStatement {
+
+    }
 
 }

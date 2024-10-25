@@ -152,6 +152,7 @@ public final class Constant {
             ExprType.LEFT,
             ExprType.RIGHT,
             ExprType.INNER,
+            ExprType.FULL,
             ExprType.ON,
             ExprType.LIKE,
             ExprType.ACC,

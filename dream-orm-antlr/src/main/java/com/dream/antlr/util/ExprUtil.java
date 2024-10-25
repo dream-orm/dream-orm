@@ -39,6 +39,8 @@ public class ExprUtil {
                 return ExprType.LEFT;
             case 77974012:
                 return ExprType.RIGHT;
+            case 2169487:
+                return ExprType.FULL;
             case 69817910:
                 return ExprType.INNER;
             case 75573339:
