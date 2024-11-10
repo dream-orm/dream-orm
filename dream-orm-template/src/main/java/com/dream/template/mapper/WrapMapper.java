@@ -33,10 +33,11 @@ public abstract class WrapMapper extends ValidateMapper {
                 if (!Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)) {
                     if (field.isAnnotationPresent(Wrap.class)) {
                         Wrap wrapAnnotation = field.getDeclaredAnnotation(Wrap.class);
-                        WrapType wrapType = wrapAnnotation.type();
+                        WrapType wrapType = wrapAnnotation.wrapType();
                         if (accept(wrapType)) {
                             acceptList.add(field);
-                            Wrapper wrapper = ReflectUtil.create(wrapAnnotation.value());
+                            Wrapper wrapper = ReflectUtil.create(wrapAnnotation.wrapper());
+                            wrapper.init(field.getType(), wrapAnnotation.value());
                             wrapObjectMap.put(field.getName(), wrapper);
                         }
                     } else {

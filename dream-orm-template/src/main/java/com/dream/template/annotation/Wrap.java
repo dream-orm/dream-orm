@@ -16,12 +16,14 @@ public @interface Wrap {
      *
      * @return 参数修改类
      */
-    Class<? extends Wrapper> value() default RawWrapper.class;
+    Class<? extends Wrapper> wrapper() default RawWrapper.class;
 
     /**
-     * 参数修改时机：插入、更新、插入或更新，默认插入或更新
+     * 参数修改时机：插入、更新、插入或更新，默认插入
      *
      * @return 参数修改时机
      */
-    WrapType type() default WrapType.INSERT_UPDATE;
+    WrapType wrapType() default WrapType.INSERT;
+
+    String value() default "";
 }

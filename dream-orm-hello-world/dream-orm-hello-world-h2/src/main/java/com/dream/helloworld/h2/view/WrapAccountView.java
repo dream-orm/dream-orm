@@ -3,13 +3,12 @@ package com.dream.helloworld.h2.view;
 import com.dream.helloworld.h2.table.Account;
 import com.dream.system.annotation.View;
 import com.dream.template.annotation.Wrap;
-import com.dream.template.wrap.ZeroWrapper;
 
 @View(Account.class)
 public class WrapAccountView {
     private Integer id;
     private String name;
-    @Wrap(ZeroWrapper.class)
+    @Wrap("0")
     private Integer age;
     private String email;
 
