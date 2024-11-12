@@ -25,5 +25,9 @@ public @interface Wrap {
      */
     WrapType wrapType() default WrapType.INSERT;
 
+    /**
+     * 自定义参数
+     * @return 自定义参数
+     */
     String value() default "";
 }
