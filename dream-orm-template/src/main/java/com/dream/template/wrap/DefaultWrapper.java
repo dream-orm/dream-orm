@@ -2,7 +2,7 @@ package com.dream.template.wrap;
 
 import com.dream.util.exception.DreamRunTimeException;
 
-public class RawWrapper implements Wrapper {
+public class DefaultWrapper implements Wrapper {
     private Object argValue;
 
     @Override
