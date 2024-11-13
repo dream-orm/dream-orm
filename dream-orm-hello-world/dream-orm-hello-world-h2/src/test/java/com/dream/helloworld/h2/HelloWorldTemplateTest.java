@@ -59,6 +59,7 @@ public class HelloWorldTemplateTest {
         AccountCondition accountCondition = new AccountCondition();
         accountCondition.setName("a");
         accountCondition.setAge(Arrays.asList(18, 20, 21, 24));
+        accountCondition.setAges(new Integer[]{10, 20});
         List<AccountView> accountViews = templateMapper.selectList(AccountView.class, accountCondition);
         System.out.println("查询结果：" + accountViews);
     }

@@ -11,6 +11,7 @@ public class DefaultInvokerFactory extends AntlrInvokerFactory {
         addInvoker(new NonInvoker());
         addInvoker(new NotInvoker());
         addInvoker(new ForEachInvoker());
+        addInvoker(new BetweenInvoker());
         addInvoker(new StarInvoker());
         addInvoker(new LimitInvoker());
         addInvoker(new OffSetInvoker());

@@ -41,7 +41,7 @@ public class CollectionObjectFactory implements ObjectFactory {
                 throw new DreamRunTimeException(result.getClass().getName() + "不支持根据索引获取值");
             }
             List<?> resultList = (List) result;
-            int index = Integer.valueOf(property);
+            int index = Integer.parseInt(property);
             if (index < resultList.size()) {
                 return resultList.get(index);
             } else {

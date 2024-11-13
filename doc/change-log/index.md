@@ -4,6 +4,7 @@
 
 - 新增：支持full join语法
 - 优化：默认值Wrapper优化
+- 新增：支持between注解
 
 ## v1.3.4
 

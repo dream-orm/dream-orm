@@ -1,5 +1,7 @@
 package com.dream.util.reflection.factory;
 
+import java.lang.reflect.Array;
+
 public class ArrayObjectFactory implements ObjectFactory {
     private Object target;
 
@@ -18,7 +20,17 @@ public class ArrayObjectFactory implements ObjectFactory {
 
     @Override
     public Object get(String property) {
-        return target;
+        if (property != null && Character.isDigit(property.charAt(0))) {
+            int index = Integer.parseInt(property);
+            int length = Array.getLength(target);
+            if (index < length) {
+                return Array.get(target, index);
+            } else {
+                return null;
+            }
+        } else {
+            return target;
+        }
     }
 
     @Override
