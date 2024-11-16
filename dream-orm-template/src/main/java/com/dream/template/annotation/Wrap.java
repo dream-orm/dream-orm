@@ -19,11 +19,11 @@ public @interface Wrap {
     Class<? extends Wrapper> wrapper() default DefaultWrapper.class;
 
     /**
-     * 参数修改时机：插入、更新、插入或更新，默认插入
+     * 参数修改时机：插入、更新、插入或更新，默认插入或更新
      *
      * @return 参数修改时机
      */
-    WrapType wrapType() default WrapType.INSERT;
+    WrapType wrapType() default WrapType.INSERT_UPDATE;
 
     /**
      * 自定义参数
