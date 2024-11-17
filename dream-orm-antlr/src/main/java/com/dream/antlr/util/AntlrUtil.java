@@ -85,7 +85,7 @@ public class AntlrUtil {
 
     public static ListColumnStatement listColumnStatement(String cut, Statement... statements) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(cut);
-        if (statements != null && statements.length > 0) {
+        if (statements != null) {
             for (Statement statement : statements) {
                 listColumnStatement.add(statement);
             }

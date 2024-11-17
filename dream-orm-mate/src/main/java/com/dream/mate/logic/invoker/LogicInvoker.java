@@ -7,6 +7,7 @@ import com.dream.antlr.invoker.AbstractInvoker;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.sql.ToSQL;
+import com.dream.mate.logic.bean.LogicField;
 import com.dream.mate.logic.handler.LogicDeleteHandler;
 import com.dream.mate.logic.handler.LogicQueryHandler;
 import com.dream.mate.logic.handler.LogicUpdateHandler;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class LogicInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_mate_logic";
-    private LogicHandler logicHandler;
+    private final LogicHandler logicHandler;
 
     public LogicInvoker(LogicHandler logicHandler) {
         this.logicHandler = logicHandler;
@@ -55,5 +56,10 @@ public class LogicInvoker extends AbstractInvoker {
 
     public String getNormalValue() {
         return logicHandler.getNormalValue();
+    }
+
+    public List<LogicField>logicFields(Assist assist, String table){
+        MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
+        return logicHandler.logicFields(methodInfo, table);
     }
 }

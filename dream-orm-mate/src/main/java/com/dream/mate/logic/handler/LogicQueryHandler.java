@@ -9,6 +9,7 @@ import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToSQL;
+import com.dream.antlr.util.AntlrUtil;
 import com.dream.mate.logic.invoker.LogicInvoker;
 import com.dream.mate.util.MateUtil;
 import com.dream.system.antlr.handler.scan.QueryScanHandler;
@@ -58,7 +59,7 @@ public class LogicQueryHandler extends AbstractHandler {
                 if (logicInvoker.isLogicDelete(assist, table)) {
                     String logicColumn = logicInvoker.getLogicColumn(table);
                     ConditionStatement conditionStatement = new ConditionStatement();
-                    conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + logicColumn)).expr());
+                    conditionStatement.setLeft(AntlrUtil.listColumnStatement(".",new SymbolStatement.SingleMarkStatement(tableScanInfo.getAlias()),new SymbolStatement.SingleMarkStatement(logicColumn)));
                     conditionStatement.setOper(new OperStatement.EQStatement());
                     conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNormalValue()));
                     QueryStatement queryStatement = queryDeque.peek();
@@ -95,7 +96,7 @@ public class LogicQueryHandler extends AbstractHandler {
                     if (logicInvoker.isLogicDelete(assist, table)) {
                         String logicColumn = logicInvoker.getLogicColumn(table);
                         ConditionStatement conditionStatement = new ConditionStatement();
-                        conditionStatement.setLeft(new SymbolExpr(new ExprReader(tableScanInfo.getAlias() + "." + logicColumn)).expr());
+                        conditionStatement.setLeft(AntlrUtil.listColumnStatement(".",new SymbolStatement.SingleMarkStatement(tableScanInfo.getAlias()),new SymbolStatement.SingleMarkStatement(logicColumn)));
                         conditionStatement.setOper(new OperStatement.EQStatement());
                         conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNormalValue()));
                         Statement joinOnStatement = joinStatement.getOn();

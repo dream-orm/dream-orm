@@ -60,7 +60,7 @@ public class TenantQueryHandler extends AbstractHandler {
                 if (tenantInjectInvoker.isTenant(assist, table)) {
                     String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
                     ConditionStatement conditionStatement = new ConditionStatement();
-                    conditionStatement.setLeft(AntlrUtil.listColumnStatement(".", tableScanInfo.getAlias(), tenantColumn));
+                    conditionStatement.setLeft(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(tableScanInfo.getAlias()), new SymbolStatement.SingleMarkStatement(tenantColumn)));
                     conditionStatement.setOper(new OperStatement.EQStatement());
                     conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                     QueryStatement queryStatement = queryDeque.peek();
@@ -97,7 +97,7 @@ public class TenantQueryHandler extends AbstractHandler {
                     if (tenantInjectInvoker.isTenant(assist, table)) {
                         String tenantColumn = tenantInjectInvoker.getTenantColumn(table);
                         ConditionStatement conditionStatement = new ConditionStatement();
-                        conditionStatement.setLeft(AntlrUtil.listColumnStatement(".", tableScanInfo.getAlias(), tenantColumn));
+                        conditionStatement.setLeft(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(tableScanInfo.getAlias()), new SymbolStatement.SingleMarkStatement(tenantColumn)));
                         conditionStatement.setOper(new OperStatement.EQStatement());
                         conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
                         Statement joinOnStatement = joinStatement.getOn();

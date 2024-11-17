@@ -334,16 +334,6 @@ public class ToPostgreSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(OrderStatement.AscStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return super.toString(statement, assist, invokerList) + " NULLS LAST";
-    }
-
-    @Override
-    protected String toString(OrderStatement.DescStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return super.toString(statement, assist, invokerList) + " NULLS LAST";
-    }
-
-    @Override
     protected String toString(FunctionStatement.UnixTimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "EXTRACT(epoch FROM " + toStr(statement.getParamsStatement(), assist, invokerList) + ")::INTEGER";
     }

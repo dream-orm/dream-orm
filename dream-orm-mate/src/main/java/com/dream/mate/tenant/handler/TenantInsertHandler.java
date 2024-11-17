@@ -52,7 +52,7 @@ public class TenantInsertHandler extends AbstractHandler {
                             InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
                             valuesListStatement.add(invokerStatement);
                         }
-                        paramListStatement.add(new SymbolStatement.LetterStatement(tenantColumn));
+                        paramListStatement.add(new SymbolStatement.SingleMarkStatement(tenantColumn));
                     }
                 }
             }

@@ -1,7 +1,10 @@
 package com.dream.mate.logic.inject;
 
+import com.dream.mate.logic.bean.LogicField;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.table.TableInfo;
+
+import java.util.List;
 
 public interface LogicHandler {
 
@@ -36,6 +39,17 @@ public interface LogicHandler {
      */
     default String getDeletedValue() {
         return "1";
+    }
+
+    /**
+     * 软删除，其他待更新字段值
+     *
+     * @param methodInfo mapper方法详尽信息
+     * @param table      主表
+     * @return 其他待更新字段值
+     */
+    default List<LogicField> logicFields(MethodInfo methodInfo, String table) {
+        return null;
     }
 
     /**
