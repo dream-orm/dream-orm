@@ -108,7 +108,13 @@ public class SelectListMapper extends SelectMapper {
         if (!ObjectUtil.isNull(sortObjectList)) {
             for (SortObject sortObject : sortObjectList) {
                 TableInfo tableInfo = tableFactory.getTableInfo(tableName);
-                orderList.add(SystemUtil.key(tableName) + "." + SystemUtil.key(tableInfo.getColumnInfo(sortObject.getProperty()).getColumn()) + " " + sortObject.getOrderType());
+                String property = sortObject.getProperty();
+                ColumnInfo columnInfo = tableInfo.getColumnInfo(property);
+                if (columnInfo == null) {
+                    orderList.add(property + " " + sortObject.getOrderType());
+                } else {
+                    orderList.add(SystemUtil.key(tableName) + "." + SystemUtil.key(columnInfo.getColumn()) + " " + sortObject.getOrderType());
+                }
             }
         }
         if (!ObjectUtil.isNull(orderList)) {
