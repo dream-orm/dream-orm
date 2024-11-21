@@ -2,7 +2,7 @@ package com.dream.mate.logic.handler;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
-import com.dream.antlr.expr.ColumnExpr;
+import com.dream.antlr.expr.OperExpr;
 import com.dream.antlr.handler.AbstractHandler;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.read.ExprReader;
@@ -39,7 +39,7 @@ public class LogicDeleteHandler extends AbstractHandler {
                 conditionStatements[0] = conditionStatement;
                 for (int i = 0; i < logicFields.size(); i++) {
                     LogicField logicField = logicFields.get(i);
-                    Statement valueStatement = new ColumnExpr(new ExprReader(logicField.getValue())).expr();
+                    Statement valueStatement = new OperExpr(new ExprReader(logicField.getValue())).expr();
                     conditionStatements[i + 1] = AntlrUtil.conditionStatement(new SymbolStatement.SingleMarkStatement(logicField.getColumn()), new OperStatement.EQStatement(), valueStatement);
                 }
             } else {

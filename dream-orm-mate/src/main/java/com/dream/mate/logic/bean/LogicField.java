@@ -17,10 +17,6 @@ public class LogicField {
         this.value = value;
     }
 
-    public static LogicField of(String column, String value) {
-        return new LogicField(column, value);
-    }
-
     public String getColumn() {
         return column;
     }
