@@ -2,11 +2,9 @@ package com.dream.mate.logic.handler;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
-import com.dream.antlr.expr.SymbolExpr;
 import com.dream.antlr.handler.AbstractHandler;
 import com.dream.antlr.handler.Handler;
 import com.dream.antlr.invoker.Invoker;
-import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.antlr.util.AntlrUtil;
@@ -59,7 +57,7 @@ public class LogicQueryHandler extends AbstractHandler {
                 if (logicInvoker.isLogicDelete(assist, table)) {
                     String logicColumn = logicInvoker.getLogicColumn(table);
                     ConditionStatement conditionStatement = new ConditionStatement();
-                    conditionStatement.setLeft(AntlrUtil.listColumnStatement(".",new SymbolStatement.SingleMarkStatement(tableScanInfo.getAlias()),new SymbolStatement.SingleMarkStatement(logicColumn)));
+                    conditionStatement.setLeft(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(tableScanInfo.getAlias()), new SymbolStatement.SingleMarkStatement(logicColumn)));
                     conditionStatement.setOper(new OperStatement.EQStatement());
                     conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNormalValue()));
                     QueryStatement queryStatement = queryDeque.peek();
@@ -96,7 +94,7 @@ public class LogicQueryHandler extends AbstractHandler {
                     if (logicInvoker.isLogicDelete(assist, table)) {
                         String logicColumn = logicInvoker.getLogicColumn(table);
                         ConditionStatement conditionStatement = new ConditionStatement();
-                        conditionStatement.setLeft(AntlrUtil.listColumnStatement(".",new SymbolStatement.SingleMarkStatement(tableScanInfo.getAlias()),new SymbolStatement.SingleMarkStatement(logicColumn)));
+                        conditionStatement.setLeft(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(tableScanInfo.getAlias()), new SymbolStatement.SingleMarkStatement(logicColumn)));
                         conditionStatement.setOper(new OperStatement.EQStatement());
                         conditionStatement.setRight(new SymbolStatement.LetterStatement(logicInvoker.getNormalValue()));
                         Statement joinOnStatement = joinStatement.getOn();

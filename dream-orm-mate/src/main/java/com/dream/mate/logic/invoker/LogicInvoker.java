@@ -58,7 +58,7 @@ public class LogicInvoker extends AbstractInvoker {
         return logicHandler.getNormalValue();
     }
 
-    public List<LogicField>logicFields(Assist assist, String table){
+    public List<LogicField> logicFields(Assist assist, String table) {
         MethodInfo methodInfo = assist.getCustom(MethodInfo.class);
         return logicHandler.logicFields(methodInfo, table);
     }
