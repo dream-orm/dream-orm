@@ -82,7 +82,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     public <T> T selectOne(Class<T> type, Object conditionObject) {
         String id = selectOne + ":" + type.getName();
         if (conditionObject != null) {
-            id += conditionObject.getClass().getName();
+            id += ":" + conditionObject.getClass().getName();
         }
         return (T) selectOneSqlMapper.execute(id, type, conditionObject);
     }
@@ -91,7 +91,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     public <T> List<T> selectList(Class<T> type, Object conditionObject) {
         String id = selectList + ":" + type.getName();
         if (conditionObject != null) {
-            id += conditionObject.getClass().getName();
+            id += ":" + conditionObject.getClass().getName();
         }
         return (List<T>) selectListMapper.execute(id, type, conditionObject);
     }
@@ -100,7 +100,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     public <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject) {
         String id = selectTree + ":" + type.getName();
         if (conditionObject != null) {
-            id += conditionObject.getClass().getName();
+            id += ":" + conditionObject.getClass().getName();
         }
         return (List<T>) selectTreeMapper.execute(id, type, conditionObject);
     }
@@ -109,7 +109,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     public <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page) {
         String id = selectPage + ":" + type.getName();
         if (conditionObject != null) {
-            id += conditionObject.getClass().getName();
+            id += ":" + conditionObject.getClass().getName();
         }
         return (Page<T>) selectPageSqlMapper.execute(id, type, conditionObject, page);
     }
@@ -164,7 +164,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     public boolean exist(Class<?> type, Object conditionObject) {
         String id = exist + ":" + type.getName();
         if (conditionObject != null) {
-            id += conditionObject.getClass().getName();
+            id += ":" + conditionObject.getClass().getName();
         }
         Integer result = (Integer) existMapper.execute(id, type, conditionObject);
         return result != null;
