@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.dream-orm</groupId>
         <artifactId>dream-orm</artifactId>
-        <version>1.3.5</version>
+        <version>1.3.6</version>
     </parent>
 
     <artifactId>dream-orm-struct</artifactId>
@@ -12,12 +12,12 @@
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-system</artifactId>
-            <version>1.3.5</version>
+            <version>1.3.6</version>
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-mate</artifactId>
-            <version>1.3.5</version>
+            <version>1.3.6</version>
         </dependency>
     </dependencies>
 </project>

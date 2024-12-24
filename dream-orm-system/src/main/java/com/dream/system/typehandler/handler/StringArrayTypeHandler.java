@@ -1,5 +1,7 @@
 package com.dream.system.typehandler.handler;
 
+import com.dream.util.common.ObjectUtil;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,7 +32,7 @@ public class StringArrayTypeHandler extends BaseTypeHandler<String[]> {
     }
 
     protected String[] getResult(String result) {
-        if (result == null) {
+        if (ObjectUtil.isNull(result)) {
             return null;
         }
         return result.split(",");

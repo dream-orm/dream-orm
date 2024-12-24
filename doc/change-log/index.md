@@ -1,5 +1,9 @@
 # dream-orm 升级日志
 
+## v1.3.6
+
+- 优化：StringArrayTypeHandler字符串转数组判断是否为空或空字符串
+
 ## v1.3.5
 
 - 新增：支持full join语法
