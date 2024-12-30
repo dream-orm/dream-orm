@@ -64,6 +64,7 @@ public final class Constant {
             ExprType.UNIX_TIMESTAMP,
             ExprType.FROM_UNIXTIME,
             ExprType.DATE,
+            ExprType.TIMESTAMP,
             ExprType.DATE_ADD,
             ExprType.DATE_SUB,
             ExprType.DATE_FORMAT,

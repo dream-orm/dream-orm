@@ -379,6 +379,9 @@ public abstract class SqlExpr {
             case DATE:
                 exprFactory = sqlExpr -> sqlExpr.exprDate(exprInfo);
                 break;
+            case TIMESTAMP:
+                exprFactory = sqlExpr -> sqlExpr.exprTimeStamp(exprInfo);
+                break;
             case DATETIME:
                 exprFactory = sqlExpr -> sqlExpr.exprDateTime(exprInfo);
                 break;
@@ -855,6 +858,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprDate(ExprInfo exprInfo) throws AntlrException {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprTimeStamp(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 

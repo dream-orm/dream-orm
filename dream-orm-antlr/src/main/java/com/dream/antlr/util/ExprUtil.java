@@ -291,6 +291,8 @@ public class ExprUtil {
                 return ExprType.FROM_UNIXTIME;
             case 2090926:
                 return ExprType.DATE;
+            case -1453246218:
+                return ExprType.TIMESTAMP;
             case -1718637701:
                 return ExprType.DATETIME;
             case -2034720975:

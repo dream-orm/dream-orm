@@ -32,11 +32,12 @@ public class ToSQLServer08 extends ToSQLServer {
                 orderStatement.setStatement(new SymbolStatement.LetterStatement("(select 0)"));
             }
             statement.setOrderStatement(null);
-            RowNumberStatement rowNumberStatement = new RowNumberStatement();
-            RowNumberStatement.OverStatement overStatement = new RowNumberStatement.OverStatement();
+            FuncOverStatement funcOverStatement = new FuncOverStatement();
+            funcOverStatement.setFunctionStatement(new FunctionStatement.RowNumberStatement());
+            OverStatement overStatement = new OverStatement();
             overStatement.setOrderStatement(orderStatement);
-            rowNumberStatement.setStatement(overStatement);
-            AliasStatement aliasStatement = AntlrUtil.aliasStatement(rowNumberStatement, new SymbolStatement.LetterStatement("V_R_N"));
+            funcOverStatement.setOverStatement(overStatement);
+            AliasStatement aliasStatement = AntlrUtil.aliasStatement(funcOverStatement, new SymbolStatement.LetterStatement("V_R_N"));
             statement.getSelectStatement().getSelectList().add(aliasStatement);
             ListColumnStatement listColumnStatement = AntlrUtil.listColumnStatement(",", "*");
             ConditionStatement conditionStatement;

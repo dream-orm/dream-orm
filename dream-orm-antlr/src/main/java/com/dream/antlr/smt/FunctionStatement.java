@@ -429,6 +429,10 @@ public abstract class FunctionStatement extends Statement {
 
     }
 
+    public static class TimeStampStatement extends FunctionStatement {
+
+    }
+
     public static class NowStatement extends FunctionStatement {
 
     }
@@ -494,9 +498,15 @@ public abstract class FunctionStatement extends Statement {
     }
 
     public static class UnixTimeStampStatement extends FunctionStatement {
+
     }
 
     public static class FromUnixTimeStatement extends FunctionStatement {
+
+    }
+
+    public static class RowNumberStatement extends FunctionStatement {
+
     }
 
     public static class ToCharStatement extends FunctionStatement {

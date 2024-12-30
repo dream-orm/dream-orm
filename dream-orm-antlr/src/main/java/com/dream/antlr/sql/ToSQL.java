@@ -431,6 +431,9 @@ public abstract class ToSQL {
             case 417418561://DateStatement
                 sql = toString((FunctionStatement.DateStatement) statement, assist, invokerList);
                 break;
+            case -1921482439://TimeStampStatement
+                sql = toString((FunctionStatement.TimeStampStatement) statement, assist, invokerList);
+                break;
             case 1888928601://NowStatement
                 sql = toString((FunctionStatement.NowStatement) statement, assist, invokerList);
                 break;
@@ -582,16 +585,19 @@ public abstract class ToSQL {
                 sql = toString((JoinStatement.FullJoinStatement) statement, assist, invokerList);
                 break;
             case 1749719820://RowNumberStatement
-                sql = toString((RowNumberStatement) statement, assist, invokerList);
+                sql = toString((FunctionStatement.RowNumberStatement) statement, assist, invokerList);
                 break;
             case -1469486373://OverStatement
-                sql = toString((RowNumberStatement.OverStatement) statement, assist, invokerList);
+                sql = toString((OverStatement) statement, assist, invokerList);
                 break;
             case -1989568059://PartitionStatement
-                sql = toString((RowNumberStatement.OverStatement.PartitionStatement) statement, assist, invokerList);
+                sql = toString((OverStatement.PartitionStatement) statement, assist, invokerList);
                 break;
             case 792918965://InvokerStatement
                 sql = toString((InvokerStatement) statement, assist, invokerList);
+                break;
+            case -1013766537://FuncOverStatement
+                sql = toString((FuncOverStatement) statement, assist, invokerList);
                 break;
             case -1652936693://MyFunctionStatement
                 sql = toString((MyFunctionStatement) statement, assist, invokerList);
@@ -887,6 +893,8 @@ public abstract class ToSQL {
 
     protected abstract String toString(FunctionStatement.DateStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
+    protected abstract String toString(FunctionStatement.TimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
     protected abstract String toString(FunctionStatement.NowStatement statement, Assist assist, List<Invoker> invokerList);
 
     protected abstract String toString(FunctionStatement.SysDateStatement statement, Assist assist, List<Invoker> invokerList);
@@ -989,13 +997,15 @@ public abstract class ToSQL {
 
     protected abstract String toString(JoinStatement.FullJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(RowNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+    protected abstract String toString(FunctionStatement.RowNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(RowNumberStatement.OverStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+    protected abstract String toString(OverStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
-    protected abstract String toString(RowNumberStatement.OverStatement.PartitionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+    protected abstract String toString(OverStatement.PartitionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(InvokerStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FuncOverStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(MyFunctionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

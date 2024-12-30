@@ -234,6 +234,11 @@ public class ToPostgreSQL extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.TimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATE(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(IntervalStatement.YearIntervalStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement numStatement = statement.getStatement();
         String res = toStr(statement.getStatement(), assist, invokerList);

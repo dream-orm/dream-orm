@@ -616,6 +616,14 @@ public class FunctionExpr extends SqlExpr {
     }
 
     @Override
+    protected Statement exprTimeStamp(ExprInfo exprInfo) throws AntlrException {
+        FunctionStatement func = new FunctionStatement.TimeStampStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     protected Statement exprDay(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.DayStatement();
         functionStatement = new FunctionParamExpr(exprReader, func).expr();
@@ -749,7 +757,10 @@ public class FunctionExpr extends SqlExpr {
 
     @Override
     protected Statement exprRowNumber(ExprInfo exprInfo) throws AntlrException {
-        return new RowNumberExpr(exprReader).expr();
+        FunctionStatement func = new FunctionStatement.RowNumberStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
     }
 
 
@@ -1273,140 +1284,6 @@ public class FunctionExpr extends SqlExpr {
             @Override
             protected Statement nil() {
                 return extractStatement;
-            }
-        }
-    }
-
-    public static class RowNumberExpr extends SqlExpr {
-        private RowNumberStatement rowNumberStatement;
-
-        public RowNumberExpr(ExprReader exprReader) {
-            super(exprReader);
-            setExprTypes(ExprType.ROW_NUMBER);
-        }
-
-        @Override
-        protected Statement exprRowNumber(ExprInfo exprInfo) throws AntlrException {
-            rowNumberStatement = new RowNumberStatement();
-            push();
-            setExprTypes(ExprType.LBRACE);
-            return expr();
-        }
-
-        @Override
-        protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
-            push();
-            setExprTypes(ExprType.RBRACE);
-            return expr();
-        }
-
-        @Override
-        protected Statement exprRBrace(ExprInfo exprInfo) throws AntlrException {
-            push();
-            setExprTypes(ExprType.OVER);
-            return expr();
-        }
-
-        @Override
-        protected Statement exprOver(ExprInfo exprInfo) throws AntlrException {
-            rowNumberStatement.setStatement(new OverExpr(exprReader).expr());
-            setExprTypes(ExprType.NIL);
-            return expr();
-        }
-
-        @Override
-        protected Statement nil() {
-            return rowNumberStatement;
-        }
-
-        public static class OverExpr extends SqlExpr {
-            private RowNumberStatement.OverStatement overStatement;
-
-            public OverExpr(ExprReader exprReader) {
-                super(exprReader);
-                setExprTypes(ExprType.OVER);
-            }
-
-            @Override
-            protected Statement exprOver(ExprInfo exprInfo) throws AntlrException {
-                overStatement = new RowNumberStatement.OverStatement();
-                push();
-                setExprTypes(ExprType.LBRACE);
-                return expr();
-            }
-
-            @Override
-            protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
-                push();
-                setExprTypes(ExprType.PARTITION, ExprType.ORDER, ExprType.RBRACE);
-                return expr();
-            }
-
-            @Override
-            protected Statement exprRBrace(ExprInfo exprInfo) throws AntlrException {
-                push();
-                setExprTypes(ExprType.NIL);
-                return expr();
-            }
-
-            @Override
-            protected Statement exprPartition(ExprInfo exprInfo) throws AntlrException {
-                overStatement.setPartitionStatement(new PartitionExpr(exprReader).expr());
-                setExprTypes(ExprType.ORDER, ExprType.RBRACE);
-                return expr();
-            }
-
-            @Override
-            protected Statement exprOrder(ExprInfo exprInfo) throws AntlrException {
-                overStatement.setOrderStatement(new OrderExpr(exprReader).expr());
-                setExprTypes(ExprType.RBRACE);
-                return expr();
-            }
-
-            @Override
-            protected Statement nil() {
-                return overStatement;
-            }
-
-            public static class PartitionExpr extends HelperExpr {
-                private RowNumberStatement.OverStatement.PartitionStatement partitionStatement;
-
-                public PartitionExpr(ExprReader exprReader) {
-                    this(exprReader, () -> new ColumnExpr(exprReader));
-                }
-
-
-                public PartitionExpr(ExprReader exprReader, Helper helper) {
-                    super(exprReader, helper);
-                    setExprTypes(ExprType.PARTITION);
-                }
-
-                @Override
-                protected Statement exprPartition(ExprInfo exprInfo) throws AntlrException {
-                    partitionStatement = new RowNumberStatement.OverStatement.PartitionStatement();
-                    push();
-                    setExprTypes(ExprType.BY);
-                    return expr();
-                }
-
-                @Override
-                protected Statement exprBy(ExprInfo exprInfo) throws AntlrException {
-                    push();
-                    setExprTypes(ExprType.HELP);
-                    return expr();
-                }
-
-                @Override
-                protected Statement exprHelp(Statement statement) throws AntlrException {
-                    partitionStatement.setStatement(statement);
-                    setExprTypes(ExprType.NIL);
-                    return expr();
-                }
-
-                @Override
-                protected Statement nil() {
-                    return partitionStatement;
-                }
             }
         }
     }

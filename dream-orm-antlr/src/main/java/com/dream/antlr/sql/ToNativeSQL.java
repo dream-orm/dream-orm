@@ -785,6 +785,11 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.TimeStampStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TIMESTAMP(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.NowStatement statement, Assist assist, List<Invoker> invokerList) {
         return "NOW()";
     }
@@ -1052,17 +1057,22 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
-    protected String toString(RowNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "ROW_NUMBER()" + toStr(statement.getStatement(), assist, invokerList);
+    protected String toString(FuncOverStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return toStr(statement.getFunctionStatement(), assist, invokerList) + " " + toStr(statement.getOverStatement(), assist, invokerList);
     }
 
     @Override
-    protected String toString(RowNumberStatement.OverStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "OVER(" + toStr(statement.getPartitionStatement(), assist, invokerList) + toStr(statement.getOrderStatement(), assist, invokerList) + ")";
+    protected String toString(FunctionStatement.RowNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "ROW_NUMBER(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }
 
     @Override
-    protected String toString(RowNumberStatement.OverStatement.PartitionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+    protected String toString(OverStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "OVER(" + toStr(statement.getPartitionStatement(), assist, invokerList) + " " + toStr(statement.getOrderStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(OverStatement.PartitionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "PARTITION BY " + toStr(statement.getStatement(), assist, invokerList);
     }
 

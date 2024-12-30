@@ -607,7 +607,7 @@ public class ToOracle extends ToPubSQL {
     }
 
     @Override
-    protected String toString(RowNumberStatement.OverStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+    protected String toString(OverStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement orderStatement = statement.getOrderStatement();
         if (orderStatement == null) {
             orderStatement = new OrderStatement();

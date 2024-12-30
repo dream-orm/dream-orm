@@ -146,6 +146,7 @@ public enum ExprType {
     SIGNED,
     DECIMAL,
     DATE,
+    TIMESTAMP,
     DATETIME,
     INTEGER,
     COALESCE,

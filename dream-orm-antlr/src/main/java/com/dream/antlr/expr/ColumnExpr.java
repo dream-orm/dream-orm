@@ -24,7 +24,7 @@ public class ColumnExpr extends HelperExpr {
 
     @Override
     protected Statement exprFunction(ExprInfo exprInfo) throws AntlrException {
-        FunctionExpr functionExpr = new FunctionExpr(exprReader);
+        FuncOverExpr functionExpr = new FuncOverExpr(exprReader);
         statement = functionExpr.expr();
         setExprTypes(ExprType.NIL);
         return expr();

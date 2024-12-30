@@ -82,13 +82,13 @@ public class HelloWorldAntlrTest {
                 ",date_add(s1,interval 3 week),date_add(s1,interval 4 day),date_add(s1,interval 4 hour),date_add(s1,interval 4 minute),date_add(s1,interval 4 second)" +
                 ",DAYOFYEAR(s),year(s),month(s),now(),day(s),DAYOFWEEK(s),hour(s),last_day(s),minute(s),quarter(s),second(s),weekofyear(s)" +
                 ",date_format(s,'%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j'),str_to_date(s,'%Y-%y-%m-%d-%e-%H-%k-%h-%l-%i-%s-%S-%j')");
-        testSqlForMany("select date_format(now(),'%T-%W-%a-%M-%M-%b-%v')");
+        testSqlForMany("select date_format(now(),'%T-%W-%a-%M-%M-%b-%v'),date('2000-12-12'),timestamp('2000-12-12')");
         testSqlForMany("select EXTRACT(year from now()),EXTRACT(QUARTER from now()),EXTRACT(month from now()),EXTRACT(week from now()),EXTRACT(day from now()),EXTRACT(hour from now()),EXTRACT(minute from now()),EXTRACT(second from now())");
     }
 
     @Test
     public void testOther() {
-        testSqlForMany("SELECT cast(s as double),cast(s as decimal(s1,b)),convert(s,decimal(s,b)),convert(s,date),convert(s,time),convert(s,datetime),cast(s as date),cast(s as time),cast(s as datetime),row_number() over(),row_number() over(partition by p),row_number() over(partition by p order by o),row_number() over(order by o),convert(s,signed),convert(s,signed int),convert(s,signed integer),convert(s,float),convert(s,double),convert(s,char),convert(s,decimal),convert(s,decimal(s)),convert(s,decimal(s,b)),cast(s as signed),cast(s as signed int),cast(s as signed integer),cast(s as float),cast(s as decimal)," +
+        testSqlForMany("SELECT cast(s as double),cast(s as decimal(s1,b)),convert(s,decimal(s,b)),convert(s,date),convert(s,time),convert(s,datetime),cast(s as date),cast(s as time),cast(s as datetime),sum(s)over(),row_number() over(),row_number() over(partition by p),row_number() over(partition by p order by o),row_number() over(order by o),convert(s,signed),convert(s,signed int),convert(s,signed integer),convert(s,float),convert(s,double),convert(s,char),convert(s,decimal),convert(s,decimal(s)),convert(s,decimal(s,b)),cast(s as signed),cast(s as signed int),cast(s as signed integer),cast(s as float),cast(s as decimal)," +
                 "cast(s as decimal(s)),cast(s as decimal(s,b)),isnull(a),ifnull(s1,s2),IF(s1,s2,s3),nullif(s1,s2)");
     }
 
