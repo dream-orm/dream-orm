@@ -191,6 +191,7 @@ public enum ExprType {
     MARK,
     INVOKER,
     COLON,
+    SEMICOLON,
     TO_CHAR,
     TO_NUMBER,
     TO_DATE,

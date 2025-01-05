@@ -32,7 +32,7 @@ public class PackageExpr extends SqlExpr {
     @Override
     protected Statement exprRBrace(ExprInfo exprInfo) throws AntlrException {
         push();
-        setExprTypes(ExprType.ACC);
+        setExprTypes(ExprType.SEMICOLON, ExprType.ACC);
         return expr();
     }
 
@@ -40,7 +40,7 @@ public class PackageExpr extends SqlExpr {
     protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
         InvokerExpr invokerExpr = new InvokerExpr(exprReader);
         statement.setStatement(invokerExpr.expr());
-        setExprTypes(ExprType.ACC);
+        setExprTypes(ExprType.SEMICOLON, ExprType.ACC);
         return expr();
     }
 
@@ -72,6 +72,14 @@ public class PackageExpr extends SqlExpr {
     protected Statement exprDML(ExprInfo exprInfo) throws AntlrException {
         DMLExpr dmlExpr = new DMLExpr(exprReader);
         statement.setStatement(dmlExpr.expr());
+        setExprTypes(ExprType.SEMICOLON, ExprType.ACC);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprSemicolon(ExprInfo exprInfo) throws AntlrException {
+        push();
+        statement.setSemicolon(true);
         setExprTypes(ExprType.ACC);
         return expr();
     }

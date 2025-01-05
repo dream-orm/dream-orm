@@ -162,6 +162,9 @@ public class ExprReader extends StringReader {
             case 58:
                 lastInfo = new ExprInfo(ExprType.COLON, ":", getStart(), getEnd());
                 break;
+            case 59:
+                lastInfo = new ExprInfo(ExprType.SEMICOLON, ";", getStart(), getEnd());
+                break;
             case 60:
                 mark();
                 c = read();

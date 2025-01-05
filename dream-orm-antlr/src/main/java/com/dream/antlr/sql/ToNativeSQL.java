@@ -36,7 +36,7 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(PackageStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getStatement(), assist, invokerList);
+        return toStr(statement.getStatement(), assist, invokerList) + (statement.isSemicolon() ? ";" : "");
     }
 
     @Override

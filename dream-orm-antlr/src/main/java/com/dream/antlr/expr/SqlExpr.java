@@ -592,6 +592,9 @@ public abstract class SqlExpr {
             case COLON:
                 exprFactory = sqlExpr -> sqlExpr.exprColon(exprInfo);
                 break;
+            case SEMICOLON:
+                exprFactory = sqlExpr -> sqlExpr.exprSemicolon(exprInfo);
+                break;
             case IGNORE:
                 exprFactory = sqlExpr -> sqlExpr.exprIgnore(exprInfo);
                 break;
@@ -646,6 +649,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprColon(ExprInfo exprInfo) throws AntlrException {
+        return exprNil(exprInfo);
+    }
+
+    protected Statement exprSemicolon(ExprInfo exprInfo) throws AntlrException {
         return exprNil(exprInfo);
     }
 

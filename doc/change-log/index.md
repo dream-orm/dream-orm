@@ -4,6 +4,7 @@
 
 - 优化：StringArrayTypeHandler字符串转数组判断是否为空或空字符串
 - 新增：支持over窗口语法，支持timestamp函数
+- 优化：支持分号
 
 ## v1.3.5
 

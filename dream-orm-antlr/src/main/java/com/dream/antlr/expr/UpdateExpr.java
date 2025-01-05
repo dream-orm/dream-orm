@@ -45,7 +45,6 @@ public class UpdateExpr extends HelperExpr {
         Statement statement = whereExpr.expr();
         updateStatement.setWhere(statement);
         setExprTypes(ExprType.NIL);
-        setExprTypes(ExprType.NIL);
         return expr();
     }
 
