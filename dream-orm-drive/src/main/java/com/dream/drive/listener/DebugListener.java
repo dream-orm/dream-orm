@@ -24,7 +24,7 @@ public class DebugListener implements Listener {
 
     @Override
     public void exception(Throwable e, MappedStatement mappedStatement) {
-        System.err.println("异常：" + e.getMessage());
+        error("异常：" + e.getMessage());
         after(mappedStatement);
     }
 
@@ -36,9 +36,17 @@ public class DebugListener implements Listener {
         } else {
             paramList = new ArrayList<>();
         }
-        System.out.println("ID：" + mappedStatement.getId());
-        System.out.println("语句：" + mappedStatement.getSql());
-        System.out.println("参数：" + paramList);
-        System.out.println("用时：" + (System.currentTimeMillis() - (long) mappedStatement.get(START_DATE)) + "ms");
+        info("ID：" + mappedStatement.getId() + "\n"
+                + "语句：" + mappedStatement.getSql() + "\n"
+                + "参数：" + paramList + "\n"
+                + "用时：" + (System.currentTimeMillis() - (long) mappedStatement.get(START_DATE)) + "ms");
+    }
+
+    protected void info(String msg) {
+        System.out.println(msg);
+    }
+
+    protected void error(String msg) {
+        System.err.println(msg);
     }
 }
