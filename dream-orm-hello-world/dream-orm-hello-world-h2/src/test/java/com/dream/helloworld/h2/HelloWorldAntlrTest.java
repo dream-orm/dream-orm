@@ -153,6 +153,24 @@ public class HelloWorldAntlrTest {
         testSqlForMany("replace into dual(id,name)values(id,name)");
     }
 
+    @Test
+    public void testWith() {
+        testSqlForMany("WITH today_login AS (\n" +
+                "    SELECT COUNT(DISTINCT user_name) AS today_count\n" +
+                "    FROM sys_login_log\n" +
+                "    WHERE DATE(login_time) = CURDATE()\n" +
+                "),\n" +
+                "yesterday_login AS (\n" +
+                "    SELECT COUNT(DISTINCT user_name) AS yesterday_count\n" +
+                "    FROM sys_login_log\n" +
+                "    WHERE DATE(login_time) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)\n" +
+                ")\n" +
+                "SELECT \n" +
+                "    today_count,\n" +
+                "    yesterday_count,\n" +
+                "    ROUND((today_count - yesterday_count) / yesterday_count * 100, 2) AS percent_change\n" +
+                "FROM today_login, yesterday_login;");
+    }
 
     protected void testSqlForMany(String sql) {
         System.out.println();

@@ -115,6 +115,9 @@ public abstract class SqlExpr {
             case AS:
                 exprFactory = sqlExpr -> sqlExpr.exprAs(exprInfo);
                 break;
+            case WITH:
+                exprFactory = sqlExpr -> sqlExpr.exprWith(exprInfo);
+                break;
             case ASC:
                 exprFactory = sqlExpr -> sqlExpr.exprAsc(exprInfo);
                 break;
@@ -1344,6 +1347,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprAs(ExprInfo exprInfo) throws AntlrException {
+        return exprKeyWord(exprInfo);
+    }
+
+    protected Statement exprWith(ExprInfo exprInfo) throws AntlrException {
         return exprKeyWord(exprInfo);
     }
 

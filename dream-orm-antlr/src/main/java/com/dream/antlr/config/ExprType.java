@@ -38,6 +38,7 @@ public enum ExprType {
     ON,
     DISTINCT,
     AS,
+    WITH,
     ASC,
     DESC,
     BLANK,

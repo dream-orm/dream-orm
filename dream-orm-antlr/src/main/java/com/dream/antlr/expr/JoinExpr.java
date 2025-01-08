@@ -94,4 +94,34 @@ public class JoinExpr extends SqlExpr {
     public Statement nil() {
         return joinStatement;
     }
+
+    public static class CommaJoinExpr extends HelperExpr {
+        private JoinStatement joinStatement;
+
+        public CommaJoinExpr(ExprReader exprReader) {
+            this(exprReader, () -> {
+                AliasColumnExpr aliasColumnExpr = new AliasColumnExpr(exprReader);
+                aliasColumnExpr.setExprTypes(ExprType.HELP);
+                return aliasColumnExpr;
+            });
+        }
+
+        public CommaJoinExpr(ExprReader exprReader, Helper helper) {
+            super(exprReader, helper);
+            setExprTypes(ExprType.HELP);
+        }
+
+        @Override
+        protected Statement nil() {
+            return joinStatement;
+        }
+
+        @Override
+        protected Statement exprHelp(Statement statement) throws AntlrException {
+            joinStatement = new JoinStatement.CommaJoinStatement();
+            joinStatement.setJoinTable(statement);
+            setExprTypes(ExprType.NIL);
+            return joinStatement;
+        }
+    }
 }

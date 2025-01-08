@@ -16,7 +16,7 @@ public class PackageExpr extends SqlExpr {
 
     public PackageExpr(ExprReader exprReader) {
         super(exprReader);
-        setExprTypes(ExprType.LBRACE, ExprType.INVOKER, ExprType.SELECT, ExprType.INSERT, ExprType.UPDATE, ExprType.DELETE, ExprType.REPLACE, ExprType.ACC);
+        setExprTypes(ExprType.LBRACE, ExprType.INVOKER, ExprType.SELECT, ExprType.INSERT, ExprType.UPDATE, ExprType.DELETE, ExprType.WITH, ExprType.REPLACE, ExprType.ACC);
     }
 
     @Override
@@ -62,6 +62,14 @@ public class PackageExpr extends SqlExpr {
     @Override
     protected Statement exprDelete(ExprInfo exprInfo) throws AntlrException {
         return exprDML(exprInfo);
+    }
+
+    @Override
+    protected Statement exprWith(ExprInfo exprInfo) throws AntlrException {
+        WithExpr withExpr = new WithExpr(exprReader);
+        statement.setStatement(withExpr.expr());
+        setExprTypes(ExprType.SEMICOLON, ExprType.ACC);
+        return expr();
     }
 
     @Override

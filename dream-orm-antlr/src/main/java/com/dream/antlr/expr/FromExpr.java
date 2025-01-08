@@ -62,6 +62,15 @@ public class FromExpr extends HelperExpr {
     }
 
     @Override
+    protected Statement exprComma(ExprInfo exprInfo) throws AntlrException {
+        push();
+        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new JoinExpr.CommaJoinExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
+        fromStatement.setJoinList(listColumnExpr.expr());
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     public Statement nil() {
         return fromStatement;
     }
@@ -69,7 +78,7 @@ public class FromExpr extends HelperExpr {
     @Override
     protected Statement exprHelp(Statement statement) throws AntlrException {
         fromStatement.setMainTable(statement);
-        setExprTypes(ExprType.LEFT, ExprType.RIGHT, ExprType.CROSS, ExprType.INNER, ExprType.JOIN, ExprType.NIL);
+        setExprTypes(ExprType.LEFT, ExprType.RIGHT, ExprType.CROSS, ExprType.INNER, ExprType.JOIN, ExprType.COMMA, ExprType.NIL);
         return expr();
     }
 }

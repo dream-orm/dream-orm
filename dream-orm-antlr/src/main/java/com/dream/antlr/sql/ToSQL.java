@@ -77,6 +77,12 @@ public abstract class ToSQL {
             case 1652540603://ReplaceIntoStatement
                 sql = toString((ReplaceIntoStatement) statement, assist, invokerList);
                 break;
+            case -419150039://WithStatement
+                sql = toString((WithStatement) statement, assist, invokerList);
+                break;
+            case -574737531://WithAliasStatement
+                sql = toString((WithStatement.WithAliasStatement) statement, assist, invokerList);
+                break;
             case 669165491://SelectStatement
                 sql = toString((SelectStatement) statement, assist, invokerList);
                 break;
@@ -584,6 +590,9 @@ public abstract class ToSQL {
             case -1532311306://FullJoinStatement
                 sql = toString((JoinStatement.FullJoinStatement) statement, assist, invokerList);
                 break;
+            case -1697491280://CommaJoinStatement
+                sql = toString((JoinStatement.CommaJoinStatement) statement, assist, invokerList);
+                break;
             case 1749719820://RowNumberStatement
                 sql = toString((FunctionStatement.RowNumberStatement) statement, assist, invokerList);
                 break;
@@ -746,6 +755,10 @@ public abstract class ToSQL {
     protected abstract String toString(SymbolStatement.SingleMarkStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(QueryStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(WithStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(WithStatement.WithAliasStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(SelectStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
@@ -996,6 +1009,8 @@ public abstract class ToSQL {
     protected abstract String toString(JoinStatement.CrossJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(JoinStatement.FullJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(JoinStatement.CommaJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.RowNumberStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

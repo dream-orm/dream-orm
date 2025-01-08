@@ -53,4 +53,8 @@ public abstract class JoinStatement extends Statement {
 
     }
 
+    public static class CommaJoinStatement extends JoinStatement {
+
+    }
+
 }

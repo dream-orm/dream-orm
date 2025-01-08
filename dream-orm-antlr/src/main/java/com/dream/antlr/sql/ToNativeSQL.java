@@ -402,6 +402,16 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(WithStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "WITH " + toStr(statement.getAliasStatement(), assist, invokerList) + toStr(statement.getStatement(), assist, invokerList);
+    }
+
+    @Override
+    protected String toString(WithStatement.WithAliasStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return toStr(statement.getAliasStatement(), assist, invokerList) + " AS " + toStr(statement.getStatement(), assist, invokerList);
+    }
+
+    @Override
     protected String toString(SelectStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "SELECT " + (statement.isDistinct() ? "DISTINCT " : "") + toStr(statement.getSelectList(), assist, invokerList);
     }
@@ -1054,6 +1064,11 @@ public class ToNativeSQL extends ToSQL {
     @Override
     protected String toString(JoinStatement.FullJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "FULL JOIN " + toStr(statement.getJoinTable(), assist, invokerList) + (statement.getOn() != null ? (" ON " + toStr(statement.getOn(), assist, invokerList)) : "");
+    }
+
+    @Override
+    protected String toString(JoinStatement.CommaJoinStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "," + toStr(statement.getJoinTable(), assist, invokerList);
     }
 
     @Override

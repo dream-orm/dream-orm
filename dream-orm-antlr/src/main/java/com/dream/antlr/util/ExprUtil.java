@@ -49,6 +49,8 @@ public class ExprUtil {
                 return ExprType.JOIN;
             case 2098:
                 return ExprType.AS;
+            case 2664646:
+                return ExprType.WITH;
             case 2527:
                 return ExprType.ON;
             case 64397344:
