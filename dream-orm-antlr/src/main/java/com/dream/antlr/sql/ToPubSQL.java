@@ -3,9 +3,7 @@ package com.dream.antlr.sql;
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.invoker.Invoker;
-import com.dream.antlr.smt.InvokerStatement;
-import com.dream.antlr.smt.MyFunctionStatement;
-import com.dream.antlr.smt.Statement;
+import com.dream.antlr.smt.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +23,15 @@ public abstract class ToPubSQL extends ToNativeSQL {
         if (statement.isNeedCache()) {
             statement.setQuickValue(sql);
         }
+    }
+
+    @Override
+    protected String toString(AliasStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        Statement alias = statement.getAlias();
+        if (alias instanceof SymbolStatement.StrStatement) {
+            alias = new SymbolStatement.SingleMarkStatement(((SymbolStatement.StrStatement) alias).getValue());
+        }
+        return toStr(statement.getColumn(), assist, invokerList) + (statement.isShowAlias() ? " AS " : " ") + toStr(alias, assist, invokerList);
     }
 
     @Override
