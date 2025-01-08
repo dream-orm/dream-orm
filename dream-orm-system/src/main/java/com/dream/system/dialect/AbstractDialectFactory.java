@@ -35,7 +35,7 @@ public abstract class AbstractDialectFactory implements DialectFactory {
                             injectFactory.inject(methodInfo);
                             methodInfo.setCompile(Compile.ANTLR_COMPILED);
                         } catch (Exception e) {
-                            throw new DreamRunTimeException("编译方法" + methodInfo.getId() + "失败，" + e.getMessage(), e);
+                            throw new DreamRunTimeException("编译方法" + methodInfo.getId() + "失败\n原因:" + e.getMessage() + "\nsql:" + sql, e);
                         }
                     }
                 }
