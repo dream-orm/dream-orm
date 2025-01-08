@@ -64,7 +64,7 @@ public class FromExpr extends HelperExpr {
     @Override
     protected Statement exprComma(ExprInfo exprInfo) throws AntlrException {
         push();
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new JoinExpr.CommaJoinExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
+        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new JoinExpr.CommaJoinExpr(exprReader), new ExprInfo(ExprType.COMMA, ""));
         fromStatement.setJoinList(listColumnExpr.expr());
         setExprTypes(ExprType.NIL);
         return expr();
