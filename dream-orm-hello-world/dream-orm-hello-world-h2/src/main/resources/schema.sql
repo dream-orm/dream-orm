@@ -11,3 +11,12 @@ CREATE TABLE account
     del_flag  int(11) NULL COMMENT '删除标志',
     PRIMARY KEY (id)
 );
+
+CREATE TABLE dept
+(
+    id        BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    name      VARCHAR(30) NULL DEFAULT NULL COMMENT '部门名称',
+    tenant_id INT(11) NULL COMMENT '租户',
+    del_flag  int(11) NULL COMMENT '删除标志',
+    PRIMARY KEY (id)
+);

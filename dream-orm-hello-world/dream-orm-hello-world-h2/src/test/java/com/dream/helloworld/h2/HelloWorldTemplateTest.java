@@ -3,6 +3,7 @@ package com.dream.helloworld.h2;
 import com.dream.helloworld.h2.condition.AccountCondition;
 import com.dream.helloworld.h2.condition.OrderAccountCondition;
 import com.dream.helloworld.h2.view.AccountView;
+import com.dream.helloworld.h2.view.AccountWithDeptView;
 import com.dream.helloworld.h2.view.ValidatedAccountView;
 import com.dream.helloworld.h2.view.WrapAccountView;
 import com.dream.system.config.Page;
@@ -61,6 +62,15 @@ public class HelloWorldTemplateTest {
         accountCondition.setAge(Arrays.asList(18, 20, 21, 24));
         accountCondition.setAges(new Integer[]{10, 20});
         List<AccountView> accountViews = templateMapper.selectList(AccountView.class, accountCondition);
+        System.out.println("查询结果：" + accountViews);
+    }
+
+    /**
+     * 测试注解条件
+     */
+    @Test
+    public void testFetch() {
+        List<AccountWithDeptView> accountViews = templateMapper.selectList(AccountWithDeptView.class, null);
         System.out.println("查询结果：" + accountViews);
     }
 
