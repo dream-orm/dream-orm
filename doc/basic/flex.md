@@ -7,20 +7,13 @@
 **FlexAPT注解**
 
 ```java
-public @interface FlexAPT {
-    /**
-     * 是否启用APT
-     *
-     * @return
-     */
-    boolean enable() default true;
-
+public @interface EnableFlexAPT {
     /**
      * 生成apt类的后缀
      *
      * @return
      */
-    String classSuffix() default "TableDef";
+    String classSuffix() default "Def";
 
     /**
      * 生成类所在目录
@@ -28,15 +21,14 @@ public @interface FlexAPT {
      *
      * @return
      */
-    String dir() default "./table";
+    String dir() default "../def";
 }
 ```
 
 | 属性        | 描述                                                |
 | ----------- | --------------------------------------------------- |
-| enable      | 是否开启APT，当类声明此注解默认开启                 |
 | classSuffix | 生成apt类的后缀                                     |
-| dir         | 根据Table注解所在类的目录生成对应代码所在目录的包名 |
+| dir         | 生成类所在目录 |
 
 **APT编译生成的代码不仅仅依赖Table注解声明的类，还依赖View注解声明的类。**
 
