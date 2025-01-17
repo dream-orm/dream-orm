@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    master:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://111.230.206.246/sooth
+      username: root
+      password: moxa@sooth
+
+  dream:
+    toSQL: com.dream.antlr.sql.ToMySQL
+    listeners:
+      - com.sooth.common.dream.listener.SoothDebugListener
