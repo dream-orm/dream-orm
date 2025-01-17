@@ -26,6 +26,7 @@ public class MethodInfo {
     protected Compile compile = Compile.ANTLR_COMPILE;
     protected String sql;
     protected int timeOut;
+    protected String page;
     protected PackageStatement statement;
     protected CacheKey methodKey;
     protected Method method;
@@ -114,6 +115,15 @@ public class MethodInfo {
 
     public MethodInfo setTimeOut(int timeOut) {
         this.timeOut = timeOut;
+        return this;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public MethodInfo setPage(String page) {
+        this.page = page;
         return this;
     }
 

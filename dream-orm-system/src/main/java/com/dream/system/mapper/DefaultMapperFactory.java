@@ -1,10 +1,7 @@
 package com.dream.system.mapper;
 
 import com.dream.system.action.ActionProvider;
-import com.dream.system.annotation.Mapper;
-import com.dream.system.annotation.Param;
-import com.dream.system.annotation.Provider;
-import com.dream.system.annotation.Sql;
+import com.dream.system.annotation.*;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.config.MethodParam;
@@ -89,6 +86,7 @@ public class DefaultMapperFactory implements MapperFactory {
         Class<? extends Collection> rowType = getRowType(mapperClass, method, actionProvider);
         Class colType = getColType(mapperClass, method, actionProvider);
         int timeOut = getTimeOut(mapperClass, method, actionProvider);
+        String page = getPage(mapperClass, method, actionProvider);
         StatementHandler statementHandler = statementHandler(mapperClass, method, actionProvider);
         ResultSetHandler resultSetHandler = resultSetHandler(mapperClass, method, actionProvider);
         InitAction[] initActions = initActions(mapperClass, method, actionProvider);
@@ -102,6 +100,7 @@ public class DefaultMapperFactory implements MapperFactory {
                 .setMethodParamList(methodParamList)
                 .setSql(sql)
                 .setTimeOut(timeOut)
+                .setPage(page)
                 .setMethod(method)
                 .setStatementHandler(statementHandler)
                 .setResultSetHandler(resultSetHandler)
@@ -175,7 +174,7 @@ public class DefaultMapperFactory implements MapperFactory {
     protected int getTimeOut(Class mapperClass, Method method, ActionProvider actionProvider) {
         Integer timeOut = null;
         if (actionProvider != null) {
-            actionProvider.timeOut();
+            timeOut = actionProvider.timeOut();
         }
         if (timeOut == null) {
             Sql sqlAnnotation = method.getDeclaredAnnotation(Sql.class);
@@ -186,6 +185,20 @@ public class DefaultMapperFactory implements MapperFactory {
             }
         }
         return timeOut;
+    }
+
+    protected String getPage(Class mapperClass, Method method, ActionProvider actionProvider) {
+        String page = null;
+        if (actionProvider != null) {
+            page = actionProvider.page();
+        }
+        if (page == null) {
+            PageQuery pageQueryAnnotation = method.getDeclaredAnnotation(PageQuery.class);
+            if (pageQueryAnnotation != null) {
+                page = pageQueryAnnotation.value();
+            }
+        }
+        return page;
     }
 
     protected StatementHandler statementHandler(Class mapperClass, Method method, ActionProvider actionProvider) {

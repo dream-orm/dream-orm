@@ -60,11 +60,10 @@ public class PageHandler extends AbstractHandler {
             newQueryStatement.setFromStatement(fromStatement);
             packageStatement.setStatement(newQueryStatement);
         }
-        PageQuery pageQuery = methodInfo.get(PageQuery.class);
-        String value = pageQuery.value();
+        String page = methodInfo.getPage();
         String property = "total";
-        if (!ObjectUtil.isNull(value)) {
-            property = value + "." + property;
+        if (!ObjectUtil.isNull(page)) {
+            property = page + "." + property;
         }
         MethodInfo methodInfo = new MethodInfo()
                 .setId(this.methodInfo.getId() + "#count")

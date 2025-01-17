@@ -75,6 +75,15 @@ public interface ActionProvider {
     }
 
     /**
+     * Page地址
+     *
+     * @return
+     */
+    default String page(){
+        return null;
+    }
+
+    /**
      * SQL操作最终类
      *
      * @return

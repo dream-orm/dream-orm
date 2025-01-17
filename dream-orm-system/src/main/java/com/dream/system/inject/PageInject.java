@@ -6,7 +6,6 @@ import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.smt.SymbolStatement;
 import com.dream.antlr.util.AntlrUtil;
-import com.dream.system.annotation.PageQuery;
 import com.dream.system.antlr.invoker.LimitInvoker;
 import com.dream.system.antlr.invoker.MarkInvoker;
 import com.dream.system.antlr.invoker.OffSetInvoker;
@@ -14,9 +13,7 @@ import com.dream.system.config.MethodInfo;
 import com.dream.util.common.ObjectUtil;
 
 public class PageInject implements Inject {
-    private final String START_ROW = "startRow";
-    private final String PAGE_SIZE = "pageSize";
-    private boolean offset;
+    private final boolean offset;
 
     public PageInject(boolean offset) {
         this.offset = offset;
@@ -24,14 +21,13 @@ public class PageInject implements Inject {
 
     @Override
     public void inject(MethodInfo methodInfo) {
-        PageQuery pageQuery = methodInfo.get(PageQuery.class);
-        if (pageQuery != null) {
+        String page = methodInfo.getPage();
+        if (page != null) {
             InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
             PackageStatement statement = methodInfo.getStatement();
-            String value = pageQuery.value();
-            String prefix = ObjectUtil.isNull(value) ? "" : (value + ".");
-            String startRow = prefix + START_ROW;
-            String pageSize = prefix + PAGE_SIZE;
+            String prefix = ObjectUtil.isNull(page) ? "" : (page + ".");
+            String startRow = prefix + "startRow";
+            String pageSize = prefix + "pageSize";
             InvokerStatement pageStatement;
             if (offset) {
                 if (invokerFactory.getInvoker(OffSetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {

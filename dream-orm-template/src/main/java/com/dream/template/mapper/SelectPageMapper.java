@@ -1,6 +1,5 @@
 package com.dream.template.mapper;
 
-import com.dream.system.annotation.PageQuery;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.config.Page;
@@ -8,7 +7,6 @@ import com.dream.system.core.session.Session;
 import com.dream.system.table.factory.TableFactory;
 import com.dream.util.common.ObjectMap;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 
@@ -39,17 +37,7 @@ public class SelectPageMapper extends SelectListMapper {
                     String tableName = getTableName(type);
                     methodInfo = getMethodInfo(configuration, tableFactory.getTableInfo(tableName), type, arg);
                     methodInfo.setId(id);
-                    methodInfo.set(PageQuery.class, new PageQuery() {
-                        @Override
-                        public Class<? extends Annotation> annotationType() {
-                            return PageQuery.class;
-                        }
-
-                        @Override
-                        public String value() {
-                            return PAGE;
-                        }
-                    });
+                    methodInfo.setPage(PAGE);
                     mapperFactory.addMethodInfo(methodInfo);
                 }
             }
