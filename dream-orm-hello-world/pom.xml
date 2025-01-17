@@ -13,6 +13,7 @@
         <module>dream-orm-hello-world-tdengine</module>
         <module>dream-orm-hello-world-generator</module>
         <module>dream-orm-hello-world-jdbc</module>
+        <module>dream-orm-hello-world-springboot</module>
     </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
