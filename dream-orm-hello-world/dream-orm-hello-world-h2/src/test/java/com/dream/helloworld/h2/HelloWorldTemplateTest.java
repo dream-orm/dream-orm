@@ -92,7 +92,7 @@ public class HelloWorldTemplateTest {
     public void testUpdate() {
         AccountView accountView = new AccountView();
         accountView.setId(1);
-        accountView.setName("哈哈");
+        accountView.setName("Jone");
         accountView.setAge(11);
         accountView.setEmail("email123");
         templateMapper.updateById(accountView);

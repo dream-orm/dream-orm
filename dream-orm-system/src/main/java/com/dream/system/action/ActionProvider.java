@@ -79,7 +79,7 @@ public interface ActionProvider {
      *
      * @return
      */
-    default String page(){
+    default String page() {
         return null;
     }
 

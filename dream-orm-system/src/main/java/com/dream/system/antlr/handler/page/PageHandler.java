@@ -6,7 +6,6 @@ import com.dream.antlr.handler.AbstractHandler;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
 import com.dream.antlr.sql.ToSQL;
-import com.dream.system.annotation.PageQuery;
 import com.dream.system.config.MethodInfo;
 import com.dream.util.common.NonCollection;
 import com.dream.util.common.ObjectUtil;

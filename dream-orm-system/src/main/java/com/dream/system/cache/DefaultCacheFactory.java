@@ -10,6 +10,10 @@ public class DefaultCacheFactory implements CacheFactory {
         return cache;
     }
 
+    public void setCache(Cache cache) {
+        this.cache = cache;
+    }
+
     @Override
     public boolean isSessionCache() {
         return sessionCache;
@@ -17,9 +21,5 @@ public class DefaultCacheFactory implements CacheFactory {
 
     public void setSessionCache(boolean sessionCache) {
         this.sessionCache = sessionCache;
-    }
-
-    public void setCache(Cache cache) {
-        this.cache = cache;
     }
 }
