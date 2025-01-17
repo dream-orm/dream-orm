@@ -7,6 +7,15 @@ package com.dream.system.cache;
 public interface CacheFactory {
 
     /**
+     * 是否开启session cache
+     *
+     * @return
+     */
+    default boolean isSessionCache() {
+        return false;
+    }
+
+    /**
      * 获取缓存处理类
      *
      * @return

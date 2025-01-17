@@ -5,6 +5,8 @@ import com.dream.chain.mapper.FlexChainMapper;
 import com.dream.flex.annotation.EnableFlexAPT;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.system.cache.Cache;
+import com.dream.system.cache.CacheFactory;
+import com.dream.system.cache.DefaultCacheFactory;
 import com.dream.system.cache.MemoryCache;
 import com.dream.system.inject.Inject;
 import com.dream.system.table.ColumnInfo;
@@ -181,6 +183,7 @@ public class HelloWorldApplication {
 //    @Bean
 //    public CacheFactory cacheFactory() {
 //        DefaultCacheFactory cacheFactory=new DefaultCacheFactory();
+//        cacheFactory.setSessionCache(true);
 //        cacheFactory.setCache(new MemoryCache());
 //        return cacheFactory;
 //    }

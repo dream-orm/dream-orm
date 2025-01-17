@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 public class DefaultSessionFactory implements SessionFactory {
     protected Configuration configuration;
     protected DataSource dataSource;
+    protected boolean sessionCache;
     protected Cache cache;
 
     public DefaultSessionFactory(Configuration configuration) {
@@ -21,6 +22,7 @@ public class DefaultSessionFactory implements SessionFactory {
         dataSource = dataSourceFactory.getDataSource();
         CacheFactory cacheFactory = configuration.getCacheFactory();
         if (cacheFactory != null) {
+            sessionCache = cacheFactory.isSessionCache();
             cache = cacheFactory.getCache();
         }
     }
@@ -30,6 +32,9 @@ public class DefaultSessionFactory implements SessionFactory {
         Transaction transaction = configuration.getTransactionFactory().getTransaction(dataSource);
         transaction.setAutoCommit(autoCommit);
         Executor executor = new JdbcExecutor(transaction, configuration.getStatementHandler(), configuration.getResultSetHandler());
+        if (sessionCache) {
+            executor = new SessionCacheExecutor(executor);
+        }
         if (this.cache != null) {
             executor = new CacheExecutor(executor, this.cache);
         }
