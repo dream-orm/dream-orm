@@ -12,7 +12,7 @@ public interface CacheFactory {
      * @return
      */
     default boolean isSessionCache() {
-        return false;
+        return true;
     }
 
     /**

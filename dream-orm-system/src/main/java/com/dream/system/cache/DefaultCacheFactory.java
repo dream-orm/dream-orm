@@ -3,7 +3,8 @@ package com.dream.system.cache;
 
 public class DefaultCacheFactory implements CacheFactory {
     private Cache cache;
-    private boolean sessionCache;
+    private boolean sessionCache = true;
+
     @Override
     public Cache getCache() {
         return cache;

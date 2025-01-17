@@ -21,10 +21,8 @@ public class DefaultSessionFactory implements SessionFactory {
         DataSourceFactory dataSourceFactory = configuration.getDataSourceFactory();
         dataSource = dataSourceFactory.getDataSource();
         CacheFactory cacheFactory = configuration.getCacheFactory();
-        if (cacheFactory != null) {
-            sessionCache = cacheFactory.isSessionCache();
-            cache = cacheFactory.getCache();
-        }
+        sessionCache = cacheFactory.isSessionCache();
+        cache = cacheFactory.getCache();
     }
 
     @Override
