@@ -2,9 +2,9 @@ spring:
   datasource:
     master:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://111.230.206.246/sooth
+      jdbc-url: jdbc:mysql://localhost/sooth
       username: root
-      password: moxa@sooth
+      password: 123456
 
   dream:
     toSQL: com.dream.antlr.sql.ToMySQL
