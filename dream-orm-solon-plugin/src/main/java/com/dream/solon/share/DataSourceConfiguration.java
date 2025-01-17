@@ -53,7 +53,7 @@ public class DataSourceConfiguration implements Plugin {
                     }
                 }
             }
-            listeners = ObjectUtil.merge(listeners, new Listener[]{new ShardListener()});
+            listeners = ObjectUtil.merge(listeners, new Listener[]{new ShardListener()}).toArray(new Listener[0]);
             listenerFactory.listeners(listeners);
         });
     }

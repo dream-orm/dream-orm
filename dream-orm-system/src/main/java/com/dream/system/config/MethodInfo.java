@@ -159,7 +159,7 @@ public class MethodInfo {
     }
 
     public MethodInfo addInitAction(InitAction... initActions) {
-        this.initActionList = ObjectUtil.merge(this.initActionList, initActions);
+        this.initActionList = ObjectUtil.merge(this.initActionList, initActions).toArray(new InitAction[0]);
         return this;
     }
 
@@ -168,7 +168,7 @@ public class MethodInfo {
     }
 
     public MethodInfo addLoopAction(LoopAction... loopActionList) {
-        this.loopActionList = ObjectUtil.merge(this.loopActionList, loopActionList);
+        this.loopActionList = ObjectUtil.merge(this.loopActionList, loopActionList).toArray(new LoopAction[0]);
         return this;
     }
 
@@ -177,7 +177,7 @@ public class MethodInfo {
     }
 
     public MethodInfo addDestroyAction(DestroyAction... destroyActionList) {
-        this.destroyActionList = ObjectUtil.merge(this.destroyActionList, destroyActionList);
+        this.destroyActionList = ObjectUtil.merge(this.destroyActionList, destroyActionList).toArray(new DestroyAction[0]);
         return this;
     }
 

@@ -203,7 +203,7 @@ public class DefaultDriveFactory implements DriveFactory {
                 Class<? extends Interceptor> interceptorType = ReflectUtil.loadClass(interceptor);
                 return ReflectUtil.create(interceptorType);
             }).collect(Collectors.toList()).toArray(new Interceptor[0]);
-            interceptors = ObjectUtil.merge(interceptors, interceptorList);
+            interceptors = ObjectUtil.merge(interceptors, interceptorList).toArray(new Interceptor[0]);
         }
         if (!ObjectUtil.isNull(interceptors)) {
             pluginFactory.interceptors(interceptors);
@@ -257,7 +257,7 @@ public class DefaultDriveFactory implements DriveFactory {
                 Class<? extends Inject> injectType = ReflectUtil.loadClass(inject);
                 return ReflectUtil.create(injectType);
             }).collect(Collectors.toList()).toArray(new Inject[0]);
-            injects = ObjectUtil.merge(injects, injectList);
+            injects = ObjectUtil.merge(injects, injectList).toArray(new Inject[0]);
         }
         if (!ObjectUtil.isNull(injects)) {
             injectFactory.injects(injects);
@@ -282,7 +282,7 @@ public class DefaultDriveFactory implements DriveFactory {
                 Class<? extends Invoker> invokerType = ReflectUtil.loadClass(invoker);
                 return ReflectUtil.create(invokerType);
             }).collect(Collectors.toList()).toArray(new Invoker[0]);
-            invokers = ObjectUtil.merge(invokers, invokerList);
+            invokers = ObjectUtil.merge(invokers, invokerList).toArray(new Invoker[0]);
         }
         if (!ObjectUtil.isNull(invokers)) {
             invokerFactory.addInvokers(invokers);
@@ -342,7 +342,7 @@ public class DefaultDriveFactory implements DriveFactory {
                 Class<? extends TypeHandlerWrapper> typeHandlerWrapperType = ReflectUtil.loadClass(typeHandlerWrapper);
                 return ReflectUtil.create(typeHandlerWrapperType);
             }).collect(Collectors.toList()).toArray(new TypeHandlerWrapper[0]);
-            typeHandlerWrappers = ObjectUtil.merge(typeHandlerWrappers, typeHandlerWrapperList);
+            typeHandlerWrappers = ObjectUtil.merge(typeHandlerWrappers, typeHandlerWrapperList).toArray(new TypeHandlerWrapper[0]);
         }
         if (!ObjectUtil.isNull(typeHandlerWrappers)) {
             typeHandlerFactory.wrappers(typeHandlerWrappers);
@@ -368,7 +368,7 @@ public class DefaultDriveFactory implements DriveFactory {
                 Class<? extends Listener> listenerType = ReflectUtil.loadClass(listener);
                 return ReflectUtil.create(listenerType);
             }).collect(Collectors.toList()).toArray(new Listener[0]);
-            listeners = ObjectUtil.merge(listeners, listenerList);
+            listeners = ObjectUtil.merge(listeners, listenerList).toArray(new Listener[0]);
         }
         if (!ObjectUtil.isNull(listeners)) {
             listenerFactory.listeners(listeners);

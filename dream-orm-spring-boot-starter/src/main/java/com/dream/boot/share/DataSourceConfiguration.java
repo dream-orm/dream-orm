@@ -57,7 +57,7 @@ public class DataSourceConfiguration implements ImportAware, ApplicationContextA
                 }
             }
         }
-        listeners = ObjectUtil.merge(listeners, new Listener[]{new ShardListener()});
+        listeners = ObjectUtil.merge(listeners, new Listener[]{new ShardListener()}).toArray(new Listener[0]);
         listenerFactory.listeners(listeners);
     }
 }
