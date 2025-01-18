@@ -9,4 +9,4 @@ spring:
   dream:
     toSQL: com.dream.antlr.sql.ToMySQL
     listeners:
-      - com.sooth.common.dream.listener.SoothDebugListener
+      - com.dream.drive.listener.DebugListener

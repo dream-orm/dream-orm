@@ -88,7 +88,7 @@ public class DefaultDriveFactory implements DriveFactory {
         this.sessionFactory = sessionFactory(dataSource, tablePackages, mapperPackages);
         this.sessionTemplate = sessionTemplate(sessionHolder(), this.sessionFactory);
         this.templateMapper = templateMapper(sessionTemplate, sequence());
-        StructFactory structFactory = new DefaultStructFactory(toSQL);
+        StructFactory structFactory = structFactory(toSQL);
         this.flexMapper = flexMapper(sessionTemplate, structFactory);
         this.streamMapper = streamMapper(sessionTemplate, structFactory);
         this.jdbcMapper = jdbcMapper(this.sessionTemplate, toSQL);
@@ -190,6 +190,16 @@ public class DefaultDriveFactory implements DriveFactory {
 
     protected Interceptor[] interceptors() {
         return new Interceptor[0];
+    }
+
+    /**
+     * struct工厂
+     *
+     * @param toSQL
+     * @return
+     */
+    protected StructFactory structFactory(ToSQL toSQL) {
+        return new DefaultStructFactory(toSQL);
     }
 
     /**
