@@ -17,6 +17,8 @@ import com.dream.jdbc.mapper.DefaultJdbcMapper;
 import com.dream.jdbc.mapper.JdbcMapper;
 import com.dream.stream.mapper.DefaultStreamMapper;
 import com.dream.stream.mapper.StreamMapper;
+import com.dream.struct.factory.DefaultStructFactory;
+import com.dream.struct.factory.StructFactory;
 import com.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.dream.system.cache.Cache;
 import com.dream.system.cache.CacheFactory;
@@ -86,8 +88,9 @@ public class DefaultDriveFactory implements DriveFactory {
         this.sessionFactory = sessionFactory(dataSource, tablePackages, mapperPackages);
         this.sessionTemplate = sessionTemplate(sessionHolder(), this.sessionFactory);
         this.templateMapper = templateMapper(sessionTemplate, sequence());
-        this.flexMapper = flexMapper(sessionTemplate, toSQL);
-        this.streamMapper = streamMapper(sessionTemplate, toSQL);
+        StructFactory structFactory = new DefaultStructFactory(toSQL);
+        this.flexMapper = flexMapper(sessionTemplate, structFactory);
+        this.streamMapper = streamMapper(sessionTemplate, structFactory);
         this.jdbcMapper = jdbcMapper(this.sessionTemplate, toSQL);
     }
 
@@ -120,12 +123,12 @@ public class DefaultDriveFactory implements DriveFactory {
         return new DefaultTemplateMapper(sessionTemplate, sequence);
     }
 
-    protected FlexMapper flexMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
-        return new DefaultFlexMapper(sessionTemplate, toSQL);
+    protected FlexMapper flexMapper(SessionTemplate sessionTemplate, StructFactory structFactory) {
+        return new DefaultFlexMapper(sessionTemplate, structFactory);
     }
 
-    protected StreamMapper streamMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
-        return new DefaultStreamMapper(sessionTemplate, toSQL);
+    protected StreamMapper streamMapper(SessionTemplate sessionTemplate, StructFactory structFactory) {
+        return new DefaultStreamMapper(sessionTemplate, structFactory);
     }
 
     protected JdbcMapper jdbcMapper(Session session, ToSQL toSQL) {

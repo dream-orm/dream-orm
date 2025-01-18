@@ -4,23 +4,15 @@ import com.dream.flex.def.DeleteDef;
 import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
-import com.dream.struct.factory.StructFactory;
-import com.dream.system.config.MethodInfo;
 import com.dream.system.config.Page;
 import com.dream.util.tree.Tree;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * 链式操作接口
  */
 public interface FlexMapper {
-
-    FlexMapper useStruct(StructFactory structFactory);
-
-    FlexMapper useMethodInfo(Consumer<MethodInfo> consumer);
-
     /**
      * 查询并返回一条
      *

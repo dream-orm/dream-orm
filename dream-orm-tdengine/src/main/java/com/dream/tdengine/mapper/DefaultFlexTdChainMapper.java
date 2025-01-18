@@ -6,6 +6,7 @@ import com.dream.flex.def.FunctionDef;
 import com.dream.flex.def.TableDef;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
+import com.dream.struct.factory.DefaultStructFactory;
 import com.dream.system.core.session.Session;
 import com.dream.tdengine.def.TdChainDeleteWhereDef;
 import com.dream.tdengine.def.TdChainFromDef;
@@ -25,7 +26,7 @@ public class DefaultFlexTdChainMapper implements FlexTdChainMapper {
     }
 
     public DefaultFlexTdChainMapper(Session session, ToSQL toSQL) {
-        this.flexMapper = new DefaultFlexMapper(session, toSQL);
+        this.flexMapper = new DefaultFlexMapper(session, new DefaultStructFactory(toSQL));
     }
 
     @Override

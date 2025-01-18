@@ -23,7 +23,6 @@ import com.dream.util.tree.TreeUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class DefaultFlexMapper implements FlexMapper {
     private Session session;
@@ -31,7 +30,6 @@ public class DefaultFlexMapper implements FlexMapper {
     private boolean offset = true;
     private StructFactory structFactory;
     private ResultSetHandler resultSetHandler;
-    private Consumer<MethodInfo> consumer;
 
     public DefaultFlexMapper(Session session, ToSQL toSQL) {
         this(session, new DefaultStructFactory(toSQL));
@@ -46,18 +44,6 @@ public class DefaultFlexMapper implements FlexMapper {
         this.structFactory = structFactory;
         this.resultSetHandler = resultSetHandler;
         this.configuration = session.getConfiguration();
-    }
-
-    @Override
-    public FlexMapper useStruct(StructFactory structFactory) {
-        return new DefaultFlexMapper(session, structFactory, resultSetHandler);
-    }
-
-    @Override
-    public FlexMapper useMethodInfo(Consumer<MethodInfo> consumer) {
-        DefaultFlexMapper flexMapper = new DefaultFlexMapper(session, structFactory, resultSetHandler);
-        flexMapper.consumer = consumer;
-        return flexMapper;
     }
 
     @Override
@@ -215,9 +201,6 @@ public class DefaultFlexMapper implements FlexMapper {
         methodInfo.setRowType(rowType);
         methodInfo.setColType(colType);
         methodInfo.setResultSetHandler(resultSetHandler);
-        if (consumer != null) {
-            consumer.accept(methodInfo);
-        }
         return methodInfo;
     }
 }

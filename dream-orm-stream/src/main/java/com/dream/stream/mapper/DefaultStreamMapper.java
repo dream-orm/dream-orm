@@ -1,9 +1,7 @@
 package com.dream.stream.mapper;
 
 import com.dream.antlr.smt.*;
-import com.dream.antlr.sql.ToSQL;
 import com.dream.stream.wrapper.QueryWrapper;
-import com.dream.struct.factory.DefaultStructFactory;
 import com.dream.struct.factory.StructFactory;
 import com.dream.struct.invoker.TakeMarkInvokerStatement;
 import com.dream.system.config.*;
@@ -24,10 +22,6 @@ public class DefaultStreamMapper implements StreamMapper {
     private StructFactory dialectFactory;
     private ResultSetHandler resultSetHandler;
     private Consumer<MethodInfo> consumer;
-
-    public DefaultStreamMapper(Session session, ToSQL toSQL) {
-        this(session, new DefaultStructFactory(toSQL));
-    }
 
     public DefaultStreamMapper(Session session, StructFactory dialectFactory) {
         this(session, dialectFactory, new SimpleResultSetHandler());
