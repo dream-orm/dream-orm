@@ -24,7 +24,7 @@
         <mysql.version>8.0.28</mysql.version>
         <HikariCP.version>4.0.3</HikariCP.version>
         <lombok.version> 1.18.30</lombok.version>
-        <solob-web.version>2.6.6</solob-web.version>
+        <solob-web.version>3.0.6</solob-web.version>
         <taos.version>3.0.2</taos.version>
     </properties>
     <dependencyManagement>
@@ -48,6 +48,11 @@
                 <groupId>com.dream-orm</groupId>
                 <artifactId>dream-orm-tdengine</artifactId>
                 <version>${dream-orm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-jdbc</artifactId>
+                <version>${spring-boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>

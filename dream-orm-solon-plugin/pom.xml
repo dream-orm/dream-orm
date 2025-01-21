@@ -20,6 +20,7 @@
             <groupId>org.noear</groupId>
             <artifactId>solon.data</artifactId>
             <version>${solon.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
