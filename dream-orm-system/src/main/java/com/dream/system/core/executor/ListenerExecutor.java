@@ -24,15 +24,15 @@ public class ListenerExecutor implements Executor {
             listeners = listenerFactory.getListeners();
         }
         if (!ObjectUtil.isNull(listeners)) {
-            beforeListeners(listeners, mappedStatement);
+            beforeListeners(listeners, mappedStatement, session);
             Object result;
             try {
                 result = nextExecutor.execute(mappedStatement, session);
             } catch (Throwable e) {
-                exceptionListeners(listeners, e, mappedStatement);
+                exceptionListeners(listeners, e, mappedStatement, session);
                 throw e;
             }
-            afterReturnListeners(listeners, result, mappedStatement);
+            afterReturnListeners(listeners, result, mappedStatement, session);
             return result;
         } else {
             return nextExecutor.execute(mappedStatement, session);
@@ -59,21 +59,21 @@ public class ListenerExecutor implements Executor {
         nextExecutor.close();
     }
 
-    protected void beforeListeners(Listener[] listeners, MappedStatement mappedStatement) {
+    protected void beforeListeners(Listener[] listeners, MappedStatement mappedStatement, Session session) {
         for (Listener listener : listeners) {
-            listener.before(mappedStatement);
+            listener.before(mappedStatement, session);
         }
     }
 
-    protected void afterReturnListeners(Listener[] listeners, Object result, MappedStatement mappedStatement) {
+    protected void afterReturnListeners(Listener[] listeners, Object result, MappedStatement mappedStatement, Session session) {
         for (Listener listener : listeners) {
-            listener.afterReturn(result, mappedStatement);
+            listener.afterReturn(result, mappedStatement, session);
         }
     }
 
-    protected void exceptionListeners(Listener[] listeners, Throwable e, MappedStatement mappedStatement) {
+    protected void exceptionListeners(Listener[] listeners, Throwable e, MappedStatement mappedStatement, Session session) {
         for (Listener listener : listeners) {
-            listener.exception(e, mappedStatement);
+            listener.exception(e, mappedStatement, session);
         }
     }
 

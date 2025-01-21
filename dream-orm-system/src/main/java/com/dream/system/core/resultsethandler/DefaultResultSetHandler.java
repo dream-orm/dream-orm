@@ -113,7 +113,7 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         ObjectFactory objectFactory = mappedResult.newColObjectFactory();
         for (MappedColumn mappedColumn : mappedColumnList) {
             Object value = mappedColumn.getValue(resultSet);
-            objectFactory.set(mappedColumn.getProperty(), value);
+            objectFactory.set(mappedColumn.getColumnLabel(), value);
         }
         return objectFactory;
     }
@@ -222,15 +222,15 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         String curTableName = getTableName(colType);
         List<Field> fieldList = ReflectUtil.findField(colType);
         if (!ObjectUtil.isNull(fieldList)) {
-            String property = builder.getProperty();
+            String columnLabel = builder.getColumnLabel();
             boolean lazyLoad = false;
             for (Field field : fieldList) {
                 if (!SystemUtil.ignoreField(field)) {
                     String fieldName = field.getName();
                     boolean mappingField = !lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(builder.getTable()) || curTableName.equalsIgnoreCase(builder.getTable()));
                     if (mappingField) {
-                        if (fieldName.equalsIgnoreCase(property)) {
-                            builder.property(fieldName);
+                        if (fieldName.equalsIgnoreCase(columnLabel)) {
+                            builder.columnLabel(fieldName);
                             TypeHandler typeHandler = builder.getTypeHandler();
                             if (typeHandler == null || typeHandler instanceof ObjectTypeHandler) {
                                 typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), builder.getJdbcType());

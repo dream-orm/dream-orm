@@ -5,9 +5,10 @@ import com.dream.mate.share.strategy.DefaultShardStrategy;
 import com.dream.mate.share.strategy.ShardStrategy;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.core.listener.Listener;
+import com.dream.system.core.session.Session;
 
 public class ShardListener implements Listener {
-    private ShardStrategy shardStrategy;
+    private final ShardStrategy shardStrategy;
 
     public ShardListener() {
         this(new DefaultShardStrategy());
@@ -18,7 +19,7 @@ public class ShardListener implements Listener {
     }
 
     @Override
-    public void before(MappedStatement mappedStatement) {
+    public void before(MappedStatement mappedStatement, Session session) {
         String strategy = shardStrategy.strategy(mappedStatement);
         if (strategy != null) {
             DataSourceHolder.set(strategy);
@@ -26,12 +27,12 @@ public class ShardListener implements Listener {
     }
 
     @Override
-    public void afterReturn(Object result, MappedStatement mappedStatement) {
+    public void afterReturn(Object result, MappedStatement mappedStatement, Session session) {
         DataSourceHolder.remove();
     }
 
     @Override
-    public void exception(Throwable e, MappedStatement mappedStatement) {
+    public void exception(Throwable e, MappedStatement mappedStatement, Session session) {
         DataSourceHolder.remove();
     }
 }

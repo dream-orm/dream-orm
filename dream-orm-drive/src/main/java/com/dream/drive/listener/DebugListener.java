@@ -3,6 +3,7 @@ package com.dream.drive.listener;
 import com.dream.system.config.MappedParam;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.core.listener.Listener;
+import com.dream.system.core.session.Session;
 import com.dream.util.common.ObjectUtil;
 
 import java.util.ArrayList;
@@ -13,17 +14,17 @@ public class DebugListener implements Listener {
     final String START_DATE = "startDate";
 
     @Override
-    public void before(MappedStatement mappedStatement) {
+    public void before(MappedStatement mappedStatement, Session session) {
         mappedStatement.put(START_DATE, System.currentTimeMillis());
     }
 
     @Override
-    public void afterReturn(Object result, MappedStatement mappedStatement) {
+    public void afterReturn(Object result, MappedStatement mappedStatement, Session session) {
         after(mappedStatement);
     }
 
     @Override
-    public void exception(Throwable e, MappedStatement mappedStatement) {
+    public void exception(Throwable e, MappedStatement mappedStatement, Session session) {
         error("异常：" + e.getMessage());
         after(mappedStatement);
     }

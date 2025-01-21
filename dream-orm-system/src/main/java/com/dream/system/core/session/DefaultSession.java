@@ -55,13 +55,25 @@ public class DefaultSession implements Session {
                             .setRowType(rowType)
                             .setColType(colType)
                             .setSql(sql)
-                            .setTimeOut(actionProvider.timeOut() == null ? 0 : actionProvider.timeOut())
                             .setPage(actionProvider.page())
                             .setStatementHandler(actionProvider.statementHandler())
-                            .setResultSetHandler(actionProvider.resultSetHandler())
-                            .addInitAction(actionProvider.initAction() == null ? new InitAction[0] : new InitAction[]{actionProvider.initAction()})
-                            .addLoopAction(actionProvider.loopAction() == null ? new LoopAction[0] : new LoopAction[]{actionProvider.loopAction()})
-                            .addDestroyAction(actionProvider.destroyAction() == null ? new DestroyAction[0] : new DestroyAction[]{actionProvider.destroyAction()});
+                            .setResultSetHandler(actionProvider.resultSetHandler());
+                    Integer timeOut = actionProvider.timeOut();
+                    if (timeOut != null) {
+                        methodInfo.setTimeOut(timeOut);
+                    }
+                    InitAction initAction = actionProvider.initAction();
+                    if (initAction != null) {
+                        methodInfo.addInitAction(initAction);
+                    }
+                    LoopAction loopAction = actionProvider.loopAction();
+                    if (loopAction != null) {
+                        methodInfo.addLoopAction(loopAction);
+                    }
+                    DestroyAction destroyAction = actionProvider.destroyAction();
+                    if (destroyAction != null) {
+                        methodInfo.addDestroyAction(destroyAction);
+                    }
                     mapperFactory.addMethodInfo(methodInfo);
                 }
             }

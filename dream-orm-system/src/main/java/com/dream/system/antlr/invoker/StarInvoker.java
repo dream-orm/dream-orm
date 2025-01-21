@@ -100,7 +100,7 @@ public class StarInvoker extends AbstractInvoker {
             List<Statement> columnList = columnInfoList.stream()
                     .filter(columnInfo -> !columnSet.contains(columnInfo.getColumn())
                             && !fieldSet.contains(columnInfo.getName()))
-                    .map(columnInfo -> AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())))
+                    .map(columnInfo -> AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())))
                     .collect(Collectors.toList());
             queryColumnList.addAll(columnList);
         }
@@ -143,7 +143,7 @@ public class StarInvoker extends AbstractInvoker {
                                         }
                                     }
                                     if (add) {
-                                        queryColumnList.add(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())));
+                                        queryColumnList.add(AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())));
                                         break;
                                     }
                                 }
@@ -166,7 +166,7 @@ public class StarInvoker extends AbstractInvoker {
                                 }
                             }
                             if (add) {
-                                queryColumnList.add(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())));
+                                queryColumnList.add(AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())));
                             }
                         }
                     } else {

@@ -11,7 +11,6 @@ public class MappedColumn {
     private int index;
     private int jdbcType;
     private String table;
-    private String property;
     private String columnLabel;
     private ColumnInfo columnInfo;
     private TypeHandler typeHandler;
@@ -32,14 +31,6 @@ public class MappedColumn {
     public String getColumnLabel() {
         return columnLabel;
     }
-
-    public String getProperty() {
-        if (property == null) {
-            property = columnInfo == null ? columnLabel : columnInfo.getName();
-        }
-        return property;
-    }
-
 
     public ColumnInfo getColumnInfo() {
         return columnInfo;
@@ -99,11 +90,6 @@ public class MappedColumn {
             return this;
         }
 
-        public Builder property(String property) {
-            mappedColumn.property = property;
-            return this;
-        }
-
         public MappedColumn build() {
             return mappedColumn;
         }
@@ -112,8 +98,8 @@ public class MappedColumn {
             return mappedColumn.getJdbcType();
         }
 
-        public String getProperty() {
-            return mappedColumn.getProperty();
+        public String getColumnLabel() {
+            return mappedColumn.getColumnLabel();
         }
 
         public String getTable() {
