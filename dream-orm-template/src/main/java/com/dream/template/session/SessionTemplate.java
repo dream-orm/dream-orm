@@ -1,5 +1,6 @@
 package com.dream.template.session;
 
+import com.dream.system.action.ActionProvider;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.config.MethodInfo;
@@ -31,6 +32,11 @@ public class SessionTemplate implements Session {
     @Override
     public <T> T getMapper(Class<T> type) {
         return mapperFactory.getMapper(type, this);
+    }
+
+    @Override
+    public Object execute(ActionProvider actionProvider, Object arg) {
+        return sessionProxy.execute(actionProvider, arg);
     }
 
     @Override

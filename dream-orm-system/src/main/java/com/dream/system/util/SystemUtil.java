@@ -68,19 +68,15 @@ public class SystemUtil {
         return sb.toString();
     }
 
-    public static CacheKey cacheKey(String sql, int split, boolean clean) {
+    public static CacheKey cacheKey(String sql, int split) {
         char[] charList = sql.toCharArray();
         int index;
-        if (clean) {
-            index = 0;
-            for (int i = 0; i < charList.length; i++) {
-                char c;
-                if (!Character.isWhitespace(c = charList[i])) {
-                    charList[index++] = Character.toLowerCase(c);
-                }
+        index = 0;
+        for (int i = 0; i < charList.length; i++) {
+            char c;
+            if (!Character.isWhitespace(c = charList[i])) {
+                charList[index++] = Character.toLowerCase(c);
             }
-        } else {
-            index = charList.length;
         }
         if (split > index) {
             split = index;

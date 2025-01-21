@@ -5,6 +5,7 @@
 - 优化：一级缓存增加控制开关，默认开启
 - 优化：ActionProvider增加分页
 - 新增：支持字段变更记录监听器
+- 优化：session接口增强，新增：selectOne,selectList,selectPage等执行sql语句方法
 
 ## v1.3.6
 
