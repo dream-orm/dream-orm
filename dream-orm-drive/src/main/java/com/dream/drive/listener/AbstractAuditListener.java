@@ -1,28 +1,22 @@
 package com.dream.drive.listener;
 
-import com.dream.flex.def.ConditionDef;
-import com.dream.flex.def.FromDef;
-import com.dream.flex.def.FunctionDef;
-import com.dream.flex.mapper.FlexMapper;
 import com.dream.system.config.Command;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MappedParam;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.core.listener.Listener;
+import com.dream.system.core.session.Session;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
-import com.dream.util.common.LowHashMap;
 import com.dream.util.common.ObjectUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class AbstractAuditListener implements Listener {
     @Override
-    public void before(MappedStatement mappedStatement) {
+    public void before(MappedStatement mappedStatement, Session session) {
         if (intercept(mappedStatement)) {
             Command command = mappedStatement.getCommand();
             if (Command.UPDATE.equals(command) || Command.INSERT.equals(command) || Command.DELETE.equals(command)) {
@@ -34,8 +28,8 @@ public abstract class AbstractAuditListener implements Listener {
                 if (tableInfo != null) {
                     List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
                     if (!ObjectUtil.isNull(primKeys)) {
-                        Map<String, Object> primValueMap = new LowHashMap<>();
-                        Map<String, Object> columnValueMap = new LowHashMap<>();
+                        Map<String, Object> primValueMap = new HashMap<>();
+                        Map<String, Object> columnValueMap = new HashMap<>();
                         List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
                         if (!ObjectUtil.isNull(mappedParamList)) {
                             for (MappedParam mappedParam : mappedParamList) {
@@ -69,7 +63,7 @@ public abstract class AbstractAuditListener implements Listener {
                                 }
                             }
                         } else if (Command.UPDATE.equals(command)) {
-                            Map<String, Object> valueMap = query(mappedStatement, tableInfo, columnValueMap.keySet(), primValueMap);
+                            Map<String, Object> valueMap = query(mappedStatement, tableInfo, columnValueMap.keySet(), primValueMap, session);
                             for (Map.Entry<String, Object> entry : columnValueMap.entrySet()) {
                                 String key = entry.getKey();
                                 Object value = entry.getValue();
@@ -85,7 +79,7 @@ public abstract class AbstractAuditListener implements Listener {
                                 }
                             }
                         } else {
-                            Map<String, Object> valueMap = query(mappedStatement, tableInfo, null, primValueMap);
+                            Map<String, Object> valueMap = query(mappedStatement, tableInfo, null, primValueMap, session);
                             if (valueMap != null) {
                                 for (Map.Entry<String, Object> entry : valueMap.entrySet()) {
                                     Object value = entry.getValue();
@@ -103,15 +97,15 @@ public abstract class AbstractAuditListener implements Listener {
     }
 
     @Override
-    public void afterReturn(Object result, MappedStatement mappedStatement) {
+    public void afterReturn(Object result, MappedStatement mappedStatement, Session session) {
         AuditColumnList auditColumnList = mappedStatement.get(AuditColumnList.class);
         if (auditColumnList != null) {
-            handle(mappedStatement.getCommand(), auditColumnList.getTableInfo(), auditColumnList.getPrimValueMap(), auditColumnList.getAuditColumnList());
+            handle(mappedStatement.getCommand(), auditColumnList.getTableInfo(), auditColumnList.getPrimValueMap(), auditColumnList.getAuditColumnList(), session);
         }
     }
 
     @Override
-    public void exception(Throwable e, MappedStatement mappedStatement) {
+    public void exception(Throwable e, MappedStatement mappedStatement, Session session) {
 
     }
 
@@ -123,29 +117,17 @@ public abstract class AbstractAuditListener implements Listener {
         return true;
     }
 
-    protected Map<String, Object> query(MappedStatement mappedStatement, TableInfo tableInfo, Set<String> columnSet, Map<String, Object> primValueMap) {
-        FlexMapper flexMapper = flexMapper(mappedStatement);
-        ConditionDef conditionDef = null;
-        for (Map.Entry<String, Object> entry : primValueMap.entrySet()) {
-            ConditionDef _conditionDef = FunctionDef.column(entry.getKey()).eq(entry.getValue());
-            if (conditionDef == null) {
-                conditionDef = _conditionDef;
-            } else {
-                conditionDef = conditionDef.and(_conditionDef);
-            }
-        }
-        FromDef fromDef;
+    protected Map<String, Object> query(MappedStatement mappedStatement, TableInfo tableInfo, Set<String> columnSet, Map<String, Object> primValueMap, Session session) {
+        StringBuilder builder = new StringBuilder();
         if (columnSet != null) {
-            fromDef = FunctionDef.select(columnSet.toArray(new String[0]));
-        } else {
-            fromDef = FunctionDef.select();
+            builder.append("select ").append(columnSet.stream().map(column -> "`" + column + "`").collect(Collectors.joining(","))).append(" from `").append(tableInfo.getTable()).append("` where ");
+            builder.append(primValueMap.keySet().stream().map(column -> "`" + column + "` =@?(" + column + ")").collect(Collectors.joining(" and ")));
+            return session.selectOne(builder.toString(), primValueMap, Map.class);
         }
-        return flexMapper.selectOne(fromDef.from(tableInfo.getTable()).where(conditionDef), LowHashMap.class);
+        return null;
     }
 
-    protected abstract FlexMapper flexMapper(MappedStatement mappedStatement);
-
-    protected abstract void handle(Command command, TableInfo tableInfo, Map<String, Object> primValueMap, List<AuditColumn> auditColumnList);
+    protected abstract void handle(Command command, TableInfo tableInfo, Map<String, Object> primValueMap, List<AuditColumn> auditColumnList, Session session);
 
     static class AuditColumnList {
         private final TableInfo tableInfo;
