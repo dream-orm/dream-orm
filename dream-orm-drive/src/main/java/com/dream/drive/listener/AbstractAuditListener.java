@@ -83,7 +83,11 @@ public abstract class AbstractAuditListener implements Listener {
                                 }
                             }
                         } else {
-                            Map<String, Object> valueMap = query(mappedStatement, tableInfo, columnValueMap.keySet(), primValueMap, session);
+                            Map<String, Object> valueMap = query(mappedStatement, tableInfo,
+                                    tableInfo.getColumnInfoList().stream()
+                                            .filter(columnInfo -> intercept(tableInfo, columnInfo))
+                                            .map(ColumnInfo::getColumn)
+                                            .collect(Collectors.toSet()), primValueMap, session);
                             if (valueMap != null) {
                                 for (Map.Entry<String, Object> entry : valueMap.entrySet()) {
                                     Object value = entry.getValue();
@@ -123,7 +127,7 @@ public abstract class AbstractAuditListener implements Listener {
 
     protected Map<String, Object> query(MappedStatement mappedStatement, TableInfo tableInfo, Set<String> columnSet, Map<String, Object> primValueMap, Session session) {
         StringBuilder builder = new StringBuilder();
-        if (columnSet != null) {
+        if (columnSet != null && !columnSet.isEmpty()) {
             builder.append("select ").append(columnSet.stream().map(column -> "`" + column + "`").collect(Collectors.joining(","))).append(" from `").append(tableInfo.getTable()).append("` where ");
             builder.append(primValueMap.keySet().stream().map(column -> "`" + column + "` =@?(" + column + ")").collect(Collectors.joining(" and ")));
             return session.selectOne(builder.toString(), primValueMap, Map.class);
