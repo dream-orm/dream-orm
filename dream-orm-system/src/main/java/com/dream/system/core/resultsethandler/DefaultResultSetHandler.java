@@ -148,11 +148,13 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             ColumnInfo columnInfo = null;
             if (!ObjectUtil.isNull(tableName)) {
                 columnInfo = getColumnInfo(mappedStatement, tableName, columnLabel);
+                if (columnInfo != null) {
+                    columnLabel = columnInfo.getName();
+                    if (columnInfo.getJdbcType() != Types.NULL && columnInfo.getJdbcType() != jdbcType) {
+                        jdbcType = columnInfo.getJdbcType();
+                    }
+                }
             }
-            if (columnInfo != null && columnInfo.getJdbcType() != Types.NULL && columnInfo.getJdbcType() != jdbcType) {
-                jdbcType = columnInfo.getJdbcType();
-            }
-
             MappedColumn.Builder builder = new MappedColumn
                     .Builder()
                     .index(i)
@@ -229,8 +231,11 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                     String fieldName = field.getName();
                     boolean mappingField = !lazyLoad && (ObjectUtil.isNull(curTableName) || ObjectUtil.isNull(builder.getTable()) || curTableName.equalsIgnoreCase(builder.getTable()));
                     if (mappingField) {
-                        if (fieldName.equalsIgnoreCase(columnLabel)) {
-                            builder.columnLabel(fieldName);
+                        boolean equal;
+                        if ((equal = fieldName.equals(columnLabel)) || fieldName.equalsIgnoreCase(columnLabel)) {
+                            if (!equal) {
+                                builder.columnLabel(fieldName);
+                            }
                             TypeHandler typeHandler = builder.getTypeHandler();
                             if (typeHandler == null || typeHandler instanceof ObjectTypeHandler) {
                                 typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), builder.getJdbcType());

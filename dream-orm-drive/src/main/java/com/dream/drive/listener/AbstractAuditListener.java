@@ -69,6 +69,10 @@ public abstract class AbstractAuditListener implements Listener {
                                 Object value = entry.getValue();
                                 if (!ObjectUtil.isNull(valueMap)) {
                                     Object oldValue = valueMap.get(key);
+                                    if (oldValue == null) {
+                                        ColumnInfo columnInfo = tableInfo.getColumnInfo(key);
+                                        oldValue = valueMap.get(columnInfo.getName());
+                                    }
                                     if (value != null || oldValue != null) {
                                         if (value == null || !value.equals(oldValue)) {
                                             auditColumnList.add(new AuditColumn(key, oldValue, value));
@@ -79,7 +83,7 @@ public abstract class AbstractAuditListener implements Listener {
                                 }
                             }
                         } else {
-                            Map<String, Object> valueMap = query(mappedStatement, tableInfo, null, primValueMap, session);
+                            Map<String, Object> valueMap = query(mappedStatement, tableInfo, columnValueMap.keySet(), primValueMap, session);
                             if (valueMap != null) {
                                 for (Map.Entry<String, Object> entry : valueMap.entrySet()) {
                                     Object value = entry.getValue();

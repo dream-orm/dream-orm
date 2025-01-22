@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = HelloWorldApplication.class)
@@ -33,6 +34,14 @@ public class HelloWorldSessionTest {
         account.setId(1);
         List<Account> accountList = session.selectList("select @*() from account where id<>@?(id)", account, Account.class);
         System.out.println(accountList);
+    }
+
+    @Test
+    public void testSelectMapList() {
+        Account account = new Account();
+        account.setId(1);
+        List<Map> mapList = session.selectList("select id,dept_id,name,tenant_id,age,email from account where id<>@?(id)", account, Map.class);
+        System.out.println(mapList);
     }
 
     @Test
