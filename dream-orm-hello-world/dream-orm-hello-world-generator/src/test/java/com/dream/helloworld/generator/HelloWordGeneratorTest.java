@@ -7,9 +7,9 @@ import com.zaxxer.hikari.HikariDataSource;
 public class HelloWordGeneratorTest {
     public static void main(String[] args) {
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl("jdbc:mysql://127.0.0.1/sooth?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useAffectedRows=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai");
-        dataSource.setUsername("root");
-        dataSource.setPassword("moxa@sooth");
+        dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/sooth");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("dream.ai@sooth2024");
         new Generator(dataSource, new GeneratorHandlerImpl()).generate();
     }
 
@@ -17,7 +17,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         protected String basePackage() {
-            return "com.sooth.module.gpt.session";
+            return "com.sooth.module.system.language";
         }
 
         @Override
@@ -32,7 +32,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         public boolean support(String table) {
-            return table.contains("session");
+            return table.contains("language");
         }
     }
 }

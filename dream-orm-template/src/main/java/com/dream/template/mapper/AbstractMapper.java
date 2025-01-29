@@ -21,6 +21,7 @@ import com.dream.util.exception.DreamRunTimeException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public abstract class AbstractMapper {
@@ -97,11 +98,7 @@ public abstract class AbstractMapper {
         if (primKeys == null || primKeys.isEmpty()) {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'未注册主键");
         }
-        if (primKeys.size() > 1) {
-            throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'存在多个主键");
-        }
-        ColumnInfo columnInfo = primKeys.get(0);
-        return "where " + SystemUtil.key(tableInfo.getTable()) + "." + SystemUtil.key(columnInfo.getColumn()) + "=" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName());
+        return "where " + primKeys.stream().map(columnInfo -> SystemUtil.key(tableInfo.getTable()) + "." + SystemUtil.key(columnInfo.getColumn()) + "=" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName())).collect(Collectors.joining(" and "));
     }
 
     protected String getIdsWhere(TableInfo tableInfo) {
@@ -109,10 +106,6 @@ public abstract class AbstractMapper {
         if (primKeys == null || primKeys.isEmpty()) {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'未注册主键");
         }
-        if (primKeys.size() > 1) {
-            throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'存在多个主键");
-        }
-        ColumnInfo columnInfo = primKeys.get(0);
-        return "where " + SystemUtil.key(tableInfo.getTable()) + "." + SystemUtil.key(columnInfo.getColumn()) + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, "null") + ")";
+        return "where " + primKeys.stream().map(columnInfo -> SystemUtil.key(tableInfo.getTable()) + "." + SystemUtil.key(columnInfo.getColumn()) + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, "null") + ")").collect(Collectors.joining(" and "));
     }
 }

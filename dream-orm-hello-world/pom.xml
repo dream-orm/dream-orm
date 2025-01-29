@@ -22,6 +22,7 @@
         <h2.version>1.4.200</h2.version>
         <junit.version>4.13.2</junit.version>
         <mysql.version>8.0.28</mysql.version>
+        <postgres.version>42.7.4</postgres.version>
         <HikariCP.version>4.0.3</HikariCP.version>
         <lombok.version> 1.18.30</lombok.version>
         <solob-web.version>3.0.6</solob-web.version>
@@ -89,6 +90,11 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgres.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.zaxxer</groupId>
