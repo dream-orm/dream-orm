@@ -6,6 +6,7 @@
 - 优化：ActionProvider增加分页
 - 新增：支持字段变更记录监听器
 - 优化：session接口增强，新增：selectOne,selectList,selectPage等执行sql语句方法
+- 优化：类型选择器优先根据映射表取类型
 
 ## v1.3.6
 

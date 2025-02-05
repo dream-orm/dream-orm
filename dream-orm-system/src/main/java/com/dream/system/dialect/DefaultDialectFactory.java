@@ -161,7 +161,15 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
                 }
             }
             if (typeHandler == null) {
-                typeHandler = typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), jdbcType);
+                Class<?> javaType;
+                if (columnInfo != null) {
+                    javaType = columnInfo.getField().getType();
+                } else if (value != null) {
+                    javaType = value.getClass();
+                } else {
+                    javaType = Object.class;
+                }
+                typeHandler = typeHandlerFactory.getTypeHandler(javaType, jdbcType);
             }
             return new ParamType(columnInfo, typeHandler);
         } else {

@@ -13,17 +13,17 @@ import java.util.Map;
 @Mapper
 public interface AccountMapper {
     @Sql("select @*() from account where id=@?(id)")
-    AccountView selectById(@Param("id") long id);
+    AccountView selectById(@Param("id") Integer id);
 
     @Sql("select @* from account where id>@?(id)")
-    List<AccountView> selectList(@Param("id") long id);
+    List<AccountView> selectList(@Param("id") Integer id);
 
     @Sql("select @*() from account where @not(id>@?(account.id) and name like concat('%',@?(account.name),'%'))")
     List<AccountView> selectNotList(@Param("account") AccountView accountView);
 
     @PageQuery
     @Sql("select id, count(id) from account where id>@?(id) group by id order by id")
-    List<Map> selectPage(@Param("id") long id, @Param("page") Page page);
+    List<Map> selectPage(@Param("id") Integer id, @Param("page") Page page);
 
     @Sql("update account set tenant_id=2,name=@?(account.name),age=@?(account.age) where id=@?(account.id) and tenant_id=3")
     int updateById(@Param("account") AccountView accountView);
@@ -44,7 +44,7 @@ public interface AccountMapper {
     void invokerInsertMaps(@Param("map") List<Map<String, Object>> maps);
 
     @Sql("delete from account where id=@?(id)")
-    int deleteById(@Param("id") long id);
+    int deleteById(@Param("id") Integer id);
 
     @Sql("delete from account where id in (@foreach(ids))")
     int deleteByIds(@Param("ids") List<Integer> ids);
