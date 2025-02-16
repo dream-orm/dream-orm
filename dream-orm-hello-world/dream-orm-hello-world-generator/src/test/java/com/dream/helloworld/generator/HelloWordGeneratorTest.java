@@ -17,7 +17,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         protected String basePackage() {
-            return "com.sooth.module.system.language";
+            return "com.sooth.module.gpt.token";
         }
 
         @Override
@@ -32,7 +32,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         public boolean support(String table) {
-            return table.contains("language");
+            return table.contains("token");
         }
     }
 }

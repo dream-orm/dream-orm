@@ -53,7 +53,7 @@ public class OrderExpr extends HelperExpr {
         private Statement statement;
 
         public AscDescExpr(ExprReader exprReader) {
-            this(exprReader, () -> new ColumnExpr(exprReader));
+            this(exprReader, () -> new CompareExpr(exprReader));
         }
 
 
