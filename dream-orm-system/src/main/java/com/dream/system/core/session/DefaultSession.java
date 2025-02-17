@@ -105,7 +105,7 @@ public class DefaultSession implements Session {
         try {
             value = executor.execute(mappedStatement, this);
         } catch (SQLException e) {
-            throw new DreamRunTimeException("执行'" + mappedStatement.getId() + "'失败：" + e.getMessage(), e);
+            throw new DreamRunTimeException("执行'" + mappedStatement.getId() + "'失败\n原因:" + e.getMessage() + "\nsql:" + mappedStatement.getSql(), e);
         }
         return value;
     }
