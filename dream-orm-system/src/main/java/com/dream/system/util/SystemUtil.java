@@ -88,9 +88,11 @@ public class SystemUtil {
         for (int i = 0; i < split; i++) {
             int sPoint = i * len;
             int size = Math.min((i + 1) * len, index) - sPoint;
-            char[] tempChars = new char[size];
-            System.arraycopy(charList, sPoint, tempChars, 0, size);
-            updateList[i + 2] = new String(tempChars);
+            if (size > 0) {
+                char[] tempChars = new char[size];
+                System.arraycopy(charList, sPoint, tempChars, 0, size);
+                updateList[i + 2] = new String(tempChars);
+            }
         }
         CacheKey cacheKey = new CacheKey();
         cacheKey.update(updateList);
