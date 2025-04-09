@@ -1,5 +1,9 @@
 # dream-orm 升级日志
 
+## v1.3.8
+
+- 修复：group_concat语句中SEPARATOR语法
+
 ## v1.3.7
 
 - 优化：一级缓存增加控制开关，默认开启

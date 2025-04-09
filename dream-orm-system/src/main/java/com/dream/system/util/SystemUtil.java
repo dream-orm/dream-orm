@@ -14,7 +14,7 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 public class SystemUtil {
-    private static TableUtil tableUtil = new TableUtil();
+    private static final TableUtil tableUtil = new TableUtil();
 
     public static String getTableName(Class<?> type) {
         return tableUtil.getTableName(type);

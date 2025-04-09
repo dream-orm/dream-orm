@@ -1186,7 +1186,7 @@ public class FunctionExpr extends SqlExpr {
             @Override
             protected Statement exprHelp(Statement statement) throws AntlrException {
                 groupConcatStatement.setParamsStatement(statement);
-                setExprTypes(ExprType.ORDER, ExprType.NIL);
+                setExprTypes(ExprType.ORDER, ExprType.SEPARATOR, ExprType.NIL);
                 return expr();
             }
         }
