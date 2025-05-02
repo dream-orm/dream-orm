@@ -30,7 +30,7 @@ public abstract class UpdateMapper extends WrapMapper {
     @Override
     protected MethodInfo getWrapMethodInfo(Configuration configuration, TableInfo tableInfo, List<Field> fieldList, Object arg) {
         String table = tableInfo.getTable();
-        List<String> setList = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {
             List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
             Set<String> primKeyNameSet = null;
@@ -42,13 +42,16 @@ public abstract class UpdateMapper extends WrapMapper {
                     String name = field.getName();
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
-                        setList.add(SystemUtil.key(columnInfo.getColumn()) + "=" +
-                                AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName()));
+                        String value = SystemUtil.key(columnInfo.getColumn()) + "=" +
+                                AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName());
+                        if (!list.contains(value)) {
+                            list.add(value);
+                        }
                     }
                 }
             }
         }
-        String updateParam = getUpdateParam(setList);
+        String updateParam = getUpdateParam(list);
         String other = getOther(configuration, tableInfo, arg);
         String sql = "update " + SystemUtil.key(table) + " set " + updateParam + " " + other;
         return new MethodInfo()
@@ -66,8 +69,8 @@ public abstract class UpdateMapper extends WrapMapper {
 
     protected abstract String getOther(Configuration configuration, TableInfo tableInfo, Object arg);
 
-    protected String getUpdateParam(List<String> setList) {
-        return String.join(",", setList);
+    protected String getUpdateParam(List<String> list) {
+        return String.join(",", list);
     }
 
     @Override

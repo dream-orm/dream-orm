@@ -44,9 +44,12 @@ public class InsertMapper extends WrapMapper {
         List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
         if (primKeys != null && !primKeys.isEmpty()) {
             for (ColumnInfo prim : primKeys) {
-                String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, prim.getName());
-                columnList.add(SystemUtil.key(prim.getColumn()));
-                valueList.add(invokerSQL);
+                String key = SystemUtil.key(prim.getColumn());
+                if (!columnList.contains(key)) {
+                    String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, prim.getName());
+                    columnList.add(key);
+                    valueList.add(invokerSQL);
+                }
             }
         }
         if (!ObjectUtil.isNull(fieldList)) {
@@ -54,11 +57,13 @@ public class InsertMapper extends WrapMapper {
                 String name = field.getName();
                 ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                 if (columnInfo != null) {
-                    String column = columnInfo.getColumn();
-                    String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName());
-                    if (!columnInfo.isPrimary()) {
-                        columnList.add(SystemUtil.key(column));
-                        valueList.add(invokerSQL);
+                    String key = SystemUtil.key(columnInfo.getColumn());
+                    if (!columnList.contains(key)) {
+                        String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName());
+                        if (!columnInfo.isPrimary()) {
+                            columnList.add(key);
+                            valueList.add(invokerSQL);
+                        }
                     }
                 }
             }
