@@ -1,5 +1,6 @@
 package com.dream.antlr.expr;
 
+import com.dream.antlr.config.Constant;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
@@ -121,12 +122,20 @@ public class SymbolExpr extends HelperExpr {
 
         public LetterExpr(ExprReader exprReader) {
             super(exprReader);
-            setExprTypes(ExprType.LETTER, ExprType.NUMBER, ExprType.STR, ExprType.JAVA_STR, ExprType.STAR, ExprType.SINGLE_MARK, ExprType.INT);
+            setExprTypes(Constant.FUNCTION).addExprTypes(ExprType.LETTER, ExprType.NUMBER, ExprType.STR, ExprType.JAVA_STR, ExprType.STAR, ExprType.SINGLE_MARK, ExprType.INT);
         }
 
         @Override
         public Statement nil() {
             return statement;
+        }
+
+        @Override
+        protected Statement exprFunction(ExprInfo exprInfo) throws AntlrException {
+            push();
+            statement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
+            setExprTypes(ExprType.NIL);
+            return expr();
         }
 
         @Override

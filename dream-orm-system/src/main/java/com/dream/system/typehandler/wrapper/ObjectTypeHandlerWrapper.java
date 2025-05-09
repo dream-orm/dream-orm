@@ -15,6 +15,7 @@ public class ObjectTypeHandlerWrapper implements TypeHandlerWrapper {
     @Override
     public Integer[] typeCode() {
         return new Integer[]{
+                TypeUtil.hash(Object.class, Types.OTHER),
                 TypeUtil.hash(Object.class, Types.NULL),
         };
     }
