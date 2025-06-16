@@ -12,6 +12,7 @@ import com.dream.tdengine.statement.TdInsertStatement;
 import com.dream.tdengine.statement.TdQueryStatement;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 public class ToTdEngine extends ToPubSQL {
     @Override
@@ -29,7 +30,44 @@ public class ToTdEngine extends ToPubSQL {
             String limit = toStr(statement.getLimitStatement(), assist, invokerList);
             String union = toStr(statement.getUnionStatement(), assist, invokerList);
             String forUpdate = toStr(statement.getForUpdateStatement(), assist, invokerList);
-            return select + from + where + partitionBy + window + groupBy + having + orderBy + sLimit + limit + union + forUpdate;
+            StringJoiner joiner = new StringJoiner(" ");
+            if(!select.isEmpty()){
+                joiner.add(select);
+            }
+            if(!from.isEmpty()){
+                joiner.add(from);
+            }
+            if(!where.isEmpty()){
+                joiner.add(where);
+            }
+            if(!partitionBy.isEmpty()){
+                joiner.add(partitionBy);
+            }
+            if(!window.isEmpty()){
+                joiner.add(window);
+            }
+            if(!groupBy.isEmpty()){
+                joiner.add(groupBy);
+            }
+            if(!having.isEmpty()){
+                joiner.add(having);
+            }
+            if(!orderBy.isEmpty()){
+                joiner.add(orderBy);
+            }
+            if(!sLimit.isEmpty()){
+                joiner.add(sLimit);
+            }
+            if(!limit.isEmpty()){
+                joiner.add(limit);
+            }
+            if(!union.isEmpty()){
+                joiner.add(union);
+            }
+            if(!forUpdate.isEmpty()){
+                joiner.add(forUpdate);
+            }
+            return joiner.toString();
         } else {
             return super.toString(statement, assist, invokerList);
         }
