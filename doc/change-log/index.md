@@ -3,6 +3,8 @@
 ## v1.3.8
 
 - 修复：group_concat语句中SEPARATOR语法
+- 修复：tdengine空格问题，导致报错
+- 修复：mysql环境下，类型选择器报错
 
 ## v1.3.7
 

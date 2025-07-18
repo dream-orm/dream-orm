@@ -6,6 +6,7 @@ import com.dream.system.typehandler.util.TypeUtil;
 import com.dream.system.typehandler.wrapper.*;
 import com.dream.util.common.ObjectUtil;
 
+import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,6 +81,10 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
     }
 
     protected TypeHandler getNoneTypeHandler(Class javaType, int jdbcType) throws TypeHandlerNotFoundException {
-        throw new TypeHandlerNotFoundException("类型选择器未找到,javaType '" + javaType.getTypeName() + "',jdbcType '" + TypeUtil.getTypeName(jdbcType) + "'");
+        TypeHandler typeHandler = getTypeHandler(TypeUtil.hash(javaType, Types.NULL));
+        if (typeHandler == null) {
+            throw new TypeHandlerNotFoundException("类型选择器未找到,javaType '" + javaType.getTypeName() + "',jdbcType '" + TypeUtil.getTypeName(jdbcType) + "'");
+        }
+        return typeHandler;
     }
 }
