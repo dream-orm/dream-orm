@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>dream-orm-flex</name>
     <artifactId>dream-orm-flex</artifactId>
     <dependencies>
         <dependency>

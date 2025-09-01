@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>dream-orm-chain</name>
     <artifactId>dream-orm-chain</artifactId>
     <dependencies>
         <dependency>

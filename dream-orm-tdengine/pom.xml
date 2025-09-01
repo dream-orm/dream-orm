@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>dream-orm-tdengine</name>
     <artifactId>dream-orm-tdengine</artifactId>
 
     <dependencies>

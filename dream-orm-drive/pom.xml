@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>dream-orm-drive</name>
     <artifactId>dream-orm-drive</artifactId>
     <dependencies>
         <dependency>

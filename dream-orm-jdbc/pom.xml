@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>dream-orm-jdbc</name>
     <artifactId>dream-orm-jdbc</artifactId>
     <dependencies>
         <dependency>

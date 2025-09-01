@@ -31,40 +31,40 @@ public class ToTdEngine extends ToPubSQL {
             String union = toStr(statement.getUnionStatement(), assist, invokerList);
             String forUpdate = toStr(statement.getForUpdateStatement(), assist, invokerList);
             StringJoiner joiner = new StringJoiner(" ");
-            if(!select.isEmpty()){
+            if (!select.isEmpty()) {
                 joiner.add(select);
             }
-            if(!from.isEmpty()){
+            if (!from.isEmpty()) {
                 joiner.add(from);
             }
-            if(!where.isEmpty()){
+            if (!where.isEmpty()) {
                 joiner.add(where);
             }
-            if(!partitionBy.isEmpty()){
+            if (!partitionBy.isEmpty()) {
                 joiner.add(partitionBy);
             }
-            if(!window.isEmpty()){
+            if (!window.isEmpty()) {
                 joiner.add(window);
             }
-            if(!groupBy.isEmpty()){
+            if (!groupBy.isEmpty()) {
                 joiner.add(groupBy);
             }
-            if(!having.isEmpty()){
+            if (!having.isEmpty()) {
                 joiner.add(having);
             }
-            if(!orderBy.isEmpty()){
+            if (!orderBy.isEmpty()) {
                 joiner.add(orderBy);
             }
-            if(!sLimit.isEmpty()){
+            if (!sLimit.isEmpty()) {
                 joiner.add(sLimit);
             }
-            if(!limit.isEmpty()){
+            if (!limit.isEmpty()) {
                 joiner.add(limit);
             }
-            if(!union.isEmpty()){
+            if (!union.isEmpty()) {
                 joiner.add(union);
             }
-            if(!forUpdate.isEmpty()){
+            if (!forUpdate.isEmpty()) {
                 joiner.add(forUpdate);
             }
             return joiner.toString();

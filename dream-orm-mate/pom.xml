@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>dream-orm-mate</name>
     <artifactId>dream-orm-mate</artifactId>
     <dependencies>
         <dependency>

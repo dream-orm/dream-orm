@@ -24,7 +24,7 @@
     <developers>
         <developer>
             <name>moxa</name>
-            <email>1339596978@qq.com</email>
+            <email>moxiaoai1995@foxmail.com</email>
             <roles>
                 <role>developer</role>
             </roles>
@@ -138,18 +138,25 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!-- 发布到 Maven Central -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.7.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>maven-central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>ossrh</id>
-                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
-                <repository>
-                    <id>ossrh</id>
-                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-                </repository>
-            </distributionManagement>
         </profile>
     </profiles>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>maven-central</id>
+            <url>https://central.sonatype.com/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
