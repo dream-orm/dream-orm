@@ -21,10 +21,9 @@ public class Assist {
         Invoker invoker;
         String name;
         if (namespace == null || namespace.trim().length() == 0) {
-            name = function;
-        } else {
-            name = function + ":" + namespace;
+            namespace = Invoker.DEFAULT_NAMESPACE;
         }
+        name = function + ":" + namespace;
         invoker = invokerMap.get(name);
         if (invoker == null) {
             invoker = invokerFactory.getInvoker(function, namespace);
