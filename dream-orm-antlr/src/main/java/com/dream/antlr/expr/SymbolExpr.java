@@ -149,20 +149,8 @@ public class SymbolExpr extends HelperExpr {
         @Override
         protected Statement exprLetter(ExprInfo exprInfo) throws AntlrException {
             push();
-            if (statement == null) {
-                statement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
-            } else {
-                statement = new SymbolStatement.LetterStatement(((SymbolStatement) statement).getValue() + exprInfo.getInfo());
-            }
-            setExprTypes(ExprType.DIVIDE, ExprType.NIL);
-            return expr();
-        }
-
-        @Override
-        protected Statement exprDivide(ExprInfo exprInfo) throws AntlrException {
-            push();
-            statement = new SymbolStatement.LetterStatement(((SymbolStatement) statement).getValue() + exprInfo.getInfo());
-            setExprTypes(ExprType.LETTER, ExprType.DIVIDE, ExprType.NIL);
+            statement = new SymbolStatement.LetterStatement(exprInfo.getInfo());
+            setExprTypes(ExprType.NIL);
             return expr();
         }
 
