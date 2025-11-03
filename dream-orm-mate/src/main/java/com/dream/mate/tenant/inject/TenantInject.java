@@ -1,7 +1,6 @@
 package com.dream.mate.tenant.inject;
 
 import com.dream.antlr.factory.InvokerFactory;
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.util.AntlrUtil;
@@ -22,14 +21,14 @@ public class TenantInject implements Inject {
     public void inject(MethodInfo methodInfo) {
         Configuration configuration = methodInfo.getConfiguration();
         InvokerFactory invokerFactory = configuration.getInvokerFactory();
-        if (invokerFactory.getInvoker(TenantInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+        if (invokerFactory.getInvoker(TenantInjectInvoker.FUNCTION) == null) {
             invokerFactory.addInvokers(new TenantInjectInvoker(tenantHandler));
         }
-        if (invokerFactory.getInvoker(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+        if (invokerFactory.getInvoker(TenantGetInvoker.FUNCTION) == null) {
             invokerFactory.addInvokers(new TenantGetInvoker(tenantHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
+        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantInjectInvoker.FUNCTION, statement.getStatement());
         statement.setStatement(invokerStatement);
     }
 

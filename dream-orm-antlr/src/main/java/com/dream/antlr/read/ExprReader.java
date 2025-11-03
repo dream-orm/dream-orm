@@ -2,28 +2,15 @@ package com.dream.antlr.read;
 
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
-import com.dream.antlr.factory.ExprFactory;
-import com.dream.antlr.factory.MyExprFactory;
-import com.dream.antlr.factory.MyFunctionFactory;
-import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.util.ExprUtil;
 
 public class ExprReader extends StringReader {
-    public final MyExprFactory myExprFactory;
-    private final MyFunctionFactory myFunctionFactory;
-    public ExprFactory exprFactory;
     private ExprInfo lastInfo;
 
     public ExprReader(String sql) {
-        this(sql, null, null);
-    }
-
-
-    public ExprReader(String sql, MyFunctionFactory myFunctionFactory, MyExprFactory myExprFactory) {
         super(sql);
-        this.myFunctionFactory = myFunctionFactory;
-        this.myExprFactory = myExprFactory;
     }
+
 
     public String getSql() {
         return this.value;
@@ -159,9 +146,6 @@ public class ExprReader extends StringReader {
             case 44:
                 lastInfo = new ExprInfo(ExprType.COMMA, ",", getStart(), getEnd());
                 break;
-            case 58:
-                lastInfo = new ExprInfo(ExprType.COLON, ":", getStart(), getEnd());
-                break;
             case 59:
                 lastInfo = new ExprInfo(ExprType.SEMICOLON, ";", getStart(), getEnd());
                 break;
@@ -247,12 +231,8 @@ public class ExprReader extends StringReader {
         int len = read(chars, 0, count);
         String info = new String(chars, 0, len);
         ExprType exprType = ExprUtil.getExprTypeInLetter(info);
-        if (ExprType.LETTER == exprType && ExprUtil.isLBrace(c) && myFunctionFactory != null) {
-            MyFunctionStatement myFunctionStatement = myFunctionFactory.create(info);
-            if (myFunctionStatement != null) {
-                myFunctionStatement.setFunctionName(info);
-                return new ExprInfo(ExprType.MY_FUNCTION, myFunctionStatement, getStart(), getEnd());
-            }
+        if (ExprType.LETTER == exprType && ExprUtil.isLBrace(c)) {
+            return new ExprInfo(ExprType.MY_FUNCTION, info, getStart(), getEnd());
         }
         return new ExprInfo(exprType, info, getStart(), getEnd());
     }

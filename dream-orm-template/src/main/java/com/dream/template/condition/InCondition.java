@@ -11,6 +11,6 @@ public class InCondition implements Condition {
 
     @Override
     public String getCondition(String column, Field field) {
-        return SystemUtil.key(column) + " in (" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, field.getName()) + ")";
+        return SystemUtil.key(column) + " in (" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, field.getName()) + ")";
     }
 }

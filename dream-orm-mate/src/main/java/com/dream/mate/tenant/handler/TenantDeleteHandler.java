@@ -31,7 +31,7 @@ public class TenantDeleteHandler extends AbstractHandler {
             ConditionStatement conditionStatement = new ConditionStatement();
             conditionStatement.setLeft(new SymbolStatement.SingleMarkStatement(tenantColumn));
             conditionStatement.setOper(new OperStatement.EQStatement());
-            conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
+            conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, new SymbolStatement.LetterStatement(tenantColumn)));
             WhereStatement whereStatement = (WhereStatement) deleteStatement.getWhere();
             if (whereStatement == null) {
                 whereStatement = new WhereStatement();

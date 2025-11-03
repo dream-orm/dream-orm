@@ -130,8 +130,8 @@
 //        } catch (AntlrException e) {
 //            throw new DreamRunTimeException(e);
 //        }
-//        TakeMarkInvoker takeMarkInvoker = (TakeMarkInvoker) assist.getInvoker(TakeMarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
-//        TakeTableInvoker takeTableInvoker = (TakeTableInvoker) assist.getInvoker(TakeTableInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+//        TakeMarkInvoker takeMarkInvoker = (TakeMarkInvoker) assist.getInvoker(TakeMarkInvoker.FUNCTION);
+//        TakeTableInvoker takeTableInvoker = (TakeTableInvoker) assist.getInvoker(TakeTableInvoker.FUNCTION);
 //        List<Object> paramList = takeMarkInvoker.getParamList();
 //        List<MappedParam> mappedParamList = null;
 //        if (paramList != null && !paramList.isEmpty()) {

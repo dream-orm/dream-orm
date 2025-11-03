@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.Statement;
 
@@ -24,8 +25,8 @@ public abstract class HelperExpr extends SqlExpr {
     //辅助语法器是否可以解析单词
     private Boolean accept;
 
-    public HelperExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader);
+    public HelperExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, myFunctionFactory);
         this.helper = helper;
         this.helpExpr = helper.helper();
         setExprTypes(ExprType.HELP, ExprType.NIL);

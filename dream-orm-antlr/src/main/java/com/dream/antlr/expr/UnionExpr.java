@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.UnionStatement;
@@ -13,12 +14,12 @@ import com.dream.antlr.smt.UnionStatement;
 public class UnionExpr extends HelperExpr {
     private final UnionStatement unionStatement = new UnionStatement();
 
-    public UnionExpr(ExprReader exprReader) {
-        this(exprReader, () -> new QueryExpr(exprReader));
+    public UnionExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new QueryExpr(exprReader, myFunctionFactory), myFunctionFactory);
     }
 
-    public UnionExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public UnionExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.UNION);
     }
 

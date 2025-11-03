@@ -3,7 +3,6 @@ package com.dream.system.antlr.handler.non;
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.handler.AbstractHandler;
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.system.antlr.invoker.MarkInvoker;
@@ -25,7 +24,7 @@ public class MarkHandler extends AbstractHandler {
 
     @Override
     public String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
-        MarkInvoker sqlInvoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+        MarkInvoker sqlInvoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION);
         List<MarkInvoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
         if (paramInfoList != null) {
             int size = paramInfoList.size();

@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.IntervalStatement;
 import com.dream.antlr.smt.Statement;
@@ -15,12 +16,12 @@ public class IntervalExpr extends HelperExpr {
 
     private Statement statement;
 
-    public IntervalExpr(ExprReader exprReader) {
-        this(exprReader, () -> new SymbolExpr(exprReader));
+    public IntervalExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new SymbolExpr(exprReader, myFunctionFactory), myFunctionFactory);
     }
 
-    public IntervalExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public IntervalExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.INTERVAL);
     }
 

@@ -191,7 +191,6 @@ public enum ExprType {
     PARTITION,
     MARK,
     INVOKER,
-    COLON,
     SEMICOLON,
     TO_CHAR,
     TO_NUMBER,

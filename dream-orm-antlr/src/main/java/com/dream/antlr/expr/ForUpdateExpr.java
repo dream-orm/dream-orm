@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.ForUpdateNoWaitStatement;
 import com.dream.antlr.smt.ForUpdateStatement;
@@ -14,8 +15,8 @@ import com.dream.antlr.smt.Statement;
 public class ForUpdateExpr extends SqlExpr {
     ForUpdateStatement forUpdateStatement = new ForUpdateStatement();
 
-    public ForUpdateExpr(ExprReader exprReader) {
-        super(exprReader);
+    public ForUpdateExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, myFunctionFactory);
         setExprTypes(ExprType.FOR);
     }
 

@@ -11,6 +11,6 @@ public class GtCondition implements Condition {
 
     @Override
     public String getCondition(String column, Field field) {
-        return SystemUtil.key(column) + ">" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, field.getName());
+        return SystemUtil.key(column) + ">" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, field.getName());
     }
 }

@@ -49,7 +49,7 @@ public class TenantInsertHandler extends AbstractHandler {
                         for (Statement columnStatement : columnList) {
                             BraceStatement valuesBraceStatement = (BraceStatement) columnStatement;
                             ListColumnStatement valuesListStatement = (ListColumnStatement) valuesBraceStatement.getStatement();
-                            InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn));
+                            InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, new SymbolStatement.LetterStatement(tenantColumn));
                             valuesListStatement.add(invokerStatement);
                         }
                         paramListStatement.add(new SymbolStatement.SingleMarkStatement(tenantColumn));

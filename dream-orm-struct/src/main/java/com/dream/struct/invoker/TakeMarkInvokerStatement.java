@@ -22,11 +22,6 @@ public class TakeMarkInvokerStatement extends InvokerStatement {
     }
 
     @Override
-    public String getNamespace() {
-        return TakeMarkInvoker.DEFAULT_NAMESPACE;
-    }
-
-    @Override
     public String getFunction() {
         return TakeMarkInvoker.FUNCTION;
     }

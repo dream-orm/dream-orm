@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.WhereStatement;
@@ -13,12 +14,12 @@ import com.dream.antlr.smt.WhereStatement;
 public class WhereExpr extends HelperExpr {
     private final WhereStatement whereStatement = new WhereStatement();
 
-    public WhereExpr(ExprReader exprReader) {
-        this(exprReader, () -> new CompareExpr(exprReader));
+    public WhereExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new CompareExpr(exprReader, myFunctionFactory), myFunctionFactory);
     }
 
-    public WhereExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public WhereExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.WHERE);
     }
 

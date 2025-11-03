@@ -14,7 +14,7 @@ public @interface Fetch {
     /**
      * 自定义sql满足复杂开发
      *
-     * @return
+     * @return sql语句
      */
-    String sql();
+    String value();
 }

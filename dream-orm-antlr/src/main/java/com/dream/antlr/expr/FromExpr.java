@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.FromStatement;
 import com.dream.antlr.smt.ListColumnStatement;
@@ -14,12 +15,12 @@ import com.dream.antlr.smt.Statement;
 public class FromExpr extends HelperExpr {
     private final FromStatement fromStatement = new FromStatement();
 
-    public FromExpr(ExprReader exprReader) {
-        this(exprReader, () -> new AliasColumnExpr(exprReader));
+    public FromExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new AliasColumnExpr(exprReader, myFunctionFactory), myFunctionFactory);
     }
 
-    public FromExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public FromExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.FROM);
     }
 
@@ -52,7 +53,7 @@ public class FromExpr extends HelperExpr {
 
     @Override
     protected Statement exprJoin(ExprInfo exprInfo) throws AntlrException {
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new JoinExpr(exprReader), new ExprInfo(ExprType.BLANK, " "));
+        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new JoinExpr(exprReader, myFunctionFactory), new ExprInfo(ExprType.BLANK, " "), myFunctionFactory);
         ListColumnStatement listColumnStatement = (ListColumnStatement) listColumnExpr.expr();
         if (listColumnStatement.getColumnList().length > 0) {
             fromStatement.setJoinList(listColumnStatement);
@@ -64,7 +65,7 @@ public class FromExpr extends HelperExpr {
     @Override
     protected Statement exprComma(ExprInfo exprInfo) throws AntlrException {
         push();
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new JoinExpr.CommaJoinExpr(exprReader), new ExprInfo(ExprType.COMMA, ""));
+        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new JoinExpr.CommaJoinExpr(exprReader, myFunctionFactory), new ExprInfo(ExprType.COMMA, ""), myFunctionFactory);
         fromStatement.setJoinList(listColumnExpr.expr());
         setExprTypes(ExprType.NIL);
         return expr();

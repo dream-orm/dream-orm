@@ -15,7 +15,7 @@ public class BetweenCondition implements Condition {
     public String getCondition(String column, Field field) {
         Class<?> type = field.getType();
         if (Collection.class.isAssignableFrom(type) || type.isArray()) {
-            return AntlrUtil.invokerSQL(BetweenInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, SystemUtil.key(column), field.getName());
+            return AntlrUtil.invokerSQL(BetweenInvoker.FUNCTION, SystemUtil.key(column), field.getName());
         } else {
             throw new DreamRunTimeException("between字段类型必须是集合或数组");
         }

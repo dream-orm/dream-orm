@@ -1,7 +1,6 @@
 package com.dream.system.dialect;
 
 import com.dream.antlr.config.Assist;
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.system.antlr.invoker.MarkInvoker;
@@ -89,7 +88,7 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
     }
 
     protected List<MarkInvoker.ParamInfo> getParamInfoList(Assist assist) {
-        MarkInvoker invoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+        MarkInvoker invoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION);
         return invoker.getParamInfoList();
     }
 

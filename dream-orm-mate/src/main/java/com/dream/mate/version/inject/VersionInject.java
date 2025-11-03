@@ -1,7 +1,6 @@
 package com.dream.mate.version.inject;
 
 import com.dream.antlr.factory.InvokerFactory;
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.util.AntlrUtil;
@@ -21,17 +20,17 @@ public class VersionInject implements Inject {
     @Override
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
-        if (invokerFactory.getInvoker(VersionInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+        if (invokerFactory.getInvoker(VersionInvoker.FUNCTION) == null) {
             invokerFactory.addInvokers(new VersionInvoker(versionHandler));
         }
-        if (invokerFactory.getInvoker(CurVersionGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+        if (invokerFactory.getInvoker(CurVersionGetInvoker.FUNCTION) == null) {
             invokerFactory.addInvokers(new CurVersionGetInvoker(versionHandler));
         }
-        if (invokerFactory.getInvoker(NextVersionGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+        if (invokerFactory.getInvoker(NextVersionGetInvoker.FUNCTION) == null) {
             invokerFactory.addInvokers(new NextVersionGetInvoker(versionHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(VersionInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
+        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(VersionInvoker.FUNCTION, statement.getStatement());
         statement.setStatement(invokerStatement);
     }
 

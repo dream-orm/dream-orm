@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.FuncOverStatement;
 import com.dream.antlr.smt.Statement;
@@ -13,12 +14,12 @@ import com.dream.antlr.smt.Statement;
 public class FuncOverExpr extends HelperExpr {
     FuncOverStatement funcOverStatement = new FuncOverStatement();
 
-    public FuncOverExpr(ExprReader exprReader) {
-        this(exprReader, () -> new FunctionExpr(exprReader));
+    public FuncOverExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new FunctionExpr(exprReader, myFunctionFactory), myFunctionFactory);
     }
 
-    public FuncOverExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public FuncOverExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.HELP);
     }
 
@@ -31,7 +32,7 @@ public class FuncOverExpr extends HelperExpr {
 
     @Override
     protected Statement exprOver(ExprInfo exprInfo) throws AntlrException {
-        OverExpr overExpr = new OverExpr(exprReader);
+        OverExpr overExpr = new OverExpr(exprReader, myFunctionFactory);
         funcOverStatement.setOverStatement(overExpr.expr());
         setExprTypes(ExprType.NIL);
         return expr();

@@ -3,9 +3,9 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.InsertStatement;
-import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.SymbolStatement;
 
@@ -15,12 +15,12 @@ import com.dream.antlr.smt.SymbolStatement;
 public class InsertExpr extends HelperExpr {
     private final InsertStatement insertStatement = new InsertStatement();
 
-    public InsertExpr(ExprReader exprReader) {
-        this(exprReader, () -> new SymbolExpr(exprReader));
+    public InsertExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new SymbolExpr(exprReader, myFunctionFactory), myFunctionFactory);
     }
 
-    public InsertExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public InsertExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.INSERT);
     }
 
@@ -42,13 +42,21 @@ public class InsertExpr extends HelperExpr {
     @Override
     protected Statement exprInto(ExprInfo exprInfo) throws AntlrException {
         push();
-        setExprTypes(ExprType.HELP);
+        setExprTypes(ExprType.MY_FUNCTION, ExprType.HELP);
+        return expr();
+    }
+
+    @Override
+    protected Statement exprMyFunction(ExprInfo exprInfo) throws AntlrException {
+        push();
+        insertStatement.setTable(new SymbolStatement.LetterStatement(exprInfo.getInfo()));
+        setExprTypes(ExprType.LBRACE);
         return expr();
     }
 
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
-        BraceExpr braceExpr = new BraceExpr(exprReader);
+        BraceExpr braceExpr = new BraceExpr(exprReader, myFunctionFactory);
         Statement statement = braceExpr.expr();
         insertStatement.setColumns(statement);
         setExprTypes(ExprType.VALUES, ExprType.SELECT);
@@ -57,7 +65,7 @@ public class InsertExpr extends HelperExpr {
 
     @Override
     protected Statement exprValues(ExprInfo exprInfo) throws AntlrException {
-        ValuesExpr valuesExpr = new ValuesExpr(exprReader);
+        ValuesExpr valuesExpr = new ValuesExpr(exprReader, myFunctionFactory);
         insertStatement.setValues(valuesExpr.expr());
         setExprTypes(ExprType.NIL);
         return expr();
@@ -65,7 +73,7 @@ public class InsertExpr extends HelperExpr {
 
     @Override
     protected Statement exprSelect(ExprInfo exprInfo) throws AntlrException {
-        QueryExpr queryExpr = new QueryExpr(exprReader);
+        QueryExpr queryExpr = new QueryExpr(exprReader, myFunctionFactory);
         Statement statement = queryExpr.expr();
         insertStatement.setValues(statement);
         setExprTypes(ExprType.NIL);
@@ -84,24 +92,15 @@ public class InsertExpr extends HelperExpr {
         return expr();
     }
 
-    @Override
-    protected Statement exprMyFunction(ExprInfo exprInfo) throws AntlrException {
-        push();
-        MyFunctionStatement myFunctionStatement = (MyFunctionStatement) exprInfo.getObjInfo();
-        insertStatement.setTable(new SymbolStatement.LetterStatement(myFunctionStatement.getFunctionName()));
-        setExprTypes(ExprType.LBRACE, ExprType.VALUES, ExprType.SELECT);
-        return expr();
-    }
-
     public static class ValuesExpr extends HelperExpr {
         private final InsertStatement.ValuesStatement valuesStatement = new InsertStatement.ValuesStatement();
 
-        public ValuesExpr(ExprReader exprReader) {
-            this(exprReader, () -> new ListColumnExpr(exprReader, () -> new BraceExpr(exprReader), new ExprInfo(ExprType.COMMA, ",")));
+        public ValuesExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+            this(exprReader, () -> new ListColumnExpr(exprReader, () -> new BraceExpr(exprReader, myFunctionFactory), new ExprInfo(ExprType.COMMA, ","), myFunctionFactory), myFunctionFactory);
         }
 
-        public ValuesExpr(ExprReader exprReader, Helper helper) {
-            super(exprReader, helper);
+        public ValuesExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+            super(exprReader, helper, myFunctionFactory);
             setExprTypes(ExprType.VALUES);
         }
 
@@ -114,7 +113,7 @@ public class InsertExpr extends HelperExpr {
 
         @Override
         protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
-            InvokerExpr invokerExpr = new InvokerExpr(exprReader);
+            InvokerExpr invokerExpr = new InvokerExpr(exprReader, myFunctionFactory);
             Statement statement = invokerExpr.expr();
             valuesStatement.setStatement(statement);
             setExprTypes(ExprType.NIL);

@@ -125,7 +125,6 @@ public class SystemUtil {
             for (int i = 0; i < columns.size(); i++) {
                 InvokerStatement markInvokerStatement = new InvokerStatement();
                 markInvokerStatement.setFunction(MarkInvoker.FUNCTION);
-                markInvokerStatement.setNamespace(MarkInvoker.DEFAULT_NAMESPACE);
                 markInvokerStatement.setParamStatement(new SymbolStatement.LetterStatement(columnRefs.get(i)));
                 statements[i] = markInvokerStatement;
             }

@@ -35,7 +35,7 @@ public class VersionUpdateHandler extends AbstractHandler {
                 Statement column = columnList[i];
                 ConditionStatement conditionStatement = (ConditionStatement) column;
                 if (versionColumn.equalsIgnoreCase(((SymbolStatement) conditionStatement.getLeft()).getValue())) {
-                    conditionStatement.setRight(AntlrUtil.invokerStatement(NextVersionGetInvoker.FUNCTION, CurVersionGetInvoker.DEFAULT_NAMESPACE));
+                    conditionStatement.setRight(AntlrUtil.invokerStatement(NextVersionGetInvoker.FUNCTION));
                     break;
                 }
             }
@@ -43,13 +43,13 @@ public class VersionUpdateHandler extends AbstractHandler {
                 ConditionStatement versionConditionStatement = new ConditionStatement();
                 versionConditionStatement.setLeft(new SymbolStatement.LetterStatement(versionInvoker.getVersionColumn()));
                 versionConditionStatement.setOper(new OperStatement.EQStatement());
-                versionConditionStatement.setRight(AntlrUtil.invokerStatement(NextVersionGetInvoker.FUNCTION, CurVersionGetInvoker.DEFAULT_NAMESPACE));
+                versionConditionStatement.setRight(AntlrUtil.invokerStatement(NextVersionGetInvoker.FUNCTION));
                 columnStatement.add(versionConditionStatement);
             }
             ConditionStatement whereConditionStatement = new ConditionStatement();
             whereConditionStatement.setLeft(new SymbolStatement.LetterStatement(versionInvoker.getVersionColumn()));
             whereConditionStatement.setOper(new OperStatement.EQStatement());
-            whereConditionStatement.setRight(AntlrUtil.invokerStatement(CurVersionGetInvoker.FUNCTION, CurVersionGetInvoker.DEFAULT_NAMESPACE));
+            whereConditionStatement.setRight(AntlrUtil.invokerStatement(CurVersionGetInvoker.FUNCTION));
             WhereStatement whereStatement = (WhereStatement) updateStatement.getWhere();
             if (whereStatement == null) {
                 whereStatement = new WhereStatement();

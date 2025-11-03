@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.LimitStatement;
 import com.dream.antlr.smt.Statement;
@@ -13,12 +14,12 @@ import com.dream.antlr.smt.Statement;
 public class LimitExpr extends HelperExpr {
     private final LimitStatement limitStatement = new LimitStatement();
 
-    public LimitExpr(ExprReader exprReader) {
-        this(exprReader, () -> new CompareExpr(exprReader));
+    public LimitExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new CompareExpr(exprReader, myFunctionFactory), myFunctionFactory);
     }
 
-    public LimitExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public LimitExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.LIMIT);
     }
 

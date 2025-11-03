@@ -14,11 +14,6 @@ public class TakeTableInvokerStatement extends InvokerStatement {
     }
 
     @Override
-    public String getNamespace() {
-        return TakeTableInvoker.DEFAULT_NAMESPACE;
-    }
-
-    @Override
     public String getFunction() {
         return TakeTableInvoker.FUNCTION;
     }

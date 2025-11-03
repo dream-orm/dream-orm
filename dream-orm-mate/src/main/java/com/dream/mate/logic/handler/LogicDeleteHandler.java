@@ -39,7 +39,7 @@ public class LogicDeleteHandler extends AbstractHandler {
                 conditionStatements[0] = conditionStatement;
                 for (int i = 0; i < logicFields.size(); i++) {
                     LogicField logicField = logicFields.get(i);
-                    Statement valueStatement = new OperExpr(new ExprReader(logicField.getValue())).expr();
+                    Statement valueStatement = new OperExpr(new ExprReader(logicField.getValue()), null).expr();
                     conditionStatements[i + 1] = AntlrUtil.conditionStatement(new SymbolStatement.SingleMarkStatement(logicField.getColumn()), new OperStatement.EQStatement(), valueStatement);
                 }
             } else {

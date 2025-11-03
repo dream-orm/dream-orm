@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.BraceStatement;
 import com.dream.antlr.smt.ConditionStatement;
@@ -16,12 +17,12 @@ public class CompareExpr extends TreeExpr {
     public static final ExprType[] COMPARE = {ExprType.LT, ExprType.GT, ExprType.LEQ, ExprType.NEQ, ExprType.EQ, ExprType.GEQ, ExprType.IS, ExprType.IN, ExprType.NOT, ExprType.EXISTS, ExprType.LIKE, ExprType.BETWEEN};
     public static final ExprType[] CONDITION = {ExprType.AND, ExprType.OR};
 
-    public CompareExpr(ExprReader exprReader) {
-        this(exprReader, () -> new OperExpr(exprReader));
+    public CompareExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new OperExpr(exprReader, myFunctionFactory), myFunctionFactory);
     }
 
-    public CompareExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public CompareExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.NOT, ExprType.EXISTS, ExprType.HELP, ExprType.LBRACE);
     }
 
@@ -112,7 +113,7 @@ public class CompareExpr extends TreeExpr {
     protected Statement exprBetween(ExprInfo exprInfo) throws AntlrException {
         push();
         exprTree(new OperStatement.BETWEENStatement());
-        BetweenAndExpr betweenAndExpr = new BetweenAndExpr(exprReader);
+        BetweenAndExpr betweenAndExpr = new BetweenAndExpr(exprReader, myFunctionFactory);
         exprTree(betweenAndExpr.expr());
         setExprTypes(ExprType.AND, ExprType.OR, ExprType.NIL);
         return expr();
@@ -152,7 +153,7 @@ public class CompareExpr extends TreeExpr {
 
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
-        BraceExpr braceExpr = new BraceExpr(exprReader);
+        BraceExpr braceExpr = new BraceExpr(exprReader, myFunctionFactory);
         BraceStatement braceStatement = (BraceStatement) braceExpr.expr();
         exprTree(braceStatement);
         setExprTypes(COMPARE).addExprTypes(CONDITION).addExprTypes(OperExpr.OPER).addExprTypes(ExprType.NIL);
@@ -161,7 +162,7 @@ public class CompareExpr extends TreeExpr {
 
     @Override
     protected Statement exprSelf(ExprInfo exprInfo) throws AntlrException {
-        OperExpr operExpr = new OperExpr(exprReader, this);
+        OperExpr operExpr = new OperExpr(exprReader, this, myFunctionFactory);
         operExpr.setExprTypes(OperExpr.OPER);
         operExpr.expr();
         setExprTypes(COMPARE).addExprTypes(CONDITION).addExprTypes(ExprType.NIL);
@@ -178,12 +179,12 @@ public class CompareExpr extends TreeExpr {
     public static class BetweenAndExpr extends HelperExpr {
         private final ConditionStatement bet = new ConditionStatement();
 
-        public BetweenAndExpr(ExprReader exprReader) {
-            this(exprReader, () -> new OperExpr(exprReader));
+        public BetweenAndExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+            this(exprReader, () -> new OperExpr(exprReader, myFunctionFactory), myFunctionFactory);
         }
 
-        public BetweenAndExpr(ExprReader exprReader, Helper helper) {
-            super(exprReader, helper);
+        public BetweenAndExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+            super(exprReader, helper, myFunctionFactory);
         }
 
         @Override

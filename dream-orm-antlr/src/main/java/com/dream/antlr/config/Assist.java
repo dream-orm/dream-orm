@@ -17,27 +17,18 @@ public class Assist {
         this.customObjMap = customObjMap;
     }
 
-    public Invoker getInvoker(String function, String namespace) {
+    public Invoker getInvoker(String function) {
         Invoker invoker;
-        String name;
-        if (namespace == null || namespace.trim().length() == 0) {
-            namespace = Invoker.DEFAULT_NAMESPACE;
-        }
-        name = function + ":" + namespace;
-        invoker = invokerMap.get(name);
+        invoker = invokerMap.get(function);
         if (invoker == null) {
-            invoker = invokerFactory.getInvoker(function, namespace);
+            invoker = invokerFactory.getInvoker(function);
             if (invoker != null) {
                 invoker = invoker.newInstance();
             }
             if (invoker == null) {
-                throw new AntlrRunTimeException("@" + name + "不存在");
+                throw new AntlrRunTimeException("@" + function + "不存在");
             }
-            invokerMap.put(name, invoker);
-            String invokerName = invoker.function() + ":" + invoker.namespace();
-            if (!invokerName.equals(name)) {
-                invokerMap.put(invokerName, invoker);
-            }
+            invokerMap.put(function, invoker);
         }
         return invoker;
     }

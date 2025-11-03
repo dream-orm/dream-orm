@@ -1,5 +1,6 @@
 package com.dream.antlr.expr;
 
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.ConditionStatement;
 import com.dream.antlr.smt.OperStatement;
@@ -12,8 +13,8 @@ public abstract class TreeExpr extends HelperExpr {
     protected ConditionStatement cur = new ConditionStatement();
     protected ConditionStatement top = cur;
 
-    public TreeExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public TreeExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
     }
 
     protected void exprTree(OperStatement oper) {

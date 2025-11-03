@@ -1,17 +1,8 @@
 package com.dream.antlr.smt;
 
 public class InvokerStatement extends Statement {
-    private String namespace;
     private String function;
     private Statement paramStatement;
-
-    public String getNamespace() {
-        return namespace;
-    }
-
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
-    }
 
     public String getFunction() {
         return function;
@@ -37,7 +28,6 @@ public class InvokerStatement extends Statement {
     @Override
     public InvokerStatement clone() {
         InvokerStatement invokerStatement = (InvokerStatement) super.clone();
-        invokerStatement.setNamespace(namespace);
         invokerStatement.setFunction(function);
         invokerStatement.setParamStatement(clone(paramStatement));
         return invokerStatement;

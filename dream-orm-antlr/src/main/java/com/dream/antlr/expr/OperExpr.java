@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.BraceStatement;
 import com.dream.antlr.smt.OperStatement;
@@ -15,17 +16,17 @@ public class OperExpr extends TreeExpr {
     public static final ExprType[] OPER = {ExprType.ADD, ExprType.SUB, ExprType.STAR, ExprType.DIVIDE, ExprType.MOD, ExprType.LLM, ExprType.RRM, ExprType.BITAND, ExprType.BITOR, ExprType.BITXOR};
     private CompareExpr compareExpr;
 
-    public OperExpr(ExprReader exprReader) {
-        this(exprReader, () -> new ColumnExpr(exprReader));
+    public OperExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new ColumnExpr(exprReader, myFunctionFactory), myFunctionFactory);
     }
 
-    public OperExpr(ExprReader exprReader, CompareExpr compareExpr) {
-        this(exprReader);
+    public OperExpr(ExprReader exprReader, CompareExpr compareExpr, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, myFunctionFactory);
         this.compareExpr = compareExpr;
     }
 
-    public OperExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public OperExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.ADD, ExprType.SUB, ExprType.HELP, ExprType.LBRACE);
     }
 
@@ -187,7 +188,7 @@ public class OperExpr extends TreeExpr {
 
     @Override
     protected Statement exprLBrace(ExprInfo exprInfo) throws AntlrException {
-        BraceExpr braceExpr = new BraceExpr(exprReader);
+        BraceExpr braceExpr = new BraceExpr(exprReader, myFunctionFactory);
         BraceStatement braceStatement = (BraceStatement) braceExpr.expr();
         exprTree(braceStatement);
         setExprTypes(OPER).addExprTypes(ExprType.NIL);

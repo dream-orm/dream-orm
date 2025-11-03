@@ -72,7 +72,7 @@ public class ScanInvoker extends AbstractInvoker {
                 for (InvokerStatement invoker : invokerStatementList) {
                     invoker.replaceWith(new SymbolStatement.MarkStatement());
                 }
-                MarkInvoker markInvoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+                MarkInvoker markInvoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION);
                 scanInfo.setParamInfoList(markInvoker.getParamInfoList());
                 scanInfo.sql = sql;
             }

@@ -36,7 +36,7 @@ public abstract class SelectMapper extends ValidateMapper {
     }
 
     protected String getSelectColumn(Class<?> type) {
-        return AntlrUtil.invokerSQL(StarInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+        return AntlrUtil.invokerSQL(StarInvoker.FUNCTION);
     }
 
     protected abstract String getOther(Configuration configuration, TableInfo tableInfo, Class<?> type, Object arg);

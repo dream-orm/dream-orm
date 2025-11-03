@@ -41,8 +41,8 @@ public class BetweenInvoker extends AbstractInvoker {
                     if (collection.size() != 2) {
                         throw new AntlrException("集合数量必须是2");
                     }
-                    conditionStatement.setLeft(AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(list + ".0")));
-                    conditionStatement.setRight(AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(list + ".1")));
+                    conditionStatement.setLeft(AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, new SymbolStatement.LetterStatement(list + ".0")));
+                    conditionStatement.setRight(AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, new SymbolStatement.LetterStatement(list + ".1")));
                 }
             } else {
                 throw new AntlrException("类'" + arrayList.getClass().getName() + "'不是集合或数组类型");

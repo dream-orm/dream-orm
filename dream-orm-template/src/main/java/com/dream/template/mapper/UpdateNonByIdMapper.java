@@ -14,6 +14,6 @@ public class UpdateNonByIdMapper extends UpdateByIdMapper {
 
     @Override
     protected String getUpdateParam(List<String> setList) {
-        return AntlrUtil.invokerSQL(NonInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, super.getUpdateParam(setList));
+        return AntlrUtil.invokerSQL(NonInvoker.FUNCTION, super.getUpdateParam(setList));
     }
 }

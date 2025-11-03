@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.SelectStatement;
@@ -14,13 +15,13 @@ import com.dream.antlr.smt.Statement;
 public class SelectExpr extends HelperExpr {
     private final SelectStatement selectStatement = new SelectStatement();
 
-    public SelectExpr(ExprReader exprReader) {
-        this(exprReader, () -> new ListColumnExpr(exprReader, () -> new AliasColumnExpr(exprReader),
-                new ExprInfo(ExprType.COMMA, ",")));
+    public SelectExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new ListColumnExpr(exprReader, () -> new AliasColumnExpr(exprReader, myFunctionFactory),
+                new ExprInfo(ExprType.COMMA, ","), myFunctionFactory), myFunctionFactory);
     }
 
-    public SelectExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public SelectExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.SELECT);
     }
 

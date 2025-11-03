@@ -1,7 +1,6 @@
 package com.dream.mate.logic.inject;
 
 import com.dream.antlr.factory.InvokerFactory;
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.util.AntlrUtil;
@@ -19,11 +18,11 @@ public class LogicInject implements Inject {
     @Override
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
-        if (invokerFactory.getInvoker(LogicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+        if (invokerFactory.getInvoker(LogicInvoker.FUNCTION) == null) {
             invokerFactory.addInvokers(new LogicInvoker(logicHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(LogicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
+        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(LogicInvoker.FUNCTION, statement.getStatement());
         statement.setStatement(invokerStatement);
     }
 

@@ -1093,7 +1093,7 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(InvokerStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return "@" + statement.getFunction() + (statement.getNamespace() == null ? "" : (":" + statement.getNamespace())) + "(" + toStr(statement.getParamStatement(), assist, invokerList) + ")";
+        return "@" + statement.getFunction() + "(" + toStr(statement.getParamStatement(), assist, invokerList) + ")";
     }
 
     @Override

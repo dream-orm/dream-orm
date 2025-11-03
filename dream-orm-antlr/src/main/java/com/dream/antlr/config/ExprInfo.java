@@ -2,7 +2,7 @@ package com.dream.antlr.config;
 
 public class ExprInfo {
 
-    private final Object objInfo;
+    private final String info;
     private final int start;
     private final int end;
     private ExprType exprType;
@@ -11,9 +11,9 @@ public class ExprInfo {
         this(exprType, info, 0, 0);
     }
 
-    public ExprInfo(ExprType exprType, Object objInfo, int start, int end) {
+    public ExprInfo(ExprType exprType, String info, int start, int end) {
         this.exprType = exprType;
-        this.objInfo = objInfo;
+        this.info = info;
         this.start = start;
         this.end = end;
     }
@@ -35,10 +35,6 @@ public class ExprInfo {
     }
 
     public String getInfo() {
-        return String.valueOf(objInfo);
-    }
-
-    public Object getObjInfo() {
-        return objInfo;
+        return info;
     }
 }

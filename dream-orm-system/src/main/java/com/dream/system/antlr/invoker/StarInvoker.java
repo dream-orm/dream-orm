@@ -49,7 +49,7 @@ public class StarInvoker extends AbstractInvoker {
                 }
             }
         }
-        ScanInvoker scanInvoker = (ScanInvoker) assist.getInvoker(ScanInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+        ScanInvoker scanInvoker = (ScanInvoker) assist.getInvoker(ScanInvoker.FUNCTION);
         ScanInvoker.ScanInfo scanInfo = scanInvoker.getScanInfo();
         Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = scanInfo.getTableScanInfoMap();
         if (!ObjectUtil.isNull(tableList)) {
@@ -57,7 +57,7 @@ public class StarInvoker extends AbstractInvoker {
             for (String table : tableList) {
                 ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(table);
                 if (tableScanInfo == null) {
-                    throw new DreamRunTimeException("函数@" + this.function() + ":" + this.namespace() + "参数值" + table + "未出现在操作表语句");
+                    throw new DreamRunTimeException("函数@" + this.function() + "参数值" + table + "未出现在操作表语句");
                 }
                 scanInfoMap.put(table, tableScanInfo);
             }

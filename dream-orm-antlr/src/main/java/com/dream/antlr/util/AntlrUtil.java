@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class AntlrUtil {
 
-    public static String invokerSQL(String function, String namespace, String... args) {
+    public static String invokerSQL(String function, String... args) {
         StringBuilder paramBuilder = new StringBuilder();
         if (args != null && args.length > 0) {
             String cut = ",";
@@ -15,11 +15,7 @@ public class AntlrUtil {
             }
             paramBuilder.delete(paramBuilder.length() - cut.length(), paramBuilder.length());
         }
-        if (namespace != null && namespace.trim().length() != 0) {
-            return "@" + function + ":" + namespace + "(" + paramBuilder + ")";
-        } else {
-            return "@" + function + "(" + paramBuilder + ")";
-        }
+        return "@" + function + "(" + paramBuilder + ")";
     }
 
     public static String replace(String value, Map<String, String> replaceMap) {
@@ -48,14 +44,13 @@ public class AntlrUtil {
         return builder.toString();
     }
 
-    public static InvokerStatement invokerStatement(String function, String namespace, Statement... statements) {
+    public static InvokerStatement invokerStatement(String function, Statement... statements) {
         ListColumnStatement listColumnStatement = new ListColumnStatement(",");
         if (statements != null) {
             listColumnStatement.add(statements);
         }
         InvokerStatement invokerStatement = new InvokerStatement();
         invokerStatement.setFunction(function);
-        invokerStatement.setNamespace(namespace);
         invokerStatement.setParamStatement(listColumnStatement);
         return invokerStatement;
     }

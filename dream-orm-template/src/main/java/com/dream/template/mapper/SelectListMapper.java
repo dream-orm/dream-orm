@@ -58,7 +58,7 @@ public class SelectListMapper extends SelectMapper {
                 whereSql = whereSql + whereFalseSql;
             }
             if (!ObjectUtil.isNull(whereTrueSql)) {
-                whereTrueSql = AntlrUtil.invokerSQL(NotInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, whereTrueSql);
+                whereTrueSql = AntlrUtil.invokerSQL(NotInvoker.FUNCTION, whereTrueSql);
                 if (!ObjectUtil.isNull(whereFalseSql)) {
                     whereSql = whereSql + " and " + whereTrueSql;
                 } else {

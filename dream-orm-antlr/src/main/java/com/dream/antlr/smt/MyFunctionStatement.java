@@ -23,6 +23,6 @@ public abstract class MyFunctionStatement extends FunctionStatement {
     public abstract String toString(ToSQL toSQL, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     public HelperExpr.Helper getHelper(ExprReader exprReader) {
-        return () -> new ListColumnExpr(exprReader, () -> new CompareExpr(exprReader), new ExprInfo(ExprType.COMMA, ","));
+        return () -> new ListColumnExpr(exprReader, () -> new CompareExpr(exprReader, null), new ExprInfo(ExprType.COMMA, ","), null);
     }
 }

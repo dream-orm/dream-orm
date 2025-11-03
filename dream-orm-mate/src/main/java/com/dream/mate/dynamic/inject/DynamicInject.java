@@ -1,7 +1,6 @@
 package com.dream.mate.dynamic.inject;
 
 import com.dream.antlr.factory.InvokerFactory;
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.util.AntlrUtil;
@@ -20,14 +19,14 @@ public class DynamicInject implements Inject {
     @Override
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
-        if (invokerFactory.getInvoker(DynamicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+        if (invokerFactory.getInvoker(DynamicInvoker.FUNCTION) == null) {
             invokerFactory.addInvokers(new DynamicInvoker(dynamicHandler));
         }
-        if (invokerFactory.getInvoker(DynamicGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+        if (invokerFactory.getInvoker(DynamicGetInvoker.FUNCTION) == null) {
             invokerFactory.addInvokers(new DynamicGetInvoker(dynamicHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(DynamicInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
+        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(DynamicInvoker.FUNCTION, statement.getStatement());
         statement.setStatement(invokerStatement);
     }
 

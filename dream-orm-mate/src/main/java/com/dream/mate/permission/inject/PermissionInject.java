@@ -1,7 +1,6 @@
 package com.dream.mate.permission.inject;
 
 import com.dream.antlr.factory.InvokerFactory;
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.util.AntlrUtil;
@@ -20,14 +19,14 @@ public class PermissionInject implements Inject {
     @Override
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
-        if (invokerFactory.getInvoker(PermissionInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+        if (invokerFactory.getInvoker(PermissionInjectInvoker.FUNCTION) == null) {
             invokerFactory.addInvokers(new PermissionInjectInvoker(permissionHandler));
         }
-        if (invokerFactory.getInvoker(PermissionGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+        if (invokerFactory.getInvoker(PermissionGetInvoker.FUNCTION) == null) {
             invokerFactory.addInvokers(new PermissionGetInvoker(permissionHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(PermissionInjectInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
+        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(PermissionInjectInvoker.FUNCTION, statement.getStatement());
         statement.setStatement(invokerStatement);
     }
 

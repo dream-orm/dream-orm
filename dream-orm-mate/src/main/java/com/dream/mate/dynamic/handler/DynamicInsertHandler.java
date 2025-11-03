@@ -36,7 +36,7 @@ public class DynamicInsertHandler extends AbstractHandler {
             if (dynamicInvoker.isDynamic(assist, table)) {
                 InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
                         DynamicGetInvoker.FUNCTION,
-                        Invoker.DEFAULT_NAMESPACE,
+
                         tableStatement);
                 insertStatement.setTable(invokerStatement);
             }

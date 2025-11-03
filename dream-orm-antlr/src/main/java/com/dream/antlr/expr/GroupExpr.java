@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.GroupStatement;
 import com.dream.antlr.smt.Statement;
@@ -13,12 +14,12 @@ import com.dream.antlr.smt.Statement;
 public class GroupExpr extends HelperExpr {
     private final GroupStatement groupStatement = new GroupStatement();
 
-    public GroupExpr(ExprReader exprReader) {
-        this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")));
+    public GroupExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ","), myFunctionFactory), myFunctionFactory);
     }
 
-    public GroupExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public GroupExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.GROUP);
     }
 

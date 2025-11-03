@@ -98,7 +98,7 @@ public abstract class AbstractMapper {
         if (primKeys == null || primKeys.isEmpty()) {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'未注册主键");
         }
-        return "where " + primKeys.stream().map(columnInfo -> SystemUtil.key(tableInfo.getTable()) + "." + SystemUtil.key(columnInfo.getColumn()) + "=" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName())).collect(Collectors.joining(" and "));
+        return "where " + primKeys.stream().map(columnInfo -> SystemUtil.key(tableInfo.getTable()) + "." + SystemUtil.key(columnInfo.getColumn()) + "=" + AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, columnInfo.getName())).collect(Collectors.joining(" and "));
     }
 
     protected String getIdsWhere(TableInfo tableInfo) {
@@ -106,6 +106,6 @@ public abstract class AbstractMapper {
         if (primKeys == null || primKeys.isEmpty()) {
             throw new DreamRunTimeException("表'" + tableInfo.getTable() + "'未注册主键");
         }
-        return "where " + primKeys.stream().map(columnInfo -> SystemUtil.key(tableInfo.getTable()) + "." + SystemUtil.key(columnInfo.getColumn()) + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, "null") + ")").collect(Collectors.joining(" and "));
+        return "where " + primKeys.stream().map(columnInfo -> SystemUtil.key(tableInfo.getTable()) + "." + SystemUtil.key(columnInfo.getColumn()) + " in(" + AntlrUtil.invokerSQL(ForEachInvoker.FUNCTION, "null") + ")").collect(Collectors.joining(" and "));
     }
 }

@@ -46,7 +46,7 @@ public class InsertMapper extends WrapMapper {
             for (ColumnInfo prim : primKeys) {
                 String key = SystemUtil.key(prim.getColumn());
                 if (!columnList.contains(key)) {
-                    String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, prim.getName());
+                    String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, prim.getName());
                     columnList.add(key);
                     valueList.add(invokerSQL);
                 }
@@ -59,7 +59,7 @@ public class InsertMapper extends WrapMapper {
                 if (columnInfo != null) {
                     String key = SystemUtil.key(columnInfo.getColumn());
                     if (!columnList.contains(key)) {
-                        String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName());
+                        String invokerSQL = AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, columnInfo.getName());
                         if (!columnInfo.isPrimary()) {
                             columnList.add(key);
                             valueList.add(invokerSQL);

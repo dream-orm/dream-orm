@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.BraceStatement;
 import com.dream.antlr.smt.Statement;
@@ -13,13 +14,13 @@ import com.dream.antlr.smt.Statement;
 public class BraceExpr extends HelperExpr {
     private final BraceStatement brace = new BraceStatement();
 
-    public BraceExpr(ExprReader exprReader) {
-        this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")));
+    public BraceExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ","), myFunctionFactory), myFunctionFactory);
 
     }
 
-    public BraceExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public BraceExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.LBRACE);
     }
 
@@ -41,7 +42,7 @@ public class BraceExpr extends HelperExpr {
 
     @Override
     protected Statement exprSelect(ExprInfo exprInfo) throws AntlrException {
-        QueryExpr queryExpr = new QueryExpr(exprReader);
+        QueryExpr queryExpr = new QueryExpr(exprReader, myFunctionFactory);
         brace.setStatement(queryExpr.expr());
         setExprTypes(ExprType.RBRACE);
         return expr();

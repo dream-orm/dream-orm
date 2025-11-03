@@ -14,11 +14,6 @@ public class TakeColumnInvokerStatement extends InvokerStatement {
     }
 
     @Override
-    public String getNamespace() {
-        return TakeColumnInvoker.DEFAULT_NAMESPACE;
-    }
-
-    @Override
     public String getFunction() {
         return TakeColumnInvoker.FUNCTION;
     }

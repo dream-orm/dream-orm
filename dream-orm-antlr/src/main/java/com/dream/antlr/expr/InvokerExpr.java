@@ -4,9 +4,9 @@ import com.dream.antlr.config.Constant;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.InvokerStatement;
-import com.dream.antlr.smt.MyFunctionStatement;
 import com.dream.antlr.smt.Statement;
 
 /**
@@ -16,12 +16,12 @@ public class InvokerExpr extends HelperExpr {
 
     private final InvokerStatement invokerStatement = new InvokerStatement();
 
-    public InvokerExpr(ExprReader exprReader) {
-        this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ",")));
+    public InvokerExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new ListColumnExpr(exprReader, new ExprInfo(ExprType.COMMA, ","), myFunctionFactory), myFunctionFactory);
     }
 
-    public InvokerExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public InvokerExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.INVOKER);
     }
 
@@ -39,17 +39,7 @@ public class InvokerExpr extends HelperExpr {
 
     @Override
     protected Statement exprMyFunction(ExprInfo exprInfo) throws AntlrException {
-        push();
-        MyFunctionStatement myFunctionStatement = (MyFunctionStatement) exprInfo.getObjInfo();
-        String functionName = myFunctionStatement.getFunctionName();
-        if (invokerStatement.getFunction() == null) {
-            invokerStatement.setFunction(functionName);
-            setExprTypes(ExprType.COLON, ExprType.LBRACE, ExprType.NIL);
-        } else {
-            invokerStatement.setNamespace(functionName);
-            setExprTypes(ExprType.LBRACE, ExprType.NIL);
-        }
-        return expr();
+        return exprName(exprInfo);
     }
 
     @Override
@@ -79,20 +69,8 @@ public class InvokerExpr extends HelperExpr {
 
     private Statement exprName(ExprInfo exprInfo) throws AntlrException {
         push();
-        if (invokerStatement.getFunction() == null) {
-            invokerStatement.setFunction(exprInfo.getInfo());
-            setExprTypes(ExprType.COLON, ExprType.LBRACE, ExprType.NIL);
-        } else {
-            invokerStatement.setNamespace(exprInfo.getInfo());
-            setExprTypes(ExprType.LBRACE, ExprType.NIL);
-        }
-        return expr();
-    }
-
-    @Override
-    protected Statement exprColon(ExprInfo exprInfo) throws AntlrException {
-        push();
-        setExprTypes(Constant.FUNCTION).addExprTypes(Constant.KEYWORD).addExprTypes(ExprType.LETTER, ExprType.MY_FUNCTION);
+        invokerStatement.setFunction(exprInfo.getInfo());
+        setExprTypes(ExprType.LBRACE, ExprType.NIL);
         return expr();
     }
 

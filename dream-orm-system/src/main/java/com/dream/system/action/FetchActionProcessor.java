@@ -18,7 +18,7 @@ public class FetchActionProcessor implements ActionProcessor {
     @Override
     public void init(Field field, Map<String, Object> paramMap, Configuration configuration) {
         this.fieldName = field.getName();
-        String sql = (String) paramMap.get("sql");
+        String sql = (String) paramMap.get("value");
         this.methodInfo = new MethodInfo()
                 .setConfiguration(configuration)
                 .setRowType(ReflectUtil.getRowType(field.getGenericType()))

@@ -1,7 +1,6 @@
 package com.dream.system.inject;
 
 import com.dream.antlr.factory.InvokerFactory;
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.smt.SymbolStatement;
@@ -30,25 +29,23 @@ public class PageInject implements Inject {
             String pageSize = prefix + "pageSize";
             InvokerStatement pageStatement;
             if (offset) {
-                if (invokerFactory.getInvoker(OffSetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+                if (invokerFactory.getInvoker(OffSetInvoker.FUNCTION) == null) {
                     invokerFactory.addInvokers(new OffSetInvoker());
                 }
                 pageStatement = AntlrUtil.invokerStatement(
                         OffSetInvoker.FUNCTION,
-                        Invoker.DEFAULT_NAMESPACE,
                         statement.getStatement(),
-                        AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(pageSize)),
-                        AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(startRow)));
+                        AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, new SymbolStatement.LetterStatement(pageSize)),
+                        AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, new SymbolStatement.LetterStatement(startRow)));
             } else {
-                if (invokerFactory.getInvoker(LimitInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+                if (invokerFactory.getInvoker(LimitInvoker.FUNCTION) == null) {
                     invokerFactory.addInvokers(new LimitInvoker());
                 }
                 pageStatement = AntlrUtil.invokerStatement(
                         LimitInvoker.FUNCTION,
-                        Invoker.DEFAULT_NAMESPACE,
                         statement.getStatement(),
-                        AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(startRow)),
-                        AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(pageSize)));
+                        AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, new SymbolStatement.LetterStatement(startRow)),
+                        AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, new SymbolStatement.LetterStatement(pageSize)));
             }
             statement.setStatement(pageStatement);
         }

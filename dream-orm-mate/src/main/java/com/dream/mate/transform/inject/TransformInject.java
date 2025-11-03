@@ -1,7 +1,6 @@
 package com.dream.mate.transform.inject;
 
 import com.dream.antlr.factory.InvokerFactory;
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.util.AntlrUtil;
@@ -19,11 +18,11 @@ public class TransformInject implements Inject {
     @Override
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
-        if (invokerFactory.getInvoker(TransformInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE) == null) {
+        if (invokerFactory.getInvoker(TransformInvoker.FUNCTION) == null) {
             invokerFactory.addInvokers(new TransformInvoker(transformHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
-        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TransformInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, statement.getStatement());
+        InvokerStatement invokerStatement = AntlrUtil.invokerStatement(TransformInvoker.FUNCTION, statement.getStatement());
         statement.setStatement(invokerStatement);
     }
 

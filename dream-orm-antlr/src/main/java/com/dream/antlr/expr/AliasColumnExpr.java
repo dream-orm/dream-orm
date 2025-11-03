@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.AliasStatement;
 import com.dream.antlr.smt.Statement;
@@ -14,12 +15,12 @@ import com.dream.antlr.smt.SymbolStatement;
 public class AliasColumnExpr extends HelperExpr {
     AliasStatement aliasStatement = new AliasStatement();
 
-    public AliasColumnExpr(ExprReader exprReader) {
-        this(exprReader, () -> new CompareExpr(exprReader));
+    public AliasColumnExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new CompareExpr(exprReader, myFunctionFactory), myFunctionFactory);
     }
 
-    public AliasColumnExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public AliasColumnExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.HELP, ExprType.STAR);
     }
 
@@ -51,7 +52,7 @@ public class AliasColumnExpr extends HelperExpr {
     }
 
     protected Statement exprAlias(ExprInfo exprInfo) throws AntlrException {
-        SymbolExpr symbolExpr = new SymbolExpr(exprReader);
+        SymbolExpr symbolExpr = new SymbolExpr(exprReader, myFunctionFactory);
         aliasStatement.setAlias(symbolExpr.expr());
         setExprTypes(ExprType.NIL);
         return expr();

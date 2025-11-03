@@ -43,7 +43,7 @@ public abstract class UpdateMapper extends WrapMapper {
                     ColumnInfo columnInfo = tableInfo.getColumnInfo(name);
                     if (columnInfo != null) {
                         String value = SystemUtil.key(columnInfo.getColumn()) + "=" +
-                                AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, columnInfo.getName());
+                                AntlrUtil.invokerSQL(MarkInvoker.FUNCTION, columnInfo.getName());
                         if (!list.contains(value)) {
                             list.add(value);
                         }

@@ -9,8 +9,6 @@ import com.dream.antlr.sql.ToSQL;
 import java.util.List;
 
 public interface Invoker {
-    String DEFAULT_NAMESPACE = "dream";
-
     /**
      * 翻译@函数抽象树
      *
@@ -51,14 +49,6 @@ public interface Invoker {
      */
     default Invoker newInstance() {
         return this;
-    }
-
-    /**
-     * @return
-     * @函数对应的命名空间
-     */
-    default String namespace() {
-        return DEFAULT_NAMESPACE;
     }
 
     /**

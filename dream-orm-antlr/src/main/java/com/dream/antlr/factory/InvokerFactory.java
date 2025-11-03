@@ -12,11 +12,10 @@ public interface InvokerFactory {
     void addInvokers(Invoker... invokers);
 
     /**
-     * 根据表名和命名空间获取对应的@函数
+     * 根据函数方法名获取对应的@函数
      *
-     * @param function  @函数方法名
-     * @param namespace @函数命名空间
+     * @param functionName @函数方法名
      * @return
      */
-    Invoker getInvoker(String function, String namespace);
+    Invoker getInvoker(String functionName);
 }

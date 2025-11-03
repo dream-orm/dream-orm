@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.DeleteStatement;
 import com.dream.antlr.smt.Statement;
@@ -13,12 +14,12 @@ import com.dream.antlr.smt.Statement;
 public class DeleteExpr extends HelperExpr {
     private final DeleteStatement deleteStatement = new DeleteStatement();
 
-    public DeleteExpr(ExprReader exprReader) {
-        this(exprReader, () -> new AliasColumnExpr(exprReader));
+    public DeleteExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new AliasColumnExpr(exprReader, myFunctionFactory), myFunctionFactory);
     }
 
-    public DeleteExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public DeleteExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.DELETE);
     }
 
@@ -38,7 +39,7 @@ public class DeleteExpr extends HelperExpr {
 
     @Override
     protected Statement exprWhere(ExprInfo exprInfo) throws AntlrException {
-        WhereExpr whereExpr = new WhereExpr(exprReader);
+        WhereExpr whereExpr = new WhereExpr(exprReader, myFunctionFactory);
         Statement statement = whereExpr.expr();
         deleteStatement.setWhere(statement);
         setExprTypes(ExprType.NIL);

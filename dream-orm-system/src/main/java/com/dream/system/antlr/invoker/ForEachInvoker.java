@@ -59,7 +59,7 @@ public class ForEachInvoker extends AbstractInvoker {
                 paramMap.remove(this.index);
                 paramMap.remove(this.item);
             } else {
-                MarkInvoker sqlInvoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE);
+                MarkInvoker sqlInvoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION);
                 List<MarkInvoker.ParamInfo> paramInfoList = sqlInvoker.getParamInfoList();
                 int index = 0;
                 Statement[] statements = new Statement[collection.size()];

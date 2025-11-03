@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.*;
 
@@ -14,14 +15,14 @@ public class QueryExpr extends SqlExpr {
     private final QueryStatement queryStatement = new QueryStatement();
 
 
-    public QueryExpr(ExprReader exprReader) {
-        super(exprReader);
+    public QueryExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, myFunctionFactory);
         setExprTypes(ExprType.SELECT);
     }
 
     @Override
     protected Statement exprSelect(ExprInfo exprInfo) throws AntlrException {
-        SelectExpr selectExpr = new SelectExpr(exprReader);
+        SelectExpr selectExpr = new SelectExpr(exprReader, myFunctionFactory);
         Statement statement = selectExpr.expr();
         queryStatement.setSelectStatement((SelectStatement) statement);
         this.setExprTypes(ExprType.FROM, ExprType.UNION, ExprType.FOR, ExprType.NIL);
@@ -30,7 +31,7 @@ public class QueryExpr extends SqlExpr {
 
     @Override
     protected Statement exprFrom(ExprInfo exprInfo) throws AntlrException {
-        FromExpr fromExpr = new FromExpr(exprReader);
+        FromExpr fromExpr = new FromExpr(exprReader, myFunctionFactory);
         Statement statement = fromExpr.expr();
         queryStatement.setFromStatement((FromStatement) statement);
         setExprTypes(ExprType.WHERE, ExprType.GROUP, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.FOR, ExprType.NIL);
@@ -39,7 +40,7 @@ public class QueryExpr extends SqlExpr {
 
     @Override
     protected Statement exprWhere(ExprInfo exprInfo) throws AntlrException {
-        WhereExpr whereExpr = new WhereExpr(exprReader);
+        WhereExpr whereExpr = new WhereExpr(exprReader, myFunctionFactory);
         queryStatement.setWhereStatement((WhereStatement) whereExpr.expr());
         setExprTypes(ExprType.GROUP, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
@@ -47,7 +48,7 @@ public class QueryExpr extends SqlExpr {
 
     @Override
     protected Statement exprGroup(ExprInfo exprInfo) throws AntlrException {
-        GroupExpr groupExpr = new GroupExpr(exprReader);
+        GroupExpr groupExpr = new GroupExpr(exprReader, myFunctionFactory);
         queryStatement.setGroupStatement((GroupStatement) groupExpr.expr());
         setExprTypes(ExprType.HAVING, ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
@@ -55,7 +56,7 @@ public class QueryExpr extends SqlExpr {
 
     @Override
     protected Statement exprHaving(ExprInfo exprInfo) throws AntlrException {
-        HavingExpr havingExpr = new HavingExpr(exprReader);
+        HavingExpr havingExpr = new HavingExpr(exprReader, myFunctionFactory);
         queryStatement.setHavingStatement((HavingStatement) havingExpr.expr());
         setExprTypes(ExprType.ORDER, ExprType.LIMIT, ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
@@ -63,7 +64,7 @@ public class QueryExpr extends SqlExpr {
 
     @Override
     protected Statement exprOrder(ExprInfo exprInfo) throws AntlrException {
-        OrderExpr orderExpr = new OrderExpr(exprReader);
+        OrderExpr orderExpr = new OrderExpr(exprReader, myFunctionFactory);
         queryStatement.setOrderStatement((OrderStatement) orderExpr.expr());
         setExprTypes(ExprType.LIMIT, ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
@@ -80,7 +81,7 @@ public class QueryExpr extends SqlExpr {
     }
 
     private Statement exprPage(ExprInfo exprInfo) throws AntlrException {
-        LimitExpr limitExpr = new LimitExpr(exprReader);
+        LimitExpr limitExpr = new LimitExpr(exprReader, myFunctionFactory);
         queryStatement.setLimitStatement((LimitStatement) limitExpr.expr());
         setExprTypes(ExprType.UNION, ExprType.FOR, ExprType.NIL);
         return expr();
@@ -88,7 +89,7 @@ public class QueryExpr extends SqlExpr {
 
     @Override
     protected Statement exprUnion(ExprInfo exprInfo) throws AntlrException {
-        UnionExpr unionExpr = new UnionExpr(exprReader);
+        UnionExpr unionExpr = new UnionExpr(exprReader, myFunctionFactory);
         UnionStatement unionStatement = (UnionStatement) unionExpr.expr();
         queryStatement.setUnionStatement(unionStatement);
         setExprTypes(ExprType.UNION, ExprType.FOR, ExprType.NIL);
@@ -97,7 +98,7 @@ public class QueryExpr extends SqlExpr {
 
     @Override
     protected Statement exprFor(ExprInfo exprInfo) throws AntlrException {
-        ForUpdateExpr forUpdateExpr = new ForUpdateExpr(exprReader);
+        ForUpdateExpr forUpdateExpr = new ForUpdateExpr(exprReader, myFunctionFactory);
         ForUpdateStatement forUpdateStatement = (ForUpdateStatement) forUpdateExpr.expr();
         queryStatement.setForUpdateStatement(forUpdateStatement);
         setExprTypes(ExprType.NIL);

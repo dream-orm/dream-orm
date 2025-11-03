@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.OrderStatement;
 import com.dream.antlr.smt.Statement;
@@ -13,12 +14,12 @@ import com.dream.antlr.smt.Statement;
 public class OrderExpr extends HelperExpr {
     private final OrderStatement orderStatement = new OrderStatement();
 
-    public OrderExpr(ExprReader exprReader) {
-        this(exprReader, () -> new ListColumnExpr(exprReader, () -> new AscDescExpr(exprReader), new ExprInfo(ExprType.COMMA, ",")));
+    public OrderExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        this(exprReader, () -> new ListColumnExpr(exprReader, () -> new AscDescExpr(exprReader, myFunctionFactory), new ExprInfo(ExprType.COMMA, ","), myFunctionFactory), myFunctionFactory);
     }
 
-    public OrderExpr(ExprReader exprReader, Helper helper) {
-        super(exprReader, helper);
+    public OrderExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, helper, myFunctionFactory);
         setExprTypes(ExprType.ORDER);
     }
 
@@ -52,13 +53,13 @@ public class OrderExpr extends HelperExpr {
         private Statement sortStatement;
         private Statement statement;
 
-        public AscDescExpr(ExprReader exprReader) {
-            this(exprReader, () -> new CompareExpr(exprReader));
+        public AscDescExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+            this(exprReader, () -> new CompareExpr(exprReader, myFunctionFactory), myFunctionFactory);
         }
 
 
-        public AscDescExpr(ExprReader exprReader, Helper helper) {
-            super(exprReader, helper);
+        public AscDescExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+            super(exprReader, helper, myFunctionFactory);
         }
 
         @Override

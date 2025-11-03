@@ -62,7 +62,7 @@ public class TenantQueryHandler extends AbstractHandler {
                     ConditionStatement conditionStatement = new ConditionStatement();
                     conditionStatement.setLeft(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(tableScanInfo.getAlias()), new SymbolStatement.SingleMarkStatement(tenantColumn)));
                     conditionStatement.setOper(new OperStatement.EQStatement());
-                    conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
+                    conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, new SymbolStatement.LetterStatement(tenantColumn)));
                     QueryStatement queryStatement = queryDeque.peek();
                     WhereStatement whereStatement = queryStatement.getWhereStatement();
                     if (whereStatement == null) {
@@ -99,7 +99,7 @@ public class TenantQueryHandler extends AbstractHandler {
                         ConditionStatement conditionStatement = new ConditionStatement();
                         conditionStatement.setLeft(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(tableScanInfo.getAlias()), new SymbolStatement.SingleMarkStatement(tenantColumn)));
                         conditionStatement.setOper(new OperStatement.EQStatement());
-                        conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, Invoker.DEFAULT_NAMESPACE, new SymbolStatement.LetterStatement(tenantColumn)));
+                        conditionStatement.setRight(AntlrUtil.invokerStatement(TenantGetInvoker.FUNCTION, new SymbolStatement.LetterStatement(tenantColumn)));
                         Statement joinOnStatement = joinStatement.getOn();
                         if (joinOnStatement instanceof ConditionStatement && ((ConditionStatement) joinOnStatement).getOper() instanceof OperStatement.ORStatement) {
                             joinOnStatement = new BraceStatement(joinOnStatement);

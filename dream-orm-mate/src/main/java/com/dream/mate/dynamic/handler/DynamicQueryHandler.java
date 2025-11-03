@@ -45,7 +45,7 @@ public class DynamicQueryHandler extends AbstractHandler {
                 if (dynamicInvoker.isDynamic(assist, table)) {
                     InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
                             DynamicGetInvoker.FUNCTION,
-                            Invoker.DEFAULT_NAMESPACE,
+
                             new SymbolStatement.SingleMarkStatement(table));
                     String alias = tableScanInfo.getAlias();
                     AliasStatement aliasStatement = new AliasStatement();
@@ -73,7 +73,7 @@ public class DynamicQueryHandler extends AbstractHandler {
                 if (dynamicInvoker.isDynamic(assist, table)) {
                     InvokerStatement invokerStatement = AntlrUtil.invokerStatement(
                             PermissionGetInvoker.FUNCTION,
-                            Invoker.DEFAULT_NAMESPACE,
+
                             new SymbolStatement.SingleMarkStatement(table));
                     String alias = tableScanInfo.getAlias();
                     AliasStatement aliasStatement = new AliasStatement();

@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.OverStatement;
 import com.dream.antlr.smt.Statement;
@@ -10,8 +11,8 @@ import com.dream.antlr.smt.Statement;
 public class OverExpr extends SqlExpr {
     private OverStatement overStatement;
 
-    public OverExpr(ExprReader exprReader) {
-        super(exprReader);
+    public OverExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, myFunctionFactory);
         setExprTypes(ExprType.OVER);
     }
 
@@ -39,14 +40,14 @@ public class OverExpr extends SqlExpr {
 
     @Override
     protected Statement exprPartition(ExprInfo exprInfo) throws AntlrException {
-        overStatement.setPartitionStatement(new PartitionExpr(exprReader).expr());
+        overStatement.setPartitionStatement(new PartitionExpr(exprReader, myFunctionFactory).expr());
         setExprTypes(ExprType.ORDER, ExprType.RBRACE);
         return expr();
     }
 
     @Override
     protected Statement exprOrder(ExprInfo exprInfo) throws AntlrException {
-        overStatement.setOrderStatement(new OrderExpr(exprReader).expr());
+        overStatement.setOrderStatement(new OrderExpr(exprReader, myFunctionFactory).expr());
         setExprTypes(ExprType.RBRACE);
         return expr();
     }
@@ -59,13 +60,13 @@ public class OverExpr extends SqlExpr {
     public static class PartitionExpr extends HelperExpr {
         private OverStatement.PartitionStatement partitionStatement;
 
-        public PartitionExpr(ExprReader exprReader) {
-            this(exprReader, () -> new ColumnExpr(exprReader));
+        public PartitionExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+            this(exprReader, () -> new ColumnExpr(exprReader, myFunctionFactory), myFunctionFactory);
         }
 
 
-        public PartitionExpr(ExprReader exprReader, Helper helper) {
-            super(exprReader, helper);
+        public PartitionExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+            super(exprReader, helper, myFunctionFactory);
             setExprTypes(ExprType.PARTITION);
         }
 

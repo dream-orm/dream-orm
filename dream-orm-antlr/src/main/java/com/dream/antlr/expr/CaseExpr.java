@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.CaseStatement;
 import com.dream.antlr.smt.Statement;
@@ -13,15 +14,15 @@ import com.dream.antlr.smt.Statement;
 public class CaseExpr extends SqlExpr {
     private final CaseStatement caseStatement = new CaseStatement();
 
-    public CaseExpr(ExprReader exprReader) {
-        super(exprReader);
+    public CaseExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, myFunctionFactory);
         setExprTypes(ExprType.CASE);
     }
 
     @Override
     protected Statement exprCase(ExprInfo exprInfo) throws AntlrException {
         push();
-        CaseCaseExpr caseCaseExpr = new CaseCaseExpr(exprReader);
+        CaseCaseExpr caseCaseExpr = new CaseCaseExpr(exprReader, myFunctionFactory);
         caseStatement.setCaseColumn(caseCaseExpr.expr());
         setExprTypes(ExprType.WHEN);
         return expr();
@@ -29,7 +30,7 @@ public class CaseExpr extends SqlExpr {
 
     @Override
     protected Statement exprWhen(ExprInfo exprInfo) throws AntlrException {
-        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new WhenThenExpr(exprReader), new ExprInfo(ExprType.BLANK, " "));
+        ListColumnExpr listColumnExpr = new ListColumnExpr(exprReader, () -> new WhenThenExpr(exprReader, myFunctionFactory), new ExprInfo(ExprType.BLANK, " "), myFunctionFactory);
         caseStatement.setWhenThenList(listColumnExpr.expr());
         setExprTypes(ExprType.ELSE, ExprType.END);
         return expr();
@@ -38,7 +39,7 @@ public class CaseExpr extends SqlExpr {
     @Override
     protected Statement exprElse(ExprInfo exprInfo) throws AntlrException {
         push();
-        WhenThenExpr.CaseElseExpr caseElseExpr = new WhenThenExpr.CaseElseExpr(exprReader);
+        WhenThenExpr.CaseElseExpr caseElseExpr = new WhenThenExpr.CaseElseExpr(exprReader, myFunctionFactory);
         caseStatement.setElseColumn(caseElseExpr.expr());
         setExprTypes(ExprType.END);
         return expr();
@@ -59,13 +60,13 @@ public class CaseExpr extends SqlExpr {
     public static class CaseCaseExpr extends HelperExpr {
         Statement statement;
 
-        public CaseCaseExpr(ExprReader exprReader) {
-            this(exprReader, () -> new CompareExpr(exprReader));
+        public CaseCaseExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+            this(exprReader, () -> new CompareExpr(exprReader, myFunctionFactory), myFunctionFactory);
             addExprTypes(ExprType.NIL);
         }
 
-        public CaseCaseExpr(ExprReader exprReader, Helper helper) {
-            super(exprReader, helper);
+        public CaseCaseExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+            super(exprReader, helper, myFunctionFactory);
         }
 
         @Override
@@ -84,8 +85,8 @@ public class CaseExpr extends SqlExpr {
     public static class WhenThenExpr extends SqlExpr {
         private final CaseStatement.WhenThenStatement whenThenStatement = new CaseStatement.WhenThenStatement();
 
-        public WhenThenExpr(ExprReader exprReader) {
-            super(exprReader);
+        public WhenThenExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+            super(exprReader, myFunctionFactory);
             setExprTypes(ExprType.WHEN);
         }
 
@@ -93,7 +94,7 @@ public class CaseExpr extends SqlExpr {
         @Override
         protected Statement exprWhen(ExprInfo exprInfo) throws AntlrException {
             push();
-            CaseWhenExpr caseWhenExpr = new CaseWhenExpr(exprReader);
+            CaseWhenExpr caseWhenExpr = new CaseWhenExpr(exprReader, myFunctionFactory);
             Statement statement = caseWhenExpr.expr();
             whenThenStatement.setWhen(statement);
             setExprTypes(ExprType.THEN);
@@ -103,7 +104,7 @@ public class CaseExpr extends SqlExpr {
         @Override
         protected Statement exprThen(ExprInfo exprInfo) throws AntlrException {
             push();
-            CaseThenExpr caseThenExpr = new CaseThenExpr(exprReader);
+            CaseThenExpr caseThenExpr = new CaseThenExpr(exprReader, myFunctionFactory);
             whenThenStatement.setThen(caseThenExpr.expr());
             setExprTypes(ExprType.NIL);
             return expr();
@@ -117,12 +118,12 @@ public class CaseExpr extends SqlExpr {
         public static class CaseWhenExpr extends HelperExpr {
             private Statement statement;
 
-            public CaseWhenExpr(ExprReader exprReader) {
-                this(exprReader, () -> new CompareExpr(exprReader));
+            public CaseWhenExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+                this(exprReader, () -> new CompareExpr(exprReader, myFunctionFactory), myFunctionFactory);
             }
 
-            public CaseWhenExpr(ExprReader exprReader, Helper helper) {
-                super(exprReader, helper);
+            public CaseWhenExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+                super(exprReader, helper, myFunctionFactory);
             }
 
             @Override
@@ -141,12 +142,12 @@ public class CaseExpr extends SqlExpr {
         public static class CaseThenExpr extends HelperExpr {
             private Statement statement;
 
-            public CaseThenExpr(ExprReader exprReader) {
-                this(exprReader, () -> new CompareExpr(exprReader));
+            public CaseThenExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+                this(exprReader, () -> new CompareExpr(exprReader, myFunctionFactory), myFunctionFactory);
             }
 
-            public CaseThenExpr(ExprReader exprReader, Helper helper) {
-                super(exprReader, helper);
+            public CaseThenExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+                super(exprReader, helper, myFunctionFactory);
             }
 
             @Override
@@ -165,12 +166,12 @@ public class CaseExpr extends SqlExpr {
         public static class CaseElseExpr extends HelperExpr {
             private Statement statement;
 
-            public CaseElseExpr(ExprReader exprReader) {
-                this(exprReader, () -> new CompareExpr(exprReader));
+            public CaseElseExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+                this(exprReader, () -> new CompareExpr(exprReader, myFunctionFactory), myFunctionFactory);
             }
 
-            public CaseElseExpr(ExprReader exprReader, Helper helper) {
-                super(exprReader, helper);
+            public CaseElseExpr(ExprReader exprReader, Helper helper, MyFunctionFactory myFunctionFactory) {
+                super(exprReader, helper, myFunctionFactory);
             }
 
             @Override

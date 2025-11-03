@@ -1,7 +1,6 @@
 package com.dream.helloworld.h2.view;
 
 import com.dream.helloworld.h2.table.Account;
-import com.dream.system.annotation.EasyFetch;
 import com.dream.system.annotation.Fetch;
 import com.dream.system.annotation.Ignore;
 import com.dream.system.annotation.View;
@@ -14,10 +13,9 @@ public class AccountWithDeptView {
     private String email;
     private Integer deptId;
     @Ignore
-    @EasyFetch(table = "dept", column = "id", columns = "name", field = "deptId")
     private String deptName;
     @Ignore
-    @Fetch(sql = "select name from dept where id=@?(deptId)")
+    @Fetch("select name from dept where id=@?(deptId)")
     private String deptName2;
 
     public Integer getId() {

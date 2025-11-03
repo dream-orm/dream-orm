@@ -36,7 +36,7 @@ public abstract class ToPubSQL extends ToNativeSQL {
 
     @Override
     protected String toString(InvokerStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        Invoker invoker = assist.getInvoker(statement.getFunction(), statement.getNamespace());
+        Invoker invoker = assist.getInvoker(statement.getFunction());
         if (invokerList == null) {
             invokerList = new ArrayList<>();
         }

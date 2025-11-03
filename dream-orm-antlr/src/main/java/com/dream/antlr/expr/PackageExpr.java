@@ -3,6 +3,7 @@ package com.dream.antlr.expr;
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.config.ExprType;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.factory.MyFunctionFactory;
 import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.BraceStatement;
 import com.dream.antlr.smt.PackageStatement;
@@ -14,8 +15,8 @@ import com.dream.antlr.smt.Statement;
 public class PackageExpr extends SqlExpr {
     private final PackageStatement statement = new PackageStatement();
 
-    public PackageExpr(ExprReader exprReader) {
-        super(exprReader);
+    public PackageExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
+        super(exprReader, myFunctionFactory);
         setExprTypes(ExprType.LBRACE, ExprType.INVOKER, ExprType.SELECT, ExprType.INSERT, ExprType.UPDATE, ExprType.DELETE, ExprType.WITH, ExprType.REPLACE, ExprType.ACC);
     }
 
@@ -38,7 +39,7 @@ public class PackageExpr extends SqlExpr {
 
     @Override
     protected Statement exprInvoker(ExprInfo exprInfo) throws AntlrException {
-        InvokerExpr invokerExpr = new InvokerExpr(exprReader);
+        InvokerExpr invokerExpr = new InvokerExpr(exprReader, myFunctionFactory);
         statement.setStatement(invokerExpr.expr());
         setExprTypes(ExprType.SEMICOLON, ExprType.ACC);
         return expr();
@@ -66,7 +67,7 @@ public class PackageExpr extends SqlExpr {
 
     @Override
     protected Statement exprWith(ExprInfo exprInfo) throws AntlrException {
-        WithExpr withExpr = new WithExpr(exprReader);
+        WithExpr withExpr = new WithExpr(exprReader, myFunctionFactory);
         statement.setStatement(withExpr.expr());
         setExprTypes(ExprType.SEMICOLON, ExprType.ACC);
         return expr();
@@ -78,7 +79,7 @@ public class PackageExpr extends SqlExpr {
     }
 
     protected Statement exprDML(ExprInfo exprInfo) throws AntlrException {
-        DMLExpr dmlExpr = new DMLExpr(exprReader);
+        DMLExpr dmlExpr = new DMLExpr(exprReader, myFunctionFactory);
         statement.setStatement(dmlExpr.expr());
         setExprTypes(ExprType.SEMICOLON, ExprType.ACC);
         return expr();
