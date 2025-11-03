@@ -1,7 +1,6 @@
 package org.example.dreamormhellospringboot3.model;
 
 
-import com.dream.system.annotation.Ignore;
 import lombok.Data;
 
 import java.io.Serial;
@@ -17,24 +16,20 @@ public class BaseEntity implements Serializable {
     /**
      * 创建者
      */
-    @Ignore
     private Object createBy;
 
     /**
      * 创建时间
      */
-    @Ignore
     private java.util.Date createTime;
 
     /**
      * 更新者
      */
-    @Ignore
     private Object updateBy;
 
     /**
      * 更新时间
      */
-    @Ignore
     private java.util.Date updateTime;
 }

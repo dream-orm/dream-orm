@@ -9,6 +9,15 @@ public class AccountView {
     private String name;
     private Integer age;
     private String email;
+    private String ap;
+
+    public void setAp(String ap) {
+        this.ap = ap;
+    }
+
+    public String getAp() {
+        return ap;
+    }
 
     public Integer getId() {
         return id;

@@ -5,6 +5,7 @@ import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.core.session.Session;
 import com.dream.system.table.TableInfo;
+import com.dream.system.util.SystemUtil;
 import com.dream.template.annotation.Wrap;
 import com.dream.template.annotation.WrapType;
 import com.dream.template.wrap.Wrapper;
@@ -29,8 +30,7 @@ public abstract class WrapMapper extends ValidateMapper {
         List<Field> acceptList = new ArrayList<>();
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
-                int modifiers = field.getModifiers();
-                if (!Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)) {
+                if (!SystemUtil.ignoreField(field)) {
                     if (field.isAnnotationPresent(Wrap.class)) {
                         Wrap wrapAnnotation = field.getDeclaredAnnotation(Wrap.class);
                         WrapType wrapType = wrapAnnotation.wrapType();

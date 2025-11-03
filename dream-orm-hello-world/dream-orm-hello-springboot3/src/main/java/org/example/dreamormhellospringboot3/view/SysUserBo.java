@@ -1,6 +1,5 @@
 package org.example.dreamormhellospringboot3.view;
 
-import com.dream.system.annotation.Ignore;
 import com.dream.system.annotation.View;
 import com.dream.template.annotation.Wrap;
 import com.dream.template.annotation.WrapType;
@@ -71,10 +70,8 @@ public class SysUserBo extends BaseEntity {
     @Wrap(value = "0", wrapType = WrapType.INSERT)
     private Integer delFlag;
 
-    @Ignore
     private List<Long> roleIds;
 
-    @Ignore
     private List<Long> postIds;
 
     public Long getId() {

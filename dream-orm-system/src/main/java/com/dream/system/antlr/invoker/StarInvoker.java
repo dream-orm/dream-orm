@@ -150,23 +150,22 @@ public class StarInvoker extends AbstractInvoker {
                             }
                         } else {
                             ColumnInfo columnInfo = rootTableInfo.getColumnInfo(fieldName);
-                            if (columnInfo == null) {
-                                throw new AntlrException("数据表映射类不存在" + fieldName + "属性");
-                            }
-                            boolean add = true;
-                            for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
-                                String queryTable = queryColumnInfo.getTable();
-                                boolean hasAdd = (columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
-                                        || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias()))
-                                        && (ObjectUtil.isNull(queryTable)
-                                        || queryTable.equalsIgnoreCase(alias));
-                                if (hasAdd) {
-                                    add = false;
-                                    break;
+                            if (columnInfo != null) {
+                                boolean add = true;
+                                for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
+                                    String queryTable = queryColumnInfo.getTable();
+                                    boolean hasAdd = (columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
+                                            || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias()))
+                                            && (ObjectUtil.isNull(queryTable)
+                                            || queryTable.equalsIgnoreCase(alias));
+                                    if (hasAdd) {
+                                        add = false;
+                                        break;
+                                    }
                                 }
-                            }
-                            if (add) {
-                                queryColumnList.add(AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())));
+                                if (add) {
+                                    queryColumnList.add(AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())));
+                                }
                             }
                         }
                     } else {

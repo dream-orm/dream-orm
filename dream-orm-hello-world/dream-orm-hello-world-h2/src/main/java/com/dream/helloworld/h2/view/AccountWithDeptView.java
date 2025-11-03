@@ -2,7 +2,6 @@ package com.dream.helloworld.h2.view;
 
 import com.dream.helloworld.h2.table.Account;
 import com.dream.system.annotation.Fetch;
-import com.dream.system.annotation.Ignore;
 import com.dream.system.annotation.View;
 
 @View(Account.class)
@@ -12,9 +11,7 @@ public class AccountWithDeptView {
     private Integer age;
     private String email;
     private Integer deptId;
-    @Ignore
     private String deptName;
-    @Ignore
     @Fetch("select name from dept where id=@?(deptId)")
     private String deptName2;
 

@@ -34,7 +34,7 @@ public abstract class UpdateMapper extends WrapMapper {
             List<ColumnInfo> primKeys = tableInfo.getPrimKeys();
             Set<String> primKeyNameSet = null;
             if (primKeys != null && !primKeys.isEmpty()) {
-                primKeyNameSet = primKeys.stream().map(primKey -> primKey.getName()).collect(Collectors.toSet());
+                primKeyNameSet = primKeys.stream().map(ColumnInfo::getName).collect(Collectors.toSet());
             }
             for (Field field : fieldList) {
                 if (primKeyNameSet == null || !primKeyNameSet.contains(field.getName())) {
