@@ -35,11 +35,6 @@ public class OffSetInvoker extends AbstractInvoker {
     }
 
     @Override
-    public Invoker newInstance() {
-        return new OffSetInvoker();
-    }
-
-    @Override
     public String function() {
         return FUNCTION;
     }

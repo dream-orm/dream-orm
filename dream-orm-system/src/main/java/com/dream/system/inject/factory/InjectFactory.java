@@ -4,9 +4,7 @@ import com.dream.system.config.MethodInfo;
 import com.dream.system.inject.Inject;
 
 public interface InjectFactory {
-    void injects(Inject... injects);
+    void addInjects(Inject... injects);
 
     void inject(MethodInfo methodInfo);
-
-    <T extends Inject> T getInject(Class<T> inject);
 }

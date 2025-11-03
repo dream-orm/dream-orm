@@ -43,15 +43,6 @@ public interface Invoker {
     void setAccessible(boolean accessible);
 
     /**
-     * 出于线程安全考虑，创建新的@函数，一般情况返回this即可
-     *
-     * @return
-     */
-    default Invoker newInstance() {
-        return this;
-    }
-
-    /**
      * 当前@函数对应的方法名
      *
      * @return

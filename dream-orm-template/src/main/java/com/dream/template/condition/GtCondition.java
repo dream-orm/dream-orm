@@ -1,6 +1,5 @@
 package com.dream.template.condition;
 
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.util.AntlrUtil;
 import com.dream.system.antlr.invoker.MarkInvoker;
 import com.dream.system.util.SystemUtil;

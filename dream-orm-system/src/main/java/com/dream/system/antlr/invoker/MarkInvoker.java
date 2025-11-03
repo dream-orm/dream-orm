@@ -17,12 +17,6 @@ public class MarkInvoker extends AbstractInvoker {
     private final List<ParamInfo> paramInfoList = new ArrayList<>();
     ObjectWrapper paramWrapper;
 
-
-    @Override
-    public Invoker newInstance() {
-        return new MarkInvoker();
-    }
-
     @Override
     public String function() {
         return FUNCTION;

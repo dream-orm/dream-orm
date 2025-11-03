@@ -17,11 +17,6 @@ public class RepInvoker extends AbstractInvoker {
     ObjectWrapper paramWrapper;
 
     @Override
-    public Invoker newInstance() {
-        return new RepInvoker();
-    }
-
-    @Override
     public String function() {
         return FUNCTION;
     }

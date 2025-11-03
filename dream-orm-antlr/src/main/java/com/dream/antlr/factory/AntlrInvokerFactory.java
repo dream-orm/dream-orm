@@ -5,21 +5,13 @@ import com.dream.antlr.invoker.Invoker;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class AntlrInvokerFactory implements InvokerFactory {
-    protected Map<String, Invoker> functionInvokerMap = new HashMap<>(16);
+    protected Map<String, Supplier<Invoker>> functionInvokerMap = new HashMap<>(16);
 
     @Override
-    public void addInvokers(Invoker... invokers) {
-        if (invokers != null && invokers.length > 0) {
-            for (Invoker invoker : invokers) {
-                addInvoker(invoker);
-            }
-        }
-    }
-
-    protected void addInvoker(Invoker invoker) {
-        String function = invoker.function();
+    public void addInvoker(String function, Supplier<Invoker> invoker) {
         if (functionInvokerMap.containsKey(function)) {
             throw new AntlrRunTimeException("@" + function + "已经存在");
         }
@@ -28,6 +20,10 @@ public class AntlrInvokerFactory implements InvokerFactory {
 
     @Override
     public Invoker getInvoker(String functionName) {
-        return functionInvokerMap.get(functionName);
+        Supplier<Invoker> supplier = functionInvokerMap.get(functionName);
+        if (supplier != null) {
+            return supplier.get();
+        }
+        return null;
     }
 }

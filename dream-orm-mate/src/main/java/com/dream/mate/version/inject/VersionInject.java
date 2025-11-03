@@ -21,13 +21,13 @@ public class VersionInject implements Inject {
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
         if (invokerFactory.getInvoker(VersionInvoker.FUNCTION) == null) {
-            invokerFactory.addInvokers(new VersionInvoker(versionHandler));
+            invokerFactory.addInvoker(VersionInvoker.FUNCTION, () -> new VersionInvoker(versionHandler));
         }
         if (invokerFactory.getInvoker(CurVersionGetInvoker.FUNCTION) == null) {
-            invokerFactory.addInvokers(new CurVersionGetInvoker(versionHandler));
+            invokerFactory.addInvoker(CurVersionGetInvoker.FUNCTION, () -> new CurVersionGetInvoker(versionHandler));
         }
         if (invokerFactory.getInvoker(NextVersionGetInvoker.FUNCTION) == null) {
-            invokerFactory.addInvokers(new NextVersionGetInvoker(versionHandler));
+            invokerFactory.addInvoker(NextVersionGetInvoker.FUNCTION, () -> new NextVersionGetInvoker(versionHandler));
         }
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement invokerStatement = AntlrUtil.invokerStatement(VersionInvoker.FUNCTION, statement.getStatement());

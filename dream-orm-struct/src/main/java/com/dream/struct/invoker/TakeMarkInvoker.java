@@ -17,11 +17,6 @@ public class TakeMarkInvoker extends AbstractInvoker {
     private final List<MappedParam> mappedParamList = new ArrayList<>();
 
     @Override
-    public Invoker newInstance() {
-        return new TakeMarkInvoker();
-    }
-
-    @Override
     public String function() {
         return FUNCTION;
     }

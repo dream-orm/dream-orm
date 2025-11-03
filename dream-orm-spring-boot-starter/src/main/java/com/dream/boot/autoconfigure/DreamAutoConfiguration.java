@@ -3,7 +3,6 @@ package com.dream.boot.autoconfigure;
 import com.dream.antlr.factory.DefaultMyFunctionFactory;
 import com.dream.antlr.factory.InvokerFactory;
 import com.dream.antlr.factory.MyFunctionFactory;
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.sql.ToMySQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.boot.factory.SpringTransactionFactory;
@@ -83,8 +82,6 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 创建SQL执行器
-     *
      * @return SQL执行器
      */
     @Bean
@@ -94,8 +91,6 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 创建数据映射器
-     *
      * @return 数据映射器
      */
     @Bean
@@ -105,8 +100,6 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 创建SessionFactory建造器
-     *
      * @return SessionFactory建造器
      */
     @Bean
@@ -116,10 +109,8 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * SQL操作会话获取
-     *
      * @param sessionFactory SQL操作会话创建工厂
-     * @return
+     * @return SQL操作会话获取
      */
     @Bean
     @ConditionalOnMissingBean
@@ -128,9 +119,7 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 目标数据库方言
-     *
-     * @return
+     * @return 目标数据库方言
      */
     @Bean
     @ConditionalOnMissingBean
@@ -147,10 +136,8 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 插件工厂
-     *
      * @param interceptors 插件处理类
-     * @return
+     * @return 插件工厂
      */
     @Bean
     @ConditionalOnMissingBean
@@ -171,8 +158,6 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 自定义函数
-     *
      * @return 自定义函数
      */
     @Bean
@@ -190,10 +175,8 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 编译工厂
-     *
      * @param myFunctionFactory 自定义函数工厂创建类
-     * @return
+     * @return 编译工厂
      */
     @Bean
     @ConditionalOnMissingBean
@@ -204,10 +187,8 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 注入工厂
-     *
      * @param injects 注入类
-     * @return
+     * @return 注入工厂
      */
     @Bean
     @ConditionalOnMissingBean
@@ -222,39 +203,23 @@ public class DreamAutoConfiguration {
             injects = ObjectUtil.merge(injects, injectList).toArray(new Inject[0]);
         }
         if (!ObjectUtil.isNull(injects)) {
-            injectFactory.injects(injects);
+            injectFactory.addInjects(injects);
         }
         return injectFactory;
     }
 
     /**
-     * @param invokers @函数
-     * @return
-     * @函数工厂
+     * @return @函数工厂
      */
     @Bean
     @ConditionalOnMissingBean
-    public InvokerFactory invokerFactory(@Autowired(required = false) Invoker... invokers) {
-        InvokerFactory invokerFactory = new DefaultInvokerFactory();
-        String[] strInvokers = dreamProperties.getInvokers();
-        if (!ObjectUtil.isNull(strInvokers)) {
-            Invoker[] invokerList = Arrays.stream(strInvokers).map(invoker -> {
-                Class<? extends Invoker> invokerType = ReflectUtil.loadClass(invoker);
-                return ReflectUtil.create(invokerType);
-            }).collect(Collectors.toList()).toArray(new Invoker[0]);
-            invokers = ObjectUtil.merge(invokers, invokerList).toArray(new Invoker[0]);
-        }
-        if (!ObjectUtil.isNull(invokers)) {
-            invokerFactory.addInvokers(invokers);
-        }
-        return invokerFactory;
+    public InvokerFactory invokerFactory() {
+        return new DefaultInvokerFactory();
     }
 
     /**
-     * 编译工厂
-     *
      * @param toSQL 目标数据库方言
-     * @return
+     * @return 编译工厂
      */
     @Bean
     @ConditionalOnMissingBean
@@ -265,10 +230,8 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 缓存工厂
-     *
      * @param cache 缓存器
-     * @return
+     * @return 缓存工厂
      */
     @Bean
     @ConditionalOnMissingBean
@@ -286,10 +249,8 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 类型选择器工厂
-     *
      * @param typeHandlerWrappers 类型选择器包装类
-     * @return
+     * @return 类型选择器工厂
      */
     @Bean
     @ConditionalOnMissingBean
@@ -310,10 +271,8 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 监听器工厂
-     *
      * @param listeners 监听器
-     * @return
+     * @return 监听器工厂
      */
     @Bean
     @ConditionalOnMissingBean
@@ -334,10 +293,8 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 数据源工厂
-     *
      * @param dataSource 数据源
-     * @return
+     * @return 数据源工厂
      */
     @Bean
     @ConditionalOnMissingBean
@@ -346,9 +303,7 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 事务工厂
-     *
-     * @return
+     * @return 事务工厂
      */
     @Bean
     @ConditionalOnMissingBean
@@ -357,8 +312,6 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 创建SQL会话创建类
-     *
      * @param configuration         配置信息
      * @param pluginFactory         插件工厂
      * @param invokerFactory        @函数工厂
@@ -373,7 +326,7 @@ public class DreamAutoConfiguration {
      * @param statementHandler      SQL执行器
      * @param resultSetHandler      数据映射器
      * @param sessionFactoryBuilder SQL操作会话工厂创建类
-     * @return
+     * @return 创建SQL会话创建类
      */
     @Bean
     @ConditionalOnMissingBean
@@ -407,11 +360,9 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * SQL操作会话
-     *
      * @param sessionHolder  SQL操作会话获取
      * @param sessionFactory SQL操作会话创建工厂
-     * @return
+     * @return SQL操作会话
      */
     @Bean
     @ConditionalOnMissingBean
@@ -421,9 +372,7 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 主键序列
-     *
-     * @return
+     * @return 主键序列
      */
     @Bean
     @ConditionalOnMissingBean
@@ -433,11 +382,9 @@ public class DreamAutoConfiguration {
 
 
     /**
-     * 模板操作接口
-     *
      * @param sessionTemplate SQL操作会话
      * @param sequence        主键序列
-     * @return
+     * @return 模板操作接口
      */
     @Bean
     @ConditionalOnMissingBean
@@ -446,9 +393,7 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * struct工厂
-     *
-     * @return
+     * @return struct工厂
      */
     @Bean
     @ConditionalOnMissingBean
@@ -458,11 +403,9 @@ public class DreamAutoConfiguration {
 
 
     /**
-     * Flex操作接口
-     *
      * @param sessionTemplate SQL操作会话
      * @param structFactory   struct工厂
-     * @return
+     * @return Flex操作接口
      */
     @Bean
     @ConditionalOnMissingBean
@@ -471,11 +414,9 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * Stream操作接口
-     *
      * @param sessionTemplate SQL操作会话
      * @param structFactory   struct工厂
-     * @return
+     * @return Stream操作接口
      */
     @Bean
     @ConditionalOnMissingBean
@@ -484,10 +425,8 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * 不翻译操作接口
-     *
      * @param sessionTemplate SQL操作会话
-     * @return
+     * @return 不翻译操作接口
      */
     @Bean
     @ConditionalOnMissingBean

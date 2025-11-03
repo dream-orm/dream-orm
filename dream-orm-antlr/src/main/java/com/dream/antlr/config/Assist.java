@@ -22,9 +22,6 @@ public class Assist {
         invoker = invokerMap.get(function);
         if (invoker == null) {
             invoker = invokerFactory.getInvoker(function);
-            if (invoker != null) {
-                invoker = invoker.newInstance();
-            }
             if (invoker == null) {
                 throw new AntlrRunTimeException("@" + function + "不存在");
             }

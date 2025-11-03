@@ -1,6 +1,5 @@
 package com.dream.template.mapper;
 
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.util.AntlrUtil;
 import com.dream.system.antlr.invoker.StarInvoker;
 import com.dream.system.config.Command;

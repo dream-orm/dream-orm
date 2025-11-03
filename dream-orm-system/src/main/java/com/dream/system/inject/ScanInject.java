@@ -13,7 +13,7 @@ public class ScanInject implements Inject {
     public void inject(MethodInfo methodInfo) {
         InvokerFactory invokerFactory = methodInfo.getConfiguration().getInvokerFactory();
         if (invokerFactory.getInvoker(ScanInvoker.FUNCTION) == null) {
-            invokerFactory.addInvokers(new ScanInvoker());
+            invokerFactory.addInvoker(ScanInvoker.FUNCTION, ScanInvoker::new);
         }
         PackageStatement statement = methodInfo.getStatement();
         InvokerStatement scanStatement = AntlrUtil.invokerStatement(ScanInvoker.FUNCTION, statement.getStatement());

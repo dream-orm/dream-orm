@@ -18,7 +18,7 @@ public class DefaultInjectFactory implements InjectFactory {
     }
 
     @Override
-    public void injects(Inject... injects) {
+    public void addInjects(Inject... injects) {
         if (!ObjectUtil.isNull(injects)) {
             for (Inject inject : injects) {
                 injectMap.put(inject.getClass(), inject);
@@ -35,10 +35,5 @@ public class DefaultInjectFactory implements InjectFactory {
         for (Inject inject : injectMap.values()) {
             inject.inject(methodInfo);
         }
-    }
-
-    @Override
-    public <T extends Inject> T getInject(Class<T> inject) {
-        return (T) injectMap.get(inject);
     }
 }

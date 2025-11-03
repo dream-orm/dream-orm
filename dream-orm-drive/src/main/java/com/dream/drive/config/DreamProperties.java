@@ -15,8 +15,6 @@ public class DreamProperties {
 
     private String[] injects;
 
-    private String[] invokers;
-
     private String[] typeHandlerWrappers;
 
     private String[] listeners;
@@ -65,14 +63,6 @@ public class DreamProperties {
 
     public void setInjects(String[] injects) {
         this.injects = injects;
-    }
-
-    public String[] getInvokers() {
-        return invokers;
-    }
-
-    public void setInvokers(String[] invokers) {
-        this.invokers = invokers;
     }
 
     public String[] getTypeHandlerWrappers() {

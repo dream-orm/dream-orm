@@ -93,11 +93,6 @@ public class ScanInvoker extends AbstractInvoker {
     }
 
     @Override
-    public Invoker newInstance() {
-        return new ScanInvoker();
-    }
-
-    @Override
     public String function() {
         return FUNCTION;
     }

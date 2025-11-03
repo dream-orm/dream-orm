@@ -30,7 +30,7 @@ public class PageInject implements Inject {
             InvokerStatement pageStatement;
             if (offset) {
                 if (invokerFactory.getInvoker(OffSetInvoker.FUNCTION) == null) {
-                    invokerFactory.addInvokers(new OffSetInvoker());
+                    invokerFactory.addInvoker(OffSetInvoker.FUNCTION, OffSetInvoker::new);
                 }
                 pageStatement = AntlrUtil.invokerStatement(
                         OffSetInvoker.FUNCTION,
@@ -39,7 +39,7 @@ public class PageInject implements Inject {
                         AntlrUtil.invokerStatement(MarkInvoker.FUNCTION, new SymbolStatement.LetterStatement(startRow)));
             } else {
                 if (invokerFactory.getInvoker(LimitInvoker.FUNCTION) == null) {
-                    invokerFactory.addInvokers(new LimitInvoker());
+                    invokerFactory.addInvoker(LimitInvoker.FUNCTION, LimitInvoker::new);
                 }
                 pageStatement = AntlrUtil.invokerStatement(
                         LimitInvoker.FUNCTION,

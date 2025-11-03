@@ -1,6 +1,5 @@
 package com.dream.system.util;
 
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.Statement;
 import com.dream.system.antlr.invoker.MarkInvoker;

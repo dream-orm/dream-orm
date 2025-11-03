@@ -18,11 +18,6 @@ public class TakeTableInvoker extends AbstractInvoker {
     private final Set<String> tableSet = new LowHashSet();
 
     @Override
-    public Invoker newInstance() {
-        return new TakeTableInvoker();
-    }
-
-    @Override
     public String function() {
         return FUNCTION;
     }

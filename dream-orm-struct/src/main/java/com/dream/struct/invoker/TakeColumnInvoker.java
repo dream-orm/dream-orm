@@ -27,11 +27,6 @@ public class TakeColumnInvoker extends AbstractInvoker {
     public static final String FUNCTION = "dream_instruct_take_column";
 
     @Override
-    public Invoker newInstance() {
-        return new TakeColumnInvoker();
-    }
-
-    @Override
     public String function() {
         return FUNCTION;
     }

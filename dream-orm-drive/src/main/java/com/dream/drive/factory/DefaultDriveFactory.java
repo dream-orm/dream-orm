@@ -3,7 +3,6 @@ package com.dream.drive.factory;
 import com.dream.antlr.factory.DefaultMyFunctionFactory;
 import com.dream.antlr.factory.InvokerFactory;
 import com.dream.antlr.factory.MyFunctionFactory;
-import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.sql.ToMySQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.drive.build.DefaultSessionFactoryBuilder;
@@ -273,13 +272,9 @@ public class DefaultDriveFactory implements DriveFactory {
             injects = ObjectUtil.merge(injects, injectList).toArray(new Inject[0]);
         }
         if (!ObjectUtil.isNull(injects)) {
-            injectFactory.injects(injects);
+            injectFactory.addInjects(injects);
         }
         return injectFactory;
-    }
-
-    protected Invoker[] invokers() {
-        return new Invoker[0];
     }
 
     /**
@@ -287,20 +282,7 @@ public class DefaultDriveFactory implements DriveFactory {
      * @函数工厂
      */
     protected InvokerFactory invokerFactory() {
-        Invoker[] invokers = invokers();
-        InvokerFactory invokerFactory = new DefaultInvokerFactory();
-        String[] strInvokers = dreamProperties.getInvokers();
-        if (!ObjectUtil.isNull(strInvokers)) {
-            Invoker[] invokerList = Arrays.stream(strInvokers).map(invoker -> {
-                Class<? extends Invoker> invokerType = ReflectUtil.loadClass(invoker);
-                return ReflectUtil.create(invokerType);
-            }).collect(Collectors.toList()).toArray(new Invoker[0]);
-            invokers = ObjectUtil.merge(invokers, invokerList).toArray(new Invoker[0]);
-        }
-        if (!ObjectUtil.isNull(invokers)) {
-            invokerFactory.addInvokers(invokers);
-        }
-        return invokerFactory;
+        return new DefaultInvokerFactory();
     }
 
     /**

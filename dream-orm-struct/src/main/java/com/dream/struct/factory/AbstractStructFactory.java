@@ -50,7 +50,9 @@ public abstract class AbstractStructFactory implements StructFactory {
     @Override
     public MappedStatement compile(Command command, Statement statement, MethodInfo methodInfo) {
         InvokerFactory invokerFactory = new AntlrInvokerFactory();
-        invokerFactory.addInvokers(defaultInvokers());
+        invokerFactory.addInvoker(TakeMarkInvoker.FUNCTION, TakeMarkInvoker::new);
+        invokerFactory.addInvoker(TakeColumnInvoker.FUNCTION, TakeColumnInvoker::new);
+        invokerFactory.addInvoker(TakeTableInvoker.FUNCTION, TakeTableInvoker::new);
         TenantHandler tenantHandler = tenantHandler();
         PermissionHandler permissionHandler = permissionHandler();
         LogicHandler logicHandler = logicHandler();
@@ -62,7 +64,7 @@ public abstract class AbstractStructFactory implements StructFactory {
                     return toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
                 }
             });
-            invokerFactory.addInvokers(new TenantGetInvoker(tenantHandler));
+            invokerFactory.addInvoker(TenantGetInvoker.FUNCTION, () -> new TenantGetInvoker(tenantHandler));
         }
         if (permissionHandler != null) {
             invokerList.add(new PermissionInjectInvoker(permissionHandler) {
@@ -71,7 +73,7 @@ public abstract class AbstractStructFactory implements StructFactory {
                     return toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
                 }
             });
-            invokerFactory.addInvokers(new PermissionGetInvoker(permissionHandler));
+            invokerFactory.addInvoker(PermissionGetInvoker.FUNCTION, () -> new PermissionGetInvoker(permissionHandler));
         }
         if (logicHandler != null) {
             invokerList.add(new LogicInvoker(logicHandler) {
@@ -113,10 +115,6 @@ public abstract class AbstractStructFactory implements StructFactory {
                 .tableSet(tableSet)
                 .mappedParamList(mappedParamList)
                 .build();
-    }
-
-    protected Invoker[] defaultInvokers() {
-        return new Invoker[]{new TakeMarkInvoker(), new TakeColumnInvoker(), new TakeTableInvoker()};
     }
 
     protected abstract TenantHandler tenantHandler();

@@ -35,11 +35,6 @@ public class LimitInvoker extends AbstractInvoker {
     }
 
     @Override
-    public Invoker newInstance() {
-        return new LimitInvoker();
-    }
-
-    @Override
     public String function() {
         return FUNCTION;
     }
