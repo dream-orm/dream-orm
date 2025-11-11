@@ -6,6 +6,7 @@
 - 删除：去除命名空间
 - 删除：去除EasyFetch
 - 删除：去除Ignore注解
+- 修复：pgsql支持isnull语法
 
 ## v1.3.8
 
