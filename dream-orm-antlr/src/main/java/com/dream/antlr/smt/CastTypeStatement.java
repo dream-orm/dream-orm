@@ -62,6 +62,13 @@ public abstract class CastTypeStatement extends Statement {
         }
     }
 
+    public static class UnSignedCastStatement extends CastTypeStatement {
+
+        public UnSignedCastStatement(Statement statement) {
+            super(statement);
+        }
+    }
+
     public static class FloatCastStatement extends CastTypeStatement {
 
         public FloatCastStatement(Statement statement) {

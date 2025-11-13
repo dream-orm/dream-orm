@@ -152,6 +152,11 @@ public class ToPostgreSQL extends ToPubSQL {
     }
 
     @Override
+    protected String toString(CastTypeStatement.UnSignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS BIGINT)";
+    }
+
+    @Override
     protected String toString(CastTypeStatement.DoubleCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS NUMERIC)";
     }
@@ -168,6 +173,11 @@ public class ToPostgreSQL extends ToPubSQL {
 
     @Override
     protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS BIGINT)";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.UnSignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS BIGINT)";
     }
 

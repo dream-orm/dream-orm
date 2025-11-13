@@ -62,6 +62,13 @@ public abstract class ConvertTypeStatement extends Statement {
         }
     }
 
+    public static class UnSignedConvertStatement extends ConvertTypeStatement {
+
+        public UnSignedConvertStatement(Statement statement) {
+            super(statement);
+        }
+    }
+
     public static class FloatConvertStatement extends ConvertTypeStatement {
 
         public FloatConvertStatement(Statement statement) {

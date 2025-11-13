@@ -11,12 +11,12 @@ public class AccountView {
     private String email;
     private String ap;
 
-    public void setAp(String ap) {
-        this.ap = ap;
-    }
-
     public String getAp() {
         return ap;
+    }
+
+    public void setAp(String ap) {
+        this.ap = ap;
     }
 
     public Integer getId() {

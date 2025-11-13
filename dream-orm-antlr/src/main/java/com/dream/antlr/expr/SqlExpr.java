@@ -395,6 +395,9 @@ public abstract class SqlExpr {
             case SIGNED:
                 statement = exprSigned(exprInfo);
                 break;
+            case UNSIGNED:
+                statement = exprUnSigned(exprInfo);
+                break;
             case INTEGER:
                 statement = exprInteger(exprInfo);
                 break;
@@ -878,6 +881,10 @@ public abstract class SqlExpr {
 
     protected Statement exprSigned(ExprInfo exprInfo) throws AntlrException {
         return exprNil(exprInfo);
+    }
+
+    protected Statement exprUnSigned(ExprInfo exprInfo) throws AntlrException {
+        return exprFunction(exprInfo);
     }
 
     protected Statement exprInteger(ExprInfo exprInfo) throws AntlrException {

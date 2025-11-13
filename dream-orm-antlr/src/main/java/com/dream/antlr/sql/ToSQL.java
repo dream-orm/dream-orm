@@ -506,6 +506,9 @@ public abstract class ToSQL {
             case 1125382932://SignedCastStatement
                 sql = toString((CastTypeStatement.SignedCastStatement) statement, assist, invokerList);
                 break;
+            case -110650437://UnSignedCastStatement
+                sql = toString((CastTypeStatement.UnSignedCastStatement) statement, assist, invokerList);
+                break;
             case -533298156://FloatCastStatement
                 sql = toString((CastTypeStatement.FloatCastStatement) statement, assist, invokerList);
                 break;
@@ -532,6 +535,9 @@ public abstract class ToSQL {
                 break;
             case 1773440088://SignedConvertStatement
                 sql = toString((ConvertTypeStatement.SignedConvertStatement) statement, assist, invokerList);
+                break;
+            case -142027183://UnSignedConvertStatement
+                sql = toString((ConvertTypeStatement.UnSignedConvertStatement) statement, assist, invokerList);
                 break;
             case 1603887960://FloatConvertStatement
                 sql = toString((ConvertTypeStatement.FloatConvertStatement) statement, assist, invokerList);
@@ -942,6 +948,8 @@ public abstract class ToSQL {
 
     protected abstract String toString(CastTypeStatement.SignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
+    protected abstract String toString(CastTypeStatement.UnSignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
     protected abstract String toString(CastTypeStatement.FloatCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(CastTypeStatement.DoubleCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
@@ -959,6 +967,8 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.ConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(ConvertTypeStatement.UnSignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(ConvertTypeStatement.FloatConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

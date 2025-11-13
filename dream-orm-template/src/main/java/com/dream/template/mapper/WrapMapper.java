@@ -14,7 +14,6 @@ import com.dream.util.common.ObjectWrapper;
 import com.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.*;
 
 public abstract class WrapMapper extends ValidateMapper {

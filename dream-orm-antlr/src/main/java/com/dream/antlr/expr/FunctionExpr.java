@@ -914,7 +914,7 @@ public class FunctionExpr extends SqlExpr {
             @Override
             protected Statement exprComma(ExprInfo exprInfo) throws AntlrException {
                 push();
-                setExprTypes(ExprType.CHAR, ExprType.SIGNED, ExprType.FLOAT, ExprType.DOUBLE, ExprType.DATE, ExprType.TIME, ExprType.DATETIME, ExprType.DECIMAL);
+                setExprTypes(ExprType.CHAR, ExprType.SIGNED, ExprType.UNSIGNED, ExprType.FLOAT, ExprType.DOUBLE, ExprType.DATE, ExprType.TIME, ExprType.DATETIME, ExprType.DECIMAL);
                 return expr();
             }
 
@@ -954,7 +954,15 @@ public class FunctionExpr extends SqlExpr {
             protected Statement exprSigned(ExprInfo exprInfo) throws AntlrException {
                 convertTypeStatement = new ConvertTypeStatement.SignedConvertStatement(statement);
                 push();
-                setExprTypes(ExprType.NIL, ExprType.INTEGER, ExprType.INT);
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprUnSigned(ExprInfo exprInfo) throws AntlrException {
+                convertTypeStatement = new ConvertTypeStatement.UnSignedConvertStatement(statement);
+                push();
+                setExprTypes(ExprType.NIL);
                 return expr();
             }
 
@@ -969,18 +977,6 @@ public class FunctionExpr extends SqlExpr {
             @Override
             protected Statement exprDouble(ExprInfo exprInfo) throws AntlrException {
                 convertTypeStatement = new ConvertTypeStatement.DoubleConvertStatement(statement);
-                push();
-                setExprTypes(ExprType.NIL);
-                return expr();
-            }
-
-            @Override
-            protected Statement exprInt(ExprInfo exprInfo) throws AntlrException {
-                return exprInteger(exprInfo);
-            }
-
-            @Override
-            protected Statement exprInteger(ExprInfo exprInfo) throws AntlrException {
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();
@@ -1031,7 +1027,7 @@ public class FunctionExpr extends SqlExpr {
             @Override
             protected Statement exprAs(ExprInfo exprInfo) throws AntlrException {
                 push();
-                setExprTypes(ExprType.CHAR, ExprType.SIGNED, ExprType.FLOAT, ExprType.DOUBLE, ExprType.DATE, ExprType.TIME, ExprType.DATETIME, ExprType.DECIMAL);
+                setExprTypes(ExprType.CHAR, ExprType.SIGNED, ExprType.UNSIGNED, ExprType.FLOAT, ExprType.DOUBLE, ExprType.DATE, ExprType.TIME, ExprType.DATETIME, ExprType.DECIMAL);
                 return expr();
             }
 
@@ -1071,7 +1067,15 @@ public class FunctionExpr extends SqlExpr {
             protected Statement exprSigned(ExprInfo exprInfo) throws AntlrException {
                 castTypeStatement = new CastTypeStatement.SignedCastStatement(statement);
                 push();
-                setExprTypes(ExprType.NIL, ExprType.INTEGER, ExprType.INT);
+                setExprTypes(ExprType.NIL);
+                return expr();
+            }
+
+            @Override
+            protected Statement exprUnSigned(ExprInfo exprInfo) throws AntlrException {
+                castTypeStatement = new CastTypeStatement.UnSignedCastStatement(statement);
+                push();
+                setExprTypes(ExprType.NIL);
                 return expr();
             }
 
@@ -1086,18 +1090,6 @@ public class FunctionExpr extends SqlExpr {
             @Override
             protected Statement exprDouble(ExprInfo exprInfo) throws AntlrException {
                 castTypeStatement = new CastTypeStatement.DoubleCastStatement(statement);
-                push();
-                setExprTypes(ExprType.NIL);
-                return expr();
-            }
-
-            @Override
-            protected Statement exprInt(ExprInfo exprInfo) throws AntlrException {
-                return exprInteger(exprInfo);
-            }
-
-            @Override
-            protected Statement exprInteger(ExprInfo exprInfo) throws AntlrException {
                 push();
                 setExprTypes(ExprType.NIL);
                 return expr();

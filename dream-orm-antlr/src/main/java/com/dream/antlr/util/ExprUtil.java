@@ -277,6 +277,8 @@ public class ExprUtil {
                 return ExprType.CAST;
             case -1849138404:
                 return ExprType.SIGNED;
+            case 766662389:
+                return ExprType.UNSIGNED;
             case 72655:
                 return ExprType.INT;
             case -1618932450:

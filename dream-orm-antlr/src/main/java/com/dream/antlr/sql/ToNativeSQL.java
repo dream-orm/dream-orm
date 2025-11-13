@@ -885,6 +885,11 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(CastTypeStatement.UnSignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS UNSIGNED)";
+    }
+
+    @Override
     protected String toString(CastTypeStatement.FloatCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS FLOAT)";
     }
@@ -927,6 +932,11 @@ public class ToNativeSQL extends ToSQL {
     @Override
     protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CONVERT(" + toStr(statement.getStatement(), assist, invokerList) + ",SIGNED)";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.UnSignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "CONVERT(" + toStr(statement.getStatement(), assist, invokerList) + ",UNSIGNED)";
     }
 
     @Override

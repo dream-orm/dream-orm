@@ -126,6 +126,7 @@ public final class Constant {
             ExprType.MINUTE,
             ExprType.SECOND,
             ExprType.SIGNED,
+            ExprType.UNSIGNED,
             ExprType.INTERVAL,
             ExprType.INT,
             ExprType.INTEGER,

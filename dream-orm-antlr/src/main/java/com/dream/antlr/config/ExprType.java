@@ -145,6 +145,7 @@ public enum ExprType {
     CAST,
     CHAR,
     SIGNED,
+    UNSIGNED,
     DECIMAL,
     DATE,
     TIMESTAMP,

@@ -234,6 +234,11 @@ public class ToClickHouse extends ToPubSQL {
     }
 
     @Override
+    protected String toString(CastTypeStatement.UnSignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toInt64(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(CastTypeStatement.CharCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "toString(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
@@ -283,6 +288,11 @@ public class ToClickHouse extends ToPubSQL {
 
     @Override
     protected String toString(ConvertTypeStatement.SignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toInt64(" + toStr(statement.getStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
+    protected String toString(ConvertTypeStatement.UnSignedConvertStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "toInt64(" + toStr(statement.getStatement(), assist, invokerList) + ")";
     }
 
