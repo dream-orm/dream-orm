@@ -54,6 +54,14 @@ public interface IService<ListView, EditView> {
     Page<ListView> selectPage(Object conditionObject, Page page);
 
     /**
+     * 根据对象生成注解条件，并统计数量
+     *
+     * @param conditionObject 对象注解条件
+     * @return 数量
+     */
+    Integer selectCount(Object conditionObject);
+
+    /**
      * 根据主键更新
      *
      * @param view 更新对象

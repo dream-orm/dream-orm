@@ -72,6 +72,15 @@ public interface TemplateMapper {
     <T> Page<T> selectPage(Class<T> type, Object conditionObject, Page page);
 
     /**
+     * 根据注解对象生成的条件，并统计数量
+     *
+     * @param type            java类型映射的表
+     * @param conditionObject 注解对象条件
+     * @return 数量
+     */
+    Integer selectCount(Class<?> type, Object conditionObject);
+
+    /**
      * 根据主键更新
      *
      * @param view 更新对象
@@ -143,7 +152,7 @@ public interface TemplateMapper {
      *
      * @param type            java类型映射的表
      * @param conditionObject 注解对象条件
-     * @return
+     * @return 是否存在
      */
     boolean exist(Class<?> type, Object conditionObject);
 

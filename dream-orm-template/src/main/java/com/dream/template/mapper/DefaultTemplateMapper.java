@@ -19,6 +19,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private final String selectList = baseName + ".selectList";
     private final String selectTree = baseName + ".selectTree";
     private final String selectPage = baseName + ".selectPage";
+    private final String selectCount = baseName + ".selectCount";
     private final String deleteById = baseName + ".deleteById";
     private final String delete = baseName + ".delete";
     private final String deleteByIds = baseName + ".deleteByIds";
@@ -47,6 +48,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private final BatchInsertMapper batchInsertMapper;
     private final ExistByIdMapper existByIdMapper;
     private final ExistMapper existMapper;
+    private SelectCountMapper selectCountSqlMapper;
 
     public DefaultTemplateMapper(Session session, Sequence sequence) {
         selectByIdSqlMapper = new SelectByIdMapper(session);
@@ -66,6 +68,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
         batchInsertMapper = new BatchInsertMapper(session, new BatchSequence(sequence));
         existByIdMapper = new ExistByIdMapper(session);
         existMapper = new ExistMapper(session);
+        selectCountSqlMapper = new SelectCountMapper(session);
     }
 
     @Override
@@ -112,6 +115,15 @@ public class DefaultTemplateMapper implements TemplateMapper {
             id += ":" + conditionObject.getClass().getName();
         }
         return (Page<T>) selectPageSqlMapper.execute(id, type, conditionObject, page);
+    }
+
+    @Override
+    public Integer selectCount(Class<?> type, Object conditionObject) {
+        String id = selectCount + ":" + type.getName();
+        if (conditionObject != null) {
+            id += ":" + conditionObject.getClass().getName();
+        }
+        return (Integer) selectCountSqlMapper.execute(id, type, conditionObject);
     }
 
     @Override

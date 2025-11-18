@@ -59,6 +59,11 @@ public abstract class ServiceImpl<ListView, EditView> implements IService<ListVi
     }
 
     @Override
+    public Integer selectCount(Object conditionObject) {
+        return templateMapper.selectCount(listViewType, conditionObject);
+    }
+
+    @Override
     public int updateById(EditView editView) {
         return templateMapper.updateById(editView);
     }
