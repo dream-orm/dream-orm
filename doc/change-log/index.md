@@ -8,6 +8,7 @@
 - 删除：去除Ignore注解
 - 修复：pgsql支持isnull语法
 - 新增：templateMapper支持count
+- 优化：fetch增加fast参数，性能优化
 
 ## v1.3.8
 

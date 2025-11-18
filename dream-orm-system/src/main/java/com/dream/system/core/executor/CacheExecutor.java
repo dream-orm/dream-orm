@@ -12,11 +12,6 @@ public class CacheExecutor extends AbstractCacheExecutor {
     }
 
     @Override
-    public void clear() {
-        cache.clear();
-    }
-
-    @Override
     protected boolean cache(MappedStatement mappedStatement) {
         return cache.cache(mappedStatement);
     }

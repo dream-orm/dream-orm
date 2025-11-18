@@ -1,15 +1,19 @@
 package com.dream.system.core.executor;
 
 
+import com.dream.system.cache.CacheKey;
 import com.dream.system.config.BatchMappedStatement;
 import com.dream.system.config.Command;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.core.session.Session;
 
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class AbstractCacheExecutor implements Executor {
     protected Executor nextExecutor;
+    protected Set<CacheKey> nullSet = new HashSet<>();
 
     public AbstractCacheExecutor(Executor nextExecutor) {
         this.nextExecutor = nextExecutor;
@@ -29,10 +33,12 @@ public abstract class AbstractCacheExecutor implements Executor {
         Object result;
         if (cache(mappedStatement)) {
             result = queryFromCache(mappedStatement);
-            if (result == null) {
+            if (result == null && !nullSet.contains(mappedStatement.getUniqueKey())) {
                 result = nextExecutor.execute(mappedStatement, session);
                 if (result != null) {
                     storeObject(mappedStatement, result);
+                } else {
+                    nullSet.add(mappedStatement.getUniqueKey());
                 }
             }
         } else {
@@ -71,6 +77,7 @@ public abstract class AbstractCacheExecutor implements Executor {
     @Override
     public void close() {
         nextExecutor.close();
+        nullSet.clear();
     }
 
     protected abstract boolean cache(MappedStatement mappedStatement);
@@ -80,6 +87,4 @@ public abstract class AbstractCacheExecutor implements Executor {
     protected abstract void storeObject(MappedStatement mappedStatement, Object value);
 
     protected abstract void clearObject(MappedStatement mappedStatement);
-
-    public abstract void clear();
 }

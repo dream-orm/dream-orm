@@ -13,6 +13,7 @@ import com.dream.template.util.ConditionObject;
 import com.dream.template.util.SortObject;
 import com.dream.template.util.TemplateUtil;
 import com.dream.util.common.ObjectUtil;
+import com.dream.util.exception.DreamRunTimeException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,6 +79,8 @@ public class SelectListMapper extends SelectMapper {
                 Condition condition = conditionObject.getCondition();
                 TableInfo tableInfo = tableFactory.getTableInfo(tableName);
                 ColumnInfo columnInfo = tableInfo.getColumnInfo(column);
+                if (columnInfo == null)
+                    throw new DreamRunTimeException(tableInfo.getType() + "不存在字段" + column);
                 String conditionSql = condition.getCondition(columnInfo.getColumn(), conditionObject.getField());
                 if (conditionObject.isOr()) {
                     orConditionList.add(conditionSql);

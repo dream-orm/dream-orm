@@ -14,11 +14,6 @@ public class SessionCacheExecutor extends AbstractCacheExecutor {
     }
 
     @Override
-    public void clear() {
-        cacheMap.clear();
-    }
-
-    @Override
     protected Object queryFromCache(MappedStatement mappedStatement) {
         return cacheMap.get(mappedStatement.getUniqueKey());
     }
@@ -36,7 +31,7 @@ public class SessionCacheExecutor extends AbstractCacheExecutor {
     @Override
     public void close() {
         super.close();
-        clear();
+        cacheMap.clear();
     }
 
     @Override

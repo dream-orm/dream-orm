@@ -17,4 +17,11 @@ public @interface Fetch {
      * @return sql语句
      */
     String value();
+
+    /**
+     * 复用第一次编译，查询条件含有@not，@non，@between，@foreach等需要动态计算的条件时，则必须设置成false
+     *
+     * @return 是否复用第一次编译MethodInfo
+     */
+    boolean fast() default true;
 }
