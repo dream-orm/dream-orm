@@ -848,7 +848,12 @@ public class FunctionExpr extends SqlExpr {
 
         @Override
         public Statement nil() {
-            return func;
+            Statement paramsStatement = func.getParamsStatement();
+            if (paramsStatement == null) {
+                return new SymbolStatement.LetterStatement(func.getFunctionName());
+            } else {
+                return func;
+            }
         }
 
         @Override

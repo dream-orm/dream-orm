@@ -17,13 +17,13 @@ import java.util.Map;
 public class FetchActionProcessor implements ActionProcessor {
     private String fieldName;
     private MethodInfo methodInfo;
-    private boolean fast;
+    private boolean reuse;
 
     @Override
     public void init(Field field, Map<String, Object> paramMap, Configuration configuration) {
         this.fieldName = field.getName();
         String sql = (String) paramMap.get("value");
-        this.fast = (boolean) paramMap.get("fast");
+        this.reuse = (boolean) paramMap.get("reuse");
         this.methodInfo = new MethodInfo()
                 .setConfiguration(configuration)
                 .setRowType(ReflectUtil.getRowType(field.getGenericType()))
@@ -36,7 +36,7 @@ public class FetchActionProcessor implements ActionProcessor {
         if (row != null) {
             Object result;
             ObjectMap objectRow = new ObjectMap(row);
-            if (fast) {
+            if (reuse) {
                 String key = "fetch:" + fieldName;
                 MappedStatement statement = (MappedStatement) mappedStatement.get(key);
                 if (statement == null) {
