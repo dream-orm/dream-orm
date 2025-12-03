@@ -1061,15 +1061,23 @@ public class FunctionDef {
     }
 
     public static FromDef select(String... columns) {
+        return select(false, columns);
+    }
+
+    public static FromDef select(boolean distinct, String... columns) {
         ColumnDef[] columnDefs = new ColumnDef[columns.length];
         for (int i = 0; i < columns.length; i++) {
             columnDefs[i] = column(columns[i]);
         }
-        return select(columnDefs);
+        return select(distinct, columnDefs);
     }
 
     public static FromDef select(ColumnDef... columnDefs) {
-        return new DefaultFlexQueryFactory().newSelectDef().select(columnDefs);
+        return select(false, columnDefs);
+    }
+
+    public static FromDef select(boolean distinct, ColumnDef... columnDefs) {
+        return new DefaultFlexQueryFactory().newSelectDef().select(distinct, columnDefs);
     }
 
     public static UpdateColumnDef update(String table) {
