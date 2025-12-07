@@ -5,7 +5,6 @@ import com.dream.antlr.smt.PackageStatement;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.system.antlr.invoker.MarkInvoker;
 import com.dream.system.antlr.invoker.ScanInvoker;
-import com.dream.system.cache.CacheKey;
 import com.dream.system.config.*;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
@@ -74,7 +73,6 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
                 mappedParamList.add(new MappedParam().setParamName(paramName).setParamValue(paramInfo.getParamValue()).setJdbcType(paramType.columnInfo == null ? Types.NULL : paramType.columnInfo.getJdbcType()).setTypeHandler(paramType.getTypeHandler()));
             }
         }
-        CacheKey uniqueKey = getUniqueKey(methodInfo, mappedParamList, sql);
         return new MappedStatement
                 .Builder()
                 .methodInfo(methodInfo)
@@ -83,29 +81,12 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
                 .tableSet(scanInfo.getTableScanInfoMap().keySet())
                 .mappedParamList(mappedParamList)
                 .arg(arg)
-                .uniqueKey(uniqueKey)
                 .build();
     }
 
     protected List<MarkInvoker.ParamInfo> getParamInfoList(Assist assist) {
         MarkInvoker invoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION);
         return invoker.getParamInfoList();
-    }
-
-    protected CacheKey getUniqueKey(MethodInfo methodInfo, List<MappedParam> mappedParamList, String sql) {
-        CacheKey uniqueKey = methodInfo.getMethodKey();
-        Object[] updateList;
-        if (!ObjectUtil.isNull(mappedParamList)) {
-            updateList = new Object[mappedParamList.size()];
-            for (int i = 0; i < mappedParamList.size(); i++) {
-                MappedParam mappedParam = mappedParamList.get(i);
-                updateList[i] = mappedParam.getParamValue();
-            }
-        } else {
-            updateList = new Object[0];
-        }
-        uniqueKey.update(updateList);
-        return uniqueKey;
     }
 
     protected Assist getAssist(MethodInfo methodInfo, Object arg) {

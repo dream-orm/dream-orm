@@ -1,6 +1,7 @@
 package com.dream.system.core.session;
 
 import com.dream.system.action.ActionProvider;
+import com.dream.system.cache.CacheKey;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MappedStatement;
 import com.dream.system.config.MethodInfo;
@@ -10,6 +11,7 @@ import com.dream.system.core.action.LoopAction;
 import com.dream.system.core.executor.Executor;
 import com.dream.system.dialect.DialectFactory;
 import com.dream.system.mapper.MapperFactory;
+import com.dream.system.util.SystemUtil;
 import com.dream.util.common.ObjectMap;
 import com.dream.util.exception.DreamRunTimeException;
 
@@ -17,12 +19,14 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 public class DefaultSession implements Session {
     protected final Configuration configuration;
     protected Executor executor;
     protected MapperFactory mapperFactory;
     protected DialectFactory dialectFactory;
+    private final Map<String, MethodInfo> weakMap = new WeakHashMap<>();
 
     public DefaultSession(Configuration configuration, Executor executor) {
         this.configuration = configuration;
@@ -39,44 +43,43 @@ public class DefaultSession implements Session {
     @Override
     public Object execute(ActionProvider actionProvider, Object arg) {
         String sql = actionProvider.sql();
-        MethodInfo methodInfo = mapperFactory.getMethodInfo(sql);
+        Class<? extends Collection> rowType = actionProvider.rowType();
+        Class<?> colType = actionProvider.colType();
+        if (rowType == null || colType == null) {
+            throw new DreamRunTimeException("返回的类型不能为空");
+        }
+        CacheKey cacheKey = SystemUtil.cacheKey(sql, 5);
+        cacheKey.update(rowType.getName(), colType.getName());
+        String id = cacheKey.toString();
+        MethodInfo methodInfo = weakMap.get(id);
         if (methodInfo == null) {
-            synchronized (configuration) {
-                methodInfo = mapperFactory.getMethodInfo(sql);
-                if (methodInfo == null) {
-                    Class<? extends Collection> rowType = actionProvider.rowType();
-                    Class<?> colType = actionProvider.colType();
-                    if (rowType == null || colType == null) {
-                        throw new DreamRunTimeException("返回的类型不能为空");
-                    }
-                    methodInfo = new MethodInfo()
-                            .setConfiguration(configuration)
-                            .setId(sql)
-                            .setRowType(rowType)
-                            .setColType(colType)
-                            .setSql(sql)
-                            .setPage(actionProvider.page())
-                            .setStatementHandler(actionProvider.statementHandler())
-                            .setResultSetHandler(actionProvider.resultSetHandler());
-                    Integer timeOut = actionProvider.timeOut();
-                    if (timeOut != null) {
-                        methodInfo.setTimeOut(timeOut);
-                    }
-                    InitAction initAction = actionProvider.initAction();
-                    if (initAction != null) {
-                        methodInfo.addInitAction(initAction);
-                    }
-                    LoopAction loopAction = actionProvider.loopAction();
-                    if (loopAction != null) {
-                        methodInfo.addLoopAction(loopAction);
-                    }
-                    DestroyAction destroyAction = actionProvider.destroyAction();
-                    if (destroyAction != null) {
-                        methodInfo.addDestroyAction(destroyAction);
-                    }
-                    mapperFactory.addMethodInfo(methodInfo);
-                }
+            methodInfo = new MethodInfo()
+                    .setConfiguration(configuration)
+                    .setId(sql)
+                    .setRowType(rowType)
+                    .setColType(colType)
+                    .setSql(sql)
+                    .setMethodKey(SystemUtil.cacheKey(sql, 5))
+                    .setPage(actionProvider.page())
+                    .setStatementHandler(actionProvider.statementHandler())
+                    .setResultSetHandler(actionProvider.resultSetHandler());
+            Integer timeOut = actionProvider.timeOut();
+            if (timeOut != null) {
+                methodInfo.setTimeOut(timeOut);
             }
+            InitAction initAction = actionProvider.initAction();
+            if (initAction != null) {
+                methodInfo.addInitAction(initAction);
+            }
+            LoopAction loopAction = actionProvider.loopAction();
+            if (loopAction != null) {
+                methodInfo.addLoopAction(loopAction);
+            }
+            DestroyAction destroyAction = actionProvider.destroyAction();
+            if (destroyAction != null) {
+                methodInfo.addDestroyAction(destroyAction);
+            }
+            weakMap.put(id, methodInfo);
         }
         if (arg != null) {
             if (arg instanceof Map) {

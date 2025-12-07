@@ -137,6 +137,9 @@ public class MethodInfo {
     }
 
     public CacheKey getMethodKey() {
+        if(methodKey==null){
+            return null;
+        }
         return methodKey.clone();
     }
 

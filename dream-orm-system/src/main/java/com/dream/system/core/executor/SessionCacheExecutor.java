@@ -36,6 +36,6 @@ public class SessionCacheExecutor extends AbstractCacheExecutor {
 
     @Override
     protected boolean cache(MappedStatement mappedStatement) {
-        return true;
+        return mappedStatement.getUniqueKey() != null;
     }
 }

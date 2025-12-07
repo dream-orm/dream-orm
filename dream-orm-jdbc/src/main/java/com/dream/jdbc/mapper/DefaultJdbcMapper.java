@@ -51,6 +51,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
         methodInfo.setStatementHandler(jdbcStatementHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
+        methodInfo.setMethodKey(SystemUtil.cacheKey(sql, 5));
         MappedStatement mappedStatement = new MappedStatement.Builder()
                 .methodInfo(methodInfo)
                 .command(Command.UPDATE)
@@ -70,6 +71,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
         methodInfo.setStatementHandler(jdbcStatementHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
+        methodInfo.setMethodKey(SystemUtil.cacheKey(sql, 5));
         JdbcBatchMappedStatement jdbcBatchMappedStatement = new JdbcBatchMappedStatement(methodInfo, argList, Command.BATCH, sql, tableSet(sql));
         return (List<Object>) session.execute(jdbcBatchMappedStatement);
     }
@@ -83,6 +85,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
         methodInfo.setResultSetHandler(jdbcResultSetHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
+        methodInfo.setMethodKey(SystemUtil.cacheKey(sql, 5));
         MappedStatement mappedStatement = new MappedStatement.Builder()
                 .methodInfo(methodInfo)
                 .command(Command.QUERY)

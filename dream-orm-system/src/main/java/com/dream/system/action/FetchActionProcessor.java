@@ -53,6 +53,7 @@ public class FetchActionProcessor implements ActionProcessor {
                         for (MappedParam mappedParam : mappedParamList) {
                             mappedParam.setParamValue(objectWrapper.get(mappedParam.getParamName()));
                         }
+                        statement = new MappedStatement.Builder(statement).mappedParamList(mappedParamList).build();
                     }
                 }
                 result = session.execute(statement);

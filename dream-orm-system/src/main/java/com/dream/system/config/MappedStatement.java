@@ -8,6 +8,7 @@ import com.dream.system.core.action.LoopAction;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.statementhandler.StatementHandler;
 import com.dream.system.typehandler.handler.TypeHandler;
+import com.dream.util.common.ObjectUtil;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -143,6 +144,10 @@ public class MappedStatement {
             mappedStatement = new MappedStatement();
         }
 
+        public Builder(MappedStatement mappedStatement) {
+            this.mappedStatement = mappedStatement;
+        }
+
         public Builder methodInfo(MethodInfo methodInfo) {
             mappedStatement.methodInfo = methodInfo;
             return this;
@@ -173,13 +178,28 @@ public class MappedStatement {
             return this;
         }
 
-        public Builder uniqueKey(CacheKey uniqueKey) {
-            mappedStatement.uniqueKey = uniqueKey;
-            return this;
+        public MappedStatement build() {
+            mappedStatement.uniqueKey = getUniqueKey(mappedStatement.methodInfo, mappedStatement.mappedParamList);
+            return mappedStatement;
         }
 
-        public MappedStatement build() {
-            return mappedStatement;
+        protected CacheKey getUniqueKey(MethodInfo methodInfo, List<MappedParam> mappedParamList) {
+            CacheKey uniqueKey = methodInfo.getMethodKey();
+            if (uniqueKey == null) {
+                return null;
+            }
+            Object[] updateList;
+            if (!ObjectUtil.isNull(mappedParamList)) {
+                updateList = new Object[mappedParamList.size()];
+                for (int i = 0; i < mappedParamList.size(); i++) {
+                    MappedParam mappedParam = mappedParamList.get(i);
+                    updateList[i] = mappedParam.getParamValue();
+                }
+            } else {
+                updateList = new Object[0];
+            }
+            uniqueKey.update(updateList);
+            return uniqueKey;
         }
     }
 }
