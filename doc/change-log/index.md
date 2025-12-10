@@ -6,7 +6,10 @@
 - 删除：去除命名空间
 - 删除：去除EasyFetch
 - 删除：去除Ignore注解
+- 删除：去除stream
+- 删除：去除flexchain
 - 修复：pgsql支持isnull语法
+- 优化：flex重构，采用系统inject
 - 新增：templateMapper支持count
 - 优化：fetch增加fast参数，性能优化
 - 优化：flex select支持distinct

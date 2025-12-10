@@ -23,10 +23,10 @@ import java.util.WeakHashMap;
 
 public class DefaultSession implements Session {
     protected final Configuration configuration;
+    private final Map<String, MethodInfo> methodInfoMap;
     protected Executor executor;
     protected MapperFactory mapperFactory;
     protected DialectFactory dialectFactory;
-    private final Map<String, MethodInfo> methodInfoMap;
 
     public DefaultSession(Configuration configuration, Executor executor) {
         this(configuration, executor, new WeakHashMap<>());

@@ -1,9 +1,11 @@
 package com.dream.flex.def;
 
+import com.dream.antlr.smt.InsertStatement;
 import com.dream.flex.factory.FlexInsertFactory;
-import com.dream.struct.command.Insert;
 
 
-public interface InsertDef extends Insert {
+public interface InsertDef {
     FlexInsertFactory creatorFactory();
+
+    InsertStatement statement();
 }

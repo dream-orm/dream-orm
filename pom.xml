@@ -42,14 +42,11 @@
         <module>dream-orm-system</module>
         <module>dream-orm-template</module>
         <module>dream-orm-mate</module>
-        <module>dream-orm-struct</module>
         <module>dream-orm-flex</module>
-        <module>dream-orm-stream</module>
         <module>dream-orm-jdbc</module>
         <module>dream-orm-drive</module>
         <module>dream-orm-spring-boot-starter</module>
         <module>dream-orm-solon-plugin</module>
-        <module>dream-orm-chain</module>
         <module>dream-orm-tdengine</module>
         <module>dream-orm-generator</module>
     </modules>

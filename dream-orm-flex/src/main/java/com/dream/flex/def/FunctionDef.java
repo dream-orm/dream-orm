@@ -7,7 +7,6 @@ import com.dream.flex.factory.DefaultFlexDeleteFactory;
 import com.dream.flex.factory.DefaultFlexInsertFactory;
 import com.dream.flex.factory.DefaultFlexQueryFactory;
 import com.dream.flex.factory.DefaultFlexUpdateFactory;
-import com.dream.struct.invoker.TakeTableSymbolStatement;
 
 import java.util.Arrays;
 
@@ -1138,7 +1137,7 @@ public class FunctionDef {
 
     public static AliasTableDef table(String table) {
         AliasStatement aliasStatement = new AliasStatement();
-        aliasStatement.setColumn(new TakeTableSymbolStatement(table));
+        aliasStatement.setColumn(new SymbolStatement.SingleMarkStatement(table));
         return new AliasTableDef(aliasStatement);
     }
 

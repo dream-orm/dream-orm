@@ -39,22 +39,7 @@
         </dependency>
         <dependency>
             <groupId>com.dream-orm</groupId>
-            <artifactId>dream-orm-struct</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dream-orm</groupId>
             <artifactId>dream-orm-flex</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dream-orm</groupId>
-            <artifactId>dream-orm-stream</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dream-orm</groupId>
-            <artifactId>dream-orm-jdbc</artifactId>
             <version>1.4.0</version>
         </dependency>
     </dependencies>

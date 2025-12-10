@@ -1,92 +1,85 @@
 package com.dream.flex.mapper;
 
+import com.dream.antlr.factory.InvokerFactory;
+import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
-import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.config.FlexBatchMappedStatement;
 import com.dream.flex.def.DeleteDef;
 import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
-import com.dream.struct.factory.DefaultStructFactory;
-import com.dream.struct.factory.StructFactory;
-import com.dream.struct.invoker.TakeMarkInvokerStatement;
-import com.dream.system.config.*;
+import com.dream.flex.invoker.TakeMarkInvoker;
+import com.dream.system.config.Configuration;
+import com.dream.system.config.MappedStatement;
+import com.dream.system.config.MethodInfo;
+import com.dream.system.config.Page;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.resultsethandler.SimpleResultSetHandler;
 import com.dream.system.core.session.Session;
+import com.dream.system.dialect.DialectFactory;
 import com.dream.util.common.NonCollection;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
-import com.dream.util.tree.Tree;
-import com.dream.util.tree.TreeUtil;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DefaultFlexMapper implements FlexMapper {
     private Session session;
     private Configuration configuration;
-    private boolean offset = true;
-    private StructFactory structFactory;
+    private DialectFactory dialectFactory;
     private ResultSetHandler resultSetHandler;
 
-    public DefaultFlexMapper(Session session, ToSQL toSQL) {
-        this(session, new DefaultStructFactory(toSQL));
+    public DefaultFlexMapper(Session session) {
+        this(session, new SimpleResultSetHandler());
     }
 
-    public DefaultFlexMapper(Session session, StructFactory structFactory) {
-        this(session, structFactory, new SimpleResultSetHandler());
-    }
-
-    public DefaultFlexMapper(Session session, StructFactory structFactory, ResultSetHandler resultSetHandler) {
+    public DefaultFlexMapper(Session session, ResultSetHandler resultSetHandler) {
         this.session = session;
-        this.structFactory = structFactory;
+        Configuration configuration = session.getConfiguration();
+        this.configuration = configuration;
+        this.dialectFactory = configuration.getDialectFactory();
         this.resultSetHandler = resultSetHandler;
-        this.configuration = session.getConfiguration();
+        InvokerFactory invokerFactory = configuration.getInvokerFactory();
+        Invoker invoker = invokerFactory.getInvoker(TakeMarkInvoker.FUNCTION);
+        if (invoker == null) {
+            invokerFactory.addInvoker(TakeMarkInvoker.FUNCTION, TakeMarkInvoker::new);
+        }
     }
 
     @Override
     public <T> T selectOne(QueryDef queryDef, Class<T> type) {
-        MethodInfo methodInfo = getMethodInfo(NonCollection.class, type);
-        MappedStatement mappedStatement = structFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
+        MappedStatement mappedStatement = compile(NonCollection.class, type, queryDef.statement());
         return (T) session.execute(mappedStatement);
     }
 
     @Override
     public <T> List<T> selectList(QueryDef queryDef, Class<T> type) {
-        MethodInfo methodInfo = getMethodInfo(List.class, type);
-        MappedStatement mappedStatement = structFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
-        return (List<T>) session.execute(mappedStatement);
-    }
-
-    @Override
-    public <T extends Tree> List<T> selectTree(QueryDef queryDef, Class<T> type) {
-        MethodInfo methodInfo = getMethodInfo(List.class, type);
-        methodInfo.addDestroyAction((result, mappedStatement, session) -> TreeUtil.toTree((Collection<? extends Tree>) result));
-        MappedStatement mappedStatement = structFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
+        MappedStatement mappedStatement = compile(List.class, type, queryDef.statement());
         return (List<T>) session.execute(mappedStatement);
     }
 
     @Override
     public <T> Page<T> selectPage(QueryDef queryDef, Class<T> type, Page page) {
-        QueryStatement statement = queryDef.statement();
-        if (page.getTotal() == 0) {
-            MethodInfo countMethodInfo = getMethodInfo(NonCollection.class, Long.class);
-            MappedStatement countMappedStatement = structFactory.compile(Command.QUERY, countQueryStatement(queryDef.statement().clone()), countMethodInfo);
-            page.setTotal((long) session.execute(countMappedStatement));
+        MethodInfo methodInfo = methodInfo(List.class, type, queryDef.statement());
+        String PAGE = "page";
+        methodInfo.setPage(PAGE);
+        Map paramMap = new HashMap();
+        paramMap.put(PAGE, page);
+        MappedStatement mappedStatement;
+        try {
+            mappedStatement = dialectFactory.compile(methodInfo, paramMap);
+        } catch (Exception e) {
+            throw new DreamRunTimeException(e);
         }
-        MethodInfo methodInfo = getMethodInfo(Collection.class, type);
-        QueryStatement queryStatement = pageQueryStatement(statement, page.getStartRow(), page.getPageSize());
-        MappedStatement mappedStatement = structFactory.compile(Command.QUERY, queryStatement, methodInfo);
-        page.setRows((Collection) session.execute(mappedStatement));
+        List<T> rows = (List<T>) session.execute(mappedStatement);
+        page.setRows(rows);
         return page;
     }
 
     @Override
     public int update(UpdateDef updateDef) {
-        MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
-        MappedStatement mappedStatement = structFactory.compile(Command.UPDATE, updateDef.statement(), methodInfo);
+        MappedStatement mappedStatement = compile(NonCollection.class, Integer.class, updateDef.statement());
         return (int) session.execute(mappedStatement);
     }
 
@@ -95,28 +88,21 @@ public class DefaultFlexMapper implements FlexMapper {
         if (ObjectUtil.isNull(updateDefList)) {
             return null;
         }
-        List<MappedStatement> mappedStatementList = new ArrayList<>(updateDefList.size());
-        MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer[].class);
-        for (UpdateDef updateDef : updateDefList) {
-            MappedStatement mappedStatement = structFactory.compile(Command.UPDATE, updateDef.statement(), methodInfo);
-            mappedStatementList.add(mappedStatement);
+        if (ObjectUtil.isNull(updateDefList)) {
+            return null;
         }
-        FlexBatchMappedStatement batchMappedStatement = new FlexBatchMappedStatement(methodInfo, mappedStatementList);
-        batchMappedStatement.setBatchSize(batchSize);
-        return (List<int[]>) session.execute(batchMappedStatement);
+        return batch(updateDefList.stream().map(UpdateDef::statement).collect(Collectors.toList()), batchSize);
     }
 
     @Override
     public int delete(DeleteDef deleteDef) {
-        MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
-        MappedStatement mappedStatement = structFactory.compile(Command.UPDATE, deleteDef.statement(), methodInfo);
+        MappedStatement mappedStatement = compile(NonCollection.class, Integer.class, deleteDef.statement());
         return (int) session.execute(mappedStatement);
     }
 
     @Override
     public int insert(InsertDef insertDef) {
-        MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
-        MappedStatement mappedStatement = structFactory.compile(Command.INSERT, insertDef.statement(), methodInfo);
+        MappedStatement mappedStatement = compile(NonCollection.class, Integer.class, insertDef.statement());
         return (int) session.execute(mappedStatement);
     }
 
@@ -125,11 +111,20 @@ public class DefaultFlexMapper implements FlexMapper {
         if (ObjectUtil.isNull(insertDefList)) {
             return null;
         }
-        List<MappedStatement> mappedStatementList = new ArrayList<>(insertDefList.size());
-        MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer[].class);
-        for (InsertDef insertDef : insertDefList) {
-            MappedStatement mappedStatement = structFactory.compile(Command.INSERT, insertDef.statement(), methodInfo);
-            mappedStatementList.add(mappedStatement);
+        return batch(insertDefList.stream().map(InsertDef::statement).collect(Collectors.toList()), batchSize);
+    }
+
+    private List<int[]> batch(List<Statement> statementList, int batchSize) {
+        List<MappedStatement> mappedStatementList = new ArrayList<>(statementList.size());
+        MethodInfo methodInfo = null;
+        for (Statement statement : statementList) {
+            methodInfo = methodInfo(NonCollection.class, Integer[].class, statement);
+            try {
+                MappedStatement mappedStatement = dialectFactory.compile(methodInfo, new HashMap<>());
+                mappedStatementList.add(mappedStatement);
+            } catch (Exception e) {
+                throw new DreamRunTimeException(e);
+            }
         }
         FlexBatchMappedStatement batchMappedStatement = new FlexBatchMappedStatement(methodInfo, mappedStatementList);
         batchMappedStatement.setBatchSize(batchSize);
@@ -148,59 +143,33 @@ public class DefaultFlexMapper implements FlexMapper {
         limitStatement.setFirst(new SymbolStatement.NumberStatement("1"));
         limitStatement.setSecond(new SymbolStatement.NumberStatement("0"));
         statement.setLimitStatement(limitStatement);
-        MethodInfo methodInfo = getMethodInfo(NonCollection.class, Integer.class);
-        MappedStatement mappedStatement = structFactory.compile(Command.QUERY, queryDef.statement(), methodInfo);
+        MappedStatement mappedStatement = compile(NonCollection.class, Integer.class, statement);
         Integer result = (Integer) session.execute(mappedStatement);
         return result != null;
     }
 
-    protected QueryStatement pageQueryStatement(QueryStatement queryStatement, long startRow, long pageNum) {
-        LimitStatement limitStatement = queryStatement.getLimitStatement();
-        if (limitStatement == null) {
-            limitStatement = new LimitStatement();
-            if (offset) {
-                limitStatement.setOffset(true);
-                limitStatement.setFirst(new TakeMarkInvokerStatement(null, pageNum));
-                limitStatement.setSecond(new TakeMarkInvokerStatement(null, startRow));
-            } else {
-                limitStatement.setOffset(false);
-                limitStatement.setFirst(new TakeMarkInvokerStatement(null, startRow));
-                limitStatement.setSecond(new TakeMarkInvokerStatement(null, pageNum));
-            }
-            queryStatement.setLimitStatement(limitStatement);
-        } else {
-            throw new DreamRunTimeException("采用自动分页方式，不支持手动分页");
-        }
-        return queryStatement;
-    }
-
-    protected QueryStatement countQueryStatement(QueryStatement statement) {
-        statement.setOrderStatement(null);
-        FunctionStatement.CountStatement countStatement = new FunctionStatement.CountStatement();
-        ListColumnStatement paramListColumnStatement = new ListColumnStatement(",");
-        paramListColumnStatement.add(new SymbolStatement.LetterStatement("*"));
-        countStatement.setParamsStatement(paramListColumnStatement);
-        ListColumnStatement listColumnStatement = new ListColumnStatement(",");
-        listColumnStatement.add(countStatement);
-        QueryStatement queryStatement = new QueryStatement();
-        SelectStatement newSelectStatement = new SelectStatement();
-        newSelectStatement.setSelectList(listColumnStatement);
-        queryStatement.setSelectStatement(newSelectStatement);
-        AliasStatement aliasStatement = new AliasStatement();
-        aliasStatement.setColumn(new BraceStatement(statement));
-        aliasStatement.setAlias(new SymbolStatement.SingleMarkStatement("t_tmp"));
-        FromStatement fromStatement = new FromStatement();
-        fromStatement.setMainTable(aliasStatement);
-        queryStatement.setFromStatement(fromStatement);
-        return queryStatement;
-    }
-
-    protected MethodInfo getMethodInfo(Class<? extends Collection> rowType, Class<?> colType) {
+    protected MethodInfo methodInfo(Class<? extends Collection> rowType, Class<?> colType, Statement statement) {
         MethodInfo methodInfo = new MethodInfo();
         methodInfo.setConfiguration(configuration);
+        methodInfo.setResultSetHandler(resultSetHandler);
         methodInfo.setRowType(rowType);
         methodInfo.setColType(colType);
-        methodInfo.setResultSetHandler(resultSetHandler);
+        if (statement instanceof PackageStatement) {
+            methodInfo.setStatement((PackageStatement) statement);
+        } else {
+            PackageStatement packageStatement = new PackageStatement();
+            packageStatement.setStatement(statement);
+            methodInfo.setStatement(packageStatement);
+        }
         return methodInfo;
+    }
+
+    protected MappedStatement compile(Class<? extends Collection> rowType, Class<?> colType, Statement statement) {
+        MethodInfo methodInfo = methodInfo(rowType, colType, statement);
+        try {
+            return dialectFactory.compile(methodInfo, new HashMap<>());
+        } catch (Exception e) {
+            throw new DreamRunTimeException(e);
+        }
     }
 }

@@ -12,12 +12,6 @@ import com.dream.drive.config.DreamProperties;
 import com.dream.drive.holder.DriveSessionHolder;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
-import com.dream.jdbc.mapper.DefaultJdbcMapper;
-import com.dream.jdbc.mapper.JdbcMapper;
-import com.dream.stream.mapper.DefaultStreamMapper;
-import com.dream.stream.mapper.StreamMapper;
-import com.dream.struct.factory.DefaultStructFactory;
-import com.dream.struct.factory.StructFactory;
 import com.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.dream.system.cache.Cache;
 import com.dream.system.cache.CacheFactory;
@@ -68,8 +62,6 @@ public class DefaultDriveFactory implements DriveFactory {
     protected SessionTemplate sessionTemplate;
     protected TemplateMapper templateMapper;
     protected FlexMapper flexMapper;
-    protected StreamMapper streamMapper;
-    protected JdbcMapper jdbcMapper;
     protected ToSQL toSQL;
     protected DreamProperties dreamProperties;
 
@@ -87,10 +79,7 @@ public class DefaultDriveFactory implements DriveFactory {
         this.sessionFactory = sessionFactory(dataSource, tablePackages, mapperPackages);
         this.sessionTemplate = sessionTemplate(sessionHolder(), this.sessionFactory);
         this.templateMapper = templateMapper(sessionTemplate, sequence());
-        StructFactory structFactory = structFactory(toSQL);
-        this.flexMapper = flexMapper(sessionTemplate, structFactory);
-        this.streamMapper = streamMapper(sessionTemplate, structFactory);
-        this.jdbcMapper = jdbcMapper(this.sessionTemplate, toSQL);
+        this.flexMapper = flexMapper(sessionTemplate);
     }
 
     @Override
@@ -108,30 +97,12 @@ public class DefaultDriveFactory implements DriveFactory {
         return flexMapper;
     }
 
-    @Override
-    public StreamMapper streamMapper() {
-        return streamMapper;
-    }
-
-    @Override
-    public JdbcMapper jdbcMapper() {
-        return jdbcMapper;
-    }
-
     protected TemplateMapper templateMapper(SessionTemplate sessionTemplate, Sequence sequence) {
         return new DefaultTemplateMapper(sessionTemplate, sequence);
     }
 
-    protected FlexMapper flexMapper(SessionTemplate sessionTemplate, StructFactory structFactory) {
-        return new DefaultFlexMapper(sessionTemplate, structFactory);
-    }
-
-    protected StreamMapper streamMapper(SessionTemplate sessionTemplate, StructFactory structFactory) {
-        return new DefaultStreamMapper(sessionTemplate, structFactory);
-    }
-
-    protected JdbcMapper jdbcMapper(Session session, ToSQL toSQL) {
-        return new DefaultJdbcMapper(session, toSQL);
+    protected FlexMapper flexMapper(SessionTemplate sessionTemplate) {
+        return new DefaultFlexMapper(sessionTemplate);
     }
 
     /**
@@ -189,16 +160,6 @@ public class DefaultDriveFactory implements DriveFactory {
 
     protected Interceptor[] interceptors() {
         return new Interceptor[0];
-    }
-
-    /**
-     * struct工厂
-     *
-     * @param toSQL
-     * @return
-     */
-    protected StructFactory structFactory(ToSQL toSQL) {
-        return new DefaultStructFactory(toSQL);
     }
 
     /**

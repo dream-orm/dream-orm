@@ -7,7 +7,7 @@ import com.dream.flex.def.InsertIntoColumnsDef;
 import com.dream.flex.def.TableDef;
 import com.dream.flex.factory.FlexInsertFactory;
 import com.dream.flex.mapper.FlexMapper;
-import com.dream.struct.invoker.TakeMarkInvokerStatement;
+import com.dream.flex.statement.TakeMarkInvokerStatement;
 import com.dream.tdengine.statement.TdInsertStatement;
 
 import java.util.*;

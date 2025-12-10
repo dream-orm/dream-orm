@@ -1,20 +1,23 @@
 package com.dream.helloworld.h2;
 
+import com.dream.antlr.sql.ToMySQL;
 import com.dream.drive.config.DreamProperties;
 import com.dream.drive.factory.DefaultDriveFactory;
 import com.dream.drive.factory.DriveFactory;
 import com.dream.drive.listener.DebugListener;
 import com.dream.helloworld.h2.table.Account;
+import com.dream.jdbc.mapper.DefaultJdbcMapper;
+import com.dream.jdbc.mapper.JdbcMapper;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class HelloWorldDriveTest {
     DriveFactory driveFactory;
-
     @Before
     public void before() {
         HikariDataSource hikariDataSource = new HikariDataSource();
@@ -46,7 +49,7 @@ public class HelloWorldDriveTest {
         DreamProperties dreamProperties = new DreamProperties();
         dreamProperties.setListeners(new String[]{DebugListener.class.getName()});
         driveFactory = new DefaultDriveFactory(hikariDataSource, packageList, packageList, dreamProperties);
-        driveFactory.jdbcMapper().execute(sql);
+        new DefaultJdbcMapper(driveFactory.session(), new ToMySQL()).execute(sql);
     }
 
     /**

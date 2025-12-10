@@ -11,14 +11,8 @@ import com.dream.drive.config.DreamProperties;
 import com.dream.drive.factory.DriveDataSourceFactory;
 import com.dream.flex.mapper.DefaultFlexMapper;
 import com.dream.flex.mapper.FlexMapper;
-import com.dream.jdbc.mapper.DefaultJdbcMapper;
-import com.dream.jdbc.mapper.JdbcMapper;
 import com.dream.solon.factory.SolonTransactionFactory;
 import com.dream.solon.holder.SolonSessionHolder;
-import com.dream.stream.mapper.DefaultStreamMapper;
-import com.dream.stream.mapper.StreamMapper;
-import com.dream.struct.factory.DefaultStructFactory;
-import com.dream.struct.factory.StructFactory;
 import com.dream.system.antlr.factory.DefaultInvokerFactory;
 import com.dream.system.cache.Cache;
 import com.dream.system.cache.CacheFactory;
@@ -415,44 +409,13 @@ public class DreamAutoConfiguration {
     }
 
     /**
-     * @return struct工厂
-     */
-    @Bean
-    @Condition(onMissingBean = FlexMapper.class)
-    public StructFactory structFactory(ToSQL toSQL) {
-        return new DefaultStructFactory(toSQL);
-    }
-
-    /**
      * @param sessionTemplate SQL操作会话
-     * @param structFactory   struct工厂
      * @return Flex操作接口
      */
     @Bean
     @Condition(onMissingBean = FlexMapper.class)
-    public FlexMapper flexMapper(SessionTemplate sessionTemplate, StructFactory structFactory) {
-        return new DefaultFlexMapper(sessionTemplate, structFactory);
-    }
-
-    /**
-     * @param sessionTemplate SQL操作会话
-     * @param structFactory   struct工厂
-     * @return Stream操作接口
-     */
-    @Bean
-    @Condition(onMissingBean = StreamMapper.class)
-    public StreamMapper streamMapper(SessionTemplate sessionTemplate, StructFactory structFactory) {
-        return new DefaultStreamMapper(sessionTemplate, structFactory);
-    }
-
-    /**
-     * @param sessionTemplate SQL操作会话
-     * @return 不翻译操作接口
-     */
-    @Bean
-    @Condition(onMissingBean = JdbcMapper.class)
-    public JdbcMapper jdbcMapper(SessionTemplate sessionTemplate, ToSQL toSQL) {
-        return new DefaultJdbcMapper(sessionTemplate, toSQL);
+    public FlexMapper flexMapper(SessionTemplate sessionTemplate) {
+        return new DefaultFlexMapper(sessionTemplate);
     }
 
     final class NoneCache implements Cache {

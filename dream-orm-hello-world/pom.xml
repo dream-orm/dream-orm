@@ -42,7 +42,7 @@
             </dependency>
             <dependency>
                 <groupId>com.dream-orm</groupId>
-                <artifactId>dream-orm-chain</artifactId>
+                <artifactId>dream-orm-jdbc</artifactId>
                 <version>${dream-orm.version}</version>
             </dependency>
             <dependency>

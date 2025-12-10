@@ -61,7 +61,10 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
             }
             for (MarkInvoker.ParamInfo paramInfo : paramInfoList) {
                 String paramName = paramInfo.getParamName();
-                ParamType paramType = paramTypeWrapper.get(paramName);
+                ParamType paramType = null;
+                if (paramName != null && !paramName.isEmpty()) {
+                    paramType = paramTypeWrapper.get(paramName);
+                }
                 if (paramType == null) {
                     try {
                         paramType = getParamType(configuration, scanInfo, paramScanInfoMap, paramInfo);

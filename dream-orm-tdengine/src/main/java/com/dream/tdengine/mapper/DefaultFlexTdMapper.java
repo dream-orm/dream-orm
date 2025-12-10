@@ -1,6 +1,5 @@
 package com.dream.tdengine.mapper;
 
-import com.dream.antlr.sql.ToSQL;
 import com.dream.system.annotation.Column;
 import com.dream.system.annotation.Table;
 import com.dream.system.core.session.Session;
@@ -18,10 +17,6 @@ import java.util.Map;
 public class DefaultFlexTdMapper extends DefaultFlexTdChainMapper implements FlexTdMapper {
     public DefaultFlexTdMapper(Session session) {
         super(session);
-    }
-
-    public DefaultFlexTdMapper(Session session, ToSQL toSQL) {
-        super(session, toSQL);
     }
 
     @Override

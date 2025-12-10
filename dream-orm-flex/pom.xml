@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.dream-orm</groupId>
-            <artifactId>dream-orm-struct</artifactId>
+            <artifactId>dream-orm-system</artifactId>
             <version>1.4.0</version>
         </dependency>
     </dependencies>

@@ -1,8 +1,7 @@
 package com.dream.flex.def;
 
 import com.dream.antlr.smt.*;
-import com.dream.flex.function.LazyFunctionStatement;
-import com.dream.struct.invoker.TakeMarkInvokerStatement;
+import com.dream.flex.statement.TakeMarkInvokerStatement;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,14 +26,12 @@ public class ColumnDef {
         this.column = column;
         if (tableDef != null) {
             ListColumnStatement listColumnStatement = new ListColumnStatement(".");
-            listColumnStatement.add(new LazyFunctionStatement(() -> {
-                AliasStatement tableStatement = tableDef.getStatement();
-                Statement aliasStatement = tableStatement.getAlias();
-                if (aliasStatement == null) {
-                    aliasStatement = tableStatement.getColumn();
-                }
-                return aliasStatement;
-            }));
+            AliasStatement tableStatement = tableDef.getStatement();
+            Statement aliasStatement = tableStatement.getAlias();
+            if (aliasStatement == null) {
+                aliasStatement = tableStatement.getColumn();
+            }
+            listColumnStatement.add(aliasStatement);
             listColumnStatement.add(statement);
             statement = listColumnStatement;
         }

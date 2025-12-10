@@ -6,7 +6,7 @@ import com.dream.antlr.smt.Statement;
 import com.dream.antlr.smt.SymbolStatement;
 import com.dream.flex.factory.FlexQueryFactory;
 import com.dream.flex.mapper.FlexMapper;
-import com.dream.struct.invoker.TakeMarkInvokerStatement;
+import com.dream.flex.statement.TakeMarkInvokerStatement;
 import com.dream.tdengine.statement.TdFillStatement;
 import com.dream.tdengine.statement.TdQueryStatement;
 import com.dream.tdengine.statement.TdWindowStatement;

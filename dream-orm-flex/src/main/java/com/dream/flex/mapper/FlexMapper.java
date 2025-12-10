@@ -5,7 +5,6 @@ import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
 import com.dream.system.config.Page;
-import com.dream.util.tree.Tree;
 
 import java.util.List;
 
@@ -32,16 +31,6 @@ public interface FlexMapper {
      * @return 集合数据
      */
     <T> List<T> selectList(QueryDef queryDef, Class<T> type);
-
-    /**
-     * 查询树形结构
-     *
-     * @param queryDef 查询定义器
-     * @param type     返回类型
-     * @param <T>
-     * @return
-     */
-    <T extends Tree> List<T> selectTree(QueryDef queryDef, Class<T> type);
 
     /**
      * 查询并返回分页

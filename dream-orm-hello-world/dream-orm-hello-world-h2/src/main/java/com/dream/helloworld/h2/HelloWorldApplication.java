@@ -1,13 +1,16 @@
 package com.dream.helloworld.h2;
 
-import com.dream.chain.mapper.DefaultFlexChainMapper;
-import com.dream.chain.mapper.FlexChainMapper;
+import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.annotation.EnableFlexAPT;
-import com.dream.flex.mapper.FlexMapper;
+import com.dream.jdbc.mapper.DefaultJdbcMapper;
+import com.dream.jdbc.mapper.JdbcMapper;
+import com.dream.system.annotation.Param;
+import com.dream.system.core.session.Session;
 import com.dream.system.inject.Inject;
 import com.dream.system.table.ColumnInfo;
 import com.dream.template.sequence.AbstractSequence;
 import com.dream.template.sequence.Sequence;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +22,10 @@ public class HelloWorldApplication {
         SpringApplication.run(HelloWorldApplication.class, args);
     }
 
+    @Bean
+    public JdbcMapper jdbcMapper(Session session,ToSQL toSQL) {
+        return new DefaultJdbcMapper(session,toSQL);
+    }
 //    /**
 //     * 配置监听器方案一
 //     * 配置SQL输出
@@ -232,11 +239,6 @@ public class HelloWorldApplication {
 //            }
 //        });
 //    }
-
-    @Bean
-    public FlexChainMapper flexChainMapper(FlexMapper flexMapper) {
-        return new DefaultFlexChainMapper(flexMapper);
-    }
 
     /**
      * 主键序列

@@ -4,7 +4,7 @@ import com.dream.antlr.smt.BraceStatement;
 import com.dream.antlr.smt.InsertStatement;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.Statement;
-import com.dream.struct.invoker.TakeMarkInvokerStatement;
+import com.dream.flex.statement.TakeMarkInvokerStatement;
 
 import java.util.Arrays;
 import java.util.List;
