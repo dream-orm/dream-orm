@@ -9,9 +9,9 @@ import java.util.Collection;
 
 public interface MapperFactory {
 
-    void addMethodInfo(MethodInfo methodInfo);
+    void add(MethodInfo methodInfo);
 
-    MethodInfo getMethodInfo(String id);
+    MethodInfo get(String id);
 
     boolean addMapper(Configuration configuration, Class<?> type);
 

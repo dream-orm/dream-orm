@@ -37,10 +37,10 @@ public abstract class AbstractMapper {
     }
 
     public Object execute(String id, Class<?> type, Object arg) {
-        MethodInfo methodInfo = mapperFactory.getMethodInfo(id);
+        MethodInfo methodInfo = mapperFactory.get(id);
         if (methodInfo == null) {
             synchronized (this) {
-                methodInfo = mapperFactory.getMethodInfo(id);
+                methodInfo = mapperFactory.get(id);
                 if (methodInfo == null) {
                     String table = getTableName(type);
                     if (ObjectUtil.isNull(table)) {
@@ -53,7 +53,7 @@ public abstract class AbstractMapper {
                     }
                     methodInfo = getMethodInfo(configuration, tableInfo, type, arg);
                     methodInfo.setId(id);
-                    mapperFactory.addMethodInfo(methodInfo);
+                    mapperFactory.add(methodInfo);
                 }
             }
         }

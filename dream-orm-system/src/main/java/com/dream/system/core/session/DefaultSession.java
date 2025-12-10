@@ -26,13 +26,18 @@ public class DefaultSession implements Session {
     protected Executor executor;
     protected MapperFactory mapperFactory;
     protected DialectFactory dialectFactory;
-    private final Map<String, MethodInfo> weakMap = new WeakHashMap<>();
+    private final Map<String, MethodInfo> methodInfoMap;
 
     public DefaultSession(Configuration configuration, Executor executor) {
+        this(configuration, executor, new WeakHashMap<>());
+    }
+
+    public DefaultSession(Configuration configuration, Executor executor, Map<String, MethodInfo> methodInfoMap) {
         this.configuration = configuration;
         this.executor = executor;
         this.mapperFactory = configuration.getMapperFactory();
         this.dialectFactory = configuration.getDialectFactory();
+        this.methodInfoMap = methodInfoMap;
     }
 
     @Override
@@ -49,37 +54,41 @@ public class DefaultSession implements Session {
             throw new DreamRunTimeException("返回的类型不能为空");
         }
         CacheKey cacheKey = SystemUtil.cacheKey(sql, 5);
-        cacheKey.update(rowType.getName(), colType.getName());
+        cacheKey.update(rowType.getName(), colType.getName(), actionProvider.page());
         String id = cacheKey.toString();
-        MethodInfo methodInfo = weakMap.get(id);
+        MethodInfo methodInfo = methodInfoMap.get(id);
         if (methodInfo == null) {
-            methodInfo = new MethodInfo()
-                    .setConfiguration(configuration)
-                    .setId(sql)
-                    .setRowType(rowType)
-                    .setColType(colType)
-                    .setSql(sql)
-                    .setMethodKey(SystemUtil.cacheKey(sql, 5))
-                    .setPage(actionProvider.page())
-                    .setStatementHandler(actionProvider.statementHandler())
-                    .setResultSetHandler(actionProvider.resultSetHandler());
-            Integer timeOut = actionProvider.timeOut();
-            if (timeOut != null) {
-                methodInfo.setTimeOut(timeOut);
+            synchronized (methodInfoMap) {
+                methodInfo = methodInfoMap.get(id);
+                if (methodInfo == null) {
+                    methodInfo = new MethodInfo()
+                            .setConfiguration(configuration)
+                            .setId(id)
+                            .setRowType(rowType)
+                            .setColType(colType)
+                            .setSql(sql)
+                            .setPage(actionProvider.page())
+                            .setStatementHandler(actionProvider.statementHandler())
+                            .setResultSetHandler(actionProvider.resultSetHandler());
+                    Integer timeOut = actionProvider.timeOut();
+                    if (timeOut != null) {
+                        methodInfo.setTimeOut(timeOut);
+                    }
+                    InitAction initAction = actionProvider.initAction();
+                    if (initAction != null) {
+                        methodInfo.addInitAction(initAction);
+                    }
+                    LoopAction loopAction = actionProvider.loopAction();
+                    if (loopAction != null) {
+                        methodInfo.addLoopAction(loopAction);
+                    }
+                    DestroyAction destroyAction = actionProvider.destroyAction();
+                    if (destroyAction != null) {
+                        methodInfo.addDestroyAction(destroyAction);
+                    }
+                    methodInfoMap.put(id, methodInfo);
+                }
             }
-            InitAction initAction = actionProvider.initAction();
-            if (initAction != null) {
-                methodInfo.addInitAction(initAction);
-            }
-            LoopAction loopAction = actionProvider.loopAction();
-            if (loopAction != null) {
-                methodInfo.addLoopAction(loopAction);
-            }
-            DestroyAction destroyAction = actionProvider.destroyAction();
-            if (destroyAction != null) {
-                methodInfo.addDestroyAction(destroyAction);
-            }
-            weakMap.put(id, methodInfo);
         }
         if (arg != null) {
             if (arg instanceof Map) {

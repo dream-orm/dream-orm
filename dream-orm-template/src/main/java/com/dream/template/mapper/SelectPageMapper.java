@@ -27,10 +27,10 @@ public class SelectPageMapper extends SelectListMapper {
             page = new Page();
         }
 
-        MethodInfo methodInfo = mapperFactory.getMethodInfo(id);
+        MethodInfo methodInfo = mapperFactory.get(id);
         if (methodInfo == null) {
             synchronized (this) {
-                methodInfo = mapperFactory.getMethodInfo(id);
+                methodInfo = mapperFactory.get(id);
                 if (methodInfo == null) {
                     Configuration configuration = this.session.getConfiguration();
                     TableFactory tableFactory = configuration.getTableFactory();
@@ -38,7 +38,7 @@ public class SelectPageMapper extends SelectListMapper {
                     methodInfo = getMethodInfo(configuration, tableFactory.getTableInfo(tableName), type, arg);
                     methodInfo.setId(id);
                     methodInfo.setPage(PAGE);
-                    mapperFactory.addMethodInfo(methodInfo);
+                    mapperFactory.add(methodInfo);
                 }
             }
         }

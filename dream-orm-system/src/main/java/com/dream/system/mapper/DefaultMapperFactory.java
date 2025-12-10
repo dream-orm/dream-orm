@@ -27,7 +27,7 @@ public class DefaultMapperFactory implements MapperFactory {
     protected Map<Class, Class[]> mapperTypeMap = new HashMap<>(8);
 
     @Override
-    public void addMethodInfo(MethodInfo methodInfo) {
+    public void add(MethodInfo methodInfo) {
         String id = methodInfo.getId();
         if (this.methodInfoMap.containsKey(id)) {
             throw new DreamRunTimeException(id + "已注入到Mapper");
@@ -36,7 +36,7 @@ public class DefaultMapperFactory implements MapperFactory {
     }
 
     @Override
-    public MethodInfo getMethodInfo(String id) {
+    public MethodInfo get(String id) {
         return methodInfoMap.get(id);
     }
 
@@ -62,7 +62,7 @@ public class DefaultMapperFactory implements MapperFactory {
                 if (ObjectUtil.isNull(methodInfo.getSql())) {
                     throw new DreamRunTimeException(methodInfo.getId() + "未绑定SQL");
                 }
-                addMethodInfo(methodInfo);
+                add(methodInfo);
             }
             this.mapperTypeMap.put(mapperClass, getAllInterface(mapperClass));
             return true;
