@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public abstract class BatchMappedStatement<T extends BatchMappedStatement> extends MappedStatement implements Iterator<T> {
+public class BatchMappedStatement extends MappedStatement implements Iterator<BatchMappedStatement> {
     protected List<MappedStatement> mappedStatementList;
     protected int batchSize = 1000;
     protected int fromIndex;
     protected int toIndex;
 
-    public BatchMappedStatement(MethodInfo methodInfo) {
-        this.methodInfo = methodInfo;
+    public BatchMappedStatement(List<MappedStatement> mappedStatementList) {
+        this.mappedStatementList = mappedStatementList;
+        this.methodInfo = mappedStatementList.get(0).methodInfo;
     }
 
     @Override
@@ -37,14 +38,14 @@ public abstract class BatchMappedStatement<T extends BatchMappedStatement> exten
     }
 
     @Override
-    public T next() {
+    public BatchMappedStatement next() {
         fromIndex = toIndex;
         toIndex = fromIndex + batchSize;
         int total = mappedStatementList.size();
         if (toIndex >= total) {
             toIndex = total;
         }
-        return (T) this;
+        return this;
     }
 
     @Override

@@ -37,15 +37,6 @@ public class HelloWorldFlexQueryTest {
     }
 
     /**
-     * 测试select数组
-     */
-    @Test
-    public void testSelectArray() {
-        QueryDef queryDef = select();
-        toOut(queryDef.statement());
-    }
-
-    /**
      * 测试字段别名
      */
     @Test

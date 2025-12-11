@@ -42,11 +42,6 @@
             </dependency>
             <dependency>
                 <groupId>com.dream-orm</groupId>
-                <artifactId>dream-orm-jdbc</artifactId>
-                <version>${dream-orm.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.dream-orm</groupId>
                 <artifactId>dream-orm-tdengine</artifactId>
                 <version>${dream-orm.version}</version>
             </dependency>

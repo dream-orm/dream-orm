@@ -3,16 +3,12 @@ package com.dream.flex.mapper;
 import com.dream.antlr.factory.InvokerFactory;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.*;
-import com.dream.flex.config.FlexBatchMappedStatement;
 import com.dream.flex.def.DeleteDef;
 import com.dream.flex.def.InsertDef;
 import com.dream.flex.def.QueryDef;
 import com.dream.flex.def.UpdateDef;
 import com.dream.flex.invoker.TakeMarkInvoker;
-import com.dream.system.config.Configuration;
-import com.dream.system.config.MappedStatement;
-import com.dream.system.config.MethodInfo;
-import com.dream.system.config.Page;
+import com.dream.system.config.*;
 import com.dream.system.core.resultsethandler.ResultSetHandler;
 import com.dream.system.core.resultsethandler.SimpleResultSetHandler;
 import com.dream.system.core.session.Session;
@@ -126,7 +122,7 @@ public class DefaultFlexMapper implements FlexMapper {
                 throw new DreamRunTimeException(e);
             }
         }
-        FlexBatchMappedStatement batchMappedStatement = new FlexBatchMappedStatement(methodInfo, mappedStatementList);
+        BatchMappedStatement batchMappedStatement = new BatchMappedStatement(mappedStatementList);
         batchMappedStatement.setBatchSize(batchSize);
         return (List<int[]>) session.execute(batchMappedStatement);
     }

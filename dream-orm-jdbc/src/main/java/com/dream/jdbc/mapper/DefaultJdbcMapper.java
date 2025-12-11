@@ -2,16 +2,11 @@ package com.dream.jdbc.mapper;
 
 import com.dream.antlr.config.ExprInfo;
 import com.dream.antlr.read.ExprReader;
-import com.dream.antlr.sql.ToSQL;
-import com.dream.jdbc.core.JdbcBatchMappedStatement;
 import com.dream.jdbc.core.JdbcResultSetHandler;
 import com.dream.jdbc.core.JdbcStatementHandler;
 import com.dream.jdbc.core.StatementSetter;
 import com.dream.jdbc.row.RowMapping;
-import com.dream.system.config.Command;
-import com.dream.system.config.Compile;
-import com.dream.system.config.MappedStatement;
-import com.dream.system.config.MethodInfo;
+import com.dream.system.config.*;
 import com.dream.system.core.session.Session;
 import com.dream.system.table.ColumnInfo;
 import com.dream.system.table.TableInfo;
@@ -35,13 +30,12 @@ public class DefaultJdbcMapper implements JdbcMapper {
     private final Session session;
     private final TableFactory tableFactory;
     private final TypeHandlerFactory typeHandlerFactory;
-    private final ToSQL toSQL;
 
-    public DefaultJdbcMapper(Session session, ToSQL toSQL) {
+    public DefaultJdbcMapper(Session session) {
         this.session = session;
-        this.tableFactory = session.getConfiguration().getTableFactory();
-        this.typeHandlerFactory = session.getConfiguration().getTypeHandlerFactory();
-        this.toSQL = toSQL;
+        Configuration configuration = session.getConfiguration();
+        this.tableFactory = configuration.getTableFactory();
+        this.typeHandlerFactory = configuration.getTypeHandlerFactory();
     }
 
     @Override
@@ -51,7 +45,6 @@ public class DefaultJdbcMapper implements JdbcMapper {
         methodInfo.setStatementHandler(jdbcStatementHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
-        methodInfo.setMethodKey(SystemUtil.cacheKey(sql, 5));
         MappedStatement mappedStatement = new MappedStatement.Builder()
                 .methodInfo(methodInfo)
                 .command(Command.UPDATE)
@@ -71,9 +64,9 @@ public class DefaultJdbcMapper implements JdbcMapper {
         methodInfo.setStatementHandler(jdbcStatementHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
-        methodInfo.setMethodKey(SystemUtil.cacheKey(sql, 5));
-        JdbcBatchMappedStatement jdbcBatchMappedStatement = new JdbcBatchMappedStatement(methodInfo, argList, Command.BATCH, sql, tableSet(sql));
-        return (List<Object>) session.execute(jdbcBatchMappedStatement);
+        List<MappedStatement> mappedStatementList = compile(methodInfo, argList, Command.BATCH, sql, tableSet(sql));
+        BatchMappedStatement batchMappedStatement = new BatchMappedStatement(mappedStatementList);
+        return (List<Object>) session.execute(batchMappedStatement);
     }
 
     @Override
@@ -85,7 +78,6 @@ public class DefaultJdbcMapper implements JdbcMapper {
         methodInfo.setResultSetHandler(jdbcResultSetHandler);
         methodInfo.setCompile(Compile.ANTLR_COMPILED);
         methodInfo.setConfiguration(session.getConfiguration());
-        methodInfo.setMethodKey(SystemUtil.cacheKey(sql, 5));
         MappedStatement mappedStatement = new MappedStatement.Builder()
                 .methodInfo(methodInfo)
                 .command(Command.QUERY)
@@ -109,16 +101,16 @@ public class DefaultJdbcMapper implements JdbcMapper {
                 String column = columnInfo.getColumn();
                 String name = columnInfo.getName();
                 if (name.equals(column)) {
-                    joiner.add(SystemUtil.key(column, toSQL));
+                    joiner.add(column);
                 } else {
-                    joiner.add(SystemUtil.key(column, toSQL) + " " + SystemUtil.key(name, toSQL));
+                    joiner.add(column + " " + name);
                 }
             }
         }
         if (sql != null) {
-            return queryForList("select " + joiner + " from " + SystemUtil.key(tableName, toSQL) + " where " + sql, type, args);
+            return queryForList("select " + joiner + " from " + tableName + " where " + sql, type, args);
         } else {
-            return queryForList("select " + joiner + " from " + SystemUtil.key(tableName, toSQL), type, args);
+            return queryForList("select " + joiner + " from " + tableName, type, args);
         }
     }
 
@@ -164,14 +156,14 @@ public class DefaultJdbcMapper implements JdbcMapper {
                     primValue = value;
                 } else {
                     if (value != null || !filterNull) {
-                        joiner.add(SystemUtil.key(columnInfo.getColumn(), toSQL) + "=?");
+                        joiner.add(columnInfo.getColumn() + "=?");
                         valueList.add(value);
                     }
                 }
             }
         }
         valueList.add(primValue);
-        return execute("update " + SystemUtil.key(tableName, toSQL) + " set " + joiner + " where " + SystemUtil.key(primColumn.getColumn(), toSQL) + "=?", valueList.toArray(new Object[]{valueList.size()}));
+        return execute("update " + tableName + " set " + joiner + " where " + primColumn.getColumn() + "=?", valueList.toArray(new Object[]{valueList.size()}));
     }
 
     @Override
@@ -195,7 +187,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
             if (columnInfo != null) {
                 Object value = wrapper.get(fieldName);
                 if (value != null) {
-                    columnList.add(SystemUtil.key(columnInfo.getColumn(), toSQL));
+                    columnList.add(columnInfo.getColumn());
                     valueList.add(value);
                 }
             }
@@ -203,7 +195,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
         if (columnList.size() > 0) {
             String[] marks = new String[columnList.size()];
             Arrays.fill(marks, "?");
-            return execute("insert into " + SystemUtil.key(tableName, toSQL) + "(" + String.join(",", columnList) + ")values(" + String.join(",", marks) + ")", valueList.toArray(new Object[]{valueList.size()}));
+            return execute("insert into " + tableName + "(" + String.join(",", columnList) + ")values(" + String.join(",", marks) + ")", valueList.toArray(new Object[]{valueList.size()}));
         } else {
             return 0;
         }
@@ -244,7 +236,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
         }
         String[] marks = new String[columnList.size()];
         Arrays.fill(marks, "?");
-        return batchExecute("insert into " + SystemUtil.key(tableName, toSQL) + "(" + columnList.stream().map(columnInfo -> SystemUtil.key(columnInfo.getColumn(), toSQL)).collect(Collectors.joining(",")) + ")values(" + String.join(",", marks) + ")", viewList, (ps, mappedStatement) -> {
+        return batchExecute("insert into " + tableName + "(" + columnList.stream().map(ColumnInfo::getColumn).collect(Collectors.joining(",")) + ")values(" + String.join(",", marks) + ")", viewList, (ps, mappedStatement) -> {
             Object arg = mappedStatement.getArg();
             ObjectWrapper wrapper = ObjectWrapper.wrapper(arg);
             for (int i = 0; i < columnList.size(); i++) {
@@ -306,7 +298,7 @@ public class DefaultJdbcMapper implements JdbcMapper {
             throw new DreamRunTimeException(e);
         }
         typeHandlerList.add(typeHandler);
-        return batchExecute("update " + SystemUtil.key(tableName, toSQL) + " set " + columnList.stream().map(columnInfo -> SystemUtil.key(columnInfo.getColumn(), toSQL) + "=?").collect(Collectors.joining(",")) + " where " + primColumn.getColumn() + "=?", viewList, (ps, mappedStatement) -> {
+        return batchExecute("update " + tableName + " set " + columnList.stream().map(columnInfo -> columnInfo.getColumn() + "=?").collect(Collectors.joining(",")) + " where " + primColumn.getColumn() + "=?", viewList, (ps, mappedStatement) -> {
             Object arg = mappedStatement.getArg();
             ObjectWrapper wrapper = ObjectWrapper.wrapper(arg);
             int size = columnList.size();
@@ -340,5 +332,14 @@ public class DefaultJdbcMapper implements JdbcMapper {
             return tableSet;
         }
         return null;
+    }
+
+    protected List<MappedStatement> compile(MethodInfo methodInfo, List<?> argList, Command command, String sql, Set<String> tableSet) {
+        List<MappedStatement> mappedStatementList = new ArrayList<>(argList.size());
+        for (Object arg : argList) {
+            MappedStatement mappedStatement = new MappedStatement.Builder().methodInfo(methodInfo).command(command).sql(sql).tableSet(tableSet).arg(arg).build();
+            mappedStatementList.add(mappedStatement);
+        }
+        return mappedStatementList;
     }
 }

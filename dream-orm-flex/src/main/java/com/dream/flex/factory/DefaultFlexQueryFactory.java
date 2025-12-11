@@ -53,6 +53,6 @@ public class DefaultFlexQueryFactory implements FlexQueryFactory {
 
     @Override
     public QueryDef newQueryDef(QueryStatement statement) {
-        return new DefaultQueryDef(this);
+        return new DefaultQueryDef(statement, this);
     }
 }
