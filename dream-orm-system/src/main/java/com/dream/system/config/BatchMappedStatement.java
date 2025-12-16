@@ -1,9 +1,6 @@
 package com.dream.system.config;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BatchMappedStatement extends MappedStatement implements Iterator<BatchMappedStatement> {
@@ -66,7 +63,14 @@ public class BatchMappedStatement extends MappedStatement implements Iterator<Ba
 
     @Override
     public List<MappedParam> getMappedParamList() {
-        return mappedStatementList.stream().flatMap(mappedStatement -> mappedStatement.getMappedParamList().stream()).collect(Collectors.toList());
+        List<MappedParam> allMappedParamList = new ArrayList<>();
+        for (MappedStatement mappedStatement : mappedStatementList) {
+            List<MappedParam> mappedParamList = mappedStatement.getMappedParamList();
+            if (mappedParamList != null && !mappedParamList.isEmpty()) {
+                allMappedParamList.addAll(mappedParamList);
+            }
+        }
+        return allMappedParamList;
     }
 
     public List<MappedStatement> getMappedStatementList() {
