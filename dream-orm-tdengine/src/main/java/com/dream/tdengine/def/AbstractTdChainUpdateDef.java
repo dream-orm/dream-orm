@@ -16,6 +16,6 @@ public abstract class AbstractTdChainUpdateDef extends AbstractUpdateDef impleme
 
     @Override
     public int execute() {
-        return flexMapper.update(this);
+        return flexMapper.execute(this);
     }
 }

@@ -49,7 +49,7 @@ public interface FlexMapper {
      * @param updateDef 更新定义器
      * @return 更新数量
      */
-    int update(UpdateDef updateDef);
+    int execute(UpdateDef updateDef);
 
     /**
      * 批量更新
@@ -57,8 +57,8 @@ public interface FlexMapper {
      * @param updateDefList 更新定义器集合
      * @return
      */
-    default List<int[]> batchUpdate(List<UpdateDef> updateDefList) {
-        return batchUpdate(updateDefList, 1000);
+    default List<int[]> execute(UpdateDef[] updateDefList) {
+        return execute(updateDefList, 1000);
     }
 
     /**
@@ -68,7 +68,7 @@ public interface FlexMapper {
      * @param batchSize     批量大小
      * @return
      */
-    List<int[]> batchUpdate(List<UpdateDef> updateDefList, int batchSize);
+    List<int[]> execute(UpdateDef[] updateDefList, int batchSize);
 
     /**
      * 删除操作
@@ -76,7 +76,7 @@ public interface FlexMapper {
      * @param deleteDef 删除定义器
      * @return 删除数量
      */
-    int delete(DeleteDef deleteDef);
+    int execute(DeleteDef deleteDef);
 
     /**
      * 插入操作
@@ -84,7 +84,7 @@ public interface FlexMapper {
      * @param insertDef 插入定义器
      * @return 插入数量
      */
-    int insert(InsertDef insertDef);
+    int execute(InsertDef insertDef);
 
     /**
      * 批量插入
@@ -92,8 +92,8 @@ public interface FlexMapper {
      * @param insertDefList 插入定义器集合
      * @return
      */
-    default List<int[]> batchInsert(List<InsertDef> insertDefList) {
-        return batchInsert(insertDefList, 1000);
+    default List<int[]> execute(InsertDef[] insertDefList) {
+        return execute(insertDefList, 1000);
     }
 
     /**
@@ -103,7 +103,7 @@ public interface FlexMapper {
      * @param batchSize     批量大小
      * @return
      */
-    List<int[]> batchInsert(List<InsertDef> insertDefList, int batchSize);
+    List<int[]> execute(InsertDef[] insertDefList, int batchSize);
 
     /**
      * 数据是否存在

@@ -18,13 +18,12 @@ import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DefaultFlexMapper implements FlexMapper {
-    private Session session;
-    private Configuration configuration;
-    private DialectFactory dialectFactory;
-    private ResultSetHandler resultSetHandler;
+    private final Session session;
+    private final Configuration configuration;
+    private final DialectFactory dialectFactory;
+    private final ResultSetHandler resultSetHandler;
 
     public DefaultFlexMapper(Session session) {
         this(session, new SimpleResultSetHandler());
@@ -74,47 +73,51 @@ public class DefaultFlexMapper implements FlexMapper {
     }
 
     @Override
-    public int update(UpdateDef updateDef) {
+    public int execute(UpdateDef updateDef) {
         MappedStatement mappedStatement = compile(NonCollection.class, Integer.class, updateDef.statement());
         return (int) session.execute(mappedStatement);
     }
 
     @Override
-    public List<int[]> batchUpdate(List<UpdateDef> updateDefList, int batchSize) {
+    public List<int[]> execute(UpdateDef[] updateDefList, int batchSize) {
         if (ObjectUtil.isNull(updateDefList)) {
             return null;
         }
-        if (ObjectUtil.isNull(updateDefList)) {
-            return null;
+        Statement[] statementList = new Statement[updateDefList.length];
+        for (int i = 0; i < updateDefList.length; i++) {
+            statementList[i] = updateDefList[i].statement();
         }
-        return batch(updateDefList.stream().map(UpdateDef::statement).collect(Collectors.toList()), batchSize);
+        return batch(statementList, batchSize);
     }
 
     @Override
-    public int delete(DeleteDef deleteDef) {
+    public int execute(DeleteDef deleteDef) {
         MappedStatement mappedStatement = compile(NonCollection.class, Integer.class, deleteDef.statement());
         return (int) session.execute(mappedStatement);
     }
 
     @Override
-    public int insert(InsertDef insertDef) {
+    public int execute(InsertDef insertDef) {
         MappedStatement mappedStatement = compile(NonCollection.class, Integer.class, insertDef.statement());
         return (int) session.execute(mappedStatement);
     }
 
     @Override
-    public List<int[]> batchInsert(List<InsertDef> insertDefList, int batchSize) {
+    public List<int[]> execute(InsertDef[] insertDefList, int batchSize) {
         if (ObjectUtil.isNull(insertDefList)) {
             return null;
         }
-        return batch(insertDefList.stream().map(InsertDef::statement).collect(Collectors.toList()), batchSize);
+        Statement[] statementList = new Statement[insertDefList.length];
+        for (int i = 0; i < insertDefList.length; i++) {
+            statementList[i] = insertDefList[i].statement();
+        }
+        return batch(statementList, batchSize);
     }
 
-    private List<int[]> batch(List<Statement> statementList, int batchSize) {
-        List<MappedStatement> mappedStatementList = new ArrayList<>(statementList.size());
-        MethodInfo methodInfo = null;
+    private List<int[]> batch(Statement[] statementList, int batchSize) {
+        List<MappedStatement> mappedStatementList = new ArrayList<>(statementList.length);
         for (Statement statement : statementList) {
-            methodInfo = methodInfo(NonCollection.class, Integer[].class, statement);
+            MethodInfo methodInfo = methodInfo(NonCollection.class, Integer[].class, statement);
             try {
                 MappedStatement mappedStatement = dialectFactory.compile(methodInfo, new HashMap<>());
                 mappedStatementList.add(mappedStatement);

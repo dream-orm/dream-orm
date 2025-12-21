@@ -30,6 +30,6 @@ public abstract class AbstractTdChainInsertDef extends AbstractInsertDef impleme
 
     @Override
     public int execute() {
-        return flexMapper.insert(this);
+        return flexMapper.execute(this);
     }
 }

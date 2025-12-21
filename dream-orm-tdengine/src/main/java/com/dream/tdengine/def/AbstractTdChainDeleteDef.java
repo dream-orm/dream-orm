@@ -16,6 +16,6 @@ public abstract class AbstractTdChainDeleteDef extends AbstractDeleteDef impleme
 
     @Override
     public int execute() {
-        return flexMapper.delete(this);
+        return flexMapper.execute(this);
     }
 }
