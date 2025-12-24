@@ -70,7 +70,7 @@ public class HelloWorldFlexTest {
     @Test
     public void testUpdate() {
         UpdateDef updateDef = update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
-        flexMapper.update(updateDef);
+        flexMapper.execute(updateDef);
     }
 
     /**
@@ -83,7 +83,7 @@ public class HelloWorldFlexTest {
             UpdateDef updateDef = update(account).set(account.age, account.age.add(1)).set(account.name, "accountName").where(account.id.eq(1));
             updateDefList.add(updateDef);
         }
-        flexMapper.batchUpdate(updateDefList);
+        flexMapper.execute(updateDefList.toArray(new UpdateDef[0]));
     }
 
     /**
@@ -92,7 +92,7 @@ public class HelloWorldFlexTest {
     @Test
     public void testInsert() {
         InsertDef insertDef = insertInto(account).columns(account.name, account.age).values("accountName", 200);
-        flexMapper.insert(insertDef);
+        flexMapper.execute(insertDef);
     }
 
     /**
@@ -112,7 +112,7 @@ public class HelloWorldFlexTest {
             Account account = (Account) acc;
             return new Object[]{account.getId(), account.getName(), account.getAge()};
         });
-        flexMapper.insert(insertDef);
+        flexMapper.execute(insertDef);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class HelloWorldFlexTest {
             InsertDef insertDef = insertInto(account).columns(account.id, account.name, account.age).values(i, "name" + i, i * 2);
             insertDefList.add(insertDef);
         }
-        flexMapper.batchInsert(insertDefList);
+        flexMapper.execute(insertDefList.toArray(new InsertDef[0]));
     }
 
     /**
@@ -131,7 +131,7 @@ public class HelloWorldFlexTest {
     @Test
     public void testDelete() {
         DeleteDef deleteDef = delete(account).where(account.id.eq(1));
-        flexMapper.delete(deleteDef);
+        flexMapper.execute(deleteDef);
     }
 
     /**
