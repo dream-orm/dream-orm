@@ -17,7 +17,10 @@ import com.dream.util.common.ObjectWrapper;
 import com.dream.util.exception.DreamRunTimeException;
 
 import java.sql.Types;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DefaultDialectFactory extends AbstractDialectFactory {
     protected ToSQL toSQL;
@@ -29,7 +32,6 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
         ScanInvoker.ScanInfo scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
         String sql;
         List<MarkInvoker.ParamInfo> paramInfoList;
-        Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap;
         if (scanInfo == null) {
             Assist assist = getAssist(methodInfo, arg);
             sql = toSQL.toStr(methodInfo.getStatement(), assist, null);
@@ -51,7 +53,6 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
                 }
             }
         }
-        paramScanInfoMap = scanInfo.getParamScanInfoMap();
         List<MappedParam> mappedParamList = new ArrayList<>();
         if (!ObjectUtil.isNull(paramInfoList)) {
             ParamTypeWrapper paramTypeWrapper = methodInfo.get(ParamTypeWrapper.class);
@@ -67,7 +68,7 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
                 }
                 if (paramType == null) {
                     try {
-                        paramType = getParamType(configuration, scanInfo, paramScanInfoMap, paramInfo);
+                        paramType = getParamType(configuration, scanInfo, paramInfo);
                     } catch (TypeHandlerNotFoundException e) {
                         throw new DreamRunTimeException("参数" + paramInfo.getParamName() + "获取类型转换器失败，" + e.getMessage(), e);
                     }
@@ -104,60 +105,34 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
         return new Assist(configuration.getInvokerFactory(), customMap);
     }
 
-    protected ParamType getParamType(Configuration configuration, ScanInvoker.ScanInfo scanInfo, Map<String, ScanInvoker.ParamScanInfo> paramScanInfoMap, MarkInvoker.ParamInfo paramInfo) throws TypeHandlerNotFoundException {
+    protected ParamType getParamType(Configuration configuration, ScanInvoker.ScanInfo scanInfo, MarkInvoker.ParamInfo paramInfo) throws TypeHandlerNotFoundException {
+        Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = scanInfo.getTableScanInfoMap();
         TypeHandlerFactory typeHandlerFactory = configuration.getTypeHandlerFactory();
-        TableFactory tableFactory = configuration.getTableFactory();
-        ScanInvoker.ParamScanInfo paramScanInfo = paramScanInfoMap.get(paramInfo.getParamName());
-        Object value = paramInfo.getParamValue();
-        if (paramScanInfo != null) {
-            String table = paramScanInfo.getTable();
-            String column = paramScanInfo.getColumn();
-            TableInfo tableInfo = null;
-            Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap = scanInfo.getTableScanInfoMap();
-            if (ObjectUtil.isNull(table)) {
-                Collection<ScanInvoker.TableScanInfo> tableScanInfoList = tableScanInfoMap.values();
-                if (tableFactory != null) {
-                    for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoList) {
-                        tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
-                        if (tableInfo != null) {
-                            break;
-                        }
-                    }
-                }
-            } else {
-                ScanInvoker.TableScanInfo tableScanInfo = tableScanInfoMap.get(table);
-                if (tableScanInfo != null) {
-                    table = tableScanInfo.getTable();
-                }
-                if (tableFactory != null) {
-                    tableInfo = tableFactory.getTableInfo(table);
-                }
-            }
-            int jdbcType = Types.NULL;
-            ColumnInfo columnInfo = null;
-            TypeHandler typeHandler = null;
+        if (tableScanInfoMap != null && tableScanInfoMap.size() == 1) {
+            ScanInvoker.TableScanInfo[] tableScanInfos = tableScanInfoMap.values().toArray(new ScanInvoker.TableScanInfo[0]);
+            ScanInvoker.TableScanInfo tableScanInfo = tableScanInfos[0];
+            String table = tableScanInfo.getTable();
+            TableFactory tableFactory = configuration.getTableFactory();
+            TableInfo tableInfo = tableFactory.getTableInfo(table);
             if (tableInfo != null) {
-                columnInfo = tableInfo.getColumnInfo(column);
+                String paramName = paramInfo.getParamName();
+                int index = paramName.lastIndexOf(".");
+                if (index > 0) {
+                    paramName = paramName.substring(index + 1);
+                }
+                ColumnInfo columnInfo = tableInfo.getColumnInfo(paramName);
                 if (columnInfo != null) {
-                    jdbcType = columnInfo.getJdbcType();
-                    typeHandler = columnInfo.getTypeHandler();
+                    TypeHandler typeHandler = columnInfo.getTypeHandler();
+                    if (typeHandler == null) {
+                        Class<?> javaType = columnInfo.getField().getType();
+                        typeHandler = typeHandlerFactory.getTypeHandler(javaType, columnInfo.getJdbcType());
+                    }
+                    return new ParamType(columnInfo, typeHandler);
                 }
             }
-            if (typeHandler == null) {
-                Class<?> javaType;
-                if (columnInfo != null) {
-                    javaType = columnInfo.getField().getType();
-                } else if (value != null) {
-                    javaType = value.getClass();
-                } else {
-                    javaType = Object.class;
-                }
-                typeHandler = typeHandlerFactory.getTypeHandler(javaType, jdbcType);
-            }
-            return new ParamType(columnInfo, typeHandler);
-        } else {
-            return new ParamType(null, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), Types.NULL));
         }
+        Object value = paramInfo.getParamValue();
+        return new ParamType(null, typeHandlerFactory.getTypeHandler(value == null ? Object.class : value.getClass(), Types.NULL));
     }
 
     public void setToSQL(ToSQL toSQL) {

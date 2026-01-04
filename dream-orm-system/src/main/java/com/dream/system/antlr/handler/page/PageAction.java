@@ -29,8 +29,8 @@ public class PageAction implements InitAction {
             argMap = new ObjectMap(arg);
         }
         ObjectWrapper wrapper = ObjectWrapper.wrapper(arg);
-        long total = (long) wrapper.get(property);
-        if (total == 0) {
+        Long total = (Long) wrapper.get(property);
+        if (total == null || total == 0) {
             Object result = session.execute(methodInfo, argMap);
             wrapper.set(property, result);
         }

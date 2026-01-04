@@ -29,8 +29,6 @@ public class ScanInvoker extends AbstractInvoker {
 
     private final DeleteScanHandler deleteScanHandler;
 
-    private final ParamScanHandler paramScanHandler;
-
     private final InvokerScanHandler invokerScanHandler;
 
     private final ScanInfo scanInfo = new ScanInfo();
@@ -40,7 +38,6 @@ public class ScanInvoker extends AbstractInvoker {
         insertScanHandler = new InsertScanHandler(scanInfo);
         updateScanHandler = new UpdateScanHandler(scanInfo);
         deleteScanHandler = new DeleteScanHandler(scanInfo);
-        paramScanHandler = new ParamScanHandler(scanInfo);
         invokerScanHandler = new InvokerScanHandler(scanInfo);
     }
 
@@ -85,7 +82,7 @@ public class ScanInvoker extends AbstractInvoker {
 
     @Override
     public Handler[] handler() {
-        return new Handler[]{queryScanHandler, insertScanHandler, updateScanHandler, deleteScanHandler, paramScanHandler, invokerScanHandler};
+        return new Handler[]{queryScanHandler, insertScanHandler, updateScanHandler, deleteScanHandler, invokerScanHandler};
     }
 
     public ScanInfo getScanInfo() {
@@ -99,7 +96,6 @@ public class ScanInvoker extends AbstractInvoker {
 
     public static class ScanInfo {
         private final Map<String, TableScanInfo> tableScanInfoMap = new LowHashMap<>();
-        private final Map<String, ParamScanInfo> paramScanInfoMap = new HashMap<>(4);
         private final List<InvokerStatement> invokerStatementList = new ArrayList<>();
         private String command = "NONE";
         private List<MarkInvoker.ParamInfo> paramInfoList;
@@ -107,10 +103,6 @@ public class ScanInvoker extends AbstractInvoker {
 
         public void add(TableScanInfo tableScanInfo) {
             tableScanInfoMap.put(tableScanInfo.getTable(), tableScanInfo);
-        }
-
-        public void add(ParamScanInfo paramScanInfo) {
-            paramScanInfoMap.put(paramScanInfo.getParam(), paramScanInfo);
         }
 
         public void add(InvokerStatement invokerStatement) {
@@ -127,11 +119,6 @@ public class ScanInvoker extends AbstractInvoker {
 
         public Map<String, TableScanInfo> getTableScanInfoMap() {
             return tableScanInfoMap;
-        }
-
-
-        public Map<String, ParamScanInfo> getParamScanInfoMap() {
-            return paramScanInfoMap;
         }
 
         public List<InvokerStatement> getInvokerStatementList() {
@@ -181,37 +168,6 @@ public class ScanInvoker extends AbstractInvoker {
 
         public boolean isMaster() {
             return master;
-        }
-
-    }
-
-    public static class ParamScanInfo {
-        private final String database;
-        private final String table;
-        private final String column;
-        private final String param;
-
-        public ParamScanInfo(String database, String table, String column, String param) {
-            this.database = database;
-            this.table = table;
-            this.column = column;
-            this.param = param;
-        }
-
-        public String getDatabase() {
-            return database;
-        }
-
-        public String getTable() {
-            return table;
-        }
-
-        public String getColumn() {
-            return column;
-        }
-
-        public String getParam() {
-            return param;
         }
 
     }
