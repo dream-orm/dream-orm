@@ -116,23 +116,25 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
             TableInfo tableInfo = tableFactory.getTableInfo(table);
             if (tableInfo != null) {
                 String paramName = paramInfo.getParamName();
-                String[] paramNames = paramName.split("\\.");
-                if (paramNames.length > 1) {
-                    for (int i = paramNames.length - 1; i >= 0; i--) {
-                        if (!Character.isDigit(paramNames[i].charAt(0))) {
-                            paramName = paramNames[i];
-                            break;
+                if (paramName != null) {
+                    String[] paramNames = paramName.split("\\.");
+                    if (paramNames.length > 1) {
+                        for (int i = paramNames.length - 1; i >= 0; i--) {
+                            if (!Character.isDigit(paramNames[i].charAt(0))) {
+                                paramName = paramNames[i];
+                                break;
+                            }
                         }
                     }
-                }
-                ColumnInfo columnInfo = tableInfo.getColumnInfo(paramName);
-                if (columnInfo != null) {
-                    TypeHandler typeHandler = columnInfo.getTypeHandler();
-                    if (typeHandler == null) {
-                        Class<?> javaType = columnInfo.getField().getType();
-                        typeHandler = typeHandlerFactory.getTypeHandler(javaType, columnInfo.getJdbcType());
+                    ColumnInfo columnInfo = tableInfo.getColumnInfo(paramName);
+                    if (columnInfo != null) {
+                        TypeHandler typeHandler = columnInfo.getTypeHandler();
+                        if (typeHandler == null) {
+                            Class<?> javaType = columnInfo.getField().getType();
+                            typeHandler = typeHandlerFactory.getTypeHandler(javaType, columnInfo.getJdbcType());
+                        }
+                        return new ParamType(columnInfo, typeHandler);
                     }
-                    return new ParamType(columnInfo, typeHandler);
                 }
             }
         }
