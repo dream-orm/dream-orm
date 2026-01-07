@@ -3,7 +3,7 @@
 
 ```xml
 <dependency>
-    <groupId>com.dream-orm</groupId>
+    <groupId>io.github.dream-orm</groupId>
     <artifactId>dream-orm-tdengine</artifactId>
     <version>${dream-orm.version}</version>
 </dependency>

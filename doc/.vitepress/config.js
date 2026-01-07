@@ -2,7 +2,7 @@ import nav from './nav';
 import sidebar from './sidebar';
 
 module.exports = {
-    base: '/orm/',
+    base: '/dream-orm/',
     title: 'dream-orm',
     description: '一个优雅、无依赖、高性能的orm框架',
     lang: 'zh-CN',

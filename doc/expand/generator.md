@@ -4,7 +4,7 @@
 
 ```xml
 <dependency>
-    <groupId>com.dream-orm</groupId>
+    <groupId>io.github.dream-orm</groupId>
     <artifactId>dream-orm-generator</artifactId>
     <version>${dream-orm.version}</version>
 </dependency>

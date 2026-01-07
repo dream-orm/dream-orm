@@ -5,7 +5,7 @@
 
 <p align="center">
     <a target="_blank" href="https://search.maven.org/search?q=dream-orm">
-        <img src="https://img.shields.io/maven-central/v/com.dream-orm/dream-orm?label=Maven%20Central" alt="Maven" />
+        <img src="https://img.shields.io/maven-central/v/io.github.dream-orm/dream-orm?label=Maven%20Central" alt="Maven" />
     </a>
     <a target="_blank" href="https://www.apache.org/licenses/LICENSE-2.0.txt">
 		<img src="https://img.shields.io/:license-Apache2-blue.svg" alt="Apache 2" />
@@ -87,7 +87,7 @@ CREATE TABLE account
 
 ```xml
 <dependency>
-    <groupId>com.dream-orm</groupId>
+    <groupId>io.github.dream-orm</groupId>
     <artifactId>dream-orm-spring-boot-starter</artifactId>
     <version>${dream-orm.version}</version>
 </dependency>
