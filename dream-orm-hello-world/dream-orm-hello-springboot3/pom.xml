@@ -50,7 +50,7 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.dream-orm</groupId>
+            <groupId>io.github.dream-orm</groupId>
             <artifactId>dream-orm-spring-boot-starter</artifactId>
             <version>1.4.0</version>
         </dependency>

@@ -3,7 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.dream-orm</groupId>
+    <groupId>io.github.dream-orm</groupId>
     <artifactId>dream-orm-hello-world</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
@@ -31,17 +31,17 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.dream-orm</groupId>
+                <groupId>io.github.dream-orm</groupId>
                 <artifactId>dream-orm-spring-boot-starter</artifactId>
                 <version>${dream-orm.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.dream-orm</groupId>
+                <groupId>io.github.dream-orm</groupId>
                 <artifactId>dream-orm-generator</artifactId>
                 <version>${dream-orm.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.dream-orm</groupId>
+                <groupId>io.github.dream-orm</groupId>
                 <artifactId>dream-orm-tdengine</artifactId>
                 <version>${dream-orm.version}</version>
             </dependency>
@@ -56,7 +56,7 @@
                 <version>${spring-boot.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.dream-orm</groupId>
+                <groupId>io.github.dream-orm</groupId>
                 <artifactId>dream-orm-solon-plugin</artifactId>
                 <version>${dream-orm.version}</version>
             </dependency>

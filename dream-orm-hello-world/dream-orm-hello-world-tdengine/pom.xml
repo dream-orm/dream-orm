@@ -3,7 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.dream-orm</groupId>
+        <groupId>io.github.dream-orm</groupId>
         <artifactId>dream-orm-hello-world</artifactId>
         <version>1.0.0</version>
     </parent>
@@ -12,11 +12,11 @@
     <artifactId>dream-orm-hello-world-tdengine</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.dream-orm</groupId>
+            <groupId>io.github.dream-orm</groupId>
             <artifactId>dream-orm-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.dream-orm</groupId>
+            <groupId>io.github.dream-orm</groupId>
             <artifactId>dream-orm-tdengine</artifactId>
         </dependency>
         <dependency>

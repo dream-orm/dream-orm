@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>dream-orm</artifactId>
-        <groupId>com.dream-orm</groupId>
+        <groupId>io.github.dream-orm</groupId>
         <version>1.4.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +13,7 @@
     <artifactId>dream-orm-jdbc</artifactId>
     <dependencies>
         <dependency>
-            <groupId>com.dream-orm</groupId>
+            <groupId>io.github.dream-orm</groupId>
             <artifactId>dream-orm-system</artifactId>
             <version>1.4.0</version>
         </dependency>

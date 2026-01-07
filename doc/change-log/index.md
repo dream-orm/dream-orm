@@ -13,6 +13,7 @@
 - 新增：templateMapper支持count
 - 优化：fetch增加fast参数，性能优化
 - 优化：flex select支持distinct
+- 其他：groupId修改
 
 ## v1.3.8
 
