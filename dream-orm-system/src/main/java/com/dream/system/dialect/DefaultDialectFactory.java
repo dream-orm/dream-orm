@@ -116,9 +116,14 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
             TableInfo tableInfo = tableFactory.getTableInfo(table);
             if (tableInfo != null) {
                 String paramName = paramInfo.getParamName();
-                int index = paramName.lastIndexOf(".");
-                if (index > 0) {
-                    paramName = paramName.substring(index + 1);
+                String[] paramNames = paramName.split("\\.");
+                if (paramNames.length > 1) {
+                    for (int i = paramNames.length - 1; i >= 0; i--) {
+                        if (!Character.isDigit(paramNames[i].charAt(0))) {
+                            paramName = paramNames[i];
+                            break;
+                        }
+                    }
                 }
                 ColumnInfo columnInfo = tableInfo.getColumnInfo(paramName);
                 if (columnInfo != null) {

@@ -65,7 +65,7 @@ public class ForEachInvoker extends AbstractInvoker {
                 Statement[] statements = new Statement[collection.size()];
                 for (Object item : collection) {
                     statements[index] = new SymbolStatement.MarkStatement();
-                    paramInfoList.add(new MarkInvoker.ParamInfo(list + "[" + index + "]", item));
+                    paramInfoList.add(new MarkInvoker.ParamInfo(list + "." + index, item));
                     index++;
                 }
                 listColumnStatement.add(statements);
