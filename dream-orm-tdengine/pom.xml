@@ -5,7 +5,7 @@
     <parent>
         <artifactId>dream-orm</artifactId>
         <groupId>io.github.dream-orm</groupId>
-        <version>1.4.0</version>
+        <version>1.4.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,12 +16,12 @@
         <dependency>
             <groupId>io.github.dream-orm</groupId>
             <artifactId>dream-orm-system</artifactId>
-            <version>1.4.0</version>
+            <version>1.4.1</version>
         </dependency>
         <dependency>
             <groupId>io.github.dream-orm</groupId>
             <artifactId>dream-orm-flex</artifactId>
-            <version>1.4.0</version>
+            <version>1.4.1</version>
         </dependency>
     </dependencies>
 </project>
