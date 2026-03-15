@@ -292,6 +292,10 @@ public class ExprReader extends StringReader {
         while ((c = read()) != -1 && (ExprUtil.isNumber(c) || ExprUtil.isDot(c))) {
             count++;
         }
+        if(ExprUtil.isLetter(c)){
+            reset();
+            return pushLetter();
+        }
         reset();
         char[] chars = new char[count];
         int len = read(chars, 0, count);
