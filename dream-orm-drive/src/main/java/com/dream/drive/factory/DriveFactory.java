@@ -1,5 +1,6 @@
 package com.dream.drive.factory;
 
+import com.dream.antlr.sql.ToSQL;
 import com.dream.flex.mapper.FlexMapper;
 import com.dream.system.core.session.Session;
 import com.dream.template.mapper.TemplateMapper;
@@ -25,4 +26,11 @@ public interface DriveFactory {
      * @return Flex操作接口
      */
     FlexMapper flexMapper();
+
+    /**
+     * 目标数据库方言
+     *
+     * @return 目标数据库方言
+     */
+    ToSQL toSQL();
 }

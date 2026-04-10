@@ -144,9 +144,10 @@ public class DefaultDriveFactory implements DriveFactory {
     /**
      * 目标数据库方言
      *
-     * @return
+     * @return 目标数据库方言
      */
-    protected ToSQL toSQL() {
+    @Override
+    public ToSQL toSQL() {
         ToSQL toSQL;
         String strToSQL = dreamProperties.getToSQL();
         if (!ObjectUtil.isNull(strToSQL)) {
