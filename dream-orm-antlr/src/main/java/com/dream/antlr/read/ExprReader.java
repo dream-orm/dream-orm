@@ -109,14 +109,11 @@ public class ExprReader extends StringReader {
             case 33:
                 mark();
                 c = read();
-                switch (c) {
-                    case 61:
-                        lastInfo = new ExprInfo(ExprType.NEQ, "<>", getStart(), getEnd());
-                        break;
-                    default:
-                        reset();
-                        lastInfo = new ExprInfo(ExprType.ERR, "!", getStart(), getEnd());
-                        break;
+                if (c == 61) {
+                    lastInfo = new ExprInfo(ExprType.NEQ, "<>", getStart(), getEnd());
+                } else {
+                    reset();
+                    lastInfo = new ExprInfo(ExprType.ERR, "!", getStart(), getEnd());
                 }
                 break;
             case 37:
@@ -135,7 +132,8 @@ public class ExprReader extends StringReader {
                 lastInfo = new ExprInfo(ExprType.ADD, "+", getStart(), getEnd());
                 break;
             case 45:
-                lastInfo = new ExprInfo(ExprType.SUB, "-", getStart(), getEnd());
+                reset();
+                lastInfo = pushSkipComment();
                 break;
             case 46:
                 lastInfo = new ExprInfo(ExprType.DOT, ".", getStart(), getEnd());
@@ -292,7 +290,7 @@ public class ExprReader extends StringReader {
         while ((c = read()) != -1 && (ExprUtil.isNumber(c) || ExprUtil.isDot(c))) {
             count++;
         }
-        if(ExprUtil.isLetter(c)){
+        if (ExprUtil.isLetter(c)) {
             reset();
             return pushLetter();
         }
@@ -302,6 +300,32 @@ public class ExprReader extends StringReader {
         String info = new String(chars, 0, len);
         return new ExprInfo(ExprType.NUMBER, info, getStart(), getEnd());
 
+    }
+
+    private ExprInfo pushSkipComment() {
+        mark();
+        if (read() == 45) {
+            if (read() == 45) {
+                if (read() == 32) {
+                    int count = 3;
+                    int c = read();
+                    while (c != -1 && c != 10) {
+                        c = read();
+                        count++;
+                    }
+                    reset();
+                    char[] chars = new char[count];
+                    int len = read(chars, 0, count);
+                    String comment = new String(chars, 0, len);
+                    return push();
+                }
+            }
+            reset();
+            read();
+            return new ExprInfo(ExprType.SUB, "-", getStart(), getEnd());
+        } else {
+            return push();
+        }
     }
 
     public ExprInfo getLastInfo() {
