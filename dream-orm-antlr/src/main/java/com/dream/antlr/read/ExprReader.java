@@ -133,7 +133,10 @@ public class ExprReader extends StringReader {
                 break;
             case 45:
                 reset();
-                lastInfo = pushSkipComment();
+                lastInfo = pushComment();
+                if (lastInfo.getExprType() == ExprType.COMMENT) {
+                    lastInfo = push();
+                }
                 break;
             case 46:
                 lastInfo = new ExprInfo(ExprType.DOT, ".", getStart(), getEnd());
@@ -302,7 +305,7 @@ public class ExprReader extends StringReader {
 
     }
 
-    private ExprInfo pushSkipComment() {
+    private ExprInfo pushComment() {
         mark();
         if (read() == 45) {
             if (read() == 45) {
@@ -317,13 +320,14 @@ public class ExprReader extends StringReader {
                     char[] chars = new char[count];
                     int len = read(chars, 0, count);
                     String comment = new String(chars, 0, len);
-                    return push();
+                    return new ExprInfo(ExprType.COMMENT, comment, getStart(), getEnd());
                 }
             }
             reset();
             read();
             return new ExprInfo(ExprType.SUB, "-", getStart(), getEnd());
         } else {
+            reset();
             return push();
         }
     }

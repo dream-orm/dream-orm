@@ -27,6 +27,24 @@ public class HelloWorldAntlrTest {
     }
 
     @Test
+    public void testComment() {
+        testSqlForMany("-- =============================================\n" +
+                "-- 聚合查询：统计每个部门的平均薪资和员工数\n" +
+                "-- =============================================\n" +
+                "SELECT \n" +
+                "    d.dept_name AS '部门名称',\n" +
+                "    COUNT(e.emp_id) AS '员工人数',                -- 统计员工数量\n" +
+                "    COALESCE(AVG(e.salary), 0) AS '平均月薪',      -- 平均薪资，无员工显示0\n" +
+                "    MAX(e.salary) AS '最高月薪',\n" +
+                "    MIN(e.salary) AS '最低月薪'\n" +
+                "FROM departments d\n" +
+                "LEFT JOIN employees e ON d.dept_id = e.dept_id\n" +
+                "GROUP BY d.dept_id, d.dept_name            -- 按部门分组\n" +
+                "HAVING COUNT(e.emp_id) > 0                 -- 只显示有员工的部门\n" +
+                "ORDER BY 平均月薪 DESC;                     -- 按平均薪资降序");
+    }
+
+    @Test
     public void testChina() {
         testSqlForMany("SELECT \n" +
                 "  DATE_FORMAT(DATART_VTABLE.NO1, '%Y-%m-%d') AS NO1（按日） \n" +

@@ -191,6 +191,7 @@ public enum ExprType {
     OVER,
     PARTITION,
     MARK,
+    COMMENT,
     INVOKER,
     SEMICOLON,
     TO_CHAR,
