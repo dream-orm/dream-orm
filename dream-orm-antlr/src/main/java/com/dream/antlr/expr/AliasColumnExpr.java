@@ -26,35 +26,14 @@ public class AliasColumnExpr extends HelperExpr {
 
     @Override
     protected Statement exprHelp(Statement statement) throws AntlrException {
-        aliasStatement.setColumn(statement);
-        setExprTypes(ExprType.LETTER, ExprType.SINGLE_MARK, ExprType.STR, ExprType.JAVA_STR, ExprType.AS, ExprType.NIL);
-        return expr();
-    }
-
-    @Override
-    protected Statement exprLetter(ExprInfo exprInfo) throws AntlrException {
-        return exprAlias(exprInfo);
-    }
-
-    @Override
-    protected Statement exprSingleMark(ExprInfo exprInfo) throws AntlrException {
-        return exprAlias(exprInfo);
-    }
-
-    @Override
-    protected Statement exprStr(ExprInfo exprInfo) throws AntlrException {
-        return exprAlias(exprInfo);
-    }
-
-    @Override
-    protected Statement exprJavaStr(ExprInfo exprInfo) throws AntlrException {
-        return exprAlias(exprInfo);
-    }
-
-    protected Statement exprAlias(ExprInfo exprInfo) throws AntlrException {
-        SymbolExpr symbolExpr = new SymbolExpr(exprReader, myFunctionFactory);
-        aliasStatement.setAlias(symbolExpr.expr());
-        setExprTypes(ExprType.NIL);
+        Statement column = aliasStatement.getColumn();
+        if (column == null) {
+            aliasStatement.setColumn(statement);
+            setExprTypes(ExprType.HELP, ExprType.AS, ExprType.NIL);
+        } else {
+            aliasStatement.setAlias(statement);
+            setExprTypes(ExprType.NIL);
+        }
         return expr();
     }
 
@@ -70,7 +49,7 @@ public class AliasColumnExpr extends HelperExpr {
     protected Statement exprAs(ExprInfo exprInfo) throws AntlrException {
         push();
         aliasStatement.setShowAlias(true);
-        setExprTypes(ExprType.LETTER, ExprType.SINGLE_MARK, ExprType.STR, ExprType.JAVA_STR);
+        setExprTypes(ExprType.HELP);
         return expr();
     }
 
