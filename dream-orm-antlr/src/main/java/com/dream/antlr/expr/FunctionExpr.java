@@ -848,7 +848,7 @@ public class FunctionExpr extends SqlExpr {
 
         @Override
         public Statement nil() {
-            return func.getParamsStatement();
+            return func;
         }
 
         @Override
