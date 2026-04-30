@@ -220,6 +220,15 @@ public class ExprReader extends StringReader {
         return lastInfo;
     }
 
+    public ExprInfo next() {
+        int nextMark = next;
+        ExprInfo lastInfoMark = lastInfo;
+        ExprInfo exprInfo = push();
+        next = nextMark;
+        lastInfo = lastInfoMark;
+        return exprInfo;
+    }
+
     private ExprInfo pushLetter() {
         mark();
         int count = 0;

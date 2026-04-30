@@ -87,7 +87,6 @@ public final class Constant {
             ExprType.WEEKOFYEAR,
             ExprType.YEAR,
             ExprType.ROW_NUMBER,
-            ExprType.OVER,
             ExprType.CAST,
             ExprType.CONVERT,
             ExprType.COALESCE,
@@ -172,6 +171,7 @@ public final class Constant {
             ExprType.DISTINCT,
             ExprType.FROM,
             ExprType.SELECT,
+            ExprType.OVER,
             ExprType.SEPARATOR,
             ExprType.AS,
             ExprType.WITH

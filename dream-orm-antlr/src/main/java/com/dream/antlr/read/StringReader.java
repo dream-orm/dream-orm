@@ -3,10 +3,10 @@ package com.dream.antlr.read;
 public class StringReader {
     private final int length;
     protected String value;
-    private int next = 0;
-    private int mark = 0;
-    private int start = 0;
-    private int end = 0;
+    protected int next = 0;
+    protected int mark = 0;
+    protected int start = 0;
+    protected int end = 0;
 
     public StringReader(String value) {
         this.value = value == null ? "" : value;

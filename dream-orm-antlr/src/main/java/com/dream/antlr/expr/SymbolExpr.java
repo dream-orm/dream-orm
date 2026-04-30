@@ -18,11 +18,10 @@ public class SymbolExpr extends SqlExpr {
 
     public SymbolExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
         super(exprReader, myFunctionFactory);
-        setExprTypes(ExprType.STR,
+        setExprTypes(Constant.FUNCTION).addExprTypes(ExprType.STR,
                 ExprType.JAVA_STR,
                 ExprType.MARK,
                 ExprType.SINGLE_MARK,
-                ExprType.LETTER,
                 ExprType.NUMBER,
                 ExprType.STAR,
                 ExprType.NULL);
@@ -55,6 +54,11 @@ public class SymbolExpr extends SqlExpr {
         statement = new SymbolStatement.NumberStatement(exprInfo.getInfo());
         setExprTypes(ExprType.NIL);
         return expr();
+    }
+
+    @Override
+    protected Statement exprFunction(ExprInfo exprInfo) throws AntlrException {
+        return exprLetter(exprInfo);
     }
 
     @Override
