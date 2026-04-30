@@ -18,7 +18,9 @@ public class SymbolExpr extends SqlExpr {
 
     public SymbolExpr(ExprReader exprReader, MyFunctionFactory myFunctionFactory) {
         super(exprReader, myFunctionFactory);
-        setExprTypes(Constant.FUNCTION).addExprTypes(ExprType.STR,
+        setExprTypes(Constant.FUNCTION).addExprTypes(
+                ExprType.LETTER,
+                ExprType.STR,
                 ExprType.JAVA_STR,
                 ExprType.MARK,
                 ExprType.SINGLE_MARK,
