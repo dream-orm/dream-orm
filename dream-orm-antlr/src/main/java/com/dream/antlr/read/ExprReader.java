@@ -241,8 +241,10 @@ public class ExprReader extends StringReader {
         int len = read(chars, 0, count);
         String info = new String(chars, 0, len);
         ExprType exprType = ExprUtil.getExprTypeInLetter(info);
-        if (ExprType.LETTER == exprType && ExprUtil.isLBrace(c)) {
-            return new ExprInfo(ExprType.MY_FUNCTION, info, getStart(), getEnd());
+        if (!ExprUtil.isKeyWord(exprType) && ExprUtil.isFunction(exprType) && !ExprUtil.isLBrace(c)) {
+            exprType = ExprType.LETTER;
+        } else if (ExprType.LETTER == exprType && ExprUtil.isLBrace(c)) {
+            exprType = ExprType.MY_FUNCTION;
         }
         return new ExprInfo(exprType, info, getStart(), getEnd());
     }

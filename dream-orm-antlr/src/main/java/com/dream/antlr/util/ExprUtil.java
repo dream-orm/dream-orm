@@ -1,8 +1,16 @@
 package com.dream.antlr.util;
 
+import com.dream.antlr.config.Constant;
 import com.dream.antlr.config.ExprType;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class ExprUtil {
+    private static final Set<ExprType> keywordSet = new HashSet<>(Arrays.asList(Constant.KEYWORD));
+    private static final Set<ExprType> functionSet = new HashSet<>(Arrays.asList(Constant.FUNCTION));
+
     public static boolean isLetter(int c) {
         return 65 <= c && c <= 90 || 97 <= c && c <= 122 || c == 95 || c == 83 || c >= 19968;
     }
@@ -358,6 +366,14 @@ public class ExprUtil {
 
     public static boolean isLBrace(int c) {
         return c == 40;
+    }
+
+    public static boolean isKeyWord(ExprType exprType) {
+        return keywordSet.contains(exprType);
+    }
+
+    public static boolean isFunction(ExprType exprType) {
+        return functionSet.contains(exprType);
     }
 
     public static boolean isRBrace(int c) {

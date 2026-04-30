@@ -27,6 +27,11 @@ public class HelloWorldAntlrTest {
     }
 
     @Test
+    public void testFunctionName() {
+        testSqlForMany("SELECT pi.count count from pi pi");
+    }
+
+    @Test
     public void testComment() {
         testSqlForMany("-- =============================================\n" +
                 "-- 聚合查询：统计每个部门的平均薪资和员工数\n" +

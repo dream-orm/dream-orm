@@ -827,7 +827,7 @@ public class FunctionExpr extends SqlExpr {
         protected Statement exprFunction(ExprInfo exprInfo) throws AntlrException {
             push();
             func.setFunctionName(exprInfo.getInfo());
-            setExprTypes(ExprType.LBRACE, ExprType.NIL);
+            setExprTypes(ExprType.LBRACE);
             return expr();
         }
 
@@ -848,12 +848,7 @@ public class FunctionExpr extends SqlExpr {
 
         @Override
         public Statement nil() {
-            Statement paramsStatement = func.getParamsStatement();
-            if (paramsStatement == null) {
-                return new SymbolStatement.LetterStatement(func.getFunctionName());
-            } else {
-                return func;
-            }
+            return func.getParamsStatement();
         }
 
         @Override
@@ -1298,7 +1293,7 @@ public class FunctionExpr extends SqlExpr {
         @Override
         protected Statement exprMyFunction(ExprInfo exprInfo) throws AntlrException {
             push();
-            setExprTypes(ExprType.LBRACE, ExprType.NIL);
+            setExprTypes(ExprType.LBRACE);
             return expr();
         }
 
