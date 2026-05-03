@@ -11,11 +11,6 @@ public class ExprReader extends StringReader {
         super(sql);
     }
 
-
-    public String getSql() {
-        return this.value;
-    }
-
     public ExprInfo push() {
         mark();
         int c = read();
@@ -236,12 +231,15 @@ public class ExprReader extends StringReader {
         while ((c = read()) != -1 && (ExprUtil.isLetter(c) || ExprUtil.isNumber(c))) {
             count++;
         }
+//        while (c == 32) {
+//            c = read();
+//        }
         reset();
         char[] chars = new char[count];
         int len = read(chars, 0, count);
         String info = new String(chars, 0, len);
         ExprType exprType = ExprUtil.getExprTypeInLetter(info);
-        if (!ExprUtil.isKeyWord(exprType) && ExprUtil.isFunction(exprType) && !ExprUtil.isLBrace(c)) {
+        if (!ExprUtil.isLBrace(c) && !ExprUtil.isKeyWord(exprType) && ExprUtil.isFunction(exprType)) {
             exprType = ExprType.LETTER;
         } else if (ExprType.LETTER == exprType && ExprUtil.isLBrace(c)) {
             exprType = ExprType.MY_FUNCTION;

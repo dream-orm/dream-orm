@@ -7,9 +7,9 @@ import com.zaxxer.hikari.HikariDataSource;
 public class HelloWordGeneratorTest {
     public static void main(String[] args) {
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/sooth");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("dream.ai@sooth2024");
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/demo");
+        dataSource.setUsername("root");
+        dataSource.setPassword("123");
         new Generator(dataSource, new GeneratorHandlerImpl()).generate();
     }
 
@@ -17,7 +17,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         protected String basePackage() {
-            return "com.sooth.module.gpt.token";
+            return "com.sooth.module.product.product";
         }
 
         @Override
@@ -32,7 +32,7 @@ public class HelloWordGeneratorTest {
 
         @Override
         public boolean support(String table) {
-            return table.contains("token");
+            return table.equals("product");
         }
     }
 }
