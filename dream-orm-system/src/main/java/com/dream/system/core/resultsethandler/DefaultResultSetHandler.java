@@ -146,22 +146,18 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             String columnLabel = metaData.getColumnLabel(i);
             String tableName = metaData.getTableName(i);
             ColumnInfo columnInfo = null;
+            TypeHandler typeHandler = null;
             if (!ObjectUtil.isNull(tableName)) {
                 columnInfo = getColumnInfo(mappedStatement, tableName, columnLabel);
                 if (columnInfo != null) {
                     columnLabel = columnInfo.getName();
+                    typeHandler = columnInfo.getTypeHandler();
                     if (columnInfo.getJdbcType() != Types.NULL && columnInfo.getJdbcType() != jdbcType) {
                         jdbcType = columnInfo.getJdbcType();
                     }
                 }
             }
-            MappedColumn.Builder builder = new MappedColumn
-                    .Builder()
-                    .index(i)
-                    .jdbcType(jdbcType)
-                    .table(tableName)
-                    .columnLabel(columnLabel)
-                    .columnInfo(columnInfo);
+            MappedColumn.Builder builder = new MappedColumn.Builder().index(i).jdbcType(jdbcType).table(tableName).columnLabel(columnLabel).columnInfo(columnInfo).typeHandler(typeHandler);
             try {
                 linkHandler(builder, mappedStatement, mappedResult, new LowHashSet(tableSet));
             } catch (TypeHandlerNotFoundException e) {
@@ -198,21 +194,19 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     }
 
     protected boolean linkHandlerForBase(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) throws TypeHandlerNotFoundException {
-        builder.typeHandler(mappedStatement
-                .getConfiguration()
-                .getTypeHandlerFactory()
-                .getTypeHandler(mappedResult.getColType()
-                        , builder.getJdbcType()));
+        TypeHandler typeHandler = builder.getTypeHandler();
+        if(typeHandler==null||typeHandler instanceof ObjectTypeHandler){
+            builder.typeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(mappedResult.getColType(), builder.getJdbcType()));
+        }
         mappedResult.add(builder.build());
         return true;
     }
 
     protected boolean linkHandlerForMap(MappedColumn.Builder builder, MappedStatement mappedStatement, MappedResult mappedResult, Set<String> tableSet) throws TypeHandlerNotFoundException {
-        builder.typeHandler(mappedStatement
-                .getConfiguration()
-                .getTypeHandlerFactory()
-                .getTypeHandler(Object.class
-                        , builder.getJdbcType()));
+        TypeHandler typeHandler = builder.getTypeHandler();
+        if(typeHandler==null||typeHandler instanceof ObjectTypeHandler){
+            builder.typeHandler(mappedStatement.getConfiguration().getTypeHandlerFactory().getTypeHandler(Object.class, builder.getJdbcType()));
+        }
         mappedResult.add(builder.build());
         return true;
     }
@@ -239,8 +233,9 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                             TypeHandler typeHandler = builder.getTypeHandler();
                             if (typeHandler == null || typeHandler instanceof ObjectTypeHandler) {
                                 typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), builder.getJdbcType());
+                                builder.typeHandler(typeHandler);
                             }
-                            builder.field(field).typeHandler(typeHandler);
+                            builder.field(field);
                             if (!ObjectUtil.isNull(curTableName)) {
                                 mappedResult.add(builder.build());
                                 return true;

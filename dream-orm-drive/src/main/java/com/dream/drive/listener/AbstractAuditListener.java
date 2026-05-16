@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractAuditListener implements Listener {
+
     @Override
     public void before(MappedStatement mappedStatement, Session session) {
         if (intercept(mappedStatement)) {
@@ -54,6 +55,7 @@ public abstract class AbstractAuditListener implements Listener {
                             }
                             primValueMap.put(column, value);
                         }
+
                         List<AuditColumn> auditColumnList = new ArrayList<>(columnValueMap.size());
                         if (Command.INSERT.equals(command)) {
                             for (Map.Entry<String, Object> entry : columnValueMap.entrySet()) {
@@ -73,10 +75,8 @@ public abstract class AbstractAuditListener implements Listener {
                                         ColumnInfo columnInfo = tableInfo.getColumnInfo(key);
                                         oldValue = valueMap.get(columnInfo.getName());
                                     }
-                                    if (value != null || oldValue != null) {
-                                        if (value == null || !value.equals(oldValue)) {
-                                            auditColumnList.add(new AuditColumn(key, oldValue, value));
-                                        }
+                                    if (isValueChanged(oldValue, value)) {
+                                        auditColumnList.add(new AuditColumn(key, oldValue, value));
                                     }
                                 } else {
                                     auditColumnList.add(new AuditColumn(key, null, value));
@@ -114,7 +114,6 @@ public abstract class AbstractAuditListener implements Listener {
 
     @Override
     public void exception(Throwable e, MappedStatement mappedStatement, Session session) {
-
     }
 
     protected boolean intercept(MappedStatement mappedStatement) {
@@ -128,14 +127,39 @@ public abstract class AbstractAuditListener implements Listener {
     protected Map<String, Object> query(MappedStatement mappedStatement, TableInfo tableInfo, Set<String> columnSet, Map<String, Object> primValueMap, Session session) {
         StringBuilder builder = new StringBuilder();
         if (columnSet != null && !columnSet.isEmpty()) {
-            builder.append("select ").append(columnSet.stream().map(column -> "`" + column + "`").collect(Collectors.joining(","))).append(" from `").append(tableInfo.getTable()).append("` where ");
-            builder.append(primValueMap.keySet().stream().map(column -> "`" + column + "` =@?(" + column + ")").collect(Collectors.joining(" and ")));
+            builder.append("select  ").append(columnSet.stream().map(column -> "`" + column + "`").collect(Collectors.joining(", "))).append(" from `").append(tableInfo.getTable()).append("` where  ");
+            builder.append(primValueMap.keySet().stream().map(column -> "`" + column + "` = @?(" + column + ")").collect(Collectors.joining(" and ")));
             return session.selectOne(builder.toString(), primValueMap, Map.class);
         }
         return null;
     }
 
     protected abstract void handle(Command command, TableInfo tableInfo, Map<String, Object> primValueMap, List<AuditColumn> auditColumnList, Session session);
+
+    private boolean isValueChanged(Object oldValue, Object newValue) {
+        if (oldValue == null && newValue == null) return false;
+        if (oldValue == null || newValue == null) return true;
+
+        if (oldValue instanceof Number && newValue instanceof Number) {
+            Number n1 = (Number) oldValue;
+            Number n2 = (Number) newValue;
+            return Double.compare(n1.doubleValue(), n2.doubleValue()) != 0;
+        }
+
+        if (oldValue.getClass().isArray() && newValue.getClass().isArray()) {
+            return !Arrays.deepEquals(new Object[]{oldValue}, new Object[]{newValue});
+        }
+
+        if (oldValue instanceof Collection && newValue instanceof Collection) {
+            Collection<?> c1 = (Collection<?>) oldValue;
+            Collection<?> c2 = (Collection<?>) newValue;
+            if (c1.size() != c2.size()) return true;
+            Object[] arr1 = c1.toArray();
+            Object[] arr2 = c2.toArray();
+            return !Arrays.deepEquals(arr1, arr2);
+        }
+        return !oldValue.equals(newValue);
+    }
 
     static class AuditColumnList {
         private final TableInfo tableInfo;
