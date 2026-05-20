@@ -9,6 +9,7 @@ import com.dream.template.sequence.Sequence;
 import com.dream.util.tree.Tree;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class DefaultTemplateMapper implements TemplateMapper {
@@ -48,7 +49,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private final BatchInsertMapper batchInsertMapper;
     private final ExistByIdMapper existByIdMapper;
     private final ExistMapper existMapper;
-    private SelectCountMapper selectCountSqlMapper;
+    private final SelectCountMapper selectCountSqlMapper;
 
     public DefaultTemplateMapper(Session session, Sequence sequence) {
         selectByIdSqlMapper = new SelectByIdMapper(session);
@@ -78,6 +79,9 @@ public class DefaultTemplateMapper implements TemplateMapper {
 
     @Override
     public <T> List<T> selectByIds(Class<T> type, Collection<?> idList) {
+        if (idList == null || idList.isEmpty()) {
+            return Collections.emptyList();
+        }
         return (List<T>) selectByIdsSqlMapper.execute(selectByIds + ":" + type.getName(), type, idList);
     }
 
@@ -163,6 +167,9 @@ public class DefaultTemplateMapper implements TemplateMapper {
 
     @Override
     public int deleteByIds(Class<?> type, Collection<?> idList) {
+        if (idList == null || idList.isEmpty()) {
+            return 0;
+        }
         return (int) deleteByIdsSqlMapper.execute(deleteByIds + ":" + type.getName(), type, idList);
     }
 
@@ -185,7 +192,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     @Override
     public List<Object> batchInsert(Collection<?> viewList) {
         if (viewList == null || viewList.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
         Class<?> type = viewList.iterator().next().getClass();
         return (List<Object>) batchInsertMapper.execute(batchInsert + ":" + type.getName(), type, viewList);
@@ -194,7 +201,7 @@ public class DefaultTemplateMapper implements TemplateMapper {
     @Override
     public List<Object> batchUpdateById(Collection<?> viewList) {
         if (viewList == null || viewList.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
         Class<?> type = viewList.iterator().next().getClass();
         return (List<Object>) batchUpdateByIdMapper.execute(batchUpdateById + ":" + type.getName(), type, viewList);
