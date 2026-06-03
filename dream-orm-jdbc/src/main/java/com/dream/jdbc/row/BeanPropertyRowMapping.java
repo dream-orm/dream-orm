@@ -46,7 +46,6 @@ public class BeanPropertyRowMapping<T> implements RowMapping<T> {
             if (tableInfo != null) {
                 ColumnInfo columnInfo = tableInfo.getColumnInfo(columnLabel);
                 method = methodMap.get(columnInfo.getName());
-                typeHandler = columnInfo.getTypeHandler();
             } else {
                 method = methodMap.get(columnLabel);
                 if (method == null) {
@@ -57,19 +56,17 @@ public class BeanPropertyRowMapping<T> implements RowMapping<T> {
                 }
             }
             Class<?>[] parameterTypes = method.getParameterTypes();
-            if (typeHandler == null) {
-                try {
-                    typeHandler = typeHandlerFactory.getTypeHandler(parameterTypes[0], jdbcType);
-                } catch (TypeHandlerNotFoundException e) {
-                    throw new DreamRunTimeException(e);
-                }
+            try {
+                typeHandler = typeHandlerFactory.getTypeHandler(parameterTypes[0], jdbcType);
+            } catch (TypeHandlerNotFoundException e) {
+                throw new DreamRunTimeException(e);
             }
             columnList.add(new Column(i + 1, jdbcType, columnLabel, typeHandler, method));
         }
     }
 
     @Override
-    public T mapTow(ResultSet resultSet) throws SQLException {
+    public T mapTow(ResultSet resultSet) {
         T result;
         try {
             result = constructor.newInstance();

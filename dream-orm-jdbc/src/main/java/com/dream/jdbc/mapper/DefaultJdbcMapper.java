@@ -223,11 +223,9 @@ public class DefaultJdbcMapper implements JdbcMapper {
             ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
             if (columnInfo != null) {
                 columnList.add(columnInfo);
-                TypeHandler typeHandler = columnInfo.getTypeHandler();
+                TypeHandler typeHandler;
                 try {
-                    if (typeHandler == null) {
-                        typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), columnInfo.getJdbcType());
-                    }
+                    typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), columnInfo.getJdbcType());
                 } catch (TypeHandlerNotFoundException e) {
                     throw new DreamRunTimeException(e);
                 }
@@ -277,11 +275,9 @@ public class DefaultJdbcMapper implements JdbcMapper {
             if (columnInfo != null) {
                 if (!fieldName.equals(primColumn.getName())) {
                     columnList.add(columnInfo);
-                    TypeHandler typeHandler = columnInfo.getTypeHandler();
+                    TypeHandler typeHandler;
                     try {
-                        if (typeHandler == null) {
-                            typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), columnInfo.getJdbcType());
-                        }
+                        typeHandler = typeHandlerFactory.getTypeHandler(field.getType(), columnInfo.getJdbcType());
                     } catch (TypeHandlerNotFoundException e) {
                         throw new DreamRunTimeException(e);
                     }
@@ -289,11 +285,9 @@ public class DefaultJdbcMapper implements JdbcMapper {
                 }
             }
         }
-        TypeHandler typeHandler = primColumn.getTypeHandler();
+        TypeHandler typeHandler;
         try {
-            if (typeHandler == null) {
-                typeHandler = typeHandlerFactory.getTypeHandler(primColumn.getField().getType(), primColumn.getJdbcType());
-            }
+            typeHandler = typeHandlerFactory.getTypeHandler(primColumn.getField().getType(), primColumn.getJdbcType());
         } catch (TypeHandlerNotFoundException e) {
             throw new DreamRunTimeException(e);
         }

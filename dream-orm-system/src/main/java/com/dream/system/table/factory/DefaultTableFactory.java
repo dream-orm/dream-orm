@@ -67,18 +67,7 @@ public class DefaultTableFactory implements TableFactory {
         if (ObjectUtil.isNull(column)) {
             column = SystemUtil.camelToUnderline(field.getName());
         }
-        Class<? extends TypeHandler> typeHandlerClass = columnAnnotation.typeHandler();
-        TypeHandler typeHandler = null;
-        if (typeHandlerClass != ObjectTypeHandler.class) {
-            try {
-                Constructor<? extends TypeHandler> constructor = typeHandlerClass.getConstructor(Class.class);
-                constructor.setAccessible(true);
-                typeHandler = constructor.newInstance(field.getType());
-            } catch (Exception e) {
-                typeHandler = ReflectUtil.create(typeHandlerClass);
-            }
-        }
-        return new ColumnInfo(table, column, field, columnAnnotation.jdbcType(), typeHandler);
+        return new ColumnInfo(table, column, field, columnAnnotation.jdbcType());
     }
 
     @Override

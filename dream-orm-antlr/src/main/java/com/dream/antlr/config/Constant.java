@@ -174,6 +174,7 @@ public final class Constant {
             ExprType.OVER,
             ExprType.SEPARATOR,
             ExprType.AS,
-            ExprType.WITH
+            ExprType.WITH,
+            ExprType.REPLACE
     };
 }
