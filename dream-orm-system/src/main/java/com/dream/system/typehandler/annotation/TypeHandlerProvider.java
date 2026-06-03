@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface TypeHandlerProvider {
-    Class<?extends TypeHandler<?>>value();
+    Class<?extends TypeHandler>value();
 }
