@@ -41,7 +41,6 @@ import com.dream.system.plugin.interceptor.Interceptor;
 import com.dream.system.transaction.factory.TransactionFactory;
 import com.dream.system.typehandler.factory.DefaultTypeHandlerFactory;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
-import com.dream.system.typehandler.wrapper.TypeHandlerWrapper;
 import com.dream.template.mapper.DefaultTemplateMapper;
 import com.dream.template.mapper.TemplateMapper;
 import com.dream.template.sequence.AutoIncrementSequence;
@@ -254,33 +253,13 @@ public class DreamAutoConfiguration {
         return defaultCacheFactory;
     }
 
-
-    @Bean
-    @Condition(onMissingBean = TypeHandlerWrapper[].class)
-    public TypeHandlerWrapper[] typeHandlerWrappers() {
-        return new TypeHandlerWrapper[0];
-    }
-
     /**
-     * @param typeHandlerWrappers 类型选择器包装类
      * @return 类型选择器工厂
      */
     @Bean
     @Condition(onMissingBean = TypeHandlerFactory.class)
-    public TypeHandlerFactory typeHandlerFactory(TypeHandlerWrapper... typeHandlerWrappers) {
-        TypeHandlerFactory typeHandlerFactory = new DefaultTypeHandlerFactory();
-        String[] strTypeHandlerWrappers = dreamProperties.getTypeHandlerWrappers();
-        if (!ObjectUtil.isNull(strTypeHandlerWrappers)) {
-            TypeHandlerWrapper[] typeHandlerWrapperList = Arrays.stream(strTypeHandlerWrappers).map(typeHandlerWrapper -> {
-                Class<? extends TypeHandlerWrapper> typeHandlerWrapperType = ReflectUtil.loadClass(typeHandlerWrapper);
-                return ReflectUtil.create(typeHandlerWrapperType);
-            }).collect(Collectors.toList()).toArray(new TypeHandlerWrapper[0]);
-            typeHandlerWrappers = ObjectUtil.merge(typeHandlerWrappers, typeHandlerWrapperList).toArray(new TypeHandlerWrapper[0]);
-        }
-        if (!ObjectUtil.isNull(typeHandlerWrappers)) {
-            typeHandlerFactory.wrappers(typeHandlerWrappers);
-        }
-        return typeHandlerFactory;
+    public TypeHandlerFactory typeHandlerFactory() {
+        return new DefaultTypeHandlerFactory();
     }
 
     @Bean

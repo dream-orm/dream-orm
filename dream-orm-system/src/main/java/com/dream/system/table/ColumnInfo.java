@@ -1,7 +1,6 @@
 package com.dream.system.table;
 
 import com.dream.system.annotation.Id;
-import com.dream.system.typehandler.handler.TypeHandler;
 
 import java.lang.reflect.Field;
 

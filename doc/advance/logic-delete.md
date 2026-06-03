@@ -2,9 +2,13 @@
 
 **逻辑删除不仅仅将删除语句改成update语句，而且还会对查询或更新SQL追求逻辑删除条件。**
 
-**注入器：[LogicInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/logic/inject/LogicInject.java)**
+*
+*注入器：[LogicInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/logic/inject/LogicInject.java)
+**
 
-**处理器：[LogicHandler](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/logic/inject/LogicHandler.java)**
+*
+*处理器：[LogicHandler](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/logic/inject/LogicHandler.java)
+**
 
 ```java
 public interface LogicHandler {
@@ -73,7 +77,6 @@ public Inject[] injects() {
         };
 }
 ```
-
 
 **开启数据权限插件方式二**
 

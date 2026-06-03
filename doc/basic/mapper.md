@@ -1,6 +1,7 @@
 # Mapper接口操作
 
-**mapper接口是最原始的开发操作，缺点：手写SQL开发慢，容易出错，优点：更加灵活，可以对SQL做增强操作。主要有两个步骤，涉及四个核心注解和一个接口方法增强类：**
+**mapper接口是最原始的开发操作，缺点：手写SQL开发慢，容易出错，优点：更加灵活，可以对SQL做增强操作。主要有两个步骤，涉及四个核心注解和一个接口方法增强类：
+**
 
 - 编写mapper接口并用Mapper注解声明
 - 编写方法并用Sql注解声明，参数用Param注解声明
@@ -30,9 +31,9 @@ public @interface Param {
 }
 ```
 
-| 属性名 | 描述     |
-| ------ | -------- |
-| value  | 参数名称 |
+| 属性名   | 描述   |
+|-------|------|
+| value | 参数名称 |
 
 ## Sql注解
 
@@ -54,10 +55,10 @@ public @interface Sql {
 }
 ```
 
-| 属性名 | 描述                   |
-| ------ | ---------------------- |
-| value  | 接口方法对应的SQL语句  |
-| time   | 超时时长，只应用于查询 |
+| 属性名   | 描述           |
+|-------|--------------|
+| value | 接口方法对应的SQL语句 |
+| time  | 超时时长，只应用于查询  |
 
 ## PageQuery注解
 
@@ -77,8 +78,8 @@ public @interface PageQuery {
 }
 ```
 
-| 属性  | 描述               |
-| ----- | ------------------ |
+| 属性    | 描述          |
+|-------|-------------|
 | value | 对象Page的参数地址 |
 
 ## Provider注解
@@ -95,9 +96,9 @@ public @interface Provider {
 }
 ```
 
-| 属性   | 描述                                                         |
-| ------ | ------------------------------------------------------------ |
-| type   | 指定sql写在的类                                              |
+| 属性     | 描述                                                    |
+|--------|-------------------------------------------------------|
+| type   | 指定sql写在的类                                             |
 | method | 对应类中的方法名（返回值限：String和ActionProvider），如果为空，则取注解绑定的方法名， |
 
 ```java
@@ -187,17 +188,17 @@ public interface ActionProvider {
 }
 ```
 
-| ActionProvider方法 | 描述                               |
-| ------------------ | ---------------------------------- |
-| sql                | SQL语句                            |
-| initAction         | SQL执行前行为                      |
-| loopAction         | 若查询结果为集合，则遍历调用此方法 |
-| destroyAction      | SQL执行后行为                      |
-| rowType            | 接受的集合类型，一般系统判断即可   |
-| colType            | 接受的对象类型，一般系统判断即可   |
-| timeOut            | 超时设置                           |
-| statementHandler   | SQL操作最终类                      |
-| resultSetHandler   | 映射数据库查询数据与java对象       |
+| ActionProvider方法 | 描述                |
+|------------------|-------------------|
+| sql              | SQL语句             |
+| initAction       | SQL执行前行为          |
+| loopAction       | 若查询结果为集合，则遍历调用此方法 |
+| destroyAction    | SQL执行后行为          |
+| rowType          | 接受的集合类型，一般系统判断即可  |
+| colType          | 接受的对象类型，一般系统判断即可  |
+| timeOut          | 超时设置              |
+| statementHandler | SQL操作最终类          |
+| resultSetHandler | 映射数据库查询数据与java对象  |
 
 **SQL执行前行为**
 
@@ -207,10 +208,10 @@ public interface InitAction {
 }
 ```
 
-| 参数名          | 描述                     |
-| --------------- | ------------------------ |
+| 参数名             | 描述           |
+|-----------------|--------------|
 | mappedStatement | 编译后的接口方法详尽信息 |
-| session         | SQL操作会话              |
+| session         | SQL操作会话      |
 
 **SQL遍历行为（查询结果为集合情况）**
 
@@ -220,11 +221,11 @@ public interface LoopAction {
 }
 ```
 
-| 参数名          | 描述                     |
-| --------------- | ------------------------ |
-| row             | 查询结果集合单个元素     |
+| 参数名             | 描述           |
+|-----------------|--------------|
+| row             | 查询结果集合单个元素   |
 | mappedStatement | 编译后的接口方法详尽信息 |
-| session         | SQL操作会话              |
+| session         | SQL操作会话      |
 
 **SQL执行后行为**
 
@@ -234,11 +235,11 @@ public interface DestroyAction {
 }
 ```
 
-| 参数名          | 描述                     |
-| --------------- | ------------------------ |
-| result          | 数据库查询结果           |
+| 参数名             | 描述           |
+|-----------------|--------------|
+| result          | 数据库查询结果      |
 | mappedStatement | 编译后的接口方法详尽信息 |
-| session         | SQL操作会话              |
+| session         | SQL操作会话      |
 
 ## 测试一：查询单条
 
@@ -361,8 +362,6 @@ public interface AccountMapper {
 查询结果：[AccountView{id=4, name='Sandy', age=21, email='test4'}, AccountView{id=5, name='Billie', age=24, email='test5'}]
 ```
 
-
-
 ## 测试四：分页查询
 
 **编写Mapper接口**
@@ -484,8 +483,6 @@ public interface AccountMapper {
 参数：[accountName, 1]
 用时：10ms
 ```
-
-
 
 ## 测试七：新增操作
 
@@ -642,7 +639,8 @@ public interface AccountMapper {
 
 ## 测试十一：接口增强操作
 
-**为了SQL过长可以很好展示，可以把SQL写在其他位置，或者需要在SQL执行前和执行后增加自己的行为，或者自定义映射器和执行器等可以用接口增强操作。**
+**为了SQL过长可以很好展示，可以把SQL写在其他位置，或者需要在SQL执行前和执行后增加自己的行为，或者自定义映射器和执行器等可以用接口增强操作。
+**
 
 **测试SQL仅仅写在其他位置**
 

@@ -1,6 +1,7 @@
 # IService
 
-**`dream-orm`提供了一个名为 `IService` 的接口，及其默认实现类 `ServiceImpl` ，用于简化在 `Service` 层重复定义 `TemplateMapper` 。**
+**`dream-orm`提供了一个名为 `IService` 的接口，及其默认实现类 `ServiceImpl` ，用于简化在 `Service`
+层重复定义 `TemplateMapper` 。**
 
 ```java
 /**

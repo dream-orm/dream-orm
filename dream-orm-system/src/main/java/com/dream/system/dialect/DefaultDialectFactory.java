@@ -6,15 +6,10 @@ import com.dream.antlr.sql.ToSQL;
 import com.dream.system.antlr.invoker.MarkInvoker;
 import com.dream.system.antlr.invoker.ScanInvoker;
 import com.dream.system.config.*;
-import com.dream.system.table.ColumnInfo;
-import com.dream.system.table.TableInfo;
-import com.dream.system.table.factory.TableFactory;
-import com.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
 import com.dream.system.typehandler.handler.TypeHandler;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.common.ObjectWrapper;
-import com.dream.util.exception.DreamRunTimeException;
 
 import java.sql.Types;
 import java.util.ArrayList;

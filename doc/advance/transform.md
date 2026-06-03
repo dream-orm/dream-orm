@@ -1,10 +1,15 @@
 # 关键字插件
 
-**数据库关键字，不是关键字可以不加特殊符号，关键字必须要加，dream-orm提供方案，SQL语句可以统一不加特殊符号，一样可以正常执行。默认插件不开启，有两种开启方式。**
+**数据库关键字，不是关键字可以不加特殊符号，关键字必须要加，dream-orm提供方案，SQL语句可以统一不加特殊符号，一样可以正常执行。默认插件不开启，有两种开启方式。
+**
 
-**注入器：[TransformInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/transform/inject/TransformInject.java)**
+*
+*注入器：[TransformInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/transform/inject/TransformInject.java)
+**
 
-**处理器：[TransformHandler](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/transform/inject/TransformHandler.java)**
+*
+*处理器：[TransformHandler](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/transform/inject/TransformHandler.java)
+**
 
 ```java
 public interface TransformHandler {
@@ -36,7 +41,6 @@ public Inject[] injects() {
     return new Inject[]{new TransformInject(new InterceptTransformHandler("keyword.txt"))};
 }
 ```
-
 
 **开启关键字插件方式二**
 

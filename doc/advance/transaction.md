@@ -1,6 +1,7 @@
 # 事务管理
 
-**对于集成到`springboot`的`dream-orm`，`springboot`已经接管了事务，但其实`dream-orm`具备脱离`sprinboot`单独启动的能力，因此必要要具备事务管理器，提供启动创建类`DriveFactory`。**
+**对于集成到`springboot`的`dream-orm`，`springboot`已经接管了事务，但其实`dream-orm`具备脱离`sprinboot`
+单独启动的能力，因此必要要具备事务管理器，提供启动创建类`DriveFactory`。**
 
 ```java
 public interface DriveFactory {

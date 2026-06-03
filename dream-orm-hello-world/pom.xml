@@ -24,7 +24,7 @@
         <mysql.version>8.0.28</mysql.version>
         <postgres.version>42.7.4</postgres.version>
         <HikariCP.version>4.0.3</HikariCP.version>
-        <lombok.version> 1.18.30</lombok.version>
+        <lombok.version>1.18.30</lombok.version>
         <solob-web.version>3.0.6</solob-web.version>
         <taos.version>3.0.2</taos.version>
     </properties>

@@ -2,9 +2,13 @@
 
 **数据权限是不需要在SQL里加入占位符的，而是根据主表进行判断，动态注入条件。**
 
-**注入器：[PermissionInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/permission/inject/PermissionInject.java)**
+*
+*注入器：[PermissionInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/permission/inject/PermissionInject.java)
+**
 
-**处理器：[PermissionHandler](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/permission/inject/PermissionHandler.java)**
+*
+*处理器：[PermissionHandler](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/permission/inject/PermissionHandler.java)
+**
 
 ```java
 public interface PermissionHandler {
@@ -56,7 +60,6 @@ public Inject[] injects() {
                 })};
 }
 ```
-
 
 **开启数据权限插件方式二**
 

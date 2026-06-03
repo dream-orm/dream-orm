@@ -59,7 +59,6 @@ public Inject[] injects() {
 }
 ```
 
-
 **开启数据权限插件方式二**
 
 ```java

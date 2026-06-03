@@ -2,9 +2,13 @@
 
 **多租户对增删改查自动加入租户条件，并且开启后租户将完全由系统接管，开发者无法对租户做更新和插入操作。**
 
-**注入器：[TenantInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/tenant/inject/TenantInject.java)**
+*
+*注入器：[TenantInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/tenant/inject/TenantInject.java)
+**
 
-**处理器：[TenantHandler](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/tenant/inject/TenantHandler.java)**
+*
+*处理器：[TenantHandler](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/tenant/inject/TenantHandler.java)
+**
 
 ```java
 public interface TenantHandler {
@@ -68,7 +72,6 @@ public Inject[] injects() {
                 })};
 }
 ```
-
 
 **开启多租户插件方式二**
 

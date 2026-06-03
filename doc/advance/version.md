@@ -1,8 +1,12 @@
 # 乐观锁插件
 
-**注入器：[VersionInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/version/inject/VersionInject.java)**
+*
+*注入器：[VersionInject](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/version/inject/VersionInject.java)
+**
 
-**处理器：[VersionHandler](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/version/inject/VersionHandler.java)**
+*
+*处理器：[VersionHandler](https://gitee.com/moxiaoai/dream-orm/blob/master/dream-orm-mate/src/main/java/com/dream/mate/version/inject/VersionHandler.java)
+**
 
 ```java
 public interface VersionHandler {

@@ -1,6 +1,7 @@
 # 不翻译SQL操作
 
-**`dream-orm`都是要对SQL进行编译的，因此需要准确无误的识别SQL，对于有些极其特殊的语法，`dream-orm`做不到语法识别，因此提供不翻译SQL，直接执行是十分有必要的。需要用到`JdbcMapper`接口。**
+**`dream-orm`都是要对SQL进行编译的，因此需要准确无误的识别SQL，对于有些极其特殊的语法，`dream-orm`
+做不到语法识别，因此提供不翻译SQL，直接执行是十分有必要的。需要用到`JdbcMapper`接口。**
 
 ```java
 /**
@@ -238,6 +239,7 @@ public interface JdbcMapper {
 }
 
 ```
+
 ## 测试一：查询单条
 
 **测试**
@@ -407,8 +409,6 @@ public interface JdbcMapper {
 参数：[]
 用时：11ms
 ```
-
-
 
 ## 测试七：新增操作
 

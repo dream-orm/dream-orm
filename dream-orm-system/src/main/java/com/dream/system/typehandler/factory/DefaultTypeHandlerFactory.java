@@ -1,13 +1,11 @@
 package com.dream.system.typehandler.factory;
 
 import com.dream.system.typehandler.TypeHandlerNotFoundException;
-import com.dream.system.typehandler.annotation.TypeHandlerProvider;
 import com.dream.system.typehandler.handler.EnumTypeHandler;
 import com.dream.system.typehandler.handler.TypeHandler;
 import com.dream.system.typehandler.util.TypeUtil;
 import com.dream.system.typehandler.wrapper.*;
 import com.dream.util.common.ObjectUtil;
-import com.dream.util.reflect.ReflectUtil;
 
 import java.sql.Types;
 import java.util.HashMap;
@@ -21,8 +19,7 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
         wrappers(getTypeHandlerWrappers());
     }
 
-    @Override
-    public void wrappers(TypeHandlerWrapper... typeHandlerWrappers) {
+    protected void wrappers(TypeHandlerWrapper... typeHandlerWrappers) {
         if (!ObjectUtil.isNull(typeHandlerWrappers)) {
             for (TypeHandlerWrapper typeHandlerWrapper : typeHandlerWrappers) {
                 TypeHandler typeHandler = typeHandlerWrapper.getTypeHandler();
@@ -41,10 +38,6 @@ public class DefaultTypeHandlerFactory implements TypeHandlerFactory {
 
     @Override
     public TypeHandler getTypeHandler(Class javaType, int jdbcType) throws TypeHandlerNotFoundException {
-        TypeHandlerProvider typeHandlerProvider = (TypeHandlerProvider) javaType.getDeclaredAnnotation(TypeHandlerProvider.class);
-        if (typeHandlerProvider != null) {
-            return ReflectUtil.create(typeHandlerProvider.value());
-        }
         TypeHandler typeHandler = getTypeHandler(TypeUtil.hash(javaType, jdbcType));
         if (typeHandler == null) {
             return getNoneTypeHandler(javaType, jdbcType);
