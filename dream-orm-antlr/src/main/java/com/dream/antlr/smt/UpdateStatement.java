@@ -10,7 +10,7 @@ public class UpdateStatement extends Statement {
     }
 
     public void setTable(Statement table) {
-        this.table = wrapParent(table);
+        this.table = table;
     }
 
     public Statement getConditionList() {
@@ -18,7 +18,7 @@ public class UpdateStatement extends Statement {
     }
 
     public void setConditionList(Statement conditionList) {
-        this.conditionList = wrapParent(conditionList);
+        this.conditionList = conditionList;
     }
 
     public Statement getWhere() {
@@ -26,7 +26,7 @@ public class UpdateStatement extends Statement {
     }
 
     public void setWhere(Statement where) {
-        this.where = wrapParent(where);
+        this.where = where;
     }
 
     @Override

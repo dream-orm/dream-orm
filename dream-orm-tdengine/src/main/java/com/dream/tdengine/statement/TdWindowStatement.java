@@ -35,7 +35,7 @@ public abstract class TdWindowStatement extends MyFunctionStatement {
         }
 
         public void setInterval(TdIntervalStatement interval) {
-            this.interval = wrapParent(interval);
+            this.interval = interval;
         }
 
         public TdSlidingStatement getSliding() {
@@ -43,7 +43,7 @@ public abstract class TdWindowStatement extends MyFunctionStatement {
         }
 
         public void setSliding(TdSlidingStatement sliding) {
-            this.sliding = wrapParent(sliding);
+            this.sliding = sliding;
         }
 
         public TdFillStatement getFill() {
@@ -51,7 +51,7 @@ public abstract class TdWindowStatement extends MyFunctionStatement {
         }
 
         public void setFill(TdFillStatement fill) {
-            this.fill = wrapParent(fill);
+            this.fill = fill;
         }
 
         @Override

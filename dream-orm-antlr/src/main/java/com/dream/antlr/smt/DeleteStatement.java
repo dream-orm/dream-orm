@@ -9,7 +9,7 @@ public class DeleteStatement extends Statement {
     }
 
     public void setTable(Statement table) {
-        this.table = wrapParent(table);
+        this.table = table;
     }
 
     public Statement getWhere() {
@@ -17,7 +17,7 @@ public class DeleteStatement extends Statement {
     }
 
     public void setWhere(Statement where) {
-        this.where = wrapParent(where);
+        this.where = where;
     }
 
     @Override

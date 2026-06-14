@@ -17,7 +17,7 @@ public abstract class CastTypeStatement extends Statement {
     }
 
     public void setStatement(Statement statement) {
-        this.statement = wrapParent(statement);
+        this.statement = statement;
     }
 
     @Override
@@ -96,13 +96,6 @@ public abstract class CastTypeStatement extends Statement {
 
         public void setParamStatement(Statement paramStatement) {
             this.paramStatement = paramStatement;
-        }
-
-        @Override
-        public DecimalCastStatement clone() {
-            DecimalCastStatement decimalCastStatement = (DecimalCastStatement) super.clone();
-            decimalCastStatement.setParentStatement(clone(paramStatement));
-            return decimalCastStatement;
         }
     }
 

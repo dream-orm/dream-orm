@@ -107,79 +107,6 @@ public class ToSQLServer extends ToPubSQL {
     }
 
     @Override
-    protected String toString(OperStatement.ADDStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        Statement leftStatement = conditionStatement.getLeft();
-        Statement rightStatement = conditionStatement.getRight();
-        if (rightStatement instanceof IntervalStatement) {
-            Statement intervalParamstatement = ((IntervalStatement) rightStatement).getStatement();
-            String left = toStr(leftStatement, assist, invokerList);
-            String right = toStr(intervalParamstatement, assist, invokerList);
-            if (intervalParamstatement instanceof SymbolStatement.StrStatement) {
-                right = right.substring(1, right.length() - 1);
-            }
-            switch (rightStatement.getNameId()) {
-                case 849271629://YearIntervalStatement
-                    return "DATEADD(yy," + right + "," + left + ")";
-                case -729227010://QuarterIntervalStatement
-                    return "DATEADD(qq," + right + "," + left + ")";
-                case 2023754666://MonthIntervalStatement
-                    return "DATEADD(mm," + right + "," + left + ")";
-                case -266778506://WeekIntervalStatement
-                    return "DATEADD(wk," + right + "," + left + ")";
-                case 1435635214://DayIntervalStatement
-                    return "DATEADD(dd," + right + "," + left + ")";
-                case 2048430214://HourIntervalStatement
-                    return "DATEADD(hh," + right + "," + left + ")";
-                case 2068434518://MinuteIntervalStatement
-                    return "DATEADD(mi," + right + "," + left + ")";
-                case -1888568330://SecondIntervalStatement
-                    return "DATEADD(ss," + right + "," + left + ")";
-                default:
-                    break;
-            }
-        }
-        return toStr(leftStatement, assist, invokerList) + "+" + toStr(rightStatement, assist, invokerList);
-    }
-
-    @Override
-    protected String toString(OperStatement.SUBStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        Statement leftStatement = conditionStatement.getLeft();
-        Statement rightStatement = conditionStatement.getRight();
-        if (rightStatement instanceof IntervalStatement) {
-            Statement intervalParamstatement = ((IntervalStatement) rightStatement).getStatement();
-            String left = toStr(leftStatement, assist, invokerList);
-            String right = toStr(intervalParamstatement, assist, invokerList);
-            if (intervalParamstatement instanceof SymbolStatement.StrStatement) {
-                right = right.substring(1, right.length() - 1);
-            }
-            right = "-" + right;
-            switch (rightStatement.getNameId()) {
-                case 849271629://YearIntervalStatement
-                    return "DATEADD(yy," + right + "," + left + ")";
-                case -729227010://QuarterIntervalStatement
-                    return "DATEADD(qq," + right + "," + left + ")";
-                case 2023754666://MonthIntervalStatement
-                    return "DATEADD(mm," + right + "," + left + ")";
-                case -266778506://WeekIntervalStatement
-                    return "DATEADD(wk," + right + "," + left + ")";
-                case 1435635214://DayIntervalStatement
-                    return "DATEADD(dd," + right + "," + left + ")";
-                case 2048430214://HourIntervalStatement
-                    return "DATEADD(hh," + right + "," + left + ")";
-                case 2068434518://MinuteIntervalStatement
-                    return "DATEADD(mi," + right + "," + left + ")";
-                case -1888568330://SecondIntervalStatement
-                    return "DATEADD(ss," + right + "," + left + ")";
-                default:
-                    break;
-            }
-        }
-        return toStr(leftStatement, assist, invokerList) + "-" + toStr(rightStatement, assist, invokerList);
-    }
-
-    @Override
     protected String toString(CastTypeStatement.SignedCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(" + toStr(statement.getStatement(), assist, invokerList) + " AS BIGINT)";
     }
@@ -284,9 +211,7 @@ public class ToSQLServer extends ToPubSQL {
     @Override
     protected String toString(FunctionStatement.RpadStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         String num = toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[1], assist, invokerList);
-        return "LEFT(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + "+REPLICATE("
-                + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[2], assist, invokerList) + ","
-                + num + ")," + num + ")";
+        return "LEFT(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[0], assist, invokerList) + "+REPLICATE(" + toStr(((ListColumnStatement) statement.getParamsStatement()).getColumnList()[2], assist, invokerList) + "," + num + ")," + num + ")";
     }
 
     @Override
@@ -515,18 +440,92 @@ public class ToSQLServer extends ToPubSQL {
     }
 
     @Override
-    protected String toString(OperStatement.LLMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        String left = toStr(conditionStatement.getLeft(), assist, invokerList);
-        String right = toStr(conditionStatement.getRight(), assist, invokerList);
-        return left + "*POWER(2," + right + ")";
-    }
-
-    @Override
-    protected String toString(OperStatement.RRMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        String left = toStr(conditionStatement.getLeft(), assist, invokerList);
-        String right = toStr(conditionStatement.getRight(), assist, invokerList);
-        return left + "/POWER(2," + right + ")";
+    protected String toString(ConditionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        OperStatement oper = statement.getOper();
+        switch (oper.getNameId()) {
+            case -236816094://LLMStatement
+            {
+                String left = toStr(statement.getLeft(), assist, invokerList);
+                String right = toStr(statement.getRight(), assist, invokerList);
+                return left + "*POWER(2," + right + ")";
+            }
+            case -1654093342://RRMStatement
+            {
+                String left = toStr(statement.getLeft(), assist, invokerList);
+                String right = toStr(statement.getRight(), assist, invokerList);
+                return left + "/POWER(2," + right + ")";
+            }
+            case 1602604526://ADDStatement
+            {
+                Statement leftStatement = statement.getLeft();
+                Statement rightStatement = statement.getRight();
+                if (rightStatement instanceof IntervalStatement) {
+                    Statement intervalParamstatement = ((IntervalStatement) rightStatement).getStatement();
+                    String left = toStr(leftStatement, assist, invokerList);
+                    String right = toStr(intervalParamstatement, assist, invokerList);
+                    if (intervalParamstatement instanceof SymbolStatement.StrStatement) {
+                        right = right.substring(1, right.length() - 1);
+                    }
+                    switch (rightStatement.getNameId()) {
+                        case 849271629://YearIntervalStatement
+                            return "DATEADD(yy," + right + "," + left + ")";
+                        case -729227010://QuarterIntervalStatement
+                            return "DATEADD(qq," + right + "," + left + ")";
+                        case 2023754666://MonthIntervalStatement
+                            return "DATEADD(mm," + right + "," + left + ")";
+                        case -266778506://WeekIntervalStatement
+                            return "DATEADD(wk," + right + "," + left + ")";
+                        case 1435635214://DayIntervalStatement
+                            return "DATEADD(dd," + right + "," + left + ")";
+                        case 2048430214://HourIntervalStatement
+                            return "DATEADD(hh," + right + "," + left + ")";
+                        case 2068434518://MinuteIntervalStatement
+                            return "DATEADD(mi," + right + "," + left + ")";
+                        case -1888568330://SecondIntervalStatement
+                            return "DATEADD(ss," + right + "," + left + ")";
+                        default:
+                            break;
+                    }
+                }
+                return toStr(leftStatement, assist, invokerList) + "+" + toStr(rightStatement, assist, invokerList);
+            }
+            case -459248849://SUBStatement
+            {
+                Statement leftStatement = statement.getLeft();
+                Statement rightStatement = statement.getRight();
+                if (rightStatement instanceof IntervalStatement) {
+                    Statement intervalParamstatement = ((IntervalStatement) rightStatement).getStatement();
+                    String left = toStr(leftStatement, assist, invokerList);
+                    String right = toStr(intervalParamstatement, assist, invokerList);
+                    if (intervalParamstatement instanceof SymbolStatement.StrStatement) {
+                        right = right.substring(1, right.length() - 1);
+                    }
+                    right = "-" + right;
+                    switch (rightStatement.getNameId()) {
+                        case 849271629://YearIntervalStatement
+                            return "DATEADD(yy," + right + "," + left + ")";
+                        case -729227010://QuarterIntervalStatement
+                            return "DATEADD(qq," + right + "," + left + ")";
+                        case 2023754666://MonthIntervalStatement
+                            return "DATEADD(mm," + right + "," + left + ")";
+                        case -266778506://WeekIntervalStatement
+                            return "DATEADD(wk," + right + "," + left + ")";
+                        case 1435635214://DayIntervalStatement
+                            return "DATEADD(dd," + right + "," + left + ")";
+                        case 2048430214://HourIntervalStatement
+                            return "DATEADD(hh," + right + "," + left + ")";
+                        case 2068434518://MinuteIntervalStatement
+                            return "DATEADD(mi," + right + "," + left + ")";
+                        case -1888568330://SecondIntervalStatement
+                            return "DATEADD(ss," + right + "," + left + ")";
+                        default:
+                            break;
+                    }
+                }
+                return toStr(leftStatement, assist, invokerList) + "-" + toStr(rightStatement, assist, invokerList);
+            }
+            default:
+                return super.toString(statement, assist, invokerList);
+        }
     }
 }

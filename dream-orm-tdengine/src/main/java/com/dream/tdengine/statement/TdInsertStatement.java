@@ -19,7 +19,7 @@ public class TdInsertStatement extends InsertStatement {
     }
 
     public void setStdTable(Statement stdTable) {
-        this.stdTable = wrapParent(stdTable);
+        this.stdTable = stdTable;
     }
 
     public Statement getTagColumn() {
@@ -35,7 +35,7 @@ public class TdInsertStatement extends InsertStatement {
     }
 
     public void setTags(ListColumnStatement tags) {
-        this.tags = wrapParent(tags);
+        this.tags = tags;
     }
 
     @Override

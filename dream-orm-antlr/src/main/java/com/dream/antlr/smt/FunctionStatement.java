@@ -19,7 +19,7 @@ public abstract class FunctionStatement extends Statement {
     }
 
     public void setParamsStatement(Statement paramsStatement) {
-        this.paramsStatement = wrapParent(paramsStatement);
+        this.paramsStatement = paramsStatement;
     }
 
     @Override
@@ -78,7 +78,7 @@ public abstract class FunctionStatement extends Statement {
         }
 
         public void setOrder(Statement order) {
-            this.order = wrapParent(order);
+            this.order = order;
         }
 
         public Statement getSeparator() {
@@ -86,7 +86,7 @@ public abstract class FunctionStatement extends Statement {
         }
 
         public void setSeparator(Statement separator) {
-            this.separator = wrapParent(separator);
+            this.separator = separator;
         }
 
         @Override
@@ -329,7 +329,7 @@ public abstract class FunctionStatement extends Statement {
         }
 
         public void setStatement(Statement statement) {
-            this.statement = wrapParent(statement);
+            this.statement = statement;
         }
 
         @Override

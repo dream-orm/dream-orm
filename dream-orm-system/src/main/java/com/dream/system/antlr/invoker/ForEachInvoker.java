@@ -69,9 +69,7 @@ public class ForEachInvoker extends AbstractInvoker {
                     index++;
                 }
                 listColumnStatement.add(statements);
-
             }
-            listColumnStatement.setParentStatement(invokerStatement.getParentStatement());
             return toSQL.toStr(listColumnStatement, assist, invokerList);
         } else {
             throw new AntlrException("类'" + arrayList.getClass().getName() + "'不是集合或数组类型");

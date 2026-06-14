@@ -9,7 +9,7 @@ public class FromStatement extends Statement {
     }
 
     public void setMainTable(Statement mainTable) {
-        this.mainTable = wrapParent(mainTable);
+        this.mainTable = mainTable;
     }
 
     public Statement getJoinList() {
@@ -17,7 +17,7 @@ public class FromStatement extends Statement {
     }
 
     public void setJoinList(Statement joinList) {
-        this.joinList = wrapParent(joinList);
+        this.joinList = joinList;
     }
 
     @Override

@@ -14,7 +14,7 @@ public class FuncOverStatement extends Statement {
     }
 
     public void setFunctionStatement(Statement functionStatement) {
-        this.functionStatement = wrapParent(functionStatement);
+        this.functionStatement = functionStatement;
     }
 
     public Statement getOverStatement() {
@@ -22,7 +22,7 @@ public class FuncOverStatement extends Statement {
     }
 
     public void setOverStatement(Statement overStatement) {
-        this.overStatement = wrapParent(overStatement);
+        this.overStatement = overStatement;
     }
 
     @Override

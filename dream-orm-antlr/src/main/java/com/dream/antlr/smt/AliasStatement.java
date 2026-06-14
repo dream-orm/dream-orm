@@ -18,7 +18,7 @@ public class AliasStatement extends Statement {
     }
 
     public void setColumn(Statement column) {
-        this.column = wrapParent(column);
+        this.column = column;
     }
 
     public Statement getAlias() {
@@ -26,7 +26,7 @@ public class AliasStatement extends Statement {
     }
 
     public void setAlias(Statement alias) {
-        this.alias = wrapParent(alias);
+        this.alias = alias;
     }
 
     @Override

@@ -25,7 +25,7 @@ public interface AccountMapper {
     @Sql("select id, count(id) from account where id>@?(id) group by id order by id")
     List<Map> selectPage(@Param("id") Integer id, @Param("page") Page page);
 
-    @Sql("update account set tenant_id=2,name=@?(account.name),age=@?(account.age) where id=@?(account.id) and tenant_id=3")
+    @Sql("update account set tenant_id=2,name=@?(account.name),age=@?(account.age) where id=cast(@?(account.id) as signed) and tenant_id=3")
     int updateById(@Param("account") AccountView accountView);
 
     @Sql("update account set @non(name=@?(account.name),age=@?(account.age)) where id=@?(account.id)")

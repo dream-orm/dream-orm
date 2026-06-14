@@ -9,7 +9,7 @@ public class WithStatement extends Statement {
     }
 
     public void setAliasStatement(Statement aliasStatement) {
-        this.aliasStatement = wrapParent(aliasStatement);
+        this.aliasStatement = aliasStatement;
     }
 
     public Statement getStatement() {
@@ -17,7 +17,7 @@ public class WithStatement extends Statement {
     }
 
     public void setStatement(Statement statement) {
-        this.statement = wrapParent(statement);
+        this.statement = statement;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class WithStatement extends Statement {
         }
 
         public void setAliasStatement(Statement aliasStatement) {
-            this.aliasStatement = wrapParent(aliasStatement);
+            this.aliasStatement = aliasStatement;
         }
 
         public Statement getStatement() {
@@ -50,7 +50,7 @@ public class WithStatement extends Statement {
         }
 
         public void setStatement(Statement statement) {
-            this.statement = wrapParent(statement);
+            this.statement = statement;
         }
 
         @Override

@@ -26,6 +26,10 @@ public abstract class ToSQL {
         if (statement == null) {
             return "";
         }
+        Statement actualStatement = statement.getActualStatement();
+        if (actualStatement != null) {
+            return toStr(actualStatement, assist, invokerList);
+        }
         String sql = before(statement);
         if (sql != null) {
             return sql;

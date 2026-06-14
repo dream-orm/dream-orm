@@ -47,14 +47,9 @@ public class ScanInvoker extends AbstractInvoker {
             throw new AntlrException("@" + this.function() + "参数个数错误");
         }
         String sql = toSQL.toStr(columnList[0], assist, invokerList);
-        Statement parentStatement = invokerStatement.getParentStatement();
-        while (!(parentStatement instanceof PackageStatement)
-                || (parentStatement instanceof PackageStatement && parentStatement.getParentStatement() != null)) {
-            parentStatement = parentStatement.getParentStatement();
-        }
-        PackageStatement packageStatement = (PackageStatement) parentStatement;
+        PackageStatement packageStatement = assist.getCustom(PackageStatement.class);
         packageStatement.setValue(ScanInfo.class, scanInfo);
-        invokerStatement.replaceWith(columnList[0]);
+        invokerStatement.setActualStatement(columnList[0]);
         List<InvokerStatement> invokerStatementList = scanInfo.getInvokerStatementList();
         if (!ObjectUtil.isNull(invokerStatementList)) {
             int i = 0;
@@ -66,7 +61,7 @@ public class ScanInvoker extends AbstractInvoker {
             }
             if (i == invokerStatementList.size()) {
                 for (InvokerStatement invoker : invokerStatementList) {
-                    invoker.replaceWith(new SymbolStatement.MarkStatement());
+                    invoker.setActualStatement(new SymbolStatement.MarkStatement());
                 }
                 MarkInvoker markInvoker = (MarkInvoker) assist.getInvoker(MarkInvoker.FUNCTION);
                 scanInfo.setParamInfoList(markInvoker.getParamInfoList());

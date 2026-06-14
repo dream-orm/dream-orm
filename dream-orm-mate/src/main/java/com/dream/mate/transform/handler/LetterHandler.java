@@ -24,7 +24,7 @@ public class LetterHandler extends AbstractHandler {
         String column = letterStatement.getValue();
         if (transformInvoker.intercept(column, invokerList)) {
             SymbolStatement.SingleMarkStatement singleMarkStatement = new SymbolStatement.SingleMarkStatement(column);
-            letterStatement.replaceWith(singleMarkStatement);
+            letterStatement.setActualStatement(singleMarkStatement);
             return singleMarkStatement;
         }
         return statement;

@@ -56,7 +56,7 @@ public class InsertInvoker extends AbstractInvoker {
         }
         InsertStatement insertStatement = SystemUtil.insertStatement(tableName, columns, Collections.singletonList(columnRefs));
         String sql = toSQL.toStr(insertStatement, assist, invokerList);
-        invokerStatement.replaceWith(insertStatement);
+        invokerStatement.setActualStatement(insertStatement);
         return sql;
     }
 

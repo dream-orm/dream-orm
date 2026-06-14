@@ -16,7 +16,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setSelectStatement(SelectStatement selectStatement) {
-        this.selectStatement = wrapParent(selectStatement);
+        this.selectStatement = selectStatement;
     }
 
     public FromStatement getFromStatement() {
@@ -24,7 +24,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setFromStatement(FromStatement fromStatement) {
-        this.fromStatement = wrapParent(fromStatement);
+        this.fromStatement = fromStatement;
     }
 
     public WhereStatement getWhereStatement() {
@@ -32,7 +32,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setWhereStatement(WhereStatement whereStatement) {
-        this.whereStatement = wrapParent(whereStatement);
+        this.whereStatement = whereStatement;
     }
 
     public GroupStatement getGroupStatement() {
@@ -40,7 +40,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setGroupStatement(GroupStatement groupStatement) {
-        this.groupStatement = wrapParent(groupStatement);
+        this.groupStatement = groupStatement;
     }
 
     public HavingStatement getHavingStatement() {
@@ -48,7 +48,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setHavingStatement(HavingStatement havingStatement) {
-        this.havingStatement = wrapParent(havingStatement);
+        this.havingStatement = havingStatement;
     }
 
     public OrderStatement getOrderStatement() {
@@ -56,7 +56,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setOrderStatement(OrderStatement orderStatement) {
-        this.orderStatement = wrapParent(orderStatement);
+        this.orderStatement = orderStatement;
     }
 
     public LimitStatement getLimitStatement() {
@@ -64,7 +64,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setLimitStatement(LimitStatement limitStatement) {
-        this.limitStatement = wrapParent(limitStatement);
+        this.limitStatement = limitStatement;
     }
 
     public UnionStatement getUnionStatement() {
@@ -72,7 +72,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setUnionStatement(UnionStatement unionStatement) {
-        this.unionStatement = wrapParent(unionStatement);
+        this.unionStatement = unionStatement;
     }
 
     public ForUpdateStatement getForUpdateStatement() {
@@ -80,7 +80,7 @@ public class QueryStatement extends Statement {
     }
 
     public void setForUpdateStatement(ForUpdateStatement forUpdateStatement) {
-        this.forUpdateStatement = wrapParent(forUpdateStatement);
+        this.forUpdateStatement = forUpdateStatement;
     }
 
     @Override

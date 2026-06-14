@@ -8,7 +8,7 @@ public class OrderStatement extends Statement {
     }
 
     public void setStatement(Statement statement) {
-        this.statement = wrapParent(statement);
+        this.statement = statement;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class OrderStatement extends Statement {
         }
 
         public void setStatement(Statement statement) {
-            this.statement = wrapParent(statement);
+            this.statement = statement;
         }
 
         public Statement getSort() {
@@ -59,7 +59,7 @@ public class OrderStatement extends Statement {
         }
 
         public void setStatement(Statement statement) {
-            this.statement = wrapParent(statement);
+            this.statement = statement;
         }
 
         public Statement getSort() {

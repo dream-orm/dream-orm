@@ -17,7 +17,7 @@ public abstract class ConvertTypeStatement extends Statement {
     }
 
     public void setStatement(Statement statement) {
-        this.statement = wrapParent(statement);
+        this.statement = statement;
     }
 
     @Override
@@ -95,7 +95,7 @@ public abstract class ConvertTypeStatement extends Statement {
         }
 
         public void setParamStatement(Statement paramStatement) {
-            this.paramStatement = wrapParent(paramStatement);
+            this.paramStatement = paramStatement;
         }
 
         @Override

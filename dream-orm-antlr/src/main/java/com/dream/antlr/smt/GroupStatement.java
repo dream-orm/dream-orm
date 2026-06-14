@@ -8,7 +8,7 @@ public class GroupStatement extends Statement {
     }
 
     public void setGroup(Statement group) {
-        this.group = wrapParent(group);
+        this.group = group;
     }
 
     @Override

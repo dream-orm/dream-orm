@@ -127,12 +127,6 @@ public class ToPostgreSQL extends ToPubSQL {
     }
 
     @Override
-    protected String toString(OperStatement.DIVIDEStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return "CAST(" + toStr(conditionStatement.getLeft(), assist, invokerList) + " as DECIMAL)/" + toStr(conditionStatement.getRight(), assist, invokerList);
-    }
-
-    @Override
     protected String toString(FunctionStatement.DateForMatStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement[] columnList = ((ListColumnStatement) statement.getParamsStatement()).getColumnList();
         String pattern = AntlrUtil.replace(toStr(columnList[1], assist, invokerList), replaceMap);
@@ -487,7 +481,6 @@ public class ToPostgreSQL extends ToPubSQL {
 
     @Override
     protected String toString(OperStatement.BITXORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "#" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "#";
     }
 }

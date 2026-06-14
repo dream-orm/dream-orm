@@ -1,6 +1,7 @@
 package com.dream.antlr.smt;
 
 public class ConditionStatement extends Statement {
+    protected ConditionStatement parentStatement;
     private Statement left;
     private OperStatement oper;
     private Statement right;
@@ -10,7 +11,10 @@ public class ConditionStatement extends Statement {
     }
 
     public void setLeft(Statement left) {
-        this.left = wrapParent(left);
+        if (left instanceof ConditionStatement) {
+            ((ConditionStatement) left).parentStatement = this;
+        }
+        this.left = left;
     }
 
     public OperStatement getOper() {
@@ -18,7 +22,7 @@ public class ConditionStatement extends Statement {
     }
 
     public void setOper(OperStatement oper) {
-        this.oper = wrapParent(oper);
+        this.oper = oper;
     }
 
     public Statement getRight() {
@@ -26,7 +30,14 @@ public class ConditionStatement extends Statement {
     }
 
     public void setRight(Statement right) {
-        this.right = wrapParent(right);
+        if (right instanceof ConditionStatement) {
+            ((ConditionStatement) right).parentStatement = this;
+        }
+        this.right = right;
+    }
+
+    public ConditionStatement getParentStatement() {
+        return parentStatement;
     }
 
     @Override

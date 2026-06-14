@@ -11,7 +11,7 @@ public class InsertStatement extends Statement {
     }
 
     public void setTable(Statement table) {
-        this.table = wrapParent(table);
+        this.table = table;
     }
 
     public Statement getColumns() {
@@ -19,7 +19,7 @@ public class InsertStatement extends Statement {
     }
 
     public void setColumns(Statement columns) {
-        this.columns = wrapParent(columns);
+        this.columns = columns;
     }
 
     public Statement getValues() {
@@ -27,7 +27,7 @@ public class InsertStatement extends Statement {
     }
 
     public void setValues(Statement values) {
-        this.values = wrapParent(values);
+        this.values = values;
     }
 
     public boolean isIgnore() {
@@ -61,7 +61,7 @@ public class InsertStatement extends Statement {
         }
 
         public void setStatement(Statement statement) {
-            this.statement = wrapParent(statement);
+            this.statement = statement;
         }
 
         @Override

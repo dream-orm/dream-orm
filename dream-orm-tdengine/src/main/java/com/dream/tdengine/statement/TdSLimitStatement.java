@@ -19,7 +19,7 @@ public class TdSLimitStatement extends MyFunctionStatement {
     }
 
     public void setFirst(Statement first) {
-        this.first = wrapParent(first);
+        this.first = first;
     }
 
     public Statement getSecond() {
@@ -27,7 +27,7 @@ public class TdSLimitStatement extends MyFunctionStatement {
     }
 
     public void setSecond(Statement second) {
-        this.second = wrapParent(second);
+        this.second = second;
     }
 
     public boolean isOffset() {

@@ -1,8 +1,12 @@
 package com.dream.antlr.smt;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ListColumnStatement extends Statement {
     private SymbolStatement.LetterStatement cut;
-    private Statement[] columnList = new Statement[0];
+    private List<Statement> columnList = new ArrayList<>(4);
 
     public ListColumnStatement() {
         this(",");
@@ -14,12 +18,7 @@ public class ListColumnStatement extends Statement {
 
     public void add(Statement... columns) {
         if (columns != null && columns.length > 0) {
-            Statement[] tempColumnList = new Statement[columnList.length + columns.length];
-            System.arraycopy(columnList, 0, tempColumnList, 0, columnList.length);
-            for (int i = 0; i < columns.length; i++) {
-                tempColumnList[columnList.length + i] = wrapParent(columns[i]);
-            }
-            columnList = tempColumnList;
+            columnList.addAll(Arrays.asList(columns));
         }
     }
 
@@ -28,20 +27,11 @@ public class ListColumnStatement extends Statement {
     }
 
     public void setCut(SymbolStatement.LetterStatement cut) {
-        this.cut = wrapParent(cut);
+        this.cut = cut;
     }
 
     public Statement[] getColumnList() {
-        return columnList;
-    }
-
-    public void setColumnList(Statement[] columnList) {
-        if (columnList != null) {
-            this.columnList = columnList;
-            for (Statement statement : columnList) {
-                wrapParent(statement);
-            }
-        }
+        return columnList.toArray(new Statement[0]);
     }
 
     @Override
@@ -53,12 +43,11 @@ public class ListColumnStatement extends Statement {
     public ListColumnStatement clone() {
         ListColumnStatement listColumnStatement = (ListColumnStatement) super.clone();
         listColumnStatement.setCut((SymbolStatement.LetterStatement) clone(cut));
-        Statement[] columnList = new Statement[this.columnList.length];
-        for (int i = 0; i < this.columnList.length; i++) {
-            Statement column = this.columnList[i];
-            columnList[i] = clone(column);
+        List<Statement> columnList = new ArrayList<>(this.columnList.size());
+        for (Statement column : this.columnList) {
+            columnList.add(clone(column));
         }
-        listColumnStatement.setColumnList(columnList);
+        listColumnStatement.columnList = columnList;
         return listColumnStatement;
     }
 }

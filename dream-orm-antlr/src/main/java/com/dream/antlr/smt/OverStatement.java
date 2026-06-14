@@ -9,7 +9,7 @@ public class OverStatement extends Statement {
     }
 
     public void setPartitionStatement(Statement partitionStatement) {
-        this.partitionStatement = wrapParent(partitionStatement);
+        this.partitionStatement = partitionStatement;
     }
 
     public Statement getOrderStatement() {
@@ -17,7 +17,7 @@ public class OverStatement extends Statement {
     }
 
     public void setOrderStatement(Statement orderStatement) {
-        this.orderStatement = wrapParent(orderStatement);
+        this.orderStatement = orderStatement;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class OverStatement extends Statement {
         }
 
         public void setStatement(Statement statement) {
-            this.statement = wrapParent(statement);
+            this.statement = statement;
         }
 
         @Override

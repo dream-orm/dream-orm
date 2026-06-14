@@ -558,22 +558,6 @@ public class ToOracle extends ToPubSQL {
     }
 
     @Override
-    protected String toString(OperStatement.LLMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        String left = toStr(conditionStatement.getLeft(), assist, invokerList);
-        String right = toStr(conditionStatement.getRight(), assist, invokerList);
-        return left + "*POWER(2," + right + ")";
-    }
-
-    @Override
-    protected String toString(OperStatement.RRMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        String left = toStr(conditionStatement.getLeft(), assist, invokerList);
-        String right = toStr(conditionStatement.getRight(), assist, invokerList);
-        return left + "/POWER(2," + right + ")";
-    }
-
-    @Override
     protected String toString(CaseStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement caseColumn = statement.getCaseColumn();
         if (caseColumn != null) {
@@ -595,25 +579,38 @@ public class ToOracle extends ToPubSQL {
     }
 
     @Override
-    protected String toString(OperStatement.BITANDStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return "BITAND(" + toStr(conditionStatement.getLeft(), assist, invokerList) + "," + toStr(conditionStatement.getRight(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(OperStatement.BITORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        String left = toStr(conditionStatement.getLeft(), assist, invokerList);
-        String right = toStr(conditionStatement.getRight(), assist, invokerList);
-        return left + right + "-BITAND(" + left + "," + right + ")";
-    }
-
-    @Override
-    protected String toString(OperStatement.BITXORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        String left = toStr(conditionStatement.getLeft(), assist, invokerList);
-        String right = toStr(conditionStatement.getRight(), assist, invokerList);
-        return left + right + "-2*BITAND(" + left + "," + right + ")";
+    protected String toString(ConditionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        OperStatement oper = statement.getOper();
+        switch (oper.getNameId()) {
+            case 105041637://BITANDStatement
+                return "BITAND(" + toStr(statement.getLeft(), assist, invokerList) + "," + toStr(statement.getRight(), assist, invokerList) + ")";
+            case -233322561://BITORStatement
+            {
+                String left = toStr(statement.getLeft(), assist, invokerList);
+                String right = toStr(statement.getRight(), assist, invokerList);
+                return left + right + "-BITAND(" + left + "," + right + ")";
+            }
+            case -1474196255://BITXORStatement
+            {
+                String left = toStr(statement.getLeft(), assist, invokerList);
+                String right = toStr(statement.getRight(), assist, invokerList);
+                return left + right + "-2*BITAND(" + left + "," + right + ")";
+            }
+            case -236816094://LLMStatement
+            {
+                String left = toStr(statement.getLeft(), assist, invokerList);
+                String right = toStr(statement.getRight(), assist, invokerList);
+                return left + "*POWER(2," + right + ")";
+            }
+            case -1654093342://RRMStatement
+            {
+                String left = toStr(statement.getLeft(), assist, invokerList);
+                String right = toStr(statement.getRight(), assist, invokerList);
+                return left + "/POWER(2," + right + ")";
+            }
+            default:
+                return super.toString(statement, assist, invokerList);
+        }
     }
 
     @Override

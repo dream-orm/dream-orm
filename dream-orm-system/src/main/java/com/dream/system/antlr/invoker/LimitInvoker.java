@@ -30,7 +30,7 @@ public class LimitInvoker extends AbstractInvoker {
         Statement[] columnList = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList();
         pageHandler.setParamList(columnList[1], columnList[2], false);
         String sql = toSQL.toStr(columnList[0], assist, invokerList);
-        invokerStatement.replaceWith(columnList[0]);
+        invokerStatement.setActualStatement(columnList[0]);
         return sql;
     }
 

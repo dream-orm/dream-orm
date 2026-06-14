@@ -257,10 +257,10 @@ public class ToClickHouse extends ToPubSQL {
     protected String toString(CastTypeStatement.DecimalCastStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         Statement paramStatement = statement.getParamStatement();
         Statement decimalStatement = null;
-        if (paramStatement != null && paramStatement instanceof BraceStatement) {
+        if (paramStatement instanceof BraceStatement) {
             BraceStatement braceStatement = (BraceStatement) paramStatement;
             Statement braceParamStatement = braceStatement.getStatement();
-            if (braceParamStatement != null && braceParamStatement instanceof ListColumnStatement) {
+            if (braceParamStatement instanceof ListColumnStatement) {
                 ListColumnStatement listColumnStatement = (ListColumnStatement) braceParamStatement;
                 Statement[] columnList = listColumnStatement.getColumnList();
                 if (columnList.length == 2) {
@@ -474,36 +474,29 @@ public class ToClickHouse extends ToPubSQL {
     }
 
     @Override
-    protected String toString(OperStatement.LLMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        String left = toStr(conditionStatement.getLeft(), assist, invokerList);
-        String right = toStr(conditionStatement.getRight(), assist, invokerList);
-        return "bitShiftLeft(" + left + "," + right + ")";
-    }
-
-    @Override
-    protected String toString(OperStatement.RRMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        String left = toStr(conditionStatement.getLeft(), assist, invokerList);
-        String right = toStr(conditionStatement.getRight(), assist, invokerList);
-        return "bitShiftRight(" + left + "," + right + ")";
-    }
-
-    @Override
-    protected String toString(OperStatement.BITANDStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return "bitAnd(" + toStr(conditionStatement.getLeft(), assist, invokerList) + "," + toStr(conditionStatement.getRight(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(OperStatement.BITORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return "bitOr(" + toStr(conditionStatement.getLeft(), assist, invokerList) + "," + toStr(conditionStatement.getRight(), assist, invokerList) + ")";
-    }
-
-    @Override
-    protected String toString(OperStatement.BITXORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return "bitXor(" + toStr(conditionStatement.getLeft(), assist, invokerList) + "," + toStr(conditionStatement.getRight(), assist, invokerList) + ")";
+    protected String toString(ConditionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        OperStatement oper = statement.getOper();
+        switch (oper.getNameId()) {
+            case -236816094://LLMStatement
+            {
+                String left = toStr(statement.getLeft(), assist, invokerList);
+                String right = toStr(statement.getRight(), assist, invokerList);
+                return "bitShiftLeft(" + left + "," + right + ")";
+            }
+            case -1654093342://RRMStatement
+            {
+                String left = toStr(statement.getLeft(), assist, invokerList);
+                String right = toStr(statement.getRight(), assist, invokerList);
+                return "bitShiftRight(" + left + "," + right + ")";
+            }
+            case 105041637://BITANDStatement
+                return "bitAnd(" + toStr(statement.getLeft(), assist, invokerList) + "," + toStr(statement.getRight(), assist, invokerList) + ")";
+            case -233322561://BITORStatement
+                return "bitOr(" + toStr(statement.getLeft(), assist, invokerList) + "," + toStr(statement.getRight(), assist, invokerList) + ")";
+            case -1474196255://BITXORStatement
+                return "bitXor(" + toStr(statement.getLeft(), assist, invokerList) + "," + toStr(statement.getRight(), assist, invokerList) + ")";
+            default:
+                return super.toString(statement, assist, invokerList);
+        }
     }
 }

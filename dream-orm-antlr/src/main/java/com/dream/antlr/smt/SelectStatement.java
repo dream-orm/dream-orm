@@ -17,7 +17,7 @@ public class SelectStatement extends Statement {
     }
 
     public void setSelectList(ListColumnStatement selectList) {
-        this.selectList = wrapParent(selectList);
+        this.selectList = selectList;
     }
 
     @Override

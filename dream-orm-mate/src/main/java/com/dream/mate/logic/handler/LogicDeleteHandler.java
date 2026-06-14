@@ -51,7 +51,7 @@ public class LogicDeleteHandler extends AbstractHandler {
             updateStatement.setConditionList(columnStatements);
             updateStatement.setTable(tableSymbolStatement);
             updateStatement.setWhere(deleteStatement.getWhere());
-            deleteStatement.replaceWith(updateStatement);
+            deleteStatement.setActualStatement(updateStatement);
             return updateStatement;
         }
         return statement;

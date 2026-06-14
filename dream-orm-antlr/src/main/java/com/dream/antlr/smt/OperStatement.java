@@ -13,7 +13,7 @@ public abstract class OperStatement extends Statement {
 
     @Override
     protected Boolean isNeedInnerCache() {
-        return parentStatement.isNeedInnerCache();
+        return true;
     }
 
     @Override
@@ -167,6 +167,4 @@ public abstract class OperStatement extends Statement {
             setLevel(7);
         }
     }
-
-
 }

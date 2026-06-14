@@ -10,7 +10,7 @@ public class ReplaceIntoStatement extends Statement {
     }
 
     public void setTable(Statement table) {
-        this.table = wrapParent(table);
+        this.table = table;
     }
 
     public Statement getColumns() {
@@ -18,7 +18,7 @@ public class ReplaceIntoStatement extends Statement {
     }
 
     public void setColumns(Statement columns) {
-        this.columns = wrapParent(columns);
+        this.columns = columns;
     }
 
     public Statement getValues() {
@@ -26,7 +26,7 @@ public class ReplaceIntoStatement extends Statement {
     }
 
     public void setValues(Statement values) {
-        this.values = wrapParent(values);
+        this.values = values;
     }
 
     @Override

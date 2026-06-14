@@ -26,7 +26,7 @@ public class TransformInvoker extends AbstractInvoker {
     protected String invoker(InvokerStatement invokerStatement, Assist assist, ToSQL toSQL, List<Invoker> invokerList) throws AntlrException {
         Statement statement = ((ListColumnStatement) invokerStatement.getParamStatement()).getColumnList()[0];
         String sql = toSQL.toStr(invokerStatement.getParamStatement(), assist, invokerList);
-        invokerStatement.replaceWith(statement);
+        invokerStatement.setActualStatement(statement);
         return sql;
     }
 

@@ -96,7 +96,7 @@ public class PageHandler extends AbstractHandler {
             fromStatement.setMainTable(aliasStatement);
             queryStatement.setFromStatement(fromStatement);
             queryStatement.setLimitStatement(limitStatement);
-            statement.replaceWith(queryStatement);
+            statement.setActualStatement(queryStatement);
         }
     }
 

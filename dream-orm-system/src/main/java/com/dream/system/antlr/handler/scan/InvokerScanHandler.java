@@ -16,7 +16,7 @@ public class InvokerScanHandler extends AbstractHandler {
 
     @Override
     protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
-        if (statement.getParentStatement() != null) {
+        if (statement.getActualStatement() == null) {
             scanInfo.add((InvokerStatement) statement);
         }
         return super.handlerAfter(statement, assist, sql, life);

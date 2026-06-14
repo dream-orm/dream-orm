@@ -241,86 +241,72 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(OperStatement.LTStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "<" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "<";
     }
 
     @Override
     protected String toString(OperStatement.LEQStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "<=" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "<=";
     }
 
     @Override
     protected String toString(OperStatement.GTStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + ">" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return ">";
     }
 
     @Override
     protected String toString(OperStatement.GEQStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + ">=" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return ">=";
     }
 
     @Override
     protected String toString(OperStatement.EQStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "=" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "=";
     }
 
     @Override
     protected String toString(OperStatement.NEQStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "<>" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "<>";
     }
 
     @Override
     protected String toString(OperStatement.LIKEStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + " LIKE " + toStr(conditionStatement.getRight(), assist, invokerList);
+        return " LIKE ";
     }
 
     @Override
     protected String toString(OperStatement.ISStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + " IS " + toStr(conditionStatement.getRight(), assist, invokerList);
+        return " IS ";
     }
 
     @Override
     protected String toString(OperStatement.INStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + " IN " + toStr(conditionStatement.getRight(), assist, invokerList);
+        return " IN ";
     }
 
     @Override
     protected String toString(OperStatement.NOTStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + " NOT " + toStr(conditionStatement.getRight(), assist, invokerList);
+        return " NOT ";
     }
 
     @Override
     protected String toString(OperStatement.EXISTSStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + " EXISTS " + toStr(conditionStatement.getRight(), assist, invokerList);
+        return " EXISTS ";
     }
 
     @Override
     protected String toString(OperStatement.STARStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "*" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "*";
     }
 
     @Override
     protected String toString(OperStatement.DIVIDEStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "/" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "/";
     }
 
     @Override
     protected String toString(OperStatement.MODStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "%" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "%";
     }
 
     @Override
@@ -486,7 +472,7 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(ConditionStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        return toStr(statement.getOper(), assist, invokerList);
+        return toStr(statement.getLeft(), assist, invokerList) + toStr(statement.getOper(), assist, invokerList) + toStr(statement.getRight(), assist, invokerList);
     }
 
     @Override
@@ -976,26 +962,22 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(OperStatement.ADDStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "+" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "+";
     }
 
     @Override
     protected String toString(OperStatement.LLMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "<<" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "<<";
     }
 
     @Override
     protected String toString(OperStatement.RRMStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + ">>" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return ">>";
     }
 
     @Override
     protected String toString(OperStatement.SUBStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "-" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "-";
     }
 
     @Override
@@ -1010,38 +992,32 @@ public class ToNativeSQL extends ToSQL {
 
     @Override
     protected String toString(OperStatement.BETWEENStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + " BETWEEN " + toStr(conditionStatement.getRight(), assist, invokerList);
+        return " BETWEEN ";
     }
 
     @Override
     protected String toString(OperStatement.ANDStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + " AND " + toStr(conditionStatement.getRight(), assist, invokerList);
+        return " AND ";
     }
 
     @Override
     protected String toString(OperStatement.BITANDStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "&" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "&";
     }
 
     @Override
     protected String toString(OperStatement.BITORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "|" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "|";
     }
 
     @Override
     protected String toString(OperStatement.BITXORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + "^" + toStr(conditionStatement.getRight(), assist, invokerList);
+        return "^";
     }
 
     @Override
     protected String toString(OperStatement.ORStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
-        ConditionStatement conditionStatement = (ConditionStatement) statement.getParentStatement();
-        return toStr(conditionStatement.getLeft(), assist, invokerList) + " OR " + toStr(conditionStatement.getRight(), assist, invokerList);
+        return " OR ";
     }
 
     @Override

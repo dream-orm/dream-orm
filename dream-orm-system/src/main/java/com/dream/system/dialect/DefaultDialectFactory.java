@@ -29,6 +29,7 @@ public class DefaultDialectFactory extends AbstractDialectFactory {
         List<MarkInvoker.ParamInfo> paramInfoList;
         if (scanInfo == null) {
             Assist assist = getAssist(methodInfo, arg);
+            assist.setCustom(PackageStatement.class, statement);
             sql = toSQL.toStr(methodInfo.getStatement(), assist, null);
             scanInfo = statement.getValue(ScanInvoker.ScanInfo.class);
             paramInfoList = getParamInfoList(assist);

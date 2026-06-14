@@ -4,7 +4,10 @@ import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
 import com.dream.antlr.invoker.AbstractInvoker;
 import com.dream.antlr.invoker.Invoker;
-import com.dream.antlr.smt.*;
+import com.dream.antlr.smt.InvokerStatement;
+import com.dream.antlr.smt.ListColumnStatement;
+import com.dream.antlr.smt.Statement;
+import com.dream.antlr.smt.SymbolStatement;
 import com.dream.antlr.sql.ToNativeSQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.antlr.util.AntlrUtil;
@@ -15,14 +18,16 @@ import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
 import com.dream.system.util.SystemUtil;
 import com.dream.util.common.LowHashMap;
-import com.dream.util.common.LowHashSet;
 import com.dream.util.common.ObjectUtil;
 import com.dream.util.exception.DreamRunTimeException;
 import com.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StarInvoker extends AbstractInvoker {
@@ -68,26 +73,22 @@ public class StarInvoker extends AbstractInvoker {
             lowHashMap.put(tableScanInfo.getTable(), tableScanInfo);
         }
         List<Statement> queryColumnList = new ArrayList<>();
-        getQuery(tableFactory, colType, lowHashMap, getQueryColumnInfoList(assist, toSQL, invokerList, invokerStatement), queryColumnList);
+        getQuery(tableFactory, colType, lowHashMap, queryColumnList);
         ListColumnStatement selectListColumnStatement = AntlrUtil.listColumnStatement(",", queryColumnList.toArray(new Statement[queryColumnList.size()]));
-        invokerStatement.replaceWith(selectListColumnStatement);
+        invokerStatement.setActualStatement(selectListColumnStatement);
         return toSQL.toStr(selectListColumnStatement, assist, invokerList);
     }
 
-    protected void getQuery(TableFactory tableFactory, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<Statement> queryColumnList) throws AntlrException {
+    protected void getQuery(TableFactory tableFactory, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<Statement> queryColumnList) throws AntlrException {
         if (Map.class.isAssignableFrom(colType) || colType == Object.class) {
-            getQueryFromMap(tableFactory, tableScanInfoMap, queryColumnInfoList, queryColumnList);
+            getQueryFromMap(tableFactory, tableScanInfoMap, queryColumnList);
         } else {
             String table = getTableName(colType);
-            getQueryFromBean(tableFactory, table, colType, tableScanInfoMap, queryColumnInfoList, queryColumnList);
+            getQueryFromBean(tableFactory, table, colType, tableScanInfoMap, queryColumnList);
         }
     }
 
-    protected void getQueryFromMap(TableFactory tableFactory, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<Statement> queryColumnList) {
-        Set<String> set = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getColumn()).collect(Collectors.toSet());
-        LowHashSet columnSet = new LowHashSet(set);
-        Set<String> aliasSet = queryColumnInfoList.stream().map(queryColumnInfo -> queryColumnInfo.getAlias()).collect(Collectors.toSet());
-        LowHashSet fieldSet = new LowHashSet(aliasSet);
+    protected void getQueryFromMap(TableFactory tableFactory, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<Statement> queryColumnList) {
         Collection<ScanInvoker.TableScanInfo> tableScanInfoList = tableScanInfoMap.values();
         for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoList) {
             String table = tableScanInfo.getTable();
@@ -98,15 +99,13 @@ public class StarInvoker extends AbstractInvoker {
             }
             Collection<ColumnInfo> columnInfoList = tableInfo.getColumnInfoList();
             List<Statement> columnList = columnInfoList.stream()
-                    .filter(columnInfo -> !columnSet.contains(columnInfo.getColumn())
-                            && !fieldSet.contains(columnInfo.getName()))
                     .map(columnInfo -> AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())))
                     .collect(Collectors.toList());
             queryColumnList.addAll(columnList);
         }
     }
 
-    protected void getQueryFromBean(TableFactory tableFactory, String table, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<QueryColumnInfo> queryColumnInfoList, List<Statement> queryColumnList) throws AntlrException {
+    protected void getQueryFromBean(TableFactory tableFactory, String table, Class colType, Map<String, ScanInvoker.TableScanInfo> tableScanInfoMap, List<Statement> queryColumnList) throws AntlrException {
         TableInfo rootTableInfo = null;
         String alias = null;
         if (!ObjectUtil.isNull(table)) {
@@ -134,42 +133,18 @@ public class StarInvoker extends AbstractInvoker {
                                 TableInfo tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
                                 ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
                                 if (columnInfo != null) {
-                                    boolean add = true;
-                                    for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
-                                        if (columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
-                                                || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias())) {
-                                            add = false;
-                                            break;
-                                        }
-                                    }
-                                    if (add) {
-                                        queryColumnList.add(AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())));
-                                        break;
-                                    }
+                                    queryColumnList.add(AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())));
+                                    break;
                                 }
                             }
                         } else {
                             ColumnInfo columnInfo = rootTableInfo.getColumnInfo(fieldName);
                             if (columnInfo != null) {
-                                boolean add = true;
-                                for (QueryColumnInfo queryColumnInfo : queryColumnInfoList) {
-                                    String queryTable = queryColumnInfo.getTable();
-                                    boolean hasAdd = (columnInfo.getColumn().equalsIgnoreCase(queryColumnInfo.getColumn())
-                                            || columnInfo.getName().equalsIgnoreCase(queryColumnInfo.getAlias()))
-                                            && (ObjectUtil.isNull(queryTable)
-                                            || queryTable.equalsIgnoreCase(alias));
-                                    if (hasAdd) {
-                                        add = false;
-                                        break;
-                                    }
-                                }
-                                if (add) {
-                                    queryColumnList.add(AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())));
-                                }
+                                queryColumnList.add(AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())));
                             }
                         }
                     } else {
-                        getQueryFromBean(tableFactory, fieldTable, ReflectUtil.getColType(colType, field), tableScanInfoMap, queryColumnInfoList, queryColumnList);
+                        getQueryFromBean(tableFactory, fieldTable, ReflectUtil.getColType(colType, field), tableScanInfoMap, queryColumnList);
                     }
                 }
             }
@@ -180,76 +155,8 @@ public class StarInvoker extends AbstractInvoker {
         return SystemUtil.getTableName(type);
     }
 
-    protected List<QueryColumnInfo> getQueryColumnInfoList(Assist assist, ToSQL toSQL, List<Invoker> invokerList, InvokerStatement invokerStatement) throws AntlrException {
-        Statement parentStatement = invokerStatement.getParentStatement();
-        ListColumnStatement listColumnStatement = (ListColumnStatement) parentStatement;
-        Statement[] columnList = listColumnStatement.getColumnList();
-        List<QueryColumnInfo> queryColumnInfoList = new ArrayList<>();
-        for (Statement statement : columnList) {
-            String database = null;
-            String table = null;
-            String column = null;
-            String alias = null;
-            if (statement instanceof AliasStatement) {
-                AliasStatement aliasStatement = (AliasStatement) statement;
-                statement = aliasStatement.getColumn();
-                alias = toSQL.toStr(aliasStatement.getAlias(), assist, invokerList);
-            }
-            if (statement instanceof SymbolStatement) {
-                SymbolStatement symbolStatement = (SymbolStatement) statement;
-                column = symbolStatement.getValue();
-            } else if (statement instanceof ListColumnStatement) {
-                ListColumnStatement columnStatements = (ListColumnStatement) statement;
-                Statement[] columnLists = columnStatements.getColumnList();
-                if (columnLists.length == 3) {
-                    database = ((SymbolStatement) columnLists[0]).getValue();
-                    table = ((SymbolStatement) columnLists[1]).getValue();
-                    column = ((SymbolStatement) columnLists[2]).getValue();
-                } else if (columnLists.length == 2) {
-                    table = ((SymbolStatement) columnLists[0]).getValue();
-                    column = ((SymbolStatement) columnLists[1]).getValue();
-                }
-            }
-            if (!ObjectUtil.isNull(column)) {
-                queryColumnInfoList.add(new QueryColumnInfo(database, table, column, alias));
-            }
-        }
-        return queryColumnInfoList;
-    }
-
-
     @Override
     public String function() {
         return FUNCTION;
-    }
-
-    public static class QueryColumnInfo {
-        private final String database;
-        private final String table;
-        private final String column;
-        private final String alias;
-
-        public QueryColumnInfo(String database, String table, String column, String alias) {
-            this.database = database;
-            this.table = table;
-            this.column = column;
-            this.alias = alias;
-        }
-
-        public String getDatabase() {
-            return database;
-        }
-
-        public String getTable() {
-            return table;
-        }
-
-        public String getColumn() {
-            return column;
-        }
-
-        public String getAlias() {
-            return alias;
-        }
     }
 }

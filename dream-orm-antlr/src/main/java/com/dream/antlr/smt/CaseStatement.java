@@ -10,7 +10,7 @@ public class CaseStatement extends Statement {
     }
 
     public void setWhenThenList(Statement whenThenList) {
-        this.whenThenList = wrapParent(whenThenList);
+        this.whenThenList = whenThenList;
     }
 
     public Statement getCaseColumn() {
@@ -18,7 +18,7 @@ public class CaseStatement extends Statement {
     }
 
     public void setCaseColumn(Statement caseColumn) {
-        this.caseColumn = wrapParent(caseColumn);
+        this.caseColumn = caseColumn;
     }
 
 
@@ -27,7 +27,7 @@ public class CaseStatement extends Statement {
     }
 
     public void setElseColumn(Statement elseColumn) {
-        this.elseColumn = wrapParent(elseColumn);
+        this.elseColumn = elseColumn;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class CaseStatement extends Statement {
         }
 
         public void setWhen(Statement when) {
-            this.when = wrapParent(when);
+            this.when = when;
         }
 
         public Statement getThen() {
@@ -61,7 +61,7 @@ public class CaseStatement extends Statement {
         }
 
         public void setThen(Statement then) {
-            this.then = wrapParent(then);
+            this.then = then;
         }
 
         @Override

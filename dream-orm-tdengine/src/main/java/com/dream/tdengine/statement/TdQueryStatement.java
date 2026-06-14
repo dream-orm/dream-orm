@@ -20,7 +20,7 @@ public class TdQueryStatement extends QueryStatement {
     }
 
     public void setPartitionBy(TdPartitionStatement partitionBy) {
-        this.partitionBy = wrapParent(partitionBy);
+        this.partitionBy = partitionBy;
     }
 
     public TdWindowStatement getWindnow() {
@@ -28,7 +28,7 @@ public class TdQueryStatement extends QueryStatement {
     }
 
     public void setWindnow(TdWindowStatement windnow) {
-        this.windnow = wrapParent(windnow);
+        this.windnow = windnow;
     }
 
     public TdSLimitStatement getSlimit() {
@@ -36,7 +36,7 @@ public class TdQueryStatement extends QueryStatement {
     }
 
     public void setSlimit(TdSLimitStatement slimit) {
-        this.slimit = wrapParent(slimit);
+        this.slimit = slimit;
     }
 
     @Override
