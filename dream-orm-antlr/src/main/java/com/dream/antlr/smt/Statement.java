@@ -56,8 +56,10 @@ public abstract class Statement implements Serializable, Cloneable {
     @Override
     public Statement clone() {
         try {
+            if (actualStatement != null) {
+                return actualStatement.clone();
+            }
             Statement statement = (Statement) super.clone();
-            statement.actualStatement = clone(actualStatement);
             statement.needCache = needCache;
             statement.quickValue = quickValue;
             return statement;
