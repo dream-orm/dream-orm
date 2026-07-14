@@ -6,18 +6,17 @@ import com.dream.antlr.handler.AbstractHandler;
 import com.dream.antlr.handler.Handler;
 import com.dream.antlr.invoker.Invoker;
 import com.dream.antlr.smt.FunctionStatement;
-import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.Statement;
-import com.dream.antlr.smt.SymbolStatement;
 import com.dream.antlr.sql.ToSQL;
-import com.dream.util.common.ObjectUtil;
 
 import java.util.List;
 
 public class FunctionHandler extends AbstractHandler {
+    private static final NullFlag NULL_FLAG = new NullFlag();
 
     @Override
     protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
+        assist.setCustom(NullFlag.class, null);
         return statement;
     }
 
@@ -44,30 +43,17 @@ public class FunctionHandler extends AbstractHandler {
     public static class ParamListHandler extends AbstractHandler {
 
         @Override
-        protected Statement handlerBefore(Statement statement, Assist assist, ToSQL toSQL, List<Invoker> invokerList, int life) throws AntlrException {
-            ListColumnStatement listColumnStatement = (ListColumnStatement) statement;
-            Statement[] columnList = listColumnStatement.getColumnList();
-            if (!ObjectUtil.isNull(columnList)) {
-                String cut = toSQL.toStr(listColumnStatement.getCut(), assist, invokerList);
-                ListColumnStatement statementList = new ListColumnStatement(cut);
-                Statement[] statements = new Statement[columnList.length];
-                for (int i = 0; i < columnList.length; i++) {
-                    String column = toSQL.toStr(columnList[i], assist, invokerList);
-                    if ("".equals(column)) {
-                        assist.setCustom(NullFlag.class, new NullFlag());
-                        return null;
-                    }
-                    statements[i] = new SymbolStatement.LetterStatement(column);
-                }
-                statementList.add(statements);
-                return statementList;
+        protected String handlerAfter(Statement statement, Assist assist, String sql, int life) throws AntlrException {
+            if ("".equals(sql)) {
+                assist.setCustom(NullFlag.class, NULL_FLAG);
+                return "";
             }
-            return statement;
+            return sql;
         }
 
         @Override
         protected boolean interest(Statement statement, Assist assist) {
-            return statement instanceof ListColumnStatement;
+            return true;
         }
     }
 
