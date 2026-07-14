@@ -1,7 +1,6 @@
 package com.dream.template.mapper;
 
 import com.dream.system.config.Page;
-import com.dream.util.tree.Tree;
 
 import java.util.Collection;
 import java.util.List;
@@ -49,16 +48,6 @@ public interface TemplateMapper {
      * @return
      */
     <T> List<T> selectList(Class<T> type, Object conditionObject);
-
-    /**
-     * 根据对象生成注解条件，并查询树形结构
-     *
-     * @param type            接收类型
-     * @param conditionObject 对象注解条件
-     * @param <T>
-     * @return
-     */
-    <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject);
 
     /**
      * 根据对象生成注解条件，并分页查询

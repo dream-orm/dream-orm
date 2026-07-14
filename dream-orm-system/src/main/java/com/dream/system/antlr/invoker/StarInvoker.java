@@ -2,8 +2,10 @@ package com.dream.system.antlr.invoker;
 
 import com.dream.antlr.config.Assist;
 import com.dream.antlr.exception.AntlrException;
+import com.dream.antlr.expr.ColumnExpr;
 import com.dream.antlr.invoker.AbstractInvoker;
 import com.dream.antlr.invoker.Invoker;
+import com.dream.antlr.read.ExprReader;
 import com.dream.antlr.smt.InvokerStatement;
 import com.dream.antlr.smt.ListColumnStatement;
 import com.dream.antlr.smt.Statement;
@@ -11,6 +13,7 @@ import com.dream.antlr.smt.SymbolStatement;
 import com.dream.antlr.sql.ToNativeSQL;
 import com.dream.antlr.sql.ToSQL;
 import com.dream.antlr.util.AntlrUtil;
+import com.dream.system.annotation.Value;
 import com.dream.system.config.Configuration;
 import com.dream.system.config.MethodInfo;
 import com.dream.system.table.ColumnInfo;
@@ -123,28 +126,34 @@ public class StarInvoker extends AbstractInvoker {
         if (!ObjectUtil.isNull(fieldList)) {
             for (Field field : fieldList) {
                 if (!SystemUtil.ignoreField(field)) {
-                    String fieldName = field.getName();
-                    Type genericType = field.getGenericType();
-                    String fieldTable = getTableName(ReflectUtil.getColType(genericType));
-                    if (ObjectUtil.isNull(fieldTable)) {
-                        if (rootTableInfo == null) {
-                            for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {
-                                alias = tableScanInfo.getAlias();
-                                TableInfo tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
-                                ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
+                    Value value = field.getAnnotation(Value.class);
+                    if (value == null) {
+                        String fieldName = field.getName();
+                        Type genericType = field.getGenericType();
+                        String fieldTable = getTableName(ReflectUtil.getColType(genericType));
+                        if (ObjectUtil.isNull(fieldTable)) {
+                            if (rootTableInfo == null) {
+                                for (ScanInvoker.TableScanInfo tableScanInfo : tableScanInfoMap.values()) {
+                                    alias = tableScanInfo.getAlias();
+                                    TableInfo tableInfo = tableFactory.getTableInfo(tableScanInfo.getTable());
+                                    ColumnInfo columnInfo = tableInfo.getColumnInfo(fieldName);
+                                    if (columnInfo != null) {
+                                        queryColumnList.add(AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())));
+                                        break;
+                                    }
+                                }
+                            } else {
+                                ColumnInfo columnInfo = rootTableInfo.getColumnInfo(fieldName);
                                 if (columnInfo != null) {
                                     queryColumnList.add(AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())));
-                                    break;
                                 }
                             }
                         } else {
-                            ColumnInfo columnInfo = rootTableInfo.getColumnInfo(fieldName);
-                            if (columnInfo != null) {
-                                queryColumnList.add(AntlrUtil.aliasStatement(AntlrUtil.listColumnStatement(".", new SymbolStatement.SingleMarkStatement(alias), new SymbolStatement.SingleMarkStatement(columnInfo.getColumn())), new SymbolStatement.SingleMarkStatement(columnInfo.getName())));
-                            }
+                            getQueryFromBean(tableFactory, fieldTable, ReflectUtil.getColType(colType, field), tableScanInfoMap, queryColumnList);
                         }
                     } else {
-                        getQueryFromBean(tableFactory, fieldTable, ReflectUtil.getColType(colType, field), tableScanInfoMap, queryColumnList);
+                        ColumnExpr columnExpr = new ColumnExpr(new ExprReader(value.value()), null);
+                        queryColumnList.add(AntlrUtil.aliasStatement(columnExpr.expr(), new SymbolStatement.SingleMarkStatement(field.getName())));
                     }
                 }
             }

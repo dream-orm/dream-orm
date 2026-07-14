@@ -10,7 +10,6 @@ import com.dream.system.table.TableInfo;
 import com.dream.system.table.factory.TableFactory;
 import com.dream.system.typehandler.TypeHandlerNotFoundException;
 import com.dream.system.typehandler.factory.TypeHandlerFactory;
-import com.dream.system.typehandler.handler.TypeHandler;
 import com.dream.system.util.SystemUtil;
 import com.dream.util.common.LowHashSet;
 import com.dream.util.common.NonCollection;
@@ -145,7 +144,6 @@ public class DefaultResultSetHandler implements ResultSetHandler {
             String columnLabel = metaData.getColumnLabel(i);
             String tableName = metaData.getTableName(i);
             ColumnInfo columnInfo = null;
-            TypeHandler typeHandler = null;
             if (!ObjectUtil.isNull(tableName)) {
                 columnInfo = getColumnInfo(mappedStatement, tableName, columnLabel);
                 if (columnInfo != null) {

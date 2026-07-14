@@ -6,7 +6,6 @@ import com.dream.template.sequence.BatchSequence;
 import com.dream.template.sequence.FetchKeySequence;
 import com.dream.template.sequence.NoFetchKeySequence;
 import com.dream.template.sequence.Sequence;
-import com.dream.util.tree.Tree;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -36,7 +35,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private final SelectByIdsMapper selectByIdsSqlMapper;
     private final SelectOneMapper selectOneSqlMapper;
     private final SelectListMapper selectListMapper;
-    private final SelectTreeMapper selectTreeMapper;
     private final SelectPageMapper selectPageSqlMapper;
     private final DeleteByIdMapper deleteByIdSqlMapper;
     private final DeleteByIdsMapper deleteByIdsSqlMapper;
@@ -56,7 +54,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
         selectByIdsSqlMapper = new SelectByIdsMapper(session);
         selectOneSqlMapper = new SelectOneMapper(session);
         selectListMapper = new SelectListMapper(session);
-        selectTreeMapper = new SelectTreeMapper(session);
         selectPageSqlMapper = new SelectPageMapper(session);
         deleteByIdSqlMapper = new DeleteByIdMapper(session);
         deleteByIdsSqlMapper = new DeleteByIdsMapper(session);
@@ -101,15 +98,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
             id += ":" + conditionObject.getClass().getName();
         }
         return (List<T>) selectListMapper.execute(id, type, conditionObject);
-    }
-
-    @Override
-    public <T extends Tree> List<T> selectTree(Class<T> type, Object conditionObject) {
-        String id = selectTree + ":" + type.getName();
-        if (conditionObject != null) {
-            id += ":" + conditionObject.getClass().getName();
-        }
-        return (List<T>) selectTreeMapper.execute(id, type, conditionObject);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.dream.helloworld.h2.view;
 
 import com.dream.helloworld.h2.table.Account;
+import com.dream.system.annotation.Value;
 import com.dream.system.annotation.View;
 
 @View(Account.class)
@@ -9,6 +10,7 @@ public class AccountView {
     private String name;
     private Integer age;
     private String email;
+    @Value("123")
     private String ap;
 
     public String getAp() {
@@ -49,15 +51,5 @@ public class AccountView {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return "AccountView{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", email='" + email + '\'' +
-                '}';
     }
 }

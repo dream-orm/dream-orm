@@ -50,7 +50,7 @@ public class ConditionHandler extends AbstractHandler {
             case 1462204615://"LTStatement"
                 vl = toSQL.toStr(leftStatement, assist, invokerList);
                 vr = toSQL.toStr(rightStatement, assist, invokerList);
-                if (ExprUtil.isEmpty(vl)||ExprUtil.isEmpty(vr)) {
+                if (ExprUtil.isEmpty(vl) || ExprUtil.isEmpty(vr)) {
                     return null;
                 } else {
                     return new SymbolStatement.LetterStatement(vl + "<" + vr);
@@ -58,7 +58,7 @@ public class ConditionHandler extends AbstractHandler {
             case -1329112489://"LEQStatement"
                 vl = toSQL.toStr(leftStatement, assist, invokerList);
                 vr = toSQL.toStr(rightStatement, assist, invokerList);
-                if (ExprUtil.isEmpty(vl)||ExprUtil.isEmpty(vr)) {
+                if (ExprUtil.isEmpty(vl) || ExprUtil.isEmpty(vr)) {
                     return null;
                 } else {
                     return new SymbolStatement.LetterStatement(vl + "<=" + vr);
@@ -66,7 +66,7 @@ public class ConditionHandler extends AbstractHandler {
             case 1857026818://"GTStatement"
                 vl = toSQL.toStr(leftStatement, assist, invokerList);
                 vr = toSQL.toStr(rightStatement, assist, invokerList);
-                if (ExprUtil.isEmpty(vl)||ExprUtil.isEmpty(vr)) {
+                if (ExprUtil.isEmpty(vl) || ExprUtil.isEmpty(vr)) {
                     return null;
                 } else {
                     return new SymbolStatement.LetterStatement(vl + ">" + vr);
@@ -74,7 +74,7 @@ public class ConditionHandler extends AbstractHandler {
             case -1974526084://"GEQStatement"
                 vl = toSQL.toStr(leftStatement, assist, invokerList);
                 vr = toSQL.toStr(rightStatement, assist, invokerList);
-                if (ExprUtil.isEmpty(vl)||ExprUtil.isEmpty(vr)) {
+                if (ExprUtil.isEmpty(vl) || ExprUtil.isEmpty(vr)) {
                     return null;
                 } else {
                     return new SymbolStatement.LetterStatement(vl + ">=" + vr);
@@ -82,7 +82,7 @@ public class ConditionHandler extends AbstractHandler {
             case 1745502755://"EQStatement"
                 vl = toSQL.toStr(leftStatement, assist, invokerList);
                 vr = toSQL.toStr(rightStatement, assist, invokerList);
-                if (ExprUtil.isEmpty(vl)||ExprUtil.isEmpty(vr)) {
+                if (ExprUtil.isEmpty(vl) || ExprUtil.isEmpty(vr)) {
                     return null;
                 } else {
                     return new SymbolStatement.LetterStatement(vl + "=" + vr);
@@ -90,7 +90,7 @@ public class ConditionHandler extends AbstractHandler {
             case -1070947051://"NEQStatement"
                 vl = toSQL.toStr(leftStatement, assist, invokerList);
                 vr = toSQL.toStr(rightStatement, assist, invokerList);
-                if (ExprUtil.isEmpty(vl)||ExprUtil.isEmpty(vr)) {
+                if (ExprUtil.isEmpty(vl) || ExprUtil.isEmpty(vr)) {
                     return null;
                 } else {
                     return new SymbolStatement.LetterStatement(vl + "<>" + vr);
@@ -98,7 +98,7 @@ public class ConditionHandler extends AbstractHandler {
             case 1921203096://"LIKEStatement"
                 vl = toSQL.toStr(leftStatement, assist, invokerList);
                 vr = toSQL.toStr(rightStatement, assist, invokerList);
-                if (ExprUtil.isEmpty(vl)||ExprUtil.isEmpty(vr)) {
+                if (ExprUtil.isEmpty(vl) || ExprUtil.isEmpty(vr)) {
                     return null;
                 } else {
                     return new SymbolStatement.LetterStatement(vl + " LIKE " + vr);
@@ -106,7 +106,7 @@ public class ConditionHandler extends AbstractHandler {
             case -557794870://"INStatement"
                 vl = toSQL.toStr(leftStatement, assist, invokerList);
                 vr = toSQL.toStr(rightStatement, assist, invokerList);
-                if (ExprUtil.isEmpty(vl)||ExprUtil.isEmpty(vr)) {
+                if (ExprUtil.isEmpty(vl) || ExprUtil.isEmpty(vr)) {
                     return null;
                 } else {
                     return new SymbolStatement.LetterStatement(vl + " IN" + vr);
