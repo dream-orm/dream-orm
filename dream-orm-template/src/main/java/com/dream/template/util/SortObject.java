@@ -1,14 +1,12 @@
 package com.dream.template.util;
 
-public class SortObject implements Comparable<SortObject> {
+public class SortObject {
     private String property;
     private String orderType;
-    private int order;
 
-    public SortObject(String property, String orderType, int order) {
+    public SortObject(String property, String orderType) {
         this.property = property;
         this.orderType = orderType;
-        this.order = order;
     }
 
     public String getProperty() {
@@ -17,10 +15,5 @@ public class SortObject implements Comparable<SortObject> {
 
     public String getOrderType() {
         return orderType;
-    }
-
-    @Override
-    public int compareTo(SortObject o) {
-        return this.order - o.order;
     }
 }

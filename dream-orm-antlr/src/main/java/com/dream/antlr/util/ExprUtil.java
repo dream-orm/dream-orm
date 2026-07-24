@@ -273,6 +273,8 @@ public class ExprUtil {
                 return ExprType.SEPARATOR;
             case 2660340:
                 return ExprType.WEEK;
+            case 1944845064:
+                return ExprType.WEEKDAY;
             case 90085256:
                 return ExprType.WEEKOFYEAR;
             case 2719805:

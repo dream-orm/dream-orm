@@ -8,7 +8,6 @@ import com.dream.util.reflect.ReflectUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 class ConditionUtil {
@@ -48,14 +47,10 @@ class ConditionUtil {
                     sortObjectList.add(
                             new SortObject(
                                     column,
-                                    sortAnnotation.value().getOrderType(),
-                                    sortAnnotation.order()
+                                    sortAnnotation.value().getOrderType()
                             )
                     );
                 }
-            }
-            if (!sortObjectList.isEmpty()) {
-                Collections.sort(sortObjectList);
             }
             return sortObjectList;
         }

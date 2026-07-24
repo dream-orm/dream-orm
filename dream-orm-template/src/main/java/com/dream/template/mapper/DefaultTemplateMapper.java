@@ -17,7 +17,6 @@ public class DefaultTemplateMapper implements TemplateMapper {
     private final String selectByIds = baseName + ".selectByIds";
     private final String selectOne = baseName + ".selectOne";
     private final String selectList = baseName + ".selectList";
-    private final String selectTree = baseName + ".selectTree";
     private final String selectPage = baseName + ".selectPage";
     private final String selectCount = baseName + ".selectCount";
     private final String deleteById = baseName + ".deleteById";

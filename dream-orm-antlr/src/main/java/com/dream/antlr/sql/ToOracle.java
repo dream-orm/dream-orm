@@ -481,6 +481,11 @@ public class ToOracle extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.WeekDayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'d')";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DayOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ddd')";
     }

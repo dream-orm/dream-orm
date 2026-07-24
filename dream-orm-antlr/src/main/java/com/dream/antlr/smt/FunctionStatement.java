@@ -448,7 +448,9 @@ public abstract class FunctionStatement extends Statement {
     public static class SecondStatement extends FunctionStatement {
 
     }
+    public static class WeekDayStatement extends FunctionStatement {
 
+    }
     public static class WeekOfYearStatement extends FunctionStatement {
 
     }

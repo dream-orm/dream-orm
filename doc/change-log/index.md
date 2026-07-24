@@ -7,6 +7,7 @@
 - 新增：增加InStrCondition
 - 新增：增加Value注解
 - 删除：去除tree
+- 新增：支持weekday
 
 ## v1.4.1
 

@@ -806,6 +806,11 @@ public class ToNativeSQL extends ToSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.WeekDayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "WEEKDAY(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.WeekOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "WEEKOFYEAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

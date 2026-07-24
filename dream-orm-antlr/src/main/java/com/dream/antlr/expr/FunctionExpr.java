@@ -689,6 +689,14 @@ public class FunctionExpr extends SqlExpr {
     }
 
     @Override
+    protected Statement exprWeekDay(ExprInfo exprInfo) throws AntlrException {
+        FunctionStatement func = new FunctionStatement.WeekDayStatement();
+        functionStatement = new FunctionParamExpr(exprReader, func, myFunctionFactory).expr();
+        setExprTypes(ExprType.NIL);
+        return expr();
+    }
+
+    @Override
     protected Statement exprWeekOfYear(ExprInfo exprInfo) throws AntlrException {
         FunctionStatement func = new FunctionStatement.WeekOfYearStatement();
         functionStatement = new FunctionParamExpr(exprReader, func, myFunctionFactory).expr();

@@ -133,6 +133,7 @@ public enum ExprType {
     SECOND,
     TIME,
     WEEK,
+    WEEKDAY,
     WEEKOFYEAR,
     YEAR,
     MY_FUNCTION,

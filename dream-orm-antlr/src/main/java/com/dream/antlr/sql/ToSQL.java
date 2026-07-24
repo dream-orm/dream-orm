@@ -459,6 +459,9 @@ public abstract class ToSQL {
             case 165066792://DayOfWeekStatement
                 sql = toString((FunctionStatement.DayOfWeekStatement) statement, assist, invokerList);
                 break;
+            case -786497689://WeekDayStatement
+                sql = toString((FunctionStatement.WeekDayStatement) statement, assist, invokerList);
+                break;
             case 1773061735://WeekOfYearStatement
                 sql = toString((FunctionStatement.WeekOfYearStatement) statement, assist, invokerList);
                 break;
@@ -925,6 +928,8 @@ public abstract class ToSQL {
     protected abstract String toString(FunctionStatement.QuarterStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.SecondStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
+
+    protected abstract String toString(FunctionStatement.WeekDayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 
     protected abstract String toString(FunctionStatement.WeekOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException;
 

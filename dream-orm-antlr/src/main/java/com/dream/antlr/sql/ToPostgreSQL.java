@@ -398,6 +398,11 @@ public class ToPostgreSQL extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.WeekDayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "EXTRACT(ISODOW FROM " + toStr(statement.getParamsStatement(), assist, invokerList) + ")-1";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DayOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "CAST(TO_CHAR(" + toStr(statement.getParamsStatement(), assist, invokerList) + ",'ddd') AS INTEGER)";
     }

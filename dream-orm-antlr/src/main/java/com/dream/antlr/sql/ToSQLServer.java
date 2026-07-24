@@ -373,6 +373,11 @@ public class ToSQLServer extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.WeekDayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "DATEPART(" + "w," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DayOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "DATEPART(" + "dy," + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

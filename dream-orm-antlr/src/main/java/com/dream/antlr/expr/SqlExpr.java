@@ -356,6 +356,9 @@ public abstract class SqlExpr {
             case WEEK:
                 statement = exprWeek(exprInfo);
                 break;
+            case WEEKDAY:
+                statement=exprWeekDay(exprInfo);
+                break;
             case WEEKOFYEAR:
                 statement = exprWeekOfYear(exprInfo);
                 break;
@@ -908,6 +911,10 @@ public abstract class SqlExpr {
     }
 
     protected Statement exprWeek(ExprInfo exprInfo) throws AntlrException {
+        return exprFunction(exprInfo);
+    }
+
+    protected Statement exprWeekDay(ExprInfo exprInfo) throws AntlrException {
         return exprFunction(exprInfo);
     }
 

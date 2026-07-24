@@ -28,7 +28,7 @@ public class HelloWorldAntlrTest {
 
     @Test
     public void testFunctionName() {
-        testSqlForMany("SELECT pi.count count from pi pi");
+        testSqlForMany("SELECT weekday(now()),pi.count count from pi pi");
     }
 
     @Test

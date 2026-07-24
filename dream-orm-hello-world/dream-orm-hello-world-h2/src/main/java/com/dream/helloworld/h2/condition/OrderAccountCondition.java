@@ -9,7 +9,7 @@ import com.dream.template.condition.LeqCondition;
 
 public class OrderAccountCondition {
     @Conditional(ContainsCondition.class)
-    @Sort(value = Order.ASC, order = 1)
+    @Sort(value = Order.ASC)
     private String name;
     @Conditional(value = GeqCondition.class, column = "age")
     private Integer minAge;

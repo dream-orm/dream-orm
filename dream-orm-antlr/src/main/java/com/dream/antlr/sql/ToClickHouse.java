@@ -424,6 +424,11 @@ public class ToClickHouse extends ToPubSQL {
     }
 
     @Override
+    protected String toString(FunctionStatement.WeekDayStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
+        return "toDayOfWeek(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
+    }
+
+    @Override
     protected String toString(FunctionStatement.DayOfYearStatement statement, Assist assist, List<Invoker> invokerList) throws AntlrException {
         return "toDayOfYear(" + toStr(statement.getParamsStatement(), assist, invokerList) + ")";
     }

@@ -84,6 +84,7 @@ public final class Constant {
             ExprType.TIME,
             ExprType.STR_TO_DATE,
             ExprType.WEEK,
+            ExprType.WEEKDAY,
             ExprType.WEEKOFYEAR,
             ExprType.YEAR,
             ExprType.ROW_NUMBER,
