@@ -11,6 +11,4 @@ public @interface Sort {
     String column() default "";
 
     Order value() default Order.ASC;
-
-    int order() default 0;
 }
